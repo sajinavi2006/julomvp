@@ -1,0 +1,466 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+{% load format_date %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-10">
+            <h3 class="box-title m-b-0">SUBMITTED RETAIN HISTORY</h3>
+        </div>
+        <div class="col-md-2">
+            <a href="{%url 'collection_vendor:collection_retain_form' %}" class="btn btn-success" style="background-color: #54C392; margin-left: 21%">Retain New Account</a>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalMessage" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 300px;">
+          <div class="modal-header" style="border-bottom: none">
+            <img src="/static/images/collections/verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;" alt="verified_arrow">
+          </div>
+          <div class="modal-body" style="padding: 0;height: 100px">
+            <p class="text-center" style="font-size: 24px;">
+                <b>Sukses!</b>
+            </p>
+            <p class="text-center" style="font-weight: 300" id="modal_content"></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #03a9f3;
+                           border-color: #03a9f3;
+                           width: 92px;
+                           height: 48px;
+                           border-radius: 5px;"
+                    data-dismiss="modal" id="btnOk">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-position" id="modalConfirmation" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 400px;">
+          <div class="modal-header" style="border-bottom: none">
+            <img src="/static/images/collections/fail-verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;" alt="verified_arrow">
+          </div>
+          <div class="modal-body" style="padding: 0;height: 150px">
+            <p class="text-center" style="font-size: 24px;">
+                <b>Apakah anda yakin ingin menghapus data ini ?</b>
+            </p>
+            <p class="text-center" style="font-weight: 300" id="confirmation_content"></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #BA2121;
+                           border-color: #BA2121;" id="btnOkToDelete">Hapus</button>
+              <button type="button"
+                    class="btn btn-default text-center"
+                    data-dismiss="modal" id="btnCancel">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column column-top">
+        <div class="header-content" style="display: flex;overflow-x: auto; height: 500px !important;overflow: scroll;">
+            <table class="table table-striped table-responsive text-nowrap">
+                <thead>
+                    <tr>
+                        <th scope="col" align="center" class="text-center">Retain Account ID</th>
+                        <th scope="col" align="center" class="text-center">Retain Date</th>
+                        <th scope="col" align="center" class="text-center">Application Xid</th>
+                        <th scope="col" align="center" class="text-center">Application ID</th>
+                        <th scope="col" align="center" class="text-center">Assign Time(at Vendor)</th>
+                        <th scope="col" align="center" class="text-center">DPD (as of Today)</th>
+                        <th scope="col" align="center" class="text-center">Subbucket (as of Assign Time)</th>
+                        <th scope="col" align="center" class="text-center">Subbucket (as of today)</th>
+                        <th scope="col" align="center" class="text-center">Loan ID</th>
+                        <th scope="col" align="center" class="text-center">Payment ID</th>
+                        <th scope="col" align="center" class="text-center">Account ID</th>
+                        <th scope="col" align="center" class="text-center">Account Payment ID</th>
+                        <th scope="col" align="center" class="text-center">Customer Name</th>
+                        <th scope="col" align="center" class="text-center">Customer Email</th>
+                        <th scope="col" align="center" class="text-center">Vendor ID</th>
+                        <th scope="col" align="center" class="text-center">Vendor Name</th>
+                        <th scope="col" align="center" class="text-center">Retain Reason</th>
+                        <th scope="col" align="center" class="text-center">Retain Remove Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for collection_assignment_extension in collection_assignment_extension_list %}
+                        <tr>
+                            <td align="center" class="text-center">{{ collection_assignment_extension.vendor_assignment_extension.id }}</td>
+                            <td align="center" class="text-center">{{ collection_assignment_extension.vendor_assignment_extension.cdate | format_date_to_locale_format }}</td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.payment.loan.application.application_xid%}
+                                    -
+                                {% else %}
+                                    {{ collection_assignment_extension.payment.loan.application.application_xid }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.payment.loan.application.id%}
+                                    -
+                                {% else %}
+                                    {{ collection_assignment_extension.payment.loan.application.id }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">{{ collection_assignment_extension.assign_time | format_date_to_locale_format }}</td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.payment.due_late_days%}
+                                    {{ collection_assignment_extension.account_payment.dpd }}
+                                {% else %}
+                                    {{ collection_assignment_extension.payment.due_late_days }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">dpd{{ collection_assignment_extension.sub_bucket_assign_time.start_dpd }}_dpd{{ collection_assignment_extension.sub_bucket_assign_time.end_dpd }}</td>
+                            <td align="center" class="text-center">dpd{{ collection_assignment_extension.sub_bucket_assign_time.start_dpd }}_dpd{{ collection_assignment_extension.sub_bucket_assign_time.end_dpd }}</td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.payment.loan.id %}
+                                    -
+                                {% else %}
+                                    {{ collection_assignment_extension.payment.loan.id }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.payment.id %}
+                                    -
+                                {% else %}
+                                    {{ collection_assignment_extension.payment.id }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.account_payment.account.id %}
+                                    -
+                                {% else %}
+                                    {{ collection_assignment_extension.account_payment.account.id }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.account_payment.id %}
+                                    -
+                                {% else %}
+                                    {{ collection_assignment_extension.account_payment.id }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.payment.id %}
+                                    {{ collection_assignment_extension.account.customer.fullname }}
+                                {% else %}
+                                    {{ collection_assignment_extension.payment.loan.customer.fullname }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">
+                                {% if not collection_assignment_extension.payment.loan.customer.email %}
+                                    {{ collection_assignment_extension.account.customer.email }}
+                                {% else %}
+                                    {{ collection_assignment_extension.payment.loan.customer.email }}
+                                {% endif %}
+                            </td>
+                            <td align="center" class="text-center">{{ collection_assignment_extension.vendor.id }}</td>
+                            <td align="center" class="text-center">{{ collection_assignment_extension.vendor.vendor_name }}</td>
+                            <td align="center" class="text-center">{{ collection_assignment_extension.vendor_assignment_extension.retain_reason }}</td>
+                            <td align="center" class="text-center">{{ collection_assignment_extension.vendor_assignment_extension.retain_removal_date }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="18">
+                                <div class="alert alert-info empty-info">
+                                    <strong>Info!</strong> Tidak ada Data.
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="center">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                  {% for i in num_pages%}
+                      <li class="page-item {% if forloop.counter == current_page %} active {% endif %}">
+                          <a class="page-link" href="{% url 'collection_vendor:collection_retain_data' %}?page_number={{forloop.counter}}">
+                              {{forloop.counter}}</a>
+                      </li>
+                  {% endfor %}
+              </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+{% block script_bottom_inside %}
+{% endblock %}

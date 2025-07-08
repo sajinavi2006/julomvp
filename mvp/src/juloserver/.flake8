@@ -1,0 +1,11 @@
+[flake8]
+ignore = D203, F403, W503
+exclude =
+    .git,
+    __pycache__,
+    */test*,
+    juloserver/retroloads*,
+    juloserver/new_migrations*,
+    */migrations/*,
+    */apps.py
+max-line-length = 100

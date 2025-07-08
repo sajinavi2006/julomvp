@@ -1,0 +1,103 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+
+{% block breadcrumb_title %}Data Status Lookup{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Perpindahan Status</a></li>
+    <li class="active">List Data</li>
+{% endblock %}
+ 
+{% block list_title %}Perpindahan Status Aplikasi{% endblock %}
+{% block list_subtitle %}Silahkan masukan data pencarian{% endblock %}
+ 
+
+
+ {% block content-list %}
+
+  <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size="{{results_per_page}}">
+    <thead>
+      <tr>
+        <th data-toggle="true"> No </th>
+        <th> Status Awal: </th>
+        <th> Kode Status Pilihan </th>
+        <th data-hide="all"> Status Pilihan </th>
+        <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">
+            Actions
+        </th>
+      </tr>
+    </thead>
+    <div class="form-inline padding-bottom-15">
+      <div class="row">
+        <div class="col-md-6 col-xs-12 hidden-xs">
+          {% block search-form %}{% search_form_w_value q_value %}{% endblock %}
+        </div>
+        
+      </div>
+    </div>
+    <tbody>
+      {% if object_list %}
+        {% for object in object_list %}
+          <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+            <td><a href="{% url 'julo_status:detail_status_selection' object.status_code %}">{{ object.status_code|default:"-"|safe }} - {{ object.status|default:"-"|safe}}</a></td>
+            <td>
+                {%if object.statusapp_from.all %}
+                  Tersedia
+                {%else %}
+                  Tidak Tersedia
+                {%endif %}
+            </td>
+            <td>
+
+                {% for item in object.statusapp_from.all %}
+                  {{ item|safe }}<br/>
+                {% empty %}
+                  -- Tidak Ada data --
+                {% endfor %}
+              
+            </td>
+            
+            <td class='text-center'>
+              <a href="{% url 'julo_status:status_selections_update' object.status_code %}" title='Ubah Data'>
+                  <button class="btn btn-outline  btn-success btn-rounded m-b-5"><i class="fa fa-pencil fa-fw"></i> Ubah </button>
+              </a>
+                  
+            </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+          <tr>
+              <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+          </tr>
+      {% endif %}
+      
+    </tbody>
+  </table>
+  <tfoot>
+    <tr>
+      <td colspan="5"><div class="text-right">
+          {% pagination2 is_paginated paginator page_obj q 4 %}
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+ 
+{% endblock %}
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      /*
+      $('#mnu_dashboard_li a:first').removeClass('active');
+      $('#{{nav_menu}}').addClass('active');
+      $('#{{nav_menu}} a:first').addClass('active');
+      $('#{{nav_submenu}}').addClass('active');
+      $('#{{nav_subsubmenu}}').addClass('active');
+      */
+  });
+{% endblock %}
+

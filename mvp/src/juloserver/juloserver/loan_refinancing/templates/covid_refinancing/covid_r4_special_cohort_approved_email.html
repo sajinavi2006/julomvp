@@ -1,0 +1,268 @@
+{% load utils %}
+{% load format_date %}
+{% load currency %}
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+  <title> </title>
+  <!--[if !mso]><!-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!--<![endif]-->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css">
+    #outlook a {
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    table,
+    td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+      -ms-interpolation-mode: bicubic;
+    }
+
+    p {
+      display: block;
+      margin: 13px 0;
+    }
+  </style>
+  <!--[if mso]>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+  <!--[if lte mso 11]>
+    <style type="text/css">
+    .outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]-->
+  <!--[if !mso]><!-->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+  </style>
+  <!--<![endif]-->
+  <style type="text/css">
+    @media only screen and (min-width:480px) {
+      .mj-column-per-100 {
+        width: 100% !important;
+        max-width: 100%;
+      }
+      .mj-column-per-50 {
+        width: 50% !important;
+        max-width: 50%;
+      }
+    }
+  </style>
+  <style type="text/css">
+    @media only screen and (max-width:480px) {
+      table.full-width-mobile {
+        width: 100% !important;
+      }
+      td.full-width-mobile {
+        width: auto !important;
+      }
+      .va-name {
+        width: 100% !important;
+        border-radius: 10px 10px 0 0 !important;
+        line-height: 35px !important;
+      }
+      .va-number {
+        width: 100% !important;
+        line-height: 35px !important;
+      }
+      .ingatkan-button {
+        width: 49% !important;
+        margin: 0 !important;
+      }
+      .bayar-button {
+        width: 49% !important;
+        margin: 0% !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+
+    <div style="margin:0px auto;max-width:600px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+        <tbody>
+          <tr>
+            <td style="direction:ltr;font-size:0px;text-align:center;">
+              <div class="mj-column-per-100 outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000;">
+                        <a href="https://www.julo.co.id/cara-bayar">
+                          <img alt="banner" height="auto" src="https://julocampaign.julo.co.id/promo_may_2024/Refinancing%20Meriah%20Cuan/R4/Diskon%20Meriah%20Cuan%20-%20R4-1.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="100" />
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin:0px auto;max-width:600px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+        <tbody>
+          <tr>
+            <td style="direction:ltr;font-size:0px;padding:20px 0;text-align:center;">
+              <div class="mj-column-per-100 outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:0 25px;word-break:break-word;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;">
+                        Halo <b>{{fullname_with_title}}</b>,
+                      </div>
+                    </td>
+                  </tr>
+                  <!-- <tr>
+                    <td align="left" style="font-size:0px;padding:0 25px;word-break:break-word;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;">
+                          <p>Gunakan DISKON SAKTI agar kamu terbebas dari tagihan cukup dengan sekali bayar!</p>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:0 25px;word-break:break-word;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;">
+                        <p>Yuk, klaim diskonnya dan langsung lunasi tagihanmu sekarang hanya dengan membayar:</p>
+                      </div>
+                    </td>
+                  </tr> -->
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:0 25px;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;">
+                        <p>Yuk, manfaatkan diskon Meriah Cuan untuk lunasi semua tagihan JULOmu hanya dengan SEKALI bayar! Tanpa bunga, tanpa denda, tagihanmu juga dapat diskon!</p>
+                      </div>
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;">
+                        <p>Lihat perbandingan jumlah tagihanmu di bawah. Tinggal bayar sejumlah ini aja, tagihanmu langsung lunas!</p>
+                      </div>
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:13pt;line-height:25px;text-align:left;color:#000000;margin-bottom: 20px">
+                        <div style="text-align: center;background: #db4d3d; padding: 8px; border: 2px solid #db4d3d; border-radius: 12px; color: white !important; font-weight: bold;margin-left:auto;margin-right:auto;width:90%">
+                          <p style="margin: 0;float:right;width: 100%;" class="total-amount">
+                            <span style="display: block; color:#fbef4d !important;text-decoration: line-through; margin-top:-1px;">{{ total_payments }}</span>
+                            <span style="display: block;font-size:15pt">{{ prerequisite_amount }}</span>
+                          </p>
+                          <div style="clear:both"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:0 25px;word-break:break-word;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;">
+                        <p>Pembayaran diskon Meriah Cuan dapat langsung dilakukan melalui:</p>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:0 25px;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;margin-bottom: 20px">
+                        <div style="text-align: center;border: 2px solid #00abf0;border-radius: 15px; font-weight: bold;">
+                          <p style="display: inline-table;width: 50%;margin: 0;color: white !important;background:#00abf0;float: left;border-radius: 10px 0 0 10px;line-height: 45px;" class="va-name">VA {{bank_name}}</p>
+                          <p style="display: inline-table;width: 50%;margin: 0;color: #00abf0 !important;float: right;line-height: 45px;" class="va-number">{{va_number}}</p>
+                          <div style="clear:both"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:0 25px;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000 !important;">
+                        <p>Ayo, manfaatkan diskon ini dan nikmati indahnya harimu tanpa tagihan!</p>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="direction:ltr;font-size:0px;text-align:center;">
+                      <div class="mj-column-per-100 outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                          <tr>
+                            <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                              <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000;">
+                                <!-- <p>Jika ada yang ingin kamu tanyakan, silakan hubungi kami di:</p> -->
+                                <img alt="footer" height="auto" src="https://julocampaign.julo.co.id/promo_mar_2023/footer-waupdated_720.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="100" />
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                  <!-- <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000;">
+                        <a href="https://www.julo.co.id/cara-membayar?utm_source=email&utm_medium=email&utm_campaign=restrukturisasiform&utm_content=reminderform">
+                          <img alt="Bayar Sekarang" height="auto" src="https://julocampaign.julo.co.id/refinancing_integration/bayar-sekarang-button.png" style="border:0;display:inline-block;outline:none;text-decoration:none;height:auto;width:45%;font-size:13px;margin: 0 auto;margin-left: 4%" class="bayar-button" />
+                        </a>
+                        <a href="{{calendar_link}}">
+                          <img alt="Ingatkan Lagi" height="auto" src="https://julocampaign.julo.co.id/refinancing_integration/ingatkan-lagi-button.png" style="border:0;display:inline-block;outline:none;text-decoration:none;height:auto;width:45%;font-size:13px;margin: 0 auto;;margin-left: 1%" class="ingatkan-button" />
+                        </a>
+                      </div>
+                    </td>
+                  </tr> -->
+                </table>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- <div style="margin:0px auto;max-width:600px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+        <tbody>
+          <tr>
+            <td style="direction:ltr;font-size:0px;text-align:center;">
+              <div class="mj-column-per-100 outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                  <tr>
+                    <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                      <div style="font-family:Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12pt;line-height:25px;text-align:left;color:#000000;"> -->
+                        <!-- <p>Jika ada yang ingin kamu tanyakan, silakan hubungi kami di:</p> -->
+                        <!-- <img alt="footer" height="auto" src="https://julocampaign.julo.co.id/refinancing_integration/new-footer-promo-sakti-2022.png" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" width="100" />
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div> -->
+
+</div>
+</body>
+
+</html>

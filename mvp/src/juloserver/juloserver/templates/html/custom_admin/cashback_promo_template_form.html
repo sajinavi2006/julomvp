@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load static from staticfiles %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ cashback_promo_form.as_table }}
+             <tr>
+                <td><b>Input File :</b></td>
+                <td><input name="input_file" type="file"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Calculate" class="default" name="_save">
+                </td>
+            </tr>
+        </table>
+        <div class="submit-row">
+            <input type="submit" value="Save" class="default" name="_save">
+        </div>
+    </form>
+{% endblock %}

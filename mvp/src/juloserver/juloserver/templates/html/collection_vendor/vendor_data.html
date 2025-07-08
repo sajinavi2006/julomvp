@@ -1,0 +1,431 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">CLICK COLLECTION VENDOR DATA TO CHANGE</h3>
+        </div>
+        <div class="col-md-3">
+            <a href="{%url 'collection_vendor:collection_vendor_form' %}" class="btn btn-success">Add Collection Vendor</a>
+            <button type="button" class="btn btn-danger" id="btnDelete"><i class="fa fa-trash-o"></i></button>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalMessage" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 300px;">
+          <div class="modal-header" style="border-bottom: none">
+            <img src="/static/images/collections/verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;" alt="verified_arrow">
+          </div>
+          <div class="modal-body" style="padding: 0;height: 100px">
+            <p class="text-center" style="font-size: 24px;">
+                <b>Sukses!</b>
+            </p>
+            <p class="text-center" style="font-weight: 300" id="modal_content"></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #03a9f3;
+                           border-color: #03a9f3;
+                           width: 92px;
+                           height: 48px;
+                           border-radius: 5px;"
+                    data-dismiss="modal" id="btnOk">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-position" id="modalConfirmation" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 400px;">
+          <div class="modal-header" style="border-bottom: none">
+            <img src="/static/images/collections/fail-verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;" alt="verified_arrow">
+          </div>
+          <div class="modal-body" style="padding: 0;height: 150px">
+            <p class="text-center" style="font-size: 24px;">
+                <b>Apakah anda yakin ingin menghapus data ini ?</b>
+            </p>
+            <p class="text-center" style="font-weight: 300" id="confirmation_content"></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #BA2121;
+                           border-color: #BA2121;" id="btnOkToDelete">Hapus</button>
+              <button type="button"
+                    class="btn btn-default text-center"
+                    data-dismiss="modal" id="btnCancel">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column column-top">
+        <div class="header-content">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Vendor Id</th>
+                        <th scope="col">Vendor Name</th>
+                        <th scope="col">Is Active</th>
+                        <th scope="col">Vendor Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vendor in collection_vendor_list %}
+                        <tr>
+                            <td><input type="checkbox" name="is_selected" class="is_selected" value="{{ vendor.id }}" vendor_name="{{ vendor.vendor_name }}"> </td>
+                            <td><a href="{% url 'collection_vendor:collection_vendor_form' %}?vendor_id={{ vendor.id }}">{{ vendor.id }}</a></td>
+                            <td>{{ vendor.vendor_name }}</td>
+                            <td>
+                                {% if vendor.is_active  %}
+                                <span class="text-success" style="font-size: 25px;"><i class="fa fa-check-circle"></i></span>
+                                {% else %}
+                                <span class="text-danger" style="font-size: 25px;"><i class="fa fa-times-circle"></i></span>
+                                {% endif %}
+                            </td>
+                            <td>{{ vendor.vendor_types }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">
+                                <div class="alert alert-info empty-info">
+                                    <strong>Info!</strong> Tidak ada Data.
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+{% block script_bottom_inside %}
+{#<script>#}
+var selected_vendor_ids = []
+var selected_vendor_names = []
+function ToastDanger (body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'error',
+            hideAfter: 2800
+        });
+    }
+$('#btnDelete').click(function (e){
+    if ($('.is_selected').is(':checked')){
+        selected_vendor_ids = []
+        $('.is_selected:checked').each(function() {
+           selected_vendor_ids.push(this.value);
+           selected_vendor_names.push($(this).attr('vendor_name'));
+        });
+        $('#confirmation_content').html(
+            '<p>Vendor ID: ['+selected_vendor_ids.join(",")+']</p>'+
+            '<p>Vendor Name: ['+selected_vendor_names.join(",")+']</p>'
+        )
+        $('#modalConfirmation').modal('show')
+    }else{
+        ToastDanger('Tidak ada vendor yang dipilih')
+    }
+})
+$('#btnOkToDelete').click(function (e) {
+    $(this).text('Waiting ...').addClass('disabled').attr('disabled', 'disabled')
+    $.ajax({
+        url: "{%url 'collection_vendor:collection_vendor_delete' %}/", // the endpoint
+        type: "POST", // http method
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            collections_vendor_ids:selected_vendor_ids.join(',')
+        },
+        success: function (json) {
+            if (json.status == "success") {
+                $('#modalConfirmation').modal('hide')
+                $('#modal_content').html(json.messages)
+                $('#modalMessage').modal('show')
+                $(this).text('Hapus').removeClass('disabled').attr("disabled", false)
+                location.reload();
+            } else {
+                ToastDanger('gagal');
+            }
+        },
+    })
+})
+{% endblock %}

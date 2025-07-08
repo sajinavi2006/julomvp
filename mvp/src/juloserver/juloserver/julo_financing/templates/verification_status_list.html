@@ -1,0 +1,367 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load static from staticfiles %}
+
+
+{% block custom_css %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+
+  <!-- Autodialer CSS dependencies -->
+  <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/sales_ops/autodialer.css' %}" rel="stylesheet">
+    <style type="text/css">
+        #draft {
+            border-radius: 10px;
+            color: #595959;
+            border: #999999 solid 2px;
+            background-color: #cccccc;
+        }
+        #approved {
+            border-radius: 10px;
+            color: #1e7461;
+            border: #61a697 solid 2px;
+            background-color: #c8f1e8;
+        }
+        #rejected {
+            border-radius: 10px;
+            color: #db4d3d;
+            border: #e9948b solid 2px;
+            background-color: #f7d8d4
+        }
+        #abandoned {
+            border-radius: 10px;
+            color: #db4d3d;
+            border: #e9948b solid 2px;
+            background-color: #f7d8d4
+        }
+        #on_review {
+            border-radius: 10px;
+            color: #f69539;
+            border: #fabf88 solid 2px;
+            background-color: #fde5ce;
+        }
+        #cancelled {
+            border-radius: 10px;
+            color: #6b6b6b;
+            border: #b7b7b7 solid 2px;
+            background-color: #e1e1e1;
+        }
+        #disbursed {
+            border-radius: 10px;
+            color: #2e6b31;
+            border: #6cbf73 solid 2px;
+            background-color: #d0f0d8;
+        }
+       .error_message {
+            padding-left: 50px;
+            line-height: 100px;
+       }
+    </style>
+  <!-- end of Autodialer CSS dependencies -->
+{% endblock %}
+
+{% block additional_title %}MENUNGGU KONFIRMASI - {{ current_status }}{% endblock %}
+
+{% block list_title %}{{bucket_title}} {% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+  <form id="search-form" class="row">
+    {{ filter_form.sort_q }}
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Cari Berdasarkan</label>
+      <div class="m-t-10">
+          <select name="filter_field" class="form-control" >
+            {% for filter_field, filter_field_text in filter_form.filter_field.field.choices %}
+              <option
+                  value="{{ filter_field }}"
+                  {% if filter_field == filter_form.filter_field.value %}
+                    selected
+                  {% endif %}
+              >{{ filter_field_text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Pencarian</label>
+      <div class="input-group m-t-10">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <input type="text"
+               name="filter_keyword"
+               id="filter_keyword"
+               class="form-control consolidation-verification-search-keyword"
+               aria-describedby="basic-addon1"
+               placeholder="Pencarian"
+               value="{{ filter_form.filter_keyword.value | default:'' }}"
+        >
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <div class="row">
+        <div class="col-md-4 col-xs-12">
+          <button type="submit" class="btn btn-primary btn-rounded btn-block"
+                  style="border-radius: 10px; background: #00acf0; border: #00acf0; height: 38px;
+                         margin-top: 25px; overflow: hidden">
+            <i class="fa fa-search" ></i> Cari
+          </button>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <button type="button" name="reset" value="empty"
+                  class="btn btn-info btn-rounded btn-block" onclick="clearSearchForm();"
+                  style="border-radius: 10px; background: #00acf0; border: 1px solid #00acf0;
+                         color: #00acf0; background: #ffffff; height: 38px; margin-top: 25px;
+                         overflow: hidden"> Kosongkan </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+    <br>
+{% if error_message %}
+    <div class="error_message">
+        {{ error_message }}
+    </div>
+{% endif %}
+
+<table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size={{page_obj.paginator.per_page}}>
+    <thead>
+      <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+        <th data-sort-ignore="true" data-toggle="true">No</th>
+        <th data-sort-ignore="true">App-ID</th>
+        <th data-sort-ignore="true">Customer ID</th>
+        <th data-sort-ignore="true">Nama Customer</th>
+        <th data-sort-ignore="true">Email</th>
+        <th data-sort-ignore="true">Nomor HP</th>
+        <th data-sort-ignore="true">Validation Status</th>
+        <th data-sort-ignore="true"></th>
+        <th data-sort-ignore="true">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for object in object_list %}
+        {% with customer=object.j_financing_checkout.customer %}
+        <tr>
+          <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+          <td onclick="show_verification_modal({{ object.id }})"><a href="#">{{ object.loan.application_id2 | default:'-' }}</a>
+          </td>
+          <td>{{ customer.id | default:'-' }}</td>
+          <td>{{ customer.fullname | default:'-' }}</td>
+          <td>{{ customer.email | default:'-' }}</td>
+          <td>{{ customer.phone | default:'-' }}</td>
+        <td>
+            <button id="{{ object.validation_status }}" disabled><b>{{ object.get_validation_status_display }}</b>
+            </button>
+        </td>
+          <td style="vertical-align: middle">
+              {% if object.is_locked %}
+                <span class="label label-danger lbl-sm lbl-rounded" title="Locked by {{ object.locked_by_info }}"><i class="fa fa-lock"></i></span>
+              {% else %}
+                <span class="label label-custom lbl-sm lbl-rounded"><i class="fa fa-unlock"></i></span>
+              {% endif %}
+          </td>
+          <td>
+            <div class="btn-group m-r-10">
+              <button aria-expanded="false" data-toggle="dropdown" class="btn btn-primary btn-rounded dropdown-toggle waves-effect waves-light" type="button">
+                 --Pilih-- <span class="caret"></span>
+              </button>
+              <ul role="menu" class="dropdown-menu">
+                {%if object.locked_by_id %}
+                  <li>
+                    <button class="btn btn-danger btn-block" title="Unlock assignment ini" onclick="unlock_verification({{ object.id }})">Unlock</button>
+                  </li>
+                {%else %}
+                  <li>
+                    <button class="btn btn-danger btn-block" title="lock assignment ini" onclick="lock_verification({{ object.id }})">Lock</button>
+                  </li>
+                {%endif%}
+              </ul>
+            </div>
+          </td>
+        </tr>
+        {% endwith %}
+      {% empty %}
+        <tr>
+          <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="12">
+            <div class="text-right">
+                {% block pagination %}
+                    {% pagination2 is_paginated paginator page_obj q 4 %}
+                {% endblock %}
+            </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+<div id="modal_locked" class="modal" tabindex="-1" role="dialog"aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-warning">
+        <h4 class="modal-title">Assignment sudah di-Lock</h4>
+      </div>
+      <div class="modal-body">
+        Body
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning waves-effect js-detail-btn" data-dismiss="modal">
+          Lihat Assignment
+        </button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal_unlocked" class="modal" tabindex="-1" role="dialog"aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-success">
+        <h4 class="modal-title">Assignment belum di-lock</h4>
+      </div>
+      <div class="modal-body">
+        Body
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning waves-effect js-detail-btn" data-dismiss="modal">
+          Lihat Assignment
+        </button>
+        <button type="button" class="btn btn-custom waves-effect js-lock-detail-btn" data-dismiss="modal">
+          Lock dan verify Assignment
+        </button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block custom_link %}
+    <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script_bottom_inside %}
+function clearSearchForm(){
+    console.log('Search Form Cleared');
+
+    $("#id_search_q").val('');
+    $("#filter_keyword").val('');
+
+    try{
+        document.getElementById('id_err_msg').innerHTML='';
+    }
+    catch(err) {
+    }
+}
+{% endblock %}
+
+{% block script_additional %}
+  <script>
+      window.CSRF_TOKEN = '{{ csrf_token }}';
+      window.JULO_FINANCING_VERIFICATION_DETAIL_URL = '{% url "julo_financing_crm:verification_detail" 0 %}'.replace('0', '')
+      window.JULO_FINANCING_VERIFICATION_CHECK_LOCK_URL = '{% url "julo_financing_crm:verification_check_lock_status" 0 %}'.replace('0', '')
+      window.JULO_FINANCING_VERIFICATION_LOCK_URL = '{% url "julo_financing_crm:verification_lock" 0 %}'.replace('0', '')
+      window.JULO_FINANCING_VERIFICATION_UNLOCK_URL = '{% url "julo_financing_crm:verification_unlock" 0 %}'.replace('0', '')
+  </script>
+
+  <script src="{% static 'default/js/julo-sorting.js' %}"></script>
+  <script src="{% static 'default/js/balance_consolidation/balance-consolidation-verification_list.js' %}"></script>
+
+  <script>
+    function go_to_verification_detail(id, with_lock){
+      var detail_url = window.JULO_FINANCING_VERIFICATION_DETAIL_URL + id;
+      if(!with_lock){
+        return window.open(detail_url, '_BLANK');
+      }
+
+      lock_verification(id).success(function(data){
+        window.open(detail_url, '_BLANK');
+      });
+    }
+
+    function show_verification_modal(id){
+      $.ajax({
+        url: window.JULO_FINANCING_VERIFICATION_CHECK_LOCK_URL + id,
+        type: 'GET',
+        statusCode: {
+          200: function(response) {
+            var modal_dom = null
+            console.log(response)
+            if(response.data.is_locked == true){
+              modal_dom = $("#modal_locked");
+              modal_dom.find('.modal-body').html("Assignment telah di lock oleh <code>" + response.data.locked_by_info + "</code>, Apakah ingin lanjut?");
+            } else {
+              modal_dom = $("#modal_unlocked")
+              modal_dom.find('.modal-body').html('Assignment masih belum diproses dan di-lock oleh Agent, Silahkan Pilih tombol aksi dibawah ini!');
+            }
+            modal_dom.find('.js-detail-btn').off('click')
+            modal_dom.find('.js-lock-detail-btn').off('click')
+            modal_dom.find('.js-detail-btn').click(function() {go_to_verification_detail(id)})
+            modal_dom.find('.js-lock-detail-btn').click(function() {go_to_verification_detail(id, true)})
+            modal_dom.modal('show')
+          },
+          404: function() {
+            alert('The Smartphone financing verification tidak ditemukan.')
+          }
+        },
+        error: function(){
+          alert('Terjadi kesalahan pada server.')
+        }
+      });
+    }
+
+    function lock_verification(id) {
+      return $.ajax({
+        url: window.JULO_FINANCING_VERIFICATION_LOCK_URL + id,
+        data: {'csrfmiddlewaretoken': window.CSRF_TOKEN},
+        type: 'POST',
+        statusCode: {
+          201: function (response) {
+            alert('Assignment berhasil di-lock.')
+            window.location.reload()
+          },
+          423: function (response) {
+            alert('Assignment verification sudah di-lock.')
+            window.location.reload()
+          },
+          404: function () {
+            alert('Assignment verification tidak ditemukan.')
+          }
+        },
+        error: function () {
+          alert('Terjadi kesalahan pada server.')
+        }
+      });
+    }
+
+    function unlock_verification(id) {
+      is_confirm = confirm('Apakah anda yakin ingin unlock assignment ini?')
+      if(!is_confirm) {
+        return;
+      }
+
+      return $.ajax({
+        url: window.JULO_FINANCING_VERIFICATION_UNLOCK_URL + id,
+        data: {'csrfmiddlewaretoken': window.CSRF_TOKEN},
+        type: 'POST',
+        statusCode: {
+          200: function(response) {
+            alert('Assignment berhasil di-unlock.')
+            window.location.reload()
+          }
+        },
+        error: function(){
+          alert('Terjadi kesalahan pada server.')
+        }
+      });
+    }
+  </script>
+{% endblock %}
+

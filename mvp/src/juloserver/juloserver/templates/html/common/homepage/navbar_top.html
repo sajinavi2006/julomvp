@@ -1,0 +1,126 @@
+{% load checkusergroup from common %}
+
+
+  <nav class="navbar navbar-default navbar-static-top m-b-0">
+    <div class="navbar-header">
+    	<a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse">
+    		<i class="ti-menu"></i>
+    	</a>
+{% load static from staticfiles %}
+      <div class="top-left-part"><a class="logo" href="{% url 'welcome' %}"><b>
+      <img src="{% static 'images/julo/julo-logo-only.png' %}" alt="beranda" /></b><span class="hidden-xs">
+      
+      </div>
+      <ul class="nav navbar-top-links navbar-left hidden-xs">
+        <li><a href="javascript:void(0)" class="open-close hidden-xs waves-effect waves-light"><i class="icon-arrow-left-circle ti-menu"></i></a></li>
+        {% if user.is_authenticated %}
+          <li>
+            <form role="search" class="app-search hidden-xs" method="GET">
+              <input type="text" ng-model = "navSearchField" placeholder="Lacak Aplikasi anda disini !" class="form-control">
+              <a href="{%url 'login' %}/{{ navSearchField }}"> <i class="fa fa-search"></i></a>
+            </form>
+          </li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-top-links navbar-right pull-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#">
+            <i class="icon-home"></i>
+          </a>
+          <ul class="dropdown-menu mailbox animated bounceInDown">
+            <li>
+              <div class="drop-title">Jelajahi julo</div>
+            </li>
+            <li>
+              <div class="message-center">
+                <a href="{%url 'welcome' %}">
+                  <div class="user-img"> <img src="{% static 'images/julo/julo-logo-only.png' %}" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                  <div class="mail-contnet">
+                    <h5>Beranda</h5>
+                    <span class="mail-desc">Kembali ke Beranda!</span>
+                  </div>
+                </a>
+                <a href="{%url 'about_us' %}">
+                  <div class="user-img"> <img src="{% static 'images/julo/julo-logo-only.png' %}" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                  <div class="mail-contnet">
+                    <h5>Tentang Kami</h5>
+                    <span class="mail-desc">Klik disini untuk lebih detail!</span>
+                  </div>
+                </a>
+                <a href="{%url 'promotions' %}">
+                  <div class="user-img"> <img src="{% static 'images/julo/julo-logo-only.png' %}" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                  <div class="mail-contnet">
+                    <h5>Promo</h5>
+                    <span class="mail-desc">Klik disini untuk lebih detail!</span>
+                  </div>
+                </a>
+                <a href="#">
+                  <div class="user-img"> <img src="{% static 'images/julo/julo-logo-only.png' %}" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
+                  <div class="mail-contnet">
+                    <h5>Reset Password</h5>
+                    <span class="mail-desc">Set Ulang Password!</span>
+                  </div>
+                </a>
+                </div>
+            </li>
+       
+          </ul>
+          
+        </li>
+
+		{% if user.is_authenticated %}
+			
+		        <li class="dropdown"> <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
+		        	<img src="{% static 'theme/plugins/images/users/unknown.png' %}" alt="user-img" width="36" class="img-circle">
+		        	<b class="hidden-xs">{{ user.username }}</b> </a>
+		          <ul class="dropdown-menu dropdown-user animated flipInY">
+		            <li><a href="#"><i class="ti-user"></i> Profil Saya</a></li>
+		            <li><a href="#"><i class="ti-wallet"></i> Deposit</a></li>
+		            <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
+		            
+		            <li role="separator" class="divider"></li>
+		            <li><a href="{% url 'logout' %}"><i class="fa fa-power-off"></i> Logout</a></li>
+		          </ul>
+		          
+		        </li>
+
+		{% else %}
+	        
+	        <li class="dropdown">
+	          <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#">
+	            <i class="icon-user-follow"></i>
+	            <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
+	          </a>
+	          
+	          <ul class="dropdown-menu dropdown-user animated flipInY">
+	            <li><a href="#"><i class="ti-user"></i> Mitra Baru</a></li>
+	          </ul>
+	        </li>
+
+	        
+	        <li class="dropdown">
+	          <a class="dropdown-toggle waves-effect waves-light" href="{% url 'login' %}">
+	            <i class="icon-login"></i>
+	          </a>
+	          
+	        </li>
+	    {% endif %}
+
+        <li class="dropdown">
+          <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#">
+          </a>
+          
+        </li>
+
+        
+        
+      </ul>
+    </div>
+    
+    
+    
+  </nav>
+  
+
+
+

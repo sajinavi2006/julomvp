@@ -1,0 +1,385 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+{% load static from staticfiles %}
+
+{% block css_inside %}
+/* Watermark Start */
+.watermarked {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Global Watermark */
+.watermarked {
+    position: relative;
+    overflow: hidden;
+}
+
+.watermarked span {
+    position: absolute;
+    font-size: 10px;
+    transform: rotate(-26.98deg);
+    color: #fff;
+    opacity: 0.4;
+    word-spacing: 0;
+}
+
+.watermarked>span:nth-child(1) {
+    left: 0;
+    top: -3%;
+}
+
+.watermarked>span:nth-child(2) {
+    left: 5%;
+    top: 15%;
+}
+
+.watermarked>span:nth-child(3) {
+    left: 25%;
+    top: 50%;
+}
+
+.watermarked>span:nth-child(4) {
+    right: 0;
+    top: 75%;
+}
+
+.watermarked>span:nth-child(5) {
+    right: 0;
+    top: 100%;
+}
+
+.watermarked>span:nth-child(6) {
+    right: 2%;
+    top: 60%;
+}
+
+.watermarked>span:nth-child(7) {
+    left: 0;
+    top: 82%;
+}
+
+.watermarked>span:nth-child(8) {
+    left: 50%;
+    bottom: 2%;
+}
+
+.white-box .box-title{
+    text-transform: none !important;
+}
+
+.text-muted.m-b-20 {
+    display: none !important;
+}
+.list-wrapper {
+    padding: 15px;
+    overflow: hidden;
+}
+
+.list-item {
+    border: 1px solid #EEE;
+    background: #FFF;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 0px #EEE;
+}
+
+.list-item h4 {
+    color: #FF7182;
+    font-size: 18px;
+    margin: 0 0 5px;
+}
+
+.list-item p {
+    margin: 0;
+}
+
+.new-julo-pagination ul {
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+
+.new-julo-pagination li {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.new-julo-pagination li a,
+.new-julo-pagination li span {
+    color: #666;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #EEE;
+    border-radius: 8px;
+    border: 1px solid #E7E7E7;
+}
+
+.new-julo-pagination .current {
+    color: #00ACF0;
+    background-color: #B2E6FA;
+    border-color: #66CDF6;
+}
+
+.new-julo-pagination .prev.current,
+.new-julo-pagination .next.current {
+    background: #0000;
+    border: none;
+    color: gray;
+}
+
+.page-link.prev {
+    color: #00ACF0;
+    border: none;
+    font-size: 20px;
+}
+
+.current.prev {
+    font-size: 20px;
+}
+
+.page-link.next {
+    color: #00ACF0;
+    border: none;
+    font-size: 20px;
+}
+
+.current.next {
+    font-size: 20px;
+}
+{% endblock %}
+
+{% block breadcrumb_title %}
+
+{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li><a href="#">Verifikasi Dokumen</a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+
+{% block list_title %}
+<div class="row row-geohash">
+    <a class="badges-link" href='/app_status/change_status/{{ object.id|default:"-"|safe  }}'><   <span>{{ object.id|default:"-"|safe  }}</span></a>
+    <div class="geo-text m-b-0">Geohash <span class="label label-rouded pull-center small badges" id="geo_tag"></span>
+    </div>
+    <p class="m-t-10 m-b-20">Selfie yang terdeteksi di Geohash</p>
+    <div class="col-sm-12 container-geohash">
+       <ul class="nav nav-tabs tab-geohash tabs">
+          <li class="tab" style="width: 100%;">
+            <a href="#geohash6" id="geohash6" onclick="patchID(this.id)" data-toggle="tab" title="Geohash 6">
+             <span>Geohash 6 (Radius 1.22 km vs 0.61 km)</span>
+            </a>
+          </li>
+       </ul>
+       <div id="selfie_geo_detail">
+       </div>
+       <div id="pagination"></div>
+    </div>
+ </div>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+$(document).ready(function() {
+
+    // Executes when the HTML document is loaded and the DOM is ready
+    //alert("Document is ready");
+});
+
+// Prevent right click
+$(document).on('contextmenu', 'img', function () {
+    return false;
+});
+$(document).on('contextmenu', '.watermarked span', function () {
+    return false;
+});
+$(document).on('contextmenu', '.mfp-container', function () {
+    return false;
+});
+
+var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+
+// Watermark image and Protect right click
+$(document).ready(function () {
+    $(document).on('contextmenu', 'img', function () {
+        return false;
+    });
+    $(document).on('contextmenu', '.watermarked span', function () {
+        return false;
+    });
+    $(document).on('contextmenu', '.mfp-container', function () {
+        return false;
+    });
+    $('.image-popup-vertical-fit').click(function () {
+        $(".mfp-img").wrap('<div class="watermarked"></div>');
+        $(".mfp-content .watermarked").append('<span>' + watermark_text + '</span><span>' + watermark_text + '</span><span>' + watermark_text + '</span>');
+    });
+    $(".watermarked").append('<span>' + watermark_text + '</span><span>' + watermark_text + '</span><span>' + watermark_text + '</span>');
+});
+
+let currentUrl = new URLSearchParams(window.location.search)
+const currentUrlType = currentUrl.get('type')
+const currentUrlPage = currentUrl.get('page')
+
+$(document).ready(function() {
+    if (currentUrlType == 'geohash6') {
+        document.getElementById(currentUrlType).click();
+        const activeGeo = document.getElementById(currentUrlType);
+        activeGeo.classList.add("active");
+    }
+});
+
+function patchID(id) {
+    geoDiv = $('#selfie_geo_detail');
+    geoTag = $('#geo_tag');
+    geoDiv.empty();
+    geoTag.empty();
+    geoPaginationElem = $('#pagination');
+    geoPaginationElem.empty();
+    appID = {{ object.id|default:"-"|safe  }}
+    $.ajax({
+        url: '{%url 'app_status:ajax_fraud_show_similar_faces' %}/?application_id='+appID+'&type='+id+'&page=1',
+        type: "GET",
+        async: false,
+
+        success: function(json) {
+            geoData = json.data;
+            goeCurrentData = json.current_selfie_data;
+
+            geoPagination = (json.count / 23).toFixed(0);
+            var items = $(".col-geo-lists");
+            var numItems = geoPagination;
+            var perPage = 1;
+
+            items.slice(perPage).hide();
+
+            geoDiv.append(
+                '<div class="col-sm-3 col-geo-lists text-center highlight">' +
+                '<a class="m-b-30 center-block" href="#" onclick="imgClick(this)"  >' +
+                '<div class="watermarked">' +
+                '<img class="img-responsive img"  src="' + goeCurrentData.url + '" >' +
+                '<span>' + watermark_text + '</span>' +
+                '<span>' + watermark_text + '</span>' +
+                '<span>' + watermark_text + '</span>' +
+                '</div>' +
+                '</a>' +
+                '<div class="geo-text">' +
+                'App-ID: ' + goeCurrentData.application_id +
+                '</div>' +
+                '<a class="btn btn-geohash-default btn-block  m-b-30" href="/app_status/change_status/' + goeCurrentData.application_id + '" target="_blank">Lihat Detail Pemohon</a>'
+            );
+
+            $.each(geoData, function(i, data) {
+                geoDiv.append(
+                    '<div class="col-sm-3 col-geo-lists text-center">' +
+                    '<a class="m-b-30 center-block" href="#" onclick="imgClick(this)"  >' +
+                    '<div class="watermarked">' +
+                    '<img class="img-responsive img"  src="' + data.url + '" >' +
+                    '<span>' + watermark_text + '</span>' +
+                    '<span>' + watermark_text + '</span>' +
+                    '<span>' + watermark_text + '</span>' +
+                    '</div>' +
+                    '</a>' +
+                    '<div class="geo-text">' +
+                    'App-ID: ' + data.application_id +
+                    '</div>' +
+                    '<a class="btn btn-geohash-default btn-block  m-b-30" href="/app_status/change_status/' + data.application_id + '" target="_blank">Lihat Detail Pemohon</a>');
+            });
+
+            if (id == 'geohash6') {
+                geoTag.append(json.geohash6)
+              }
+
+            $(geoPaginationElem).pagination({
+                items: numItems,
+                itemsOnPage: perPage,
+                prevText: "&laquo;",
+                nextText: "&raquo;",
+                onPageClick: function(pageNumber) {
+                    var showFrom = perPage * (pageNumber - 1);
+                    var showTo = showFrom + perPage;
+                    items.hide().slice(showFrom, showTo).show();
+                    geoDiv.empty();
+                    $.ajax({
+                        url: '{%url 'app_status:ajax_fraud_show_similar_faces' %}/?application_id='+appID+'&type='+id+'&page='+pageNumber,
+                        type: "GET",
+                        async: false,
+
+                        success: function(json) {
+                            geoData = json.data;
+                            goeCurrentData = json.current_selfie_data;
+
+                            geoDiv.append(
+                                '<div class="col-sm-3 col-geo-lists text-center highlight">' +
+                                '<a class="m-b-30 center-block" href="#" onclick="imgClick(this)"  >' +
+                                '<div class="watermarked">' +
+                                '<img class="img-responsive img"  src="' + goeCurrentData.url + '" >' +
+                                '<span>' + watermark_text + '</span>' +
+                                '<span>' + watermark_text + '</span>' +
+                                '<span>' + watermark_text + '</span>' +
+                                '</div>' +
+                                '</a>' +
+                                '<div class="geo-text">' +
+                                'App-ID: ' + goeCurrentData.application_id +
+                                '</div>' +
+                                '<a class="btn btn-geohash-default btn-block  m-b-30" href="/app_status/change_status/' + goeCurrentData.application_id + '" target="_blank">Lihat Detail Pemohon</a>'
+                            );
+
+                            $.each(geoData, function(i, data) {
+                                geoDiv.append(
+                                    '<div class="col-sm-3 col-geo-lists text-center">' +
+                                    '<a class="m-b-30 center-block" href="#" onclick="imgClick(this)"  >' +
+                                    '<div class="watermarked">' +
+                                    '<img class="img-responsive img"  src="' + data.url + '" >' +
+                                    '<span>' + watermark_text + '</span>' +
+                                    '<span>' + watermark_text + '</span>' +
+                                    '<span>' + watermark_text + '</span>' +
+                                    '</div>' +
+                                    '</a>' +
+                                    '<div class="geo-text">' +
+                                    'App-ID: ' + data.application_id +
+                                    '</div>' +
+                                    '<a class="btn btn-geohash-default btn-block  m-b-30" href="/app_status/change_status/' + data.application_id + '" target="_blank">Lihat Detail Pemohon</a>');
+                            });
+                        },
+                        error: function(xhr, errmsg, err) {
+                            geoDiv.append('<p class="text-center p-20"><code> ------ Tidak Ada Data -----</code></p>')
+                        },
+
+                    });
+                }
+            });
+        },
+        error: function(xhr, errmsg, err) {
+            geoDiv.append('<p class="text-center p-20"><code> ------ Tidak Ada Data -----</code></p>')
+        },
+    });
+};
+
+function imgClick(e) {
+    var src = $(e).find('img').attr('src');
+    var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})';
+
+    Swal.fire({
+        html: '<div class="watermarked">' +
+            '<img src="' + src + '" class="img-responsive img-modal m-auto"> ' +
+            '<div class="vertical-watermark">' + watermark_text + '</div>' +
+            '</div>',
+        width: '800px',
+        confirmButtonText: 'Tutup Preview',
+    })
+}
+
+$("img").on("error", function () {
+    $(this).attr("src","{% static 'images/icons/ic-placeholder.png' %}"
+    );
+});
+{% endblock %}
+
+{% block script_end %}
+<link href="{% static 'default/css/selfie-in-geohash.css' %}" rel="stylesheet" />
+<script type="text/javascript" charset="utf8"  src="{% static 'theme/plugins/bower_components/sweetalert2/sweetalert2.min.js' %}"></script>
+<script type="text/javascript" charset="utf8"  src="{% static 'theme/plugins/bower_components/pagination/customPagination.js' %}"></script>
+{% endblock %}

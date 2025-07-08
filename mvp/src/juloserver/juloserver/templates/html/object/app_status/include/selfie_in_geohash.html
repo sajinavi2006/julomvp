@@ -1,0 +1,21 @@
+{% load checkusergroup from common %}
+{% load unit %}
+<div class="row row-geohash">
+   <div class="geo-text">Selfie yang terdeteksi di Geohash <span class="label label-rouded pull-center small badges" id="geo_tag"></span>
+   </div>
+   <div class="col-sm-12 container-geohash">
+      <p class="text m-b-0">Pilih Jarak Geohash</p>
+      <p class="sub-text">Jarak geohash menentukan jarak radius area. </p>
+      <ul class="nav nav-tabs tab-geohash customtab tabs in">
+         <li class="tab active" id="geohash6" style="width: 100%;">
+            <a data-toggle="tab" title="Geohash 6">
+              <span>Geohash 6 (Radius 1.22 km vs 0.61 km)</span>
+              <small id="count_geo6"></small>
+            </a>
+         </li>
+      </ul>
+      <div id="selfie_geo_detail">
+      </div>
+   </div>
+</div>
+<!-- .row -->

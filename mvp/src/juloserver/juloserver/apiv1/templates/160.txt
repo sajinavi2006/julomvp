@@ -1,0 +1,1 @@
+Selamat! Dana pinjaman siap dicairkan. Sebagai langkah akhir, silahkan review <a href=\"http://www.julofinance.com/android/goto/agreement\">Surat Perjanjian Hutang Piutang</a> sebelum kadaluarsa pada tanggal {{expiry_date}}.

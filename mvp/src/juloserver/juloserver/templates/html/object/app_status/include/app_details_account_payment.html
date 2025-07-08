@@ -1,0 +1,643 @@
+{% load unit utils %}
+{% load static %}
+{% load checkusergroup from common %}
+
+  {% checkusergroup in ['j1_agent_assisted_100'] %}
+  {% if is_can_assisted_agent_j1 %}
+    <div align="left">
+        <a href="#" onclick="check_locked_data('{% url 'app_status:application_form_assist' object.id %}', {{ object.id }});" class="btn btn-info appcheck" style="border-radius:3px;background: none;color: #03a9f3;">
+          Lengkapi Form Pengguna
+        </a>
+    </div>
+
+    <div id="modal-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header label-success">
+                    <h4 class="modal-title" id="modal-locked-app_title">Title</h4> </div>
+                <div class="modal-body" id="modal-locked-app_body">
+                  Body
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-custom waves-effect" id="lock_edit_app" data-dismiss="modal" onclick="go_locked_app();">Kunci dan Lengkapi</button>
+                    <button type="button" class="btn btn-default waves-effect" id="cancel_app" data-dismiss="modal" onclick="close_btn();">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <div id="modal-see-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header label-success">
+                  <h4 class="modal-title" id="modal_see_title">Title</h4> </div>
+              <div class="modal-body" id="modal_see_body">
+                Body
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-warning waves-effect" data-dismiss="modal" onclick="reload_btn();">Lihat Aplikasi</button>
+                  <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  {% endif %}
+  {% endcheckusergroup %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+  {% if 'payment_status' not in request.get_full_path %}
+    <li class="tab active">
+      <a href="#dvc" data-toggle="tab" title="DVC" class="tab_dvc">
+        <span class="visible-xs">
+          <i class="fa fa-user"></i>
+        </span>
+        <span class="hidden-xs">DVC</span>
+      </a>
+    </li>
+
+    <!-- Start "Updated Data" tab-->
+    {% include 'object/app_status/include/customer_data/updated_data_tab_menu.html' %}
+    <!-- End "Updated Data" tab-->
+
+    {% checkusergroup in ['bo_data_verifier','admin_full'] %}
+      <li class="tab">
+        <a href="#download" id="sd_tab" data-toggle="tab" aria-expanded="false" title="Scraped Data Download">
+          <span class="visible-xs"><i class="fa fa-file-o"></i></span>
+          <span class="hidden-xs">SD</span>
+          {% if sd_data or bpjs_details or bank_report_url%}
+            <i class="fa fa-folder-open" aria-hidden="true"></i>
+          {% else %}
+            <i class="fa fa-folder-open fa-empty" aria-hidden="true"></i>
+          {% endif %}
+        </a>
+      </li>
+    {% endcheckusergroup %}
+    {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+      {%if object.application_status.status_code >= 130 %}
+        {% checkusergroup in ['bo_sd_verifier','admin_full','bo_credit_analyst'] %}
+          <li class="tab">
+            <a href="#offerdata"
+               id="offer_tab"
+               data-toggle="tab"
+               aria-expanded="false"
+               title="Offers">
+              <span class="visible-xs"><i class="fa fa-money"></i></span>
+              <span class="hidden-xs">OFFER</span>
+            </a>
+          </li>
+        {% endcheckusergroup %}
+      {% endif %}
+    {% endcheckusergroup %}
+    {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+      <li class="tab">
+        <a href="#fin" data-toggle="tab" aria-expanded="false" title="Basic Financial Calculation">
+          <span class="visible-xs"><i class="fa fa-money"></i></span>
+          <span class="hidden-xs">FIN</span>
+          {% if object.product_line %}
+            {% if object.dti_capacity < object.basic_installment_discount %}
+              <i class="text-danger fa fa-times-circle"></i>
+            {% else %}
+              {% if object.basic_financial < object.basic_installment_discount %}
+                <i class="text-danger fa fa-times-circle"></i>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        </a>
+      </li>
+    {% endcheckusergroup %}
+    {%if 'app_status'  in request.get_full_path %}
+      {% checkusergroup in ['admin_full','bo_full','bo_data_verifier','cs_team_leader'] %}
+       <li class="tab">
+        <a href="#security" data-toggle="tab" aria-expanded="false" title="Security">
+          <span class="visible-xs">
+            <i class="fa fa-unlock"></i>
+          </span>
+          <span class="hidden-xs">Security</span>
+        </a>
+      </li>
+    {% endcheckusergroup %}
+   {% endif %}
+   {%if object.application_status.status_code == 190 and 'account_details' not in request.path %}
+       <li class="tab">
+        <a href="#ba" data-toggle="tab" aria-expanded="false" title="Bank Account">
+          <span class="visible-xs">
+            <i class="fa fa-unlock"></i>
+          </span>
+          <span class="hidden-xs">Bank Account</span>
+        </a>
+      </li>
+       <li class="tab">
+        <a href="#cfs" class="js-tab" data-toggle="tab" aria-expanded="false" title="CFS"
+          data-url="{% url 'crm_cfs:ajax_app_status_tab' object.id %}"
+        >
+          <span class="visible-xs">
+            <i class="linea-icon linea-basic"></i>
+          </span>
+          <span class="hidden-xs">CFS</span>
+        </a>
+      </li>
+    {% endif %}
+    {%if status_skiptrace %}
+        <li class="tab">
+          <a href="#st" data-toggle="tab" aria-expanded="false" title="Skip Tracing">
+            <span class="visible-xs"><i class="fa fa-chevron-circle-down"></i></span>
+            <span class="hidden-xs">ST</span>
+          </a>
+        </li>
+      {% endif %}
+
+    {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+      {%if object.application_status.status_code in disburse_process_statuses %}
+        {% checkusergroup in ['bo_finance'] %}
+          <li class="tab" >
+            <a href="#disbursement" id="disbursement_tab" data-toggle="tab" aria-expanded="false" title="Disbursement" style="background:rgba(255, 252, 0, 0.42)">
+              <span class="visible-xs"><i class="fa fa-usd"></i></span>
+              <span class="hidden-xs" ><b>DISBURSEMENT</b></span>
+            </a>
+          </li>
+        {% endcheckusergroup %}
+      {% endif %}
+       {%if object.partner.name == partner_laku6 or object.application_status.status_code == experiment.target_status and object.is_julo_one or object.application_status.status_code == 141 and object.is_julover or object.application_status.status_code == 144 and object.is_julo_one %}
+        {%if object.application_status.status_code >= 120 and 'account_details' not in request.path %}
+          <li class="tab" >
+              <a href="#name_bank_validation" id="name_bank_validation_tab" data-toggle="tab" title="Name Bank Validation">
+                <span class="visible-xs"><i class="fa fa-usd"></i></span>
+                <span class="hidden-xs" >NAME BANK VALIDATION</span>
+
+              </a>
+            </li>
+        {% endif %}
+       {% endif %}
+
+      {% if 'payment_status' in request.path or 'account_details' in request.path %}
+        <li class="tab">
+          <a href="#doc_verify_payment_account" data-toggle="tab" title="Document Verify Pay" class="tab_doc_verify">
+            <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+            <span class="hidden-xs">Document Verify</span>
+          </a>
+        </li>
+      {% endif %}
+      {% if object.application_status.status_code == 180 or object.application_status.status_code == 190 or 121 <= object.application_status.status_code and object.application_status.status_code <= 192 and object.is_jstarter %}
+        {% checkusergroup in ['bo_finance'] %}
+          <!-- Head Redeem Cashback -->
+          <li class="tab">
+            <a href="#redeem_cashback" data-toggle="tab" title="Document Verify Pay" class='tab_doc_verify'>
+              <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+              <span class="hidden-xs">Redeem Cashback</span>
+            </a>
+          </li>
+          <!-- Head Pending Overpaid -->
+          <li class="tab">
+            <a href="#overpaid_cases" data-toggle="tab" title="Overpaid">
+              <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+              <span class="hidden-xs">Overpaid</span>
+            </a>
+          </li>
+        {% endcheckusergroup %}
+      {% endif %}
+      {% if object.application_status.status_code == 190 and object.account.status_id in fraud_check_status_list and object.account.status_id != 432 %}
+        {% checkusergroup in ['admin_full','ops_supervisor','ops_team_leader','bo_general_cs','fraudcolls','fraudops'] %}
+          <!-- Head Fraud -->
+          <li class="tab">
+            <a href="#fraud" data-toggle="tab" title="Fraud">
+              <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+              <span class="hidden-xs">Fraud</span>
+            </a>
+          </li>
+        {% endcheckusergroup %}
+      {% endif %}
+      {%if status_fraud_collection and object.account.status_id == 441%}
+        <li class="tab">
+          <a href="#st" data-toggle="tab" aria-expanded="false" title="Fraud Collection">
+            <span class="visible-xs"><i class="fa fa-chevron-circle-down"></i></span>
+            <span class="hidden-xs">FC</span>
+          </a>
+        </li>
+      {% endif %}
+      {%if object.application_status.status_code == 141 or object.application_status.status_code == 190 %}
+      <li class="tab">
+        <a href="#autodebit_act" data-toggle="tab" title="Autodebet Act">
+          <span class="visible-xs"><i class="fa fa-chevron-circle-down"></i></span>
+          <span class="hidden-xs">Autodebet Act</span>
+        </a>
+      </li>
+      {% endif %}
+    {% endcheckusergroup %}
+  <!-- Tab Reverification -->
+    {% if show_reverification %}
+    {% checkusergroup in ['fraudops','admin_full','waiver_fraud_approver'] %}
+    <li class="tab">
+      <a href="#reverification" data-toggle="tab" title="Reverification">
+        <span class="hidden-xs">Reverification</span>
+      </a>
+    </li>
+    {% endcheckusergroup %}
+    {% endif %}
+  {% else %}
+    <li class="tab active">
+      <a href="#dvc" data-toggle="tab" title="DVC" class="tab_dvc">
+        <span class="visible-xs">
+          <i class="fa fa-user"></i>
+        </span>
+        <span class="hidden-xs">DVC</span>
+      </a>
+    </li>
+    {% if is_iso_inactive %}
+      {% checkusergroup in ['bo_sd_verifier','admin_full'] %}
+        <li class="tab">
+          <a href="#download"
+             id="sd_tab"
+             data-toggle="tab"
+             aria-expanded="false"
+             title="Scraped Data Download">
+            <span class="visible-xs"><i class="fa fa-file-o"></i></span>
+            <span class="hidden-xs">SD</span>
+            {% if sd_data or bpjs_details or bank_report_url%}
+              <i class="fa fa-folder-open" aria-hidden="true"></i>
+            {% else %}
+              <i class="fa fa-folder-open fa-empty" aria-hidden="true"></i>
+            {% endif %}
+          </a>
+        </li>
+      {% endcheckusergroup %}
+      {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+        {%if object.application_status.status_code >= 130 %}
+          {% checkusergroup in ['bo_sd_verifier','admin_full','bo_credit_analyst'] %}
+            <li class="tab">
+              <a href="#offerdata"
+                 id="offer_tab"
+                 data-toggle="tab"
+                 aria-expanded="false"
+                 title="Offers">
+                <span class="visible-xs"><i class="fa fa-money"></i></span>
+                <span class="hidden-xs">OFFER</span>
+              </a>
+            </li>
+          {% endcheckusergroup %}
+        {% endif %}
+      {% endcheckusergroup %}
+      {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+        <li class="tab">
+          <a href="#fin" data-toggle="tab" aria-expanded="false" title="Basic Financial Calculation">
+            <span class="visible-xs"><i class="fa fa-money"></i></span>
+            <span class="hidden-xs">FIN</span>
+            {% if object.product_line %}
+              {% if object.dti_capacity < object.basic_installment_discount %}
+                <i class="text-danger fa fa-times-circle"></i>
+              {% else %}
+                {% if object.basic_financial < object.basic_installment_discount %}
+                  <i class="text-danger fa fa-times-circle"></i>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          </a>
+        </li>
+      {% endcheckusergroup %}
+      {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+        {%if object.application_status.status_code in disburse_process_statuses %}
+          {% checkusergroup in ['bo_finance'] %}
+            <li class="tab" >
+              <a href="#disbursement"
+                 id="disbursement_tab"
+                 data-toggle="tab"
+                 aria-expanded="false"
+                 title="Disbursement"
+                 style=" background:rgba(255, 252, 0, 0.42)">
+                <span class="visible-xs"><i class="fa fa-usd"></i></span>
+                <span class="hidden-xs" ><b>DISBURSEMENT</b></span>
+              </a>
+            </li>
+          {% endcheckusergroup %}
+        {% endif %}
+        {%if object.partner.name == "laku6" or object.application_status.status_code == 124 and object.is_julo_one or object.application_status.status_code == 141 and object.is_julover or object.application_status.status_code == 144 and object.is_julo_one %}
+          {%if object.application_status.status_code >= 120 %}
+            <li class="tab" >
+              <a href="#name_bank_validation"
+                 id="name_bank_validation_tab"
+                 data-toggle="tab"
+                 aria-expanded="false"
+                 title="Name Bank Validation"
+                 style=" background:rgba(255, 252, 0, 0.42)">
+                <span class="visible-xs"><i class="fa fa-usd"></i></span>
+                <span class="hidden-xs" >NAME BANK VALIDATION</span>
+              </a>
+            </li>
+          {% endif %}
+        {% endif %}
+        {% if object.application_status.status_code == 180 or object.application_status.status_code == 190 or 121 <= object.application_status.status_code and object.application_status.status_code <= 192 and object.is_jstarter %}
+          {% checkusergroup in ['bo_finance'] %}
+            <!-- Head Redeem Cashback -->
+            <li class="tab">
+              <a href="#redeem_cashback" data-toggle="tab" title="Document Verify Pay">
+                <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+                <span class="hidden-xs">Redeem Cashback</span>
+              </a>
+            </li>
+            <!-- Head Pending Overpaid -->
+            <li class="tab">
+              <a href="#overpaid_cases" data-toggle="tab" title="Overpaid">
+                <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+                <span class="hidden-xs">Overpaid</span>
+              </a>
+            </li>
+          {% endcheckusergroup %}
+        {% endif %}
+      {% endcheckusergroup %}
+    {% endif %}
+
+    {% checkusergroup in ['admin_full','admin_read_only','bo_data_verifier','collection_supervisor','ops_repayment'] %}
+      <li class="tab">
+        <a href="#doc_verify_payment" data-toggle="tab" title="Document Verify Pay" class="tab_doc_verify">
+          <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+          <span class="hidden-xs">Document Verify</span>
+        </a>
+      </li>
+    {% endcheckusergroup %}
+    {%if status_skiptrace %}
+      <li class="tab">
+        <a href="#st" data-toggle="tab" aria-expanded="false" title="Skip Tracing">
+          <span class="visible-xs"><i class="fa fa-chevron-circle-down"></i></span>
+          <span class="hidden-xs">ST</span>
+        </a>
+      </li>
+    {% endif %}
+    {% checkusergroup in ['collection_courtesy_call'] %}
+          <li class="tab">
+            <a href="#autodebit_act" data-toggle="tab" title="Autodebet Act">
+              <span class="visible-xs"><i class="fa fa-chevron-circle-down"></i></span>
+              <span class="hidden-xs">Autodebet Act</span>
+            </a>
+          </li>
+    {% endcheckusergroup %}
+  {% endif %}
+  {% if object.application_status.status_code in dukcapil_tab_statuses %}
+      <li class="tab">
+        <a href="#dukcapil" data-toggle="tab" title="Dukcapil" data-test="dukcapil-tab">
+          <span class="visible-xs"><i class="fa fa-file-text-o"></i></span>
+          {% if highlight_dukcapil_tab %}
+          <span class="hidden-xs">Dukcapil <img src="{% static 'theme/plugins/images/warning-round.svg'%}"> </span>
+          {% else %}
+          <span class="hidden-xs">Dukcapil</span>
+          {% endif %}
+        </a>
+      </li>
+  {% endif %}
+  {% if risky_fraud_list %}
+      <span class="suspicious_warning">
+        {% if risky_fraud_list|length == 1 %}
+        <span class="suspicious_warning_text"><img src="{% static 'theme/plugins/images/warning.svg'%}" height="14px">&nbsp;Suspicious:&nbsp;<strong> {{risky_fraud_list | first}}</strong></span>
+        {% elif risky_fraud_list|length > 1%}
+          <span class="sus_dropdown">
+            <span class="suspicious_warning_text sus_dropdown_btn"><img src="{% static 'theme/plugins/images/warning.svg'%}" height="14px">&nbsp;Suspicious:&nbsp;<strong> MULTIPLE FACTORS</strong></span>
+              <div class="suspicious-list">
+                {% for fraud in risky_fraud_list %}
+                <p>{{fraud}}</p>
+                {% endfor %}
+              </div>
+          </span>
+        {% endif %}
+      </span>
+  {% endif %}
+  {% if check_sonic_bypass %}
+  <div align="right">
+      <span class="hidden-xs" style="color:green;;font-size:12px;position:inherit;
+      font-weight:bold;" >sonic_bypass</span>
+  </div>
+{% endif %}
+  {% if check_high_score_full_bypass %}
+    <div align="right">
+        <span class="hidden-xs" style="color:green;;font-size:12px;position:inherit;
+        font-weight:bold;" >High_score_full_bypass</span>
+    </div>
+  {% endif %}
+  {% if check_offline_activation_flow %}
+    <div align="right">
+        <span class="hidden-xs" style="color:green;;font-size:12px;position:inherit;
+        font-weight:bold;" >Offline_activation_booth</span>
+    </div>
+  {% endif %}
+  {% if is_julo_one_ios %}
+    <div align="right">
+        <span class="hidden-xs" style="color:blue;;font-size:12px;position:inherit;
+        font-weight:bold;" >APPLE_IOS</span>
+    </div>
+  {% endif %}
+</ul>
+<div id="slim_apps">
+  <div class="tab-content">
+    {% if 'payment_status' in request.path %}
+      <!-- Tab personal -->
+      <div class="tab-pane active" id="dvc">
+        {% include "object/app_status/include/tab_dvc.html" %}
+      </div>
+      <!-- Document Verify -->
+      <div class="tab-pane" id="doc_verify_payment">
+          {% include "object/app_status/include/detail_images.html" %}
+      </div>
+        <!-- Autodebet Act -->
+        <div class="tab-pane" id="autodebit_act">
+          {% include "object/app_status/include/tab_autodebit_act.html" %}
+        </div>
+      {% if is_iso_inactive %}
+        <!-- Tab Download -->
+        {% checkusergroup in ['bo_data_verifier','admin_full'] %}
+          <div class="tab-pane" id="download">
+            {% include "object/app_status/include/tab_download.html" %}
+          </div>
+        {% endcheckusergroup %}
+        {%if object.application_status.status_code >= 130 %}
+          {% checkusergroup in ['bo_sd_verifier','admin_full','bo_credit_analyst'] %}
+            <div class="tab-pane" id="offerdata">
+              {% include "object/app_status/include/tab_offer.html" %}
+            </div>
+          {% endcheckusergroup %}
+        {% endif %}
+        <!-- Tab Financial -->
+        <div class="tab-pane" id="fin">
+          {% include "object/app_status/include/tab_fin.html" %}
+        </div>
+
+        <!-- Tab Skip Tracing -->
+        <div class="tab-pane" id="st">
+          {% include "object/app_status/include/account_payment_tab_skip_tracing.html" %}
+        </div>
+
+
+        <!-- Tab Dibursement -->
+        <div class="tab-pane" id="disbursement">
+          {% include "object/app_status/include/tab_disbursement2.html" %}
+        </div>
+
+        <!-- Tab name_bank_validation -->
+        <div class="tab-pane" id="name_bank_validation">
+          {% include "object/app_status/include/tab_namebankvalidate.html" %}
+        </div>
+        {% checkusergroup in ['bo_finance'] %}
+          <!-- Tab Redeem Cashback -->
+          <div class="tab-pane" id="redeem_cashback">
+            {% if cashback_transfer %}
+              {% include "object/app_status/include/tab_redeem_cashback.html" %}
+            {% else %}
+              <code> ------ Tidak Ada Data -----</code>
+            {% endif %}
+          </div>
+          <!-- Tab Overpaid -->
+          <div class="tab-pane" id="overpaid_cases">
+            {% if overpaid_cases %}
+              {% include "object/app_status/include/tab_overpaid_cases.html" %}
+            {% else %}
+              <code> ------ Tidak Ada Data -----</code>
+            {% endif %}
+          </div>
+        {% endcheckusergroup %}
+      {% else %}
+        <!-- Tab Skip Tracing -->
+        <div class="tab-pane active" id="st">
+          {% include "object/app_status/include/tab_skip_tracing.html" %}
+        </div>
+      {% endif %}
+    {% else %}
+      <!-- Tab personal -->
+        <div class="tab-pane active" id="dvc">
+          {% include "object/app_status/include/tab_dvc.html" %}
+        </div>
+
+      <!-- Start "Updated Data" tab content -->
+      {% include 'object/app_status/include/customer_data/updated_data_tab_content.html' %}
+      <!-- End "Updated Data" tab content -->
+
+      <!-- Document Verify -->
+      {% if 'account_details' in request.path %}
+        <div class="tab-pane" id="doc_verify_payment_account">
+        {% include "object/app_status/include/detail_images.html" %}
+        </div>
+        {% endif %}
+      <!-- Tab Download -->
+      {% checkusergroup in ['bo_data_verifier','admin_full'] %}
+        <div class="tab-pane" id="download">
+          {% include "object/app_status/include/tab_download.html" %}
+        </div>
+      {% endcheckusergroup %}
+      {%if object.application_status.status_code >= 130 %}
+        {% checkusergroup in ['bo_sd_verifier','admin_full','bo_credit_analyst'] %}
+          <div class="tab-pane" id="offerdata">
+            {% include "object/app_status/include/tab_offer.html" %}
+          </div>
+        {% endcheckusergroup %}
+      {% endif %}
+      <!-- Tab Financial -->
+      <div class="tab-pane" id="fin">
+        {% include "object/app_status/include/tab_fin.html" %}
+      </div>
+       <!-- Tab Security -->
+      {%if 'app_status'  in request.get_full_path %}
+       {% checkusergroup in ['admin_full','bo_full','bo_data_verifier','cs_team_leader'] %}
+        <div class="tab-pane" id="security">
+          {% include "object/app_status/include/tab_security.html" %}
+        </div>
+       {% endcheckusergroup %}
+       {% endif %}
+      {%if object.application_status.status_code == 190 %}
+        <!-- Tab Bank Account -->
+        <div class="tab-pane" id="ba">
+          {% include "object/app_status/include/table_name_bank_validation_julo_one.html" %}
+        </div>
+      {% endif %}
+      {% if object.application_status.status_code == 141 or object.application_status.status_code == 190 %}
+        <!-- Tab Autodebit Act -->
+        <div class="tab-pane" id="autodebit_act">
+          {% include "object/app_status/include/tab_autodebit_act.html" %}
+        </div>
+      {% endif %}
+      <!-- Tab Skip Tracing -->
+      <div class="tab-pane" id="st">
+        {% include "object/app_status/include/tab_skip_tracing.html" %}
+      </div>
+
+      <!-- Tab Dibursement -->
+      <div class="tab-pane" id="disbursement">
+        {% include "object/app_status/include/tab_disbursement2.html" %}
+      </div>
+      <!-- Tab name_bank_validation -->
+      <div class="tab-pane" id="name_bank_validation">
+        {% include "object/app_status/include/tab_namebankvalidate.html" %}
+      </div>
+      {% checkusergroup in ['bo_finance'] %}
+        <!-- Tab Redeem Cashback -->
+        <div class="tab-pane" id="redeem_cashback">
+          {% if cashback_transfer %}
+            {% include "object/app_status/include/tab_redeem_cashback.html" %}
+          {% else %}
+            <code> ------ Tidak Ada Data -----</code>
+          {% endif %}
+        </div>
+        <!-- Tab Overpaid -->
+        <div class="tab-pane" id="overpaid_cases">
+          {% if overpaid_cases %}
+            {% include "object/app_status/include/tab_overpaid_cases.html" %}
+          {% else %}
+            <code> ------ Tidak Ada Data -----</code>
+          {% endif %}
+        </div>
+      {% endcheckusergroup %}
+      <!-- Tab Fraud -->
+      <div class="tab-pane" id="fraud">
+        {% include "object/app_status/include/tab_fraud.html" %}
+      </div>
+      <!-- Tab CFS -->
+      <div class="tab-pane" id="cfs">
+        {# Will be filled from javascript #}
+      </div>
+    {% endif %}
+    <!-- Tab Dukcapil -->
+    {% if object.application_status.status_code in dukcapil_tab_statuses %}
+      <div class="tab-pane active" id="dukcapil">
+        {% include "object/app_status/include/tab_dukcapil.html" %}
+      </div>
+    {% endif %}
+    <!-- Tab Reverification -->
+    {% if show_reverification %}
+      <div class="tab-pane active" id="reverification">
+        {% include "object/app_status/include/tab_reverification.html" %}
+      </div>
+    {% endif %}
+    </div>
+</div>
+
+{%if form_app %}
+<div class="row m-t-10">
+  <div class="col-md-12 col-xs-12 m-p-20">
+    {% if update_app_active %}
+        <div class="alert alert-warning" id="id_error_div_2">
+          <code>{{ message_out_update_app|escape }}</code><br/>
+        </div>
+    {% endif %}
+    {% if form_app.errors %}
+      {% for error in form_app.non_field_errors %}
+        <div class="alert alert-danger" id="id_error_div_1">
+          <strong>{{ error|escape }}</strong>
+        </div>
+      {% endfor %}
+      {% for error in field.errors %}
+        <div class="alert alert-danger">
+          <strong>{{ error|escape }}</strong>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-danger">
+          <strong>{{ message|escape }}</strong>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% if not lock_status and agent_update_app_status != 0 %}
+      <button type="button" class="btn btn btn-warning btn-block" id="id_btn_update_app">
+        <i class="txt-warning fa fa-save fa-fw"></i> Update Aplikasi
+      </button>
+    {%endif%}
+  </div>
+</div>
+{%endif%}

@@ -1,0 +1,2043 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+{% load currency %}
+{% load format_date %}
+{% load model %}
+{% load static from staticfiles %}
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+        .w170 {
+            width: 170px;
+        }
+        .w15{
+            width: 20px;
+        }
+        .w200 {
+            width: 200px;
+        }
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight:bold;
+            color: #67717F;
+        }
+        .dot-false {
+          height: 15px;
+          width: 15px;
+          background-color: #bbb;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        .dot-true {
+          height: 15px;
+          width: 15px;
+          background-color: #5AD3A6;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        .txt-align {
+            padding: 10px;
+        }
+        .txt-blue {
+            color: blue;
+        }
+        .error-msg {
+            border: 1px solid red;
+        }
+        .container {
+            width : 90% !important;
+        }
+        .border-grey {
+            border-right: 10px solid #cccccc
+        }
+        .border-blue {
+            border: 5px solid #33C4FF;
+        }
+        .left-div-bg {
+            height: 40px !important;
+            background-color: #AB8BE4 !important;
+            font-size: 14px !important;
+            padding: 10px !important;
+            font-weight: bold !important;
+            line-height: 16px !important;
+            font-color: white !important;
+        }
+        .text-left {
+            font-size: 12px !important;;
+            font-weight: bold !important;
+            padding-left: 15px !important;
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+            font-color: white !important;
+            line-height: 14px !important;
+        }
+        .text-right {
+            font-size: 12px;
+            padding-left: 15px !important;
+            text-align: left;
+            font-color: #000000 !important;
+            line-height: 14px !important;
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+        }
+        .box-padding {
+            padding-bottom: 30px;
+        }
+        .box-row-ht {
+            height: 25px !important;
+        }
+        .small-text {
+            font-size: 8px !important;;
+        }
+        .right-div-bg-top, .right-div-bg-bottom{
+            height: 40px !important;
+            background-color: #AB8CE4 !important;
+            font-size: 14px !important;
+            padding: 10px !important;
+            font-weight: bold !important;
+            line-height: 16px !important;
+            color: white !important;
+            text-align: center;
+        }
+        .right-div-bg-bottom {
+            background-color: #98FB98 !important;
+        }
+        .align-middle {
+            text-align: center !important;
+        }
+        .align-left {
+            text-align: left !important;
+        }
+        .align-right {
+            text-align: right !important;
+            padding-right: 10px !important;
+        }
+        .align-right_txt {
+            text-align: right !important;
+            padding-right: 2% !important;
+        }
+        .loading-div, .loading-div_simulasi {
+            background: gray none repeat scroll 0 0;
+            display: inline;
+            height: 500px;
+            left: 0;
+            opacity: 0.20;
+            position: absolute;
+            width: 100%;
+            z-index: 999;
+        }
+        #loading-div > img, #loading-div_simulasi > img{
+            left: 30%;
+            position: absolute;
+            top: 50px;
+        }
+        .btn-circle-portal {
+            background-color: #AB8CE4;
+            border: none;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 33px 2px;
+            border-radius: 8px;
+            width: 35%;
+        }
+
+        /* move to new style */
+        .table-header {
+            background-color: #7454C4;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin: 0;
+        }
+        .table-header > .glyphicon {
+            float: left;
+        }
+        .web-portal-thead > tr > th{
+            height: 77px;
+        }
+        .web-portal-thead > tr > th:not(.exclude-min){
+            min-width: 120px !important;
+        }
+        .exclude-min {
+            width: 77px;
+        }
+        .exclude-min-60 {
+            width: 58.75px !important;
+        }
+        .payment-number {
+            width: 85px !important;
+        }
+        .extend-padding {
+            padding: 17px 10px !important;
+        }
+        .extend-padding-2x {
+            padding: 10px 10px !important;
+        }
+        .extend-padding-1l-2x {
+            padding: 20px 10px !important;
+        }
+        .input-padding {
+            padding: 8px 10px !important;
+        }
+        .min-20-line-data tbody > tr > td {
+        }
+        .font-weight-bold {
+            font-weight: bold;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div style="border-bottom: 1px solid;">
+        <h3 class="box-title m-b-0">COLLECTION OFFER RECOMMENDATIONS (Approval)</h3>
+    </div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+    <div class="loading-div" style="display:none;padding-left:30px;" id="loading-div" >
+        <img src="{% static 'images/collections/ajax-loader.gif' %}" >
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form method="get" id="frm_search_loan">
+                <div class="center flex">
+                    <label class="w100">Loan ID:</label>
+                    <div style="width: 200px;">
+                        <input type="text" class="form-control" name="loan_id" id="loan_id"
+                               value="{{ loan_id }}" maxlength="15"
+                               onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+                    </div>
+                    <div style="width: 200px;">
+                        &nbsp;&nbsp;<button type="button" class="btn btn-primary" id="btn_search_loan">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row hide-after-submit" style="{% if show == False %} display:none; {% endif %} ">
+        <div class="col-md-3 border-grey">
+            <div id="div_interview" class="row">
+                <div class="col-md-12">
+                    <div class="row left-div-bg">
+                        <div class="col-md-12" style="color: white">
+                            General Info
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Program</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div>
+                                    <span class="loan-id">{{ program_name }}</span>
+                                </div>
+                                <input type="hidden" name="program_name" value="{{ program_name }}" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Loan ID:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ loan_id }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Nama Customer:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ customer_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Email:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ email_address }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Original program:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ original_program_name }}</span>
+                                </div>
+                                <input type="hidden" name="original_program_name" value="{{ original_program_name }}" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Agent:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ agent_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Tanggal waiver dibuat:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ waiver_cdate | format_date_to_locale_format }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Employment Status:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ new_employment_status }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Notes:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="glyphicon glyphicon-comment" aria-hidden="true" style="color: #53C292; cursor: pointer;"  data-toggle="modal" data-target="#agentNoteModal"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Jumlah Pembayaran:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ waived_payment_count }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Waived Payment:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="loan-id">{{ waived_payment_list }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Total Outstanding Amount:</label>
+                                 <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                 <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="input-group-addon">Rp.</span>
+                                    <input class="form-control mask" maxlength="15" type="text" value="{{ outstanding_amount|add_separator }}" name="total_outstanding_amount" disabled>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Waiver Amount:</label>
+                                 <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                 <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="input-group-addon">Rp.</span>
+                                    <input class="form-control mask" maxlength="15" type="text" value="{{ requested_waiver_amount|add_separator }}" name="approved_waiver_amount">
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Requested PTP Amount:</label>
+                                 <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                 <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="input-group-addon">Rp.</span>
+                                    <input class="form-control mask" maxlength="15" type="text" value="{{ requested_ptp_amount|add_separator }}" name="agent_ptp_amount" disabled>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" {% if not waiver_request_id %}style="display: none;"{% endif %}>
+                        <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Waiver Validity Date:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <div class="input-group m-t-10" style="width: 210px;">
+                                    <span class="input-group-addon glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    <input class="form-control datepicker" id="waiver_validity_date" name="waiver_validity_date" placeholder="dd M yyyy" type="text">
+                                    <input type="hidden" id="waiver_validity_date_db" value="{{ waiver_validity_date|format_date_ymd_format }}" name="approved_waiver_validity_date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="center flex" style="float:right; padding-top:15px;">
+                                <div style="width: 223px;">
+                                    <button type="button" class="btn btn-primary btn_calculate_waiver" id="btn_calculate_waiver" onclick="recalculate();">Calculate</button>
+                                    <button type="button" class="btn btn-primary" id="reset" onclick="reset()">Reset</button>&nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-lg-12" id="flex_table" style="display: flex;">
+                    <div style="width: 50%">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr style="background-color: #8E6AD4">
+                                    <th class="align-middle" colspan="2" style="color: white">PTP Information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="align-middle">PTP Paid</td>
+                                    <td class="align-middle">
+                                        <span>{{ ptp_paid | add_rupiah_separator }}</span>
+                                        <input type="hidden" name="paid_ptp_amount" value="{{ ptp_paid }}" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle extend-padding">PTP amount</td>
+                                    <td class="align-middle extend-padding">
+                                        <span>{{ ptp_amount | add_rupiah_separator }}</span>
+                                        <input type="hidden" name="ptp_amount" value="{{ ptp_amount }}" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle extend-padding-2x">Sisa PTP Amount <br>(PTP Amount - PTP Paid)</td>
+                                    {% if remaining_original_ptp < 0 %}
+                                        <td class="align-middle extend-padding-2x">
+                                            <span>Lebih Bayar<br/>{{ remaining_original_ptp | minus_to_number_format | add_rupiah_separator }}</span>
+                                            <input type="hidden" name="remaining_original_ptp" value="{{ remaining_original_ptp }}" >
+                                        </td>
+                                    {% else %}
+                                        <td class="align-middle extend-padding-1l-2x">
+                                            <span>{{ remaining_original_ptp | add_rupiah_separator }}</span>
+                                            <input type="hidden" name="remaining_original_ptp" value="{{ remaining_original_ptp }}" >
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td class="align-middle extend-padding-2x">Sisa Angsuran Original <br>(untuk payment yang diwaive)</td>
+                                    <td class="align-middle extend-padding-1l-2x">
+                                        <span>{{ remaining_original_installment | add_rupiah_separator }}</span>
+                                        <input type="hidden" name="remaining_original_installment" value="{{ remaining_original_installment }}" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="align-middle extend-padding-2x">Sisa Angsuran Approved <br>(untuk payment yang diwaive)</td>
+                                    <td class="align-middle extend-padding-1l-2x">
+                                        <span>{{ remaining_approved_installment | add_rupiah_separator }}</span>
+                                        <input type="hidden" name="approved_remaining_amount" value="{{ remaining_approved_installment }}" >
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="width: 50%">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr style="background-color: #8E6AD4">
+                                    <th class="align-middle" colspan="2" style="color: white">Payment Information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="align-middle extend-padding-2x">Jumlah yang masih harus dibayar<br/>untuk payment yang di-waive</td>
+                                    <td class="align-middle extend-padding-1l-2x">
+                                        <span>{{ need_to_pay | add_rupiah_separator }}</span>
+                                        <input type="hidden" name="need_to_pay" value="{{ need_to_pay }}" >
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="width: 50%">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr style="background-color: #7454C4">
+                                    <th class="align-middle" colspan="3" style="color: white">Waiver % Comparison</th>
+                                </tr>
+                                <tr>
+                                    <th class="align-middle" style="width: 50%"></th>
+                                    <th class="align-middle" style="width: 25%">Recommended</th>
+                                    <th class="align-middle" style="width: 25%">Actual</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="align-middle extend-padding">Late Fee Waiver</td>
+                                    <td class="align-middle extend-padding">{{ recommended_late_fee_waiver_percent|decimal_to_percent_format }}</td>
+                                    {% if original_program_name == "r5" %}
+                                        <td class="align-middle input-padding">
+                                            <div class="input-group">
+                                                <input class="form-control" maxlength="15" type="text" name="approved_late_fee_waiver_percentage" value="{{ actual_late_fee_waiver_percent|percent_to_decimal_format }}">
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </td>
+                                    {% else %}
+                                        <td class="align-middle extend-padding">
+                                            <span>{{ actual_late_fee_waiver_percent }}</span>
+                                            <input type="hidden" name="approved_late_fee_waiver_percentage" value="{{ actual_late_fee_waiver_percent|percent_to_decimal_format }}" >
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td class="align-middle extend-padding-1l-2x">Interest Waiver</td>
+                                    <td class="align-middle extend-padding-1l-2x">{{ recommended_interest_waiver_percent|decimal_to_percent_format }}</td>
+                                    {% if original_program_name == "r6" %}
+                                        <td class="align-middle extend-padding">
+                                            <div class="input-group">
+                                                <input class="form-control" maxlength="15" type="text" name="approved_interest_waiver_percentage" value="{{ actual_interest_waiver_percent|percent_to_decimal_format }}">
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </td>
+                                    {% else %}
+                                        <td class="align-middle extend-padding-1l-2x">
+                                            <span>{{ actual_interest_waiver_percent }}</span>
+                                            <input type="hidden" name="approved_interest_waiver_percentage" value="{{ actual_interest_waiver_percent|percent_to_decimal_format }}" >
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td class="align-middle extend-padding-1l-2x">Principal Waiver</td>
+                                    <td class="align-middle extend-padding-1l-2x">{{ recommended_principal_waiver_percent|decimal_to_percent_format }}</td>
+                                    {% if original_program_name == "r4" %}
+                                        <td class="align-middle extend-padding">
+                                            <div class="input-group">
+                                                <input class="form-control" maxlength="15" type="text" name="approved_principal_waiver_percentage" value="{{ actual_principal_waiver_percent|percent_to_decimal_format }}">
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </td>
+                                    {% else %}
+                                        <td class="align-middle extend-padding-1l-2x">
+                                            <span>{{ actual_principal_waiver_percent }}</span>
+                                            <input type="hidden" name="approved_principal_waiver_percentage" value="{{ actual_principal_waiver_percent|percent_to_decimal_format }}" >
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row right-div-bg-top">
+                <div class="col-md-12">
+                    Pinjaman yang sedang berjalan
+                    <span class="glyphicon glyphicon-forward" aria-hidden="true" style="float: right" onclick="expandTable('original_amount_table')"></span>
+                </div>
+            </div>
+            {% include "covid_loan_refinancing/include/table_ongoing_loan.html" %}
+
+            <div class="loading-div_simulasi" style="display:none" id="loading-div_simulasi" style="padding-left:30px;"><img src="{% static 'images/collections/ajax-loader.gif' %}" ></div>
+            <div class="row">
+                <div class="col-md-12 box-padding">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="row right-div-bg-bottom" id="div_simulasi_head" style="display:none;">
+                <div class="col-md-12" id="div_header_txt">
+                </div>
+            </div>
+            <div class="row" id="div_simulasi_details" style="display:none;">
+            </div>
+            <div class="row">
+                <div class="col-md-12 box-padding">
+                    &nbsp;
+                </div>
+            </div>
+
+            <div class="row right-div-bg-bottom" style="display: none;" id="cp_head">
+                <div class="col-md-12">
+                    Submit Refinancing untuk {{ customer_name }} dengan detail sebagai berikut:
+                </div>
+            </div>
+            <div class="row" style="display: none;" id="cp_table">
+                <div class="col-md-12">
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle"> Email Address</th>
+                                    <th class="align-middle"> Loan ID </th>
+                                    <th class="align-middle"> Covid Product </th>
+                                    <th class="align-middle"> Tenure Extension </th>
+                                    <th class="align-middle"> New Income </th>
+                                    <th class="align-middle"> New Expense </th>
+                                    <th class="align-middle"> New Employment Status </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="align-middle" id="cp_email"></td>
+                                    <td class="align-middle" id="cp_loan_id"></td>
+                                    <td class="align-middle" id="cp_covid_product"></td>
+                                    <td class="align-middle" id="cp_tenure_extension"></td>
+                                    <td class="align-middle" id="cp_new_income"></td>
+                                    <td class="align-middle" id="cp_new_expense"></td>
+                                    <td class="align-middle" id="cp_employment_status"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-left:25px;padding-top:25px;">
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px;">
+                            <b>Preferensi Channel Reminder</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px;line-height:15px;">
+                            <input type="checkbox" id="comms_channel1_1" name="comms_channel1" value="Email"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="return check_comms(1)">&nbsp;<label for="comms_channel1_1">Email</label> &nbsp;&nbsp;
+                            <input type="checkbox" id="comms_channel1_2" name="comms_channel1" value="PN"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="return check_comms(1)">&nbsp;<label for="y">PN</label> &nbsp;&nbsp;
+                            <input type="checkbox" id="comms_channel1_3" name="comms_channel1" value="SMS"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="return check_comms(1)">&nbsp;<label for="y">SMS</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px;line-height:15px;">
+                            <input type="checkbox" id="is_customer_confirmed_reactive" name="is_customer_confirmed_reactive"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="">&nbsp;<label for="is_customer_confirmed_reactive">Customer tertarik dengan program ini dan sudah menyetujui pilihannya sekarang</label>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-12" >
+                            <button type="button"
+                                class="btn btn-primary disabled btn-inactive btn_refinancing_submit"
+                                    id="btn_refinancing_submit" disabled>
+                                &nbsp;&nbsp;&nbsp;SUBMIT&nbsp;&nbsp;&nbsp;  </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="div_waiver_request_submit" style="display:none;">
+                <div class="col-md-12" style="padding-left:25px;">
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px;">
+                            <b>Preferensi Channel Reminder</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px;line-height:15px;">
+                            <input type="checkbox" id="comms_channel2_1" name="comms_channel2" value="Email"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="return check_comms(2)">&nbsp;<label for="comms_channel2_1">Email</label> &nbsp;&nbsp;
+                            <input type="checkbox" id="comms_channel2_2" name="comms_channel2" value="PN"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="return check_comms(2)">&nbsp;<label for="comms_channel2_2">PN</label> &nbsp;&nbsp;
+                            <input type="checkbox" id="comms_channel2_3" name="comms_channel2" value="SMS"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="return check_comms(2)">&nbsp;<label for="comms_channel2_3">SMS</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:15px;line-height:15px;">
+                            <input type="checkbox" id="is_customer_confirmed_waiver" name="is_customer_confirmed_waiver"
+                                   style="height:18px; width:18px; vertical-align: middle;"
+                                   onChange="">&nbsp;<label for="is_customer_confirmed_waiver">Customer tertarik dengan program ini dan sudah menyetujui pilihannya sekarang</label>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-12" >
+                            <button type="button"
+                                class="btn btn-primary disabled btn-inactive btn_waiver_request_submit"
+                                    id="btn_waiver_request_submit" disabled>
+                                SUBMIT WAIVER REQUEST</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row hide-after-submit" style="{% if show == False %} display:none; {% endif %} ">
+        <div class="col-lg-12" style="display: flex; overflow-x: auto;">
+            {% include "covid_loan_refinancing/include/table_outstanding_amount.html" %}
+            {% include "covid_loan_refinancing/include/table_waiver_amount.html" %}
+            {% include "covid_loan_refinancing/include/table_new_installment.html" %}
+        </div>
+    </div>
+
+    <div class="row hide-after-submit" {% if show == False %} style="display:none;" {% endif %} >
+        <div class="col-md-12" >
+            <input type="checkbox" id="submit_approve" class="hide">
+            {% if remaining_original_ptp < 0 %}
+                <button type="button" class="btn btn-success button-submit" data-toggle="modal" data-target="#approverNoteModal" data-decision="Approve">Ok</button>
+            {% else %}
+                <button type="button" class="btn btn-success button-submit" data-toggle="modal" data-target="#approverNoteModal" data-decision="Approve">Approve</button>
+                <button type="button" class="btn btn-danger button-submit" data-toggle="modal" data-target="#approverNoteModal" data-decision="Reject">Reject</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="error_pop_up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header label-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Collection Offer Recommendations</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" id="pop_msg">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="agentNoteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agentNoteModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Notes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" id="pop_msg">
+                            {% for note in notes %}
+                                <p>
+                                    <strong>{{ note.layer }} : </strong><br/>
+                                    {{ note.note }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="approverNoteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="approverNoteModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Approver Notes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <textarea class="form-control" name="approver_notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="approver_button" type="button" class="btn waves-effect" data-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "covid_loan_refinancing/include/collection_offers_portal_modal.html" %}
+{% endblock %}
+
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'default/js/loan-refinancing.js' %}"></script>
+{% endblock %}
+
+{% block script_bottom_inside %}
+{#<script>#}
+    // lib initiate
+    $(".mask").maskMoney({thousands:',', decimal:'.', allowZero: true, suffix: '', precision:0});
+    $('.datepicker, #waiver_validity_date').datepicker({
+        format: 'dd M yyyy',
+        buttonClasses: ['btn', 'btn-sm'],
+        applyClass: 'btn-danger',
+        cancelClass: 'btn-inverse',
+        dateLimit: {
+        days: 6
+        },
+        autoclose: true,
+        startDate:'+0d',
+        todayHighlight: true,
+        todayBtn: "linked",
+    }).datepicker("setDate", "{{ waiver_validity_date|format_date_to_datepicker_format }}");
+
+    // default data
+    var selected_program_name = "{{ program_name }}";
+    var recalculate_section = "";
+    var amount_types = ["late_fee", "interest", "principal"];
+    var reverse_amount_types = ["principal", "interest", "late_fee"];
+    var loan_id = parseInt({{ loan_id }});
+    var waiver_request_id = parseInt({{ waiver_request_id|default:0 }});
+    var waiver_validity_date = "{{ waiver_validity_date|format_date_ymd_format }}";
+    var show = '{{ show }}';
+    var bucket = '{{ bucket }}';
+    var partner_product = '{{ partner_product }}';
+    var is_covid_risky = '{{ is_covid_risky }}';
+    var waiver_recommendation_id = parseInt({{ waiver_recommendation_id|default:0 }});
+    var reset_data = null;
+
+    if (show == 'True') {
+        reset_data = define_data_for_normal_program();
+        if (waiver_request_id == 0) {
+            reset_data = define_data_for_general_paid_program();
+        }
+    }
+
+    $(document).ready(function(){
+        $("input[name$='percentage']").each(function(){
+            $(this).attr("data-original", $(this).val());
+        });
+
+        flex_table = $("#flex_table div table");
+        if (waiver_request_id) {
+            if (selected_program_name == "General Paid Waiver") {
+                flex_table.eq(2).parent().hide();
+            } else {
+                flex_table.eq(1).parent().hide();
+            }
+        } else {
+            flex_table.eq(0).parent().hide();
+            flex_table.eq(2).parent().hide();
+        }
+        recalculate_remaining_installment();
+        update_total_waiver_amount(recalculate_total_remaining_installment(), "remaining", "_amount");
+    });
+
+    // UX
+    $('#waiver_validity_date').on('changeDate', function(e) {
+        $('#waiver_validity_date_db').val(moment(e.date).format('YYYY-MM-DD'));
+    });
+
+    function expandTable(tableName) {
+        $("#" + tableName).toggle();
+        $("." + tableName + "-backward").toggle();
+    }
+
+    function enable_all_input() {
+        $("input[name$='percentage'].form-control").prop("disabled", false);
+        $("input[name^='requested'].form-control").prop("disabled", false);
+        $("input[name=approved_waiver_amount]").prop("disabled", false);
+        if (selected_program_name == "General Paid Waiver" && waiver_request_id == 0) {
+            $(".waiver_approval_payment_selector").prop("disabled", false);
+        }
+    }
+
+    function enabled_button() {
+        $("button.button-submit").prop("disabled", false);
+    }
+
+    function disabled_button() {
+        $("button.button-submit").prop("disabled", true);
+    }
+
+    function disable_amount_input() {
+        $("input[name^='requested'].form-control").prop("disabled", true);
+    }
+
+    function disable_percentage_input() {
+        $("input[name$='percentage'].form-control").prop("disabled", true);
+    }
+
+    function disable_waiver_input() {
+        $("input[name=approved_waiver_amount]").prop("disabled", true);
+    }
+
+    function disabled_waiver_checkbox() {
+        if (selected_program_name == "General Paid Waiver" && waiver_request_id == 0) {
+            $(".waiver_approval_payment_selector").prop("disabled", true);
+        }
+    }
+
+    // notification
+    function ToastDanger (header_msg, body_message, type='') {
+        if(type == 1)
+            hide_time = 6300
+        else
+            hide_time = 2800
+        $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'error',
+            hideAfter: hide_time
+        });
+    }
+
+    function ToastSuccess (header_msg, body_message, type='') {
+        if(type == 1)
+            hide_time = 6300
+        else
+            hide_time = 1500
+        $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'success',
+            hideAfter: hide_time,
+            stack: 6
+        });
+    }
+
+    function negative_response_swal(msg) {
+        swal({
+        title: "Gagal!",
+        html:true,
+        text: msg,
+        type: "error",
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonColor: "#ffffff",
+        cancelButtonText: "Kembali",
+        closeOnCancel: true
+        });
+    }
+
+    // validation
+    if (loan_id && show == 'False') {
+        ToastDanger('Failure', 'Invalid Loan ID');
+    }
+
+    function calculate_validation() {
+        return percentage_range_validation() && priority_validation() && maximum_waiver_validation() && cell_by_cell_validation() && maximum_waiver_amount_validation() && general_paid_waiver_cell_by_cell_validation() && minimum_waiver_amount_validation();
+    }
+
+    function percentage_range_validation() {
+        // R4/R5/R6
+        return_value = true;
+        if (selected_program_name != "General Paid Waiver") {
+            amount_types.forEach(function(amount_type){
+                percentage = string_to_decimal($("input[name=approved_"+amount_type+"_waiver_percentage]").val());
+                first_validation = percentage > 100;
+                if (first_validation || percentage < 0) {
+                    ToastDanger('Failure', "Waiver % harus lebih besar dari 0% dan lebih kecil dari 100%");
+                    return_value = false;
+                }
+            });
+        }
+
+        return return_value;
+    }
+
+    function priority_validation() {
+        // R4/R6/General Paid Waiver Case 1/General Paid Waiver Case 2
+        late_fee = string_to_decimal($("input[name=approved_late_fee_waiver_percentage]").val());
+        interest = string_to_decimal($("input[name=approved_interest_waiver_percentage]").val());
+        principal = string_to_decimal($("input[name=approved_principal_waiver_percentage]").val());
+
+        if (interest > 0 && late_fee > 0 && late_fee < 100) {
+            ToastDanger('Failure', "Late Fee harus di-waive sepenuhnya (100%) sebelum memasukkan Interest Waiver");
+            return false;
+        }
+
+        if (principal > 0 && interest > 0 && interest < 100) {
+            ToastDanger('Failure', "Late Fee dan Interest harus di-waive sepenuhnya (100%) sebelum memasukkan Principal Waiver");
+            return false;
+        }
+        return true;
+    }
+
+    function maximum_waiver_validation() {
+        // R4/R5/R6/General Paid Waiver Case 1/General Paid Waiver Case 2
+        outstanding = get_each_payment_outstanding_installment();
+        return_value = true;
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            amount_types.forEach(function(amount_type){
+                amount = string_to_number($("input[name=requested_"+amount_type+"_amount_"+index+"]").val());
+                if (amount > outstanding[amount_type][index]) {
+                    ToastDanger("Failure", "Waiver Amount Principal/Interest/Late Fee yang di-input harus kurang dari outstanding principal/interest/late fee untuk payment ID tersebut");
+                    return_value = false;
+                }
+            });
+        });
+        return return_value;
+    }
+
+    function maximum_waiver_amount_validation() {
+        // General paid Waiver Case 1
+        if (selected_program_name == "General Paid Waiver" && waiver_request_id != 0) {
+            waiver = string_to_number($("input[name=approved_waiver_amount]").val());
+            outstanding = string_to_number($("input[name=total_outstanding_amount]").val());
+            if (waiver > outstanding) {
+                ToastDanger("Failure", "Waiver Amount yang di-input melebihi outstanding amount untuk payment ID yang di-waive");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function cell_by_cell_validation() {
+        return_value = true;
+        outstanding = get_each_payment_outstanding_installment();
+        previous = {"late_fee": 0, "interest": 0, "principal": 0};
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            if (return_value) {
+                index = $(this).val();
+                amount_types.forEach(function(amount_type){
+                    amount = string_to_number($("input[name=requested_"+amount_type+"_amount_"+index+"]").val());
+                    if (amount > 0 && previous[amount_type] > 0) {
+                        if (outstanding[amount_type][index-1] !== undefined) {
+                            if (outstanding[amount_type][index-1] >= outstanding[amount_type][index]) {
+                                if (amount > 0 && amount > previous[amount_type] && amount < outstanding[amount_type][index]) {
+                                    ToastDanger("Failure", "Waiver Amount untuk payment sebelumnya harus >= dari payment setelahnya");
+                                    return_value = false;
+                                }
+                            }
+                        } else if (amount > 0 && amount > outstanding[amount_type][index]) {
+                            ToastDanger("Failure", "Waiver Amount untuk "+amount_type+" di payment ke-"+(parseInt(index)+1)+" melebihi outstanding amount");
+                            return_value = false;
+                        }
+                    }
+                    previous[amount_type] = amount;
+                });
+            }
+        });
+        return return_value;
+    }
+
+    function general_paid_waiver_cell_by_cell_validation() {
+        // General paid Waiver Case 1/General paid Waiver Case 2
+        return_value = true;
+        if (selected_program_name == "General Paid Waiver") {
+            outstanding = get_each_payment_outstanding_installment();
+            $(".waiver_approval_payment_selector:checked").each(function(){
+                if (return_value) {
+                    index = $(this).val();
+                    principal = string_to_number($("input[name=requested_principal_amount_"+index+"]").val());
+                    interest = string_to_number($("input[name=requested_interest_amount_"+index+"]").val());
+                    late_fee = string_to_number($("input[name=requested_late_fee_amount_"+index+"]").val());
+
+                    if (interest > 0) {
+                        if (outstanding["principal"][index] != principal){
+                            ToastDanger("Failure", "Principal harus di waive sepenuhnya sebelum melakukan waive interest.");
+                            return_value = false;
+                        }
+                    }
+                    if (late_fee > 0) {
+                        if (outstanding["principal"][index] != principal || outstanding["interest"][index] != interest){
+                            ToastDanger("Failure", "Principal / Interest harus di waive sepenuhnya sebelum melakukan waive late fee.");
+                            return_value = false;
+                        }
+                    }
+                }
+            });
+        }
+        return return_value;
+    }
+
+    function minimum_waiver_amount_validation() {
+        if (selected_program_name != "General Paid Waiver") {
+            minumum = 0;
+            outstanding = get_outstanding_installment();
+            waiver_amount = string_to_number($("input[name=approved_waiver_amount]").val());
+
+            if (selected_program_name == "r4") {
+                minumum = outstanding["late_fee"] + outstanding["interest"];
+
+            } else if (selected_program_name == "r6") {
+                minumum = outstanding["late_fee"];
+
+            }
+
+            if (waiver_amount < minumum) {
+                ToastDanger("Failure", "Waiver amount harus lebih besar dari " + numberWithCurrency(minumum));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // formatter
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function numberWithCurrency(x) {
+        if (x == "0") {
+            return "-";
+        }
+        return "Rp. " + numberWithCommas(x);
+    }
+
+    function decimal_to_percent(decimal) {
+        return decimal * 100;
+    }
+
+    function number_to_percentage(x) {
+        return x + "%";
+    }
+
+    function percent_to_decimal(percent) {
+        return parseFloat(percent / 100);
+    }
+
+    function string_to_number(num) {
+        return parseInt(num.replace(/,/g,'') || 0);
+    }
+
+    function string_to_decimal(num) {
+        return parseFloat(num.replace(/,/g,'') || 0);
+    }
+
+    // data definition
+    function define_waiver_payments(waiver_type) {
+        payments = [];
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            payment = {
+                index: index,
+                payment_id: parseInt($("input[name=payment_"+index+"]").val()),
+                remaining_paid_off: $("input[name=remaining_paid_off_"+index+"]").val()
+            };
+
+            keys = ["outstanding", "remaining", "requested"];
+            keys.forEach(function(item){
+                key_item = item;
+                amount_field = "_amount"
+                if (item == "requested") {
+                    amount_field = "_waiver_amount";
+                    if (waiver_type == "approved") {
+                        key_item = waiver_type;
+                    }
+                }
+                amount_types.forEach(function(amount_type){
+                    payment[key_item+"_"+amount_type+amount_field] = string_to_number($("input[name="+item+"_"+amount_type+"_amount_"+index+"]").val());
+                });
+                payment["total_"+key_item+amount_field] = string_to_number($("input[name=total_"+item+"_amount_"+index+"]").val());
+            });
+            if (waiver_type == "requested") {
+                payment["is_paid_off_after_ptp"] = (payment["total_remaining_amount"] == 0);
+            }
+            payments.push(payment);
+        });
+        return payments;
+    }
+
+    function define_program_data() {
+        amount_data = {
+            all_total_requested_waiver_amount: $("#all_total_requested_waiver_amount").html(),
+            all_total_remaining_amount: $("#all_total_remaining_amount").html(),
+            all_total_outstanding_amount: $("#all_total_outstanding_amount").html(),
+        }
+        amount_types.forEach(function(amount_type){
+            amount_data["approved_"+amount_type+"_waiver_percentage"] = percent_to_decimal($("input[name=approved_"+amount_type+"_waiver_percentage]").val());
+            sections = ["requested", "remaining", "outstanding"];
+            sections.forEach(function(section){
+                field = "_amount";
+                if (section == "requested") {
+                    field = "_waiver_amount";
+                }
+                field_key = "all_"+section+"_"+amount_type+field;
+                amount_data[field_key] = $("#" + field_key).html();
+            });
+        });
+
+        return $.extend({}, {
+                loan_id: loan_id,
+                paid_ptp_amount: string_to_number($("input[name=paid_ptp_amount]").val()),
+                ptp_amount: string_to_number($("input[name=ptp_amount]").val()),
+                need_to_pay: string_to_number($("input[name=need_to_pay]").val()),
+                total_outstanding_amount: string_to_number($("input[name=total_outstanding_amount]").val()),
+                approved_program: selected_program_name,
+                approved_waiver_amount: string_to_number($("input[name=approved_waiver_amount]").val()),
+                approved_remaining_amount: string_to_number($("input[name=approved_remaining_amount]").val()),
+                approved_waiver_validity_date: $("input[name=approved_waiver_validity_date]").val(),
+                approved_waiver_validity_date_formatted: $("input[name=waiver_validity_date]").val(),
+            }, amount_data, define_decision());
+    }
+
+    function define_data_for_normal_program() {
+        return $.extend({}, {
+            waiver_payment_approvals: define_waiver_payments("approved"),
+            waiver_request_id: waiver_request_id,
+            waiver_request: {},
+            waiver_payment_requests: []
+        }, define_program_data());
+    }
+
+    function define_data_for_general_paid_program() {
+        data = define_program_data();
+        waiver_payment_requests = define_waiver_payments("requested");
+        request = waiver_payment_requests[0];
+        waiver_request = {
+            loan_id: loan_id,
+            bucket_name: bucket,
+            selected_program_name: selected_program_name,
+            is_covid_risky: is_covid_risky,
+            outstanding_amount: string_to_number($("input[name=ongoing_remaining_outstanding_amount_"+request.index+"]").val()),
+            unpaid_principal: string_to_number($("input[name=ongoing_remaining_principal_amount_"+request.index+"]").val()),
+            unpaid_interest: string_to_number($("input[name=ongoing_remaining_interest_amount_"+request.index+"]").val()),
+            unpaid_late_fee: string_to_number($("input[name=ongoing_remaining_late_fee_amount_"+request.index+"]").val()),
+            waiver_validity_date: waiver_validity_date,
+            reason: data.notes, //
+            ptp_amount: data.ptp_amount,
+            requested_waiver_amount: data.approved_waiver_amount,
+            calculated_unpaid_waiver_percentage: 80,
+            recommended_unpaid_waiver_percentage: 100,
+            waived_payment_count: 1,
+            last_payment_number: string_to_number($("input[name=ongoing_remaining_payment_number_"+request.index+"]").val()),
+            partner_product: partner_product,
+            is_automated: false,
+            waiver_recommendation_id: waiver_recommendation_id,
+            requested_late_fee_waiver_percentage: number_to_percentage(decimal_to_percent(data.approved_late_fee_waiver_percentage)),
+            requested_interest_waiver_percentage: number_to_percentage(decimal_to_percent(data.approved_interest_waiver_percentage)),
+            requested_principal_waiver_percentage: number_to_percentage(decimal_to_percent(data.approved_principal_waiver_percentage)),
+            requested_late_fee_waiver_amount: request.requested_late_fee_waiver_amount,
+            requested_interest_waiver_amount: request.requested_interest_waiver_amount,
+            requested_principal_waiver_amount: request.requested_principal_waiver_amount,
+            agent_notes: data.notes, //
+            first_waived_payment: request.payment_id,
+            last_waived_payment: request.payment_id,
+            remaining_amount_for_waived_payment: 0, //
+        };
+        return $.extend({}, {
+                waiver_payment_approvals: define_waiver_payments("approved"),
+                waiver_request_id: null,
+                waiver_request: waiver_request,
+                waiver_payment_requests: waiver_payment_requests
+            }, data
+        );
+    }
+
+    function define_decision() {
+        decision = "rejected";
+        if ($("#submit_approve").prop("checked")) {
+            decision = "approved";
+        };
+
+        return {
+            decision: decision,
+            notes: $("textarea[name=approver_notes]").val()
+        };
+    }
+
+    function define_approve(status) {
+        $("#submit_approve").prop("checked", (status == "Approve"));
+    }
+
+    function update_approved_waiver_amount(amount) {
+        $("input[name=approved_waiver_amount]").val(numberWithCommas(amount));
+    }
+
+    function update_total_waiver_amount(amounts, section, field) {
+        amount_types.forEach(function(amount_type){
+            $("#all_"+section+"_"+amount_type+field).html(numberWithCurrency(amounts[amount_type]));
+        });
+        $("#all_total_"+section+field).html(numberWithCurrency(amounts["total"]));
+    }
+
+    function update_approved_waiver_percentage(amounts) {
+        outstanding = get_outstanding_installment();
+        amount_types.forEach(function(amount_type){
+            percentage = 0;
+            if (outstanding[amount_type] > 0 && amounts[amount_type] > 0) {
+                percentage = (amounts[amount_type] / outstanding[amount_type]) * 100;
+            }
+            input = $("input[name=approved_"+amount_type+"_waiver_percentage]");
+            percent_number = percentage.toFixed(2);
+            if (percent_number == 0.00) {
+                percent_number = 0;
+            }
+            input.val(percent_number.toString());
+            input.attr("data-original", percentage.toString());
+            input.prev("span").html(number_to_percentage(percent_number));
+        });
+    }
+
+    function recalculate_outstanding_installment() {
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            total_amount = 0;
+            amount_types.forEach(function(amount_type){
+                ongoing_amount = string_to_number($("input[name=ongoing_remaining_"+amount_type+"_amount_"+index+"]").val());
+                requested_amount = string_to_number($("input[name=requested_"+amount_type+"_amount_"+index+"]").val());
+
+                outstanding_input = $("input[name=outstanding_"+amount_type+"_amount_"+index+"]");
+                outstanding_amount = ongoing_amount - requested_amount;
+
+                outstanding_input.val(numberWithCommas(outstanding_amount));
+                outstanding_input.prev("span").html(numberWithCurrency(outstanding_amount));
+
+                total_amount += outstanding_amount;
+            });
+            total_outstanding_input = $("input[name=total_outstanding_amount_"+index+"]");
+            total_outstanding_input.val(numberWithCommas(total_amount));
+            total_outstanding_input.prev("span").html(numberWithCurrency(total_amount));
+        });
+    }
+
+    function recalculate_total_outstanding_installment() {
+        outstandings = {"late_fee": 0, "interest": 0, "principal": 0, "total": 0};
+        $("#outstanding_amount table tbody tr").each(function(index){
+            amount_types.forEach(function(amount_type){
+                outstandings[amount_type] += string_to_number($("input[name=outstanding_"+amount_type+"_amount_"+index+"]").val());
+            });
+            outstandings["total"] += string_to_number($("input[name=total_outstanding_amount_"+index+"]").val());
+        });
+        return outstandings;
+    }
+
+    function recalculate_remaining_installment() {
+        need_to_pay = string_to_number($("input[name=need_to_pay]").val());
+        $("#sisa_angsuran tbody tr").each(function(index){
+            total_amount = 0;
+            reverse_amount_types.forEach(function(amount_type){
+                outstanding_amount = string_to_number($("input[name=outstanding_"+amount_type+"_amount_"+index+"]").val());
+
+                remaining_input = $("input[name=remaining_"+amount_type+"_amount_"+index+"]");
+                if (need_to_pay > 0) {
+                    need_to_pay -= outstanding_amount;
+                    if (need_to_pay >= 0) {
+                        remaining_amount = 0;
+                    } else {
+                        remaining_amount = need_to_pay * -1;
+                    }
+                } else {
+                    remaining_amount = outstanding_amount;
+                }
+
+                remaining_input.val(numberWithCommas(remaining_amount));
+                remaining_input.prev("span").html(numberWithCurrency(remaining_amount));
+
+                total_amount += remaining_amount;
+            });
+            total_remaining_input = $("input[name=total_remaining_amount_"+index+"]");
+            total_remaining_input.val(numberWithCommas(total_amount));
+            total_remaining_input.prev("span").html(numberWithCurrency(total_amount));
+
+            remaining_paid_off_input = $("input[name=remaining_paid_off_"+index+"]");
+            remaining_paid_off = "N";
+            if (parseInt(total_amount) == 0) {
+                remaining_paid_off = "Y";
+            }
+            remaining_paid_off_input.val(remaining_paid_off);
+            remaining_paid_off_input.prev("span").html(remaining_paid_off);
+        });
+    }
+
+    function recalculate_total_remaining_installment() {
+        remainings = {"late_fee": 0, "interest": 0, "principal": 0, "total": 0};
+        $("#sisa_angsuran tbody tr").each(function(index){
+            amount_types.forEach(function(amount_type){
+                remainings[amount_type] += string_to_number($("input[name=remaining_"+amount_type+"_amount_"+index+"]").val());
+            });
+            remainings["total"] += string_to_number($("input[name=total_remaining_amount_"+index+"]").val());
+        });
+        return remainings;
+    }
+
+    function get_outstanding_installment() {
+        outstanding = {"late_fee": 0, "interest": 0, "principal": 0};
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            amount_types.forEach(function(amount_type){
+                outstanding[amount_type] += string_to_number($("input[name=ongoing_remaining_"+amount_type+"_amount_"+index+"]").val());
+            });
+        });
+        return outstanding;
+    }
+
+    function get_each_payment_outstanding_installment() {
+        outstanding = {"late_fee": {}, "interest": {}, "principal": {}};
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            amount_types.forEach(function(amount_type){
+                outstanding[amount_type][index] = string_to_number($("input[name=ongoing_remaining_"+amount_type+"_amount_"+index+"]").val());
+            });
+        });
+        return outstanding;
+    }
+
+    function update_approved_remaining_amount() {
+        approved_remaining_amount = 0;
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            approved_remaining_amount += string_to_number($("input[name=total_remaining_amount_"+index+"]").val());
+        });
+        input = $("input[name=approved_remaining_amount]");
+        input.val(numberWithCommas(approved_remaining_amount));
+        input.prev("span").html(numberWithCurrency(approved_remaining_amount));
+    }
+
+    function update_need_to_pay() {
+        need_to_pay = 0;
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            need_to_pay += string_to_number($("input[name=total_outstanding_amount_"+index+"]").val());
+        });
+        input = $("input[name=need_to_pay]");
+        input.val(numberWithCommas(need_to_pay));
+        input.prev("span").html(numberWithCurrency(need_to_pay));
+    }
+
+    function update_ptp_amount() {
+        if (selected_program_name != "General Paid Waiver") {
+            outstanding = get_outstanding_installment();
+            waiver_amount = string_to_number($("input[name=approved_waiver_amount]").val());
+            outstanding_amount = 0;
+            amount_types.forEach(function(amount_type){
+                outstanding_amount += outstanding[amount_type];
+            });
+            paid_ptp_amount = string_to_number($("input[name=paid_ptp_amount]").val());
+
+            ptp_amount = outstanding_amount - waiver_amount;
+            input = $("input[name=ptp_amount]");
+            input.val(numberWithCommas(ptp_amount));
+            input.prev("span").html(numberWithCurrency(ptp_amount));
+
+            remaining_original_ptp = ptp_amount - paid_ptp_amount;
+            input = $("input[name=remaining_original_ptp]");
+            input.val(numberWithCommas(remaining_original_ptp));
+            input.parent().removeClass("extend-padding-1l-2x").removeClass("extend-padding-2x");
+            prefix = "";
+            class_name = "extend-padding-1l-2x";
+            if (remaining_original_ptp < 0) {
+                prefix = "Lebih Bayar<br/>";
+                remaining_original_ptp *= -1;
+                class_name = "extend-padding-2x";
+            }
+            input.parent().addClass(class_name);
+            input.prev("span").html(prefix + numberWithCurrency(remaining_original_ptp));
+        }
+    }
+
+    function update_checked_payment() {
+        allow_recheck_payment = (recalculate_section == "amount" || recalculate_section == "checkbox")
+        if (selected_program_name == "General Paid Waiver" && allow_recheck_payment && waiver_request_id == 0) {
+            if (recalculate_section == "checkbox") {
+                new_total_outstanding = 0;
+                $(".waiver_approval_payment_selector:checked").each(function(){
+                    index = $(this).val();
+                    new_total_outstanding += string_to_number($("input[name=ongoing_remaining_outstanding_amount_"+index+"]").val());
+                });
+                $("input[name=approved_waiver_amount]").val(numberWithCommas(new_total_outstanding));
+                $("input[name=total_outstanding_amount]").val(numberWithCommas(new_total_outstanding));
+            }
+            total_outstanding_amount = 0;
+            waiver_amount = string_to_number($("input[name=approved_waiver_amount]").val());
+            $("#ongoing_payment tbody tr").each(function(index){
+                outstanding = string_to_number($("input[name=ongoing_remaining_outstanding_amount_"+index+"]").val());
+                if (outstanding > 0) {
+                    payment = $("input[name=payment_"+index+"]");
+                    if (waiver_amount > 0) {
+                        input = document.createElement("input");
+                        input.setAttribute("class", "waiver_approval_payment_selector");
+                        input.setAttribute("type", "checkbox");
+                        input.setAttribute("value", index);
+                        input.setAttribute("checked", "checked");
+                        payment.parent().next('td').html(input);
+
+                        amount_types.forEach(function(amount_type){
+                            ongoing_amount = string_to_number($("input[name=ongoing_remaining_"+amount_type+"_amount_"+index+"]").val());
+                            if (ongoing_amount > 0) {
+                                span = document.createElement("span");
+                                span.setAttribute("class", "input-group-addon");
+                                span.innerHTML = "Rp";
+
+                                input = document.createElement("input");
+                                input.setAttribute("class", "form-control mask");
+                                input.setAttribute("maxlength", "15");
+                                input.setAttribute("type", "text");
+                                input.setAttribute("style", "width: 100px;");
+                                input.setAttribute("name", "requested_"+amount_type+"_amount_"+index);
+
+                                div = document.createElement("div");
+                                div.setAttribute("class", "input-group");
+                                div.append(span);
+                                div.append(input);
+
+                                input = $("input[name=requested_"+amount_type+"_amount_"+index+"]");
+                                input.closest('td').addClass("input-padding");
+                                input.closest('td').html(div);
+
+                            } else {
+                                span = document.createElement("span");
+                                span.innerHTML = "-";
+
+                                input = document.createElement("input");
+                                input.setAttribute("type", "hidden");
+                                input.setAttribute("name", "requested_"+amount_type+"_amount_"+index);
+
+                                div = document.createElement("div");
+                                div.append(span);
+                                div.append(input);
+
+                                request_input = $("input[name=requested_"+amount_type+"_amount_"+index+"]");
+                                request_input.closest('td').html(div);
+
+                            }
+                        });
+                        waiver_amount -= outstanding;
+                        total_outstanding_amount += outstanding;
+                    } else {
+                        input = document.createElement("input");
+                        input.setAttribute("class", "waiver_approval_payment_selector");
+                        input.setAttribute("type", "checkbox");
+                        input.setAttribute("value", index);
+                        payment.parent().next('td').html(input);
+                        amount_types.forEach(function(amount_type){
+                            span = document.createElement("span");
+                            span.innerHTML = "-";
+
+                            hidden_input = document.createElement("input");
+                            hidden_input.setAttribute("type", "hidden");
+                            hidden_input.setAttribute("name", "requested_"+amount_type+"_amount_"+index);
+                            hidden_input.setAttribute("value", "0");
+
+                            input = $("input[name=requested_"+amount_type+"_amount_"+index+"]");
+                            td_parent = input.closest('td');
+                            td_parent.removeClass("input-padding");
+                            td_parent.html(span);
+                            td_parent.append(hidden_input);
+                        });
+                        total_requested = $("input[name=total_requested_amount_"+index+"]");
+                        total_requested.val(0);
+                        total_requested.prev("span").html("-");
+                    }
+                }
+            })
+            $("input[name=total_outstanding_amount]").val(numberWithCommas(total_outstanding_amount));
+            $(".mask").maskMoney({thousands:',', decimal:'.', allowZero: true, suffix: '', precision:0});
+        }
+    }
+
+    function generate_waiver_amounts_for_paid_waiver() {
+        waivers = {"late_fee": [], "interest": [], "principal": []};
+        outstanding = get_each_payment_outstanding_installment();
+        waiver_amount = string_to_number($("input[name=approved_waiver_amount]").val());
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            if (waiver_amount > 0) {
+                reverse_amount_types.forEach(function(amount_type){
+                    if (waiver_amount > outstanding[amount_type][index]) {
+                        waivers[amount_type][index] = outstanding[amount_type][index];
+                    } else {
+                        waivers[amount_type][index] = waiver_amount;
+                    }
+                    waiver_amount = waiver_amount - waivers[amount_type][index];
+                });
+            };
+        });
+        return waivers;
+    }
+
+    function recalculate_waiver_amount_table(waivers) {
+        amounts = {"late_fee": 0, "interest": 0, "principal": 0, "total": 0};
+        $(".waiver_approval_payment_selector:checked").each(function(){
+            index = $(this).val();
+            total_amount = 0;
+            amount_types.forEach(function(amount_type){
+                amount = string_to_number($("input[name=ongoing_remaining_"+amount_type+"_amount_"+index+"]").val());
+                percentage = percent_to_decimal(string_to_decimal($("input[name=approved_"+amount_type+"_waiver_percentage]").attr("data-original")));
+                max_amount = Math.ceil(percentage * amount);
+                if (amount > max_amount) {
+                    amount = max_amount;
+                }
+
+                if (typeof waivers[amount_type] == "number") {
+                    if (waivers[amount_type]-amount >= 0) {
+                        waivers[amount_type] -= amount;
+                    } else {
+                        amount = waivers[amount_type];
+                        waivers[amount_type] = 0;
+                    }
+                } else {
+                    if (waivers[amount_type][index] !== undefined) {
+                        if (waivers[amount_type][index]-amount >= 0) {
+                            waivers[amount_type][index] -= amount;
+                        } else {
+                            amount = waivers[amount_type][index];
+                            waivers[amount_type][index] = 0;
+                        }
+                    } else {
+                        amount = 0;
+                    }
+                }
+
+                input = $("input[name=requested_"+amount_type+"_amount_"+index+"]");
+                input.val(numberWithCommas(amount));
+                input.prev("span:not(.input-group-addon)").html(numberWithCurrency(amount));
+                amounts[amount_type] += amount;
+                total_amount += amount;
+            });
+            input_total_amount = $("input[name=total_requested_amount_"+index+"]");
+            input_total_amount.val(numberWithCommas(total_amount));
+            input_total_amount.prev("span").html(numberWithCurrency(total_amount));
+            amounts["total"] += total_amount;
+        });
+        return amounts;
+    }
+
+    // main function
+    $(document).on("keypress, keyup, blur, change", "input[name^='requested'].form-control", function(){
+        disabled_button();
+        disable_waiver_input();
+        disable_percentage_input();
+        disabled_waiver_checkbox()
+        recalculate_section = "cell";
+    });
+
+    $(document).on("keypress, keyup, blur, change", "input[name$='percentage'].form-control", function(){
+        disabled_button();
+        disable_waiver_input();
+        disable_amount_input();
+        disabled_waiver_checkbox()
+        recalculate_section = "percentage";
+        $(this).attr("data-original", $(this).val());
+    });
+
+    $(document).on("keypress, keyup, blur, change", "input[name=approved_waiver_amount]", function(){
+        disabled_button();
+        disable_percentage_input();
+        disable_amount_input();
+        disabled_waiver_checkbox()
+        recalculate_section = "amount";
+    });
+
+    $(document).on("change, click", ".waiver_approval_payment_selector", function(){
+        disabled_button();
+        disable_waiver_input();
+        disable_percentage_input();
+        disable_amount_input();
+        recalculate_section = "checkbox";
+    });
+
+    $(document).on("click", ".button-submit", function(){
+        button = $("#approver_button");
+        button.removeClass('btn-success');
+        button.removeClass('btn-danger');
+        if ($(this).attr("data-decision") == "Approve") {
+            button.addClass("btn-success");
+        } else {
+            button.addClass("btn-danger");
+        }
+        button.html($(this).attr("data-decision"));
+        button.attr("onclick", "define_approve('"+$(this).attr("data-decision")+"'); submit_approval();");
+    });
+
+    $("#btn_search_loan").on('click', function (e) {
+        loan_id = $('#loan_id').val();
+        if (!loan_id) {
+            ToastDanger('Failure', 'Please enter Loan ID');
+            e.preventDefault();
+            return false;
+        } else {
+            $('#loading-div').show();
+            {% if is_approver %}
+                showModalPortal('loan', loan_id, '/api/loan_refinancing/v1/covid_refinancing_web_portal');
+            {% else %}
+                $("#frm_search_loan").submit();
+            {% endif %}
+        }
+    });
+
+    $('#portal_modal').on('hidden.bs.modal', function () {
+        $('#loading-div').hide();
+    });
+
+    function recalculate() {
+        if (recalculate_section == "" || !minimum_waiver_amount_validation()) {
+            return false;
+        }
+        enable_all_input();
+
+        if (recalculate_section == "checkbox") {
+            // part of apply waiver checkbox
+            update_checked_payment();
+            recalculate_waiver_amount_table(generate_waiver_amounts_for_paid_waiver());
+
+        } else if (recalculate_section == "cell") {
+            // part of waiver cell by cell changes
+            amounts = {"late_fee": 0, "interest": 0, "principal": 0, "total": 0};
+            $(".waiver_approval_payment_selector:checked").each(function(){
+                index = $(this).val();
+                total_amount = 0;
+                amount_types.forEach(function(amount_type){
+                    amount = string_to_number($("input[name=requested_"+amount_type+"_amount_"+index+"]").val());
+                    amounts[amount_type] += amount;
+                    total_amount += amount;
+                });
+                input_total_amount = $("input[name=total_requested_amount_"+index+"]");
+                input_total_amount.val(numberWithCommas(total_amount));
+                input_total_amount.prev("span").html(numberWithCurrency(total_amount));
+                amounts["total"] += total_amount;
+            });
+            update_approved_waiver_amount(amounts["total"]);
+            update_approved_waiver_percentage(amounts);
+
+        } else if (recalculate_section == "percentage") {
+            // part of waiver percentage changes
+            amounts = {"late_fee": 0, "interest": 0, "principal": 0, "total":0};
+            $(".waiver_approval_payment_selector:checked").each(function(){
+                index = $(this).val();
+                total_amount = 0;
+                amount_types.forEach(function(amount_type){
+                    outstanding = string_to_number($("input[name=ongoing_remaining_"+amount_type+"_amount_"+index+"]").val())
+                    actual_percentage = percent_to_decimal(string_to_decimal($("input[name=approved_"+amount_type+"_waiver_percentage]").attr("data-original")));
+                    amount_cell = parseInt((outstanding * actual_percentage).toFixed());
+                    input_amount = $("input[name=requested_"+amount_type+"_amount_"+index+"]");
+                    input_amount.val(numberWithCommas(amount_cell));
+                    amounts[amount_type] += amount_cell;
+                    total_amount += amount_cell;
+                });
+                input_total_amount = $("input[name=total_requested_amount_"+index+"]");
+                input_total_amount.val(numberWithCommas(total_amount));
+                input_total_amount.prev("span").html(numberWithCurrency(total_amount));
+                amounts["total"] += total_amount;
+            });
+            update_approved_waiver_amount(amounts["total"]);
+
+        } else if (recalculate_section == "amount") {
+            // part of waiver amount changes
+            update_checked_payment();
+            if (selected_program_name != "General Paid Waiver") {
+                waiver_amount = string_to_number($("input[name=approved_waiver_amount]").val());
+                waivers = {"late_fee": 0, "interest": 0, "principal": 0};
+                outstanding = get_outstanding_installment();
+                waiver_type = $("input[name$='percentage'].form-control").prop("name").replace("approved_", "").replace("_waiver_percentage", "");
+                if (waiver_type == "principal") {
+                    waivers["late_fee"] = outstanding["late_fee"];
+                    waivers["interest"] = outstanding["interest"];
+                    waivers["principal"] = waiver_amount - waivers["late_fee"] - waivers["interest"];
+                } else if (waiver_type == "interest") {
+                    waivers["late_fee"] = outstanding["late_fee"];
+                    waivers["interest"] = waiver_amount - waivers["late_fee"];
+                } else {
+                    waivers["late_fee"] = waiver_amount;
+                }
+                update_approved_waiver_percentage(waivers);
+            } else {
+                waivers = generate_waiver_amounts_for_paid_waiver();
+            }
+            amounts = recalculate_waiver_amount_table(waivers);
+        }
+
+        update_total_waiver_amount(amounts, "requested", "_waiver_amount");
+        update_ptp_amount();
+
+        recalculate_outstanding_installment();
+        update_total_waiver_amount(recalculate_total_outstanding_installment(), "outstanding", "_amount");
+
+        update_need_to_pay();
+        recalculate_remaining_installment();
+        update_total_waiver_amount(recalculate_total_remaining_installment(), "remaining", "_amount");
+
+        update_approved_remaining_amount();
+        enabled_button();
+    }
+
+    function reset() {
+        enable_all_input();
+        enabled_button();
+
+        recalculate_section = "";
+        $("input[name=paid_ptp_amount]").val(numberWithCommas(reset_data.paid_ptp_amount));
+        $("input[name=program_name]").val(reset_data.approved_program);
+        amount_types.forEach(function(amount_type){
+            input = $("input[name=approved_"+amount_type+"_waiver_percentage]");
+            value = decimal_to_percent(reset_data["approved_"+amount_type+"_waiver_percentage"]);
+            input.val(value);
+            input.attr("data-original", value);
+        });
+        $("input[name=approved_waiver_amount]").val(numberWithCommas(reset_data.approved_waiver_amount));
+        $("input[name=approved_remaining_amount]").val(numberWithCommas(reset_data.approved_remaining_amount));
+        $("input[name=approved_remaining_amount]").prev("span").html(numberWithCurrency(reset_data.approved_remaining_amount));
+        $("input[name=waiver_validity_date]").val(reset_data.approved_waiver_validity_date_formatted).trigger("change");
+        $("input[name=approved_waiver_validity_date]").val(reset_data.approved_waiver_validity_date);
+        $("input[name=total_outstanding_amount]").val(numberWithCommas(reset_data.total_outstanding_amount));
+        if (waiver_request_id == 0) {
+            recalculate_section = "amount";
+            update_checked_payment();
+            recalculate_section = "";
+        }
+
+        $("#ongoing_payment tbody tr").each(function(index){
+            checkbox = $("input.waiver_approval_payment_selector[value="+index+"]:checked");
+            if (checkbox.length == 0) {
+                total_outstanding = string_to_number($("input[name=ongoing_remaining_outstanding_amount_"+index+"]").val());
+                if (total_outstanding > 0) {
+                    amount_types.forEach(function(amount_type){
+                        amount = string_to_number($("input[name=ongoing_remaining_"+amount_type+"_amount_"+index+"]").val());
+                        input = $("input[name=remaining_"+amount_type+"_amount_"+index+"]");
+                        input.val(numberWithCommas(amount));
+                        input.prev("span").html(numberWithCurrency(amount));
+
+                        input = $("input[name=outstanding_"+amount_type+"_amount_"+index+"]");
+                        input.val(numberWithCommas(amount));
+                        input.prev("span").html(numberWithCurrency(amount));
+                    });
+
+                    input = $("input[name=total_outstanding_amount_"+index+"]");
+                    input.val(numberWithCommas(total_outstanding));
+                    input.prev("span").html(numberWithCurrency(total_outstanding));
+
+                    input = $("input[name=total_remaining_amount_"+index+"]");
+                    input.val(numberWithCommas(total_outstanding));
+                    input.prev("span").html(numberWithCurrency(total_outstanding));
+
+                    remaining_paid_off_input = $("input[name=remaining_paid_off_"+index+"]");
+                    remaining_paid_off = "N";
+                    if (parseInt(total_outstanding) == 0) {
+                        remaining_paid_off = "Y";
+                    }
+                    remaining_paid_off_input.val(remaining_paid_off);
+                    remaining_paid_off_input.prev("span").html(remaining_paid_off);
+                }
+            }
+        });
+
+        reset_data.waiver_payment_approvals.forEach(function(payment){
+            keys = ["outstanding", "remaining", "approved"];
+            keys.forEach(function(item){
+                key_item = item;
+                amount_field = "_amount"
+                if (item == "approved") {
+                    amount_field = "_waiver_amount";
+                    item = "requested";
+                }
+                amount_types.forEach(function(amount_type){
+                    input = $("input[name="+item+"_"+amount_type+"_amount_"+payment.index+"]");
+                    input.val(numberWithCommas(payment[key_item+"_"+amount_type+amount_field]));
+                    input.prev("span:not(.input-group-addon)").html(numberWithCurrency(payment[key_item+"_"+amount_type+amount_field]));
+                });
+                input = $("input[name=total_"+item+"_amount_"+payment.index+"]");
+                input.val(numberWithCommas(payment["total_"+key_item+amount_field]));
+                input.prev("span").html(numberWithCurrency(payment["total_"+key_item+amount_field]));
+            })
+            remaining_paid_off_input = $("input[name=remaining_paid_off_"+payment.index+"]");
+            remaining_paid_off_input.val(payment.remaining_paid_off);
+            remaining_paid_off_input.prev("span").html(payment.remaining_paid_off);
+        });
+        $("#all_total_requested_waiver_amount").html(reset_data.all_total_requested_waiver_amount);
+        $("#all_total_remaining_amount").html(reset_data.all_total_remaining_amount);
+        $("#all_total_outstanding_amount").html(reset_data.all_total_outstanding_amount);
+        amount_types.forEach(function(amount_type){
+            sections = ["requested", "remaining", "outstanding"];
+            sections.forEach(function(section){
+                field = "_amount";
+                if (section == "requested") {
+                    field = "_waiver_amount";
+                }
+                field_key = "all_"+section+"_"+amount_type+field;
+                $("#"+field_key).html(reset_data[field_key]);
+            });
+        });
+
+        input = $("input[name=ptp_amount]");
+        input.val(numberWithCommas(reset_data.ptp_amount));
+        input.prev("span").html(numberWithCurrency(reset_data.ptp_amount));
+
+        remaining_original_ptp = reset_data.ptp_amount - reset_data.paid_ptp_amount;
+        input = $("input[name=remaining_original_ptp]");
+        input.val(numberWithCommas(remaining_original_ptp));
+        input.parent().removeClass("extend-padding-1l-2x").removeClass("extend-padding-2x");
+        prefix = "";
+        class_name = "extend-padding-1l-2x";
+        if (remaining_original_ptp < 0) {
+            prefix = "Lebih Bayar<br/>";
+            remaining_original_ptp *= -1;
+            class_name = "extend-padding-2x";
+        }
+        input.parent().addClass(class_name);
+        input.prev("span").html(prefix + numberWithCurrency(remaining_original_ptp));
+
+        input = $("input[name=need_to_pay]");
+        input.val(numberWithCommas(reset_data.need_to_pay));
+        input.prev("span").html(numberWithCurrency(reset_data.need_to_pay));
+
+        if (waiver_request_id == 0) {
+            $("#ongoing_payment tbody tr").each(function(index){
+                checkbox = $("input.waiver_approval_payment_selector[value="+index+"]");
+                if (checkbox.length == 0) {
+                    total_outstanding = string_to_number($("input[name=total_outstanding_amount_"+index+"]").val());
+                    if (total_outstanding > 0) {
+                        amount_types.forEach(function(amount_type){
+                            amount = string_to_number($("input[name=outstanding_"+amount_type+"_amount_"+index+"]").val());
+                            input = $("input[name=remaining_"+amount_type+"_amount_"+index+"]");
+                            input.val(numberWithCommas(amount));
+                            input.prev("span").html(numberWithCurrency(amount));
+                        });
+
+                        input = $("input[name=total_remaining_amount_"+index+"]");
+                        input.val(numberWithCommas(total_outstanding));
+                        input.prev("span").html(numberWithCurrency(total_outstanding));
+
+                        remaining_paid_off_input = $("input[name=remaining_paid_off_"+index+"]");
+                        remaining_paid_off = "N";
+                        if (parseInt(total_outstanding) == 0) {
+                            remaining_paid_off = "Y";
+                        }
+                        remaining_paid_off_input.val(remaining_paid_off);
+                        remaining_paid_off_input.prev("span").html(remaining_paid_off);
+                    }
+                }
+            });
+        }
+        recalculate_remaining_installment();
+        update_total_waiver_amount(recalculate_total_remaining_installment(), "remaining", "_amount");
+    }
+
+    function submit_approval() {
+        if (!calculate_validation()) {
+            return false;
+        }
+        data = define_data_for_normal_program();
+        if (waiver_request_id == 0) {
+            data = define_data_for_general_paid_program();
+        }
+        $.ajax({
+            url: "{%url 'loan_refinancing:submit_waiver_approval' %}", // the endpoint
+            type: "POST", // http method
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            data : JSON.stringify(data), // data sent with the post request
+            success: function (json) { // handle a successful response
+                msg = '<span style="line-height:24px">'+json.message+'</span>';
+                if(json.status == 'success') {
+                    swal({
+                        title: "Sukses!",
+                        html: true,
+                        text: msg,
+                        type: "success",
+                        showCancelButton: false,
+                        confirmButtonColor: "#7cd1f9",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: true,
+                    });
+                    $(".hide-after-submit").hide();
+                } else{
+                    negative_response_swal(msg);
+                }
+            },
+            error: function (xhr, errmsg, err) { // handle a non-successful response
+                msg = "";
+                if (xhr.responseJSON.status !== undefined) {
+                    details = xhr.responseJSON.detail.detail;
+                    for (const [key, value] of Object.entries(details)) {
+                        if (key == "bucket_name" || key == "is_covid_risky") {
+                            msg = "Mohon Maaf. Silahkan hubungi bagian IT<br/>";
+                        } else {
+                            msg += value + "<br/>";
+                        }
+                    }
+                } else {
+                    msg = "Mohon maaf. Silakan coba lagi";
+                }
+                negative_response_swal('<span style="line-height:24px">'+msg+'</span>');
+            }
+        })
+    }
+
+{% endblock %}

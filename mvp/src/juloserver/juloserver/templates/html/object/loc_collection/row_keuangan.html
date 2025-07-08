@@ -1,0 +1,118 @@
+{% load unit %}
+<tr class= "ca-none {{ app_data.has_other_income.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Ada Penghasilan Lain?</strong></div>
+        <div class="col-xs-6">
+            {{ application.has_other_income|yesno:"Ya, Tidak"|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.other_income_amount.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Besar Penghasilan</strong></div>
+        <div class="col-xs-6">
+            {{ application.other_income_amount|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.other_income_source.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Sumber Penghasilan</strong></div>
+        <div class="col-xs-6">
+            {{ application.other_income_source|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.vehicle_type_1.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Kendaraan Pribadi</strong></div>
+        <div class="col-xs-6">
+            {{ application.vehicle_type_1|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.vehicle_ownership_1.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Kepemilikan Kendaraan</strong></div>
+        <div class="col-xs-6">
+            {{ application.vehicle_ownership_1|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.bank_name.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Bank</strong></div>
+        <div class="col-xs-6">
+            {{ application.bank_name|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.bank_branch.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Cabang Bank</strong></div>
+        <div class="col-xs-6">
+            {{ application.bank_branch|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.bank_account_number.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No. Rekening</strong></div>
+        <div class="col-xs-6">
+            {{ application.bank_account_number|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Sesuai Rekening Bank</strong></div>
+        <div class="col-xs-6">
+            {{ application.name_in_bank|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Sumber Penghasilan</strong></div>
+        <div class="col-xs-6">
+            {{ application.other_income_source|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Biaya Sewa/ Cicilan Rumah per Bulan</strong></div>
+        <div class="col-xs-6">
+            {{ application.monthly_housing_cost|f_rupiahs:"no"|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Pengeluaran Rutin per Bulan (selain Rumah)</strong></div>
+        <div class="col-xs-6">
+            {{ application.monthly_expenses|f_rupiahs:"no"|safe }}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Total Cicilan Hutang per Bulan</strong></div>
+        <div class="col-xs-6">
+            {{ application.total_current_debt|f_rupiahs:"no"|safe }}
+        </div>
+    </div>
+  </td>
+</tr>

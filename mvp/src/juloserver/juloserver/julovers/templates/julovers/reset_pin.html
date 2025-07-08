@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><!-- jQuery Library-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://www.julofinance.com/images/julo.ico" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Julo | Reset PIN</title>
+    <style media="screen">
+      * {
+      margin: 0;
+      padding: 0;
+      }
+      h5,h4,h3,h2,h1{
+        text-align: center;
+      }
+      img{
+        display: block;
+        margin: 0 auto;
+      }
+      .banner{
+        margin-top: 3%;
+        margin-bottom: 2%;
+      }
+      .banner img{
+        width:20%;
+      }
+      nav{
+        background-color: #00ACF0;
+        height: 50px;
+        line-height: 50px;
+      }
+      .page-footer{
+        background-color: #00ACF0;
+        padding-bottom: 70px;
+      }
+      body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      }
+      main {
+        flex: 1 0 auto;
+      }
+      .box {
+        width: 50%;
+        margin: 0px auto;
+        border: 2px solid grey;
+        border-radius: 5px;
+      }
+      .form{
+        width: 60%;
+        margin: 20px auto;
+      }
+      .btn{
+        padding: 0 1rem;
+      }
+      .google{
+        width:1.3%;
+        margin:0 0;
+        display:inline;
+        align:middle;
+      }
+      @media only screen and (max-width : 992px) {
+        .box{
+          width: 100%;
+        }
+        .form{
+          width: 100%;
+        }
+        .banner img{
+          width: 50%
+        }
+        html{
+          font-size: 200%;
+        }
+        i{
+          width: 5px;
+        }
+        .btn-large{
+          height: 3rem;
+        }
+        .fa-eye::before{
+          font-size: 1rem;
+        }
+        .btn{
+          padding: 0 2rem;
+          height: 2.5rem;
+        }
+        .google{
+          width: 4%
+        }
+      }
+      .button.is-primary.is-outlined{
+        border-color: #00ACF0;
+        color: #00ACF0;
+      }
+      .button.is-primary.is-outlined:hover{
+        background-color: #00ACF0;
+      }
+      .input-field input[type=password]:focus {
+        border-bottom: 1px solid #00ACF0;
+        box-shadow: 0 1 0 0 #00ACF0;
+      }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('#pin1').keyup(function() {
+                $('#result1').html(checkStrength($('#pin1').val(), '#result1'))
+                $('#result2').html(checkSimiliar($('#pin1').val(), $('#pin2').val(), '#result2'))
+            })
+            $('#pin2').keyup(function() {
+                $('#result2').html(checkSimiliar($('#pin1').val(), $('#pin2').val(), '#result2'))
+            })
+            $("#pin1").keypress(function(event) {
+              if ($('#pin1').val().length > 5) {
+                event.preventDefault();
+              }
+              if (event.which < 48 || event.which > 57) {
+                event.preventDefault();
+              }
+            });
+
+            $("#pin2").keypress(function(event) {
+              if ($('#pin2').val().length > 5) {
+                event.preventDefault();
+              }
+              if (event.which < 48 || event.which > 57) {
+                event.preventDefault();
+              }
+            });
+
+            function checkStrength(pin, result) {
+                var validLength = 6;
+                if (pin.length != validLength) {
+                  $(result).removeClass()
+                  $(result).addClass('short')
+                  return 'PIN harus terdiri dari 6 digit '
+                }
+                else{
+                  $(result).removeClass()
+                  $(result).addClass('clear')
+                  return ''
+                }
+            }
+            function checkSimiliar(pin1,pin2,result) {
+                if (pin2.length < 2){
+                  $(result).removeClass()
+                  $(result).addClass('clear')
+                  return ''
+                }
+                if(pin1 !== pin2){
+                  $(result).removeClass()
+                  $(result).addClass('wrong')
+                  return 'PIN tidak sesuai'
+                }else{
+                  $(result).removeClass()
+                  $(result).addClass('clear')
+                  return ''
+                }
+            }
+        });
+        function CheckPin() {
+            var pin1 = document.getElementById('pin1').value;
+            var pin2 = document.getElementById('pin2').value;
+            if (!$.isNumeric(pin1)) {
+                sweetAlert("Peringatan", "PIN harus terisi oleh angka", "error");
+                return false;
+            }
+            if (pin1.length != 6) {
+                sweetAlert("Peringatan", "PIN harus terdiri dari 6 digit", "error");
+                return false;
+            }
+            else if (pin1 != pin2) {
+                sweetAlert("Peringatan", "PIN tidak sesuai", "error");
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <style>
+        #reset .short{
+        color:#FF0000;
+        font-size: 90%;
+        }
+        #reset .wrong{
+        color:#FF0000;
+        font-size: 90%;
+        }
+        #reset .clear{
+        color: white;
+        font-size: 90%;
+        }
+    </style>
+</head>
+<body>
+  <main>
+    <div class="row">
+      <nav class="nav-wrapper has-shadow">
+      </nav>
+    </div>
+    <div class="row">
+      <div class="banner">
+        <img src="https://www.julofinance.com/images/JULO_logo_small.png" alt="Julo"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 m12 l12" style="align-content:center;">
+        <div class="box z-depth-3">
+          <div class="row">
+            <h5>Silakan reset PIN JULO sebelum kamu mengakses akun kamu.</h5>
+          </div>
+          <div class="row">
+            <div class="form">
+              <form id="reset" method="post" action="{{action}}" onsubmit="return CheckPin();">
+                {% csrf_token %}
+                <div class="col s12 m12 l12">
+                  <div class="input-field col s12 m12 l12">
+                    <input type="text" class="validate" name="email" id="email"
+                    placeholder="email" autocomplete="off" value="{{email}}" size="30" readonly>
+                    <label for="email">Email</label>
+                  </div>
+                  <div class="col s12 m12 l12">
+                    <div class="input-field col l10 s10" style="padding-left:0px">
+                      <input type="password" class="validate" name="pin1" id="pin1" autocomplete="off" pattern="[0-9]*" inputmode="numeric" maxlength="15" size="15">
+                      <label style="left:0rem" for="pin1">Ketik PIN baru</label>
+                    </div>
+                    <div class="input-field col s2 m2 l2">
+                      <a href="#" class="btn" style="background-color:#00ACF0;" onclick="if(pin1.type=='text')pin1.type='password'; else pin1.type='text';" ><i class="fa fa-eye"></i></a>
+                    </div>
+                    <div class="col s12 m12 l12">
+                      <span style="left:0rem" id="result1"></span>
+                    </div>
+                  </div>
+                  <div class="col s12 m12 l12">
+                    <div class="input-field col l10 s10" style="padding-left:0px">
+                      <input type="password" class="validate" name="pin2" id="pin2" autocomplete="off" pattern="[0-9]*" inputmode="numeric" maxlength="15" size="15">
+                      <label style="left:0rem" for="pin2">Konfirmasi PIN</label>
+                    </div>
+                    <div class="input-field col s2 m2 l2">
+                      <a href="#" class="btn" style="background-color:#00ACF0;" onclick="if(pin2.type=='text')pin2.type='password'; else pin2.type='text';" ><i class="fa fa-eye"></i></a>
+                    </div>
+                    <div class="col s12 m12 l12">
+                      <span style="left:0rem" id="result2"></span>
+                    </div>
+                  </div>
+                  <div class="col s12 m12 l12" style="text-align:center;">
+                    <button type="submit" class="waves-effect waves-light btn-large blue" data-loading-text="Resetting PIN..." style="background-color:#00ACF0;border-radius:0px;">Ubah</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col s12 m12 l12">
+          <p class="center" style="color:white">
+            <strong>©{% now "Y" %} JULO</strong> | All rights reserved | Get it on <a href="https://play.google.com/store/apps/details?id=com.julofinance.juloapp" style="color:white" target="_blank">Google Play Store <img class="google" src="https://www.julofinance.com/images/googleplay.ico" alt="google-play" /></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

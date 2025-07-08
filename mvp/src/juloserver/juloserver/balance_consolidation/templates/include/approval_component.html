@@ -1,0 +1,158 @@
+{% load unit %}
+{% load model %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+<div class="row">
+    <hr>
+    <div class="col-md-12 col-xs-12 block_form" id="form_row" style="height:300px;">
+      <form class="form-horizontal" id="status_form" role="form" method="POST">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+
+        {% if form.errors %}
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-danger" id="id_error_div_1">
+                <strong>{{ error|escape }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+      <div class="row">
+        {% if is_locked_by_me %}
+          <div class="col-md-6 col-md-offset-3 col-xs-12 m-t-30" id="id_form_selection">
+              {%if object.validation_status != 'approved' or object.validation_status != 'rejected' %}
+                <button id="id_btn_ubah_status" class="btn btn-info btn-block text-uppercase waves-effect waves-light" type="button">
+                  <i class="fa fa-pencil fa-fw"></i> Ubah Status
+                </button>
+              {% endif %}
+                <button id="id_btn_simpan_note" class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="button">
+                  <i class="fa fa-file-text-o fa-fw"></i> Tambah Note
+                </button>
+                <button id="id_btn_unlock_app" class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="button" data-toggle="modal" data-target="#confirmUnlockAppModal">
+                  <i class="fa fa-unlock fa-fw"></i> Unlock Aplikasi
+                </button>
+            </div>
+        {% else %}
+            <div class="col-md-6 col-md-offset-3 col-xs-12 m-t-30" id="id_form_selection">
+              {%if object.validation_status != 'approved' or object.validation_status != 'rejected' %}
+                <button id="id_btn_ubah_status" class="btn btn-info btn-block text-uppercase waves-effect waves-light" type="button" disabled="disabled">
+                  <i class="fa fa-pencil fa-fw"></i> Ubah Status
+                </button>
+                <button id="id_btn_simpan_note" class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="button" disabled="disabled">
+                  <i class="fa fa-file-text-o fa-fw"></i> Tambah Note
+                </button>
+              {% endif %}
+            </div>
+        {% endif %}
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 col-xs-12" id="id_form_selection">
+            <div class="row collapse" id="id_form_ubah_status" aria-expanded="false" style="height: 0px;">
+              <div class="row">
+                  <div class="col-md-2 col-xs-12 m-t-10">
+                    <small>From: </small> <code>{{ object.validation_status|default:"-"|safe }}</code>
+                  </div>
+                  <div class="col-md-1 col-xs-4 m-t-10">
+                    <small>To: </small>
+                  </div>
+                  <div class="col-md-8 col-xs-8{% if form.status_to.errors %} has-error {% endif %}">
+                      {{ form.status_to }}
+                  </div>
+
+              </div>
+              <!-- end row -->
+
+              <div class="row m-t-10">
+                <div class="col-md-6 col-sm-12 form-group {% if form.reason.errors %} has-error {% endif %} m-r-10">
+                  <select multiple="multiple" class="form-control" id="id_reason" name="reason" style="height: 140px;"><option selected="selected" value="">-- Pilih Alasan --</option></select>
+                </div>
+
+                <div class="col-md-6 col-sm-6 form-group {% if form.notes.errors %} has-error {% endif %}">
+                  {{ form.notes }}
+                </div>
+              </div>
+              <!-- end row -->
+
+              <div class="row">
+                  <div class="col-md-6 col-sm-4 col-xs-6">
+                    <button id="id_batal_ubah_status" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button">Batal</button>
+                  </div>
+                  <div class="col-md-6 col-sm-4 col-xs-6">
+                      <button class="btn btn-default btn-block text-uppercase waves-effect waves-light" disabled="true" data-toggle="modal" data-target="#confirmStatusUpdateModal" type="button" name="ubah_status" id="verification-status">Simpan</button>
+
+                  </div>
+              </div>
+
+            </div>
+            <div class="row collapse" id="id_form_simpan_note" aria-expanded="false" style="height: 0px;">
+                <div class="row m-t-10">
+                  <div class="col-md-12 col-sm-12 form-group {% if form.notes_only.errors %} has-error {% endif %} m-r-10">
+                    {{ form.notes_only }}
+                  </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-4 col-xs-6">
+                      <button id="id_batal_simpan_note" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button">Batal</button>
+                    </div>
+                    <div class="col-md-6 col-sm-4 col-xs-6">
+                      <button id="id-submit-simpan-note" class="btn btn-default btn-block text-uppercase waves-effect waves-light" disabled="true" type="button" name="simpan_note">Simpan Note</button>
+                    </div>
+                </div>
+
+              </div>
+        </div>
+        <!-- col.md.12 -->
+      </div>
+      <!-- 2nd row end -->
+      </form>
+    </div>
+    <!-- div form end -->
+
+  </div>
+
+<!-- confirm dialog -->
+<div class="modal fade" id="confirmStatusUpdateModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle" style="display: inline-block;">Update Status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Apakah anda yakin untuk meng-update status?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Batal</button>
+        <button id="submit-verify" type="button" class="btn btn-danger">Ya, Update Status</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmUnlockAppModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle" style="display: inline-block;">Unlock Aplikasi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Balance consolidation akan di unlock, apakah anda yakin?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Batal</button>
+        <button id="submit-unlock-balance-cons" type="button" class="btn btn-danger">Ya, Unlock</button>
+      </div>
+    </div>
+  </div>
+</div>

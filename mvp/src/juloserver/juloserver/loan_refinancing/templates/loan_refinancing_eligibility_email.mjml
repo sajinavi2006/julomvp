@@ -1,0 +1,54 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat:400,700" />
+    <mj-attributes>
+      <mj-all font-family="Montserrat, sans-serif" /> </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" align="right" src="https://s3-ap-southeast-1.amazonaws.com/julopublic/email_assets/Logo_JULO.jpg" /> </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-weight="700" font-size="14px"> Halo {{fullname_with_title}} </mj-text>
+        <mj-text font-size="12px" line-height="25px">
+          <p>Kami mengetahui bahwa Anda telah melewatkan beberapa pembayaran hutang Anda di JULO.</p>
+          <p>Kami memahami bahwa mungkin Anda sedang mengalami kesulitan pembayaran hutang karena satu dan lain hal yang penting. Untuk itu kami menawarkan cara untuk dapat membuat pembayaran Anda kembali normal.</p>
+          <p>Untuk memperpanjang pinjaman Anda, klik link berikut ini:</p>
+        </mj-text>
+        <mj-button background-color="#05ACF0" font-weight=700 width="300px" target={{encoded_link}}> AJUKAN REFINANCING </mj-button>
+        <mj-text font-size="12px" line-height="25px">
+          <p>Link di atas akan kadaluarsa dalam waktu 14 hari ke depan, Untuk informasi lebih lanjut, silahkan menghubungi Petugas Kami di Nomor Telepon 021 3950 9957 atau email korespondensi di collections@julo.co.id </mj-text>
+        <mj-text font-size="12px"
+          font-weight="700"> PT. Julo Teknologi Finansial</mj-text>
+        <mj-text font-size="12px" font-weight="700">Berdasarkan Kuasa dari Perusahaan Pemberi Pinjaman</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-divider border-width="1px" border-color="lightgrey"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-top=0>
+      <mj-group>
+        <mj-column>
+          <mj-text align="left" font-size="10px" padding-top=0>
+            <p>PT.JULO Teknologi Finansial </p>
+            <p>88@Kasablanka Tower A Lantai 5. Jl. Casablanka Raya Kav.88, Jakarta Selatan 12870</p>
+            <p>© Copyright PT JULO Teknologi Finansial - All Rights Reserved</p>
+          </mj-text>
+        </mj-column>
+        <mj-column>
+          <mj-social font-size="12px" icon-size="15px" mode="horizontal">
+            <mj-social-element name="facebook" href="https://www.facebook.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="linkedin" href="https://www.linkedin.com/company/juloindonesia"> </mj-social-element>
+            <mj-social-element name="twitter" href="https://twitter.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="youtube" href="https://www.youtube.com/channel/UCA9WsBMIg3IHxwVA-RvSctA"> </mj-social-element>
+            <mj-social-element name="instagram" href="https://www.instagram.com/juloindonesia"> </mj-social-element>
+          </mj-social>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+  </mj-body>
+</mjml>

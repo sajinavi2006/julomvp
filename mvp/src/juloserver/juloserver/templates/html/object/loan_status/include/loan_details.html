@@ -1,0 +1,369 @@
+{% load unit utils %}
+{% load checkusergroup from common %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+   <li class="active tab">
+    <a href="#payment" data-toggle="tab"> <span class="visible-xs">
+    <i class="fa fa-home"></i></span> <span class="hidden-xs">Loan Detail</span> </a>
+  </li>
+  <li class="tab"><a href="#pmt_event" data-toggle="tab">
+    <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Payment List</span> </a>
+  </li>
+  <li class="tab"><a href="#app_detail" data-toggle="tab" aria-expanded="true">
+    <span class="visible-xs"><i class="fa fa-envelope-o"></i></span> <span class="hidden-xs">Application ID</span> </a>
+  </li>
+  <li class="tab"><a href="#wallet" data-toggle="tab" aria-expanded="true">
+    <span class="visible-xs"><i class="fa fa-envelope-o"></i></span> <span class="hidden-xs">Wallet List</span> </a>
+  </li>
+
+</ul>
+
+<div id="slim_pmts">
+  <div class="tab-content pmt_event">
+    <!-- Tab payment details -->
+    <div class="tab-pane active" id="payment">
+
+      <div class="row p-b-10 m-r-20">
+        <div class="col-md-3 col-xs-6 label-warning text-center p-t-10 p-b-10">
+          <small>Loan Amount</small><br/>
+          <strong>{{ loan_obj.loan_amount|f_rupiahs:"no"|safe}}</strong>
+        </div>
+        <div class="col-md-3 col-xs-6 label-success text-center p-t-10 p-b-10">
+          <small>Duration</small><br/>
+          <strong>{{ loan_obj.loan_duration|default:"-"|safe}} {{ loan_obj.get_application.determine_kind_of_installment }}</strong>
+        </div>
+        <div class="col-md-3 col-xs-6 label-primary text-center p-t-10 p-b-10">
+          <small>Installment Amount</small><br/>
+          <strong>{{ loan_obj.installment_amount|f_rupiahs:"no"|default:"-"|safe  }}</strong>
+        </div>
+       <div class="col-md-3 col-xs-6 label-danger text-center p-t-10 p-b-10">
+          <small>Cashback earned total</small><br/>
+          <strong>{{ loan_obj.cashback_earned_total|f_rupiahs:"no"|default:"-"|safe }}</strong>
+        </div>
+      </div>
+
+      <table>
+        <tr>
+          <td class='m-r-10'>
+            PPOB/Disbursement id
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.fund_id|default:"-"|safe }}</strong>
+          </td>
+        </tr>
+        {%if loan_obj.is_ppob_transaction %}
+            <tr>
+              <td class='m-r-10'>
+                PPOB Number
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong>{{ loan_obj.ppob_number }}</strong>
+              </td>
+            </tr>
+        {%endif%}
+        {%if loan_obj.is_cash_transaction %}
+            <tr>
+              <td class='m-r-10'>
+                Transaction Method
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong>{{ loan_obj.transaction_method.fe_display_name|default:"-"|safe }}</strong>
+              </td>
+            </tr>
+        {%endif%}
+        <tr>
+          <td class='m-r-10'>
+            Loan disbursement amount
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.loan_disbursement_amount|f_rupiahs:"no"|safe }}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Fund Transfer ts
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.get_disbursement_date|date:"d M Y H:i:s"|default:"-"|safe }}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Transaction Detail
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.transaction_detail|default:"-"|safe }}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Status {%if loan_obj.is_ppob_transaction %} PPOB {% else %} Disbursement {% endif %}
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.disbursement_status|default:"-"|safe }}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Bank Name
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.julo_bank_name|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Julo VA App
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.julo_bank_account_number|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Promo code usage
+          </td>
+          <td>
+            <icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.get_promo_code_usage|default:"-"|safe }}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Lender
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.lender|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Disbursement Method
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ disbursement_method|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        {% if loan_obj.is_zero_interest %}
+          <tr>
+            <td class='m-r-10 m-t-10 m-b-10'>
+              Loan campaign:
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <span class="label label-rouded label-success pull-center small">Bunga 0%</span>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10 m-t-10 m-b-10'>
+              Provision fee:
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ loan_obj.provision_rate|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10 m-t-10 m-b-10'>
+              Disbursement fee:
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ loan_obj.disbursement_rate|default:"0.0" }}</strong>
+            </td>
+          </tr>
+        {% endif%}
+      	{% if loan_obj.is_education_product %}
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Pemilik Rekening Tujuan
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ education_bank_account_validated_name|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Nomor Rekening Tujuan
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ education_bank_account_number|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Bank Tujuan
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ education_bank_name_frontend|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+      	{% endif %}
+        {% for method in payment_method %}
+            <tr>
+              <td class='m-r-10 m-t-10 m-b-10'>
+                Payment Method {{forloop.counter|add:1}}
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong>{{method.payment_method_name}} - {{method.virtual_account|default:"-"|safe}}</strong>
+              </td>
+            </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="2">
+            <hr>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Cycle day
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.cycle_day|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Cycle day change Date
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.cycle_day_change_date|date:"d M Y"|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10 m-t-10 m-b-10'>
+            Cycle day Requested
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.cycle_day_requested|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Cycle day requested Date
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.cycle_day_requested_date|date:"d M Y"|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <hr>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Customer
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.customer|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Product
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ loan_obj.product|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+
+      </table>
+
+      <div class="m-t-10 align-buttons">
+        {% checkusergroup in ['bo_sd_verifier','admin_full','bo_credit_analyst'] %}
+          <button class="btn btn-warning m-b-5"  title="edit bank" data-toggle="modal" data-target="#responsive-modal">
+            <i class="fa fa-dollar fa-fw"></i> Ubah BANK
+          </button>
+
+
+          {%if cycle_day_button_active %}
+            <button class="btn btn-success m-b-5"  title="edit cycle day" data-toggle="modal" data-target="#modal-cycleday">
+              <i class="fa fa-clock-o fa-fw"></i> Ubah Cycle Day
+            </button>
+          {%endif%}
+
+          {%if first_installment_btn_active %}
+            <button class="btn btn-success m-b-5"  title="edit cycle day and first installment amount" data-toggle="modal" data-target="#modal-first-settlement">
+              <i class="fa fa-clock-o fa-fw"></i> Cycle Day and First Installment
+            </button>
+          {%endif%}
+        {% endcheckusergroup %}
+        {% checkusergroup in ['collection_supervisor','admin_full','collection_recovery']%}
+          {% if loan_can_restructure %}
+            <button class="btn btn-danger m-b-5"
+                    title="mark to restructure"
+                    id="mark_loan_restructure_id"
+                    onclick="mark_loan_to_restructure('{{ loan_obj.id }}');">
+              <i class="fa fa-building fa-fw"></i>Mark to Restructure
+            </button>
+          {% endif %}
+        {% endcheckusergroup %}
+      </div>
+    </div>
+    <!-- Tab Payment list -->
+    <div class="tab-pane" id="pmt_event">
+    {% with payments as payment_list %}
+      {% include "object/loan_status/include/tab_payment_list.html" %}
+    {% endwith %}
+    </div>
+
+    <!-- Tab Application -->
+    <div class="tab-pane" id="app_detail">
+
+      <table>
+        <tr>
+          <td class='m-r-10'>
+            Application ID
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <a href="{% url 'app_status:change_status' loan_obj.get_application.id %}" target="_blank" title="Application Detail">
+              <strong> {{ loan_obj.get_application.id|default:"-"|safe}}</strong>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Application Status
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong> {{ loan_obj.get_application.application_status|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
+
+    <!-- Tab Payment list -->
+    <div class="tab-pane" id="wallet">
+    {% with wallets as wallets %}
+      {% include "object/loan_status/include/tab_wallet_list.html" %}
+    {% endwith %}
+    </div>
+  </div>
+</div>

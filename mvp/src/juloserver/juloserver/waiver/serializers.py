@@ -1,0 +1,112 @@
+from rest_framework import serializers
+
+
+class GenerateJ1WaiverRefinancingSerializer(serializers.Serializer):
+    account_id = serializers.IntegerField(required=True)
+    is_auto_populated = serializers.BooleanField(required=False)
+    selected_product = serializers.CharField(required=True)
+
+
+class J1WaiverRequestSerializer(serializers.Serializer):
+    account_id = serializers.IntegerField(required=True)
+    bucket_name = serializers.CharField(required=True)
+    selected_program_name = serializers.CharField(required=True)
+    is_covid_risky = serializers.CharField(required=True)
+    outstanding_amount = serializers.IntegerField(required=True)
+    unpaid_principal = serializers.IntegerField(required=True)
+    unpaid_interest = serializers.IntegerField(required=True)
+    unpaid_late_fee = serializers.IntegerField(required=True)
+    waiver_validity_date = serializers.DateField(required=True)
+    ptp_amount = serializers.IntegerField(required=True)
+    calculated_unpaid_waiver_percentage = serializers.FloatField(required=True)
+    recommended_unpaid_waiver_percentage = serializers.FloatField(required=True)
+    waived_account_payment_count = serializers.IntegerField(required=True)
+    partner_product = serializers.CharField(required=True)
+    is_automated = serializers.BooleanField(required=True)
+    waiver_recommendation_id = serializers.IntegerField(required=True)
+    requested_late_fee_waiver_percentage = serializers.CharField(required=True)
+    requested_interest_waiver_percentage = serializers.CharField(required=True)
+    requested_principal_waiver_percentage = serializers.CharField(required=True)
+    requested_late_fee_waiver_amount = serializers.IntegerField(required=True)
+    requested_interest_waiver_amount = serializers.IntegerField(required=True)
+    requested_principal_waiver_amount = serializers.IntegerField(required=True)
+    requested_waiver_amount = serializers.IntegerField(required=True)
+    remaining_amount_for_waived_payment = serializers.IntegerField(required=True)
+    agent_notes = serializers.CharField(required=True)
+    first_waived_account_payment = serializers.IntegerField(required=True)
+    last_waived_account_payment = serializers.IntegerField(required=True)
+    comms_channels = serializers.CharField(required=False)
+    is_customer_confirmed = serializers.BooleanField(required=False)
+    outstanding_late_fee_amount = serializers.IntegerField(required=False)
+    outstanding_interest_amount = serializers.IntegerField(required=False)
+    outstanding_principal_amount = serializers.IntegerField(required=False)
+    selected_account_payments_waived = serializers.JSONField(required=False)
+    unrounded_requested_interest_waiver_percentage = serializers.FloatField(required=False)
+    unrounded_requested_late_fee_waiver_percentage = serializers.FloatField(required=False)
+    unrounded_requested_principal_waiver_percentage = serializers.FloatField(required=False)
+    is_multiple_ptp_payment = serializers.BooleanField(required=False)
+    number_of_multiple_ptp_payment = serializers.IntegerField(required=False)
+    multiple_payment_ptp = serializers.JSONField(required=False)
+    agent_group = serializers.CharField(required=False)
+    agent_detail = serializers.JSONField(required=False)
+
+    def validate_is_covid_risky(self, value):
+        if value == "yes":
+            return True
+        return False
+
+
+class WaiverAccountPaymentRequestSerializer(serializers.Serializer):
+    account_payment_id = serializers.IntegerField(required=True)
+    outstanding_late_fee_amount = serializers.IntegerField(required=True)
+    outstanding_interest_amount = serializers.IntegerField(required=True)
+    outstanding_principal_amount = serializers.IntegerField(required=True)
+    total_outstanding_amount = serializers.IntegerField(required=True)
+    requested_late_fee_waiver_amount = serializers.IntegerField(required=True)
+    requested_interest_waiver_amount = serializers.IntegerField(required=True)
+    requested_principal_waiver_amount = serializers.IntegerField(required=True)
+    total_requested_waiver_amount = serializers.IntegerField(required=True)
+    remaining_late_fee_amount = serializers.IntegerField(required=True)
+    remaining_interest_amount = serializers.IntegerField(required=True)
+    remaining_principal_amount = serializers.IntegerField(required=True)
+    total_remaining_amount = serializers.IntegerField(required=True)
+    is_paid_off_after_ptp = serializers.BooleanField(required=True)
+
+
+class J1WaiverApprovalSerializer(serializers.Serializer):
+    account_id = serializers.IntegerField(required=True, allow_null=True)
+    waiver_request_id = serializers.IntegerField(required=True, allow_null=True)
+    paid_ptp_amount = serializers.IntegerField(required=True)
+    decision = serializers.CharField(required=True)
+    approved_program = serializers.CharField(required=True)
+    approved_late_fee_waiver_percentage = serializers.FloatField(required=True)
+    approved_interest_waiver_percentage = serializers.FloatField(required=True)
+    approved_principal_waiver_percentage = serializers.FloatField(required=True)
+    approved_waiver_amount = serializers.IntegerField(required=True)
+    approved_remaining_amount = serializers.IntegerField(required=True)
+    approved_waiver_validity_date = serializers.DateField(required=True)
+    notes = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    waiver_account_payment_approvals = serializers.ListField(required=True)
+    waiver_request = serializers.DictField(required=False, allow_null=True)
+    waiver_account_payment_requests = serializers.ListField(required=False, allow_null=True)
+    unrounded_approved_late_fee_waiver_percentage = serializers.FloatField(required=True)
+    unrounded_approved_interest_waiver_percentage = serializers.FloatField(required=True)
+    unrounded_approved_principal_waiver_percentage = serializers.FloatField(required=True)
+    approved_reason_type = serializers.CharField(required=False, allow_null=True)
+    approved_reason = serializers.CharField(required=False, allow_null=True)
+
+
+class WaiverAccountPaymentApprovalSerializer(serializers.Serializer):
+    outstanding_late_fee_amount = serializers.IntegerField(required=True)
+    outstanding_interest_amount = serializers.IntegerField(required=True)
+    outstanding_principal_amount = serializers.IntegerField(required=True)
+    total_outstanding_amount = serializers.IntegerField(required=True)
+    approved_late_fee_waiver_amount = serializers.IntegerField(required=True)
+    approved_interest_waiver_amount = serializers.IntegerField(required=True)
+    approved_principal_waiver_amount = serializers.IntegerField(required=True)
+    total_approved_waiver_amount = serializers.IntegerField(required=True)
+    remaining_late_fee_amount = serializers.IntegerField(required=True)
+    remaining_interest_amount = serializers.IntegerField(required=True)
+    remaining_principal_amount = serializers.IntegerField(required=True)
+    total_remaining_amount = serializers.IntegerField(required=True)
+    account_payment_id = serializers.IntegerField(required=True)

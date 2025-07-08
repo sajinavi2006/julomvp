@@ -1,0 +1,83 @@
+{% extends "common/theme1/detail/detail_img_editor.html" %}
+{% load model %}
+{% load static from staticfiles %}
+
+{% block custom_css %}
+    <!-- Watermark CSS -->
+    <link href="{% static 'theme/plugins/watermark/watermark.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block css_inside %}
+  .watermarked {
+    overflow: hidden;
+    position: relative;
+  }
+  .watermarked::after {
+    position: inherit;
+    bottom: 50%;
+    display: block;
+    content: attr(data-watermark);
+    opacity: 0.5;
+    color: #fff;
+    font-size: medium;
+    font-weight: normal;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+    line-height: 2;
+    text-transform: uppercase;
+    background: black !important;
+  }
+  .cropper-container.cropper-bg {
+    height: 55vh !important;
+  }
+{% endblock %}
+
+{% block breadcrumb_title %}Data Aplikasi{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li><a href="#">Verifikasi Dokumen</a></li>
+    <li class="active">Image Editor</li>
+{% endblock %}
+
+{% block list_title %}
+  Image Editor - Tipe Dokumen: {{ object.image_type }} - Application ID : {{ object.image_source }}
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+    {% include "object/loan_app/include/image_editor.html" %}
+
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{%url 'loan_app:detail_img_verification' object.image_source %}">
+    <button id="back" type="button" class="btn btn-info">
+      <i class="fa fa-back"></i> << Kembali ke Detail Verifikasi
+    </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(function() {
+    $(document).on('DOMNodeInserted', function(e) {
+      $(".cropper-canvas").addClass('watermarked');
+      $(".cropper-canvas").attr("data-watermark", watermark_text);
+      // Prevent right click
+      $(document).on('contextmenu', '.cropper-container', function () {
+        return false;
+      });
+    });
+  });
+
+  // Identify Watermark Text
+  var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+{% endblock %}
+
+{% load static from staticfiles %}
+  <!-- Watermark JS -->
+  <script type="text/javascript" charset="utf8"  src="{% static 'theme/plugins/watermark/watermark.js' %}"></script>
+{% endblock %}

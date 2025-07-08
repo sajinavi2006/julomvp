@@ -1,0 +1,41 @@
+{% load unit utils %}
+
+{% if not is_eligible_for_cfs %}
+  <b>Not eligible for CFS</b>
+{% else %}
+  <table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">Tier</div>
+        <div class="col-xs-6"><b>{{ cfs_tier.name }}</b></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">JScore</div>
+        <div class="col-xs-6"><b>{{ jscore }}</b></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">Unlocked Benefit</div>
+        <div class="col-xs-6">
+          <p><b>Cashback multiplier - {{ cfs_tier.cashback_multiplier }}x</b></p>
+          <p><b>Referral bonus - {{ cfs_tier.referral_bonus | f_rupiahs:'no' }}</b></p>
+          <p><b>
+            {% if cfs_tier.qris %} QRIS, {% endif %}
+            {% if cfs_tier.ppob %} PPOB, {% endif %}
+            {% if cfs_tier.ecommerce %} E-Commerce, {% endif %}
+          </b></p>
+          {% if cfs_tier.tarik_dana %}<p><b>Tarik Dana, </b></p> {% endif %}
+          {% if cfs_tier.dompet_digital %}<p><b>Dompet Digital, </b></p> {% endif %}
+          {% if cfs_tier.transfer_dana %}<p><b>Transfer Dana, </b></p> {% endif %}
+          {% if cfs_tier.pencairan_cashback %}<p><b>Pencairan Cashback, </b></p> {% endif %}
+
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+{% endif %}

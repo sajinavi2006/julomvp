@@ -1,0 +1,769 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+{% load unit %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+
+        .div_loading {
+            margin-left: 30%;
+        }
+
+        .chart canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .chart span {
+            color: #555;
+            display: block;
+            line-height: 220px;
+            text-align: center;
+            width: 220px;
+            font-family: sans-serif;
+            font-size: 40px;
+            font-weight: 100;
+            margin-left: 5px;
+        }
+
+        .chart input {
+            width: 200px;
+        }
+
+        .chart span {
+
+        }
+
+        .glyphicon-refresh-animate {
+            -animation: spin .7s infinite linear;
+            -webkit-animation: spin2 .7s infinite linear;
+        }
+
+        @-webkit-keyframes spin2 {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: scale(1) rotate(0deg);
+            }
+            to {
+                transform: scale(1) rotate(360deg);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">COLLECTION INTELIX MANUAL DOWNLOAD</h3><br/>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalFilterDownload" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 500px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Pilih Filter untuk download sent to dialer
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">  
+                    <div class="col-md-12">
+                        <label class="col-md-12 col-sm-12">Lists</label>
+                        <select class="form-control" id="filter_query_bucket" name="filter_query_bucket" onchange="validate()">
+                            <option value="" selected>----</option>
+                            {% for list in lists %}
+                                <option value="{{ list }}">{{ list }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-12 parent_file">
+                        <span id="helpBlockFile1" class="help-block">
+                            Mohon pilih salah satu list untuk melanjutkan
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 10px">
+                    <div class="button-container" align="center">
+                        <button type="button"
+                            class="btn btn-default text-center"
+                            id="btnClearFilter">clear
+                        </button>
+                        <button type="button"
+                            class="btn btn-primary text-center btn_download_all"
+                            style="background-color: #03a9f3;
+                            border-color: #03a9f3;" id="btn_download_all" >select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-position" id="modalBulkDownload" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 600px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Preparing <br>
+                        Don't close the page until the download is finish
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 300px">
+                    <div class="col-md-12">
+                        <div class="chart div_loading" id="graph" data-percent="1"></div>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 100px;">
+                        <div class='progress-wrapper' style="display: none;">
+                            <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+                        </div>
+                        <h4 id="progress-bar-message" class="text-primary text-center">
+                            Waiting for progress to start...</h4>
+
+                        <div class="button-container" align="center">
+                            <input type="hidden" id="download_file_name" value="">
+                            <button id="download-file-btn"
+                                type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                                border-color: #03a9f3;display:none;" >Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-b-5">
+        <div class="col-md-2 col-md-offset-10">
+            <button type="button" class="btn btn-success btn-rounded btn-block"
+                    id="btn_download" data-toggle="modal" data-target="#modalFilterDownload">
+                <span id="download_text">Download</span>
+                <span id="download_spinner" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"
+                      style="display: none;"></span>
+                <i id="download_icon" class="fa fa-download" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+
+{% endblock %}
+<script>
+    {% block script_bottom_inside %}
+        function validate() {
+            let list_name = $('#filter_query_bucket').val()
+
+            if (list_name == "") {
+                $('#btn_download_all').attr('disabled', 'disabled')
+                $('.parent_file').addClass('has-error')
+                $('#helpBlockFile1').text('Pilih salah satu list')
+                return ''
+            }
+
+            $('.parent_file').removeClass('has-error')
+            $('#helpBlockFile1').text('Mohon pilih salah satu list untuk melanjutkan')
+            $('#btn_download_all').attr('disabled', false)
+        }
+
+        $('#btnSubmitDownload').click(function (e) {
+            $('#filterDownloadForm').submit()
+        })
+
+        $('#download-file-btn').click(function (e) {
+            
+            $.ajax({
+                    url: `{%url 'minisquad:do_download_manual_upload_intelix_csv_files_progress' 1%}`.replace(
+                        '1', $('#download_file_name').val()), // the endpoint
+                    type: "GET", // http method
+                    function (json) {
+                      console.log(json);
+                    },
+                })
+        });
+
+
+        $('#btn_download_all').click(function (e) {
+            let list_name = $('#filter_query_bucket').val()
+
+            if (list_name == "") {
+                $('.parent_file').addClass('has-error')
+                $('#helpBlockFile1').text('Pilih salah satu list')
+                return
+            }
+
+            if($('#download_text').text()==='Preparing..'){
+                $('#modalBulkDownload').modal('show');
+                return
+            }
+            $('#download_text').text('Preparing..')
+            $('#download_spinner').show(100)
+            $('#download_icon').hide(100)
+            $.ajax({
+                    url: `{%url 'minisquad:process_bulk_download_manual_upload_intelix_csv_files_trigger' %}`, // the endpoint
+                    type: "POST", // http method
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        filter_query_bucket: $('#filter_query_bucket').val(),
+                    },
+                    success: function (json) {
+                        if (json.status == "success") {
+                            if (json.task_id){
+                                $('#modalBulkDownload').modal('show');
+                                //run progress tracking
+                                var progressUrl = "{% url 'minisquad:get_bulk_download_manual_upload_intelix_csv_files_progress' 1 %}".replace(
+                                    '1', json.task_id);
+                                CeleryProgressBar.initProgressBar(progressUrl)
+                            }else{
+                                $('#download_text').text('Download Now')
+                                $('#download_spinner').hide(100)
+                                $('#download_icon').show(100)
+                            }
+                        } else {
+                            negative_response_swal(json.messages);
+                        }
+                    },
+                })
+        });
+
+        $('#btnClearFilter').click(function(e){
+            $('#filter_query_bucket').val('')
+            $('.parent_file').removeClass('has-error')
+            $('#helpBlockFile1').text('Mohon pilih salah satu list untuk melanjutkan')
+            $('#btn_download_all').attr('disabled', false)
+        })
+
+        var el = document.getElementById('graph'); // get canvas
+
+        var options = {
+            percent: el.getAttribute('data-percent') || 25,
+            size: el.getAttribute('data-size') || 220,
+            lineWidth: el.getAttribute('data-line') || 15,
+            rotate: el.getAttribute('data-rotate') || 0
+        }
+    
+        var canvas = document.createElement('canvas');
+        canvas.className = 'canvas_loading'
+        var span = document.createElement('span');
+        span.className = 'span_loading'
+        span.textContent = options.percent + '%';
+    
+        if (typeof (G_vmlCanvasManager) !== 'undefined') {
+            G_vmlCanvasManager.initElement(canvas);
+        }
+    
+        var ctx = canvas.getContext('2d');
+        canvas.width = canvas.height = options.size;
+    
+        el.appendChild(span);
+        el.appendChild(canvas);
+    
+        ctx.translate(options.size / 2, options.size / 2); // change center
+        ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
+    
+        //imd = ctx.getImageData(0, 0, 240, 240);
+        var radius = (options.size - options.lineWidth) / 2;
+    
+        var drawCircle = function (color, lineWidth, percent) {
+            percent = Math.min(Math.max(0, percent || 1), 1);
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
+            ctx.strokeStyle = color;
+            ctx.lineCap = 'round'; // butt, round or square
+            ctx.lineWidth = lineWidth
+            ctx.stroke();
+        };
+    
+        drawCircle('#efefef', options.lineWidth, 100 / 100);
+        drawCircle('#68a9ef', options.lineWidth, options.percent / 100);
+
+        function negative_response_swal(msg) {
+            swal({
+            title: "Gagal!",
+            html:true,
+            text: msg,
+            type: "error",
+            showCancelButton: true,
+            showConfirmButton: false,
+            cancelButtonColor: "#ffffff",
+            cancelButtonText: "Kembali",
+            closeOnCancel: true
+            });
+        }
+
+
+        class CeleryProgressBar {
+
+            constructor(progressUrl, options) {
+                this.progressUrl = progressUrl;
+                options = options || {};
+                let progressBarId = options.progressBarId || 'progress-bar';
+                let progressBarMessage = options.progressBarMessageId || 'progress-bar-message';
+                this.progressBarElement = options.progressBarElement || document.getElementById(progressBarId);
+                this.progressBarMessageElement = options.progressBarMessageElement || document.getElementById(progressBarMessage);
+                this.onProgress = options.onProgress || this.onProgressDefault;
+                this.onSuccess = options.onSuccess || this.onSuccessDefault;
+                this.onError = options.onError || this.onErrorDefault;
+                this.onTaskError = options.onTaskError || this.onTaskErrorDefault;
+                this.onDataError = options.onDataError || this.onError;
+                this.onRetry = options.onRetry || this.onRetryDefault;
+                this.onIgnored = options.onIgnored || this.onIgnoredDefault;
+                let resultElementId = options.resultElementId || 'celery-result';
+                this.resultElement = options.resultElement || document.getElementById(resultElementId);
+                this.onResult = options.onResult || this.onResultDefault;
+                // HTTP options
+                this.onNetworkError = options.onNetworkError || this.onError;
+                this.onHttpError = options.onHttpError || this.onError;
+                this.pollInterval = options.pollInterval || 500;
+                // Other options
+                let barColorsDefault = {
+                    success: '#76ce60',
+                    error: '#dc4f63',
+                    progress: '#68a9ef',
+                    ignored: '#7a7a7a'
+                }
+                this.barColors = Object.assign({}, barColorsDefault, options.barColors);
+            }
+    
+            onSuccessDefault(progressBarElement, progressBarMessageElement, result) {
+                progressBarElement.style.backgroundColor = this.barColors.success;
+                progressBarMessageElement.textContent = "Success!";
+                $('#download_text').text('Download Now');
+                $('#download_spinner').hide(100);
+                $('#download_icon').show(100);
+                $('#download_file_name').val(result.download_cache_id);
+                if (result.download_cache_id){
+                    if (result.download_cache_id == 'failed_run_query'){
+                        window.setTimeout(function(){
+                            negative_response_swal("Terjadi kesalahan saat run query");
+                            return
+                        },1500);
+                    }else{
+                        window.setTimeout(function(){
+                            window.location='/api/minisquad/do_download_manual_upload_intelix_csv_files_progress/' +result.download_cache_id
+                        },5000);
+                    }
+    
+                 }
+                drawCircle('#76ce60', options.lineWidth, 1);
+                setTimeout(function(){
+                    $('#modalBulkDownload').modal('hide');
+                }, 5000);
+               
+            }
+    
+            onResultDefault(resultElement, result) {
+                if (resultElement) {
+                    resultElement.textContent = result;
+                }
+            }
+    
+            /**
+             * Default handler for all errors.
+             * @param data - A Response object for HTTP errors, undefined for other errors
+             */
+            onErrorDefault(progressBarElement, progressBarMessageElement, excMessage, data) {
+                progressBarElement.style.backgroundColor = this.barColors.error;
+                excMessage = excMessage || '';
+                progressBarMessageElement.textContent = "Gagal !" + excMessage;
+            }
+    
+            onTaskErrorDefault(progressBarElement, progressBarMessageElement, excMessage) {
+                let message = this.getMessageDetails(excMessage);
+                this.onError(progressBarElement, progressBarMessageElement, message);
+            }
+    
+            onRetryDefault(progressBarElement, progressBarMessageElement, excMessage, retryWhen) {
+                retryWhen = new Date(retryWhen);
+                let message = 'Retrying in ' + Math.round((retryWhen.getTime() - Date.now()) / 1000) + 's: ' + excMessage;
+                this.onError(progressBarElement, progressBarMessageElement, message);
+            }
+    
+            onIgnoredDefault(progressBarElement, progressBarMessageElement, result) {
+                progressBarElement.style.backgroundColor = this.barColors.ignored;
+                progressBarMessageElement.textContent = result || 'Task result ignored!'
+            }
+    
+            onProgressDefault(progressBarElement, progressBarMessageElement, progress) {
+                progressBarElement.style.backgroundColor = this.barColors.progress;
+                progressBarElement.style.width = progress.percent + "%";
+                if ((parseInt(progress.percent) / 100) > 0){
+                    drawCircle('#68a9ef', options.lineWidth, parseInt(progress.percent) / 100);
+                    console.log(parseInt(progress.percent) / 100)
+                }
+                $('.span_loading').text(parseInt(progress.percent) + "%")
+                var description = progress.description || "";
+                if (progress.current == 0) {
+                    if (progress.pending === true) {
+                        progressBarMessageElement.textContent = 'Waiting for task to start...';
+                    } else {
+                        progressBarMessageElement.textContent = 'Task started...';
+                    }
+
+                   
+                } else {
+                    if (parseInt(progress.percent) >= 95){
+                        progressBarMessageElement.textContent = 'Almost Done';
+                    }else{
+                        progressBarMessageElement.textContent = progress.current + ' of ' + (progress.total - 5) + ' processed. ';
+                    }
+    
+                }
+            }
+    
+            getMessageDetails(result) {
+                if (this.resultElement) {
+                    return ''
+                } else {
+                    return result || '';
+                }
+            }
+    
+            /**
+             * Process update message data.
+             * @return true if the task is complete, false if it's not, undefined if `data` is invalid
+             */
+            onData(data) {
+                let done = false;
+                if (data.progress) {
+                    this.onProgress(this.progressBarElement, this.progressBarMessageElement, data.progress);
+                }
+                if (data.complete === true) {
+                    done = true;
+                    if (data.success === true) {
+                        this.onSuccess(this.progressBarElement, this.progressBarMessageElement, data);
+                    } else if (data.success === false) {
+                        if (data.state === 'RETRY') {
+                            this.onRetry(this.progressBarElement, this.progressBarMessageElement, data.result.message, data.result.when);
+                            done = false;
+                            delete data.result;
+                        } else {
+                            this.onTaskError(this.progressBarElement, this.progressBarMessageElement, data.result);
+                        }
+                    } else {
+                        if (data.state === 'IGNORED') {
+                            this.onIgnored(this.progressBarElement, this.progressBarMessageElement, data.result);
+                            delete data.result;
+                        } else {
+                            done = undefined;
+                            this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Data Error");
+                        }
+                    }
+                    if (data.hasOwnProperty('result')) {
+                        this.onResult(this.resultElement, data.result);
+                    }
+                } else if (data.complete === undefined) {
+                    done = undefined;
+                    this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Data Error");
+                }
+                return done;
+            }
+    
+            async connect() {
+                let response;
+                try {
+                    response = await fetch(this.progressUrl);
+                } catch (networkError) {
+                    this.onNetworkError(this.progressBarElement, this.progressBarMessageElement, "Network Error");
+                    throw networkError;
+                }
+    
+                if (response.status === 200) {
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (parsingError) {
+                        this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Parsing Error")
+                        throw parsingError;
+                    }
+    
+                    const complete = this.onData(data);
+    
+                    if (complete === false) {
+                        setTimeout(this.connect.bind(this), this.pollInterval);
+                    }
+                } else {
+                    this.onHttpError(this.progressBarElement, this.progressBarMessageElement, "HTTP Code " + response.status, response);
+                }
+            }
+    
+            static initProgressBar(progressUrl, options) {
+                const bar = new this(progressUrl, options);
+                bar.connect();
+            }
+        }
+
+    {% endblock %}

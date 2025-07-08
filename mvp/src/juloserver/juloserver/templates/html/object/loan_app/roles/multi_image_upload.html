@@ -1,0 +1,210 @@
+{% extends "common/theme1/crup/create_update_2.html" %}
+{% load model %}
+
+
+{% block custom_link %}
+{% load static from staticfiles %}
+  <!-- Dropzone css -->
+  <link rel="stylesheet" href="{% static 'theme/plugins/bower_components/dropify/dist/css/dropify.css' %}">
+  <link href="{% static 'theme/plugins/bower_components/dropzone-master/dist/dropzone.css' %}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block breadcrumb_path %}
+    <li><a href="{% url 'loan_app:roles_image_verification' %}">Data Aplikasi</a></li>
+    <li class="active">Multi Upload Document</li>
+{% endblock %}
+ 
+{% block breadcrumb_title %}Upload Multi Dokumen{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-body %}
+    
+    {% include "object/loan_app/include/upload_multi_doc.html" %}
+    
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'loan_app:roles_image_verification' %}">
+      <button id="back" type="button" class="btn btn-info">
+          <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+      </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+{% load static from staticfiles %}
+  var select_1 = "" +
+    "<select class='form-control' id='id_image_type_1' name='image_type_1' required>\n"
+  
+  var select_2 = "" +
+    "<select class='form-control' id='id_image_type_2' name='image_type_2' required>\n"
+   
+  var select_3 = "" +
+    "<select class='form-control' id='id_image_type_3' name='image_type_3' required>\n"
+
+  var select_4 = "" +
+    "<select class='form-control' id='id_image_type_4' name='image_type_4' required>\n"
+
+  var select_5 = "" +
+    "<select class='form-control' id='id_image_type_5' name='image_type_5' required>\n"
+
+  var select_6 = "" +
+    "<select class='form-control' id='id_image_type_6' name='image_type_6' required>\n"
+
+  var select_7 = "" +
+    "<select class='form-control' id='id_image_type_7' name='image_type_7' required>\n"
+    
+  var select_8 = "" +
+    "<select class='form-control' id='id_image_type_8' name='image_type_8' required>\n"
+
+  var select_9 = "" +
+    "<select class='form-control' id='id_image_type_9' name='image_type_9' required>\n"
+
+  var select_10 = "" +
+    "<select class='form-control' id='id_image_type_10' name='image_type_10' required>\n"
+
+  var option_image_type = "" +
+    "<option value=''>-------</option>\n" +
+    "<option value='ktp_self'>KTP Self</option>\n" +
+    "<option value='kk'>KK</option>\n" +
+    "<option value='paystub'>Paystub</option>\n" +
+    "<option value='selfie'>Selfie</option>\n" +
+    "<option value='badge'>Badge</option>\n" +
+    "<option value='signature'>Signature</option>\n" +
+    "<option value='bank_statement'>Bank Statement</option>\n" +
+    "<option value='business_income_statement'>Business Income Statement</option>\n" +
+    "<option value='drivers_license'>Drivers License</option>\n" +
+    "<option value='electric_bill'>Electric Bill</option>\n" +
+    "<option value='government_document'>Government Document</option>\n" +
+    "<option value='ktp_spouse'>Ktp Spouse</option>\n" +
+    "<option value='phone_bill'>Phone Bill</option>\n" +
+    "<option value='rental_document'>Rental Document</option>\n" +
+    "<option value='tax_document'>Tax Document</option>\n" +
+    "<option value='water_bill'>Water Bill</option>\n" +
+    "</select>"
+
+  var input_file = $("#id_attachments");
+  input_file.change(function () {
+      // Clear details before showing any files
+      $("#previewImg1").html('');
+      $("#previewImg2").html('');
+      $("#previewImg3").html('');
+
+      for (var i=0, len = this.files.length; i < len; i++) {
+          (function (j, self) {
+            console.log(i, self.files[j]);
+            var url = self.files[j].name;
+            <!-- console.log(url); -->
+            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+            <!-- console.log(ext); -->
+
+            var id_select = NaN;
+            if (j==0) id_select = select_1;
+            else if (j==1) id_select = select_2;
+            else if (j==2) id_select = select_3;
+            else if (j==3) id_select = select_4;
+            else if (j==4) id_select = select_5;
+            else if (j==5) id_select = select_6;
+            else if (j==6) id_select = select_7;
+            else if (j==7) id_select = select_8;
+            else if (j==8) id_select = select_9;
+            else
+              id_select = select_10;
+            <!-- console.log(id_select); -->
+
+            if (self.files[j] && (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) 
+             {
+              var reader = new FileReader()
+              reader.onload = function(e) {
+                   //$('#img_src_'+(i+1)).attr('src', e.target.result);
+                   var html = "" +
+                      "<div class='col-md-3'>\n" +
+                      "  <div class='row col-md-12 m-t-10 m-b-10  label-warning'><small>"+ url +"</small></div>\n" +
+                      "  <div class='row col-md-12 m-t-10 m-b-10'>"+ id_select + option_image_type +"</div>\n" +
+                      "  <div class='row col-md-12'>\n" +
+                      "    <a class='image-popup-vertical-fit' title='"+ url +"'>\n" +
+                      "      <img src='" + e.target.result + "' class='img-responsive' />\n" +
+                      "    </a>\n" +
+                      "    <br/>\n" +
+                      "  </div>\n" +
+                      "</div>";
+
+                   if (j<=3) $("#previewImg1").append(html);
+                   else if (j>=4 && j<=7) $("#previewImg2").append(html);
+                   else $("#previewImg3").append(html);
+                   
+                }
+              reader.readAsDataURL(self.files[j]);
+              
+            }
+            else if (self.files[j] && (ext == "pdf")) {
+               var html = "" +
+                  "<div class='col-md-3'>\n" +
+                  "  <div class='row col-md-12 m-t-10 m-b-10  label-warning '><small>"+ url +"</small></div>\n" +
+                  "  <div class='row col-md-12 m-t-10 m-b-10'>"+ id_select + option_image_type +"</div>\n" +
+                  "  <div class='row col-md-12'>\n" +
+                  "    <a class='image-popup-vertical-fit' title='"+ url +"'>\n" +
+                  "      <img src='{% static 'images/collections/image-pdf.png' %}' class='img-responsive' />\n" +
+                  "    </a>\n" +
+                  "    <br/>\n" +
+                  "  </div>\n" +
+                  "</div>";
+
+               if (j<=3) $("#previewImg1").append(html);
+               else if (j>=4 && j<=7) $("#previewImg2").append(html);
+               else $("#previewImg3").append(html);
+            }
+            else
+            {
+              var html = "" +
+                  "<div class='col-md-3'>\n" +
+                  "  <div class='row col-md-12 m-t-10 m-b-10  label-warning '><small>"+ url +"</small></div>\n" +
+                  "  <div class='row col-md-12'>\n" +
+                  "    <a class='image-popup-vertical-fit' title='"+ url +"'>\n" +
+                  "      <img src='{% static 'images/collections/no-image-1.jpg' %}' class='img-responsive' />\n" +
+                  "    </a>\n" +
+                  "    <br/>\n" +
+                  "  </div>\n" +
+                  "</div>";
+
+               if (j<=3) $("#previewImg1").append(html);
+               else if (j>=4 && j<=7) $("#previewImg2").append(html);
+               else $("#previewImg3").append(html);
+               //$('#img_src_'+(i+1)).attr('src', '{% static 'images/collections/no-image-1.jpg' %}');
+            }
+
+          })(i, this);
+      }
+  });
+
+  $(document).ready(function() {
+     
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      $("#img_upload_form").submit(function() {
+          $("#wrapper").toggle();
+          $("#id_div_wheel").toggle();
+      });
+
+  });
+{% endblock %}
+
+
+{% block script_additional %}
+    <script src="{% static 'theme/nav-full/js/mask.js' %}"></script>
+
+    <!-- <script src="{% static 'theme/plugins/bower_components/dropify/dist/js/dropify.min.js' %}"></script> -->
+    <!-- Dropzone Plugin JavaScript -->
+    <!-- <script src="{% static 'theme/plugins/bower_components/dropzone-master/dist/dropzone.js' %}"></script> -->
+
+{% endblock %}
+
+
+
+
+
+

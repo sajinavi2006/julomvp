@@ -1,0 +1,51 @@
+<html>
+  <body>
+    <p>Dengan hormat,</p><br/>
+    <p style="line-height: 1.5;">Dengan mengacu pada perjanjian pinjaman antara Anda dengan Kami, PT JULO TEKNOLOGI FINANSIAL ("JULO") selaku wakil dari Pemberi Pinjaman, Kami memberitahukan kepada Anda bahwa jadwal pembayaran Anda saat ini berstatus sebagai berikut:</p>
+    <p><table style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <th style="border: 1px solid black; text-align: center;">Angsuran ke</th>
+            <th style="border: 1px solid black; text-align: center;">Jumlah Angsuran</th>
+            <th style="border: 1px solid black; text-align: center;">Tanggal Jatuh Tempo</th>
+            <th style="border: 1px solid black; text-align: center;">Biaya Keterlambatan</th>
+            <th style="border: 1px solid black; text-align: center;">Jumlah Pembayaran</th>
+            <th style="border: 1px solid black; text-align: center;">Tanggal bayar</th>
+            <th style="border: 1px solid black; text-align: center;">Jumlah yang harus dibayarkan</th>
+        </tr>
+        {% for payment in payments %}
+        <tr>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{payment.payment_number|default:"-"|safe}}</td>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{payment.original_due_amount|default:"-"|safe}}</td>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{payment.due_date|default:"-"|safe}}</td>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{payment.remaining_late_fee|default:"-"|safe}}</td>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{payment.paid_amount|default:"-"|safe}}</td>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{payment.paid_date|default:"-"|safe}}</td>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{payment.due_amount|default:"-"|safe}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td style="border: 1px solid black; text-align: center;"><strong>Total</strong></td>
+            <td colspan="5" style="border: 1px solid black;">&nbsp;</td>
+            <td style="border: 1px solid black; text-align: center; padding: 5px;">{{total_outstanding}}</td>
+        </tr>
+    </table></p>
+    <p style="line-height: 1.5;">Angsuran pinjaman Anda sebesar {{total_outstanding}}. Sesuai dengan tabel diatas, yang mana sekarang sudah melewati batas waktu tanggal jatuh tempo {{dpd}}  hari. Kami telah melakukan upaya apapun dan terus menerus untuk menghubungi Anda namun karena pinjaman Anda masih belum dibayar maka Kami, selaku wakil dari Pemberi Pinjaman akan mengalihkan hutang Anda kepada pihak lain dengan menjualkan hutang Anda dengan cara sah menurut hukum yang berlaku di Indonesia.</p>
+    <p style="line-height: 1.5;">Merujuk kepada Akta Jual Beli No. {{ajb_number}}  tanggal  {{ajb_date}} ("Akta Jual Beli") yang dibuat dan ditandatangani oleh JULO selaku wakil dari Pemberi Pinjaman dan {{buyer_vendor_name}} ("Pembeli"). Pembeli memberikan kuasa kepada {{collector_vendor_name}} untuk komunikasi dan menagih pinjaman Anda. Silahkan hubungi {{collector_vendor_phone}}  untuk menyelesaikan kewajiban Anda.</p>
+    <p style="line-height: 1.5;"><strong>Dengan pengalihan hutang ini Kami telah mengalihkan hak tagih kepada Pembeli, maka untuk kedepannya penagihan akan dilakukan oleh Pembeli, dan JULO tidak lagi memiliki hak tagih atas hutang Anda.</strong></p>
+    <br/><br/>
+    <p style="line-height: 1.5;">
+        PT Julo Teknologi Finansial (JULO)<br/>
+        selaku wakil Pemberi Pinjaman<br/>
+        Hormat Kami,
+
+    </p>
+    <p>
+        <img src="https://juloblasts-prod.oss-ap-southeast-5.aliyuncs.com/email/Sell-off/signature.png" />
+        <div style="width: 275px;"><hr></div>
+    </p>
+    <p style="line-height: 1.5;">
+        Nama :    Eko Yulianto<br/>
+        Jabatan:  Legal Specialist (Kuasa Direksi - PT. JULO Teknologi Finansial)
+    </p>
+  </body>
+</html>

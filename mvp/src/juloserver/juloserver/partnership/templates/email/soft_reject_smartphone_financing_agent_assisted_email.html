@@ -1,0 +1,42 @@
+{% extends "email/smartphone_financing_agen_assisted_base_email.html" %}
+
+{% block content %}
+<table>
+    <tr>
+        <td colspan="100" align="left"
+            style="width:100%; text-align: left; vertical-align: middle; word-wrap:break-word; padding-bottom:24px">
+            <img style="display:block;vertical-align: middle; width:100%; height: auto; margin-bottom:24px;border-radius:8px;"
+                 src="{{banner_image}}" alt=""/>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Halo {{fullname}},
+            </p>
+            <br>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Maaf, pengajuan kamu untuk Program Cicilan Paket HP Telkomsel belum dapat disetujui
+                karena saat ini kamu belum memenuhi kriteria.
+                <br>
+                <br>
+                Terima kasih atas waktu dan perhatianmu, ya.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100" align="left"
+            style="width:100%; text-align: left; vertical-align: middle; word-wrap:break-word;">
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Mohon berhati-hati terhadap modus <br>
+                penipuan melalui email, SMS, WhatsApp, <br>
+                dan media sosial mengatasnamakan JULO. <br>
+                Informasi transaksi dan program JULO hanya <br>
+                dikirim dari email resmi JULO yang berakhiran
+                @julo.<span>co</span>.id dan @<span>julofinance</span>.com.
+            </p>
+            <br>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Jika kamu menemukan informasi mencurigakan atau ada pertanyaan lebih lanjut,
+                silakan konfirmasi langsung melalui email atau telepon kami yang tertera di bawah.
+            </p>
+        </td>
+    </tr>
+</table>
+{% endblock %}

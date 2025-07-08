@@ -1,0 +1,1 @@
+Hi {{first_name}}, KESEMPATAN TERAKHIR u/ menangkan total hadiah 20jt! Jangan sampai kelewatan! Bayar sekarang {{payment_link}}

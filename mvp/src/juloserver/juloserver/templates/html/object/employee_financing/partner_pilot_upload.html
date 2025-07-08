@@ -1,0 +1,100 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .mb10 {
+        margin-bottom: 10px;
+    }
+
+    .ml5 {
+        margin-left: 5px;
+    }
+
+    .w100 {
+        width: 100px;
+    }
+
+    .grid {
+        display: grid;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .lb-result {
+        font-size: larger;
+    }
+
+    .center {
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">Upload Report</h3>
+</div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<form style="margin-bottom:10px" method="post" enctype="multipart/form-data" id="uploadForm">
+    {% csrf_token %}
+
+    <div class="flex">
+        <label class="w100">File Upload:</label>
+        {{form.file_field}}
+    </div>
+    <div class="flex">
+        <label class="w100">Action:</label>
+        <div class="grid">
+            {% for radio in form.action_field%}
+            <div style="display: flex;">
+                {{ radio }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <button class="btn btn-info" type="submit">Upload</button>
+    <a href="{% url 'employee_financing:ef_upload_history' %}">
+        <button id="upload_history" type="button" class="btn btn-success">
+            <i class="fa fa-back"></i> Check upload history
+        </button>
+    </a>
+</form>
+{% if messages %}
+<ul class="messages" style="width:50%;margin:auto;">
+    {% for message in messages %}
+    {% if message.tags == 'error' %}
+    <li class="alert alert-danger">{{ message }}</li>
+    {% elif message.tags == 'success' %}
+    <li class="alert alert-success">{{ message }}</li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block script_common_list %}
+    $('#uploadForm').one('submit', function () {
+        $(this).find('button[type="submit"]').attr('disabled', 'disabled');
+    });
+{% endblock %}

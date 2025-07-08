@@ -1,0 +1,178 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block extrahead %}{{ block.super }}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    table, th, td {
+      vertical-align: middle;
+      border-collapse: collapse;
+      border: 1px solid gray;
+    }
+    input[type=number] {
+      width: 70px;
+    }
+    .error {
+      color: red;
+      background-color: #f1f1f1;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    input[type="checkbox"]:disabled {
+      opacity: 0.5;
+    }
+    input[type="checkbox"]:disabled:after {
+      content: '';
+      background: #686666;
+      width: 10px;
+      height: 10px;
+      display: block;
+      border-radius: 1px;
+      border: 1px solid;
+    }
+</style>
+{% endblock %}
+
+{% block field_sets %}
+<div ng-app="myApp" ng-controller="myCtrl">
+  <input type="hidden" name="form_data" id="id_form_data" value="[[form_data]]">
+  <table style="width:100%; height: 61px; margin-bottom: 10px;">
+    <tbody ng-repeat="(customer_type, channel_list) in form_data">
+      <tr>
+        <th bgcolor="LightBlue">Customer Type:</th>
+        <th bgcolor="LightBlue">Preferred Channel:</th>
+        <th bgcolor="LightBlue">Current Traffic:</th>
+        <th bgcolor="LightBlue">New Traffic:</th>
+        <th bgcolor="LightBlue" colspan="9" >Backup Channel:</th>
+      </tr>
+      <tr>
+        <th rowspan="[[channel_list.settings|numkeys]]">[[channel_list.title]]</th>
+      </tr>
+      <tr ng-repeat="(bank_name, bank_config) in channel_list.settings">
+        <td>[[bank_config.title]]</td>
+        <td>[[::bank_config.prob]]%</td>
+        <td><input ng-model="bank_config.prob" ng-change="check_total(bank_config)" type="number">%</td>
+        <td ng-repeat="(bank_backup, bank_channel) in bank_config.backup">
+          <input type="checkbox"
+                 name='[[customer_type+bank_name]]'
+                 ng-change="selected(customer_type, bank_name, bank_backup, bank_channel.selected)"
+                 ng-disabled="disabled(customer_type, bank_channel.value)"
+                 ng-model="bank_channel.selected">[[bank_channel.value]]</td>
+      </tr>
+    </tbody>
+
+  </table>
+  <p class="error" ng-show="error!=''">[[error]]</p>
+  <p class="error" ng-show="backup_error!=''">[[backup_error]]</p>
+
+</div>
+{% endblock %}
+{% block admin_change_form_document_ready %}
+<script>
+var app = angular.module('myApp', []);
+var $ = django.jQuery;
+
+app.filter('numkeys', function() {
+  return function(object) {
+    return Object.keys(object).length+1;
+  }
+});
+
+app.config(function($interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+});
+app.controller('myCtrl', function($scope, ) {
+  $scope.form_data = {{adminform.form.form_data.value|safe}};
+  $scope.error = '';
+  $backup_error = '';
+  let error1 = "Please make sure total traffic flow for selected preferred channel is 100% for each customer type!";
+  let error2 = "The lowest is 0% or 5%";
+  let error3 = "The percent must be integer";
+  let error4 = "Backup channel can't be empty";
+
+
+  $scope.restructure_form_data = function () {
+    for (customer_type in $scope.form_data) {
+      for (bank_type in $scope.form_data[customer_type]['settings']) {
+        for (bank_va in $scope.form_data[customer_type]['settings'][bank_type]['backup']) {
+          $scope.form_data[customer_type]['settings'][bank_type]['backup'][bank_va] = {
+            value: $scope.form_data[customer_type]['settings'][bank_type]['backup'][bank_va],
+            selected: $scope.form_data[customer_type]['settings'][bank_type]['selected'].indexOf(bank_va) !== -1
+          }
+        }
+      }
+    }
+  }
+
+  $scope.restructure_form_data();
+
+  $scope.selected = function(customer_type, bank_name, bank_backup, selected_value) {
+    if (!Array.isArray($scope.form_data[customer_type]['settings'][bank_name]['selected'])) {
+      $scope.form_data[customer_type]['settings'][bank_name]['selected'] = []
+    }
+
+    if (selected_value) {
+      $scope.form_data[customer_type]['settings'][bank_name]['selected'].push(bank_backup)
+    } else {
+      let indexOfBank = $scope.form_data[customer_type]['settings'][bank_name]['selected'].indexOf(bank_backup)
+      $scope.form_data[customer_type]['settings'][bank_name]['selected'].splice(
+        indexOfBank,
+        1
+      )
+    }
+
+    if ($scope.form_data[customer_type]['settings'][bank_name]['selected'].length == 0) {
+      $scope.backup_error = error4;
+    } else {
+      $scope.backup_error = '';
+    }
+  }
+
+  //commented PM want to enable bni
+  //$scope.disabled = function(customer_type, bank_channel_value) {
+    //if (customer_type != 'bni' && bank_channel_value == 'BNI VA') {
+      //return '!enableMe'
+    //}
+  //}
+
+  $scope.check_total = function(bank_config) {
+    bank_config.prob>100 ? bank_config.prob=100:null;
+    bank_config.prob<0 ? bank_config.prob=0:null;
+    let error_res = [];
+    for (var customer_type in $scope.form_data) {
+      if ($scope.form_data.hasOwnProperty(customer_type)) {
+        var total_prob = Object.keys($scope.form_data[customer_type].settings).reduce(function(sum, key) {
+          let prob = $scope.form_data[customer_type].settings[key].prob;
+          prob>0&&prob<5? error_res.push(error2):null;
+          Number.isInteger(prob)? null:error_res.push(error3);
+          return sum + $scope.form_data[customer_type].settings[key].prob;
+        }, 0);
+        if (total_prob != 100) {
+          error_res.push(error1);
+        }
+      }
+    }
+
+    if (error_res.length == 0){
+      $scope.error = ''
+    }
+    else if (error_res.indexOf($scope.error) == -1) {
+      $scope.error = error_res[0];
+    }
+  }
+
+  $("#featuresetting_form").on("submit", function() {
+    return $scope.error =='' && $scope.backup_error == ''
+  })
+
+});
+</script>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load model template default unit %}
+
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block custom_css %}
+    <!-- Static Css -->
+    <link href="{% static 'theme/nav-mini/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">Lender Withdraw Batch</h3>
+        </div>
+    </div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+
+<form id="search-form" class="row">
+    {{ filter_form.sort_q }}
+    <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Cari Berdasarkan</label>
+      <div class="m-t-10">
+          <select name="filter_field" class="form-control" >
+            {% for filter_field, filter_field_text in filter_form.filter_field.field.choices %}
+              <option
+                  value="{{ filter_field }}"
+                  {% if filter_field == filter_form.filter_field.value %}
+                    selected
+                  {% endif %}
+              >{{ filter_field_text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Kondisi</label>
+      <div class="m-t-4">
+          <select name="filter_condition" class="form-control" style="width:auto;">
+            {% for value, text in filter_form.filter_condition.field.choices %}
+              <option
+                  value="{{ value }}"
+                  {% if value == filter_form.filter_condition.value %}
+                    selected
+                  {% endif %}
+              >{{ text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Pencarian</label>
+      <div class="input-group m-t-10">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <input type="text"
+               name="filter_keyword"
+               id="filter_keyword"
+               class="form-control"
+               aria-describedby="basic-addon1"
+               placeholder="Pencarian"
+               value="{{ filter_form.filter_keyword.value | default:'' }}"
+        >
+      </div>
+    </div>
+    <div class="col-md-12 m-t-10">
+      <div class="row">
+        <div class="col-md-2 col-xs-12">
+          <button type="submit" class="btn btn-primary btn-rounded btn-block">
+            <strong><i class="fa fa-search" ></i> Cari</strong>
+          </button>
+        </div>
+        <div class="col-md-2 col-xs-12">
+          <button type="button" name="reset" value="empty" class="btn btn-info btn-rounded btn-block" onClick="clearSearchForm();">
+            <strong><i class="fa fa-eraser fa-fw"></i>Kosongkan</strong>
+          </button>
+        </div>
+        <div class="col-md-3 pull-right">
+            <div class="col-md-6 col-xs-6">
+            </div>
+            <div class="col-md-6 col-xs-6">
+                <a href="{% url 'channeling_loan_portal:lender_osp_transaction_create' %}" title='Add new Data'>
+                    <button type="button" class="btn btn-info btn-rounded btn-block">
+                        <strong><i class="fa fa-plus" ></i> New Data</strong>
+                    </button>
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+</form>
+
+<div class="a-table">
+    <table class="table toggle-circle table-hover table-striped" size={{page_obj.paginator.per_page}}>
+      <thead>
+        <tr>
+          <th class="small-width p-l-10" scope="col"> No </th>
+          <th class="large-width"> Lender Account </th>
+          <th class="large-width" scope="col"> Amount </th>
+          <th data-sort-ignore="true"> Created Date </th>
+          <th data-sort-ignore="true"> Action </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in object_list %}
+        <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+            <td>
+                {{ item.lender_osp_account }}
+            </td>
+            <td>{{ item.balance_amount}}</td>
+            <td>
+                {{ item.cdate|date:"d M Y H:i:s"|default:"-"|safe }}
+            </td>
+            <td>
+                <a href="{% url 'channeling_loan_portal:lender_osp_transaction_detail' item.id %}" title='verifikasi'>
+                    <button class="btn btn-success btn-rounded m-b-5"><i class="fa fa-pencil fa-fw"></i> Edit </button>
+                </a>
+            </td>
+
+        </tr>
+        {% endfor %}
+
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5">
+              <div class="text-right">
+                  {% block pagination %}
+                      {% pagination2 is_paginated paginator page_obj q 4 %}
+                  {% endblock %}
+              </div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+</div>
+{% endblock %}
+
+{% block script_bottom_inside %}
+   function clearSearchForm(){
+    $("#id_search_q").val('');
+    $("#filter_keyword").val('');
+    $("#filter_action").val('');
+    $("#filter_action option[value=null]").attr('selected','selected');
+    try{
+        document.getElementById('id_err_msg').innerHTML='';
+    }
+    catch(err) {
+    }
+  }
+{% endblock %}

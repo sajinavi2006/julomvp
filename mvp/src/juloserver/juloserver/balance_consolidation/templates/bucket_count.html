@@ -1,0 +1,20 @@
+{% load checkusergroup from common %}
+{% checkusergroup in ['bo_data_verifier','bo_sd_verifier','document_verifier'] %}
+  <!-- Balance Consolidation Bucket -->
+  {% with info=bucket_info %}
+    <div class="col-lg-1 col-sm-1 col-xs-6">
+      <a href="{% url 'balance_consolidation_crm:balance_consolidation_verification_list' %}?filter_condition=on_review" id="balance_consolidation_verification_list" target="_blank">
+        <div class="panel panel-info">
+          <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px">{{info.title}}
+          </div>
+          <div class="panel-wrapper collapse in" aria-expanded="true">
+            <div class="panel-body">
+              <span class="status_font text-success">{{info.count}}</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  {% endwith %}
+  <!-- END of Balance Consolidation Bucket -->
+{% endcheckusergroup %}

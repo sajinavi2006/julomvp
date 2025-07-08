@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Dapatkan cashback {{cashback_multiplier}} x {{ payment_cashback_amount }} dgn segera membayar cicilan Anda {{ due_amount }} hari ini. Cara bayar: {{url}}

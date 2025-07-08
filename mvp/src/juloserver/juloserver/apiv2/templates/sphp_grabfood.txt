@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+  <style>
+    body {
+      color : #5E5E5E;
+    }
+    h4 {
+      color : #0598D0;
+      text-align: center;
+    }
+    tr {
+      align: center; 
+    }
+    .installment { 
+      width: 100%;
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+    #topBottomBorder { 
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #topBorder {
+      border-top: 1px solid black;
+    }
+    #bottomBorder { 
+      border-bottom: 1px solid black;
+    }
+    .hideExtra { 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow:ellipsis;
+    }
+  </style>
+<body>
+  <h4>SURAT PERJANJIAN HUTANG PIUTANG</h4>
+  <p>Pada hari ini, <b>{{ date_today | safe }}</b>, saya yang bertanda tangan di bawah ini:</p>
+  <table>
+      <tbody>
+      <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama:</th>
+          <td>{{ application.fullname | safe }}</td>
+      </tr>
+      <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir:</th>
+          <td>{{ dob | safe }}</td>
+      </tr>
+      <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP:</th>
+          <td>{{ application.ktp | safe }}</td>
+      </tr>
+      <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon:</th>
+          <td>{{ application.mobile_phone_1 | safe }}</td>
+      </tr>
+      <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat:</th>
+          <td>{{ full_address | safe }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Menyatakan bahwa saya menyetujui dengan pihak <b>PT. JULO TEKNOLOGI FINANSIAL</b>
+    (selanjutnya disebut JULO) atas ketentuan-ketentuan perjanjian sebagai berikut:</p>
+  <table>
+      <tbody>
+      <tr>
+          <td style="text-align: left; vertical-align: top;">1.</td>
+          <td style="padding-bottom:5px;">
+            Bahwa saya mengajukan permohonan pinjaman melalui pihak JULO, dan telah disetujui
+              pinjaman uang tunai sebesar <b>{{ loan_amount | safe }}</b> kepada saya.
+          </td>
+      </tr>
+      <tr>
+          <td style="text-align: left; vertical-align: top;">2.</td>
+          <td style="padding-bottom:5px;">
+              Bahwa saya berjanji untuk melunasi pinjaman dengan melakukan pembayaran
+              sesuai dengan jadwal berikut ini:
+            <table class="installment" style="margin-top:5px;">
+              <tr id ="topBottomBorder">
+                <th>Cicilan</th>
+                <th>Jumlah</th>
+                <th>Jatuh Tempo</th>
+              </tr>
+              {% for payment in payments %}
+                {% if forloop.last %}
+                  <tr id="bottomBorder">
+                {% else %}
+                  <tr>
+                {% endif %}
+                    <td>
+                      <div class="hideExtra">{{ payment.payment_number | safe }}</div>
+                    </td>
+                    <td>
+                      <div class="hideExtra">{{ payment.due_amount | safe }}</div>
+                    </td>
+                    <td>
+                      <div class="hideExtra">{{ payment.due_date | safe }}</div>
+                    </td>
+                  </tr>
+              {% endfor %}
+            </table>
+          </td>
+      </tr>
+      <tr>
+          <td style="text-align: left; vertical-align: top;">3.</td>
+          <td style="">
+              Bahwa saya akan melakukan pembayaran setiap minggu <b>sebelum tanggal jatuh tempo</b>.
+          </td>
+      </tr>
+       <tr>
+          <td style="text-align: left; vertical-align: top;">4.</td>
+          <td style="">
+              Bahwa syarat dan ketentuan Perjanjian ini merupakan bagian yang tak terpisahkan dari syarat dan ketentuan umum pengguna aplikasi JULO.
+          </td>
+      </tr>
+      </tbody>
+  </table>
+  <p>Pembayaran setiap minggu akan dilakukan ke rekening Virtual Account (VA) sebagai berikut :</p>
+  <table frame="box" style="width:100%" bordercolor="00ACF0">
+      <tbody>
+      <tr>
+          <td style="text-align: center;  vertical-align: top; white-space: nowrap;">
+              <b>{{ julo_bank_name | safe }}</b>{{ julo_bank_code | safe }}
+          </td>
+      </tr>
+      <tr>
+          <td style="text-align: center; vertical-align: top; white-space: nowrap;">Nomor VA:
+              <b>{{ julo_bank_account_number | safe }}</b>
+          </td>
+      </tr>
+      </tbody>
+  </table>
+  <p>Surat perjanjian ini adalah sah dan mengikat sesuai dengan aturan KUH Perdata, dan saya menandatangani secara
+      sadar dan tanpa paksaan dari pihak manapun.</p>
+</body>
+</html>

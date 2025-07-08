@@ -1,0 +1,524 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+{% load unit %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+<style>
+  .container {
+    font-family: 'Poppins', sans-serif !important;
+  }
+  p,
+  span {
+    color: #797979;
+    margin: 1em 0;
+  }
+  input {
+    outline: none;
+  }
+  .table-container div:nth-child(odd) {
+    background-color: #f9fafc;
+  }
+  .table-value {
+    font-weight: bold;
+  }
+  .account-status {
+    background-color: rgba(243, 12, 3, 0.1);
+    color: rgba(243, 12, 3, 1);
+    padding: 3px 10px;
+    font-weight: normal;
+    font-size: 12px;
+  }
+  .blacklist-status {
+    background-color: rgba(3, 169, 243, .1);
+    color: #22a9f3;
+    padding: 3px 10px;
+    font-weight: normal;
+    font-size: 12px;
+  }
+  .submit-button {
+    background-color: #ab8ce4;
+    border: none;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 3px;
+  }
+  .blacklist-button {
+    background-color: #4facf0;
+    color: white;
+    border: none;
+    padding: 10px 50px;
+    border-radius: 3px;
+  }
+  .blacklist-button-disabled {
+    background-color: #eeeeee !important;
+  }
+  .modal-blacklist {
+    border-radius: 16px;
+  }
+  .modal-content {
+    border-radius: 16px;
+  }
+  .modal-body img {
+    width: 90px;
+    height: 90px;
+    margin: 1em 0;
+  }
+  .modal-inners {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    color: #686868;
+  }
+  .modal-inners input,
+  select {
+    color: #686868;
+  }
+  .modal-forms p {
+    margin: 0;
+    font-size: 12px;
+  }
+  .modal-forms-item {
+    margin: 0.5em 0;
+  }
+  .modal-forms-buttons {
+    display: flex;
+    justify-content: center;
+  }
+  .blacklist-no {
+    background-color: white;
+    color: #686868;
+    font-weight: bold;
+    font-size: 16px;
+    min-width: 120px;
+    min-height: 48px;
+    border: solid 1px #868886;
+    margin: 0 0.5em;
+    border-radius: 5px;
+  }
+  .blacklist-yes {
+    background-color: #4facf0;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    min-width: 120px;
+    min-height: 48px;
+    border: solid 1px #868886;
+    margin: 0 0.5em;
+    border-radius: 5px;
+  }
+  .blacklist-yes-disable {
+    background-color: #d5d6d6 !important;
+    color: #e1e1e1 !important;
+    border: none !important;
+  }
+  .modal-inners-success {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    text-align: center;
+    color: #575757;
+    padding: 1em 0;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">Blacklist Account</h3><br/>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+<div class="container">
+  <div>
+    <span style="font-size: 15px">Account ID:</span>
+    <input type="number" style="padding: 8px 18px" id="blacklist-input" />
+    <button class="submit-button blacklist-button-disabled" disabled>Submit</button>
+  </div>
+  <div class="table-container" id="blacklist-data" style="margin: 3% 0; display: none;">  
+    <!-- user data -->
+    <div style="display: flex">
+      <p style="width: 30%">Full Name</p>
+      <p class="table-value" id="blacklist-name">loading...</p>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Account ID</p>
+      <p class="table-value" id="blacklist-id">loading...</p>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Account Status</p>
+      <p class="table-value">:</p>
+      <p class="table-value account-status" id="blacklist-status-code" style="margin-left: 5px;">loading...</p>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">App ID</p>
+      <p class="table-value" id="blacklist-app-id">loading...</p>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Email</p>
+      <p class="table-value" id="blacklist-email">loading...</p>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Phone Number List</p>
+      <div class="table-value" id="blacklist-phone">
+      </div>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Blacklist Status</p>
+      <p class="table-value">:</p>
+      <p class="table-value blacklist-status" id="blacklist-status" style="margin-left: 5px;">:-</p>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Reason Removal</p>
+      <div>
+        <p class="table-value" id="blacklist-reason">:-</p>
+        <p class="table-value" id="blacklist-reason-text" style="font-weight: normal;">Catatan:-</p>
+      </div>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Expired Date</p>
+      <p class="table-value" id="blacklist-expired">: -</p>
+    </div>
+    <div style="display: flex">
+      <p style="width: 30%">Blacklist by</p>
+      <p class="table-value" id="blacklist-pic">:-</p>
+    </div>
+    <button
+      data-toggle="modal"
+      data-target="#blacklist-contact"
+      class="blacklist-button"
+      id="blacklist-contact-button"
+    >
+      Blacklist Contact
+    </button>
+  </div>
+</div>
+<!-- modal -->
+<div
+  class="modal fade modal-blacklist"
+  id="blacklist-contact"
+  tabindex="-1"
+  aria-hidden="true"
+  role="dialog"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-inners">
+          <div style="display: flex; justify-content: center">
+            <img src="{% static 'images/blacklist/warning-blacklist.webp' %}" alt="warning-blacklist" />
+          </div>
+          <h6 style="font-size: 16px; text-align: center">
+            Apakah Anda yakin untuk blacklist Contact ini?
+          </h6>
+          <p style="font-size: 12px; text-align: center">
+            Contact yang diblacklist tidak bisa di unblacklist hingga waktu
+            expire yang ditentukan
+          </p>
+          <div class="modal-forms">
+            <form id="blacklist-form">
+            <div class="modal-forms-item">
+              <p style="font-weight: bold">Expired Date</p>
+              <input type="date" style="width: 100%" id="blacklist-date"/>
+            </div>
+            <div class="modal-forms-item">
+              <p style="font-weight: bold">Reason of Removal</p>
+              <select style="width: 100%" id="blacklist-reason-removal">
+                <option value="Fraud" >Fraud</option>
+                <option value="Not Disbursed">Not Disbursed</option>
+                <option value="Request By Agent" >Request By Agent</option>
+                <option value="Testing Account">Testing Account</option>
+                <option value="Wrong Phone Number" >Wrong Phone Number</option>
+                <option value="Other">Other</option>
+                <option value="Application Denied" >Application Denied</option>
+                <option value="Cancel by Customer">Cancel by Customer</option>
+                <option value="Customer Resigned" >Customer Resigned</option>
+              </select>
+            </div>
+          </form>
+            <div class="modal-forms-item">
+              <textarea
+                style="
+                  resize: none;
+                  width: 100%;
+                  margin: 1em 0;
+                  min-height: 116px;
+                  border-radius: 5px;
+                  padding: 15px;
+                "
+                placeholder="Jelaskan alasan Anda Blacklist Contact ini (Optional)"
+                id="blacklist-reason-removal-text"
+              ></textarea>
+            </div>
+            <div class="modal-forms-buttons">
+              <button
+                class="blacklist-no"
+                data-toggle="modal"
+                data-target="#blacklist-contact"
+              >
+                Tidak
+              </button>
+              <!-- <button
+                class="blacklist-yes blacklist-yes-disable"
+                id="blacklist-modal-confirm"
+                data-toggle="modal"
+                data-target="#blacklist-contact-success"
+                data-dismiss="modal"
+                disabled
+              >
+                Ya
+              </button> -->
+              <button
+                class="blacklist-yes blacklist-yes-disable"
+                id="blacklist-modal-confirm"
+                disabled
+              >
+                Ya
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal success -->
+<div
+  class="modal fade modal-blacklist"
+  id="blacklist-contact-success"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-inners-success">
+          <div style="display: flex; justify-content: center">
+            <img src="{% static 'images/blacklist/success-blacklist.webp' %}" alt="success-blacklist" />
+          </div>
+          <h1>Berhasil!</h1>
+          <p>Account ini berhasil diblacklist</p>
+          <div>
+            <button
+              class="blacklist-yes"
+              data-toggle="modal"
+              data-target="#blacklist-contact-success"
+            >
+              Ya
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal error -->
+<div
+  class="modal fade modal-blacklist"
+  id="blacklist-contact-error"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-inners-success">
+          <div style="display: flex; justify-content: center">
+            <img src="{% static 'images/blacklist/warning-blacklist.webp' %}" alt="warning-blacklist" />            
+          </div>
+          <h1>Akun tidak ditemukan!</h1>
+          <div>
+            <button
+              class="blacklist-yes"
+              data-toggle="modal"
+              data-target="#blacklist-contact-error"
+            >
+              Kembali
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+<script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script> 
+$(document).ready(function(){
+  const today = dayjs().format("YYYY-MM-DD")
+  $("#blacklist-date").attr("min", today)
+  $("#blacklist-input").keyup(function() {
+    if($("#blacklist-input").val().length !==0) {
+      $(".submit-button").removeClass("blacklist-button-disabled")
+      $(".submit-button").prop("disabled", false)
+    } else {
+      $(".submit-button").addClass("blacklist-button-disabled")
+      $(".submit-button").prop("disabled", true)
+    }
+  })
+    function ToastDanger(body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'error',
+            hideAfter: 2800
+        });
+    }
+  $(".submit-button").click(function() {
+    $(".submit-button").addClass("blacklist-button-disabled")
+    $(".submit-button").prop("disabled", true)
+    $.ajax({
+            url: `{%url 'minisquad:set_blacklist_account'%}?account_id=${$("#blacklist-input").val()}`, // the endpoint
+                    type: "GET", // http method
+                    headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                "Authorization": 'token {{token}}',
+                            },
+                
+                    success: function (json) {
+                    if (json.data.success == false){
+                        ToastDanger(json.data.errors)
+                        return
+                    }
+                    $("#blacklist-data").css("display","block")
+                      $("#blacklist-name").text(`: ${json.data.full_name}`)
+                      $("#blacklist-id").text(`: ${json.data.account_id}`)
+                      $("#blacklist-status-code").text(json.data.account_status)
+                      $("#blacklist-app-id").text(`: ${json.data.app_id}`)
+                      $("#blacklist-email").text(`: ${json.data.email}`)
+                        $("#blacklist-phone").html("")
+                      $.map(json.data.phone_list,(list)=>{
+                        $("#blacklist-phone").append(`<p>: ${list.contact_name}-${list.contact_source}-${list.phone_number}</p>`)
+                      })
+                      $("#blacklist-status").text(json.data.blacklist_status)
+                      if(json.data.blacklist_status === "Blacklist") {
+                        $("#blacklist-status").removeClass("blacklist-status")
+                        $("#blacklist-status").addClass("account-status")
+                        $("#blacklist-contact-button").hide()
+                      }else{
+                          $("#blacklist-status").removeClass("account-status")
+                          $("#blacklist-status").addClass("blacklist-status")
+                          $("#blacklist-contact-button").show()
+                      }
+                      const reason = json.data.reason_removal !==null ? json.data.reason_removal.split("\n") : json.data.reason_removal
+                      $("#blacklist-reason").text(`: ${reason !== null ? reason[0] : reason}`)
+                      $("#blacklist-reason-text").text(`Catatan: ${reason !== null && reason.length >1 ? reason[1] : reason}`)
+                      if(json.data.expire_date !== "-") {
+                        $("#blacklist-expired").text(dayjs(json.data.expire_date).format("DD-MM-YYYY"))
+                      }else{
+                          $("#blacklist-expired").text("-")
+                      }
+                      $("#blacklist-pic").text(`: ${json.data.black_list_by}`)
+
+                    },
+                    error: function(err) {
+                      $("#blacklist-data").css("display","none")
+                      $("#blacklist-contact-error").modal("show")
+
+                    }
+                })
+  })
+  $("#blacklist-date").on("change", ()=> {
+   if($("#blacklist-date").val() !== "") {
+     $("#blacklist-modal-confirm").removeAttr("disabled")
+     $("#blacklist-modal-confirm").removeClass("blacklist-yes-disable")
+   } else {
+    $("#blacklist-modal-confirm").attr("disabled", true)
+    $("#blacklist-modal-confirm").addClass("blacklist-yes-disable")
+   }
+  })
+
+  $("#blacklist-modal-confirm").click(function() {
+    $.ajax({
+      url: `{%url 'minisquad:set_blacklist_account'%}?account_id=${$("#blacklist-input").val()}`, // the endpoint
+      type: "POST", // http method
+      data:JSON.stringify({
+        account_id:$("#blacklist-input").val(),
+        expire_date: $("#blacklist-date").val(),
+        reason_removal: $("#blacklist-reason-removal").val(),
+        description: $("#blacklist-reason-removal-text").val(),
+      }),
+      headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  "Authorization": 'token {{token}}',
+              },
+  
+      success: function (json) {
+        if (json.data.success == false){
+            ToastDanger(json.data.errors)
+            return
+        }
+        $("#blacklist-status").text(json.data.blacklist_status)
+        if(json.data.blacklist_status === "Blacklist") {
+          $("#blacklist-status").removeClass("blacklist-status")
+          $("#blacklist-status").addClass("account-status")
+          $("#blacklist-contact-button").css("display","none")
+        }
+        const reason = json.data.reason_removal !==null ? json.data.reason_removal.split("\n") : json.data.reason_removal
+        $("#blacklist-reason").text(`: ${reason !== null ? reason[0] : reason}`)
+        $("#blacklist-reason-text").text(`Catatan: ${reason !== null && reason.length >1 ? reason[1] : reason}`)
+        $("#blacklist-expired").text(`: ${dayjs(json.data.expire_date).format("DD-MM-YYYY")}`)
+        $("#blacklist-pic").text(`: ${json.data.black_list_by}`)
+        $("#blacklist-contact-success").modal("show")
+        $("#blacklist-contact").modal("hide")
+        $('#blacklist-date').val("")
+        $('#blacklist-reason-removal-text').val("")
+      },
+        error: function(err) {
+              if (err.responseJSON.success == false){
+                ToastDanger(err.responseJSON.errors)
+              }
+            }
+    })
+  })
+})
+</script>
+{% endblock %}
+{% block script_bottom_inside %}
+{% endblock %}

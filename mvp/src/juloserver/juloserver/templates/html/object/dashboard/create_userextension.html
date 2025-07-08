@@ -1,0 +1,102 @@
+{% extends "common/theme1/crup/crup_1_theme1.html" %}
+{% load model %}
+
+{% block breadcrumb_title %}Agent Settings{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">User</a></li>
+    <li><a href="#">Extension</a></li>
+    <li class="active">Form</li>
+{% endblock %}
+ 
+{% block list_title %}
+    <label class="label label-info m-l-5"> {{ msg_title }}</label>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-body %}
+    <div class="row">
+        <div class="col-md-6 col-xs-12 col-md-offset-2">
+            User extension saat ini:
+            <label class="label label-warning">
+                {{ current_user_extension|default:"-"|safe }}
+            </label>
+        </div>
+        <div class="col-md-6 col-xs-12 col-md-offset-2">
+            Quiros username saat ini:
+            <label class="label label-warning">
+                {{ quiros_username|default:"-"|safe }}
+            </label>
+        </div>
+        <div class="col-md-6 col-xs-12 col-md-offset-2">
+            User extension: <input id ="id_user_extension" type="text">
+        </div>
+        <div class="col-md-6 col-xs-12 col-md-offset-2">
+            Quiros username: <input id ="id_quiros_username" type="text">
+        </div>
+        <div class="col-md-6 col-xs-12 col-md-offset-2">
+            Quiros password: <input id ="id_quiros_password" type="text">
+        </div>
+        <div class="col-md-6 col-xs-12 col-md-offset-2">
+            <button onclick="updateUserExtension();">Submit</button>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+
+  $(document).ready(function() {
+    $.ajaxSetup({
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+  });
+
+  function updateUserExtension(){
+    var dataInput = {}
+
+    var userExtension = $('#id_user_extension').val();
+    var quirosUsername = $('#id_quiros_username').val();
+    var quirosPassword = $('#id_quiros_password').val();
+
+    if (userExtension != "") {
+      dataInput["user_extension"] = userExtension
+    }
+
+    if (quirosUsername != "" && quirosPassword != "") {
+      dataInput["quiros_username"] = quirosUsername
+      dataInput["quiros_password"] = quirosPassword
+    }
+
+    if(Object.keys(dataInput).length == 0){
+      alert("Data kosong");
+      return;
+    }
+
+    $.ajax({
+        url :  "{%url 'dashboard:ajax_update_user_extension' %}/", // the endpoint
+        type : "POST", // http method
+        data : dataInput,
+        // handle a successful response
+        success : function(json) {
+            if (json.status == "success"){
+                 $('#id_user_extension').val('');
+                setTimeout(function(){
+                    window.location.reload(true);
+                }, 500);
+                alert("Success Update User Extension");
+            }
+            else {
+                console.log(json);
+                alert("Fail to update User Extension");
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    }); // end of ajax
+
+  }
+
+{% endblock %}

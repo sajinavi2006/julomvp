@@ -1,0 +1,1 @@
+Hi {{ first_name }}, yuk bayar segera cicilan JULOmu & uang tunai jutaan rupiah siap jadi MILIKMU! Bayar sekarang {{ payment_url }}

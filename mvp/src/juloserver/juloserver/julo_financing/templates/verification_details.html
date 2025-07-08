@@ -1,0 +1,360 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+{% block additional_title %}Smartphone Financing - {{ object.id }} {% endblock %}
+
+{% block custom_link %}
+{% endblock %}
+
+{% block css_inside %}
+  {{ block.super }}
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+
+  .checkbox label::before{
+    border: 1px solid;
+  }
+
+  .btn-grp-default {
+    width:30px !important;
+    padding-left:8px !important;
+  }
+
+  .select { overflow: hidden; }
+  .select::-webkit-scrollbar { width: 0 !important }
+  .select { -ms-overflow-style: none; }
+  .select { overflow: -moz-scrollbars-none; }
+  .select:active { pointer-events: none; }
+  .select_cls {
+      width: 232px;
+      height: 36px;
+      border: solid 1px #d5d6d6;
+      background-color: #ffffff;
+  }
+
+  td.day{
+    position:relative;
+  }
+
+  td.td-padding {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+
+  .enabled a{
+    color:black !important;
+    background:green !important;
+  }
+
+  td.day.disabled:hover:before {
+    content: 'This date is disabled';
+    color: white;
+    background-color: grey;
+    top: 28px;
+    position: absolute;
+    width: 136px;
+    left: -34px;
+    z-index: 1000;
+    text-align: center;
+    padding: 2px;
+  }
+
+  td.disabled-date {
+    background-color: red !important;
+    color: white !important;
+  }
+
+  .red{color: red;}
+  .green{color: green;}
+  .no-left{padding-left:0px;}
+
+  .modal-content {
+    width: 120%;
+  }
+
+  .row-scroll {
+    white-space: nowrap;
+    display: flex;
+    justify-content;
+    flex: 1 1 100%;
+  }
+
+  .image-boxed-size-selfie {
+    height: 300px;
+    object-fit: contain;
+  }
+
+  .image-boxed-size-ktp {
+    height: 200px;
+    object-fit: contain;
+  }
+
+  .image-boxed-size-checkbox {
+    height: 25px;
+    object-fit: contain;
+  }
+
+  .modal-header-similarity {
+    border-bottom:1px solid #eee;
+    background-color: #f0ad4e;
+    -webkit-border-top-left-radius: 15px;
+    -webkit-border-top-right-radius: 15px;
+    -moz-border-radius-topleft: 15px;
+    -moz-border-radius-topright: 15px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    display: flex;
+  }
+
+  .table-similarity {
+    padding:25px;
+    white-space: normal;
+  }
+
+  .modal-content-similarity  {
+      position: relative;
+      background-color: #fff;
+      -webkit-background-clip: padding-box;
+              background-clip: padding-box;
+      border: 1px solid #999;
+      border: 1px solid rgba(0, 0, 0, .2);
+      border-radius: 15px;
+      outline: 0;
+      -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+              box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+  }
+
+  .modal-x-button {
+    margin: auto;
+    margin-right: 0px;
+  }
+
+  .modal-similarity {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .modal-body-padding {
+    padding: 0px;
+  }
+
+  .table-similarity-word-wrap > div {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .face-check-rounded-images {
+    padding:15px;
+    max-width: 70%;
+    border-radius: 10%;
+    display:block;
+    margin:auto;
+  }
+
+  a.right {
+    margin-left:auto;
+    margin-right:20;
+    float:right;
+    color:#f2a3b3;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  .sweet-alert .sa-confirm-button-container button {
+    background-color: #03a9f3 !important;
+    border: 1px solid #03a9f3 !important;
+  }
+  .sweet-alert button.cancel {
+    background-color: #fff !important;
+    color: #333 !important;
+    border-color: #efefef !important;
+    border: 1px solid !important;
+  }
+  .sweet-alert p {
+    color: #333 !important;
+    font-family: "Poppins", sans-serif !important;
+    font-weight: normal !important;
+    font-size: 15px !important;
+  }
+  .sweet-alert button {
+   margin: 30px 5px 10px 5px !important;
+  }
+  .btn.btn-success:disabled{
+    background-color: #E5E5E5;
+  }
+  .upload-document-button {
+    border-radius: 10px !important;
+    border: 1px !important;
+    border-style: solid !important;
+    color: #fb9678 !important;
+    box-shadow: none !important;
+  }
+  .upload-document-button:hover {
+    background-color: #fb9678 !important;
+    color: white !important;
+  }
+
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+
+{% block list_title %}
+  <div class="row m-b-10">
+    <div class="col-md-2 col-xs-12 label-danger  p-t-10 p-b-10">
+      <small>app-id</small>: {{ object.loan.application_id2 }}
+      <code>Julo Financing</code>
+    </div>
+    <div class="col-md-1 col-xs-12 label-info text-center p-t-10 p-b-10">
+      <small>CUST-ID</small>: {{ object.loan.customer_id }}
+    </div>
+    <div class="col-md-2 col-xs-12 label-danger text-center p-t-10 p-b-10">
+      <small>Nama</small>: {{ object.loan.customer.fullname }}
+    </div>
+    <div class="col-md-2 col-xs-12 label-success p-t-10 p-b-10">
+      <small>Status</small>: {{ object.get_validation_status_display }}
+    </div>
+    <div class="col-md-3 col-xs-12 label-danger p-t-10 p-b-10">
+      <small>Email</small>: {{ object.loan.customer.email }}
+    </div>
+    <div class="col-md-2 col-xs-12 label-warning p-t-10 p-b-10">
+      <small>Nomor HP</small>: {{ object.j_financing_checkout.additional_info.phone_number }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-12 col-xs-12">
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        {% include "include/details_tab.html" %}
+      </div>
+
+      <!-- DOCUMENT -->
+      <div class="col-md-6 col-xs-12">
+        <div class="col-md-12 col-xs-12">
+          {% comment %} Document view {% endcomment %}
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xs-12">
+        {% comment %} Histories {% endcomment %}
+      </div>
+
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end col-md-12 -->
+</div>
+<!--end root row-- >
+{% endblock %}
+
+{% block script_end %}
+
+<script>
+  var lockStatus = {{ lock_status|yesno:"true,false" }};
+  var lockEdit =  {{ lock_status|yesno:"true,false"}};
+  var currentStatus = '{{object.validation_status}}';
+  var currentNote = `{{object.note|default:""|safe}}`;
+  var csrfToken = `{{csrf_token}}`
+  var courierName = `{{ object.j_financing_checkout.courier_name|safe }}`;
+  var courierTrackingId = `{{ object.j_financing_checkout.courier_tracking_id|safe }}`;
+  var urlVerificationUpdate = `{% url 'julo_financing_crm:verification_detail_update' object.id %}`
+  var lockedByInfo = `{{ object.locked_by_info|default:" - "|safe }}`
+  window.JULO_FINANCING_VERIFICATION_UNLOCK_URL = '{% url "julo_financing_crm:verification_unlock" 0 %}'.replace('0', '')
+  window.JULO_FINANCING_VERIFICATION_LOCK_URL = '{% url "julo_financing_crm:verification_lock" 0 %}'.replace('0', '')
+
+  var objectId = {{ object.id }}
+
+  // handle unlock
+  $('#submit-unlock-smartphone-financing').on('click', function () {
+    unlock_verification(objectId)
+  })
+
+  function unlock_verification(id) {
+    is_confirm = confirm('Apakah anda yakin ingin unlock assignment ini?')
+    if(!is_confirm) {
+      return;
+    }
+
+    return $.ajax({
+      url: window.JULO_FINANCING_VERIFICATION_UNLOCK_URL + id,
+      data: {'csrfmiddlewaretoken': csrfToken},
+      type: 'POST',
+      statusCode: {
+        200: function(response) {
+          alert('Assignment berhasil di-unlock.')
+          window.location.reload()
+        }
+      },
+      error: function(){
+        alert('Terjadi kesalahan pada server.')
+      }
+    });
+  }
+
+  $('#submit-lock-smartphone-financing').on('click', function () {
+    lock_verification(objectId)
+  })
+
+  function lock_verification(id) {
+    return $.ajax({
+      url: window.JULO_FINANCING_VERIFICATION_LOCK_URL + id,
+      data: {'csrfmiddlewaretoken': csrfToken},
+      type: 'POST',
+      statusCode: {
+        201: function (response) {
+          alert('Assignment berhasil di-lock.')
+          window.location.reload()
+        },
+        423: function (response) {
+          alert('Assignment verification sudah di-lock.')
+          window.location.reload()
+        },
+        404: function () {
+          alert('Assignment verification tidak ditemukan.')
+        }
+      },
+      error: function () {
+        alert('Terjadi kesalahan pada server.')
+      }
+    });
+  }
+
+
+</script>
+<script src="{% static 'default/js/julo_financing/verification-detail.js' %}"></script>
+<script src="{% static 'default/js/balance_consolidation/balance-consolidation-verification-detail.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'default/theme/js/jquery.tablesorter.js' %}"></script>
+{% load static from staticfiles %}
+{% endblock %}

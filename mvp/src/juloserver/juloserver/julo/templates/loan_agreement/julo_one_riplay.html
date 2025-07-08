@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RIPLAY document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        text-align: justify;
+      }
+      .container {
+        margin: auto;
+        border-radius: 10px;
+      }
+      .section {
+        margin-bottom: 10px;
+      }
+      .section-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        margin-top: 10px;
+      }
+      .info-table th,
+      .info-table td {
+        padding: 8px;
+      }
+      .info-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+      }
+      .info-table td {
+        text-align: right;
+      }
+      .info-table td.left {
+        text-align: left;
+      }
+      .disclaimer {
+        font-size: 0.9em;
+        color: #555;
+      }
+      .title {
+        text-align: center;
+        font-size: 18px;
+      }
+      ol {
+        padding: 5px;
+      }
+      ol li.section {
+        counter-increment: item-counter roman-counter;
+        list-style-type: none;
+        text-align: center;
+      }
+      ol > li.section::before {
+        content: counter(roman-counter, upper-roman) ". ";
+        font-size: 1.2em;
+      }
+      .inside-content {
+        text-align: left;
+        margin-top: 10px;
+      }
+      p {
+        text-align: justify;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      strong {
+        margin-bottom: 10px !important;
+      }
+      .inside-content ol {
+        padding-left: 30px !important;
+      }
+      .info-table-loan {
+        border-collapse: collapse;
+        border-radius: 10px;
+        border-style: hidden;
+        box-shadow: 0 0 0 1px #ccc;
+      }
+      .payment-table > tbody > tr > th,
+      .payment-table > tbody > tr > td {
+        text-align: center !important;
+        border-collapse: collapse;
+        background-color: transparent;
+        border: 1px solid #ccc;
+      }
+      .payment-table {
+        border-collapse: collapse;
+        border-radius: 10px;
+        border-style: hidden;
+        box-shadow: 0 0 0 1px #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h4 class="title">
+        Ringkasan Informasi Produk dan Layanan <br />
+        (RIPLAY) Personal
+      </h4>
+      <ol style="margin-bottom: 0">
+        <table class="info-table">
+          <tr>
+            <td class="left">Nama penerbit pinjaman</td>
+            <td><strong>{{ company_name }}</strong></td>
+          </tr>
+          <tr>
+            <td class="left">Nama penerima pinjaman</td>
+            <td><strong>{{ full_name }}</strong></td>
+          </tr>
+          <tr>
+            <td class="left">Nama Produk</td>
+            <td><strong>{{ display_transaction_method }}</strong></td>
+          </tr>
+          <tr>
+            <td class="left">Jenis Produk</td>
+            <td><strong>Cicilan</strong></td>
+          </tr>
+          <tr>
+            <td class="left">Deskripsi singkat produk</td>
+            <td><strong>{{ display_transaction_method }}</strong></td>
+          </tr>
+        </table>
+      </ol>
+      <ol style="margin-top: 0">
+        <li class="section">
+          <strong>Rincian Fitur Utama</strong>
+          <table class="info-table">
+            <tr>
+              <td class="left">Limit kredit</td>
+              <td><strong>{{ loan_amount }}</strong></td>
+            </tr>
+            <tr>
+                <td class="left">Tanggal jatuh tempo</td>
+                <td><strong>{{ last_due_date }}</strong></td>
+              </tr>
+            <tr>
+              <td class="left">Bunga</td>
+              <td><strong>{{ interest_rate_monthly }}</strong></td>
+            </tr>
+            <tr>
+              <td class="left">Tenor pinjaman</td>
+              <td><strong>{{ loan_duration }}</strong></td>
+            </tr>
+            <tr>
+              <td class="left">Angsuran per bulan</td>
+              <td><strong>{{ loan_installment_amount }}</strong></td>
+            </tr>
+            <tr>
+              <td class="left">Denda keterlambatan</td>
+              <td><strong>{{ late_fee_rate_per_day }}</strong></td>
+            </tr>
+            <tr>
+              <td class="left">Biaya admin</td>
+              <td><strong>{{ provision_fee_amount }}</strong></td>
+            </tr>
+            <tr>
+              <td class="left">Biaya lainnya</td>
+              <td><strong>{{ additional_fee }}</strong></td>
+            </tr>
+          </table>
+        </li>
+        <li class="section">
+          <strong>Risiko</strong>
+          <div class="inside-content">
+            <p>
+              Apabila pengguna lalai dalam melakukan pembayaran angsuran ataupun
+              tidak memenuhi kewajiban sesuai dengan perjanjian yang disepakati
+              maka terdapat:
+            </p>
+            <ol type="1">
+              <li>
+                <p>
+                  Risiko pengenaan biaya keterlambatan yang akan disesuaikan
+                  dengan hari keterlambatan
+                </p>
+              </li>
+              <li>
+                <p>
+                  Risiko penagihan yang akan dilakukan oleh JULO dan/atau pihak
+                  ketiga
+                </p>
+              </li>
+              <li>
+                <p>
+                  Risiko reputasi berupa pencatatan riwayat kredit macet pada
+                  Fintech Data Center (FDC) dan/atau Pusat Data Fintech Lending
+                  (PUSDAFIL)
+                </p>
+              </li>
+            </ol>
+            <p style="margin-top: 0px">
+              Untuk informasi lebih lengkap terkait risiko pendanaan dapat
+              diakses melalui link ini
+              <a href="https://julo.co.id/privacy-policy" target="_blank" >https://julo.co.id/privacy-policy</a >
+            </p>
+          </div>
+        </li>
+
+        <li class="section">
+          <strong>Manfaat</strong>
+          <div class="inside-content">
+            <p>
+              Proses pengajuan pinjaman dana dengan JULO lewat aplikasi sangat
+              mudah dengan durasi tenor yang tersedia maksimal 9 bulan dengan
+              tanggal pembayaran akan disesuaikan dengan tanggal gajian.
+              Pinjaman dana dari JULO dapat dimanfaatkan oleh pengguna untuk
+              pemenuhan berbagai kebutuhan baik kebutuhan produktif maupun
+              konsumtif dengan proses pengajuan yang mudah dan cepat.
+            </p>
+          </div>
+        </li>
+        <li class="section">
+          <strong>Pengajuan Pinjaman</strong>
+          <div class="inside-content">
+            <p>
+              Pengguna yang telah mengajukan pinjaman dana telah memenuhi
+              persyaratan sebagai berikut:
+            </p>
+            <ol type="1">
+              <li>WNI</li>
+              <li>Usia 18-65 Tahun</li>
+              <li>Upload KTP dan selfie</li>
+            </ol>
+          </div>
+        </li>
+        <li class="section">
+          <strong>Pengaduan Terkait Produk dan Layanan</strong>
+          <div class="inside-content">
+            <p>
+              Pengaduan terkait produk dan layanan dapat menghubungi kami di:
+            </p>
+            <ol type="1">
+              <li>Email: cs@julo.co.id </li>
+              <li>Live chat via aplikasi JULO</li>
+              <li>Call Center: 021 5091 9034 / 021 5091 9036</li>
+              <li>Social Media JULO:</li>
+              <ol type="a">
+                <li>
+                  Facebook: @JULOIndonesia
+                </li>
+                <li>
+                  Instagram: @juloindonesia
+                </li>
+                <li>
+                    Kontak Customer Service via website:
+                    <a href="https://www.julo.co.id/faq/kontak" target="_blank" >https://www.julo.co.id/faq/kontak</a >
+                </li>
+              </ol>
+            </ol>
+            <p>Jam operasional: Senin-Minggu pukul 08:00-20:00 WIB</p>
+          </div>
+        </li>
+        <li class="section">
+          <strong>Rincian Pinjaman Dana</strong>
+          <div class="inside-content">
+            <table class="info-table info-table-loan">
+              <tbody>
+                <tr>
+                  <td class="left">Bunga</td>
+                  <td>{{ interest_rate_monthly }}</td>
+                </tr>
+                <tr>
+                  <td class="left">Admin</td>
+                  <td> {{ provision_rate }}</td>
+                </tr>
+                <tr>
+                  <td class="left">Jumlah pinjaman</td>
+                  <td> {{ loan_amount }} </td>
+                </tr>
+                <tr>
+                  <td class="left">Jumlah transfer dana</td>
+                  <td>{{ loan_disbursement_amount }}</td>
+                </tr>
+                <tr>
+                  <td class="left">Tenor</td>
+                  <td> {{ loan_duration }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="info-table payment-table">
+              <tr>
+                <th></th>
+                <th>Pokok</th>
+                <th>Bunga</th>
+                <th>Jumlah Cicilan</th>
+              </tr>
+              {% for payment in payments %}
+                <tr>
+                    <td style="text-align: left !important;">{{ payment.display_due_date }} </td>
+                    <td>{{ payment.installment_principal }}</td>
+                    <td>{{ payment.installment_interest }}</td>
+                    <td>{{ payment.due_amount }} </td>
+                </tr>
+              {% endfor %}
+              <tr>
+                <th colspan="3" style="text-align: left !important">Total Cicilan</th>
+                <th>{{ total_due_amount }}</th>
+              </tr>
+            </table>
+          </div>
+        </li>
+        <li class="section">
+          <strong>Informasi Tambahan</strong>
+          <div class="inside-content">
+            <ol type="1">
+              <li>
+                <p>
+                    Pengguna dapat mengajukan penutupan akun dengan menghubungi Customer Service JULO
+                </p>
+              </li>
+              <li>
+                <p>
+                    Pengguna akan menerima produk layanan lain dari pihak ketiga lain apabila menyetujui untuk membagikan data pribadi
+                </p>
+              </li>
+              <li>
+                <p>
+                    Informasi lain mengenai biaya, manfaat, dan risiko dapat diakses melalui website
+                  <a href="https://www.julo.co.id" target="_blank" >https://www.julo.co.id</a>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </li>
+        <li class="section">
+          <strong>Disclaimer</strong>
+          <div class="inside-content">
+            <ol type="1">
+              <li>
+                <p>
+                    Penerima pinjaman telah membaca, menerima penjelasan dan memahami produk 
+                    {{ loan_type }} sesuai Ringkasan Informasi Produk dan Layanan
+                </p>
+              </li>
+              <li>
+                <p>
+                    Ringkasan Informasi Produk dan Layanan ini bukan merupakan bagian dari aplikasi pembuatan akun JULO
+                </p>
+              </li>
+              <li>
+                <p>
+                    Penerima pinjaman wajib untuk membaca, memahami, dan menyetujui syarat dan ketentuan serta kebijakan privasi JULO
+                </p>
+              </li>
+              <li>
+                <p>
+                    Informasi yang tercakup dalam Ringkasan Informasi Produk dan Layanan ini berlaku sampai dengan adanya perubahan terbaru Ringkasan Informasi Produk dan Layanan
+                </p>
+              </li>
+              <li>
+                <p>
+                    Penerima pinjaman harus membaca dengan teliti Ringkasan Informasi Produk dan Layanan ini sebelum menyetujui produk {{ loan_type }} dan berhak bertanya kepada customer service atas semua hal maupun pengaduan terkait Ringkasan Informasi Produk dan Layanan
+                </p>
+              </li>
+            </ol>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </body>
+</html>

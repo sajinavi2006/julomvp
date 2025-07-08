@@ -1,0 +1,644 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load static from staticfiles %}
+
+{% block css_inside %}
+label.error {
+    color: red;
+    padding-top: 8px;
+}
+input.error {
+    border-color: red !important;
+}
+{% endblock %}
+
+{% block custom_link %}
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/Jako/jq.multiInput/dist/css/jq.multiinput.min.css" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'theme/nav-mini/css/campaign_automation_custom.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block list_title %}
+<!--########################### Action Button ###########################-->
+<div class="actions-wrapper row">
+    <div class="col-md-12 mx-auto">
+        <form method="post" class="form-draft-approval">
+            <input type="hidden" name="save_type" value="add" id="save_type" />
+            <div class="btn-wrapper">
+                <button class="btn btn-success rounded-sm btn-block blue-primary" id="btnDraft" value="save" type="button">
+                    <strong> Simpan Draft </strong>
+                </button>
+            </div>
+            <div class="btn-wrapper">
+                <button type="button" class="btn btn-action rounded-sm btn-block" id="btnSave">
+                    <strong> Request Approval </strong>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--########################### End Action Button ###########################-->
+{% endblock %}
+<!-- {% block list_subtitle %}{% endblock %} -->
+{% block content-list %}
+<!--########################### Campaign First Form ###########################-->
+<div class="row" style="margin-bottom: 40px;">
+    <div class="col-md-9">
+        <a class="btn btn-back" href="{% url 'cohort_campaign_automation:cohort_campaign_automation_list' %}" role="button">
+            <span class="fa fa-arrow-left"></span><strong>  Create Campaign</strong>
+        </a>
+    </div>
+    <div class="col-md-3 text-right">
+        <button class="btn btn-history blue-primary rounded-sm" id="btnHistory" value="history" type="button">
+            <img width="15" height="15" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAETSURBVHgBnZONccIwDIWflA5ANkgnaEcoE0Dv6ACdoGxQ2ADmgDtgAhiBDcgGYQCIkOzwE3ByhneXnO1Yn5RnmXCvWfEF5h5E+jrL3JpgCyZ9yjG+0/x2O11Gi6KDkv81cIg2EU0q0P4KsOADrXX2iRhZRW/SNQi7BcscCk7k3T0PVehei3HDRZHhSLtgpkHHVzjfS7gS6fKZ9JIIfVZK3H+HCT3zIAaQN6xnjDaZP6ZEHW+AMJrpUHPXDmLNE4LocSpAVmhWVoOI/NbTkwIES7TLQ84tXgOU4+qci4k6+oenJFMM0qE3McFI39v4WN3rY+ABdjGcSUqNyVzdA5vRw3fX2kanD1x7JHdmm18/6eZ2+wnQq2dyvJdRkwAAAABJRU5ErkJggg==">
+            <strong> History </strong>
+        </button>
+    </div>
+</div>
+<div class="row grey-box m-b-0 p-b-0">
+    <form method="post" id="form_campaign_automation" name="form_campaign_automation" class="panel" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="panel-body col-xs-12 panel-default p-0">
+            <div class="form-card">
+                <div class="title">Campaign Detail</div>
+                <div class="form-fields">
+                    <div class="row form-group">
+                        <div class="col-sm-12 txt-align">
+                            <label for="description">Nama Campaign</label>
+                            <input class="form-control mainForm" required="required" id="campaign_name_id" name="campaign_name_id" maxlength="100" type="text" value="{{ cohort_campaign.campaign_name }}"/>
+                            <!-- Temporary Placement -->
+                            <input type="hidden"id="campaign_name" name="campaign_name"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-12 col-md-4 txt-align">
+                            <label for="description">Tanggal Mulai Campaign</label>
+                            <input class="form-control mainForm datepicker" name="campaign_start_period_id" data-zdp_readonly_element="false" id="campaign_start_period_id" maxlength="None" placeholder="-----" type="text" value="" autocomplete="off"/>
+                            <input type="hidden" id="campaign_start_period" value="" name="campaign_start_period" />
+                        </div>
+                        <div class="col-sm-12 col-md-4 txt-align">
+                            <label for="description">Tanggal Selesai Campaign</label>
+                            <input class="form-control mainForm datepicker" name="campaign_end_period_id" data-zdp_readonly_element="false" id="campaign_end_period_id" maxlength="None" placeholder="-----" type="text" value="" autocomplete="off"/>
+                            <input type="hidden" id="campaign_end_period" value="" name="campaign_end_period" />
+                        </div>
+                        <div class="col-sm-12 col-md-4 txt-align">
+                            <label for="description">Metabase Link</label>
+                            <input class="form-control mainForm datepicker" name="metabase_link_id" data-zdp_readonly_element="false" id="metabase_link_id" maxlength="None" placeholder="Masukkan metabase link" type="text" value="" autocomplete="off"/>
+                            <input type="hidden" id="metabase_link" value="" name="metabase_link" />
+                        </div>
+                    </div>
+                    <!-- <div class="row form-group">
+                        <div class="col-sm-12 txt-align">
+                            <label for="description">Unggah csv</label>
+                            <div class="file-dragdrop" style="background: #F0FAFE; padding: 8px;min-height: 80px;margin-bottom: 4px;border-radius: 8px; border: 1px dashed black;">
+                                <label for="file">Select CSV file to input
+                                    Drag & drop or <span>browse</span>.</label>
+                                <input type="file" accept=".csv" id="upload_csv_file" class="btn btn-default btn-file csv form-control editField" name="upload_csv_file">
+                                <div class="file-thumbnail">
+                                    <div style="display:flex; align-items:center;margin-top: 12px;">
+                                        <img style="margin-left:15px;margin-right:10px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJlSURBVHgBtZbBbtNAEIZnNjkgUUjyAATzBFg9phK4tx5z5dQ0PEBbqZHgFOeCQolEX4DiNyA8Ac4lyq3mCYjDCziAKkBkhxknhDax4zh1fymx1zuebz07O7sICTLsWnFymbMQ6CkSGEBU/NdHCj0C7H09fddN8oOrAPqHOmR3R9wsJngZ8p+rcro1bDvDKJNcJKTx/FD/BhnlHv/uQLJkICYRVu/vbI+/9S+8RFD5pN4koPaagCUgh6haqGzDuH/RiwUJhENlw81lLcLmoAeNeo0n/Ayyk8DGDBtII0wG40XN0BP8BJJV2SpQW/RoaDuBkpaeqOYtQESSuZK1gMZRrUh5/EJJKRwjRPBQU4tjY2jAtxEm4VflJzlZjHpzyF3aldBIu3xyYPJlf8GsCJdgKYZYsIEWIeEzgMdRtpqQQRjdOfPmKKBjDFf+aki5UX/P4Tcj/fD85yGOAeD6b84P5J6zsguclcQvxEG4BtZW+CooWENSvzBHu4jYTQuZwx426h+IqBrTbY865624l9eGcHQUafLjTcielqXNIaEXhM+KQLkJZkuwNBCRQnJTLFi0FaieRr2fBgKzBRvWOh6xzSNvwm2Il8iIszfMOvVHnzExgIwl6092XbkPt4lg4P0sVcxfvP/vQYbiuTkenjruHBTC+t6gUDH5w9CCTEQtv+PM97drO+y477nZwKg16jj21SdLZwaBlXZMnwMsdStVVZ/OM71kSHuxL/IUxGH0Sk/Mj6SxxC8bkHBQmQFeqy145r+azkmEzWrJ+Q6+g6UVWnyA/F/pEQM+LflKkwv3wL1a/6L0F5mZEG0woXSYAAAAAElFTkSuQmCC">
+                                        <div class="imgName"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACqSURBVHgBjZLhDcIgEIXvSP/LCF3FDXQDGcEJuoITgBvoBrqCG7CBTAA+kh5pkdC+hHDHfXl3Adg5p4noRP96G2O8JAzQpZQuDdAz81FghTVSWyMMXvAZBeypwFugwLc9IGHWwzDHAckZu2+4PXIw1IUq1xIIqPPQ1FFxBHhVSoVlMcaoMdK0BAOgOy53BeZXg8FUt/5aa1ftcFZiheRD2/I8t8ifQnfA5w+PAkkTRnA2UQAAAABJRU5ErkJggg=="><span></span></div>
+                                        <div class="imgBtn">Ubah File</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-12 txt-align">
+                            <div style="background:#FDE5CE; border-radius:8px; border:1px solid; padding:16px;color:#965B22;">
+                            <span style="font-weight: bold;">Pastikan data CSV terlebih dahulu!</span><br>
+                            1. Tidak ada data tercantum pada campaign lain<br>
+                            2. ID pelanggan harus memenuhi persyaratan untuk mengikuti campaign<br>
+                            3. Tidak termasuk PTP<br>
+                            4. Tidak termasuk Grab<br>
+                            5. Tidak termasuk Customer with refinancing status Selected and Approved<br>
+                            6. Tidak termasuk ops.loan.lender_id = 26<br>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="title">Pilih Tipe Refinancing</div>
+                <div class="form-fields">
+                    <div class="row form-group">
+                        <div class="col-sm-12 txt-align" style="font-size: 16px;">
+                            Pilih salah satu tipe financing
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-12 col-md-4 txt-align">
+                            <div class="btn-white-grey btn-financing-type {% if cohort_campaign.program_type == 'R4' %}clicked{% endif %}">R4</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 txt-align">
+                            <div class="btn-white-grey btn-financing-type">R5</div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 txt-align">
+                            <div class="btn-white-grey btn-financing-type">R6</div>
+                        </div>
+                    </div>
+                    <div class="row financing-type {% if cohort_campaign.program_type == 'R4' %}show{% endif %}" id="r4">
+                        <div class="col-sm-12 txt-align">
+                            <div style="background: #F5F5F5;border-radius: 8px;padding:24px 16px;">
+                                <div style="padding-bottom:16px; font-size:16px;"><strong>Isikan sesuai dengan ketentuan campaign R4</strong></div>
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <label for="description">Principal Waiver (%)</label>
+                                        <div class="field-percent">
+                                            <input class="form-control mainForm" required="required" id="principal_waiver_id" 
+                                                name="principal_waiver" maxlength="100" type="text" value="{{ cohort_campaign.principal_waiver_percentage }}" autocomplete="off"
+                                                onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')
+                                                            if (this.value > 100) this.value = 100"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="description">Interest Waiver (%)</label>
+                                        <div class="field-percent">
+                                            <input class="form-control mainForm" required="required" id="interest_waiver_id" 
+                                                name="interest_waiver" maxlength="100" type="text" value="{{ cohort_campaign.interest_waiver_percentage }}" autocomplete="off"
+                                                onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')
+                                                            if (this.value > 100) this.value = 100"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="description">Late Fee Waiver (%)</label>
+                                        <div class="field-percent">
+                                            <input class="form-control mainForm" required="required" id="late_fee_waiver_id" 
+                                                name="late_fee_waiver" maxlength="100" type="text" value="{{ cohort_campaign.late_fee_waiver_percentage }}" autocomplete="off"
+                                                onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')
+                                                            if (this.value > 100) this.value = 100"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="title">Konfigurasi Delivery Campaign</div>
+                <div class="form-fields">
+                    <div class="row form-group">
+                        <div class="col-sm-12 txt-align">
+                            <ul class="tab-menu tab-menu-1" index="1">
+                                <li class="tab-menu__item col-md-6 text-center active" menu="campaign">
+                                    <span class="tab-menu__item__label">Email</span>
+                                </li>
+                                <li class="tab-menu__item col-md-6 text-center" menu="pn">
+                                    <span class="tab-menu__item__label">Push Notification</span>
+                                </li>
+                            </ul>
+                            <div class="tab-content tab-content-1" index="1">
+                                <div class="campaign-configuration content-configuration active" style="background: #F5F5F5;border-radius: 8px;padding:24px 16px;">
+                                    <div class="content-configuration__section">
+                                        <div class="content-configuration__title">
+                                            Email Setting #01
+                                        </div>
+                                        <div class="content-configuration__fields">
+                                            <label for="description">Template Code</label>
+                                            <input class="form-control mainForm" required="required" placeholder="Masukkan template code" name="campaign_tempate_code" maxlength="100" type="text" value="" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                    <div class="content-configuration__section">
+                                        <div class="content-configuration__section__label">
+                                            <strong>Subject & Banner</strong>
+                                        </div>
+                                        <div class="content-configuration__fields">
+                                            <label for="description">Subject</label>
+                                            <input class="form-control mainForm" required="required" placeholder="Masukkan subject email" name="campaign_subject" maxlength="100" type="text" value="" autocomplete="off"/>
+                                        </div>
+                                        <div class="content-configuration__fields banner">
+                                            <label for="description">Banner</label>
+                                            <div class="file-dragdrop" style="background: #F0FAFE; padding: 8px;min-height: 80px;margin-bottom: 4px;border-radius: 8px; border: 1px dashed #66CDF6;">
+                                                <label for="description">Drag & drop or <span>browse</span></label>
+                                                <input accept="image/*" type='file' id="imgInp" style="z-index: 2;" class="btn btn-default btn-file form-control editField">
+                                                <div class="file-thumbnail">
+                                                    <div style="display:flex; align-items:center">
+                                                        <img style="margin-left:15px;margin-right:10px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJlSURBVHgBtZbBbtNAEIZnNjkgUUjyAATzBFg9phK4tx5z5dQ0PEBbqZHgFOeCQolEX4DiNyA8Ac4lyq3mCYjDCziAKkBkhxknhDax4zh1fymx1zuebz07O7sICTLsWnFymbMQ6CkSGEBU/NdHCj0C7H09fddN8oOrAPqHOmR3R9wsJngZ8p+rcro1bDvDKJNcJKTx/FD/BhnlHv/uQLJkICYRVu/vbI+/9S+8RFD5pN4koPaagCUgh6haqGzDuH/RiwUJhENlw81lLcLmoAeNeo0n/Ayyk8DGDBtII0wG40XN0BP8BJJV2SpQW/RoaDuBkpaeqOYtQESSuZK1gMZRrUh5/EJJKRwjRPBQU4tjY2jAtxEm4VflJzlZjHpzyF3aldBIu3xyYPJlf8GsCJdgKYZYsIEWIeEzgMdRtpqQQRjdOfPmKKBjDFf+aki5UX/P4Tcj/fD85yGOAeD6b84P5J6zsguclcQvxEG4BtZW+CooWENSvzBHu4jYTQuZwx426h+IqBrTbY865624l9eGcHQUafLjTcielqXNIaEXhM+KQLkJZkuwNBCRQnJTLFi0FaieRr2fBgKzBRvWOh6xzSNvwm2Il8iIszfMOvVHnzExgIwl6092XbkPt4lg4P0sVcxfvP/vQYbiuTkenjruHBTC+t6gUDH5w9CCTEQtv+PM97drO+y477nZwKg16jj21SdLZwaBlXZMnwMsdStVVZ/OM71kSHuxL/IUxGH0Sk/Mj6SxxC8bkHBQmQFeqy145r+azkmEzWrJ+Q6+g6UVWnyA/F/pEQM+LflKkwv3wL1a/6L0F5mZEG0woXSYAAAAAElFTkSuQmCC">
+                                                        <img id="imgThumb" class="imgThumb" src="#" alt="your image" style="width:115px; height:60px" />
+                                                        <div class="imgName"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACqSURBVHgBjZLhDcIgEIXvSP/LCF3FDXQDGcEJuoITgBvoBrqCG7CBTAA+kh5pkdC+hHDHfXl3Adg5p4noRP96G2O8JAzQpZQuDdAz81FghTVSWyMMXvAZBeypwFugwLc9IGHWwzDHAckZu2+4PXIw1IUq1xIIqPPQ1FFxBHhVSoVlMcaoMdK0BAOgOy53BeZXg8FUt/5aa1ftcFZiheRD2/I8t8ifQnfA5w+PAkkTRnA2UQAAAABJRU5ErkJggg=="><span></span></div>
+                                                        <div class="imgBtn">Ubah Gambar</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            Banner size 670x340, Maximum file size 2 mb
+                                        </div>
+                                    </div>
+                                    <div class="content-configuration__section">
+                                        <div class="content-configuration__section__label">
+                                            <strong>Email Editor</strong>
+                                        </div>
+                                        <span style="font-size:12px; font-family: 'Poppins';margin-bottom:5px;display: block;"><strong>Template Preview</strong></span>
+                                        <div class="email-preview">
+                                            <div class="email-preview-field">
+                                                <strong>Halo <span>{First Name}</span></strong>
+                                            </div>
+                                            <div class="content-configuration__fields wysiwyg">
+                                                <textarea class="body-email" id="emailwysiwyg1" name="body_email" autocomplete="off" rows="4">
+                                                </textarea>
+                                            </div>
+                                            <div class="email-preview-field">
+                                                <strong>Total yang harus kamu bayar</strong><br><br>
+                                                <span>{Nominal Tagihan}</span><br><br>
+                                                Pembayaran bisa dilakukan melalui:<br><br>
+                                                <span>{Nomor Virtual Account}</span><br><br>
+                                                Promo Berlaku Sampai Tanggal:<br><br>
+                                                <span>{Promo Expiry Date}</span><br><br>
+                                                *Promo otomatis batal jika kamu tidak melakukan pembayaran lewat dari tanggal promo berakhir.<br><br>
+                                                JULO akan memberikan potongan besar untuk kamu agar bisa melunasi tagihanmu. Segera manfaatkan diskon terbatas ini sekarang juga!
+                                            </div>
+                                        </div>
+                                        <div class="content-configuration__section__label">
+                                            <strong>Expiry Promo Date</strong>
+                                        </div>
+                                        <div class="content-configuration__fields">
+                                            <input type="checkbox" style="margin-top: 2px;" name="expiry_promo_date">
+                                            <label for="description" style="font-weight: 400; vertical-align: top;">Cantumkan tanggal promo berakhir</label>
+                                        </div>
+                                    </div>
+                                    <div class="content-configuration__section">
+                                        <div class="content-configuration__section__label">
+                                            <strong>Nomor Whatsapp Admin</strong>
+                                        </div>
+                                        <div class="content-configuration__fields">
+                                            <label for="description">Nomor WhatsApp Admin</label>
+                                            <div class="field-input-button">
+                                                <input class="form-control mainForm whatsapp" placeholder="Masukkan nomor WhatsApp admin" name="whatsapp" maxlength="100" type="number" value="" autocomplete="off"/>
+                                                <div class="btn-white-grey btn-action btn-save-whatsapp">Simpan</div>
+                                            </div>
+                                            <div class="whatsapp-preview">Belum ada nomor whatsapp</div>
+                                        </div>
+                                    </div>
+                                    <div class="content-configuration__section">
+                                        <div class="content-configuration__section__label">
+                                            <strong>Email Sending Test</strong>
+                                        </div>
+                                        <div class="content-configuration__fields">
+                                            <label for="description">Alamat Email untuk Tes</label>
+                                            <div class="field-input-button">
+                                                <input class="form-control mainForm" placeholder="Masukkan alamat email" name="campaign_email_send_test" maxlength="100" type="text" value="" autocomplete="off"/>
+                                                <div class="btn-white-grey btn-action btn-send-test">Kirim Email</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pn-configuration content-configuration" style="background: #F5F5F5;border-radius: 8px;padding:24px 16px;">
+                                    <div class="content-configuration__section">
+                                        <div class="content-configuration__title">
+                                            PN Setting #01
+                                        </div>
+                                        <div class="content-configuration__fields">
+                                            <label for="description">Template Code</label>
+                                            <input class="form-control mainForm" required="required" placeholder="Masukkan template code" name="pn_name_id" maxlength="100" type="text" value="" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                    <div class="content-configuration__section">
+                                        <div class="content-configuration__section__label">
+                                            <strong>Push Notification Editor</strong>
+                                        </div>
+                                        <div class="content-configuration__fields">
+                                            <label for="description">Title</label>
+                                            <input class="form-control mainForm" required="required" placeholder="Masukkan judul Push Notification" name="pn_title" maxlength="100" type="text" value="" autocomplete="off"/>
+                                        </div>
+                                        <div class="content-configuration__fields banner">
+                                            <label for="description">Banner</label>
+                                            <div class="file-dragdrop" style="background: #F0FAFE; padding: 8px;min-height: 80px;margin-bottom: 4px;border-radius: 8px; border: 1px dashed #66CDF6;">
+                                                <label for="description">Drag & drop or <span>browse</span></label>
+                                                <input accept="image/*" type='file' id="imgInp" style="z-index: 2;" class="btn btn-default btn-file form-control editField">
+                                                <div class="file-thumbnail">
+                                                    <div style="display:flex; align-items:center">
+                                                        <img style="margin-left:15px;margin-right:10px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJlSURBVHgBtZbBbtNAEIZnNjkgUUjyAATzBFg9phK4tx5z5dQ0PEBbqZHgFOeCQolEX4DiNyA8Ac4lyq3mCYjDCziAKkBkhxknhDax4zh1fymx1zuebz07O7sICTLsWnFymbMQ6CkSGEBU/NdHCj0C7H09fddN8oOrAPqHOmR3R9wsJngZ8p+rcro1bDvDKJNcJKTx/FD/BhnlHv/uQLJkICYRVu/vbI+/9S+8RFD5pN4koPaagCUgh6haqGzDuH/RiwUJhENlw81lLcLmoAeNeo0n/Ayyk8DGDBtII0wG40XN0BP8BJJV2SpQW/RoaDuBkpaeqOYtQESSuZK1gMZRrUh5/EJJKRwjRPBQU4tjY2jAtxEm4VflJzlZjHpzyF3aldBIu3xyYPJlf8GsCJdgKYZYsIEWIeEzgMdRtpqQQRjdOfPmKKBjDFf+aki5UX/P4Tcj/fD85yGOAeD6b84P5J6zsguclcQvxEG4BtZW+CooWENSvzBHu4jYTQuZwx426h+IqBrTbY865624l9eGcHQUafLjTcielqXNIaEXhM+KQLkJZkuwNBCRQnJTLFi0FaieRr2fBgKzBRvWOh6xzSNvwm2Il8iIszfMOvVHnzExgIwl6092XbkPt4lg4P0sVcxfvP/vQYbiuTkenjruHBTC+t6gUDH5w9CCTEQtv+PM97drO+y477nZwKg16jj21SdLZwaBlXZMnwMsdStVVZ/OM71kSHuxL/IUxGH0Sk/Mj6SxxC8bkHBQmQFeqy145r+azkmEzWrJ+Q6+g6UVWnyA/F/pEQM+LflKkwv3wL1a/6L0F5mZEG0woXSYAAAAAElFTkSuQmCC">
+                                                        <img id="imgThumb" class="imgThumb" src="#" alt="your image" style="width:115px; height:60px" />
+                                                        <div class="imgName"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACqSURBVHgBjZLhDcIgEIXvSP/LCF3FDXQDGcEJuoITgBvoBrqCG7CBTAA+kh5pkdC+hHDHfXl3Adg5p4noRP96G2O8JAzQpZQuDdAz81FghTVSWyMMXvAZBeypwFugwLc9IGHWwzDHAckZu2+4PXIw1IUq1xIIqPPQ1FFxBHhVSoVlMcaoMdK0BAOgOy53BeZXg8FUt/5aa1ftcFZiheRD2/I8t8ifQnfA5w+PAkkTRnA2UQAAAABJRU5ErkJggg=="><span></span></div>
+                                                        <div class="imgBtn">Ubah Gambar</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            Banner size 670x340, Maximum file size 2 mb
+                                        </div>
+                                        <div class="content-configuration__section">
+                                            <div class="content-configuration__fields">
+                                                <label for="description">Description</label>
+                                                <div class="content-configuration__fields wysiwyg">
+                                                    <textarea class="body-email" id="pnwysiwyg1" name="body_email" autocomplete="off" rows="4">
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="content-configuration__section">
+                                            <div class="content-configuration__section__label">
+                                                <strong>Push Notification Sending Test</strong>
+                                            </div>
+                                            <div class="content-configuration__fields">
+                                                <label for="description">Alamat Email untuk Tes</label>
+                                                <input class="form-control mainForm" required="required" placeholder="Masukkan alamat email" name="pn_email_send_test" maxlength="100" type="text" value="" autocomplete="off"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-6"></div>
+</div>
+<!--########################### End Campaign First Form ###########################-->
+{% endblock %}
+
+{% block script_additional %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="//code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+    <script src="{% static 'default/js/jquery.serializejson.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <!-- Time Picker -->
+    <script src="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/zebra_datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/bootstrap/zebra_datepicker.min.css">
+    <script src="{% static 'ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+
+{#</script>#}
+{#komen script#}
+<script>
+{% block script_bottom_inside %}
+    $(document).ready(function() {
+        window.product_type = "{{ cohort_campaign.program_type }}"
+        //newform
+        function getImageSizeInBytes(imgURL) {
+            var request = new XMLHttpRequest();
+            request.open("HEAD", imgURL, false);
+            request.send(null);
+            var headerText = request.getAllResponseHeaders();
+            var re = /Content\-Length\s*:\s*(\d+)/i;
+            re.exec(headerText);
+            return parseInt(RegExp.$1);
+        }
+
+        $('.btn-financing-type').click(function(){
+            $('.btn-financing-type').removeClass('clicked');
+            $(this).addClass('clicked');
+
+            const id = $(this).text().toLocaleLowerCase();
+            const type = $(this).text()
+            $('.financing-type').removeClass('show');
+            $('.financing-type#'+id).addClass('show');
+            if (type == 'R4') {
+                window.product_type = type
+            } else {
+                window.product_type = ''
+            }
+        });
+
+        $('.btn-file.csv').change(function(){
+            const [file] = $(this).prop('files');
+            let btnFile = $(this);
+
+            if(file){
+                if(!file.type == 'text/csv'){
+                    swal("Error!", "Only csv file format allowed", "error");
+                }else{
+                    btnFile.parent().find('.file-thumbnail').addClass('uploaded');
+                    btnFile.parent().find('.imgName span').text(file.name);
+                }
+            }
+        });
+
+        $('.content-configuration .banner .btn-file').change(function(){
+            const [file] = $(this).prop('files');
+            let btnFile = $(this);
+
+            if (file) {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                img.onload = function() {
+                    if(img.width > 670 || img.height > 340){
+                        swal("Error!", "Maximum banner size is 670x340", "error");
+                    }else if ((file.size/1024000) > 2){
+                        swal("Error!", "Maximum file size is 2 mb", "error");
+                    }else{
+                        btnFile.parent().find('.file-thumbnail').addClass('uploaded');
+                        btnFile.parent().find('.imgThumb').attr('src',URL.createObjectURL(file));
+                        btnFile.parent().find('.imgName span').text(file.name);
+                    }
+                }
+            }
+        });
+
+        $('.file-thumbnail .imgBtn').click(function(){
+            $(this).parent().parent().parent().find('input.btn-file').trigger('click');
+        });
+
+        $('.tab-menu li').click(function(){
+            const index = $(this).parent().attr('index');
+            const menu = $(this).attr('menu');
+
+            if(!$(this).hasClass('active')){
+                $('.tab-menu li').removeClass('active');
+                $(this).addClass('active');
+                $('.tab-content-'+index+' .content-configuration').removeClass('active');
+                $('.tab-content-'+index+' .'+menu+'-configuration').addClass('active');
+            }
+        });
+
+        //wysiwyg
+        function initiateWysiwyg(el){
+            ClassicEditor
+                .create( document.querySelector(el), {
+                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'alignment', 'bulletedList', 'numberedList', 'blockQuote' ],
+                } )
+                .catch( error => {
+                    console.log( error );
+                } );
+        }
+        initiateWysiwyg('#emailwysiwyg1');
+        initiateWysiwyg('#pnwysiwyg1');
+
+        //field-input-button
+        $('.field-input-button input').on('input',function(){
+            if($(this).val().length > 0){
+                $(this).parent().find('.btn-action').addClass('active');
+            }else{
+                $(this).parent().find('.btn-action').removeClass('active');
+            }
+        });
+        $('.field-input-button .btn-save-whatsapp').click(function(){
+            $fieldInputButton = $(this).parent();
+            $max = $fieldInputButton.find('.whatsapp-hidden').length;
+
+            if($max < 3){
+                $val = $fieldInputButton.find('input').val();
+                $hidden = "<input type=hidden class='whatsapp-hidden' name='whatsapp[]' id='"+$val+"' value='"+$val+"'>";
+                $whatsapp = "<div class='whatsapp-item'>"+$val+"<span id='"+$val+"' class='whatsapp-remove'>X</span></div>";
+                if($max == 0){
+                    $fieldInputButton.parent().find('.whatsapp-preview').html('');
+                }
+                $fieldInputButton.append($hidden);
+                $fieldInputButton.parent().find('.whatsapp-preview').css('display','flex');
+                $fieldInputButton.parent().find('.whatsapp-preview').append($whatsapp);
+                $fieldInputButton.find('input').val('');
+                $(this).removeClass('active');
+            }else {
+                swal("Error!", "Max 3 number", "error");
+            }
+        });
+
+        $(document).on('click','.whatsapp-remove',function(){
+            $whatsappItem = $(this).parent();
+            $whatsappPreview = $(this).parent().parent();
+            $whatsappItem.remove();
+            $('#'+$(this).attr('id')).remove();
+            $max =  $whatsappPreview.parent().find('.whatsapp-hidden').length;
+            if($max == 0){
+                $whatsappPreview.css('display','block');
+                $whatsappPreview.html('Belum ada nomor whatsapp');
+            }
+        });
+        
+        $('#campaign_start_period_id').Zebra_DatePicker({
+            onSelect: function() {
+                $(this).change();
+                $('#campaign_start_period').val($(this).val());
+            },
+            format: 'Y-m-d H:i',
+            direction: true,
+            strict: true,
+            pair: $('#campaign_end_period_id')
+        });
+
+        $('#campaign_end_period_id').Zebra_DatePicker({
+            onSelect: function() {
+                $(this).change();
+                $('#campaign_end_period').val($(this).val());
+            },
+            format: 'Y-m-d H:i',
+            direction: 1
+        });
+
+        $('#campaign_name_id').change(function(e) {
+            $('#campaign_name').val($(this).val());
+        });
+
+        $('#btnDraft').click(function(e) {
+            validate_submit_form(e, false)
+        });
+
+        $('#btnSave').click(function(e) {
+            validate_submit_form(e, true)
+        })
+
+        function validate_submit_form(e, approval) {
+            metabase_link = $.trim($("#metabase_link_id").val())
+            if ($.trim($("#campaign_name_id").val()) == "") {
+                swal("Error!", "Campaign Name is Required", "error");
+            } else if (metabase_link != "" && isValidUrl($.trim($("#metabase_link_id").val())) != true) {
+                swal("Error!", "Invalid metabase link", "error");
+            } else {
+                submit_cohort_campaign_automation(e, approval)
+            }
+        }
+
+        function submit_cohort_campaign_automation(e, approval) {
+            e.preventDefault();
+            let csrftoken = '{{ csrf_token }}'
+            var formData = new FormData($("#campaign_automation_id")[0]);
+            formData.append("campaign_name", $.trim($("#campaign_name_id").val()).replaceAll(' ', '_').toLowerCase());
+            formData.append("principal_waiver_percentage", ($.trim($("#principal_waiver_id").val()) ? $.trim($("#principal_waiver_id").val()) : 0));
+            formData.append("interest_waiver_percentage", ($.trim($("#interest_waiver_id").val()) ? $.trim($("#interest_waiver_id").val()) : 0));
+            formData.append("late_fee_waiver_percentage", ($.trim($("#late_fee_waiver_id").val()) ? $.trim($("#late_fee_waiver_id").val()) : 0));
+            formData.append("program_type", window.product_type);
+            formData.append("metabase_link", $.trim($("#metabase_link_id").val()));
+            formData.append("start_date", $.trim($("#campaign_start_period_id").val()));
+            formData.append("end_date", $.trim($("#campaign_end_period_id").val()));
+            formData.append("is_edit", true);
+            formData.append("campaign_id", "{{ cohort_campaign.id }}");
+            // formData.append("csv_file", $("#upload_csv_file")[0].files[0]);
+            if (approval) {
+                formData.append("waiting_approval", true);
+            }
+
+            $.ajax({
+                url: "{%url 'cohort_campaign_automation:submit_cohort_campaign_automation' %}",
+                type: "POST",
+                headers:{'X-CSRFToken':csrftoken},
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                statusCode: {
+                    400: function(json) {
+                        swal("", json['responseJSON'].message, "warning");
+                    },
+                },
+                success: function(json) {
+                    if(json.status == 'success') {
+                        swal({
+                            title: "",
+                            text: json.message,
+                            type: "success"
+                        }, function() {
+                            $(location).attr('href', "{% url 'cohort_campaign_automation:cohort_campaign_automation_list' %}" );
+                        });
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    swal("", err, "error");
+                }
+            });
+        }
+
+        function isValidUrl(url) {
+            try {
+                new URL(url)
+                return true
+            } catch {
+                return false
+            }
+        }
+
+        $('#form_campaign_automation input').on('input', function(e) {
+            if ($.trim($("#campaign_name_id").val()) != "" &&
+                $.trim($("#campaign_start_period_id").val()) != "" &&
+                $.trim($("#campaign_end_period_id").val()) != "" &&
+                // $.trim($("#metabase_link_id").val()) != "" &&
+                $.trim($("#principal_waiver_id").val()) != "" &&
+                $.trim($("#interest_waiver_id").val()) != "" &&
+                $.trim($("#late_fee_waiver_id").val()) != ""
+                // $.trim($("#upload_csv_file").val()) != ""
+            ){
+                $('#btnSave').addClass('active');
+            }else{
+                $('#btnSave').removeClass('active');
+            }
+        });
+
+        // START RELOAD FUNCTION
+        function Refresh() {
+            window.parent.location = window.parent.location.href;
+        }
+    });
+    // END RELOAD FUNCTION
+    $(document).ready(function() {
+        if (localStorage.length > 0 ) {
+            localStorage.clear();
+        }
+    })
+{% endblock %}
+{# </script>#}

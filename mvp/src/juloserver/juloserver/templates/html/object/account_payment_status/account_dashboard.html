@@ -1,0 +1,491 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load unit utils %}
+{% load model template default unit %}
+{% block breadcrumb_title %}{% endblock %}
+{% block list_title %}{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+{% block css_inside %}
+            .scroll-top-wrapper{display:none}
+            .white-box{
+                background:#edf1f5!important;
+                padding:0px!important;
+            }
+            .white-box .text-muted{margin:0px!important;}
+            .card-basic{
+                background: #fff;
+                box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.08);
+                padding: 15px;
+                border-radius: 8px;
+                color: #797979;
+            }
+            .card-container{
+                padding: 25px 25px 0;
+            }
+            .card-basic .bordered-left{
+                border-left: 1px solid #969696;
+                padding-left: 15px;
+            }
+            .horizontal-table tr td{
+                height: 3.5rem;
+                font-weight: 300;
+            }
+            .horizontal-table tr td.text-bold  {
+                font-weight: 600;
+            }
+            .horizontal-table tr td:first-child{
+                padding-right: 60px;
+            }
+            .card-basic .card-title-xs{
+                display: block;
+                font-size: 16px;
+                height: 80px;
+            }
+            .card-basic .card-content-text{
+                font-size: 24px;
+                font-weight: 600;
+            }
+            .info-table thead{
+                background: #1ca9f3;
+
+            }
+            .info-table thead tr th{
+                color: #fff;
+                padding: 15px;
+            }
+            .info-table{
+                background: #fff;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            .info-table tbody tr td{
+                padding: 15px;
+                border-top: none;
+                font-weight: 300;
+            }
+            .info-table tbody tr th{
+                padding: 15px;
+            }
+            .subinfo-table tbody tr td{
+                padding: 15px 0;
+            }
+            .info-table tbody tr td.text-bold, .subinfo-table tbody tr td.text-bold{
+                font-weight: 600;
+            }
+            .info-table tbody tr:nth-child(odd){
+                background: #f9fafc;
+            }
+            .row-flex {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display:         flex;
+                flex-wrap: wrap;
+            }
+            .bubble-text{
+                display: block;
+                border-radius: 50px;
+                padding: 5px 20px;
+                color: #fff;
+                margin-bottom: 10px;
+                width: fit-content;
+            }
+            .bubble-text.purple{
+                background: #ab8ce4;
+            }
+            .bubble-text.orange{
+                background: #fb9677;
+            }
+            .bubble-text.text-bold{
+                font-weight: 600;
+            }
+            .white-table-wrapper {
+                background: #fff;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                padding: 0;
+            }
+            .h-100{
+                height: 100%;
+            }
+            .row-flex > [class*='col-'] {
+                display: flex;
+                flex-direction: column;
+            }
+            .col-xs-5ths,
+            .col-sm-5ths,
+            .col-md-5ths,
+            .col-lg-5ths {
+                position: relative;
+                min-height: 1px;
+                padding-left: 7.5px;
+                padding-right: 7.5px;
+                margin-right:25px;
+            }
+
+            .col-xs-5ths {
+                width: 15%;
+                float: left;
+            }
+
+            @media (min-width: 768px) {
+                .col-sm-5ths {
+                    width: 15%;
+                    float: left;
+                }
+            }
+
+            @media (min-width: 992px) {
+                .col-md-5ths {
+                    width: 15%;
+                    float: left;
+                }
+            }
+
+            @media (min-width: 1200px) {
+                .col-lg-5ths {
+                    width: 15%;
+                    float: left;
+                }
+            }
+{% endblock %}
+{% block content-list %}
+ <!-- Add this for new UI-->
+                <div class="row card-container">
+                    <div class="col-lg-12">
+                        <div class="card card-basic">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <table class="horizontal-table">
+                                        <tr>
+                                            <td>Account ID</td>
+                                            <td class="text-bold">: {{ account.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Monthly installment Amount </td>
+                                            <td class="text-bold">: {{ total_monthly_installment|f_rupiahs:"no"|safe }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-4 bordered-left">
+                                    <table class="horizontal-table">
+                                        <tr>
+                                            <td>Name</td>
+                                            <td class="text-bold">: {{ application.fullname}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td class="text-bold">: {{ application.email}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-4 bordered-left">
+                                    <table class="horizontal-table">
+                                        <tr>
+                                            <td>Status</td>
+                                            <td class="text-bold">: {{ account.status}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gender</td>
+                                            <td class="text-bold">: {{ application.gender}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row card-container">
+                    <div class="col-md-5ths">
+                        <div class="card card-basic">
+                            <span class="card-title-xs">Loan Limit</span>
+                            <span class="card-content-text">{{ account_limit.set_limit|f_rupiahs:"no"|safe}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-5ths">
+                        <div class="card card-basic">
+                            <span class="card-title-xs">Limit Terpakai </span>
+                            <span class="card-content-text">{{ account_limit.used_limit|f_rupiahs:"no"|safe}}</span>
+                        </div>
+                    </div>
+                     <div class="col-md-5ths">
+                        <div class="card card-basic">
+                            <span class="card-title-xs">Limit Tersedia </span>
+                            <span class="card-content-text">{{ account_limit.available_limit|f_rupiahs:"no"|safe}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-5ths">
+                        <div class="card card-basic">
+                            <span class="card-title-xs">Jumlah Loan Aktif</span>
+                            <span class="card-content-text"><a href="{% url 'account_payment_status:list' 'all'  %}?&search_q={{account.id}}&filter_category=Account ID" target="_blank">{{ active_loans_count}}<a></a></span>
+                        </div>
+                    </div>
+                    <div class="col-md-5ths">
+                        <div class="card card-basic">
+                            <span class="card-title-xs">Total Outstanding loan amount</span>
+                            <span class="card-content-text">{{total_outstanding_due_amount|f_rupiahs:"no"|safe}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-5ths">
+                        <div class="card card-basic">
+                            <span class="card-title-xs">Installment Overdue</span>
+                            <span class="card-content-text">{{ total_overdue_amount|f_rupiahs:"no"|safe }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-flex card-container">
+
+                        <div class="col-md-6">
+                            <div class="white-table-wrapper  h-100">
+                                <table class="info-table table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Informasi Customer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="col-md-4">Paid Loan Amount</td>
+                                            <td class="text-bold">: {{sum_of_paid_amount|f_rupiahs:"-"|safe}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Last Paid Date</td>
+                                            <td class="text-bold">: {{ last_paid_date|default:'-'|safe}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Company Name</td>
+                                            <td class="text-bold">: {{ application.company_name|default:"-"|safe}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Company Phone Number</td>
+                                            <td class="text-bold">: {{ application.company_phone_number|default:"-"|safe}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer Job Position</td>
+                                            <td class="text-bold">: {{ application.job_description|default:"-"|safe}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer job unit</td>
+                                            <td class="text-bold">: {{ application.job_type|default:"-"|safe}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer income stated</td>
+                                            <td class="text-bold">: {{application_original.monthly_income|f_rupiahs:"no"|safe}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer income verified</td>
+                                            <td class="text-bold">: {{application.monthly_income|f_rupiahs:"no"|safe}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="white-table-wrapper h-100">
+                                <table class="info-table table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Overdue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for bucket_key, overdue_data in over_due_bucket_data.items %}
+                                        <tr>
+                                            <td class="col-md-5">Overdue Amount in {{ overdue_data.in_dpd }} (Bucket {{ bucket_key }})</td>
+                                            <td class="text-bold">: {{ overdue_data.overdue_amount|f_rupiahs:"default-0"|safe}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                </div>
+                <div class="row card-container" id="slim_history_note">
+
+                    <ul class="nav nav-tabs customtab tabs">
+
+                        <li class="active tab"><a href="#skip_trace_history" data-toggle="tab" title="Application Note History">
+                          <span class="hidden-xs">Skiptrace History</span></a>
+                        </li>
+                         <li class=" tab">
+                          <a href="#app_status_history" data-toggle="tab"> <span class="visible-xs" title="Status History and Notes History">
+                          <i class="fa fa-home"></i></span> <span class="hidden-xs">Status History and Notes History</span> </a>
+                        </li>
+
+
+                     <div class="tab-content pmt_event">
+                       <!-- Tab skiptrace history -->
+                        <div class="tab-pane active" id="skip_trace_history">
+                            <table class="info-table table">
+                                <thead>
+                                    <tr>
+                                        <th>Waktu/Status </th>
+                                        <th>Content / Catatan</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    {%  for obj in skiptrace_history_list %}
+                                      {%if obj.call_result.id != 1 %}
+                                         <tr class="success">
+                                          <td>
+                                            <label class="label label-warning m-b-10">
+                                              {{ obj.cdate|date:"d M Y H:i:s" }}
+                                            </label><br>
+                                            <label class="label label-danger m-b-10">
+                                              Action
+                                            </label>
+                                          </td>
+                                          <td>
+                                            <strong>Agent :</strong> <code>{{ obj.agent_name|default:'-'|safe }}</code><br/>
+                                            <strong>{{ obj.call_result.name|default:'-'|safe }}</strong><br/>
+                                            {%if obj.callback_time and obj.call_result.name == 'RPC - Call Back' %}
+                                              <strong>Call Back Time :</strong> {{ obj.callback_time|default:'-'|safe }}<br/>
+                                            {% endif %}
+                                            <strong>Phone :</strong> {{ obj.skiptrace.phone_number|no_hp|default:'-'|safe }},
+                                            <strong>Source :</strong> {{ obj.skiptrace.contact_source|default:'-'|safe }}<br/>
+                                            <strong>App-Id :</strong> {{ obj.application.id|default:'-'|safe }},
+                                            {%if obj.account_payment %}
+                                            <strong>Acc-id:</strong> {{ obj.account_payment.account.id|default:'-'|safe }},
+                                            <strong>Acc-pmt-id :</strong> {{ obj.account_payment.id|default:'-'|safe }}<br/>
+                                            {% endif %}
+
+                                            <strong>Start :</strong> {{ obj.start_ts|date:"d M Y H:i:s"|safe }},
+                                            <strong>End :</strong> {{ obj.end_ts|date:"d M Y H:i:s"|safe }}<br/>
+                                            {%if obj.non_payment_reason %}
+                                              <strong>Non Payment Reason :</strong> {{ obj.non_payment_reason|default:'-'|safe }}<br/>
+                                            {% endif %}
+                                          </td>
+                                        </tr>
+                                      {% endif %}
+
+                                    {% empty %}
+                                        <tr>
+                                          <td colspan="2">
+                                            <span> Tidak ada Data  </span>
+                                          </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    <!-- Tab payment details -->
+                    <div class="tab-pane" id="app_status_history">
+
+                        <table class="info-table table">
+                        <thead>
+                            <tr>
+                                <th>Waktu/Status </th>
+                                <th>Content / Catatan</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+
+                            {% for his_note_obj in history_note_list %}
+                                    {%if his_note_obj.type_data == 'Notes' %}
+                                       <tr class="success">
+                                        <td>
+                                          <label class="label label-warning">
+                                            {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                                          </label><br/>
+                                           <label class="label label-danger">
+                                            {{ his_note_obj.type_data }}
+                                          </label>
+                                            <label class="label label-info">
+                                            Act-Pmt ID:{{ his_note_obj.account_payment_id }}
+                                          </label>
+                                        </td>
+
+                                        <td>
+                                          Agent: <code>{{ his_note_obj.added_by|default:'-'|safe }}</code><br/>
+                                          <strong>Catatan:</strong>
+                                          {{ his_note_obj.note_text|default:'-'|linebreaks|escape }}
+                                        </td>
+                                      </tr>
+                                    {% elif his_note_obj.type_data == 'Account Assignment Change' %}
+                                       <tr class="success">
+                                        <td>
+                                          <label class="label label-warning">
+                                            {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                                          </label><br/>
+                                          <label class="label label-danger">
+                                            {{ his_note_obj.type_data }}
+                                          </label>
+                                            <label class="label label-info">
+                                            Act-Pmt ID:{{ his_note_obj.account_payment_id }}
+                                          </label>
+                                        </td>
+
+                                        <td>
+                                          <strong>Assignment Reason: </strong> {{ his_note_obj.assignment_reason }} <br/>
+                                          <strong>New Assignment: </strong>
+                                            {% if not his_note_obj.new_assignment %}
+                                                Inhouse
+                                            {% else %}
+                                                {{ his_note_obj.new_assignment }}
+                                            {% endif %}
+                                            <br/>
+                                            <strong>Old Assignment: </strong>
+                                                {% if not his_note_obj.old_assignment %}
+                                                    Inhouse
+                                                {% else %}
+                                                    {{ his_note_obj.old_assignment }}
+                                                {% endif %}
+                                                <br/>
+                                        </td>
+                                      </tr>
+                                    {% else %}
+                                      {%if his_note_obj.change_reason == 'system_triggered' %}
+                                        <!-- do nothing -->
+                                      {% else %}
+                                        <tr class="warning">
+                                          <td>
+                                            <label class="label label-success">
+                                              {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                                            </label><br/>
+                                            <label class="label label-purple">
+                                              {{ his_note_obj.type_data }}
+                                            </label>
+                                              <label class="label label-info">
+                                            Act-Pmt ID:{{ his_note_obj.account_payment_id }}
+                                          </label>
+                                          </td>
+                                          <td>
+                                            Agent: <code>{{ his_note_obj.changed_by|default:'-'|safe }}</code><br/>
+                                            Status: <label class="label label-info">
+                                              {{ his_note_obj.status_old|safe }}
+                                            </label>
+                                            &nbsp;&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                                            <label class="label label-success">
+                                              {{ his_note_obj.status_new|safe }}
+                                            </label>
+                                            <br/>
+                                            <strong>Alasan :</strong>
+                                            {{ his_note_obj.change_reason|default:'-'|linebreaks|escape|safe }}
+                                          </td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endif %}
+                                {% empty %}
+                                    <tr>
+                                      <td colspan="2">
+                                        <span> Tidak ada Data </span>
+                                      </td>
+                                    </tr>
+                                {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+<!-- end of new UI -->
+{% endblock %}
+{% block script_bottom_inside %}
+  $('#slim_history_note').slimScroll({
+      // position: 'left',
+      height: '450px',
+      railVisible: true,
+      alwaysVisible: true
+  });
+{% endblock %}

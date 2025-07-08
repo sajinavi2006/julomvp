@@ -1,0 +1,69 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Nama Lengkap</strong> <br>
+    <p class="text-muted">{{object.fullname|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Tgl. Lahir</strong> <br>
+    <p class="text-muted">
+      {{object.dob|date:"d M Y"|safe}} - Usia:  
+      {{object.dob|age|safe}} Tahun
+    </p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Email</strong> <br>
+    <p class="text-muted">{{object.email|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Gender</strong> <br>
+    <p class="text-muted">{{object.gender|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6 col-xs-6 b-r"> <strong>Alamat Lengkap</strong> <br>
+    <p class="text-muted">
+      {{ object.address_street_num }} <br/>
+      {{ object.address_kecamatan }} -
+      {{ object.address_kelurahan }} <br/>
+      {{ object.address_kabupaten }} -
+      {{ object.address_provinsi }}  <br/>
+      {{ object.address_kodepos }} 
+    </p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>No. HP (1)</strong> <br>
+    <p class="text-muted">{{object.mobile_phone_1|no_hp|default:"-"|safe}}</p>
+    <br/>
+    <strong>Ada WA (1)</strong> <br>
+    <p class="text-muted">{{object.has_whatsapp_1|yesno:"Ya, Tidak"|safe}}</p>
+    </div>
+  <div class="col-md-3 col-xs-6 b-r"><strong>No. HP (2)</strong> <br>
+    <p class="text-muted">{{object.mobile_phone_2|no_hp|default:"-"|safe}}</p>
+    <br/>
+    <strong>Ada WA (2)</strong> <br>
+    <p class="text-muted">{{object.has_whatsapp_2|yesno:"Ya, Tidak"|safe}}</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6 col-xs-6 b-r"> <strong>Instagram Username</strong> <br>
+    <p class="text-muted">{{object.instagram_username|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>HP Milik Sendiri</strong> <br>
+    <p class="text-muted">{{object.is_own_phone|yesno:"Ya, Tidak"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>No. KTP</strong> <br>
+    <p class="text-muted">{{object.ktp|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6 col-xs-6"> <strong>Twitter Username</strong> <br>
+    <p class="text-muted">{{object.twitter_username|default:"-"|safe}}</p>
+  </div>
+   <div class="col-md-3 col-xs-6 b-r"> <strong>Android Device</strong> <br>
+    <p class="text-muted">{{ object.device|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Pin BBM</strong> <br>
+    <p class="text-muted">{{object.bbm_pin|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>

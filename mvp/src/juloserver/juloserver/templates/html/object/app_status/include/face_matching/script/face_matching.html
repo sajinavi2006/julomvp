@@ -1,0 +1,372 @@
+{% load static from staticfiles %}
+<script type="text/javascript">
+  var is_active_liveness_x_ktp;
+  var is_active_liveness_x_selfie;
+  var liveness_value;
+
+  function get_face_liveness_check_status() {
+    var csrftoken = getCookie("csrftoken");
+    $.ajax({
+      url: "{%url 'face_recognition:face-matching' %}",
+      type: "GET",
+      async: false,
+      data: {
+        application_id: "{{app_obj.id}}",
+      },
+      success: function (json) {
+        liveness_value = json.data;
+        is_active_liveness_x_ktp =
+          liveness_value.selfie_to_ktp.is_feature_active;
+        is_active_liveness_x_selfie =
+          liveness_value.selfie_to_liveness.is_feature_active;
+
+        var wrapperLivenessXKTP = document.getElementById(
+          "liveness_ktp_anchor"
+        );
+        var wrapperLivenessXSelfie = document.getElementById(
+          "liveness_selfie_anchor"
+        );
+        var tabModalLivenessXKTP = document.getElementById(
+          "modal_liveness_x_ktp_tab"
+        );
+        var tabModalLivenessXSelfie = document.getElementById(
+          "modal_liveness_x_selfie_tab"
+        );
+
+        if (liveness_value.is_feature_disabled) {
+          document.getElementById("face-matching-wrapper").style.display =
+            "none";
+        } else {
+          if (!is_active_liveness_x_ktp) {
+            wrapperLivenessXKTP.style.display = "none";
+            tabModalLivenessXKTP.style.display = "none";
+          } 
+          if (!is_active_liveness_x_selfie) {
+            wrapperLivenessXSelfie.style.display = "none";
+            tabModalLivenessXSelfie.style.display = "none";
+          }
+          if (liveness_value.selfie_to_ktp.status != 1) {
+            tabModalLivenessXKTP.style.display = "none";
+          }
+          if (liveness_value.selfie_to_liveness.status != 1) {
+            tabModalLivenessXSelfie.style.display = "none";
+          }
+          if (!is_active_liveness_x_ktp && !is_active_liveness_x_selfie) {
+            document.getElementById("face-matching-wrapper").style.display =
+            "none";
+          }
+          updateBandages(liveness_value);
+        }
+      },
+      error: function (xhr, errmsg, err) {
+        console.log(xhr.status + ": " + xhr.responseText);
+        document.getElementById("face-matching-wrapper").style.display = "none";
+      },
+    });
+  }
+
+  function updateBandages(liveness_value) {
+    var liveness_x_ktp = liveness_value.selfie_to_ktp.status;
+    var liveness_x_selfie = liveness_value.selfie_to_liveness.status;
+    var is_agent_verified_liveness_x_ktp =
+      liveness_value.selfie_to_ktp.is_agent_verified;
+    var is_agent_verified_liveness_x_selfie =
+      liveness_value.selfie_to_liveness.is_agent_verified;
+
+    if (is_agent_verified_liveness_x_ktp) {
+      updateAnchor("liveness_ktp_anchor", 2);
+    } else {
+      updateAnchor("liveness_ktp_anchor", liveness_x_ktp);
+    }
+
+    if (is_agent_verified_liveness_x_selfie) {
+      updateAnchor("liveness_selfie_anchor", 2);
+    } else {
+      updateAnchor("liveness_selfie_anchor", liveness_x_selfie);
+    }
+  }
+
+  function updateAnchor(anchorId, value) {
+    var anchor = $("#" + anchorId);
+    var icon = anchor.find("i");
+    var functionName;
+    var ktpStatusText = document.getElementById("liveness_ktp_text");
+    var selfieStatusText = document.getElementById("liveness_selfie_text");
+
+    if (value === 0 || value === 4) {
+      if (anchorId == "liveness_ktp_anchor") {
+        ktpStatusText.textContent += "Mencocokkan Selfie dan KTP";
+      } else {
+        selfieStatusText.textContent += "Mencocokkan Selfie dan Liveness";
+      }
+      anchor.removeClass().addClass("font-warning-30 badges warning mr-8");
+      anchor.attr("matching", "not-found");
+      icon.removeClass().addClass("fa fa-clock-o font-warning-30 pr-4");
+    } else if (value === 2) {
+      if (anchorId == "liveness_ktp_anchor") {
+        ktpStatusText.textContent += "Selfie dan KTP";
+      } else {
+        selfieStatusText.textContent += "Selfie dan Liveness";
+      }
+      anchor.removeClass().addClass("font-success-30 badges not-found mr-8");
+      anchor.attr("matching", "not-found");
+      icon.removeClass().addClass("fa fa-check-circle font-success-30 pr-4");
+    } else if (value === 3) {
+      if (anchorId == "liveness_ktp_anchor") {
+        ktpStatusText.textContent += "Pencocokan wajah otomatis gagal";
+      } else {
+        selfieStatusText.textContent += "Pencocokan wajah otomatis gagal";
+      }
+      anchor.removeClass().addClass("font-error-30 badges found mr-8");
+      anchor.attr("matching", "not-found");
+      icon.removeClass().addClass("fa fa-exclamation-circle font-error-30 pr-4");
+      anchor.attr("onclick", "clickStatusSkipped()");
+    } else if (value === 1) {
+      if (anchorId == "liveness_ktp_anchor") {
+        ktpStatusText.textContent += "Selfie dan KTP tidak cocok";
+      } else {
+        selfieStatusText.textContent += "Selfie dan Liveness tidak cocok";
+      }
+      anchor.removeClass().addClass("font-error-30 badges found mr-8");
+      if (anchorId == "liveness_ktp_anchor" && is_active_liveness_x_ktp) {
+        anchor.attr("matching", "found");
+      } else if (anchorId == "liveness_selfie_anchor" && is_active_liveness_x_selfie) {
+        anchor.attr("matching", "found");
+      } else {
+        anchor.attr("matching", "not-found");
+      }
+      icon.removeClass().addClass("fa fa-exclamation-circle font-error-30 pr-4");
+    }
+
+    if (value === 1) {
+      functionName =
+        anchorId === "liveness_ktp_anchor" ? "LivenessXKTP" : "LivenessXSelfie";
+      anchor.attr(
+        "onclick",
+        `$("#modal_liveness").modal('show'); ${functionName}();`
+      );
+      anchor.attr("data-active", anchorId);
+    } else {
+      anchor.attr("href", "#");
+    }
+  }
+
+  function LivenessXKTP() {
+    document
+      .getElementById("modal_liveness_x_ktp_tab")
+      .setAttribute("class", "tab active");
+    document
+      .getElementById("modal_liveness_x_selfie_tab")
+      .setAttribute("class", "tab");
+    document
+      .getElementById("modal_liveness_x_ktp_match")
+      .setAttribute("style", "display:block");
+    document
+      .getElementById("modal_liveness_x_selfie_match")
+      .setAttribute("style", "display:none");
+    document
+      .getElementById("modal_liveness_x_ktp_button")
+      .setAttribute("style", "display:inline-block");
+    document
+      .getElementById("modal_liveness_x_selfie_button")
+      .setAttribute("style", "display:none");
+  }
+
+  function LivenessXSelfie() {
+    document
+      .getElementById("modal_liveness_x_ktp_tab")
+      .setAttribute("class", "tab");
+    document
+      .getElementById("modal_liveness_x_selfie_tab")
+      .setAttribute("class", "tab active");
+    document
+      .getElementById("modal_liveness_x_ktp_match")
+      .setAttribute("style", "display:none");
+    document
+      .getElementById("modal_liveness_x_selfie_match")
+      .setAttribute("style", "display:block");
+    document
+      .getElementById("modal_liveness_x_ktp_button")
+      .setAttribute("style", "display:none");
+    document
+      .getElementById("modal_liveness_x_selfie_button")
+      .setAttribute("style", "display:inline-block");
+  }
+
+  function open_confirm_modal(process) {
+    $("#modal_liveness").modal("hide");
+    $("#response_post_face_matching").modal("show");
+
+    if (process === "liveness_x_ktp") {
+      $("#footer_modal_confirm_ktp").show();
+      $("#footer_modal_confirm_selfie").hide();
+    } else {
+      $("#footer_modal_confirm_ktp").hide();
+      $("#footer_modal_confirm_selfie").show();
+    }
+  }
+
+  function post_face_match(process) {
+    get_face_liveness_check_status();
+    var csrftoken = getCookie("csrftoken");
+    var newStatus;
+    var checkboxMatch;
+    var processInt;
+    var liveness_value_int = 1;
+
+    if (is_active_liveness_x_ktp && liveness_value.selfie_to_ktp.status == 1) {
+      processInt = 3;
+      checkboxMatch = document.getElementById("checkbox-match-ktp").checked;
+      newStatus = liveness_value_int && checkboxMatch ? 2 : 1;
+      run_post_request(processInt, newStatus);
+    } if (is_active_liveness_x_selfie && liveness_value.selfie_to_liveness.status == 1) {
+      processInt = 4;
+      checkboxMatch = document.getElementById("checkbox-match-selfie").checked;
+      newStatus = liveness_value_int && checkboxMatch ? 2 : 1;
+      run_post_request(processInt, newStatus);
+    }
+  }
+
+  function run_post_request(processInt, newStatus) {
+    run_ajax_request(processInt, newStatus);
+  }
+
+  function run_ajax_request(processInt, newStatus) {
+    var ktpStatusText = document.getElementById("liveness_ktp_text");
+    var selfieStatusText = document.getElementById("liveness_selfie_text");
+    $.ajax({
+      url: "{%url 'face_recognition:face-matching' %}",
+      type: "POST",
+      async: false,
+      data: {
+        application_id: `{{app_obj.id}}`,
+        process: processInt,
+        new_status: newStatus,
+        is_agent_verified: true,
+        remarks: "",
+      },
+      success: function (json) {
+        if (ktpStatusText) {
+          ktpStatusText.replaceWith("Loading...");
+        }
+        if (selfieStatusText) {
+          selfieStatusText.replaceWith("Loading...");
+        }
+        if (json.success) {
+          window.location.reload(true);
+        } else {
+          toast_danger(
+            "Error!",
+            "Error saat melakukan update, silahkan coba kembali!"
+          );
+          $("#response_post_face_matching").modal("hide");
+        }
+      },
+      error: function (xhr, errmsg, err) {
+        toast_danger(
+          "Error!",
+          "Error saat melakukan update, silahkan coba kembali!"
+        );
+      },
+    });
+  }
+  function clickStatusSkipped() {
+    $("#clickStatusSkipped").modal("show");
+  };
+</script>
+
+<!-- /.modal face matching confirm modal-->
+<div
+  id="response_post_face_matching"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
+  aria-hidden="true"
+  style="display: none"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-success">
+        <h4 class="modal-title semi-bold">Konfirmasi Face Matching</h4>
+      </div>
+      <div class="modal-body">Apakah kamu ingin mengirim hasil tersebut?</div>
+      <div
+        class="modal-footer"
+        id="footer_modal_confirm_ktp"
+        style="display: none"
+      >
+        <button
+          type="button"
+          class="btn btn-default waves-effect radius-8 px-16"
+          data-dismiss="modal"
+          onclick="$('#modal_liveness').modal('show');LivenessXKTP()"
+        >
+          Kembali
+        </button>
+        <button
+          type="button"
+          class="btn btn-success waves-effect radius-8 px-16"
+          id="modal_liveness_x_ktp_confirm_button"
+          onclick="post_face_match();"
+        >
+          Yakin
+        </button>
+      </div>
+      <div
+        class="modal-footer"
+        id="footer_modal_confirm_selfie"
+        style="display: none"
+      >
+        <button
+          type="button"
+          class="btn btn-default waves-effect radius-8 px-16"
+          data-dismiss="modal"
+          onclick="$('#modal_liveness').modal('show');LivenessXSelfie()"
+        >
+          Kembali
+        </button>
+        <button
+          type="button"
+          class="btn btn-success waves-effect radius-8 px-16"
+          id="modal_liveness_x_selfie_confirm_button"
+          onclick="post_face_match();"
+        >
+          Yakin
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /.modal face matching for status 3 (skipped)-->
+<div
+  id="clickStatusSkipped"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
+  aria-hidden="true"
+  style="display: none"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-warning">
+        <h4 class="modal-title semi-bold">Gagal Melakukan Pencocokan Wajah Otomatis</h4>
+      </div>
+      <div class="modal-body">Harap cek kecocokan wajah secara manual dan ganti statusnya dengan klik Ubah Status di bagian bawah layar, ya.</div>
+      <div
+        class="modal-footer"
+      >
+        <button
+          type="button"
+          class="btn btn-success waves-effect radius-8 px-16"
+          data-dismiss="modal"
+          onclick="$('#clickStatusSkipped').modal('hide');"
+        >
+          Mengerti
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

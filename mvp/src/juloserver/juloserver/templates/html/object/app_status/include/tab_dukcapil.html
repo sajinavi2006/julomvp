@@ -1,0 +1,250 @@
+{% load unit %}
+{% load static %}
+{% load checkusergroup from common %}
+<div style="width:800px;height:280px;">
+  <img style="max-width: 500px; max-height: 250px; margin: auto; display: block;" src="{{ktp_self_image_url}}">
+</div>
+{% if not dukcapil_response or dukcapil_response.errors != None %}
+<div class="row">
+  <div class="col-md-12">
+    <p><b>
+      Dukcapil Error:
+      <span style="color: red">
+      {% if dukcapil_response %}
+        ({{ dukcapil_response.errors }}) {{ dukcapil_response.message }}
+      {% else %}
+        Belum terverifikasi ke server Dukcapil.
+      {% endif %}
+      </span>
+    </b></p>
+  </div>
+</div>
+{% endif %}
+
+{% if dukcapil_response %}
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+        </div>
+        <div class="col-xs-4">
+          <b>Database</b>
+        </div>
+        <div class="col-xs-4">
+          <b>Dukcapil</b>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Nama Lengkap :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.fullname|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.name == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.name == False  %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Tempat Lahir :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.birth_place|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.birthplace == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.birthplace == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Tanggal Lahir :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.dob|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.birthdate == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.birthdate == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Jenis Kelamin :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.gender|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.gender == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.gender == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Status Kawin :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.marital_status|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.marital_status == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.marital_status == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Jenis Pekerjaan :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.job_type|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.job_type == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.job_type == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Alamat :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.address_street_num|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.address_street == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.address_street == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Kelurahan :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.address_kelurahan|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.address_kelurahan == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.address_kelurahan == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Kecamatan :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.address_kecamatan|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.address_kecamatan == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.address_kecamatan == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Kabupaten :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.address_kabupaten|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.address_kabupaten == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.address_kabupaten == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Provinsi :</b>
+        </div>
+        <div class="col-xs-4">
+          {{ object.address_provinsi|default:"-"|safe}}
+        </div>
+        <div class="col-xs-4">
+          {% if dukcapil_response.address_provinsi == True %}
+          <span style="color: green;"><b>Sesuai</b></span>
+          {% elif dukcapil_response.address_provinsi == False %}
+          <span style="color: orange;"><b>Tidak Sesuai</b> <img height="20px" src="{% static 'images/dukcapil/alert_yellow.png' %}"> </span>
+          {% else %}
+          <span style="color: red;"><b>Tidak Ditemukan</b> <img height="20px" src="{% static 'images/dukcapil/alert_red.png' %}"></span>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+{% endif %}

@@ -1,0 +1,1 @@
+Ada yg coba terhubung dgn akunmu. Jika itu kamu, masukkan OTP ini {{otp_token}}. Jgn berikan OTP pada siapa pun, termasuk pihak JULO. Terima kasih.

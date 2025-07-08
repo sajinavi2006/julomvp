@@ -1,0 +1,1175 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+{% load unit %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+
+        .div_loading {
+            margin-left: 30%;
+        }
+
+        .chart canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .chart span {
+            color: #555;
+            display: block;
+            line-height: 220px;
+            text-align: center;
+            width: 220px;
+            font-family: sans-serif;
+            font-size: 40px;
+            font-weight: 100;
+            margin-left: 5px;
+        }
+
+        .chart input {
+            width: 200px;
+        }
+
+        .chart span {
+
+        }
+
+        .glyphicon-refresh-animate {
+            -animation: spin .7s infinite linear;
+            -webkit-animation: spin2 .7s infinite linear;
+        }
+
+        @-webkit-keyframes spin2 {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: scale(1) rotate(0deg);
+            }
+            to {
+                transform: scale(1) rotate(360deg);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">FIELD COLLECTION AUTOMATION</h3><br/>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalFilterDownload" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 500px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Pilih Filter untuk download sent to dialer
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">  
+                        <div class="col-md-12">
+                            <label class="col-md-12 col-sm-12">Bucket</label>
+                            <select class="form-control" id="filter_bucket" name="filter_bucket">
+                                <option value="" selected>----</option>
+                                {% for bucket in buckets %}
+                                    <option value="{{ bucket }}">{{ bucket }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="col-md-12 col-sm-12">Account ids</label>
+                            <input class="form-control" id="filter_account_ids"
+                                   name="filter_account_ids" type="text"/>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="col-md-12 col-sm-12">Last agents username</label>
+                            <input class="form-control" id="filter_agent_username"
+                                   name="filter_agent_username" type="text"/>
+                        </div>
+                        <div class="col-md-12" style="margin-bottom: 10px;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="col-md-12 col-sm-12">Cdate</label>
+                                    <select class="form-control" id="filter_cdate_mode" name="filter_cdate_mode">
+                                        <option value="" selected>----</option>
+                                        <option value="between">Between</option>
+                                        <option value="today">Today</option>
+                                        <option value="exact">Exact</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 div_cdate_from" style="display: none;">
+                                    <label class="col-md-12 col-sm-12">Cdate From</label>
+                                    <div class="input-group m-t-10 ">
+                                        <span class="input-group-addon btn_calendar" input_name="filter_cdate_1"><i
+                                                class="fa fa-calendar"></i></span>
+                                        <input class="form-control" id="filter_cdate_1"
+                                               name="filter_cdate_1" type="text"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 div_cdate_until" style="display: none;">
+                                    <label class="col-md-12 col-sm-12">Cdate Until</label>
+                                    <div class="input-group m-t-10 ">
+                                        <span class="input-group-addon btn_calendar" input_name="filter_cdate_2"><i
+                                                class="fa fa-calendar"></i></span>
+                                        <input class="form-control" id="filter_cdate_2"
+                                               name="filter_cdate_2" type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+
+
+                </div>
+                <div class="modal-footer" style="margin-top: 10px">
+                    <div class="button-container" align="center">
+                        <button type="button"
+                                class="btn btn-default text-center"
+                                id="btnClearFilter">clear
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center btn_download_all"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btn_download_all" >select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalUploadForm" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 500px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Upload Field Assignment
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">
+                    <form id="uploadForm" method="POST"
+                          action="{% url 'collection_field:process_bulk_upload_excel_trigger' %}"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-md-12 parent_file">
+                            <label class="col-md-12 col-sm-12">Assignment Field File</label>
+                            <input type="file" class="form-control" id="assignment_field_file"
+                                   onchange="validateInputForm()" name="assignment_field_file">
+                            <span id="helpBlockFile1" class="help-block">
+                                Mohon pilih file dengan format xlsx atau xls untuk melanjutkan</span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="button-container" align="center">
+                        <button type="button"
+                                class="btn btn-default text-center"
+                                id="btnClearUpload">clear
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btnSubmitUpload" data-dismiss="modal">Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalInvalidUpload" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 800px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Invalid Data
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-top:20px;display: flex;overflow-x: auto; height: 500px !important;overflow: scroll;">
+                        <table class="table table-striped table-responsive text-nowrap">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Row Number</th>
+                                <th class="text-center">Account Id</th>
+                                <th class="text-center">Invalid Message</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invalid_data_table">
+
+                        </tbody>
+                </table>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 10px">
+                    <div class="button-container" align="center">
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" data-dismiss="modal">Ok
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-position" id="modalBulkDownload" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 500px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Preparing
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 300px">
+                    <div class="col-md-12">
+                        <div class="chart div_loading" id="graph" data-percent="1"></div>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 100px;">
+                        <div class='progress-wrapper' style="display: none;">
+                            <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+                        </div>
+                        <h4 id="progress-bar-message" class="text-primary text-center">
+                            Waiting for progress to start...</h4>
+
+                            <div class="button-container" align="center">
+                                <input type="hidden" id="download_file_name" value="">
+                                <button id="download-file-btn"
+                                type="button"
+                                        class="btn btn-primary text-center"
+                                        style="background-color: #03a9f3;
+                                       border-color: #03a9f3;display:none;" >Download
+                                </button>
+                            </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-b-5">
+        <div class="col-md-2 col-md-offset-6">
+            <button type="button" class="btn btn-primary btn-rounded btn-block"
+                    id="btn_call_date" data-toggle="modal" data-target="#modalUploadForm">
+                Upload
+            </button>
+        </div>
+        <div class="col-md-2 ">
+            <button type="button" class="btn btn-success btn-rounded btn-block"
+                    id="btn_download" data-toggle="modal" data-target="#modalFilterDownload">
+                <span id="download_text">Download</span>
+                <span id="download_spinner" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"
+                      style="display: none;"></span>
+                <i id="download_icon" class="fa fa-download" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'collection_field:field_agent_attendance_report' %}" class="btn btn-danger btn-rounded btn-block"
+                    id="btn_duration_all">
+                Attendance
+            </a>
+        </div>
+        <form method="POST" id="formFilter" style="margin-top: 50px">
+            {% csrf_token %}
+            <input type="hidden" name="page_number" id="globalPageNumber">
+            <div class="col-md-2">
+                <label class="col-md-12 col-sm-12">Account Id</label>
+                <input class="form-control multiple-filter" id="search_account_id"
+                   name="search_account_id" type="text" value="{{ search_account_id }}"/>
+            </div>
+            <div class="col-md-2">
+                <label class="col-md-12 col-sm-12">Area</label>
+                <input class="form-control multiple-filter" id="search_area"
+                   name="search_area" type="text" value="{{ search_area }}"/>
+            </div>
+            <div class="col-md-1">
+                <label class="col-md-12 col-sm-12">DPD</label>
+                <input class="form-control multiple-filter" id="search_dpd"
+                   name="search_dpd" type="number" value="{{ search_dpd }}"/>
+            </div>
+            <div class="col-md-2">
+                <label class="col-md-12 col-sm-12">Agent PIC</label>
+                <input class="form-control multiple-filter" id="search_agent"
+                   name="search_agent" type="text" value="{{ search_agent }}"/>
+            </div>
+            <div class="col-md-2">
+                <label class="col-md-12 col-sm-12">Date Assignment</label>
+                <div class="input-group m-t-10 ">
+                    <span class="input-group-addon btn_calendar" input_name="search_date_assignment"><i
+                                                class="fa fa-calendar"></i></span>
+                    <input class="form-control multiple-filter" id="search_date_assignment"
+                       name="search_date_assignment" type="text"
+                           placeholder="YYYY-MM-DD" readonly value="{{ search_date_assignment }}"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="col-md-12 col-sm-12">Expiry Date Assignment</label>
+                <div class="input-group m-t-10 ">
+                    <span class="input-group-addon btn_calendar" input_name="search_expiry_date_assignment"><i
+                                                class="fa fa-calendar"></i></span>
+                    <input class="form-control multiple-filter" id="search_expiry_date_assignment"
+                       name="search_expiry_date_assignment" type="text"
+                           placeholder="YYYY-MM-DD" readonly value="{{ search_expiry_date_assignment }}"/>
+                </div>
+            </div>
+            <div class="col-md-1 " style="margin-top: 10px;padding-top: 20px">
+                <button type="submit" class="btn btn-warning btn-rounded btn-block" id="btn_refresh_search">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+                <button type="submit" class="btn btn-info btn-rounded btn-block" id="btn_submit_search">
+                    <i class="fa fa-search" aria-hidden="true"></i> Cari
+                </button>
+            </div>
+        </form>
+    </div>
+    <div id="table_content" class="header-content"
+         style="margin-top:20px;display: flex;overflow-x: auto; height: 500px !important;overflow: scroll;">
+        <table class="table table-striped table-responsive text-nowrap">
+            <thead>
+            <tr>
+                <th scope="col" align="center" class="text-center">No</th>
+                <th scope="col" align="center" class="text-center">Status</th>
+                <th scope="col" align="center" class="text-center">Account Id</th>
+                <th scope="col" align="center" class="text-center">Area</th>
+                <th scope="col" align="center" class="text-center">DPD</th>
+                <th scope="col" align="center" class="text-center">Date of <br/>assignment</th>
+                <th scope="col" align="center" class="text-center">Expiry of <br/>assignment</th>
+                <th scope="col" align="center" class="text-center">Overdue amount</th>
+                <th scope="col" align="center" class="text-center">Agent PIC</th>
+                <th scope="col" align="center" class="text-center">Result</th>
+                <th scope="col" align="center" class="text-center">Visit Photo</th>
+                <th scope="col" align="center" class="text-center">PTP date</th>
+                <th scope="col" align="center" class="text-center">PTP amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for field_assignment in data_for_field_assignments %}
+                <tr>
+                    <td align="center" class="text-center">
+                        <input type="hidden" name="field_assignment_ids[]" value="{{ field_assignment.id }}">
+                        {{ field_assignment.data_number }}
+                    </td>
+                    <td align="center" class="text-center" style="color: #54C392;">
+                        {% if field_assignment.done_status %}
+                        <span class="glyphicon glyphicon-ok-sign"></span> <b>Done</b>
+                        {% else %}-
+                        {% endif %}
+                    </td>
+                    <td align="center" class="text-center">
+                        <a href="{% url 'account_payment_status:account_dashboard' field_assignment.account_id %}">
+                            {{ field_assignment.account_id|default:"-" }}</a>
+                    </td>
+                    <td align="center" class="text-center">{{ field_assignment.area|default:"-" }}</td>
+                    <td align="center" class="text-center">{{ field_assignment.current_dpd|default:"-" }}</td>
+                    <td align="center" class="text-center">
+                        {{ field_assignment.assignment_date|date:"d M Y"|safe }}
+                    </td>
+                    <td align="center" class="text-center">
+                        {{ field_assignment.expiry_date|date:"d M Y"|safe }}
+                    </td>
+                    <td align="center" class="text-center">
+                        {{ field_assignment.overdue_amount|f_rupiahs:"no"|safe }}</td>
+                    <td align="center" class="text-center">{{ field_assignment.agent_username|default:"-" }}</td>
+                    <td align="center" class="text-center">{{ field_assignment.result|default:"-" }}</td>
+                    <td align="center" class="text-center">
+                        {% if field_assignment.visit_photo %}
+                            <a href="{{ field_assignment.visit_photo }}" target="_blank">Photo</a>
+                        {% else %}
+                            <p>Photo not available</p>
+                        {% endif %}
+                    </td>
+                    <td align="center" class="text-center">
+                        {{ field_assignment.ptp_date|date:"d M Y"|safe }}
+                    </td>
+                    <td align="center" class="text-center">
+                        {{ field_assignment.ptp_amount|f_rupiahs:"no"|safe }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="18" align="center">
+                        <div class="alert alert-info empty-info">
+                            <strong>Info!</strong> Tidak ada Data.
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if raw_data.has_previous %}
+                <li class="page-item">
+                    <a class="page-link btnPage" href="#"
+                       page_number="{{ raw_data.previous_page_number }}">
+                        Previous
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
+
+            {% if raw_data.number|add:'-9' > 1 %}
+                <li class="page-item">
+                    <a class="page-link btnPage" href="#" page_number="{{ raw_data.number|add:'-10' }}">&hellip;</a>
+                </li>
+            {% endif %}
+
+            {% for i in raw_data.paginator.page_range %}
+                {% if raw_data.number == i %}
+                    <li class="page-item active" aria-current="page">
+              <span class="page-link">
+                {{ i }}
+                <span class="sr-only">(current)</span>
+              </span>
+                    </li>
+                {% elif i > raw_data.number|add:'-10' and i < raw_data.number|add:'10' %}
+                    <li class="page-item">
+                        <a class="page-link btnPage" href="#" page_number="{{ i }}">{{ i }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if raw_data.paginator.num_pages > raw_data.number|add:'9' %}
+                <li class="page-item"><a class="page-link btnPage" href="#"
+                                         page_number="{{ raw_data.number|add:'10' }}">&hellip;</a></li>
+            {% endif %}
+
+            {% if recording_detail_lists.has_next %}
+                <li class="page-item">
+                    <a class="page-link btnPage" href="#" page_number="{{ raw_data.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+
+{% endblock %}
+<script>
+    {% block script_bottom_inside %}
+
+
+
+        
+        var date = new Date();
+        date.setDate(date.getDate()-90);
+        var date_minim =  new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        function ToastDanger(body_message) {
+            $.toast({
+                heading: 'Failure',
+                text: body_message,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'error',
+                hideAfter: 2800
+            });
+        }
+        function ToastSuccess(header_msg, body_message) {
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'success',
+                hideAfter: 1500,
+                stack: 6
+            });
+        }
+        $('#btnSubmitDownload').click(function (e) {
+            $('#filterDownloadForm').submit()
+        })
+        $('#filter_cdate_1').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: date_minim
+        });
+        $('#filter_cdate_2').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: date_minim
+        });
+        $('#search_expiry_date_assignment').datepicker({
+            format: 'yyyy-mm-dd',
+        });
+        $('#search_date_assignment').datepicker({
+            format: 'yyyy-mm-dd',
+        });
+        $('.btn_calendar').click(function (e) {
+            input_id = $(this).attr('input_name')
+            $('#' + input_id).datepicker('show');
+        });
+
+
+        $('#download-file-btn').click(function (e) {
+            
+            $.ajax({
+                    url: `{%url 'collection_field:do_download_excel_progress' 1%}`.replace(
+                        '1', $('#download_file_name').val()), // the endpoint
+                    type: "GET", // http method
+                    function (json) {
+                      console.log(json);
+                    },
+                })
+        });
+
+
+        $('#btn_download_all').click(function (e) {
+            
+            if($('#download_text').text()==='Preparing..'){
+                $('#modalBulkDownload').modal('show');
+                return
+            }
+            $('#download_text').text('Preparing..')
+            $('#download_spinner').show(100)
+            $('#download_icon').hide(100)
+            $.ajax({
+                    url: `{%url 'collection_field:process_bulk_download_excel_trigger' %}`, // the endpoint
+                    type: "POST", // http method
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        filter_bucket: $('#filter_bucket').val(),
+                        filter_account_ids: $('#filter_account_ids').val(),
+                        filter_agent_username: $('#filter_agent_username').val(),
+                        filter_cdate_mode: $('#filter_cdate_mode').val(),
+                        filter_cdate_1: $('#filter_cdate_1').val(),
+                        filter_cdate_2: $('#filter_cdate_2').val(),
+                        
+    
+                    },
+                    success: function (json) {
+                        if (json.status == "success") {
+                            if (json.task_id){
+                                $('#modalBulkDownload').modal('show');
+                                //run progress tracking
+                                var progressUrl = "{% url 'collection_field:get_bulk_download_excel_progress' 1 %}".replace(
+                                    '1', json.task_id);
+                                CeleryProgressBar.initProgressBar(progressUrl)
+                            }else{
+                                $('#download_text').text('Download Now')
+                                $('#download_spinner').hide(100)
+                                $('#download_icon').show(100)
+                            }
+                        } else {
+                            negative_response_swal(json.messages);
+                        }
+                    },
+                })
+        });
+
+
+        function validateInputForm() {
+            if (document.getElementById("assignment_field_file").files.length == 0) {
+                return ''
+            }
+            let filename = document.getElementById("assignment_field_file").files[0].name
+            let format = filename.split('.')[1]
+            if (format !== 'xlsx' && format !== 'xls') {
+                $('#btnSubmitUpload').attr('disabled', 'disabled')
+                $('.parent_file').addClass('has-error')
+                $('#helpBlockFile1').text('Format File bukan .xlsx atau .xls')
+                return ''
+            }
+            $('.parent_file').removeClass('has-error')
+            $('#helpBlockFile1').text('Mohon pilih file dengan format xlsx atau xls untuk melanjutkan')
+            $('#btnSubmitUpload').attr('disabled', false)
+        }
+        $('#filter_cdate_mode').change(function (e){
+            val = $(this).val()
+            if (val=='today' || val==''){
+                $('.div_cdate_from').hide(200)
+                $('.div_cdate_until').hide(200)
+                $('#filter_cdate_1').val('')
+                $('#filter_cdate_2').val('')
+                return
+            }
+            $('.div_cdate_from').show(200)
+            if (val=='between'){
+                $('.div_cdate_until').show(200)
+            }else{
+                $('.div_cdate_until').hide(200)
+                $('#filter_cdate_2').val('')
+            }
+        })
+        $('#btnSubmitUpload').click(function (e) {
+            e.preventDefault();
+            var formData = new FormData($("#uploadForm")[0]);
+            $.ajax({
+                url: $("#uploadForm").attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function (json) {
+                    if (json.status == 'failure'){
+                        ToastDanger(json.messages)
+                        invalid_data = json.invalid_data
+                        invalid_html=''
+                        for (let i=0; i < invalid_data.length; i++){
+                            row = '<tr>' +
+                                '<td class="text-center">'+invalid_data[i].row_number+'</td>' +
+                                '<td class="text-center">'+invalid_data[i].account_id+'</td>' +
+                                '<td class="text-center">'+invalid_data[i].error_message+'</td>' +
+                                '</tr>'
+                            invalid_html = invalid_html + row
+                        }
+                        $('#invalid_data_table').html(invalid_html)
+                        $('#modalInvalidUpload').modal('show')
+                        return ''
+                    }
+                     $('#modalBulkDownload').modal('show');
+                    var progressUrl = "{% url 'collection_field:get_bulk_download_excel_progress' 1 %}".replace(
+                                    '1', json.task_id);
+                    CeleryProgressBar.initProgressBar(progressUrl)
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        })
+        $('#btnClearFilter').click(function(e){
+            $('#filter_cdate_mode').val('').trigger('change')
+            $('#filter_cdate_1').val('')
+            $('#filter_cdate_2').val('')
+            $('#filter_agent_username').val('')
+            $('#filter_account_ids').val('')
+            $('#filter_bucket').val('')
+        })
+        $('#btnClearUpload').click(function(e){
+            $('#uploadForm')[0].reset()
+        })
+        $('.btnPage').click(function (e) {
+            number = $(this).attr('page_number')
+            $('#globalPageNumber').val(number)
+            $('#formFilter').submit()
+        })
+        $('#btn_refresh_search').click(function(e){
+            $('#search_account_id').val('')
+            $('#search_area').val('')
+            $('#search_dpd').val('')
+            $('#search_agent').val('')
+            $('#search_date_assignment').val('')
+            $('#search_expiry_date_assignment').val('')
+            $('#formFilter').submit()
+        })
+
+
+        var el = document.getElementById('graph'); // get canvas
+
+        var options = {
+            percent: el.getAttribute('data-percent') || 25,
+            size: el.getAttribute('data-size') || 220,
+            lineWidth: el.getAttribute('data-line') || 15,
+            rotate: el.getAttribute('data-rotate') || 0
+        }
+    
+        var canvas = document.createElement('canvas');
+        canvas.className = 'canvas_loading'
+        var span = document.createElement('span');
+        span.className = 'span_loading'
+        span.textContent = options.percent + '%';
+    
+        if (typeof (G_vmlCanvasManager) !== 'undefined') {
+            G_vmlCanvasManager.initElement(canvas);
+        }
+    
+        var ctx = canvas.getContext('2d');
+        canvas.width = canvas.height = options.size;
+    
+        el.appendChild(span);
+        el.appendChild(canvas);
+    
+        ctx.translate(options.size / 2, options.size / 2); // change center
+        ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
+    
+        //imd = ctx.getImageData(0, 0, 240, 240);
+        var radius = (options.size - options.lineWidth) / 2;
+    
+        var drawCircle = function (color, lineWidth, percent) {
+            percent = Math.min(Math.max(0, percent || 1), 1);
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
+            ctx.strokeStyle = color;
+            ctx.lineCap = 'round'; // butt, round or square
+            ctx.lineWidth = lineWidth
+            ctx.stroke();
+        };
+    
+        drawCircle('#efefef', options.lineWidth, 100 / 100);
+        drawCircle('#68a9ef', options.lineWidth, options.percent / 100);
+
+
+
+
+        class CeleryProgressBar {
+
+            constructor(progressUrl, options) {
+                this.progressUrl = progressUrl;
+                options = options || {};
+                let progressBarId = options.progressBarId || 'progress-bar';
+                let progressBarMessage = options.progressBarMessageId || 'progress-bar-message';
+                this.progressBarElement = options.progressBarElement || document.getElementById(progressBarId);
+                this.progressBarMessageElement = options.progressBarMessageElement || document.getElementById(progressBarMessage);
+                this.onProgress = options.onProgress || this.onProgressDefault;
+                this.onSuccess = options.onSuccess || this.onSuccessDefault;
+                this.onError = options.onError || this.onErrorDefault;
+                this.onTaskError = options.onTaskError || this.onTaskErrorDefault;
+                this.onDataError = options.onDataError || this.onError;
+                this.onRetry = options.onRetry || this.onRetryDefault;
+                this.onIgnored = options.onIgnored || this.onIgnoredDefault;
+                let resultElementId = options.resultElementId || 'celery-result';
+                this.resultElement = options.resultElement || document.getElementById(resultElementId);
+                this.onResult = options.onResult || this.onResultDefault;
+                // HTTP options
+                this.onNetworkError = options.onNetworkError || this.onError;
+                this.onHttpError = options.onHttpError || this.onError;
+                this.pollInterval = options.pollInterval || 500;
+                // Other options
+                let barColorsDefault = {
+                    success: '#76ce60',
+                    error: '#dc4f63',
+                    progress: '#68a9ef',
+                    ignored: '#7a7a7a'
+                }
+                this.barColors = Object.assign({}, barColorsDefault, options.barColors);
+            }
+    
+            onSuccessDefault(progressBarElement, progressBarMessageElement, result) {
+                progressBarElement.style.backgroundColor = this.barColors.success;
+                progressBarMessageElement.textContent = "Success!";
+                $('#download_text').text('Download Now');
+                $('#download_spinner').hide(100);
+                $('#download_icon').show(100);
+                $('#download_file_name').val(result.download_cache_id);
+                if (result.download_cache_id){
+                    window.setTimeout(function(){
+                        window.location='/collection_field/do_download_excel_progress/' +result.download_cache_id
+                    },5000);
+    
+                 }
+                drawCircle('#76ce60', options.lineWidth, 1);
+                setTimeout(function(){
+                    $('#modalBulkDownload').modal('hide');
+                }, 5000);
+               
+            }
+    
+            onResultDefault(resultElement, result) {
+                if (resultElement) {
+                    resultElement.textContent = result;
+                }
+            }
+    
+            /**
+             * Default handler for all errors.
+             * @param data - A Response object for HTTP errors, undefined for other errors
+             */
+            onErrorDefault(progressBarElement, progressBarMessageElement, excMessage, data) {
+                progressBarElement.style.backgroundColor = this.barColors.error;
+                excMessage = excMessage || '';
+                progressBarMessageElement.textContent = "Gagal !" + excMessage;
+            }
+    
+            onTaskErrorDefault(progressBarElement, progressBarMessageElement, excMessage) {
+                let message = this.getMessageDetails(excMessage);
+                this.onError(progressBarElement, progressBarMessageElement, message);
+            }
+    
+            onRetryDefault(progressBarElement, progressBarMessageElement, excMessage, retryWhen) {
+                retryWhen = new Date(retryWhen);
+                let message = 'Retrying in ' + Math.round((retryWhen.getTime() - Date.now()) / 1000) + 's: ' + excMessage;
+                this.onError(progressBarElement, progressBarMessageElement, message);
+            }
+    
+            onIgnoredDefault(progressBarElement, progressBarMessageElement, result) {
+                progressBarElement.style.backgroundColor = this.barColors.ignored;
+                progressBarMessageElement.textContent = result || 'Task result ignored!'
+            }
+    
+            onProgressDefault(progressBarElement, progressBarMessageElement, progress) {
+                progressBarElement.style.backgroundColor = this.barColors.progress;
+                progressBarElement.style.width = progress.percent + "%";
+                if ((parseInt(progress.percent) / 100) > 0){
+                    drawCircle('#68a9ef', options.lineWidth, parseInt(progress.percent) / 100);
+                    console.log(parseInt(progress.percent) / 100)
+                }
+                $('.span_loading').text(parseInt(progress.percent) + "%")
+                var description = progress.description || "";
+                if (progress.current == 0) {
+                    if (progress.pending === true) {
+                        progressBarMessageElement.textContent = 'Waiting for task to start...';
+                    } else {
+                        progressBarMessageElement.textContent = 'Task started...';
+                    }
+
+                   
+                } else {
+                    if (parseInt(progress.percent) >= 95){
+                        progressBarMessageElement.textContent = 'Almost Done';
+                    }else{
+                        progressBarMessageElement.textContent = progress.current + ' of ' + (progress.total - 5) + ' processed. ';
+                    }
+    
+                }
+            }
+    
+            getMessageDetails(result) {
+                if (this.resultElement) {
+                    return ''
+                } else {
+                    return result || '';
+                }
+            }
+    
+            /**
+             * Process update message data.
+             * @return true if the task is complete, false if it's not, undefined if `data` is invalid
+             */
+            onData(data) {
+                let done = false;
+                if (data.progress) {
+                    this.onProgress(this.progressBarElement, this.progressBarMessageElement, data.progress);
+                }
+                if (data.complete === true) {
+                    done = true;
+                    if (data.success === true) {
+                        this.onSuccess(this.progressBarElement, this.progressBarMessageElement, data);
+                    } else if (data.success === false) {
+                        if (data.state === 'RETRY') {
+                            this.onRetry(this.progressBarElement, this.progressBarMessageElement, data.result.message, data.result.when);
+                            done = false;
+                            delete data.result;
+                        } else {
+                            this.onTaskError(this.progressBarElement, this.progressBarMessageElement, data.result);
+                        }
+                    } else {
+                        if (data.state === 'IGNORED') {
+                            this.onIgnored(this.progressBarElement, this.progressBarMessageElement, data.result);
+                            delete data.result;
+                        } else {
+                            done = undefined;
+                            this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Data Error");
+                        }
+                    }
+                    if (data.hasOwnProperty('result')) {
+                        this.onResult(this.resultElement, data.result);
+                    }
+                } else if (data.complete === undefined) {
+                    done = undefined;
+                    this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Data Error");
+                }
+                return done;
+            }
+    
+            async connect() {
+                let response;
+                try {
+                    response = await fetch(this.progressUrl);
+                } catch (networkError) {
+                    this.onNetworkError(this.progressBarElement, this.progressBarMessageElement, "Network Error");
+                    throw networkError;
+                }
+    
+                if (response.status === 200) {
+                    let data;
+                    try {
+                        data = await response.json();
+                    } catch (parsingError) {
+                        this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Parsing Error")
+                        throw parsingError;
+                    }
+    
+                    const complete = this.onData(data);
+    
+                    if (complete === false) {
+                        setTimeout(this.connect.bind(this), this.pollInterval);
+                    }
+                } else {
+                    this.onHttpError(this.progressBarElement, this.progressBarMessageElement, "HTTP Code " + response.status, response);
+                }
+            }
+    
+            static initProgressBar(progressUrl, options) {
+                const bar = new this(progressUrl, options);
+                bar.connect();
+            }
+        }
+
+    {% endblock %}

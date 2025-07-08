@@ -1,0 +1,4 @@
+Pembayaran pinjaman Anda terlambat!<br>
+Transfer sekarang juga {{due_amount}} ke {{julo_bank_name}}, nomor rekening {{julo_bank_account_number}} untuk menghindari biaya yang akan terus bertambah.
+<br>
+Jika Anda telah melakukan pembayaran, informasi akan ter-update dalam 1 hari kerja. Kunjungi halaman <a href="http://www.julofinance.com/android/goto/loan_activity">Aktivitas Pinjaman</a> untuk mengunggah kwitansi / bukti transfer, atau untuk melihat detail pembayaran.

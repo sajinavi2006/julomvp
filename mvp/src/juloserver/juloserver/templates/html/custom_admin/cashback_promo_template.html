@@ -1,0 +1,12 @@
+{% extends "admin/change_list.html" %}
+{% block object-tools %}
+        <ul class="object-tools">
+            {% block object-tools-items %}
+                <li>
+                    <a href="{% url "cashback_promo_admin:cashback_promo_add" %}" class="addlink">
+                        Add New Cash Back Promo
+                    </a>
+                </li>
+            {% endblock %}
+        </ul>
+{% endblock %}

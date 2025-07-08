@@ -1,0 +1,233 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+<style type="text/css">
+    .form-row {
+        overflow: visible;
+    }
+    .selectize-control {
+        width: 300px;
+        display: inline-grid;
+    }
+</style>
+{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+&rsaquo; {% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}<div id="content-main">
+{% block object-tools %}
+{% if change %}{% if not is_popup %}
+  <ul class="object-tools">
+    {% block object-tools-items %}
+    <li>
+        {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
+        <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
+    </li>
+    {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
+    {% endblock %}
+  </ul>
+{% endif %}{% endif %}
+{% endblock %}
+<form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+<div>
+{% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
+{% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
+{% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+{% if errors %}
+    <p class="errornote">
+    {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+    </p>
+    {{ adminform.form.non_field_errors }}
+{% endif %}
+{% block field_sets %}
+{% for fieldset in adminform %}
+  {% include "custom_admin/cootek_fieldset.html" %}
+{% endfor %}
+{% endblock %}
+
+{% block after_field_sets %}{% endblock %}
+
+{% block inline_field_sets %}
+{% for inline_admin_formset in inline_admin_formsets %}
+    {% include inline_admin_formset.opts.template %}
+{% endfor %}
+{% endblock %}
+
+{% block after_related_objects %}{% endblock %}
+
+{% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
+
+{% block admin_change_form_document_ready %}
+    <script type="text/javascript">
+        (function($) {
+            $(document).ready(function() {
+                $('.add-another').click(function(e) {
+                    e.preventDefault();
+                    var event = $.Event('django:add-another-related');
+                    $(this).trigger(event);
+                    if (!event.isDefaultPrevented()) {
+                        showAddAnotherPopup(this);
+                    }
+                });
+            {% if adminform and add %}
+                $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
+            {% endif %}
+
+                const $product = $('#id_product')
+                if ($product.val() === "J1") {
+                    $('.field-julo_gold').show()
+                } else {
+                    $('.field-julo_gold').hide()
+                }
+                $product.on('change', function() {
+                    if ($(this).val() === "J1") {
+                        $('.field-julo_gold').show()
+                    } else {
+                        $('.field-julo_gold').hide()
+                    }
+                })
+            });
+        })(django.jQuery);
+    </script>
+{% endblock %}
+
+{# JavaScript for prepopulated fields #}
+{% prepopulated_fields_js %}
+
+</div>
+</form></div>
+
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // initial
+        update_input_field_follow_by_dpd_condtion();
+        criteria_changed();
+        partner_changed();
+        update_called_val();
+
+        $('.cootek-configuration-setting-control').selectize();
+        $('#id_dpd_condition').on('change', function() {
+            update_input_field_follow_by_dpd_condtion();
+        });
+        $('#id_partner').on('change', function() {
+            partner_changed();
+        });
+        $('#id_criteria').on('change', function() {
+            criteria_changed();
+        });
+
+        function update_input_field_follow_by_dpd_condtion(){
+            reset_dpd_value();
+            dpd_condtion = $('#id_dpd_condition').val();
+            if (dpd_condtion == "Range"){
+                $("#div_called_to").show();
+                $("#lb_called_at").show();
+            }
+            else{
+                $("#div_called_to").hide();
+                $("#lb_called_at").hide();
+            }
+
+        }
+
+        function update_called_val() {
+            $("#id_called_at").val($("#fake_called_at").val());
+            $("#id_called_to").val($("#fake_called_to").val());
+            $("#fake_called_to").remove();
+            $("#fake_called_at").remove();
+        }
+
+        function reset_dpd_value(){
+            $("#id_called_at").val("");
+            $("#id_called_to").val("");
+        }
+
+        function partner_changed(){
+            var urls = $(location).attr('pathname').split("/")
+            page_info = urls[5]
+            selected_partner = $('#id_partner').val();
+            selected_partner_name = $('#id_partner option:selected').text()
+            product_options = $("#id_product option");
+            if (selected_partner != '') {
+                if (selected_partner_name != 'dana' && page_info != 'change'){
+                    $('#id_product').val("");
+                }
+                $("#id_criteria").prop('selectedIndex',0);
+                $("#id_dpd_condition").prop('disabled', false);
+                $("#id_called_at").prop('disabled', false);
+                $("#id_called_to").prop('disabled', false);
+                product_options.eq(1).hide();
+                product_options.eq(2).hide();
+                product_options.eq(3).hide();
+            } else {
+                product_options.eq(1).show();
+                product_options.eq(2).show();
+                product_options.eq(3).show();
+            }
+        }
+
+        function criteria_changed(){
+            selected_criteria = $('#id_criteria').val();
+            if (selected_criteria == 'Refinancing_Pending') {
+                $("#id_partner").prop('selectedIndex',0);
+                $("#id_dpd_condition").prop('disabled', true);
+                $("#id_called_at").prop('disabled', true);
+                $("#id_called_to").prop('disabled', true);
+                document.getElementsByClassName('form-row field-task_type')[0].style.visibility = 'hidden';
+                document.getElementsByClassName('form-row field-cootek_control_group')[0].style.visibility = 'hidden';
+                reset_dpd_value();
+            }
+            else if (selected_criteria == 'Unconnected_Late_dpd') {
+                document.getElementsByClassName('form-row field-cootek_control_group')[0].style.visibility = 'visible';
+                document.getElementsByClassName('form-row field-task_type')[0].style.visibility = 'visible';
+            }
+            else {
+                $("#id_dpd_condition").prop('disabled', false);
+                $("#id_called_at").prop('disabled', false);
+                $("#id_called_to").prop('disabled', false);
+                document.getElementsByClassName('form-row field-task_type')[0].style.visibility = 'hidden';
+                document.getElementsByClassName('form-row field-cootek_control_group')[0].style.visibility = 'hidden';
+            }
+        }
+    });
+
+</script>
+<style>
+    .can_apply.hasValue .selectize-dropdown {
+    display: none !important;
+}
+.d-none {
+    display: none;
+}
+.d-block {
+    display: block;
+}
+.related-widget-wrapper {
+    float:none !important;
+  }
+</style>
+{% endblock %}

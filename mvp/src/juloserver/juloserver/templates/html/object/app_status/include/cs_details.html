@@ -1,0 +1,68 @@
+{% load unit utils %}
+{% load static %}
+{% load checkusergroup from common %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+    <li class="tab active">
+      <a href="#cs_customer_information" data-toggle="tab" title="Customer Information">
+        <span class="visible-xs">
+          <i class="fa fa-user"></i>
+        </span>
+        <span class="hidden-xs">Customer Information</span>
+      </a>
+    </li>
+
+    <li class="tab">
+        <a href="#cs_application_id" data-toggle="tab" aria-expanded="false" title="Application ID">
+            <span class="visible-xs">
+                <i class="fa fa-unlock"></i>
+            </span>
+            <span class="hidden-xs">Application ID</span>
+        </a>
+    </li>
+
+    <li class="tab">
+        <a href="#cs_loan_id" data-toggle="tab" aria-expanded="false" title="Loan ID">
+            <span class="visible-xs">
+                <i class="fa fa-unlock"></i>
+            </span>
+            <span class="hidden-xs">Loan ID</span>
+        </a>
+    </li>
+
+    <li class="tab">
+        <a href="#cs_payment_details" data-toggle="tab" aria-expanded="false" title="Payment Details">
+            <span class="visible-xs">
+                <i class="fa fa-unlock"></i>
+            </span>
+            <span class="hidden-xs">Payment Details</span>
+        </a>
+    </li>
+</ul>
+
+<div id="slim_apps">
+    <div class="tab-content">
+        <!-- Do not Delete This -->
+            <div class="tab-pane" id="do_not_delete_it">
+                {% include "object/app_status/include/tab_dvc.html" %}
+            </div>
+        <!-- Do not Delete This -->
+
+        <div class="tab-pane active" id="cs_customer_information">
+            {% include "object/app_status/include/tab_cs_customer_information.html" %}
+        </div>
+
+        <div class="tab-pane" id="cs_application_id">
+            {% include "object/app_status/include/tab_cs_application_id_detail.html" %}
+        </div>
+
+        <div class="tab-pane" id="cs_loan_id">
+            {% include "object/app_status/include/tab_cs_loan_id_detail.html" %}
+        </div>
+
+        <div class="tab-pane" id="cs_payment_details">
+            {% include "object/app_status/include/tab_cs_payment_detail.html" %}
+        </div>
+    </div>
+</div>

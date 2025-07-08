@@ -1,0 +1,211 @@
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+{% block custom_link %}
+<link href="{% static 'default/css/helper.css' %}" rel="stylesheet" />
+{% endblock %}
+{% load unit %}
+<style>
+   .modal-header-similarity {
+   border-bottom:1px solid #eee;
+   background-color: #F2C544 ;
+   -webkit-border-top-left-radius: 15px;
+   -webkit-border-top-right-radius: 15px;
+   -moz-border-radius-topleft: 15px;
+   -moz-border-radius-topright: 15px;
+   border-top-left-radius: 15px;
+   border-top-right-radius: 15px;
+   display: flex;
+   }
+   .table-similarity {
+   padding:25px;
+   white-space: normal;
+   }
+   .modal-content-similarity  {
+   position: relative;
+   background-color: #fff;
+   -webkit-background-clip: padding-box;
+   background-clip: padding-box;
+   border: 1px solid #999;
+   border: 1px solid rgba(0, 0, 0, .2);
+   border-radius: 15px;
+   outline: 0;
+   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+   box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+   }
+   .modal-x-button {
+   margin: auto;
+   margin-right: 0px;
+   }
+   .modal-similarity {
+   position: fixed;
+   margin: 0;
+   padding: 0;
+   height: 100%;
+   width: 100%;
+   }
+   .modal-similarity .modal-footer{
+   padding-right: 32px;
+   }
+   .modal-similarity .modal-footer button{
+   border-radius: var(--corner-md);
+   padding: var(--spacing-sm) var(--spacing-lg);   
+   }
+   .modal-body-padding {
+   padding: 0px;
+   }
+   .table-similarity-word-wrap > div {
+   white-space: nowrap;
+   overflow: hidden;
+   }
+   .face-check-rounded-images {
+   padding:15px;
+   max-width: 70%;
+   border-radius: 10%;
+   display:block;
+   margin:auto;
+   }
+   #face_similarity_data_customer {
+   border-right: 1px solid hsla(var(--hsl-neutrals-50), 1);
+   }
+   #face_similarity_data_customer .badges {
+   border: 2px solid hsla(var(--hsl-information-20), 1);
+   }
+   a.right {
+   margin-left:auto;
+   margin-right:20;
+   float:right;
+   }
+   .image-boxed-size-checkbox {
+   display: flex;
+   align-items: flex-start;
+   float: left;
+   height: 25px;
+   }
+   .tab-geohash li.active a, .tab-geohash li.active a:hover, .tab-geohash li.active a:focus {
+    background-color: white !important;
+   }
+</style>
+<div class="row pl-32 ml-32 mt-24" style="overflow: hidden auto;height: 70vh;">
+   <div id="face_similarity_data_customer" class="col-xs-4 justify-content-start customer-similarity-face-bg bg-neutrals-20">
+      <img id="img_crop_selfie_face_recognition" src="{% static 'images/icons/ic-placeholder.png' %}" class="img-responsive face-check-rounded-images image-boxed-size-selfie" />
+      <img id="img_ktp_face_recognition" src="{% static 'images/icons/ic-placeholder.png' %}" class="img-responsive face-check-rounded-images image-boxed-size-ktp" />
+      <div class="image-boxed-size-checkbox">
+         &nbsp;
+      </div>
+      <span class="label label-rouded pull-center small badges ml-8 bg-information-10 font-information-20 px-8 py-4">Current App ID</span>
+      <table id="ca_table_data_customer" class="ca_table table table-similarity mt-16">
+         <tbody>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16" style="border-top: none;">
+                  <div class="col-xs-4 bold font-neutrals-100">Application ID</div>
+                  <div id="customer_app_id" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Apply Date</div>
+                  <div id="customer_apply_date" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Geo Location Distance</div>
+                  <div id="customer_geo_loc" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Address</div>
+                  <div id="customer_address" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Provinsi</div>
+                  <div id="customer_provinsi" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Kabupaten</div>
+                  <div id="customer_kabupaten" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Kecamatan</div>
+                  <div id="customer_kecamatan" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Kelurahan</div>
+                  <div id="customer_kelurahan" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">NIK</div>
+                  <div id="customer_nik" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Email</div>
+                  <div id="customer_email" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Full Name</div>
+                  <div id="customer_full_name" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">POB</div>
+                  <div id="customer_pob" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">DOB</div>
+                  <div id="customer_dob" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Bank Name</div>
+                  <div id="customer_bank_name" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Bank Account Name</div>
+                  <div id="customer_bank_account_name" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Bank Account Number</div>
+                  <div id="customer_bank_account_number" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Android ID</div>
+                  <div id="customer_android_id" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+            <tr>
+               <td class="col-xs-12 table-similarity-word-wrap py-16">
+                  <div class="col-xs-4 bold font-neutrals-100">Device Name</div>
+                  <div id="customer_device_name" class="col-xs-8 font font-neutrals-70 semi-bold">: -</div>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+   <div class="col-xs-8 justify-content-start row-scroll" id="face_recognition_data_row" style="overflow: auto;"></div>
+   <div class="col-xs-8 justify-content-start row-scroll hide" id="fraud_recognition_data_row" style="overflow: auto;"></div>
+</div>

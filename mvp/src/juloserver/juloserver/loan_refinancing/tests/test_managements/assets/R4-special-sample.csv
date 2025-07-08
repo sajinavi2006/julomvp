@@ -1,0 +1,2 @@
+"loan_id","email","principal_waiver","interest_waiver","late_fee_waiver","offer","expired_at"
+"3456","test1@gmail.com","15","100","100","R4","2100-09-15"

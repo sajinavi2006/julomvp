@@ -1,0 +1,64 @@
+<mjml>
+  <mj-head>
+      <mj-attributes>
+        <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap" />
+        <mj-all color="#5E5E5E" font-family="Montserrat" font-size="14px" align="left" />
+      </mj-attributes>
+    </mj-head>
+  <mj-body width="320px">
+    <mj-section padding="0px 0px 0px 0px">
+      <mj-column>
+        <mj-image
+          align="center"
+          width="225px"
+          src="image.png" />
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0px 0px 0px 0px">
+      <mj-column>
+        <mj-text
+          align="center"
+          font-weight="600"
+          color="#00ACF0"
+          padding="0px 0px 0px 0px">
+            Tanda Tangan Elektronik
+          </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="16px 0px 0px 0px">
+      <mj-column>
+        <mj-text
+          align="justify"
+          padding="0px 0px 0px 0px">
+            Ikuti langkah-langkah berikut untuk memproses dokumen Anda :
+          </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="16px 0px 0px 0px">
+      <mj-column>
+        <mj-table padding="0px 0px 0px 0px">
+          <tr>
+            <td align="right" valign="top" style="font-weight: 600; color: #00ACF0; width: 12px; padding-right: 4px">1.</td>
+            <td>Tekan tombol <span style="color: #00ACF0; font-weight: 500">Next</span> sampai pindah ke halaman paling akhir</td>
+          </tr>
+          <tr>
+            <td align="right" valign="top" style="font-weight: 600; color: #00ACF0; width: 12px; padding-right: 4px">2.</td>
+            <td>Cari <span style="font-weight: 500">kotak merah</span> dan tekan untuk menyisipkan tanda tangan Anda</td>
+          </tr>
+          <tr>
+            <td align="right" valign="top" style="font-weight: 600; color: #00ACF0; width: 12px; padding-right: 4px">3.</td>
+            <td>Tekan tombol <span style="color: #00883E; font-weight: 500">Proses</span> untuk membuka halaman autentikasi</td>
+          </tr>
+          <tr>
+            <td align="right" valign="top" style="font-weight: 600; color: #00ACF0; width: 12px; padding-right: 4px">4.</td>
+            <td>Isi halaman autentikasi dengan data yang valid</td>
+          </tr>
+          <tr>
+            <td align="right" valign="top" style="font-weight: 600; color: #00ACF0; width: 12px; padding-right: 4px">5.</td>
+            <td>Setelah itu tekan tombol <span style="color: #00883E; font-weight: 500">Setuju</span></td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

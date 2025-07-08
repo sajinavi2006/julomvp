@@ -1,0 +1,944 @@
+{% load unit utils %}
+{% load format_date %}
+{% load currency %} 
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+      rel="stylesheet"
+    />
+    <title>JULO</title>
+    <style>
+      p {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-family: Nunito;
+      }
+      body {
+        background: #fff;
+        margin: 0;
+        font-family: Nunito;
+      }
+      header {
+        display: block;
+        max-height: 11.37%;
+        align-self: stretch;
+      }
+
+      .top-header {
+        background: #db4d3d;
+        height: 53.41%;
+        padding: 16px;
+      }
+      .top-header-text {
+        align-self: stretch;
+        color: #fff;
+        text-align: center;
+        font-family: Nunito;
+        font-style: normal;
+        line-height: normal;
+        margin: 0;
+      }
+      .first-header {
+        font-size: 40px;
+        font-weight: 800;
+      }
+      .second-header {
+        font-size: 32px;
+        font-weight: 700;
+      }
+      .third-header {
+        font-size: 15px;
+        font-weight: 400;
+      }
+      .bottom-header {
+        padding: 24px 72px;
+        align-items: center;
+        gap: 22px;
+        align-self: stretch;
+        margin-top: 16px;
+      }
+      .letterhead-container {
+        padding: 24px 72px;
+        align-items: center;
+        align-self: stretch;
+        margin-bottom: 16px;
+      }
+      .letterhead-container p {
+        text-align: left;
+      }
+      .letterhead-table th, .letterhead-table td {
+        padding: 0;
+      }
+      .julo-logo-container {
+        text-align: left;
+        width: 176px;
+        overflow: hidden;
+      }
+      #julo-logo {
+        width: 176px;
+        padding: 8px;
+        object-fit: cover;
+      }
+      .letterhead-text p {
+        margin: 0;
+      }
+      #company-name {
+        color: #FFF;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+        margin-top: 0;
+        margin-bottom: 0;
+        vertical-align: bottom;
+        white-space: nowrap;
+      }
+      #company-address {
+        color: #FFF;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 17px;
+        vertical-align: top;
+      }
+      main {
+        padding: 16px 72px;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        align-self: stretch;
+      }
+      main > p,
+      main > table,
+      main > div {
+        color: #404040;
+
+        font-size: 16px;
+        font-style: normal;
+        margin-bottom: 24px;
+      }
+      .main-text-title {
+        display: block;
+        line-height: 24px;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 32px;
+        align-self: stretch;
+        margin-bottom: 24px;
+        font-size: 16px;
+      }
+      .main-text-content {
+        align-self: stretch;
+        text-align: justify;
+        color: #404040;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+        margin-bottom: 24px;
+      }
+      .flex {
+        display: flex !important;
+      }
+      .main-text-paragraph {
+        padding-top: 24px;
+        padding-bottom: 24px;
+      }
+      .main-text-paragraph-number {
+        color: #404040;
+        text-align: justify;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      }
+      .main-content-container {
+        padding: 16px 72px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      .main-table {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        align-self: stretch;
+      }
+      .table-title {
+        display: flex;
+        padding: 8px 16px;
+        justify-content: space-between;
+        align-items: center;
+        align-self: stretch;
+        background: #db4d3d;
+      }
+      .table-row {
+        display: flex;
+        padding: 8px 16px;
+        justify-content: space-between;
+        align-items: center;
+        align-self: stretch;
+      }
+      .table-title-text,
+      .table-title-text th {
+        color: #fff;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 17px;
+        padding: 8px 16px;
+        width: 11.13%;
+      }
+      .align-left {
+        text-align: left !important;
+      }
+      .align-right {
+        text-align: right !important;
+      }
+      .bg-grey {
+        background: #9e9e9e !important;
+        color: #fff !important;
+      }
+      .bg-orange {
+        background: #db4d3d !important;
+      }
+      .bg-blue {
+        background: #00ACF0 !important;
+      }
+      .bg-light-blue {
+        background: #B2E6FA !important;
+      }
+      .text-white {
+        color: #FFF !important;
+      }
+      .text-dark-blue {
+        color: #006790 !important;
+      }
+      th {
+        text-align: left;
+        padding: 4px 16px;
+        justify-content: space-between;
+        align-items: center;
+        align-self: stretch;
+        text-align: center;
+        font-weight: normal;
+      }
+      td {
+        color: #404040;
+
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 17px;
+        padding: 16px 16px;
+        text-align: center;
+      }
+      .main-table-number,
+      .main-table-text {
+        text-align: justify;
+        vertical-align: top;
+        padding: 0;
+        color: #404040;
+        font-family: Nunito;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+      }
+      .main-table-number {
+        width: min-content;
+        padding-right: 24px;
+      }
+      .main-table-content {
+        width: 100%;
+        padding: 0;
+        background-color: #FFF;
+      }
+      .table-border-radius-top {
+        border-radius: 8px 8px 0 0;
+      }
+      .even-row {
+        background: #f5f5f5;
+      }
+      .odd-row {
+        background: #fff;
+      }
+      tr {
+        padding: 8px 16px;
+      }
+      .bold {
+        color: #404040;
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+      }
+      #text-footnote {
+        color: #404040;
+
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 15px;
+        align-self: flex-start;
+        text-align: left;
+      }
+      #payment-method-container {
+        padding: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        align-self: stretch;
+
+        border-radius: 8px;
+        background: #f5f5f5;
+        margin-bottom: 24px;
+      }
+      #payment-method-container table {
+        margin: 16px 0px;
+      }
+      #virtual-account-wrapper {
+        display: flex;
+        padding: 0px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        align-self: stretch;
+      }
+      .virtual-account-box th,
+      .virtual-account-box td {
+        padding: 0;
+      }
+      .virtual-account-logo-box {
+        width: fit-content;
+        padding-right: 16px !important;
+      }
+      .virtual-account-box img {
+        width: 56px;
+        height: 40px;
+      }
+      .virtual-account-text {
+        color: #404040;
+
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 22px;
+      }
+      .virtual-account-bank-name {
+        color: #404040;
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+        text-align: left;
+        width: 100%;
+      }
+      .virtual-account-bank-number {
+        color: #757575;
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+        text-align: left;
+      }
+      #virtual-account-separator {
+        padding: 16px 0;
+        align-items: flex-start;
+        align-self: stretch;
+        width: 100%;
+      }
+      #virtual-account-separator svg {
+        width: 100%;
+      }
+      #virtual-account-info {
+        padding: 0;
+        align-items: flex-start;
+        gap: 10px;
+        align-self: stretch;
+      }
+      #virtual-account-info-text,
+      #virtual-account-info-text a {
+        color: #404040;
+      }
+      .virtual-account-text-important {
+        color: #404040;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 22px;
+        text-decoration-line: underline;
+      }
+      footer {
+        padding: 24px 72px;
+        align-items: center;
+        gap: 32px;
+        align-self: stretch;
+        background: #181818;
+      }
+
+      footer table,
+      footer tr,
+      footer td {
+        color: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .ojk-container {
+        text-align: center;
+        vertical-align: middle;
+        margin: 0;
+        padding: 0;
+      }
+
+      #ojk-text {
+        color: #fff;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 22px;
+        margin-right: 8px;
+      }
+
+      .footer-logo {
+        width: 39.117px;
+        height: 28.215px;
+        margin: 0;
+        padding: 0;
+        margin-right: 12px;
+      }
+
+      .centered-content {
+        text-align: center;
+      }
+
+      .centered-content p,
+      .centered-content img {
+        display: inline;
+        vertical-align: middle;
+      }
+
+      #footer-separator {
+        border: 1px dashed white;
+        width: 100%;
+        height: 0;
+        padding: 0;
+        margin: 32px 0;
+      }
+
+      #footer-company-text {
+        align-self: stretch;
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 17px;
+        margin-bottom: 32px;
+      }
+
+      #footer-menu {
+        align-self: stretch;
+        color: #fff;
+        text-align: center;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        margin-bottom: 32px;
+      }
+
+      .footer-link {
+        color: #fff !important;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        text-decoration-line: underline;
+      }
+
+      #footer-copyright {
+        color: #fff;
+        text-align: center;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        margin-top: 32px;
+      }
+      .closing {
+        padding: 24px;
+        border-radius: 8px;
+        border: 2px solid #db4d3d;
+        margin-bottom: 24px;
+      }
+      .closing-text {
+        color: #404040;
+        text-align: justify;
+
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+      }
+      .signature-container {
+        display: block;
+        margin-bottom: 16px;
+      }
+      .signature-box {
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        overflow: hidden;
+      }
+      .signature-box img {
+        object-fit: cover;
+      }
+      .pd-h-72 {
+        padding-left: 72px !important;
+        padding-right: 72px !important;
+      }
+      .letterhead-separator {
+        width: 100%;
+      }
+      .mobile-view {
+        display: none !important;
+      }
+      .web-view {
+        display: block !important;
+      }
+
+      @media screen and (max-width: 620px) {
+        .first-header {
+          font-size: 30px;
+          line-height: 32px;
+          font-weight: 700;
+        }
+        .second-header {
+          font-size: 14px;
+          margin: 8px 0;
+          line-height: 22px;
+          font-style: normal;
+          font-weight: 700;
+        }
+        .third-header {
+          font-size: 10px;
+        }
+        .letterhead-container {
+          padding: 24px 16px;
+        }
+        .julo-logo-container {
+          text-align: left;
+          width: 80px;
+          overflow: hidden;
+        }
+        #julo-logo {
+          width: 100px;
+          padding: 4px;
+        }
+        #company-name {
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 15px;
+        }
+        #company-address {
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 15px;
+        }
+        .letterhead-separator {
+          width: 130px;
+        }
+        .main-content-container {
+          padding: 24px 16px;
+        }
+        .signature-container {
+          margin-bottom: 0;
+        }
+        .signature-box {
+          height: 100px;
+        }
+        .signature-box img {
+          object-fit: cover;
+        }
+        td[class=main-table-content] {
+          background: #F5F5F5 !important;
+        }
+        .main-table-content td {
+          background: #FFF !important;
+        }
+        td[class=align-right] {
+          font-weight: 700;
+        }
+        table {
+          width: auto;
+        }
+        .table-text td{
+          background: #FFF;
+        }
+        .list-table td, .list-table th {
+          border-bottom: 1px solid #ededed;
+        }
+        .ojk-mobile {
+          margin: 0 60px;
+        }
+        .footer-logo {
+          width: 35px;
+          margin: 0;
+          padding: 0;
+          margin-right: 10px;
+        }
+        #afpi-badge {
+          margin-right: 0 !important;
+          padding-right: 0;
+        }
+        #footer-company-text {
+          align-self: stretch;
+          color: #fff;
+          text-align: center;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 700;
+          line-height: 17px;
+          margin-bottom: 32px;
+        }
+        #footer-copyright {
+          color: #fff;
+          text-align: center;
+          font-size: 13px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22px;
+          margin: 0;
+          padding: 0;
+          margin-top: 32px;
+        }
+        #ojk-text {
+          margin-right: 6px;
+        }
+        .mobile-view {
+          padding: 16px 8px;
+          display: table !important;
+        }
+        .mobile-view td {
+          padding: 8px 16px;
+        }
+        .footer-mobile {
+          padding: 0;
+        }
+        .web-view {
+          display: none !important;
+        }
+        footer {
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- letterhead -->
+    <div>
+    
+    <div class="letterhead-container bg-blue web-view">
+        <table class="letterhead-table">
+          <tr>
+            <th rowspan="2" class="julo-logo-container">
+              <img
+                id="julo-logo"
+                src="{% static 'images/julo/JULO_logo_white_small.png' %}"
+                alt="julo-logo"
+              />
+            </th>
+            <th rowspan="2" style="width: 100%"></th>
+            <th id="company-name">
+              <p>PT Julo Teknologi Finansial</p>
+            </th>
+          </tr>
+          <tr class="letterhead-text">
+            <td id="company-address">
+              <p>
+                88@Kasablanka Tower A Lantai 5,<br />
+                Jl. Raya Casablanca No.Kav 88,<br />
+                Jakarta Selatan 12870
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="letterhead-container bg-blue mobile-view" style="padding: 24px 37px; width: 80%;">
+        <table class="letterhead-table" style="text-align: left; width: 100%;">
+          <tr style="margin-bottom: 24px;">
+            <th class="julo-logo-container">
+              <img
+                id="julo-logo"
+                src="{% static 'images/julo/JULO_logo_white_small.png' %}"
+                alt="julo-logo"
+              />
+            </th>
+          </tr>
+          <tr style="height: 24px;">
+            <th></th>
+          </tr>
+          <tr>
+            <th id="company-name">
+              <p style="padding: 0; margin: 0; font-size: 16px;"><b>PT Julo Teknologi Finansial</b></p>
+            </th>
+          </tr>
+          <tr class="letterhead-text">
+            <td id="company-address" style="padding: 0; margin: 0;">
+              <p style="font-size: 12px;">
+                88@Kasablanka Tower A Lantai 5,<br />
+                Jl. Raya Casablanca No.Kav 88,<br />
+                Jakarta Selatan 12870
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- main content -->
+    <div class="main-content-container">
+      <p class="main-text-title">
+        Kepada Yth. <b>{{fullname}}</b><br />
+        {{address}}
+      </p>
+      <p class="main-text-title">Dengan Hormat,</p>
+      <p class="main-text-content" style="width: 100%; padding: 0">
+        Bersama ini kami sampaikan berdasarkan permintaan dari Pemberi Pinjaman dengan ini menyampaikan pemberitahuan Perjanjian Pemberian Fasilitas dan Surat Konfirmasi Rincian Transaksi Pendanaan (“<b>Perjanjian</b>”) atas nama Saudara/i, dengan No SKRTP dan tanggal persetujuan sebagai berikut:
+      </p>
+      <table class="main-inside-table web-view">
+        <tr class="table-title-text bg-blue">
+          <th class="align-left" style="border-top-left-radius: 4px">Nama Pemberi Pinjaman</th>
+          <th class="align-left">Nomor SKRTP</th>
+          <th class="align-left" style="border-top-right-radius: 4px">Tanggal Persetujuan SKRTP</th>
+        </tr>
+        {% for skrtp in skrtp_list %}
+        <tr class="table-text {% cycle 'odd-row' 'even-row' %}">
+          <td class="align-left" {% if forloop.first %}style="border-bottom-left-radius: 4px"{% endif %}>Julo Holdings Pte. Ltd.</td>
+          <td class="align-left">{{skrtp.skrtp_no}}</td>
+          <td class="align-left" {% if forloop.first %}style="border-bottom-right-radius: 4px"{% endif %}>{{skrtp.skrtp_sign_date}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div
+        class="main-inside-table mobile-view"
+        style="
+          background: #f5f5f5 !important;
+          border-radius: 8px;
+          border: none;
+        "
+      >
+      <table class="main-inside-table mobile-view">
+        <tr class="table-title-text bg-blue">
+          <th class="align-left" style="border-top-left-radius: 4px">
+            Nama Pemberi Pinjaman
+          </th>
+          <th class="align-left">
+            Nomor SKRTP
+          </th>
+          <th class="align-right" style="border-top-right-radius: 4px">
+            Tanggal Persetujuan SKRTP
+          </th>
+        </tr>
+        {% for skrtp in skrtp_list %}
+        <tr
+          class="table-text list-table"
+          style="border: 1px solid #ededed; border-top: none; {% if forloop.last %} border-radius: 4px; {% endif %}"
+        >
+          <td
+            class="align-left"
+            style="font-weight: 700; {% if forloop.last %} border-bottom-left-radius: 4px; {% endif %}"
+          >
+            Julo Holdings Pte. Ltd.
+          </td>
+          <td
+            class="align-left"
+            style="font-weight: 700;"
+          >
+            {{skrtp.skrtp_no}}
+          </td>
+          <td
+            class="align-right"
+            style="font-weight: 700; {% if forloop.last %} border-bottom-right-radius: 4px; {% endif %}"
+          >
+            {{skrtp.skrtp_sign_date}}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      </div>
+      <div class="signature-container" style="padding-top:24px;">
+        <p class="closing-text">
+        telah dialihkan kepada <b>{{vendor_name}}</b><br /><br />
+        </p>
+        <p class="closing-text">
+          Apabila, Saudara/i membutuhkan informasi tambahan dapat menghubungi <b>{{vendor_name}}</b>{% if vendor_contact_info %} {{vendor_contact_info}}{% else %} melalui Whatsapp: {{vendor_contact_number}} dan Email: {{vendor_email}}{% endif %}<br/><br/>
+        </p>
+        <p class="closing-text">
+          Demikian Surat Pemberitahuan ini JULO sampaikan, terima kasih atas
+          perhatian dan kerjasamanya.<br /><br />
+          Hormat kami,<br />Wakil Pemberi Pinjaman<br /><b
+            >PT JULO TEKNOLOGI FINANSIAL</b
+          >
+        </p>
+        <div class="signature-box">
+          <img
+            src="{% static 'images/email/selloff_sign.png' %}"
+            alt="signature"
+            style="height: 100%"
+          />
+        </div>
+        <p class="closing-text">
+          <strong>Listyo Febryantono</strong><br />
+          Head of Operations
+        </p>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <footer>
+      <div class="web-view">
+        <table>
+          <tr>
+            <td class="ojk-container">
+              <div class="centered-content">
+                <p id="ojk-text">Terdaftar dan diawasi oleh</p>
+                <img
+                  src="{% static 'images/warning_letter/ojk.png' %}"
+                  alt="ojk-logo"
+                  class="footer-logo"
+                />
+                <img
+                  src="{% static 'images/warning_letter/afpi.png' %}"
+                  alt="afpi-logo"
+                  class="footer-logo"
+                />
+                <img
+                  src="{% static 'images/warning_letter/afj.png' %}"
+                  alt="afpi-badge"
+                  class="footer-logo"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <hr style="border: 0px; border-top: 2px dashed #c2c2c2" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p id="footer-company-text">
+                PT Julo Teknologi Finansial<br />
+                88@Kasablanka Tower A Lantai 5. Jl. Raya Casablanca<br />
+                Kav.88, Jakarta Selatan 12870
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Keamananmu adalah prioritas kami. Pelajari tentang
+              <a
+                href="https://www.julo.co.id/privacy-policy"
+                class="footer-link"
+                >kebijakan privasi</a
+              >
+              kami.<br />
+              <a href="https://www.julo.co.id/cara-bayar" class="footer-link"
+                >Panduan Pembayaran</a
+              >
+              |
+              <a href="https://www.julo.co.id/faq" class="footer-link"
+                >Pusat Bantuan</a
+              >
+              | Unsubscribe
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p id="footer-copyright">
+                ©2023 PT Julo Teknologi Finansial | All rights reserved
+              </p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="mobile-view footer-mobile">
+        <div class="centered-content" style="padding-top: 24px">
+          <p id="ojk-text">Terdaftar dan diawasi oleh</p>
+          <img
+            src="{% static 'images/warning_letter/ojk.png' %}"
+            alt="ojk-logo"
+            class="footer-logo"
+          />
+          <img
+            src="{% static 'images/warning_letter/afpi.png' %}"
+            alt="afpi-logo"
+            class="footer-logo"
+          />
+          <img
+            src="{% static 'images/warning_letter/afj.png' %}"
+            alt="afpi-badge"
+            class="footer-logo"
+            id="afpi-badge"
+          />
+        </div>
+        <table class="ojk-mobile">
+          <tr>
+            <td style="padding: 32px 0">
+              <hr style="border: 0px; border-top: 2px dashed #c2c2c2" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p id="footer-company-text">
+                PT Julo Teknologi Finansial<br />
+                88@Kasablanka Tower A Lantai 5. Jl. Raya Casablanca<br />
+                Kav.88, Jakarta Selatan 12870
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 14px">
+              Keamananmu adalah prioritas kami. Pelajari tentang
+              <a
+                href="https://www.julo.co.id/privacy-policy"
+                class="footer-link"
+                >kebijakan privasi</a
+              >
+              kami.<br />
+              <a href="https://www.julo.co.id/cara-bayar" class="footer-link"
+                >Panduan Pembayaran</a
+              >
+              |
+              <a href="https://www.julo.co.id/faq" class="footer-link"
+                >Pusat Bantuan</a
+              >
+              | Unsubscribe
+            </td>
+          </tr>
+        </table>
+        <p id="footer-copyright" style="padding-bottom: 24px">
+          ©2023 PT Julo Teknologi Finansial | All rights reserved
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

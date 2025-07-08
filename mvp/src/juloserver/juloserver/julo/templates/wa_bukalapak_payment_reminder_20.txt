@@ -1,0 +1,4 @@
+Yth {{fullname}}.
+Tagihan BayarNanti Anda telah jatuh tempo pada {{due_date}}. Total tagihan saat ini sebesar {{due_amount}} dan akan terus bertambah karena adanya denda.
+Lakukan pembayaran sekarang agar tidak menjadi beban. Informasi dan cara melakukan pembayaran tersedia pada Aplikasi Bukalapak (bl.id/BayarNanti).
+Hubungi tim BayarNanti untuk mendapatkan solusi, atau silahkan Whatsapp pertanyaan Anda 087886904744

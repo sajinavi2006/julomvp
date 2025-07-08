@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <style>
+    body {
+      color: #5E5E5E;
+      font-family: Montserrat;
+    }
+    h4 {
+      color: #0598D0;
+      text-align: center;
+    }
+  </style>
+<body>
+  <h4>SURAT PERJANJIAN HUTANG PIUTANG</h4>
+  <h4>Nomor: {{ application.application_xid | safe }}</h4>
+  <p>Surat Perjanjian Hutang Piutang ini dibuat dan disetujui pada tanggal {{ date_today | safe }}, oleh dan antara :</p>
+  <ol>
+      <li>
+        Pemberi Pinjaman yang diwakilkan oleh <strong> PT.&nbspJULO&nbspTEKNOLOGI&nbspFINANSIAL</strong> (selanjutnya
+        disebut “JULO”) sebagai penyelenggara
+        “Layanan Pinjam Meminjam Uang Berbasis Teknologi Informasi”, sesuai dengan Peraturan OJK No.77/POJK.01/2016.
+      </li>
+      <li>
+        <div>Penerima Pinjaman menyatakan setuju untuk mengikatkan diri dan mengakui bahwa PT. JULO Teknologi Finansial
+          (selanjutnya disebut JULO) sebagai platform yang bertindak sesuai dengan surat kuasa 1.JTF.201707 atas
+          ketentuan-ketentuan perjanjian sebagai berikut:</div>
+         <table>
+             <tbody>
+                <tr>
+                    <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama:</th>
+                    <td>{{ application.fullname | safe }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir:</th>
+                    <td>{{ dob | safe }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP:</th>
+                    <td>{{ application.ktp | safe }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon:</th>
+                    <td>{{ application.mobile_phone_1 | safe }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat:</th>
+                    <td>{{ full_address | safe }}</td>
+                </tr>
+            </tbody>
+        </table>
+      </li>
+  </ol>
+  <p>Penerima Pinjaman menyatakan setuju untuk mengikatkan diri dan mengakui bahwa PT. JULO Teknologi Finansial
+      (selanjutnya
+      disebut JULO) sebagai platform yang bertindak sesuai dengan surat kuasa 1.JTF.201707 atas ketentuan-ketentuan
+      perjanjian sebagai berikut:</p>
+  <table>
+      <tbody>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">1.</td>
+          <td style="padding-bottom:5px;">
+              Bahwa Penerima Pinjaman mengajukan permohonan pinjaman dengan nomor pinjaman {{ application.application_xid | safe }} melalui pihak JULO, dan telah disetujui pinjaman uang tunai sebesar {{ loan_amount | safe }} kepada Penerima Pinjaman.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">2.</td>
+          <td style="padding-bottom:5px;">
+              Bahwa Penerima Pinjaman berjanji untuk melunasi pinjaman dengan melakukan pembayaran kepada pihak JULO sebesar
+              {{ installment_amount | safe }} sebelum jatuh tempo pada tanggal {{ min_due_date | safe}}.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">3.</td>
+          <td style="{% if doku_flag %}padding-bottom:5px;{% endif %}">
+              Bahwa jika Penerima Pinjaman terlambat melunasi pinjaman kepada pihak JULO, adalah kewajiban dan tanggung jawab
+              saya untuk membayar biaya keterlambatan atau denda sebesar {{ first_late_fee_amount | safe }}. Denda Tambahan setelah 10 hari terlambat {{ first_late_fee_amount | safe }}. Denda Tambahan setelah 30 hari berikutnya {{ late_fee_amount | safe }}.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">4.</td>
+          <td>
+              Bahwa jika terjadi keterlambatan sebagaimana pasal 3 diatas, maka Penerima Pinjaman bersedia, setuju, dan
+              memberikan izin kepada Pejabat JULO atau pihak yang ditunjuk JULO untuk melakukan kunjungan sesuai dengan peraturan di Indonesia.
+          </td>
+        </tr>
+      </tbody>
+  </table>
+  <p>Pelunasan akan dilakukan ke rekening Virtual Account(VA) sebagai berikut:</p>
+  <table frame="box" style="width:100%" bordercolor="00ACF0">
+      <tbody>
+        <tr>
+          <td style="text-align: center;  vertical-align: top; white-space: nowrap;">
+            <b>{{ julo_bank_name | safe }}</b>{{ julo_bank_code | safe }}
+          </td>
+        </tr>
+      <tr>
+          <th style="text-align: center; vertical-align: top; white-space: nowrap;">Nomor VA:
+            <b>{{ julo_bank_account_number | safe }}</b>
+          </th>
+      </tr>
+      </tbody>
+  </table>
+  <p>Penerima Pinjaman dan JULO wajib melaksanakan ketentuan yang diatur dalam perjanjian ini dengan sebaik-baiknya
+    serta
+    senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan Perjanjian ini.</p>
+  <p>Pertanyaan atau persoalan yang timbul karena penafsiran dan/atau pelaksanaan Perjanjian ini akan diselesaikan
+    secara
+    musyawarah dengan itikad baik untuk mencapai mufakat oleh para pihak.</p>
+  <p>Segala hal-hal yang belum dituangkan dalam SPHP ini akan diatur kemudian hari dan akan dibuat Perjanjian
+    Perpanjangan/Perubahan (Addendum) pada SPHP ini, dan merupakan bagian yang tidak terpisahkan dalam Perjanjian ini
+    serta tidak memerlukan tanda tangan ulang atau persetujuan apapun terhadap Addendum tersebut.</p>
+  <p>Perjanjian ini dibuat oleh JULO secara elektronik dan secara sah serta mengikat Para Pihak pada hari dan tanggal
+    tersebut diatas dan sama berlakunya dengan perjanjian yang dicetak,ditulis tangan, dan ditandatangani secara sadar
+    dan tanpa paksaan dari pihak manapun, yang dilindungi sesuai dengan ketentuan UU. No. 11/2008 Tentang Informasi dan
+    Transaksi Elektronik, dan Peraturan Pemerintah No.82/2012 Tentang Penyelenggaraan Sistem dan Transaksi Elektronik,
+    dan Peraturan Pelaksanaannya. Segala penyalahgunaan terhadap dokumen perjanjian ini akan ditindak sesuai hukum dan
+    peraturan yang berlaku.</p>
+</body>
+</html>

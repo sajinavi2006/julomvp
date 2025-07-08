@@ -1,0 +1,49 @@
+<div class="alert alert-warning" id="payment_messages" style="display: none;">
+    <code id="payment_messages_body">
+            Silahkan field yang tersedia dengan inputan yang benar!
+    </code>
+</div>
+
+
+
+
+
+
+<div class="row m-t-20">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> {{ form_loan.julo_bank_name.label }}: </label>
+      {% if form_loan.julo_bank_name.errors %}
+        <span class="help-block error_msg small">
+            {{ form_loan.julo_bank_name.errors.as_text }}
+        </span>
+      {% endif %}
+      <div class="col-md-12 col-sm-12">
+          {{ form_loan.julo_bank_name }}
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12">{{ form_loan.julo_bank_account_number.label }}: </label>
+        {% if form_loan.julo_bank_account_number.errors %}
+          <span class="help-block error_msg small">
+              {{ form_loan.julo_bank_account_number.errors.as_text }}
+          </span>
+        {% endif %}
+        <div class="col-md-12 col-sm-12">
+           {{ form_loan.julo_bank_account_number }}
+        </div>
+  </div>
+</div>
+
+<div class="row m-t-20">
+  <div class="col-md-12 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> {{ form_loan.julo_bank_branch.label }}: </label>
+      {% if form_loan.julo_bank_branch.errors %}
+          <span class="help-block error_msg small">
+              {{ form_loan.julo_bank_branch.errors.as_text }}
+          </span>
+      {% endif %}
+      <div class="col-md-12 col-sm-12">
+          {{ form_loan.julo_bank_branch }}
+      </div>
+  </div>
+</div>

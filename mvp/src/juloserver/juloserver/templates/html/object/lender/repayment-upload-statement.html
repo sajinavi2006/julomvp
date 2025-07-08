@@ -1,0 +1,496 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+
+
+{% block additional_title %}Julo Lender - Upload Attachment{% endblock %}
+
+{% block meta %}
+    <!-- remarked if for production -->
+    <!-- <meta http-equiv="refresh" content="3" > -->
+{% endblock %}
+
+{% block custom_css %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+{% endblock %}
+
+{% block css_inside %}
+    .modal-confirm {
+      color: #000;
+      width: 525px
+    }
+    .modal-confirm .modal-content {
+      padding: 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
+    .modal-confirm .modal-header {
+      background: #fff;
+      border-bottom: none;
+          position: relative;
+      text-align: center;
+      margin: -20px -20px 0;
+      border-radius: 5px 5px 0 0;
+      padding: 35px;
+      padding-bottom: 10px;
+    }
+    .modal-confirm h4 {
+      text-align: center;
+      font-size: 36px;
+      margin: 10px 0;
+    }
+    .modal-confirm .form-control, .modal-confirm .btn {
+      min-height: 40px;
+      border-radius: 3px;
+    }
+    .modal-confirm .close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: #fff;
+      text-shadow: none;
+      opacity: 0.5;
+    }
+    .modal-confirm .close:hover {
+      opacity: 0.8;
+    }
+    .modal-confirm .icon-box {
+      color: #a7db89;
+      width: 95px;
+      height: 95px;
+      display: inline-block;
+      border-radius: 50%;
+      z-index: 9;
+      border: 5px solid #edf8e7;
+      padding: 15px;
+      text-align: center;
+    }
+    .modal-confirm .icon-box.confirm {
+        font-size:70px;
+        padding: 0;
+        color: #a5dcf0;
+    }
+    .modal-confirm .icon-box i {
+      font-size: 64px;
+      margin: -4px 0 0 -4px;
+    }
+    .modal-confirm.modal-dialog {
+      margin-top: 80px;
+    }
+    .modal-confirm .btn {
+      background-color: #03a9f3;
+      border-color: #03a9f3;
+      width: 92px;
+      height: 48px;
+      border-radius: 5px;;
+    }
+    .modal-confirm .btn.warn{
+      background-color: #fff;
+      border-color: #000;
+      color: #000;
+    }
+    .modal-confirm .btn:hover, .modal-confirm .btn:focus {
+      background: #eda645;
+      outline: none;
+      #e6feff
+    }
+
+    .modal-confirm .btn.warn:hover, .modal-confirm .btn.warn:focus {
+      background: #e6feff;
+    }
+
+    .modal-confirm .btn span {
+      margin: 1px 3px 0;
+      float: left;
+    }
+    .modal-confirm .btn i {
+      margin-left: 1px;
+      font-size: 20px;
+      float: right;
+    }
+    .trigger-btn {
+      display: inline-block;
+      margin: 100px auto;
+    }
+    .modal-confirm .icon-box.warn {
+      border: 5px solid #ffd9de;
+      color: #de2e42;
+    }
+    .ask{
+      text-align:center;
+      border-top: 0;
+    }
+    .modal-confirm .modal-content.mar {
+      padding-left: 60px;
+      padding-right: 60px;
+    }
+
+    #loading {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border: 10px solid rgb(231,231,231);
+      border-radius: 50%;
+      border-top-color: #07a8f0;
+      animation: spin 1s ease-in-out infinite;
+      -webkit-animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { -webkit-transform: rotate(360deg); }
+    }
+    @-webkit-keyframes spin {
+      to { -webkit-transform: rotate(360deg); }
+    }
+    .hidden-fi{
+      display:none;
+    }
+    .fixed-button {
+      width: 100px;
+    }
+    .table thead tr th, .table tbody tr td {
+        border: none;
+    }
+    .btn-submit {
+      width: 230.5px;
+      height: 44px;
+      background-color: #d8d8d8;
+      font-size: 17px;
+      font-weight: 500;
+      border-radius: 5px;
+      color: white;
+    }
+
+    .rectangle {
+      width: 480px;
+      height: 60px;
+      border-radius: 5px;
+      border: solid 1px #c6cbda;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-upload {
+      margin-left: 24px;
+      width: 90px;
+      height: 30px;
+      background-color: #ececed;
+      border-radius: 2px;
+      font-size: 12px;
+      padding-top: 5px;
+      cursor: pointer;
+    }
+
+    .html-btn {
+      display: none !important;
+    }
+
+    .td-table {
+      display: flex;
+      align-items: center;
+    }
+
+{% endblock %}
+{% block list_title %}Upload your attachment{% endblock %}
+{% block list_subtitle %}Drag and drop your files here{% endblock %}
+
+
+ {% block content-list %}
+
+      <!-- .row status aplikasi 120 - 180 -->
+<div id="successModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-confirm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="icon-box">
+          <i class="material-icons">&#xE876;</i>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <h1 style="margin-bottom: 20px;">Sukses!</h1>
+        <p>Submit berhasil</p>
+        <button onclick="location.reload()"type="button text-center" class="btn btn-primary text-center" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div id="errorModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="icon-box warn">
+              <i class="material-icons">&#xE5CD;</i>
+            </div>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body text-center">
+            <h1 style="margin-bottom: 20px;">Gagal!</h1>
+            <p>Data gagal dikirimkan</p>
+            <button onclick="location.reload()" type="button text-center" class="btn btn-primary text-center warn" data-dismiss="modal">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="processModal" class="modal fade" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div>
+              <div id="loading"></div>
+            </div>
+          </div>
+          <div class="modal-body text-center">
+            <h1 style="margin-bottom: 20px;">Mohon Tunggu</h1>
+            <p>sedang dalam proses...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <table id="demo-foo-row-toggler" class="table table-borderless">
+    <tbody>
+        {% for va_channel in list_repayment_channels %}
+          <tr>
+            <td id="repayment-{{forloop.counter}}" style="padding-top: 27px;">{{ va_channel }}</td>
+            <td>
+              <div class="rectangle text-center">
+                <div class="btn-upload" id="btn-upload-{{forloop.counter}}">Choose</div><br>
+                <input class="html-btn" id ="html-btn-{{forloop.counter}}" type="file" name="csv_or_txt_file" ref="file" />
+                <span id="upload-text-{{forloop.counter}}" style="margin-left: 12px; font-size: 12px; font-weight: 500px;">No file selected</span>
+            </div></td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  <div class="text-center" style="margin-top:168px;">
+    <button style="background: #03a9f3; border: 1px solid #03a9f3;" class="btn-submit" id='upload-submit-btn'>Submit</button>
+  </div>
+
+{% endblock %}
+{% block script_bottom_inside %}
+  $('#btn-upload-1').bind("click" , function () {
+    $('#html-btn-1').click();
+  });
+
+  $('#btn-upload-2').bind("click" , function () {
+    $('#html-btn-2').click();
+  });
+
+  $('#btn-upload-3').bind("click" , function () {
+    $('#html-btn-3').click();
+  });
+
+  $('#btn-upload-4').bind("click" , function () {
+    $('#html-btn-4').click();
+  });
+
+  $('#btn-upload-5').bind("click" , function () {
+    $('#html-btn-5').click();
+  });
+
+  $('#btn-upload-6').bind("click" , function () {
+    $('#html-btn-6').click();
+  });
+
+  $('#btn-upload-7').bind("click" , function () {
+    $('#html-btn-7').click();
+  });
+
+  $('#btn-upload-8').bind("click" , function () {
+    $('#html-btn-8').click();
+  });
+
+  $('#btn-upload-9').bind("click" , function () {
+    $('#html-btn-9').click();
+  });
+
+
+  $('#html-btn-1').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-1').html('No file selected');
+    } else {
+      $('#upload-text-1').html(fileName);
+    }
+  });
+
+  $('#html-btn-2').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-2').html('No file selected');
+    } else {
+      $('#upload-text-2').html(fileName);
+    }
+  });
+
+  $('#html-btn-3').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-3').html('No file selected');
+    } else {
+      $('#upload-text-3').html(fileName);
+    }
+  });
+
+  $('#html-btn-4').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-4').html('No file selected');
+    } else {
+      $('#upload-text-4').html(fileName);
+    }
+  });
+
+  $('#html-btn-5').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-5').html('No file selected');
+    } else {
+      $('#upload-text-5').html(fileName);
+    }
+  });
+
+  $('#html-btn-6').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-6').html('No file selected');
+    } else {
+      $('#upload-text-6').html(fileName);
+    }
+  });
+
+  $('#html-btn-7').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-7').html('No file selected');
+    } else {
+      $('#upload-text-7').html(fileName);
+    }
+  });
+
+  $('#html-btn-8').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-8').html('No file selected');
+    } else {
+      $('#upload-text-8').html(fileName);
+    }
+  });
+
+  $('#html-btn-9').bind('change', function() {
+    let fileName = '';
+    fileName = $(this).val();
+
+    if (fileName === '') {
+      $('#upload-text-9').html('No file selected');
+    } else {
+      $('#upload-text-9').html(fileName);
+    }
+  });
+
+
+  $('#upload-submit-btn').on('click', function() {
+    $('#processModal').modal('show');
+    let repayment_types = [];
+    let fd = new FormData();
+    let list_repayment_channels_count = {{ list_repayment_channels|safe }}.length
+
+    for (let i = 1; i <= list_repayment_channels_count; i++) {
+      let file = $('#html-btn-' + i)[0].files[0];
+
+      if (file) {
+        let repayment_type = $('#repayment-' + i).html()
+        fd.append('file', file);
+        repayment_types.push(repayment_type);
+      }
+    }
+
+    fd.append('repayment_types', repayment_types);
+    let csrf_token = '{{csrf_token}}'
+
+    $.ajax({
+      beforeSend: function (request) {
+        request.setRequestHeader("X-CSRFToken", csrf_token);
+      },
+      url: "{%url 'lender:ajax_repayment_upload' %}/",
+      type: 'post',
+      data: fd,
+      contentType: false,
+      processData: false,
+      success: function(json) {
+        if (json.message === 'success') {
+          $('#processModal').modal('hide');
+          redis_key = json.redis_key;
+          let url = '{% url "lender:repayment_list" 'default_redis_key' %}';
+          url = url.replace('default_redis_key', redis_key);
+          window.location.href = url;
+        } else {
+          $('#processModal').modal('hide');
+          $('#errorModal').modal('show');
+        }
+      },
+    });
+  })
+{% endblock %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <!-- Footable -->
+    <!-- <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script> -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+    <!--FooTable init-->
+    <!-- <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script> -->
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+
+{% endblock %}

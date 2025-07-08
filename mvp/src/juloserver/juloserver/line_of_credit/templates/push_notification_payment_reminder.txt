@@ -1,0 +1,2 @@
+Yth Bpk/Ibu, JULOKredit Anda akan jatuh tempo pd tgl {{due_date}}
+dg min.pembayaran {{minimum_payment}}

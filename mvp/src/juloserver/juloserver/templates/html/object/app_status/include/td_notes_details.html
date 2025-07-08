@@ -1,0 +1,32 @@
+{% load model template default unit %}
+
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Application ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.id|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Last Updated Note
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.max_cdate_application_note|date:"Y-m-d H:i:s"|safe }}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Last Note
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.applicationnote_set.last.note_text }}</strong>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,291 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block extrahead %}{{ block.super }}{{ media }}{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<style type="text/css">
+    :root {
+        --primary: #79aec8;
+        --secondary: #417690;
+        --accent: #f5dd5d;
+        --primary-fg: #fff;
+
+        --body-fg: #333;
+        --body-bg: #fff;
+        --body-quiet-color: #666;
+        --body-medium-color: #444;
+        --body-loud-color: #000;
+
+        --header-color: #ffc;
+        --header-branding-color: var(--accent);
+        --header-bg: var(--secondary);
+        --header-link-color: var(--primary-fg);
+
+        --breadcrumbs-fg: #c4dce8;
+        --breadcrumbs-link-fg: var(--body-bg);
+        --breadcrumbs-bg: #264b5d;
+
+        --link-fg: #417893;
+        --link-hover-color: #036;
+        --link-selected-fg: var(--secondary);
+
+        --hairline-color: #e8e8e8;
+        --border-color: #ccc;
+
+        --error-fg: #ba2121;
+
+        --message-success-bg: #dfd;
+        --message-warning-bg: #ffc;
+        --message-error-bg: #ffefef;
+
+        --darkened-bg: #f8f8f8; /* A bit darker than --body-bg */
+        --selected-bg: #e4e4e4; /* E.g. selected table cells */
+        --selected-row: #ffc;
+
+        --button-fg: #fff;
+        --button-bg: var(--secondary);
+        --button-hover-bg: #205067;
+        --default-button-bg: #205067;
+        --default-button-hover-bg: var(--secondary);
+        --close-button-bg: #747474;
+        --close-button-hover-bg: #333;
+        --delete-button-bg: #ba2121;
+        --delete-button-hover-bg: #a41515;
+
+        --object-tools-fg: var(--button-fg);
+        --object-tools-bg: var(--close-button-bg);
+        --object-tools-hover-bg: var(--close-button-hover-bg);
+
+        --font-family-primary:
+            "Segoe UI",
+            system-ui,
+            Roboto,
+            "Helvetica Neue",
+            Arial,
+            sans-serif,
+            "Apple Color Emoji",
+            "Segoe UI Emoji",
+            "Segoe UI Symbol",
+            "Noto Color Emoji";
+        --font-family-monospace:
+            ui-monospace,
+            Menlo,
+            Monaco,
+            "Cascadia Mono",
+            "Segoe UI Mono",
+            "Roboto Mono",
+            "Oxygen Mono",
+            "Ubuntu Monospace",
+            "Source Code Pro",
+            "Fira Mono",
+            "Droid Sans Mono",
+            "Courier New",
+            monospace,
+            "Apple Color Emoji",
+            "Segoe UI Emoji",
+            "Segoe UI Symbol",
+            "Noto Color Emoji";
+
+        color-scheme: light;
+    }
+
+    .remove-button {
+        background: #c87979;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        height: 35px;
+        line-height: 15px;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    img[class^="field-preview-image-"] {
+        width: 300px;
+    }
+
+    .object-tools {
+        font-size: 0.625rem;
+        font-weight: bold;
+        padding-left: 0;
+        float: right;
+        position: relative;
+        margin-top: 0em;
+        margin-left: 1em;
+    }
+
+    .object-tools li {
+        display: block;
+        float: left;
+        margin-left: 5px;
+        height: 1rem;
+    }
+
+    .object-tools a {
+        border-radius: 15px;
+    }
+
+    .object-tools a:link, .object-tools a:visited {
+        float: left;
+        padding: 3px 12px;
+        background: var(--object-tools-bg);
+        color: var(--object-tools-fg);
+        font-weight: 400;
+        font-size: 0.6875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .object-tools a:focus, .object-tools a:hover {
+        background-color: var(--object-tools-hover-bg);
+    }
+
+    .object-tools a:focus{
+        text-decoration: none;
+    }
+
+    .object-tools a.viewsitelink, .object-tools a.addlink {
+        background-repeat: no-repeat;
+        background-position: right 7px center;
+        padding-right: 26px;
+    }
+
+    .object-tools a.viewsitelink {
+        background-image: url(../img/tooltag-arrowright.svg);
+    }
+
+    .object-tools a.addlink {
+        background-image: url(../img/tooltag-add.svg);
+    }
+
+    .object-tools img {
+        width: 0.6875rem;
+        height: 0.6875rem;
+        float: right;
+        padding-right: 0.2rem;
+    }
+
+    .loader {
+      margin: 0 auto;
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #3498db;
+      width: 40px;
+      height: 40px;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+    }
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+</style>
+{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; {% if add %}{% trans 'Upload' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block content %}
+{% block object-tools %}
+<ul class="object-tools">
+    {% block object-tools-items %}
+        {% for row in custom_object_tools %}
+        <li>
+            <a href="{{ row.link }}" class="{{ row.class }}">
+                {% if row.add_back %}
+                    &#8592; 
+                {% endif %}
+                {% if row.add_hist_icon %}
+                    <img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAgMjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwLjUuNUM3IC41IDMuOSAyLjQgMi4zIDUuM0wwIDN2Ni41aDYuNUwzLjcgNi43QzUgNC4yIDcuNSAyLjUgMTAuNSAyLjVjNC4xIDAgNy41IDMuNCA3LjUgNy41cy0zLjQgNy41LTcuNSA3LjVjLTMuMyAwLTYtMi4xLTcuMS01SDEuM2MxLjEgNCA0LjggNyA5LjIgNyA1LjMgMCA5LjUtNC4zIDkuNS05LjVTMTUuNy41IDEwLjUuNVpNOSA1LjV2NS4xbDQuNyAyLjguOC0xLjMtNC0yLjRWNS41SDlaIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIuOSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGFzcz0iZmlsbC0wMDAwMDAiPjwvcGF0aD48L3N2Zz4=">
+                {% endif %}
+                {% if row.add_guideline_icon %}
+                    <img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDggNDgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iI2ZmZmZmZiIgY2xhc3M9ImZpbGwtMjQxZjIwIj48cGF0aCBkPSJNMzMuMDIxIDIuMDI2VjBIMTQuOTc5djIuMDI2SDRWNDhoNDBWMi4wMjZIMzMuMDIxek00MCA0Mkg4VjZoNi45Nzl2M2gxOC4wNDJWNkg0MHYzNnoiPjwvcGF0aD48cGF0aCBkPSJNMTIgMTQuOTM4aDI0LjA2MnY0SDEyek0xMiAyMi45MzhoMjQuMDYydjRIMTJ6TTEyIDMwLjkzOGgyNC4wNjJ2NEgxMnoiPjwvcGF0aD48L2c+PC9zdmc+">
+                {% endif %}
+                {{ row.text }}
+            </a>
+        </li>
+        {% endfor %}
+    {% endblock %}
+</ul>
+{% endblock %}
+{% if data_table %}
+<h2 style="margin-left: 1em;">CSV Format</h2>
+<table style="border: 1px solid black;margin-bottom: 2em; margin-left: 1em;">
+    <tr>
+        {% for property in data_table.property %}
+            <td style="border: 1px solid black;"><b>{{ property }}</b></td>
+        {% endfor %}
+    </tr>
+    <tr>
+        {% for data in data_table.data %}
+            <td style="border: 1px solid black;">{{ data|linebreaksbr }}</td>
+        {% endfor %}
+    </tr>
+</table>
+{% endif %}
+
+<div id="content-main">
+  <form enctype="multipart/form-data" action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+      <div>
+          {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
+          {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
+          {% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+          {% if errors %}
+              <p class="errornote">
+              {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+              </p>
+              {{ adminform.form.non_field_errors }}
+          {% endif %}
+          
+          <fieldset class="module aligned ">
+              {{ form.as_p }}
+          </fieldset>
+
+          {% block submit_buttons_bottom %}
+              <div class="submit-row">
+                  <input type="submit" value="Submit" class="default" id="{{ opts.model_name }}_submit" name="_save">
+              </div>
+          {% endblock %}
+      </div>
+  </form>
+  <br/>
+  <br/>
+</div>
+{% endblock %}

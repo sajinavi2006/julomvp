@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Angsuran {{payment_number}} Anda {{ due_amount }} jatuh tempo hari ini. Segera bayar untuk kesempatan terakhir cashback sebesar {{ payment_cashback_amount }}. Cara bayar: {{url}}

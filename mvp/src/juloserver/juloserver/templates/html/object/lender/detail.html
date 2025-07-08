@@ -1,0 +1,1000 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+
+{% block additional_title %}New Product{% endblock %}
+ 
+{% block css_inside %}
+
+{% endblock %}
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+ 
+{% block list_title %} 
+{% endblock %}
+{% block list_subtitle %}<h4>Lender Detail</h4>{% endblock %}
+
+{% block content-list %}
+<div class="row m-b-12 p-t-0" id="lender-product-detail">
+    <br />
+    {% if status == 'Edit' %}
+        <div class="col-md-12 col-xs-12">
+            <div class="row">
+                <div class="col-md-12" style="text-align: center">
+                    <div v-if="!isEdit">
+                        <button
+                            class="button btn btn-danger"
+                            v-on:click="Edit">
+                            <i class="fa fa-pencil">
+                            Edit</i>
+                        </button>
+                    </div>
+                    <div v-else>
+                        <button
+                            class="button btn btn-primary"
+                            v-on:click="updateLenderProduct">
+                            <i class="fa fa-save">
+                            Save</i>
+                        </button>
+                        <button
+                            class="button btn btn-danger"
+                            v-on:click="Edit">
+                            <i class="fa fa-times">
+                            Cancel</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="partner">Lender Name</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{partner.name}}"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel col-md-6 col-xs-12 panel-default">
+                <div class="panel-heading">
+                    <h5>Product Criteria</h5>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group row">
+                        <label>Type</label>
+                        <select
+                            class="form-control"
+                            v-model="lender_product.type"
+                            @change="onTypeChange"
+                            :disabled="isEdit === false"
+                        >
+                            <option
+                                v-for="type in LENDER_PRODUCT_TYPE_CHOICES"
+                                :value='type'><% type %>
+                            </option>
+                        </select>
+                    </div>
+                    <div id="product-list" v-if="lender_product.type === 'Product List'">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">product profile list</label>
+                                <select
+                                    class="form-control"
+                                    v-model="lender_product.product_profile_list"
+                                    multiple="multiple"
+                                    :disabled="isEdit === false">
+                                    <option
+                                        v-for="product_profile in product_profile_list"
+                                        :value="product_profile.pk">
+                                        <% product_profile.fields.name %>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="product-definition" v-else>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min interest rate</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_interest_rate"
+                                    :disabled="isEdit === false" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max interest rate</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    step="0.0000"
+                                    v-model="lender_product.max_interest_rate"
+                                    :disabled="isEdit === false" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min origination fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_origination_fee"
+                                    :disabled="isEdit === false" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max origination fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_origination_fee"
+                                    :disabled="isEdit === false" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min Amount</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.min_amount"
+                                    :disabled="isEdit === false" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max Amount</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.max_amount"
+                                    :disabled="isEdit === false" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min duration</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.min_duration"
+                                    :disabled="isEdit === false" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max duration</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.max_duration" 
+                                    :disabled="isEdit === false"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">min late fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_late_fee"
+                                    :disabled="isEdit === false"
+                                />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">max late fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_late_fee"
+                                    :disabled="isEdit === false"
+                                />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">min cashback initial</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_cashback_initial"
+                                    :disabled="isEdit === false"
+                                />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">max cashback initial</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_cashback_initial"
+                                    :disabled="isEdit === false" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">min cashback payment</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_cashback_payment"
+                                    :disabled="isEdit === false" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">max cashback payment</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_cashback_payment"
+                                    :disabled="isEdit === false" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel col-sm-6 col-xs-12 panel-default">
+                <div class="panel-heading">
+                    <h5>Customer Criteria</h5>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">min age</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.min_age"
+                                :disabled="isEdit === false" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">max age</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.max_age"
+                                :disabled="isEdit === false" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">min income</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.min_income"
+                                :disabled="isEdit === false" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">max income</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.max_income"
+                                :disabled="isEdit === false" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">job type</label>
+                            <select 
+                                class="form-control"
+                                v-model="lender_customer.job_type"
+                                multiple="multiple"
+                                :disabled="isEdit === false">
+                                <option
+                                    v-for="job_type in JOB_TYPE_CHOICES"
+                                    :value='job_type'><% job_type %></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">job industrt</label>
+                            <select
+                                class="form-control"
+                                v-model="lender_customer.job_industry"
+                                multiple="multiple"
+                                :disabled="isEdit === false">
+                                <option
+                                    v-for="job_industry in JOB_INDUSTRY_CHOICES"
+                                    :value="job_industry"><% job_industry %></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">job description</label>
+                            <select
+                                class="form-control"
+                                v-model="lender_customer.job_description"
+                                multiple="multiple"
+                                :disabled="isEdit === false">
+                                <option
+                                    v-for="job_description in JOB_DESCRIPTION_CHOICES"
+                                    :value="job_description"><% job_description %></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">credit score</label>
+                            <select
+                                class="form-control"
+                                v-model="lender_customer.credit_score"
+                                multiple="multiple"
+                                :disabled="isEdit === false">
+                                <option
+                                    v-for="credit_score in CREDIT_SCORE_CHOICES"
+                                    :value="credit_score"><% credit_score %></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if status == 'Add' %}
+        <div class="col-md-12 col-xs-12">
+            <div class="row">
+                <div class="col-md-12" style="text-align: center">
+                    <button
+                        class="button btn btn-primary"
+                        v-on:click="saveLenderProduct">
+                        <i class="fa fa-save">
+                        Save</i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="partner">Lender Name</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{partner.name}}"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel col-md-6 col-xs-12 panel-default">
+                <div class="panel-heading">
+                    <h5>Product Criteria</h5>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group row">
+                        <label>Type</label>
+                        <select
+                            class="form-control"
+                            v-model="lender_product.type"
+                            @change="onTypeChange"
+                        >
+                            {% for type in LENDER_PRODUCT_TYPE_CHOICES %}
+                                <option value='{{ type }}'>{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="product-definition" v-if="lender_product.type == 'Product Definition'">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min interest rate</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_interest_rate" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max interest rate</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    step="0.0000"
+                                    v-model="lender_product.max_interest_rate" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min origination fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_origination_fee" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max origination fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_origination_fee" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min Amount</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.min_amount" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max Amount</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.max_amount" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">Min duration</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.min_duration" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">Max duration</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender_product.max_duration" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">min late fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_late_fee"
+                                    required="true" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">max late fee</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_late_fee" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">min cashback initial</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_cashback_initial" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">max cashback initial</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_cashback_initial" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">min cashback payment</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.min_cashback_payment" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="code">max cashback payment</label>
+                                <input
+                                    type="number"
+                                    step="0.0000"
+                                    class="form-control"
+                                    v-model="lender_product.max_cashback_payment" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="product-list" v-else>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="code">product profile list</label>
+                                <select
+                                    class="form-control"
+                                    v-model="lender_product.product_profile_list"
+                                    multiple="multiple">
+                                    {% for product in product_list %}
+                                        <option value='{{product.id}}'>{{ product.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel col-sm-6 col-xs-12 panel-default">
+                <div class="panel-heading">
+                    <h5>Customer Criteria</h5>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">min age</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.min_age" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">max age</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.max_age" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">min income</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.min_income" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">max income</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_customer.max_income" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">job type</label>
+                            <select class="form-control" v-model="lender_customer.job_type" multiple="multiple">
+                                {% for job_type in JOB_TYPE_CHOICES %}
+                                    <option value='{{job_type}}'>{{ job_type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">job industry</label>
+                            <select
+                                class="form-control"
+                                v-model="lender_customer.job_industry"
+                                multiple="multiple">
+                                {% for job_industry in JOB_INDUSTRY_CHOICES %}
+                                    <option value='{{job_industry}}'>{{ job_industry }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">job description</label>
+                            <select
+                                class="form-control"
+                                v-model="lender_customer.job_description"
+                                multiple="multiple">
+                                {% for job_description in JOB_DESCRIPTION_CHOICES %}
+                                    <option value='{{job_description}}'>{{ job_description }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">credit score</label>
+                            <select
+                                class="form-control"
+                                v-model="lender_customer.credit_score"
+                                multiple="multiple">
+                                {% for credit_score in CREDIT_SCORE_CHOICES %}
+                                    <option value='{{credit_score}}'>{{ credit_score }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% load static from staticfiles %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<!-- vue js -->
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type="text/javascript">
+    var LenderProductDetail = new Vue({
+        el: '#lender-product-detail',
+        delimiters: ["<%", "%>"],
+        data: {
+            isEdit: false,
+            csrftoken:'{{csrf_token}}',
+            lender_product: {
+                id:'{{lender_product_criteria_id}}',
+                type: 'Product List',
+                min_amount: null,
+                max_amount: null,
+                min_duration: null,
+                max_duration: null,
+                min_interest_rate: null,
+                max_interest_rate: null,
+                min_origination_fee: null,
+                max_origination_fee: null,
+                min_late_fee: null,
+                max_late_fee: null,
+                min_cashback_payment: null,
+                max_cashback_payment: null,
+                min_cashback_initial: null,
+                max_cashback_initial: null,
+                product_profile_list: [],
+                partner: '{{ partner.id }}',
+            },
+            lender_customer: {
+                min_age: null,
+                max_age: null,
+                min_income: null,
+                max_income: null,
+                job_type: [],
+                job_industry: [],
+                job_description: [],
+                location: [],
+                credit_score: [],
+            },
+            lender: {
+                username: '',
+                password: '',
+                name: '',
+                type: 'lender',
+                email: '',
+                phone: '',
+                token: '',
+                systrace: '',
+                is_active: true,
+            },
+            partner: {},
+            product_profile_list: [],
+            LENDER_PRODUCT_TYPE_CHOICES: [],
+            JOB_TYPE_CHOICES: [],
+            JOB_INDUSTRY_CHOICES: [],
+            JOB_DESCRIPTION_CHOICES: [],
+            CREDIT_SCORE_CHOICES: [],
+            styleObject: {
+                // overflowY: 'scroll',
+                // height: '42vh'
+            }
+        },
+        beforeMount(){
+            this.getLenderProduct()
+        },
+        methods: {
+            getLenderProduct: function() {
+                self = this
+                if (self.lender_product.id !== 'None') {
+                   $.ajax({
+                        url :  "{%url 'lender:ajax_get_detail' %}", // the endpoint
+                        type : "GET", // http method
+                        data : {
+                          partner_id: '{{partner.id}}',
+                        }, // data sent with the get request
+                          // handle a successful response
+                        success : function(json) {
+                            console.log('json', json)
+                            // Lender Product
+                            self.lender_product = json.lender_product_criteria.fields !== undefined ? json.lender_product_criteria.fields : {}
+                            self.lender_product.id = json.lender_product_criteria.pk
+                            self.lender_product.product_profile_list = json.lender_product_criteria.fields.product_profile_list !== null ? JSON.parse(json.lender_product_criteria.fields.product_profile_list) : null
+
+                            // lender customer
+                            self.lender_customer = json.lender_customer_criteria.fields !== undefined ? json.lender_customer_criteria.fields : {}
+                            self.lender_customer.id = json.lender_customer_criteria.pk
+                            self.lender_customer.job_type = json.lender_customer_criteria.fields.job_type !== null ? 
+                                JSON.parse(json.lender_customer_criteria.fields.job_type) : null
+                            self.lender_customer.job_industry = json.lender_customer_criteria.fields.job_industry ? 
+                                JSON.parse(json.lender_customer_criteria.fields.job_industry) : null
+                            self.lender_customer.job_description = json.lender_customer_criteria.fields.job_description ? 
+                                JSON.parse(json.lender_customer_criteria.fields.job_description) : null
+                            self.lender_customer.credit_score = json.lender_customer_criteria.fields.credit_score !== null ? 
+                                JSON.parse(json.lender_customer_criteria.fields.credit_score) : null
+                            self.lender_customer.location = json.lender_customer_criteria.fields.location !== null ? 
+                                JSON.parse(json.lender_customer_criteria.fields.location) : null
+
+                            // All choices List
+                            self.product_profile_list = json.product_profile_list
+                            self.partner = json.partner.fields
+                            self.LENDER_PRODUCT_TYPE_CHOICES = json.LENDER_PRODUCT_TYPE_CHOICES
+                            self.JOB_TYPE_CHOICES = json.JOB_TYPE_CHOICES
+                            self.JOB_INDUSTRY_CHOICES = json.JOB_INDUSTRY_CHOICES
+                            self.JOB_DESCRIPTION_CHOICES = json.JOB_DESCRIPTION_CHOICES
+                            self.CREDIT_SCORE_CHOICES = json.CREDIT_SCORE_CHOICES
+                        },
+                          // handle a non-successful response
+                        error : function(xhr,errmsg,err) {
+                            console.log(xhr)
+                            self.ToastDanger('failed get lender product')
+                        }
+                    });
+                } 
+            },
+            reAssignEmptyFields: function() {
+                self = this
+                if (self.lender_product.min_amount === '') {
+                    self.lender_product.min_amount = null
+                }
+                if (self.lender_product.max_amount === '') {
+                    self.lender_product.max_amount = null
+                }
+                if (self.lender_product.min_duration === '') {
+                    self.lender_product.min_duration = null
+                }
+                if (self.lender_product.max_duration === '') {
+                    self.lender_product.max_duration = null
+                }
+                if (self.lender_product.min_interest_rate === '') {
+                    self.lender_product.min_interest_rate = null
+                }
+                if (self.lender_product.max_interest_rate === '') {
+                    self.lender_product.max_interest_rate = null
+                }
+                if (self.lender_product.min_origination_fee === '') {
+                    self.lender_product.min_origination_fee = null
+                }
+                if (self.lender_product.max_origination_fee === '') {
+                    self.lender_product.max_origination_fee = null
+                }
+                if (self.lender_product.min_late_fee === '') {
+                    self.lender_product.min_late_fee = null
+                }
+                if (self.lender_product.max_late_fee === '') {
+                    self.lender_product.max_late_fee = null
+                }
+                if (self.lender_product.min_cashback_initial === '') {
+                    self.lender_product.min_cashback_initial = null
+                }
+                if (self.lender_product.max_cashback_initial === '') {
+                    self.lender_product.max_cashback_initial = null
+                }
+                if (self.lender_product.min_cashback_payment === '') {
+                    self.lender_product.min_cashback_payment = null
+                }
+                if (self.lender_product.max_cashback_payment === '') {
+                    self.lender_product.max_cashback_payment = null
+                }
+                // lender customer criteria
+                if (self.lender_customer.min_age === '') {
+                    self.lender_customer.min_age = null
+                }
+                if (self.lender_customer.max_age === '') {
+                    self.lender_customer.max_age = null
+                }
+                if (self.lender_customer.min_income === '') {
+                    self.lender_customer.min_income = null
+                }
+                if (self.lender_customer.max_income === '') {
+                    self.lender_customer.max_income = null
+                }
+            },
+            integerFieldValidation: function() {
+                self = this
+                if (self.lender_product.min_amount !== null) {
+                    if (String(self.lender_product.min_amount).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'min amount could not be decimal value!!')
+                        return false
+                    }
+                }
+                
+                if (self.lender_product.max_amount !== null) {
+                    if (String(self.lender_product.max_amount).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'max amount could not be decimal value!!')
+                        return false
+                    }
+                }
+
+                if (self.lender_product.min_duration !== null) {
+                    if (String(self.lender_product.min_duration).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'min duration could not be decimal value!!')
+                        return false
+                    }
+                }
+                
+                if (self.lender_product.max_duration !== null) {
+                    if (String(self.lender_product.max_duration).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'max duration could not be decimal value!!')
+                        return false
+                    }
+                }
+                
+                if (self.lender_customer.min_age !== null) {
+                    if (String(self.lender_customer.min_age).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'min age could not be decimal value!!')
+                        return false
+                    }
+                }
+                
+                if (self.lender_customer.max_age !== null) {
+                    if (String(self.lender_customer.max_age).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'max age could not be decimal value!!')
+                        return false
+                    }
+                }
+                
+                if (self.lender_customer.min_income !== null) {
+                    if (String(self.lender_customer.min_income).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'min income could not be decimal value!!')
+                        return false
+                    }
+                }
+                
+                if (self.lender_customer.max_income !== null) {
+                    if (String(self.lender_customer.max_income).indexOf('.') !== -1) {
+                        self.ToastDanger('invalid value', 'max income could not be decimal value!!')
+                        return false
+                    }
+                }
+
+                return true
+            },
+            requiredFieldsValidation: function() {
+                self = this
+                if (self.lender_product.partner === null || self.lender_product.partner === '') {
+                    self.ToastDanger('missing required field', 'partner could not be empty!!')
+                    return false
+                }
+                return true
+            },
+            updateLenderProduct: function() {
+                self = this
+                self.reAssignEmptyFields();
+                if (self.requiredFieldsValidation() === true && 
+                    self.integerFieldValidation() === true) {
+                    $.ajax({
+                        url :  "{%url 'lender:ajax_update_detail' %}", // the endpoint
+                        type : "POST", // http method
+                        data : {
+                          lender_product: JSON.stringify(self.lender_product),
+                          lender_customer: JSON.stringify(self.lender_customer),
+                          csrfmiddlewaretoken: self.csrftoken
+                        }, // data sent with the get request
+                          // handle a successful response
+                        success : function(json) {
+                            self.ToastSuccess('success update lender product')
+                            window.location.href = json.url
+                        },
+                          // handle a non-successful response
+                        error : function(xhr,errmsg,err) {
+                            console.log(xhr)
+                            self.ToastDanger('failed update lender product!!',
+                                xhr.responseText)
+                        }
+                    });
+                }
+            },
+            saveLenderProduct: function() {
+                console.log(JSON.stringify(this.product))
+                self = this
+                self.reAssignEmptyFields();
+                if (self.requiredFieldsValidation() === true) {
+                    delete self.lender_product.id
+                    $.ajax({
+                        url :  "{%url 'lender:ajax_add_lender_product' %}", // the endpoint
+                        type : "POST", // http method
+                        data : {
+                          lender_product: JSON.stringify(self.lender_product),
+                          lender_customer: JSON.stringify(self.lender_customer),
+                          csrfmiddlewaretoken: self.csrftoken
+                        }, // data sent with the get request
+                          // handle a successful response
+                        success : function(json) {
+                            console.log(json)
+                            self.ToastSuccess('success add lender product')
+                            window.location.href = json.url
+                        },
+                          // handle a non-successful response
+                        error : function(xhr,errmsg,err) {
+                            self.ToastDanger('failed add lender product',
+                                             xhr.responseText)
+                        }
+                    });
+                }
+            },
+            onTypeChange: function(e) {
+                self = this
+                if (e.target.value === 'Product Definition') {
+                    self.lender_product.product_profile_list = []
+                } else {
+                    self.lender_product.min_amount = null
+                    self.lender_product.max_amount = null
+                    self.lender_product.min_duration = null
+                    self.lender_product.max_duration = null
+                    self.lender_product.min_interest_rate = null
+                    self.lender_product.max_interest_rate = null
+                    self.lender_product.min_origination_fee = null
+                    self.lender_product.max_origination_fee = null
+                    self.lender_product.min_late_fee = null
+                    self.lender_product.max_late_fee = null
+                    self.lender_product.min_cashback_payment = null
+                    self.lender_product.max_cashback_payment = null
+                    self.lender_product.min_cashback_initial = null
+                    self.lender_product.max_cashback_initial = null
+                }
+            },
+            handleChange: function(e) {
+                self = this
+                product_field = e.target.name.split('__')[0]
+                product_line_field = e.target.name.split('__')[1]
+                self.product[product_field] = e.target.value
+                self.product_line[product_line_field] = e.target.value
+                console.log(self)
+            },
+            handleCheck: function(e) {
+                self = this
+                model_name = e.target.name.split('__')[0]
+                field_name = e.target.name.split('__')[1]
+                self[model_name][field_name] = !JSON.parse(self[model_name][field_name])
+            },
+            handleMultipleChange: function(e) {
+                val_arr = e.target.value.toLowerCase().replace(/, /g, ',').replace(/ ,/g, ',').split(',')
+                model_name = e.target.name.split('__')[0]
+                field_name = e.target.name.split('__')[1]
+                self[model_name][field_name] = val_arr
+            },
+            ToastSuccess: function(header_msg, body_message){
+             $.toast({
+               heading: header_msg,
+               text: body_message,
+               position: 'top-right',
+               loaderBg:'#ff6849',
+               icon: 'success',
+               hideAfter: 1500,
+               stack: 6
+             });
+            },
+            ToastDanger: function(header_msg, body_message){
+             $.toast({
+               heading: header_msg,
+               text: body_message,
+               position: 'top-right',
+               loaderBg:'#ff6849',
+               icon: 'error',
+               hideAfter: 2800
+             });
+            },
+            Edit: function(){
+                this.isEdit = !this.isEdit
+                if (this.isEdit === false) {
+                    this.getLenderProduct()
+                }
+            }
+        },
+        filters: {
+        }
+    });
+</script>
+{% endblock %}

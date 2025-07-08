@@ -1,0 +1,43 @@
+{% load unit %}
+<tr class= "ca-none {{ app_data.fraud_report.statuses|ca_tr_class|default:''|safe}} ca">
+  <td class="col-xs-8">
+    <strong>Fraud Report</strong>
+    {% with object=app_data.fraud_report field_name='fraud_report'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.karakter.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <strong>Karakter</strong>
+    {% with object=app_data.karakter field_name='karakter'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.selfie.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <strong>Selfie</strong>
+    {% with object=app_data.selfie field_name='selfie'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+
+
+<tr class= "ca-none {{ app_data.signature.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <strong>Tanda tangan</strong>
+    {% with object=app_data.signature field_name='signature'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.voice_recording.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <strong>Voice Recording</strong>
+    {% with object=app_data.voice_recording field_name='voice_recording'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+

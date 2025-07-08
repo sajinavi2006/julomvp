@@ -1,0 +1,137 @@
+{% load checkusergroup from common %}
+{% load unit %}
+  <div class="row block_image p-t-20" id="image_row">
+      <div class="col-sm-12">
+        {% for document in image_list|slice:":6" %}
+          {% include "object/app_status/include/detail_images_part.html" %}
+        {% endfor %}
+        {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+          {% if 'payment_status' not in request.path or is_iso_inactive == True %}
+            {% if image_list.count < 6 %}
+                {% for document in voice_list|slice:"1" %}
+                  {% include "object/app_status/include/detail_voice.html" %}
+                {% endfor %}
+            {% endif %}
+          {% endif %}
+        {% endcheckusergroup %}
+
+        {% if image_list.count = 0 and voice_list.count = 0 %}
+          <p>
+          <strong>Dokumen Tidak Tersedia</strong>
+          </p>
+        {% endif %}
+      </div>
+
+      <div class="col-sm-12">
+        {% for document in image_list|slice:"6:12" %}
+          {% include "object/app_status/include/detail_images_part.html" %}
+        {% endfor %}
+        {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+          {% if 'payment_status' not in request.path or is_iso_inactive == True %}
+            {% if image_list.count > 5 and image_list.count < 12 %}
+                {% for document in voice_list|slice:"1" %}
+                 {% include "object/app_status/include/detail_voice.html" %}
+               {% endfor %}
+            {% endif %}
+          {% endif %}
+        {% endcheckusergroup %}
+      </div>
+
+      <div class="col-sm-12">
+        {% for document in image_list|slice:"12:18" %}
+          {% include "object/app_status/include/detail_images_part.html" %}
+        {% endfor %}
+        {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+          {% if 'payment_status' not in request.path or is_iso_inactive == True %}
+            {% if image_list.count > 11 and image_list.count < 18 %}
+                {% for document in voice_list|slice:"1" %}
+                  {% include "object/app_status/include/detail_voice.html" %}
+                {% endfor %}
+            {% endif %}
+          {% endif %}
+        {% endcheckusergroup %}
+      </div>
+
+      <div class="col-sm-12">
+        {% for document in image_list|slice:"18:24" %}
+          {% include "object/app_status/include/detail_images_part.html" %}
+        {% endfor %}
+        {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+          {% if 'payment_status' not in request.path or is_iso_inactive == True %}
+            {% if image_list.count > 17 and image_list.count < 24 %}
+                {% for document in voice_list|slice:"1" %}
+                  {% include "object/app_status/include/detail_voice.html" %}
+                {% endfor %}
+            {% endif %}
+          {% endif %}
+        {% endcheckusergroup %}
+      </div>
+
+      <div class="col-sm-12">
+        {% for document in image_list|slice:"24:30" %}
+          {% include "object/app_status/include/detail_images_part.html" %}
+        {% endfor %}
+        {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+          {% if 'payment_status' not in request.path or is_iso_inactive == True %}
+            {% if image_list.count > 23 and image_list.count < 30 %}
+                {% for document in voice_list|slice:"1" %}
+                  {% include "object/app_status/include/detail_voice.html" %}
+                {% endfor %}
+             {% endif %}
+          {% endif %}
+        {% endcheckusergroup %}
+      </div>
+      {% if is_partnership_leadgen %}
+        <div class="col-sm-12">
+          {% for document in list_image_partnership_liveness|slice:":6" %}
+            {% include "object/app_status/include/detail_images_partnership_liveness_part.html" %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="row collapse" id="imageobsolete" aria-expanded="false" style="height: 0px;">
+
+        <!-- /.col -->
+        <div class="col-sm-12">
+          {% for document in image_list_1|slice:":6" %}
+            {% include "object/app_status/include/detail_images_part.html" %}
+          {% endfor %}
+        </div>
+        <div class="col-sm-12">
+          {% for document in image_list_1|slice:"6:12" %}
+            {% include "object/app_status/include/detail_images_part.html" %}
+          {% endfor %}
+        </div>
+        <div class="col-sm-12">
+          {% for document in image_list_1|slice:"12:18" %}
+            {% include "object/app_status/include/detail_images_part.html" %}
+          {% endfor %}
+        </div>
+
+          {% if 'payment_status' not in request.path or is_iso_inactive == True %}
+          <div class="col-sm-12">
+            {% for document in voice_list_1|slice:":6" %}
+              {% include "object/app_status/include/detail_voice.html" %}
+            {% endfor %}
+          </div>
+          <div class="col-sm-12">
+            {% for document in voice_list_1|slice:"6:12" %}
+              {% include "object/app_status/include/detail_voice.html" %}
+            {% endfor %}
+          </div>
+         {% endif %}
+      </div>
+
+      {% if 'payment_status' not in request.path or is_iso_inactive == True %}
+        {%if image_list_1 or voice_list_1 %}
+        <div class="row">
+          <div class="col-md-6 col-sm-12 col-xs-12 col-md-offset-3 m-t-30 m-p-30">
+              <button id="btn_show_obsolete" class="btn btn-primary  btn-block left collapsed" type="button" data-toggle="collapse" data-target="#imageobsolete" aria-expanded="false" aria-controls="imageobsolete"><i class="fa fa-image fa-fw"></i>Tampilkan Gbr Tidak Terpakai</button>
+          </div>
+        </div>
+        <br/>
+        {% endif %}
+      {% endif %}
+
+  </div>
+  <!-- .row -->

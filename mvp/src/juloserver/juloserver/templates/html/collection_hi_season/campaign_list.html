@@ -1,0 +1,143 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block custom_css %}
+    <!-- Static Css -->
+    <link href="{% static 'theme/nav-mini/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">HIGH SEASON CAMPAIGN</h3>
+        </div>
+        <div class="col-md-3 text-right">
+            <a href="{%url 'collection_hi_season:collection_hi_season_campaign_form' %}" title="Add New Campaign">
+                <button class="btn btn-success btn-rounded m-b-5"><i class="fa fa-pencil fa-fw"></i> Add New Campaign </button>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+<div class="a-table">
+    <table class="table toggle-circle table-hover table-striped">
+      <thead>
+        <tr>
+          <th class="small-width p-l-10" scope="col"> No </th>
+          <th class="large-width"> Name </th>
+          <th class="large-width" scope="col"> Campaign Period </th>
+          <th class="large-width" scope="col"> Eligible Due Date </th>
+          <th class="large-width" scope="col"> Payment Terms </th>
+          <th class="large-width" scope="col"> Eligible Partner ID </th>
+          <th class="large-width" scope="col"> Exclude Refinancing </th>
+          <th class="large-width" scope="col"> Prize </th>
+          <th class="large-width" scope="col"> Created On </th>
+          <th class="large-width" scope="col"> Last Update </th>
+          <th class="large-width" scope="col"> Announcement Date </th>
+          <th class="large-width" scope="col"> Action </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in campaign_list %}
+        <tr>
+            <td class="p-l-10" id="number"> {{ forloop.counter }}</td>
+            <td>
+                {{ item.campaign_name }}
+            </td>
+            <td>{{ item.campaign_start_period}} - {{ item.campaign_end_period }}</td>
+            <td>{{ item.due_date_start }} - {{item.due_date_end }}</td>
+            <td>{{ item.payment_terms }}</td>
+            <td>{{ item.eligible_partner_ids }}</td>
+            <td>{{ item.exclude_pending_refinancing}}</td>
+            <td>{{ item.prize }}</td>
+            <td>{{ item.cdate}}</td>
+            <td>{{ item.udate}}</td>
+            <td>{{ item.announcement_date|default:"-"}}</td>
+            <td>
+                {% if item.campaign_status == 'draft' %}
+                <button type="button" class="btn-primary btn-rounded btnCampaign p-l-20 p-r-20 m-r-40" id="btnStart" value="{{ item.id }}">Start</button>
+                {% elif item.campaign_status == 'active' %}
+                <button type="button" class="btn btn-danger btn-rounded btnCampaign btn-pause p-l-20 p-r-20 m-r-40" value="{{ item.id }}">Pause</button>
+                {% elif item.campaign_status == 'pause' %}
+                <button type="button" class="btn btn-success btn-rounded btnCampaign btn-resume p-l-20 p-r-20 m-r-40" value="{{ item.id }}">Resume</button>
+                {% elif item.campaign_status == 'finished' %}
+                <button type="button" class="btn btn-secondary btn-rounded btnCampaign p-l-20 p-r-20 m-r-40" disabled style="background-color: #bfd1d1;">Finished</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="11">
+                <div class="alert alert-info center empty-info">
+                    <strong>Info!</strong> Tidak ada Data.
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block script_bottom_inside %}
+    $('#btnStart').click(function (e){
+        $.ajax({
+            url: "{%url 'collection_hi_season:update_campaign_status' %}",
+            type: "POST",
+            data : {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+              campaign_id: $('#btnStart').val(),
+              status: 'active'
+            },
+        success : function (json) {
+            if(json.status == "success"){
+                location.reload();
+            }
+        }
+        })
+
+    });
+
+    $('.btn-pause').click(function (e){
+        $.ajax({
+            url: "{%url 'collection_hi_season:update_campaign_status' %}",
+            type: "POST",
+            data : {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+              campaign_id: $(this).val(),
+              status: 'pause'
+            },
+        success : function (json) {
+            if(json.status == "success"){
+                location.reload();
+            }
+        }
+        })
+
+    });
+
+    $('.btn-resume').click(function (e){
+        $.ajax({
+            url: "{%url 'collection_hi_season:update_campaign_status' %}",
+            type: "POST",
+            data : {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+              campaign_id: $(this).val(),
+              status: 'active'
+            },
+        success : function (json) {
+            if(json.status == "success"){
+                location.reload();
+            }
+        }
+        })
+
+    });
+
+{% endblock %}

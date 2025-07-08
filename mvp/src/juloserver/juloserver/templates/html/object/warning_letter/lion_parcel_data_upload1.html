@@ -1,0 +1,122 @@
+WITH base_payment
+     AS (SELECT DISTINCT a.account_id,
+                         l.customer_id,
+                         l.loan_id,
+                         p.account_payment_id,
+                         p.payment_id,
+                         p.due_date,
+                         p.due_amount,
+                         p.paid_date,
+                         p.paid_amount,
+                         ( current_date AT TIME zone 'Asia/Jakarta' ) :: DATE -
+                         p.due_date AS dpd,
+                         p.payment_status_code,
+                         a.application_xid
+         FROM   ops.payment p
+                join ops.account_payment ap
+                  ON p.account_payment_id = ap.account_payment_id
+                join ops.loan l
+                  ON p.loan_id = l.loan_id
+                join ops.application a
+                  ON l.application_id2 = a.application_id
+                join ops.product_line pl
+                  ON a.product_line_code = pl.product_line_code
+                join ops.account ac
+                  ON a.account_id = ac.account_id
+         WHERE  p.payment_status_code NOT IN ( 330, 331, 332 )
+                AND a.product_line_code IN ( 1, 2 )
+                AND Coalesce(a.partner_id, 0) NOT IN ( 9, 93 )
+                AND ap.status_code NOT IN ( 330, 331, 332 )
+                AND p.is_restructured = FALSE
+                AND p.account_payment_id IS NOT NULL
+                AND ac.status_code NOT IN ( 433 )),
+     base_account_payment
+     AS (SELECT DISTINCT account_id,
+                         customer_id,
+                         account_payment_id,
+                         due_date,
+                         dpd,
+                         Row_number()
+                           over(
+                             PARTITION BY account_id, customer_id
+                             ORDER BY due_date, account_payment_id) AS
+                         due_date_number,
+                         Max(application_xid)                       AS
+                         application_xid,
+                         SUM(due_amount)                            AS
+                         due_amount,
+                         SUM(paid_amount)                           AS
+                         total_paid,
+                         Max(paid_date)                             AS last_paid
+                         ,
+                         Min(loan_id)
+                         AS
+                         earliest_loan_id
+         FROM   base_payment
+         GROUP  BY account_id,
+                   customer_id,
+                   account_payment_id,
+                   due_date,
+                   dpd),
+     earliest_account_payment
+     AS (SELECT account_id,
+                customer_id,
+                account_payment_id
+         FROM   (SELECT account_id,
+                        customer_id,
+                        account_payment_id,
+                        Row_number()
+                          over(
+                            PARTITION BY account_id, customer_id
+                            ORDER BY due_date ASC) AS rn
+                 FROM   base_account_payment) sub
+         WHERE  rn = 1),
+     dab_summary
+     AS (SELECT DISTINCT bap.account_id,
+                         bap.customer_id,
+                         eap.account_payment_id,
+                         Max(bap.application_xid)     AS application_xid,
+                         Min(bap.due_date)            AS earliest_due_date,
+                         Max(bap.dpd)                 AS highest_dpd,
+                         CASE
+                           WHEN Max(bap.dpd) < 1 THEN 'Current'
+                           WHEN Max(bap.dpd) BETWEEN 1 AND 10 THEN 'Bucket 1'
+                           WHEN Max(bap.dpd) BETWEEN 11 AND 40 THEN 'Bucket 2'
+                           WHEN Max(bap.dpd) BETWEEN 41 AND 70 THEN 'Bucket 3'
+                           WHEN Max(bap.dpd) BETWEEN 71 AND 90 THEN 'Bucket 4'
+                           WHEN Max(bap.dpd) >= 91 THEN 'Bucket 5'
+                           ELSE NULL
+                         END                          AS bucket,
+                         Coalesce(SUM(CASE
+                                        WHEN bap.due_date <= (
+                                             current_date AT TIME
+                                             zone
+                                             'Asia/Jakarta' )
+                                             :: DATE
+                                               THEN
+                                        bap.due_amount
+                                        ELSE NULL
+                                      END), SUM(CASE
+                                                  WHEN bap.due_date_number = 1
+                                                THEN
+                                                  bap.due_amount
+                                                  ELSE NULL
+                                                END)) AS due_amount,
+                         SUM(bap.due_amount)          AS all_outstanding_amount,
+                         Max(bap.last_paid)           AS last_paid,
+                         Min(bap.earliest_loan_id)    AS earliest_loan_id
+         FROM   base_account_payment bap
+                left join earliest_account_payment eap USING (
+                account_id, customer_id
+                )
+         GROUP  BY bap.account_id,
+                   bap.customer_id,
+                   eap.account_payment_id)
+SELECT DISTINCT dab.account_id
+FROM   dab_summary dab
+       join ops.application a
+         ON dab.application_xid = a.application_xid
+WHERE  dab.highest_dpd = 15
+       AND Lower(a.address_kabupaten) ~
+'jakarta|bogor|depok|bekasi|tangerang|bandung|surabaya|sidoarjo|gresik|cimahi'
+AND dab.due_amount >= 100000 

@@ -1,0 +1,70 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .alert-error {
+        background: #fb9678;
+        color: #ffffff;
+        border-color: #fb9678;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">Upload AR Switching</h3>
+</div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="container-fluid p-0">
+        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert" >
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+            </button>
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="row">
+            <div class="form-group col-md-3 col-sm-4 {% if field.errors %}has-error{% endif %}">
+                <label class="control-label">{{ field.label_tag }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="form-group">
+            <div class="col-xs-12">
+                <button class="btn btn-info" type="submit">Upload</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}

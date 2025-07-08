@@ -1,0 +1,99 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls admin_static %}
+
+{% block extrahead %}{{ block.super }}
+<style type="text/css">
+    .form-row {
+        overflow: visible !important;
+    }
+    .selectize-control {
+        width: 300px;
+        display: inline-grid;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+</style>
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.special-event-binary-setting-control').selectize();
+        var job_data = JSON.parse($('#id_form_data').val())
+        var job_description_selectize = $('.job-description-control').selectize()[0].selectize;
+        var job_industry_selectize = $('.job-industry-control').selectize()[0].selectize;
+
+        job_industry_selectize.on("item_add", function(selected_value, item){
+            new_job_industry = job_data[selected_value]
+            $.each(new_job_industry, function(index, value ) {
+                new_option = selected_value + ':' + value
+                job_description_selectize.addOption({value: new_option, text: new_option});
+            });
+            job_description_selectize.addItem(selected_value + ':All')
+        })
+
+        job_description_selectize.on("item_add", function(selected_value, item){
+            splitted_value = selected_value.split(':')
+            if (splitted_value.length == 2 && splitted_value[1] != 'All') {
+                job_description_selectize.removeItem(splitted_value[0] + ':All', 1)
+            }
+            else if (splitted_value.length == 2 && splitted_value[1] == 'All') {
+                removed_industry = job_data[splitted_value[0]]
+                $.each(removed_industry, function(index, value ) {
+                    if (value != 'All')
+                        job_description_selectize.removeItem(splitted_value[0] + ':' + value);
+                });
+            }
+        })
+
+        job_industry_selectize.on("item_remove", function(deselected_value, item){
+            deselected_job_industry = job_data[deselected_value]
+            $.each(deselected_job_industry, function(index, value ) {
+                deselected_option = deselected_value + ':' + value
+                job_description_selectize.removeOption(deselected_option);
+            });
+        })
+
+        job_description_selectize.on("item_remove", function(selected_value, item){
+            splitted_value = selected_value.split(':')
+            check_existing = false;
+            if (splitted_value.length == 2) {
+                $.each(job_description_selectize.items, function(index, value) {
+                    if (value.includes(splitted_value[0] + ":")) {
+                        check_existing = true;
+                        return;
+                    }
+                });
+                if (!check_existing) {
+                    job_industry_selectize.removeItem(splitted_value[0]);
+                }
+            }
+        })
+    })
+</script>
+<style>
+    .can_apply.hasValue .selectize-dropdown {
+    display: none !important;
+}
+.d-none {
+    display: none;
+}
+.d-block {
+    display: block;
+}
+.related-widget-wrapper {
+    float:none !important;
+  }
+</style>
+{% endblock %}

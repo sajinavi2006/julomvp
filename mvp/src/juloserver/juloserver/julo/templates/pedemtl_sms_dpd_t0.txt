@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Angsuran {{payment_number}} PEDE Pinter {{ due_amount }} jatuh tempo hari ini. Cara bayar: {{url}} dan cek aplikasi PEDE anda.

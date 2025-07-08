@@ -1,0 +1,100 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Parse the initial form data
+    const initialData = JSON.parse($('#id_form_data').val() || {});
+    const switches = initialData.switches || {};
+    const banks = initialData.banks || [];
+    const vendors = initialData.vendors || [];
+
+    // Function to update the hidden form field
+    function updateFormData() {
+        const switches = {};
+        $('input[type="radio"]:checked').each(function() {
+            const bank = $(this).data('bank');
+            const vendor = $(this).val();
+            switches[bank] = vendor;
+        });
+
+        const formData = {
+            switches: switches,
+            banks: banks,
+            vendors: vendors
+        };
+        $('#id_form_data').val(JSON.stringify(formData));
+    }
+
+    // Initialize the table
+    let tableHtml = `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Bank</th>
+                    ${vendors.map(vendor => `<th>${vendor}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    banks.forEach(bank => {
+        tableHtml += `
+            <tr>
+                <td>${bank}</td>
+        `;
+
+        vendors.forEach(vendor => {
+            const isChecked = switches[bank] === vendor;
+            tableHtml += `
+                <td>
+                    <input type="radio" name="${bank}"
+                           value="${vendor}"
+                           data-bank="${bank}"
+                           ${isChecked ? 'checked' : ''}>
+                </td>
+            `;
+        });
+
+        tableHtml += `</tr>`;
+    });
+
+    tableHtml += `</tbody></table>`;
+
+    // Add the table to the form
+    $('.form-row.field-form_data').after(`
+        <div class="form-row">
+            <div class="fieldBox">
+                ${tableHtml}
+            </div>
+        </div>
+    `);
+
+    // Update form data when radios change
+    $('body').on('change', 'input[type="radio"]', updateFormData);
+});
+</script>
+{% endblock %}
+
+{% block field_sets %}
+{{ block.super }}
+<style>
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+.table th, .table td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+.table th {
+    background-color: #5c6ccd;
+    color: #fff;
+}
+</style>
+{% endblock %}

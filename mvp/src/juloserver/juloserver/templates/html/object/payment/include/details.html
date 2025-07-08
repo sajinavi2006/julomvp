@@ -1,0 +1,55 @@
+<!-- customtab -->
+<ul class="nav nav-tabs tabs">
+  <li class="active tab">
+    <a href="#status" data-toggle="tab"> <span class="visible-xs">
+    <i class="fa fa-home"></i></span> <span class="hidden-xs">Payment </span> </a> 
+  </li>
+  <li class="tab">
+    <a href="#personal" data-toggle="tab"> <span class="visible-xs">
+    <i class="fa fa-home"></i></span> <span class="hidden-xs">Data Pribadi</span> </a> 
+  </li>
+  <li class="tab"><a href="#loan" data-toggle="tab"> 
+    <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Pinjaman</span> </a> 
+  </li>
+  <li class="tab"><a href="#family" data-toggle="tab" aria-expanded="true"> 
+    <span class="visible-xs"><i class="fa fa-envelope-o"></i></span> <span class="hidden-xs">Keluarga</span> </a> 
+  </li>
+  <li class="tab"><a href="#working" data-toggle="tab" aria-expanded="false"> 
+    <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Pekerjaan</span> </a> 
+  </li>
+</ul>
+
+<div class="tab-content">
+  <!-- Tab History -->
+  <div class="tab-pane active" id="status">
+    {% include "object/payment/include/tab_payment.html" %}
+
+    <div class="row">
+      <a href="{% url 'payment:create_partial_payment' object.id%}" title='Partial Payment'>
+          <button class="btn btn-success m-b-5"><i class="fa fa-money fa-fw"></i> Payment Event </button>
+      </a>
+    </div>
+  </div>
+
+{% with object.loan.application as object %}
+  <!-- Tab personal -->
+  <div class="tab-pane" id="personal">
+    {% include "object/loan_app/include/tab_personal.html" %}
+  </div>
+
+  <!-- Tab Pinjaman -->
+  <div class="tab-pane" id="loan">
+    {% include "object/loan_app/include/tab_loan.html" %}
+  </div>
+
+  <!-- Tab Keluarga -->
+  <div class="tab-pane" id="family">
+    {% include "object/loan_app/include/tab_family.html" %}
+  </div>
+
+  <!-- Tab Pekerjaan -->
+  <div class="tab-pane" id="working">
+    {% include "object/loan_app/include/tab_working.html" %}
+  </div>
+{% endwith %}
+</div>

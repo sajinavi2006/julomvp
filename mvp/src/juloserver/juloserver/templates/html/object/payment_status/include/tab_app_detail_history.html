@@ -1,0 +1,33 @@
+{% load default unit %}
+
+<table class="table">
+    <thead>
+      <tr>
+        <th width="15%">Waktu</th>
+        <th width="70%">Perubahan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%  for app_detail_history in app_detail_history_list %}
+        <tr class="success">
+            <td>
+              <label class="label label-warning m-b-10">
+                {{ app_detail_history.cdate|date:"d M Y H:i:s" }}
+              </label><br/>
+            </td>
+            <td>
+              Agent: <code>{{ app_detail_history.agent|default:'-'|safe }}</code><br/>
+              <strong>Field name:</strong> {{ app_detail_history.field_name|safe }}<br/>
+              <strong>Old value:</strong> {{ app_detail_history.old_value|safe }}<br/>
+               <strong>New value:</strong> {{ app_detail_history.new_value|safe }}<br/>
+            </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="2">
+            <span> Tidak ada Data </span>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>

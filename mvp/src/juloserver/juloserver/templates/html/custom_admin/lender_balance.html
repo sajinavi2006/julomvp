@@ -1,0 +1,282 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style type="text/css">
+    /* tabs */
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        width: 50%;
+    }
+    .panel {
+        display: none;
+        padding: 20px 30px 30px;
+    }
+    .panel h2 {
+        margin: 0 0 20px 0;
+    }
+    .input {
+        position: absolute;
+        opacity: 0;
+    }
+    .label {
+        margin: 0 20px 8px 20px;
+        font-weight: bold;
+        color: #5e5e5e;
+        cursor: pointer;
+        transition: background 0.1s, color 0.1s;
+        padding: 20px 0;
+    }
+    .separator {
+        width: 0;
+        height: 20px;
+        margin: 20px 0 0 0;
+        opacity: 0.35;
+        border: solid 1px #707070;
+    }
+    .input:focus + .label {
+        /* box-shadow: inset 0px 0px 0px 3px #2aa1c0; */
+        z-index: 1;
+    }
+    .input:checked + .label {
+        background: #fff;
+        color: #000;
+        border-bottom: solid 2px #00acf0;
+    }
+    .input:checked + .label + .panel {
+        display: block;
+        width: 100%;
+    }
+
+    /* responsive */
+    @media (min-width: 600px) {
+        .label {
+            width: auto;
+        }
+        .panel {
+            order: 99;
+        }
+    }
+
+    #content > h1 {
+        margin-left: 20px;
+        font-weight: 500;
+        color: #5e5e5e;
+    }
+    .form-input {
+        padding: 13px 8px 12px 16px !important;
+        background-color: #f8f8f8;
+        line-height: 2em;
+        min-width: calc(100% - 26px);
+    }
+    .form-data-static {
+        border: solid 1px #e5e5e5;
+        padding: 10px;
+        margin-top: 20px;
+    }
+    .last {
+        margin-top: 0 !important;
+        margin-bottom: 20px;
+    }
+    .confirm-label {
+        margin: 5px;
+        display: block;
+    }
+    .form-data-static p {
+        margin: 0;
+    }
+    .form-data-static select {
+        width: 100%;
+        height: 40px;
+        background: none;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; Balance
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    {% if not withdrawal and not deposit_va %}
+        <h2>Account Number for deposit and withdrawal not found!</h2>
+    {% endif %}
+
+    <div class="tabs">
+        {% if deposit_va %}
+        <input name="tabs" type="radio" id="tab-1" checked="checked" class="input"/>
+        <label for="tab-1" class="label">Tambah Dana</label>
+        <div class="panel">
+            <h2>Dana yang tersedia: Rp. {{ available_balance }}</h2>
+            <form method="post" action="deposit/" id="deposit_form" onsubmit="return validateForm();">
+                {% csrf_token %}
+                <label>Dana yang ingin ditambah?</label><br/>
+                <input class="form-input" id="id_deposit_amount" name="deposit_amount" type="text" data-type="currency">
+                <div class="form-data-static">
+                    <label>Source of Fund</label>
+                    <select id="id_transaction_type" name="transaction_type">
+                        {% for transaction in transactions %}
+                            <option value="{{ transaction }}">{{ transaction|upper }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-data-static repayment-only" style="display: none;">
+                    <label>Maksimum repayment amount</label>
+                    <p><strong>Rp. {{ total_repayment_formatted }}</strong></p>
+                </div>
+                <div class="form-data-static">
+                    <label>Transfer ke</label>
+                    <p><strong>{{ deposit_va.bank_name }}</strong></p>
+                </div>
+                <div class="form-data-static">
+                    <label>Nomor Virtual Account</label>
+                    <p><strong>{{ deposit_va.account_number }}</strong></p>
+                </div>
+                <label class="confirm-label">Pastikan nama akun bank Anda benar</label>
+                <div class="form-data-static last">
+                    <label>Atas Nama</label>
+                    <p><strong>{{ deposit_va.account_name }}</strong></p>
+                </div>
+                <div class="submit-row">
+                    <input type="submit" value="Konfirmasi" class="default submit-button" name="_save" disabled>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+
+        {% if deposit_va and withdrawal %}
+        <p class="separator"></p>
+        {% endif %}
+
+        {% if withdrawal %}
+        <input name="tabs" type="radio" id="tab-2" class="input"/>
+        <label for="tab-2" class="label">Tarik Dana</label>
+        <div class="panel">
+            <h2>Dana yang tersedia: Rp. {{ available_balance }}</h2>
+            <form method="post" action="withdraw/" id="withdrawal_form">
+                {% csrf_token %}
+                <label>Dana yang ingin ditarik?</label><br/>
+                <input class="form-input" id="id_withdrawal_amount" name="withdrawal_amount" type="text" data-type="currency">
+                <div class="form-data-static">
+                    <label>Transfer ke</label>
+                    <p><strong>{{ withdrawal.bank_name }}</strong></p>
+                </div>
+                <div class="form-data-static">
+                    <label>Nomor Rekening Tujuan</label>
+                    <p><strong>{{ withdrawal.account_number }}</strong></p>
+                </div>
+                <label class="confirm-label">Pastikan nama akun bank Anda benar</label>
+                <div class="form-data-static last">
+                    <label>Nama Akun Bank</label>
+                    <p><strong>{{ withdrawal.account_name }}</strong></p>
+                </div>
+                <div class="submit-row">
+                    <input type="submit" value="Konfirmasi" class="default submit-button" name="_save" disabled>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+
+        <p class="separator"></p>
+        <input name="tabs" type="radio" id="tab-3" class="input"/>
+        <label for="tab-3" class="label">Reset Balance</label>
+        <div class="panel">
+            <h2>Dana yang tersedia: Rp. {{ available_balance }}</h2>
+            <form method="post" action="reset/" id="reset_form">
+                {% csrf_token %}
+                <input type="submit" value="Reset" class="submit-button">
+            </form>
+        </div>
+      </div>
+</div>
+
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script type="text/javascript">
+    var total_repayment = parseInt({{ total_repayment }});
+    $("input[data-type='currency']").on({
+        keyup: function() {
+            formatCurrency($(this));
+        },
+        blur: function() {
+            formatCurrency($(this), "blur");
+        }
+    });
+
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+        form = input.parents("form");
+        button = form.find(".submit-button");
+        if (input_val === "") {
+            button.prop("disabled", true);
+            return;
+        }
+        button.prop("disabled", false);
+        var original_len = input_val.length;
+        var caret_pos = input.prop("selectionStart");
+        input_val = formatNumber(input_val);
+        input.val(input_val);
+        var updated_len = input_val.length;
+        caret_pos = updated_len - original_len + caret_pos;
+        input[0].setSelectionRange(caret_pos, caret_pos);
+
+        transaction_type = $("select[name=transaction_type]").val();
+        if (transaction_type == "repayment" && total_repayment < 0 && form.attr("id") == "deposit_form") {
+            button.prop("disabled", true);
+        }
+    }
+
+    function validateForm() {
+        transaction_type = $("select[name=transaction_type]").val();
+        if (transaction_type == "repayment") {
+            amount = $("input[name=deposit_amount]").val().replace(/\D/g, "");
+            if (amount == "") {
+                amount = 0;
+            }
+            if (parseInt(amount) > total_repayment) {
+                formatted_number = formatNumber(total_repayment.toString());
+                if (total_repayment < 0) {
+                    formatted_number = "-" + formatted_number;
+                }
+                alert("Maksimum Repayment amount is Rp. " + formatted_number);
+                return false;
+            }
+        };
+        $("input[data-type='currency']").each(function(){
+            $(this).val($(this).val().replace(/\D/g, ""));
+        });
+        return true;
+    }
+
+    $("form#withdrawal_form").on("submit", function(){
+        $("input[data-type='currency']").each(function(){
+            $(this).val($(this).val().replace(/\D/g, ""));
+        });
+    });
+
+    $("select[name=transaction_type]").on("change", function(){
+        $(".repayment-only").hide();
+        button = $(this).parents("form").find(".submit-button");
+        button.prop("disabled", false);
+        transaction_type = $(this).val();
+        if (transaction_type == "repayment") {
+            $(".repayment-only").show();
+            if (total_repayment < 0) {
+                button.prop("disabled", true);
+            }
+        };
+    })
+</script>
+{% endblock %}

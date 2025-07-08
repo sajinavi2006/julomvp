@@ -1,0 +1,136 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style type="text/css">
+    /* tabs */
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        width: 50%;
+    }
+    .panel {
+        display: none;
+        padding: 20px 30px 30px;
+    }
+    .panel h2 {
+        margin: 0 0 20px 0;
+    }
+    .input {
+        position: absolute;
+        opacity: 0;
+    }
+    .label {
+        margin: 0 20px 8px 20px;
+        font-weight: bold;
+        color: #5e5e5e;
+        cursor: pointer;
+        transition: background 0.1s, color 0.1s;
+        padding: 20px 0;
+    }
+    .separator {
+        width: 0;
+        height: 20px;
+        margin: 20px 0 0 0;
+        opacity: 0.35;
+        border: solid 1px #707070;
+    }
+    .input:focus + .label {
+        /* box-shadow: inset 0px 0px 0px 3px #2aa1c0; */
+        z-index: 1;
+    }
+    .input:checked + .label {
+        background: #fff;
+        color: #000;
+        border-bottom: solid 2px #00acf0;
+    }
+    .input:checked + .label + .panel {
+        display: block;
+        width: 100%;
+    }
+
+    /* responsive */
+    @media (min-width: 600px) {
+        .label {
+            width: auto;
+        }
+        .panel {
+            order: 99;
+        }
+    }
+
+    #content > h1 {
+        margin-left: 20px;
+        font-weight: 500;
+        color: #5e5e5e;
+    }
+    .form-input {
+        padding: 13px 8px 12px 16px !important;
+        background-color: #f8f8f8;
+        line-height: 2em;
+        min-width: calc(100% - 26px);
+    }
+    .form-data-static {
+        border: solid 1px #e5e5e5;
+        padding: 10px;
+        margin-top: 20px;
+    }
+    .last {
+        margin-top: 0 !important;
+        margin-bottom: 20px;
+    }
+    .confirm-label {
+        margin: 5px;
+        display: block;
+    }
+    .form-data-static p {
+        margin: 0;
+    }
+    .form-data-static select {
+        width: 100%;
+        height: 40px;
+        background: none;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; Status
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="tabs">
+        <input name="tabs" type="radio" id="tab-1" checked="checked" class="input"/>
+        <label for="tab-1" class="label" style="display: none;">Lender Status</label>
+        <div class="panel">
+            <form method="post" action="change/" id="deposit_form">
+                {% csrf_token %}
+                <input name="old_lender_status" type="hidden" value="{{ lender_status }}">
+                <div class="form-data-static last">
+                    <label>Lender Status</label>
+                    <select id="id_lender_status" name="lender_status">
+                        {% for status in status_list %}
+                            {% if status == lender_status %}
+                                <option value="{{ status }}" selected>{{ status|upper }}</option>
+                            {% else %}
+                                <option value="{{ status }}">{{ status|upper }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="submit-row">
+                    <input type="submit" value="Submit" class="default submit-button" name="_save">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

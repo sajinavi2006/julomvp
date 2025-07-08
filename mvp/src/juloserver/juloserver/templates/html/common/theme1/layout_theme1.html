@@ -1,0 +1,249 @@
+{% extends "common/layout_master.html" %}
+
+{% block meta %}{% endblock %}
+{% block body_class %} class="fix-sidebar content-wrapper"{% endblock %}
+
+{% block master_css %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+  <!-- Bootstrap Core CSS -->
+  <link href="{% static 'theme/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Menu CSS -->
+  <link href="{% static 'theme/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css' %}" rel="stylesheet">
+
+  <!-- animation CSS -->
+  <link href="{% static 'theme/nav-mini/css/animate.css' %}" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'theme/nav-mini/css/style.css' %}" rel="stylesheet">
+
+  <!-- color CSS -->
+  <link href="{% static 'theme/nav-mini/css/colors/default.css' %}" id="theme"  rel="stylesheet">
+
+{% endblock %}
+
+{% block custom_css %}
+  <style type="text/css">
+    .white-bg {
+      /*background: #fff !important;*/
+    }
+    .fa-2x {
+      font-size: 2em !important;}
+    .fa-4x {
+      font-size: 4em !important;}
+    .fa-6x {
+      font-size: 6em !important;}
+    .fa-8x {
+      font-size: 8em !important;}
+    .icon-lg{
+      width: 100px;
+      height: 100px;
+      padding: 10px 16px;
+      border-radius: 50px;
+      font-size: 24px;
+      line-height: 1.33;
+    }
+  </style>
+{% endblock %}
+
+{% block custom_link %}{% endblock %}
+
+{% block master_script %}
+  <script src="{% static 'theme/plugins/w3schools/w3data.js' %}"></script>
+{% endblock %}
+
+{% block script_head %}{% endblock %}
+
+{% block css_inside %}{% endblock %}
+
+{% block body %}
+  <!-- Preloader -->
+  <div class="preloader" id="id_div_wheel">
+    <div class="cssload-speeding-wheel"></div>
+    <div class="row col-md-12 col-xs-12 m-t-30">
+      <hr>
+      <img src="{% static 'images/julo/julo-logo-only.png' %}" alt="home" class="dark-logo"/>
+      <h3>Mohon Tunggu sedang dalam Proses</h3>
+      <br/>
+      <code>Perhatian: Mohon jangan menutup atau refresh halaman ini !</code>
+      <hr>
+    </div>
+  </div>
+
+  <div id="wrapper">
+
+    <!-- Top Navigation -->
+    {% block navbar_section %}
+      {% include 'common/theme1/navbar_roles.html' %}
+    {% endblock %}
+    <!-- Top Navigation end -->
+
+    {% block inside_body %}{% endblock %}
+
+    {% block footer %}
+      {% include 'common/footer.html' %}
+    {% endblock %}
+
+    <!-- .right-sidebar -->
+    <div class="right-sidebar">
+        <div class="slimscrollright">
+            <div class="rpanel-title"> List App-Locked <span><i class="ti-close right-side-toggle"></i></span> </div>
+            <div class="r-panel-body">
+                {% block list_app_locked %}
+
+                  {%if app_locked_data_user %}
+                    <ul class="chatonline">
+                      <li>
+                          <img src="{% static 'theme/plugins/images/users/unknown.png' %}" alt="user-img" width="36" class="img-circle">
+                          <span>{{user.username|safe}}</span>
+                      </li>
+                    </ul>
+                    <br/>
+                  {% endif %}
+                  <b>application :</b><br/>
+                  {% for app_lock_obj in app_locked_data_user %}
+                        <a href="{%url 'app_status:change_status' app_lock_obj.application.id %}" class="m-l-30" target="_blank">
+                          <strong class="text-danger">{{app_lock_obj.application.id|safe}}-{{app_lock_obj.application.application_status.status_code|safe}}</strong>
+                        </a>
+                        <br/>
+                  {%empty%}
+                          <code>- Belum ada app yang di-lock - </code>
+                  {%endfor%}
+                  <br/>
+                  {% checkusergroup notin 'bo_outbond_caller_3rd_party' %}
+                    <b>Payment :</b><br/>
+                    {% for payment_lock_obj in payment_locked_data_user %}
+                          <a href="{%url 'payment_status:change_status' payment_lock_obj.payment.id %}" class="m-l-30" target="_blank">
+                            <strong class="text-danger">{{payment_lock_obj.payment.id|safe}}-{{payment_lock_obj.payment.payment_status.status_code|safe}}</strong>
+                          </a>
+                          <br/>
+                    {%empty%}
+                            <code>- Belum ada payment yang di-lock - </code>
+                    {%endfor%}
+                  {% endcheckusergroup %}
+                  <br />
+                  {% if cfs_assignment_verification_locked_data_user %}
+                    <b>CFS Verification: </b><br>
+                    {% for cfs_assignment_verification in cfs_assignment_verification_locked_data_user %}
+                        <a href="{%url 'crm_cfs:update_verification_check' cfs_assignment_verification.id %}" class="m-l-30" target="_blank">
+                          <strong class="text-danger">{{ cfs_assignment_verification.id | safe }}</strong>
+                        </a>
+                        <br/>
+                    {% empty %}
+                      <code>- Belum ada CFS assignment verification yang di-lock - </code>
+                    {% endfor %}
+                  {% endif %}
+                  <br />
+                  {% if balance_consolidation_verification_locked_data_user %}
+                    <b>Balance consolidation: </b><br>
+                    {% for consolidation_verification in balance_consolidation_verification_locked_data_user %}
+                        <a href="{%url 'balance_consolidation_crm:balance_consolidation_verification_details' consolidation_verification.id %}" class="m-l-30" target="_blank">
+                          <strong class="text-danger">{{ consolidation_verification.id | safe }}</strong>
+                        </a>
+                        <br/>
+                    {% empty %}
+                      <code>- Belum ada balance consolidation verification yang di-lock - </code>
+                    {% endfor %}
+                  {% endif %}
+
+                  <br />
+                  {% if j_financing_verification_locked_data_user %}
+                    <b>Smartphone financing: </b><br>
+                    {% for j_financing_verification in j_financing_verification_locked_data_user %}
+                        <a href="{% url 'julo_financing_crm:verification_detail' j_financing_verification.id %}" class="m-l-30" target="_blank">
+                          <strong class="text-danger">{{ j_financing_verification.id | safe }}</strong>
+                        </a>
+                        <br/>
+                    {% empty %}
+                      <code>- Belum ada Smartphone financing verification yang di-lock - </code>
+                    {% endfor %}
+                  {% endif %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <!-- /.right-sidebar -->
+
+  </div>
+{% endblock %}
+
+
+{% block custom_script %}
+  <!-- julo common js  -->
+  <script src="{% static 'default/js/julo_common.js' %}"></script>
+
+  <!-- jQuery -->
+  <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="{% static 'theme/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <!-- Menu Plugin JavaScript -->
+  <script src="{% static 'theme/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js' %}"></script>
+
+  <script src="{% static 'theme/nav-mini/js/jquery.slimscroll.js' %}"></script>
+  <!--Wave Effects -->
+  <script src="{% static 'theme/nav-mini/js/waves.js' %}"></script>
+  <!--weather icon -->
+  <script src="{% static 'theme/plugins/bower_components/skycons/skycons.js' %}"></script>
+  <!--Counter js -->
+  <script src="{% static 'theme/plugins/bower_components/waypoints/lib/jquery.waypoints.js' %}"></script>
+  <script src="{% static 'theme/plugins/bower_components/counterup/jquery.counterup.min.js' %}"></script>
+
+  <!-- Sweet-Alert  -->
+  <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+  <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="{% static 'theme/nav-mini/js/custom.min.js' %}"></script>
+
+  <!-- Sparkline chart JavaScript -->
+  <script src="{% static 'theme/plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js' %}"></script>
+  <script src="{% static 'theme/plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js' %}"></script>
+
+{% endblock %}
+
+
+{% block script_bottom %}
+  <script type="text/javascript">
+
+      {% block script_bottom_inside %}{% endblock %}
+
+      $("#id_search_app_id").on("keydown",function search(e) {
+          if(e.keyCode == 13) {
+              var app_id = $(this).val();
+              if(app_id!=""){
+                e.preventDefault();
+                goto_search_url(app_id);
+              }
+          }
+      });
+
+      function goto_search_url(app_id){
+        var app_id_uri = encodeURIComponent(app_id);
+        var search_url = "search_q="+app_id_uri;
+        var url_selected = "/app_status/list?"+search_url;
+        window.open(url_selected, '_blank');
+      }
+
+      function display_app_details(){
+        var app_id = $("#id_search_app_id").val();
+        console.log("app_id : " + app_id);
+        if(app_id!=""){
+          goto_search_url(app_id);
+        }
+      }
+
+      {% block script_common_list %}{% endblock %}
+  </script>
+
+  <!--Style Switcher -->
+  <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+
+  <script src="{% static 'default/js/common-web.js' %}"></script>
+  <script src="{% static 'default/js/agent-activity-logger.js' %}"></script>
+
+  {% block script_local_list %}{% endblock %}
+
+{% endblock %}

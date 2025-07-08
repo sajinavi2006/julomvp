@@ -1,0 +1,203 @@
+{% load static from staticfiles %}
+
+<div class="container">
+  <div class="row" id="audodialer-widget">
+    <div class="col-4">
+      <div class="panel panel-chat mini">
+        <div class="panel-heading">
+          <a href="#" class="chatMinimize" onclick="return false"><span>Autodialer</span></a>
+          <div class="clearFix"></div>
+        </div>
+        <div class="panel-body" style="height: 0px; display: none;">
+          <div>
+            <div v-if="state==='STOP'">
+              <p class="text-center" style="margin-top:70px;">Pilih Tipe Auto Dialer</p>
+              <div class="text-center">
+                 {% if bucket_code == 'graduation' %}
+                    <input type="radio" id="sales_ops_graduation" value="sales_ops:graduation" v-model="options">
+                    <label for="sales_ops_graduation" style="padding-right: 20px">Graduation</label>
+                 {% else %}
+                    {% for bucket_code, bucket_name in bucket_code_map %}
+                      <input type="radio" id="sales_ops_{{bucket_code|default:''}}" value="sales_ops:{{bucket_code|default:''}}" v-model="options">
+                      <label for="sales_ops_{{bucket_code|default:''}}" style="padding-right: 20px">{{bucket_name}}</label>
+                    {% endfor %}
+                 {% endif %}
+              </div>
+              <button v-if="options < 1" class="btn btn-basic btn-block disabled">PLAY</button>
+              <button v-else class="btn btn-success btn-block" v-on:click="playBtn">PLAY</button>
+            </div>
+            <div v-if="state==='WAITING'">
+              <transition name="fade">
+                <div class="row">
+                  <div class="col-12 text-center">
+                    <img style="width:20em" src="{% static 'images/julo/loading.gif' %}" alt="loading">
+                  </div>
+                  <div class="col-12">
+                    <h2 class="text-center"><% callProcess %></h2>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-danger btn-block" v-on:click="stopBtn">STOP</button>
+                  </div>
+                </div>
+              </transition>
+            </div>
+            <div v-if="state==='PLAYING'" class="col-12">
+              <div class="row" style="border-bottom:1px solid;">
+                <div class="col-md-6">
+                  <p v-if="callType==='COLLECTION CALL'">Payment Id :</p>
+                  <p v-else>Application Id :</p>
+                  <a :href="urlobj" target="_blank" v-on:click="linkBtn"><% application %> - <% email %></a>
+                    <img v-if="logic_flag==='blue'" style="width:2em" src="{% static 'images/autodialer/flag_blue.png' %}" alt="blue_flag">
+                    <img v-if="logic_flag==='green'" style="width:2em" src="{% static 'images/autodialer/flag_green.png' %}" alt="green_flag">
+                </div>
+                <div class="col-md-6">
+                  <button v-if="['ACTIVATION CALL'].indexOf(callType) != -1 && button.change_status" class="btn btn-success" v-on:Click="changestatusBtn">Pindah Status</button>
+                  <div v-if="['COURTESY CALL'].indexOf(callType) != -1 && button.courtesy">
+                    <button class="btn btn-success" v-on:Click="courtesyBtn">Success</button>
+                    <button class="btn btn-warning" v-on:click="emailBtn">Email</button>
+                  </div>
+                  <button v-if="['FOLLOW UP'].indexOf(callType) != -1 && button.fu" class="btn btn-success" v-on:Click="followUpBtn">FU Success</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <h4>Current Call :</h4>
+                    </div>
+                    <div class="col-md-9">
+                      <h4><% objName %> - <% callType %></h4>
+                    </div>
+                    <div v-if="Object.keys(promoCode).length">
+                      <div class="col-md-3">
+                        <h4>Promo Code: </h4>
+                      </div>
+                      <div class="col-md-8">
+                        <h4 v-if="!promoCode.is_warning"><% promoCode.code %> - expired at: <% promoCode.expiry_time %> </h4>
+                        <h4 v-if="promoCode.is_warning" style="color:red"><% promoCode.code %> - Promotion will expire within <% promoCode.expiry_time %></h4>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div v-if="skiptrace.length >= 1" class="row" style="border:2px solid grey;padding:10px 0px;margin-left: 10px 10px;">
+                      <div class="col-md-4">
+                        <div class="row">
+                          <p v-if="['PV EMPLOYER'].indexOf(callType) != -1" style="cursor:pointer" v-on:click="goToGoogle" class="text-center" style="color:green"><% skiptrace[callIndex].contact_name %></p>
+                          <p v-else class="text-center" style="color:green"><% skiptrace[callIndex].contact_name %></p>
+                        </div>
+                        <div class="row">
+                          <p class="text-center unselectable" style="color:green"><% skiptrace[callIndex].contact_source %></p>
+                        </div>
+                        <div class="row" style="cursor:pointer">
+                          <p class="text-center" v-on:click="copySTBtn" style="color:green"><% skiptrace[callIndex].phone_number.replace('+62','0') %></p>
+                        </div>
+                      </div>
+                      <div v-if="callLength-callIndex > 1" class="col-md-4">
+                        <div class="row">
+                          <p class="text-center unselectable"><% skiptrace[callIndex+1].contact_name %></p>
+                        </div>
+                        <div class="row">
+                          <p class="text-center unselectable"><% skiptrace[callIndex+1].contact_source %></p>
+                        </div>
+                        <div class="row">
+                          <p class="text-center unselectable"><% skiptrace[callIndex+1].phone_number.replace('+62','0') %></p>
+                        </div>
+                      </div>
+                      <div v-if="callLength-callIndex > 2" class="col-md-4">
+                        <div class="row">
+                          <p class="text-center unselectable"><% skiptrace[callIndex+2].contact_name %></p>
+                        </div>
+                        <div class="row">
+                          <p class="text-center unselectable"><% skiptrace[callIndex+2].contact_source %></p>
+                        </div>
+                        <div class="row">
+                          <p class="text-center unselectable"><% skiptrace[callIndex+2].phone_number.replace('+62','0') %></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else class="row" style="border:2px solid grey;padding:10px 0px;margin-left: 10px 10px;">
+                      <div v-if="object_id == false" class="col-md-12">
+                        <img style="width:10em" src="{% static 'images/julo/loading.gif' %}" alt="loading">
+                      </div>
+                      <p class="text-center unselectable">Tidak ada Skiptrace</p>
+                    </div>
+                  </div>
+                  <div v-if="skiptrace.length >= 0 && button.skiptrace">
+                    <div class="row" style="padding-top:1em;padding-bottom:1em;">
+                      <div class="col-md-4">
+                        <button class="btn btn-block" v-on:click="notconnectedBtn(object_id, '2', object_type)">Not Connected</button>
+                      </div>
+                      <div class="col-md-4">
+                        <button class="btn btn-block" v-on:click="rjtBtn(object_id, '3', object_type)">Rejected/Busy</button>
+                      </div>
+                      <div class="col-md-4">
+                        <button class="btn btn-block" v-on:click="noAnswerBtn(object_id, '4', object_type)">No Answer</button>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="col-md-4">
+                        <button class="btn" v-on:click="wpcBtn(object_id, '5', object_type)">WPC</button>
+                      </div>
+                      <div class="col-md-4">
+                        <button class="custom-button" v-on:click="rpcBtn(object_id, '6', object_type)">RPC and Next App</button>
+                      </div>
+                      <div class="col-md-4">
+                        <button class="btn btn-block" v-on:click="nextBtn(object_id, '6', object_type)">RPC and Next Phone</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="text-align:center" v-else>
+                    <i class="fa fa-spinner fa-spin" style="font-size:100px"></i>
+                  </div>
+                </div>
+                <div class="col-md-3" style="margin-left:3em;padding-top:5px;">
+                  <div class="row text-right" style="padding: 5px 3px;">
+                    <div v-if="counter.countdown" style="margin-left:5px">
+                      <a v-if="counter.started" v-on:click="counter.started=!counter.started" href="#" class="btn btn-warning">
+                        <span class="fa fa-pause-circle-o"></span>
+                      </a>
+                      <a v-else href="#" v-on:click="counter.started=!counter.started" class="btn btn-success">
+                        <span class="fa fa-play"></span>
+                      </a>
+                    </div>
+                    <div v-else>
+                      <a href="#" v-on:click="stopBtn" class="btn btn-danger">
+                        <span class="fa fa-close"></span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="row text-center" style="border-style: solid">
+                    <h1 v-text="counter.count_sec"></h1>
+                  </div>
+                  <div v-if="button.tag && callLength-callIndex <= 1" class="row text-center" style="padding-top:5px;">
+                    <button class="btn" v-on:click="tagBtn">#</button>
+                    <textarea v-model="note" style="border-style: solid" class="form-control"></textarea>
+                  </div>
+                  <div v-if="callLength-callIndex >= 1" class="row text-center" style="padding-top:5px;">
+                    <button class="btn btn btn-warning btn-rounded" v-on:click="callBtn"><i class="fa fa-phone"></i></button>
+                    <button class="btn btn btn-danger btn-rounded" v-on:click="hangBtn"><i class="fa fa-phone"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="clearFix"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Sales ops Call -->
+    <div class="col-4" v-if="callType != ''">
+      <transition name="slide-fade">
+        <div class="panel panel-chat panel-chat-extend">
+          <div class="panel-heading">
+              <span>SALES OPS LINE UP USER INFO</span>
+              <div class="clearFix"></div>
+          </div>
+            <div class="panel-body-extend" id="script">
+          </div>
+        </div>
+      </transition>
+    </div>
+    <!--  -->
+  </div>
+</div>

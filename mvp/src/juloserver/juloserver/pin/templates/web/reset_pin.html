@@ -1,0 +1,380 @@
+<html lang="id" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+  style="color-scheme: light dark;">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings xmlns:o="urn:schemas-microsoft-com:office:office">
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <style>
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+  </style>
+  <![endif]-->
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    @media (max-width: 600px) {}
+
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    .reset-pin-form {
+      max-width: 550px;
+      margin: auto;
+      box-shadow: 0px 1px 16px 0px rgba(0, 0, 0, 0.12);
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .input-field {
+      margin-bottom: 8px;
+    }
+
+    .input-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .input-field input {
+      width: 100%;
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+      border-radius: 8px;
+      border: 1px solid #E0E0E0;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 12px;
+      margin-top: 4px;
+      min-height: 46px;
+      background-color: white;
+      color:black;
+    }
+
+    .input-field input:read-only {
+      background-color: #EDEDED;
+      color: #757575;
+    }
+
+    .information {
+      display: flex;
+      align-items: start;
+      width: 100%;
+      border: 1px solid #83A7FA;
+      border-radius: 8px;
+      padding: 8px 12px;
+      box-sizing: border-box;
+      margin: 16px 0px;
+      background-color: #EAF0FE;
+    }
+
+    .information li {
+      font-size: 12px;
+      color: #2656C6;
+    }
+
+    button {
+      font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background-color: #00ACF0;
+      width: 100%;
+      font-size: 16px;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border-color: transparent;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.disable {
+      pointer-events: none;
+      background-color: #EDEDED;
+    }
+
+    .eye {
+      cursor: pointer;
+      position: absolute;
+      top: 22px;
+      right: 2%;
+      width: 15px;
+    }
+
+    .eye.off {
+      top: 21px;
+    }
+
+    .error {
+      font-size: 10px;
+      color: #DB4D3D;
+      margin-top: 4px;
+    }
+
+    input.err {
+      border: 1px solid #DB4D3D;
+    }
+
+    textarea:focus,
+    input:focus {
+      outline: none;
+    }
+    
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    #headerbrand img {
+      width: 80px;
+      height: 40px;
+      margin-left: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin: 13px 20px;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+
+<body
+  style="font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; word-break: break-word; margin: 0; width: 100%; background-color: #f8fafc; padding: 0;
+  padding-bottom: 30px;">
+  <div id="headerbrand" style="background: #00ACF0;"><img alt="julo" src="https://www.julo.co.id/sites/default/files/newsletter/ic-logo-julo.png" /></div>
+  <div style="margin-left:12px; margin-right:12px;">
+    <div class="reset-pin-form">
+      <p style="font-weight: bold; font-size: 16px; color:black;">
+        Isi form ini untuk ubah PIN kamu
+      </p>
+      <div>
+        <form id="reset" method="post">
+          {% csrf_token %}
+          <div class="">
+            <div class="input-field">
+              <label for="email">Email</label>
+              <!-- BE need to adjust the {{email}} -->
+              <input type="text" class="validate" name="email" id="email" placeholder="email" autocomplete="off"
+                value="{{email}}" size="30" readonly>
+            </div>
+            <div class="input-field">
+              <label for="pin1">PIN Baru</label>
+              <div class="new-pin" style="position:relative;">
+                <img class="eye off" width="16"
+                  src="https://www.julo.co.id/sites/default/files/lupa-pin/ic-eye-off.svg">
+                <img class="eye on" style="display:none;" width="16"
+                  src="https://www.julo.co.id/sites/default/files/lupa-pin/ic-eye.svg">
+                <input type="password" class="validate" placeholder="Masukkan PIN Baru" name="pin1" id="pin1"
+                  autocomplete="off" inputmode="numeric" maxlength="6" size="6" value="{{pin1}}">
+                  <!-- BE need to adjust the password value if the form is re-loaded -->
+              </div>
+            </div>
+            <div class="input-field">
+              <label for="pin2">Ulangi PIN Baru</label>
+              <div class="confirm-pin" style="position:relative;">
+                <img class="eye off" width="16"
+                  src="https://www.julo.co.id/sites/default/files/lupa-pin/ic-eye-off.svg">
+                <img class="eye on" style="display:none;" width="16"
+                  src="https://www.julo.co.id/sites/default/files/lupa-pin/ic-eye.svg">
+                <input type="password" class="validate" placeholder="Ulangi PIN Baru" name="pin2" id="pin2"
+                  autocomplete="off" inputmode="numeric" maxlength="6" size="6" value="{{pin2}}">
+                  <!-- BE need to adjust the password value if the form is re-loaded -->
+              </div>
+            </div>
+            <div class="information">
+              <img width="16" height="16"
+                src="https://www.julo.co.id/sites/default/files/lupa-pin/ic-information-circle.svg">
+              <ul style="margin:0;padding-left: 30px;">
+                {% for setting in feature_setting %}
+                  <li>{{ setting }}</li>
+                {% endfor %} 
+              </ul>
+            </div>
+            <div style="text-align:center;">
+              <button type="submit" class="disable waves-effect waves-light btn-large blue">Ubah PIN</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function displayError(inputEl, msgId, text) {
+      inputEl.insertAdjacentHTML('afterend', '<div class="error" id="warning-' + msgId + '">' + text + '</div>');
+    }
+    
+
+    var errorMessage = {% if err_message %}'{{err_message}}'{% else %}null{% endif %};
+    if(errorMessage) {
+      newPin = document.querySelector("input#pin1");
+      confirmPin = document.querySelector("input#pin2");
+      displayError(newPin, 'pin1', errorMessage);
+      displayError(confirmPin, 'pin2', errorMessage);
+      newPin.classList.add("err");
+      confirmPin.classList.add("err");
+    }
+
+    var validateCheck = true;
+    function validatePin(inputId) {
+
+      var pinEl = document.querySelector("input#" + inputId);
+      var msgEl = document.getElementById("warning-" + inputId);
+
+      if (msgEl != null) {
+        msgEl.remove();
+        validateCheck = true;
+      }
+
+      if (pinEl.value.length == 0) {  // validate not empty
+        displayError(pinEl, inputId, 'Tidak boleh kosong.');
+        validateCheck = false;
+      } else {
+        if (pinEl.value.length < 6) {  // validate < 6 digit
+          displayError(pinEl, inputId, 'PIN Kurang dari 6 digit.');
+          validateCheck = false;
+        } else if (pinEl.value.length == 6) {
+          var numbers = "01234567890";
+          var numbersRev = "09876543210";
+
+          if (/^([0-9])\1*$/.test(pinEl.value) ||
+            numbers.indexOf(String(pinEl.value)) > -1 ||
+            numbersRev.indexOf(String(pinEl.value)) > -1) {  // check repeat or sequence
+            displayError(pinEl, inputId, 'PIN tidak boleh berulang atau berurutan.');
+            validateCheck = false;
+          }
+        }
+      }
+
+      if (!validateCheck) { pinEl.classList.add("err"); } else { pinEl.classList.remove("err"); }
+
+      return validateCheck;
+    }
+
+    function matchPin(newPinId, confirmPinId) {  // check match pin
+      var newPin = document.querySelector("input#" + newPinId);
+      var confirmPin = document.querySelector("input#" + confirmPinId);
+      var matchCheck = true;
+
+      if (newPin.value.length == 6 && confirmPin.value.length == 6 && validateCheck) {
+        var msgEl = document.getElementById('warning-' + confirmPinId);
+        if (msgEl != null) {
+          msgEl.remove();
+        }
+
+        if (newPin.value != confirmPin.value) {
+          displayError(confirmPin, confirmPinId, 'PIN tidak cocok.');
+          matchCheck = false;
+        }
+
+        if (!matchCheck) { confirmPin.classList.add("err"); } else { confirmPin.classList.remove("err"); }
+        return matchCheck;
+      }
+    }
+
+    document.addEventListener('keypress', function (e) {
+      if (e.target && e.target.id == 'pin1' || e.target && e.target.id == 'pin2') {
+        var key = e.keyCode;
+        if ((e.keyCode < 48 || e.keyCode > 57)) {
+          e.preventDefault();
+        }
+      }
+    });
+
+    var button = document.querySelector("#reset button");
+    var pin1 = document.querySelector("input#pin1");
+    var pin2 = document.querySelector("input#pin2");
+    var newPinEyes = document.querySelectorAll('.new-pin .eye');
+    var confirmPinEyes = document.querySelectorAll('.confirm-pin .eye');
+
+    pin1.addEventListener('input', function (e) {
+      if (pin1.value.length <= pin1.maxLength) {
+        var validate = validatePin('pin1');
+        var match = matchPin('pin1', 'pin2');
+
+        if (validate && match) {
+          button.classList.remove("disable");
+        } else {
+          button.classList.add("disable");
+        }
+      } else {
+        pin1.value = pin1.value.slice(0, pin1.maxLength);
+      }
+    });
+    pin2.addEventListener('input', function (e) {
+      if (pin2.value.length <= pin2.maxLength) {
+        var validate = validatePin('pin2');
+        var match = matchPin('pin1', 'pin2');
+
+        if (validate && match) {
+          button.classList.remove("disable");
+        } else {
+          button.classList.add("disable");
+        }
+      } else {
+        pin2.value = pin2.value.slice(0, pin2.maxLength);
+      }
+    });
+    $("#pin1, #pin2").on("copy cut paste drop", function() {
+      return false;
+    });
+
+    newPinEyes.forEach(e => e.addEventListener('click', function (e) {
+      if (pin1.type == 'number') {
+        pin1.type = 'password';
+        document.querySelector('.new-pin .eye.on').style.display = 'none';
+        document.querySelector('.new-pin .eye.off').style.display = 'block';
+      } else {
+        pin1.type = 'number';
+        document.querySelector('.new-pin .eye.off').style.display = 'none';
+        document.querySelector('.new-pin .eye.on').style.display = 'block';
+      };
+    })
+    );
+    confirmPinEyes.forEach(e => e.addEventListener('click', function (e) {
+      if (pin2.type == 'number') {
+        pin2.type = 'password';
+        document.querySelector('.confirm-pin .eye.on').style.display = 'none';
+        document.querySelector('.confirm-pin .eye.off').style.display = 'block';
+      } else {
+        pin2.type = 'number';
+        document.querySelector('.confirm-pin .eye.off').style.display = 'none';
+        document.querySelector('.confirm-pin .eye.on').style.display = 'block';
+      };
+    })
+    );
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+Hi {{first_name}}, total hadiah 20jt rupiah menunggu Anda. Bayar pinjaman Anda segera dan bawa pulang hadiahnya! Bayar sekarang {{payment_link}}

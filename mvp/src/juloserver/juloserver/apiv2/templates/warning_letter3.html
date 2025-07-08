@@ -1,0 +1,471 @@
+{% load unit utils %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 15px;
+            color: #000000;
+        }
+
+        p {
+            margin: 0;
+            float: left;
+            width: 100%;
+        }
+
+        a {
+            color: #0077a9;
+        }
+
+         img {
+            max-width: 100%;
+        }
+
+        .table_pad {
+            padding-left:35px;
+            padding-top:10px;
+            padding-right:35px;
+        }
+        .table_pad1 {
+            padding-left:25px;
+            padding-top:40px;
+            padding-right:35px;
+        }
+
+        .td_font1 {
+            font-size: 16px;
+        }
+        .td_font2 {
+            font-size: 18px;
+        }
+        .td_font3 {
+            font-size: 14px;
+        }
+        .td_font4 {
+            font-size: 26px;
+            color: #004c99;
+        }
+        .td_font5 {
+            font-size: 10px;
+        }
+        .td_pad1 {
+            padding-top:20px;
+        }
+        .td_pad2 {
+            padding-top:40px;
+        }
+        .td_pad3 {
+            padding-top:10px;
+        }
+        .td_pad4 {
+            padding-top:30px;
+        }
+        .td_pad5 {
+            padding-left:10px;
+        }
+         .td_pad6 {
+            padding-left:15px;
+        }
+        .td_font1_bold {
+            font-weight: bold;
+        }
+        .td_line_height {
+            line-height: 25px;
+        }
+        .borders {
+            border: 1px solid #404040;
+        }
+        .font_red {
+            color: red;
+        }
+         .font_grey {
+            color: #606060;
+        }
+        .img_align {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+<table width="70%">
+    <tr>
+        <td>
+            <img src="{{header_image}}" style="width:100%"/>
+        </td>
+    </tr>
+    <tr>
+        <td  >
+            <table width="100%" class="table_pad" >
+                <tr>
+                    <td class="td_font1">
+                        Jakarta, {{now}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_font2 td_pad1 td_font1_bold">
+                        Perihal : Surat Peringatan Ketiga untuk angsuranmu yang belum terbayar
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="td_font3">
+                        Mohon ditindak lanjuti selambat-lambatnya 3 (tiga) x 24 jam sejak tanggal surat ini
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad2 td_font1">
+                        <p>Kepada Yth.</p>
+                            {{name}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad3 td_font1">
+                        Dengan Hormat,
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad3 td_font1 td_line_height">
+                       Untuk dan atas nama PT. Julo Teknologi Finansial, selaku perwakilan dari Perusahaan Pemberi Pinjaman,  dengan ini Kami menyampaikan Surat Peringatan Ketiga kepada Saudara/i sebagai berikut:
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad3 td_font1 td_line_height td_pad5 td_pad6">
+                        <table width="97%"  cellpadding="6" cellspacing="0"  >
+                            <tr>
+                                <td width=2% valign="top">1.
+                                </td>
+                                <td width=95% valign="top">
+                                    Bahwa Saudara/i telah membuat suatu pengikatan pinjam-meminjam berbasis teknologi dengan Kami dengan nomor Surat Perjanjian Hutang Piutang (“SPHP”) <span class="td_font1_bold">{{application_xid}}</span> pada tanggal <span class="td_font1_bold">{{sphp_accepted_ts}}</span> <a href="{{url}}">(terlampir bersama surat ini)</a>;
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width=2% valign="top">2.
+                                </td>
+                                <td width=95% valign="top">
+
+                                    Bahwa sebagai bentuk upaya perbaikan kredit Anda serta itikad baik dalam pelaksanaan seluruh hak Kami yaitu dengan  melakukan penagihan  seperti melakukan panggilan melalui telepon, email, sms, whatsapp serta membantu meringankan  kewajiban Anda sampai dengan memberikan langkah  restrukturisasi kredit kepada Anda, namun sampai dengan saat ini Kami belum menerima tanggapan yang kongkrit dari Saudara/i maupun pelunasan atas  seluruh jumlah tunggakan Saudara/i berikut dengan bunga dan denda keterlambatan yaitu sebesar <span class="td_font1_bold">{{ due_amount_total|f_rupiahs:"no"|safe  }}</span> sejak tanggal <span class="td_font1_bold">{{ not_payed_start }}</span> s/d hari ini sebagaimana Kami minta untuk Saudara/i melakukan pelunasan tersebut pada surat peringatan Kami terdahulu ;
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad3 td_font1 td_line_height">
+                       Bahwa perlu Kami tegaskan, Kami berhak atas pembayaran sebagaimana yang telah disepakati bersama dalam SPHP yang disebut diatas dan Saudara/i tidak berhak untuk menahan pembayaran ataupun ingkar terhadap segala kewajiban Saudara/i yang untuk itu kembali Kami berikan surat peringatan kepada Saudara/i dimana dalam jangka waktu <span class="td_font1_bold">3 (tiga) x 24 jam</span> sejak tanggal surat ini diterima oleh Saudara/i, Saudara/i akan melakukan pelunasan tunggakan dan mengirimkan bukti pembayaran kepada Kami melalui email korespondensi Kami <span class="td_font1_bold"><u>collections@julo.co.id</u></span> atau Whatsapp CS  di <span class="td_font1_bold">{{ collection_wa_number|default:"0813 1778 2065" }}</span>.
+
+                       <br><br>
+                        Sebagai informasi perlu Kami sampaikan bahwa Saudara/i telah menunggak sebanyak <span class="td_font1_bold">{{ due_amount_total|f_rupiahs:"no"|safe  }}</span> dengan rincian sebagai berikut :
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad1 td_font1">
+                         <table width="97%"  cellpadding="6" cellspacing="0" border="1" class="borders">
+                           <tr>
+                                <td width="13%" align="center">Angsuran Ke-</td>
+                                <td width="22%" align="center">Jumlah yang harus dibayarkan<br> (sudah termasuk denda)</td>
+                                <td width="17%" align="center">Informasi Denda</td>
+                                <td width="14%" align="center">Jatuh Tempo</td>
+                                <td width="20%" align="center">Keterlambatan Hari ke-</td>
+                                <td width="14%" align="center">Terbayar
+                                <br>(Ya/Tidak)</td>
+
+
+                            </tr>
+
+
+                            {% for payment in due_payment %}
+
+                             <tr>
+                                <td align="center">
+                                    {{ payment.payment_number }}
+                                </td>
+                                <td align="center">
+                                    {{ payment.due_amount|f_rupiahs:"no"|safe }}
+                                </td>
+                                <td align="center">
+                                    {{ payment.late_fee_amount|f_rupiahs:"no"|safe}}
+                                </td>
+                                <td align="center">
+                                    {{ payment.due_late_days_formatted }}
+                                </td>
+                                <td align="center">
+                                    {{ payment.due_late_days }}
+                                </td>
+                                <td class="font_red" align="center">
+                                    Tidak
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+
+                            <tr>
+                                <td class="td_font1_bold" align="center">Total</td>
+                                <td class="td_font1_bold" align="center">{{ due_amount_total|f_rupiahs:"no"|safe  }} </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="td_pad2 td_font1">
+                        <table width="71%"  cellpadding="4" cellspacing="0" align="left" >
+                            <tr>
+                                <td colspan=3>
+                                    Silahkan lakukan pembayaran segera menggunakan chanel pembayaran berikut :
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="40%">
+                                    Bank Tujuan
+                                </td>
+                                <td width="1%">
+                                    :
+                                </td>
+                                <td width="30%">
+                                    {{julo_bank_name}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="40%">
+                                    Nomor Virtual Account
+                                </td>
+                                <td width="1%">
+                                    :
+                                </td>
+                                <td width="30%">
+                                    {{julo_bank_account_number}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="40%">
+                                    Total yang harus dibayar
+                                </td>
+                                <td width="1%">
+                                    :
+                                </td>
+                                <td width="30%">
+                                    <span class="td_font1_bold">{{ due_amount_total|f_rupiahs:"no"|safe  }}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad1 td_font1">
+                        Harap dicatat bahwa tidak membayar tunggakan pinjaman Anda dapat menyebabkan riwayat kredit yang buruk dan Anda akan dimasukkan ke daftar hitam pada Fintech Data Center (FDC) yang didirikan oleh Asosiasi Fintech Pendanaan Bersama Indonesia (AFPI). Ini akan berdampak negatif pada peluang Anda mendapatkan pinjaman di masa depan.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad2 td_font1">
+
+                        Bahwa peringatan ini adalah <strong>PERINGATAN TERAKHIR </strong>kepada saudara/i, dimana apabila dalam waktu yang kami berikan dimaksud diatas saudara/i  <span class="td_font1_bold">{{name_only}}</span> tidak mengindahkan <strong>SURAT PERINGATAN TERAKHIR</strong> ini, maka dengan sangat menyesal kami akan menempuh jalur hukum yang tegas dengan melaksanakan kunjungan petugas lapangan dan mengajukan proses perdata, sesuai dengan peraturan yang berlaku, yang mana pada akhirnya dapat merugikan saudaran dan nama baik saudara.
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="td_pad4 td_font1">
+                        Untuk informasi lebih lanjut, silahkan menghubungi Petugas Kami di:
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="td_font1">
+                         <table width="98%"  cellpadding="4" cellspacing="0" align="left" >
+                            <tr>
+                                <td width="4%" align="left">
+                                    <img src="{{wa_image}}"  />
+                                </td>
+                                <td width="94%" align="left">
+                                    Whatsapp - <span class="td_font1_bold">{{ collection_wa_number|default:"0813 1778 2065" }}</span>  <span class="td_font3">atau</span>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td width="4%" align="left">
+                                    <img src="{{email_image}}"  />
+                                </td>
+                                <td width="94%" align="left">
+                                    Email - <span class="td_font1_bold"><a href="mailto:{{ collection_email_address|default:"collections@julo.co.id" }}">
+                                    {{ collection_email_address|default:"collections@julo.co.id" }}</a></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="4%" align="left" class="td_pad4">
+                                    <img src="{{phone_image}}"  width="26" height="26" />
+                                </td>
+                                <td width="94%" align="left" class="td_pad4">
+                                    Layanan Telepon - <span class="td_font1_bold">{{ collection_phone_number_1|default:"021 5071 8800" }}</span>
+                                    <span class="td_font3">atau</span> <span class="td_font1_bold">{{ collection_phone_number_2|default:"021 5071 8822" }}</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                {% if link_url %}
+                <tr>
+                    <td class="td_pad3 td_font1">
+                        Cara mudah untuk mengingat jatuh tempo anda adalah dengan <a href="{{link_url}}">mencatatnya di kalender Google anda</a>.
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td class="td_pad1 td_font1">
+                       Demikian disampaikan untuk menjadi perhatian Saudara/i.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad1">
+                       <table width="46%"  cellpadding="4" cellspacing="0" align="left" >
+                        <tr>
+                                <td  align="left" >
+                                   <img src="{{sign_image}}"  style="width:50%"/>
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td  align="left" class="td_font3">
+                                    Departemen Hukum<br/>
+                                    PT. Julo Teknologi Finansial<br/>
+                                    <a href="mailto:departemen.hukum@julo.co.id">departemen.hukum@julo.co.id</a><br/>
+                                   Berdasarkan Kuasa dari Perusahaan Pemberi Pinjaman<br/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="td_pad1">
+                       <table width="70%"  cellpadding="4" cellspacing="0" align="left" >
+                        <tr>
+                                <td  align="left" class="td_font4 td_font1_bold" colspan="2">
+                                    <a href="https://go.onelink.me/zOQD/epay">Bayar Sekarang</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left"  class="td_font1">
+                                    <img src="{{lihat_image}}" class="img_align" width="48" height="48" />&nbsp;Lihat <a href="https://julo.co.id/r/wl3">cara membayar</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+    <div style="margin:0px auto;max-width:100%;background:#222222;">
+        <table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:#222222;" align="center" border="0">
+            <tbody>
+                <tr>
+                    <td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;">
+                        <div class="mj-column-per-100 outlook-group-fix" style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0.5px;" align="center">
+                                            <div style="cursor:auto;color:white;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:10px;font-weight:400;line-height:120%;text-align:center;"> Pinjaman Cerdas Dari Smartphone Anda</div>
+                                            <div><a href="https://play.google.com/store/apps/details?id=com.julofinance.juloapp" style="color:white;text-decoration:none;" target="_blank">Google Play Store <img src="{{play_store}}" alt="google-play" style="width:15%;padding-top:10px; display:inline; align:middle;text-decoration:none;border-bottom: #f6f6f6"></a></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0.5px;Border-bottom:10px" align="center">
+                                            <div>
+                                                <table role="presentation" cellpadding="0" cellspacing="0" style="float:none;display:inline-table;" align="center" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding:4px;vertical-align:middle;">
+                                                                <table role="presentation" cellpadding="0" cellspacing="0" style="border-radius:3px;" border="0">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="vertical-align:middle;">
+                                                                                <a href="https://www.instagram.com/juloindonesia/" target="_blank"> <img alt="instagram" height="NaN" src="https://www.julo.co.id/images/icon_instagram.png" style="display:block;border-radius:3px;width:16px;" width="NaN"> </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table role="presentation" cellpadding="0" cellspacing="0" style="float:none;display:inline-table;" align="center" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding:4px;vertical-align:middle;">
+                                                                <table role="presentation" cellpadding="0" cellspacing="0" style="border-radius:3px;" border="0">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="vertical-align:middle;">
+                                                                                <a href="https://www.facebook.com/juloindonesia/" target="_blank"> <img alt="facebook" height="NaN" src="https://www.julo.co.id/images/icon_facebook.png" style="display:block;border-radius:3px;width:18px" width="NaN"> </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table role="presentation" cellpadding="0" cellspacing="0" style="float:none;display:inline-table;" align="center" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding:4px;vertical-align:middle;">
+                                                                <table role="presentation" cellpadding="0" cellspacing="0" style="border-radius:3px;width:;" border="0">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="vertical-align:middle;">
+                                                                                <a href="https://twitter.com/juloindonesia" target="_blank"> <img alt="twitter" height="NaN" src="https://www.julo.co.id/images/icon_twitter.png" style="display:block;border-radius:3px;width:16px" width="NaN"> </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table role="presentation" cellpadding="0" cellspacing="0" style="float:none;display:inline-table;" align="center" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding:4px;vertical-align:middle;">
+                                                                <table role="presentation" cellpadding="0" cellspacing="0" style="border-radius:3px;" border="0">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="vertical-align:middle;">
+                                                                                <a href="https://www.youtube.com/channel/UCA9WsBMIg3IHxwVA-RvSctA" target="_blank"> <img alt="twitter" height="NaN" src="https://www.julo.co.id/images/icon_youtube.png" style="display:block;border-radius:3px;width:16px" width="NaN"> </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                </td>
+                                    </tr>
+                                    <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;padding-top:0.5px;" align="center">
+                                        <div style="cursor:auto;color:white;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:9px;font-weight:300;line-height:120%;text-align:center;"> ©2020 JULO | All rights reserved</div>
+                                    </td>
+                                    </div>
+                                    </td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</table>
+
+</body>
+
+</html>

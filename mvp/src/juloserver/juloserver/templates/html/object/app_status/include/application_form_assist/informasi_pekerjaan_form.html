@@ -1,0 +1,61 @@
+<div class="form-group">
+    <label>Tipe Pekerjaan</label>
+    <select id="job_type" class="form-control form-control-afs" onchange="validate_the_form('#job_type');">
+      <option>Pilih</option>
+    </select>
+</div>
+
+<div id="section_for_job_only">
+    <div id="section_job_industry">
+        <div class="form-group">
+            <label>Bidang Pekerjaan</label>
+            <select id="job_industry" class="form-control form-control-afs" disabled="disabled">
+              <option>Pilih</option>
+            </select>
+        </div>
+    </div>
+    <div id="section_job_description">
+        <div class="form-group">
+            <label>Posisi Pekerjaan</label>
+            <select id="job_description" class="form-control form-control-afs" disabled="disabled">
+              <option>Pilih</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="company_name">Nama Perusahaan</label>
+        <input type="text" class="form-control form-control-afs" onkeyup="validate_the_form('#company_name');" onchange="validate_the_form('#company_name');" id="company_name" placeholder="Masukkan nama perusahaan">
+    </div>
+
+    <div class="form-group">
+        <label for="company_phone_number">Nomor Telepon Perusahaan</label>
+        <input type="text" class="form-control form-control-afs" id="company_phone_number" onkeyup="validate_the_form('#company_phone_number');" placeholder="Masukkan nomor telepon perusahaan">
+        <small>Nomor bisa diawali dengan 08 atau 021</small>
+    </div>
+
+    <div class="form-group">
+        <label for="job_start">Mulai Bekerja</label>
+        <input type="text" class="form-control form-control-afs" id="job_start" onchange="validate_the_form('#job_start');" maxlength="10" placeholder="MM/YYYY">
+        <small>Bekerja di perusahaan saat ini</small>
+    </div>
+
+    <div class="form-group">
+        <label for="payday">Tanggal Gajian</label>
+        <input type="number" class="form-control form-control-afs" id="payday" onkeyup="validate_the_form('#payday');" maxlength="2" placeholder="Masukkan tanggal gajian">
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Pendidikan Terakhir</label>
+    <select id="last_education" class="form-control form-control-afs" onchange="validate_the_form('#last_education');">
+        <option>Pilih</option>
+        <option value="SD" {% if app_obj.last_education == 'SD' %} selected {% endif %}>SD</option>
+        <option value="SLTP" {% if app_obj.last_education == 'SLTP' %} selected {% endif %}>SLTP</option>
+        <option value="SLTA" {% if app_obj.last_education == 'SLTA' %} selected {% endif %}>SLTA</option>
+        <option value="Diploma" {% if app_obj.last_education == 'Diploma' %} selected {% endif %}>Diploma</option>
+        <option value="S1" {% if app_obj.last_education == 'S1' %} selected {% endif %}>S1</option>
+        <option value="S2" {% if app_obj.last_education == 'S2' %} selected {% endif %}>S2</option>
+        <option value="S3" {% if app_obj.last_education == 'S3' %} selected {% endif %}>S3</option>
+    </select>
+</div>

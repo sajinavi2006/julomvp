@@ -1,0 +1,18 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+
+{% block breadcrumb_title %}Data SPHP{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Loan</a></li>
+    <li><a href="#">SPHP-Julo One</a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+
+{% block list_title %}SPHP-Julo One{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+    {% include "julo_one_sphp.html" %}
+
+{% endblock %}

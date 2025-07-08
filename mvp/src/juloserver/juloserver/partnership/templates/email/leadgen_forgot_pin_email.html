@@ -1,0 +1,54 @@
+{% extends "email/agen_assisted_base_email.html" %}
+
+{% block content %}
+<style>
+    .primary-btn {
+
+
+        }
+</style>
+<table>
+    <tr>
+        <td colspan="100" align="left"
+            style="width:100%; text-align: left; vertical-align: middle; word-wrap:break-word; padding-bottom:24px">
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Halo {{fullname}},
+            </p>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Kamu terima email ini karena permintaan untuk ubah PIN.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100" align="center" style="width:100%; background-color: #F5F5F5; text-align: center; vertical-align: middle; word-wrap:break-word; padding:32px 16px;">
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:700;line-height: 24px;">
+                Klik tombol di bawah ini untuk ubah PIN
+            </p>
+            <br>
+            <br>
+            <a href="{{action_url}}" class="primary-btn" style="background-color: #00ACF0;border: none;border-radius: 8px;color: #ffffff;padding: 8px 16px;text-align: center;text-decoration: none;display: block;">
+                <span style="font-family: 'Nunito', sans-seriffont-size: 14px;font-style: normal;font-weight: 700;line-height: 22px;">
+                    Ubah PIN
+                </span>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100" align="left" style="width:100%; text-align: left; vertical-align: middle; word-wrap:break-word; padding-top:24px;">
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Atau link di bawah ini jika terjadi kendala: <br>
+                <a href={{action_url}}> link ubah pin </a>
+            </p>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Link hanya berlaku selama 2 jam sejak email ini kamu terima, ya.
+            </p>
+            <br>
+            <br>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Salam, <br>
+                JULO
+            </p>
+        </td>
+    </tr>
+</table>
+{% endblock %}

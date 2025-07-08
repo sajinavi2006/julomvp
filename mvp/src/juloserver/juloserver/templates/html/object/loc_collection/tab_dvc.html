@@ -1,0 +1,19 @@
+{% load unit %}
+
+  <table id="ca_table" class="ca_table table table-hover table-striped " >
+    <thead>
+      <tr>
+        <th>
+        </th>
+        <th>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% include "object/loc_collection/row_loan.html" %}
+    {% include "object/loc_collection/row_bio.html" %}
+    {% include "object/loc_collection/row_family.html" %}
+    {% include "object/loc_collection/row_working.html" %}
+    {% include "object/loc_collection/row_keuangan.html" %}
+    <tbody>
+  </table>

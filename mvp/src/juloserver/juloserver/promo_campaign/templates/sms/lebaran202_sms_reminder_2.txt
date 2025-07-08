@@ -1,0 +1,1 @@
+Hi {{first_name}}, Sudah bayar pinjaman Anda? Ini KESEMPATAN TERAKHIR u/ menangkan hadiah undian 5 juta rupiah! Bayar sekarang {{payment_link}}

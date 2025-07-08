@@ -1,0 +1,172 @@
+{% load unit %}
+
+
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Ada Penghasilan Lain?</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	{{ object.has_other_income|yesno:"Ya, Tidak"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Besar Penghasilan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	
+  	<div class="input-group input-group-sm {% if form_app.other_income_amount.errors %} has-error {% endif %}"> 
+      <span class="input-group-addon">
+        Rp.
+      </span>
+      {{form_app.other_income_amount}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-other_income_amount', '{{ object.other_income_amount|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Sumber Penghasilan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	{{ object.other_income_source|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Biaya Sewa/ Cicilan Rumah per Bulan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	
+  	<div class="input-group input-group-sm {% if form_app.monthly_housing_cost.errors %} has-error {% endif %}"> 
+      <span class="input-group-addon">
+        Rp.
+      </span>
+      {{form_app.monthly_housing_cost}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-monthly_housing_cost', '{{ object.monthly_housing_cost|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Pengeluaran Rutin per Bulan (selain Rumah)</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	
+  	<div class="input-group input-group-sm {% if form_app.monthly_expenses.errors %} has-error {% endif %}"> 
+      <span class="input-group-addon">
+        Rp.
+      </span>
+      {{form_app.monthly_expenses}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-monthly_expenses', '{{ object.monthly_expenses|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Total Cicilan Hutang per Bulan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	
+  	<div class="input-group input-group-sm {% if form_app.total_current_debt.errors %} has-error {% endif %}"> 
+      <span class="input-group-addon">
+        Rp.
+      </span>
+      {{form_app.total_current_debt}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-total_current_debt', '{{ object.total_current_debt|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Kendaraan Pribadi</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	
+      {{ object.vehicle_type_1|default:"-"|safe}}
+    
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Kepemilikan Kendaraan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	
+    <div class="input-group input-group-sm {% if form_app.vehicle_ownership_1.errors %} has-error {% endif %}"> 
+      {{form_app.vehicle_ownership_1}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-vehicle_ownership_1', '{{ object.vehicle_ownership_1|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Nama Bank</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	{{object.bank_name|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>Cabang Bank</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	{{object.bank_branch|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+  	<strong>No Rek</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+  	{{object.bank_account_number|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+
+
+

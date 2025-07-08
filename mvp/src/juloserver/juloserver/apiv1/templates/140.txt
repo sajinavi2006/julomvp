@@ -1,0 +1,1 @@
+Selamat! Anda telah mendapat persetujuan untuk pinjaman KTA JULO. <a href=\"http://www.julofinance.com/android/goto/got_offers\">Lihat penawaran pinjaman</a> yang tersedia untuk Anda. Penawaran akan berakhir pada tanggal {{expiry_date}}.

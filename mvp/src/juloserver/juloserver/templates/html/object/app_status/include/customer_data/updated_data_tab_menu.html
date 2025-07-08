@@ -1,0 +1,14 @@
+{% load checkusergroup from common %}
+
+{%if 'app_status'  in request.get_full_path %}
+  {% checkusergroup in ['cs_team_leader','cs_admin','ccs_agent','bo_general_cs'] %}
+  <li class="tab">
+    <a href="#updated_data" data-toggle="tab" title="updated_data" class="tab_updated_data">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Updated Data</span>
+    </a>
+  </li>
+  {% endcheckusergroup %}
+{% endif %}

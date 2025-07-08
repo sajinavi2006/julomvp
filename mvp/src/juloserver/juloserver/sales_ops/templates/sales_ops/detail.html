@@ -1,0 +1,214 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load static from staticfiles %}
+
+{% block additional_title %}Julo - Sales Ops - {{ object.id }}{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+
+{% block list_title %}Detail Lineup: {{ object.id }}{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-12 col-xs-12">
+    <div class="row">
+       <!-- Lineup detail section -->
+      <div class="col-md-6 col-xs-12">
+        {% include "sales_ops/include/detail_lineup.html" %}
+      </div>
+      <!-- end of lineup detail section -->
+
+      <!-- disbursement history -->
+      <div class="col-md-6 col-xs-12">
+        {% include "sales_ops/include/detail_loan_history.html" %}
+      </div>
+       <!-- end of disbursement history -->
+    </div>
+    <div class="row">
+      <hr>
+       <!-- error message section -->
+      <div class="col-md-6 col-xs-12">
+        {% if messages %}
+            <div class="alert alert-warning">
+            {% for message in messages %}
+                <code>{{ message|escape }}</code><br/>
+            {% endfor %}
+            </div>
+        {% endif %}
+        <form method="POST" class="form-horizontal row" test-id="sales-ops-form">
+          {% csrf_token %}
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="inactive_until">Inactive until:</label>
+              {{ form.inactive_until }}
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="inactive_note">Note:</label>
+              {{ form.inactive_note }}
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-primary btn-block text-uppercase waves-effect waves-light">
+              Simpan
+            </button>
+          </div>
+        </form>
+
+        <div class="row" style="padding-top: 10px">
+            <div class="col-md-12">
+                <button id="send_email_button"
+                        type="button"
+                        class="btn btn-warning m-b-5 btn-block text-uppercase waves-effect waves-light"
+                        title="send_email"
+                        data-toggle="modal"
+                        data-target="#responsive-modal-email"
+                        onclick="open_email_dialog();"
+                        style="width:100%">
+                  <i class="fa fa-envelope-o fa-fw"></i> Kirim Email
+                </button>
+            </div>
+        </div>
+      </div>
+       <!-- end of error message section -->
+
+       <!-- History section -->
+      <div class="col-md-6 col-xs-12">
+        {% include "sales_ops/include/detail_skiptrace_history.html" %}
+      </div>
+       <!-- end of history section -->
+    </div>
+  </div>
+</div>
+
+<!--  Email Modal  -->
+<div id="responsive-modal-email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        onclick="closeEmail();">×</button>
+                <h4 class="modal-title">Send custom Email</h4> </div>
+            <div class="modal-body">
+              {% with sales_ops_obj as object %}
+                {% include "object/app_status/include/form_send_email.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect"
+                        data-dismiss="modal">
+                    Batal
+                </button>
+                <button type="button" class="btn btn-danger waves-effect waves-light"
+                        onclick="send_email();">
+                    Kirim
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  Email Modal  -->
+{% endblock %}
+
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script_additional %}
+  <script type="application/javascript">
+    window.CSRF_TOKEN = '{{ csrf_token }}';
+    window.SALES_OPS_LINEUP_ID = '{{ object.id }}';
+    window.SALES_OPS_APPLICATION_ID = '{{ object.latest_application_id }}';
+    window.SALES_OPS_ADD_SKIPTRACE_URL = '{% url 'sales_ops.crm:add_skiptrace' %}/';
+    window.SALES_OPS_UPDATE_SKIPTRACE_URL = '{% url 'sales_ops.crm:update_skiptrace' %}/';
+    window.SALES_OPS_SKIPTRACE_HISTORY_URL = '{% url 'sales_ops.crm:skiptrace_history' %}/';
+  </script>
+  <script src="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+  <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+  <script src="{% static 'theme/plugins/DataTables/js/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'default/js/sales_ops/auto_choose_tab.js' %}"></script>
+  <script src="{% static 'default/js/Skiptrace.js' %}"></script>
+  <script src="{% static 'default/js/utils.js' %}"></script>
+  <script src="{% static 'default/js/sales_ops/lineup-detail.js' %}"></script>
+  <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+  <script src="{% static 'default/js/change.status.js' %}"></script>
+  <script src="{% static 'theme/plugins/bower_components/tinymce/tinymce.min.js' %}"></script>
+  <script src="{% static 'default/js/change.status.email.js' %}"></script>
+{% endblock %}
+
+{% block script_bottom_inside %}
+
+var canned_responses = {{canned_responses|safe}};
+var canned_ajax_url = "{%url 'app_status:ajax_canned_email' %}/";
+var canned_section = ["Insert", "Save", "Delete"];
+
+function open_email_dialog(){
+    if(GLOBAL_EMAIL_STATUS){
+        {% include "sales_ops/include/template_send_email.html" %}
+        GLOBAL_EMAIL_STATUS=false;
+    }
+}
+
+function send_email(){
+    var to_email = $('#to_email').val();
+    var cc_email = $('#cc_email').val();
+    var email_subject = $('#email_subject').val();
+    var email_content = tinymce.get('email_content').getContent();
+
+    if (to_email == ''){
+        $("#email_error_message").text("email tujuan tidak boleh kosong")
+        $("#email_error_message").css("display", "block");
+        $("#email_error_div").show();
+    }
+    if (email_subject == ''){
+        $("#email_error_message").text("subject email tidak boleh kosong")
+        $("#email_error_message").css("display", "block");
+        $("#email_error_div").show();
+    }
+    if (email_content == ''){
+        $("#email_error_message").text("content email tidak boleh kosong")
+        $("#email_error_message").css("display", "block");
+        $("#email_error_div").show();
+    }
+
+    $.ajax({
+        beforeSend: function (request) {
+            request.setRequestHeader("X-CSRFToken", window.CSRF_TOKEN);
+        },
+        url :  "{% url 'app_status:ajax_custom_email' %}/",
+        type : "POST",
+        data : {
+            application_id: {{ object.latest_application_id }},
+            content: postProccessEmailContent(email_content),
+            email_sender: GLOBAL_EMAIL_SENDER,
+            email_receiver: to_email,
+            email_cc: cc_email,
+            subject: email_subject,
+            exclude_app_email: true
+        },
+        // handle a successful response
+        success : function(json) {
+            console.log(json);
+            if (json.status == "success"){
+                $('#responsive-modal-email').modal('hide');
+                $('#responsive-modal-success-email').modal('show');
+            } else if(json.status == "failed"){
+                $("#email_error_message").text(json.messages)
+                $("#email_error_message").css("display", "block");
+                $("#email_error_div").show();
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    }); // end of ajax
+
+} // end of function send_email
+
+{% endblock %}

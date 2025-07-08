@@ -1,0 +1,138 @@
+{% load unit utils tz %}
+<div class="row" id="skip_trace" >
+  <div id="form_skip_trace" hidden>
+      <div class="col-md-3 col-xs-12 p-r-1" hidden>
+          <input class="form-control" id="id_skiptrace">
+      </div>
+      <div class="col-md-3 col-xs-12 p-r-1">
+        <input class="form-control" id="id_name" name="name" placeholder="Name">
+      </div>
+       <div class="col-md-3 col-xs-12 p-r-1">
+        <input class="form-control" id="id_source" name="source" placeholder="Source">
+      </div>
+      <div class="col-md-4 col-xs-12">
+        <div class="input-group">
+          <span class="input-group-addon">
+            +62
+          </span>
+          <input class="form-control" id="id_number_phone" name="phone" placeholder="Phone">
+        </div>
+      </div>
+  </div>
+  <div id="btn_form_skip_trace" class="col-md-2 col-xs-12" hidden>
+    <button type="button" class="btn btn btn-success btn-rounded" id="id_btn_add_skip_trace">
+      <i class="fa fa-plus-circle"></i>
+    </button>
+    <button type="button" class="btn btn btn-info btn-rounded" id="id_btn_update_skip_trace">
+      <i class="fa fa-floppy-o"></i>
+    </button>
+    <button type="button" class="btn btn btn-danger btn-rounded" id="id_btn_cancel_skip_trace" onclick="HideFormSkipTrace();">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div id="id_add_skip_trace">
+    <div class="col-md-5 col-xs-12 p-l-20 p-r-10">
+      <select class="form-control" id="id_sort_by" onchange="SortSkipTrace()">
+        <option value="" selected="selected">Sort By ----</option>
+        <option value="eff">Effectiveness</option>
+        <option value="rec" >Recency</option>
+        <option value="freq">Frequency</option>
+      </select>
+    </div>
+    <div class="col-md-3 col-xs-12">
+      <button type="button" class="btn btn btn-success btn-block" onclick="ShowFormSkipTrace('Add', {source: 'sales_ops'});">
+        Add Number
+      </button>
+    </div>
+  </div>
+</div>
+<template id="template_skiptrace_detail" hidden>
+  <div style="width:100%;">
+    <div style="margin-bottom:0.5em">
+      <span class="js-st-phone-number" style="cursor:pointer;color:blue">08XX-XXXX-XXXX</span>
+      <button type="button" class="btn btn btn-default btn-rounded m-l-10 js-st-edit-btn" title="Edit">
+        <i class="fa fa-pencil-square-o"></i>
+      </button>
+    </div>
+    {% if can_submit_skiptrace_history %}
+    <div style="display: flex; margin-bottom:0.5em">
+      <label style="align-self:center; margin-right: 1em">Note: </label>
+      <input type="text" class="js-st-note-input form-control">
+    </div>
+    <table cellspacing="0" border="0" style="padding-left:50px;">
+      <tbody>
+        <tr style="background:none;">
+          <td style="border: none;">
+            <button type="button" class="btn btn btn-default btn-rounded js-st-action-btn" data-result-choice-id="2">
+              Not Connected
+            </button>
+          </td>
+          <td style="border: none;">
+            <button type="button" class="btn btn btn-default btn-rounded js-st-action-btn" data-result-choice-id="3">
+              Rejected/Busy
+            </button>
+          </td>
+          <td style="border: none;">
+            <button type="button" class="btn btn btn-default btn-rounded js-st-action-btn" data-result-choice-id="4">
+              No Answer
+            </button>
+          </td>
+        </tr>
+        <tr style="background:none;">
+          <td style="border: none;">
+            <button type="button" class="btn btn btn-default btn-rounded js-st-action-btn" data-result-choice-id="5">
+              WPC
+            </button>
+          </td>
+          <td style="border: none;">
+            <button type="button" class="btn btn btn-default btn-rounded js-st-action-btn" data-result-choice-id="6">
+              RPC
+            </button>
+          </td>
+        </tr>
+        <tr style="background:none;"></tr>
+      </tbody>
+    </table>
+    {% else %}
+      <i>Lineup sudah RPC atau sedang di-call [{{ lineup.latest_agent_assignment.udate | localtime | date:'d M Y H:i:s'  }}]</i>
+    {% endif %}
+  </div>
+</template>
+<table id="skiptraceTable" class="display" cellspacing="0" width="100%" style="margin:0px;" >
+    <thead id="skiptraceTable_head" style="background-color:#ffffff">
+        <tr>
+            <th id="sort_by_name">Name</th>
+            <th class="no-sort">Source</th>
+            <th class="no-sort">Action</th>
+            <th id="sort_by_eff">Eff</th>
+            <th id="sort_by_rec" style="white-space: nowrap;">Rec</th>
+            <th id="sort_by_freq">Freq</th>
+            <th id="sort_by_id">Id</th>
+            <th >Phone Number</th>
+            <th class="no-sort">Operator</th>
+        </tr>
+    </thead>
+    <tbody id="skiptraceTable_body">
+      {% for object in skiptrace_list %}
+        <tr>
+          <td>{{ object.contact_name|default:"-"|safe}}
+              {% if object.is_guarantor %}
+                <strong><i class="fa fa-check" aria-hidden="true"></i></strong>
+              {% endif %}
+          </td>
+          <td>{{ object.contact_source|default:"-"|safe}}</td>
+          <td>
+            <button type="button" class="btn btn btn-success btn-rounded js-skiptrace-detail">
+              <i class="fa fa-chevron-circle-down"></i>
+            </button>
+          </td>
+          <td>{{ object.effectiveness|default:"-"|safe}}</td>
+          <td style="white-space: nowrap;">{{ object.recency|date:"Y-m-d"|default:"-"|safe }}<br>{{ object.recency|date:"H:i:s"|safe }}</td>
+          <td>{{ object.frequency|default:"-"|safe}}</td>
+          <td >{{ object.id|default:"-"|safe}}</td>
+          <td >{{ object.phone_number|default:"-"|safe}}</td>
+          <td>{{ object.phone_operator|default:"-"|safe}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>

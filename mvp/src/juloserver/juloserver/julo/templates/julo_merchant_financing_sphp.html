@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPHP - Merchant Financing</title>
+    <link href="https://fonts.googleapis.com/css?family=Pinyon Script" rel="stylesheet">
+    <style>
+        .sphp-body {
+            color : #5E5E5E;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: inherit;
+        }
+        .sphp-header {
+            margin-bottom: 2rem;
+            font-size: 16px;
+            font-weight: bold;
+            color : #00acf0;
+            text-align: center;
+            letter-spacing: normal;
+            text-transform: uppercase;
+        }
+
+        .table-identity .title, .table-identity .colon {
+          font-weight: bold;
+        }
+
+        .table-identity .colon{
+          margin-right: 10px;
+        }
+
+        .list-sphp li {
+          margin: 1rem 0px;
+        }
+
+        .list-sphp * {
+          font-size: inherit;
+        }
+
+        .syarat-ketentuan {
+          text-decoration: none;
+          color: #00acf0!important;
+        }
+
+        .wrapper-signature {
+          justify-content: end;
+          display: flex;
+          margin: 2rem 2rem 2rem 2rem;
+        }
+
+        .signature {
+          width: 100%;
+        }
+
+        .signature-date {
+          margin-bottom: 1rem;
+        }
+
+        @media (min-width: 500px) {
+          .signature {
+            width: 200px;
+          }
+        }
+        .signature-font {
+            font-family: Pinyon Script;
+            font-size: 30px;
+            padding-top: 0px;
+        }
+    </style>
+</head>
+  <body class="sphp-body">
+      <div class="sphp-header">
+          <div>
+              SURAT PERJANJIAN HUTANG PIUTANG
+          </div>
+          <div>
+              Nomor: {{ application_xid }}
+          </div>
+      </div>
+        <p>Surat Perjanjian Hutang Piutang ini dibuat dan ditandatangani pada tanggal {{ date_today }} (“Perjanjian”), oleh dan antara :</p>
+        <ol class="list-sphp">
+          <li>Pemberi Pinjaman, berdasarkan Surat Kuasa no. SK001 diwakilkan oleh PT. JULO TEKNOLOGI FINANSIAL sebagai penyelenggara Layanan Pinjam Meminjam Uang Berbasis Teknologi Informasi, sesuai dengan Peraturan OJK No.77/POJK.01/2016 (selanjutnya disebut <strong>"JULO"</strong>).</li>
+          <li>Penerima Pinjaman yang memiliki identitas sebagai berikut:
+            <div style="display: flex; justify-content: center; margin: 1.5rem 0px">
+              <table class="table-identity">
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; font-weight: bold">
+                          <div style="display: flex; justify-content: space-between;">
+                            <div class="title">
+                              Nama
+                            </div>
+                            <div class="colon">
+                              :
+                            </div>
+                          </div>
+                        </td>
+                        <td> {{ fullname }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">
+                          <div style="display: flex; justify-content: space-between;">
+                            <div class="title">
+                              Tgl. Lahir
+                            </div>
+                            <div class="colon">
+                              :
+                            </div>
+                          </div>
+                        </td>
+                        <td> {{ dob }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                          <div style="display: flex; justify-content: space-between;">
+                            <div class="title">
+                              No. KTP
+                            </div>
+                            <div class="colon">
+                              :
+                            </div>
+                          </div>
+                        </td>
+                        <td> {{ ktp }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                          <div style="display: flex; justify-content: space-between;">
+                            <div class="title">
+                              No. Telpon
+                            </div>
+                            <div class="colon">
+                              :
+                            </div>
+                          </div>
+                        </th>
+                        <td> {{ phone_number }}</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 100px;">
+                          <div style="display: flex; justify-content: space-between;">
+                            <div class="title">
+                              Alamat
+                            </div>
+                            <div class="colon">
+                              :
+                            </div>
+                          </div>
+                        </th>
+                        <td> {{ full_address }}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+        </ol>
+        <p>Penerima Pinjaman menyatakan setuju untuk mengikatkan diri kepada JULO atas ketentuan-ketentuan sebagai berikut:</p>
+        <ol class="list-sphp">
+          <li>Penerima Pinjaman mengakui dan setuju bahwa pengajuan pinjaman yang disetujui akan diberikan dalam bentuk fasilitas Kredit Limit JULO berupa persediaan limit pinjaman tertentu. Penerima Pinjaman dapat melakukan transaksi pinjaman jika limit pinjaman yang tersedia pada aplikasi Penerima Pinjaman mencukupi.</li>
+          <li>Bahwa, Penerima Pinjaman telah mengajukan permohonan melalui JULO dan telah disetujui JULO berupa Fasilitas Kredit Limit JULO (“Fasilitas”) pada tanggal {{ date_credit_limit_generated }} (“tanggal pencairan limit”), dengan total maksimal sebesar {{ set_limit }} (“pinjaman”).</li>
+          <li>Bahwa atas permohonan pinjaman yang disetujui sebagaimana angka 2 diatas, Penerima Pinjaman mengakui dan setuju bahwa setiap rincian transaksi penarikan atau penggunaan Fasilitas akan tercantum dalam setiap Lampiran pada Perjanjian ini, dan setiap transaksi tersebut akan mengurangi limit pinjaman yang tersedia pada aplikasi Penerima Pinjaman.</li>
+          <li>Dalam hal terdapat perbedaan informasi atau data atas rincian transaksi pada Perjanjian ini dengan rincian Fasilitas Kredit Limit yang terdapat pada setiap lampiran konfirmasi, maka baik JULO maupun Penerima Pinjaman sepakat untuk mengacu pada informasi atau data terkini dalam platform JULO. Jika Penerima Pinjaman ingin mengajukan pertanyaan  atau keberatan atas Rincian Fasilitas Kredit Limit, maka Penerima Pinjaman dapat menghubungi JULO di email cs@julo.co.id.</li>
+          <li>Bahwa jika terjadi keterlambatan sebagaimana pasal 3 diatas, maka Penerima Pinjaman bersedia, setuju, dan memberikan izin kepada Pejabat JULO atau pihak yang ditunjuk JULO untuk melakukan penagihan dan/atau kunjungan sesuai dengan peraturan di Indonesia.</li>
+          <li>
+            <div>Pemberian Kuasa</div>
+            <div>Bahwa merujuk pada Surat Kuasa no. SK001, JULO sebagai penyelenggara Layanan Pinjam Meminjam Uang Berbasis Teknologi Informasi diberikan otoritas dan kuasa penuh oleh Pemberi Pinjaman untuk bertindak mewakili Pemberi Pinjaman dalam hal menerima dan menggunakan segala informasi Penerima Pinjaman terkait permohonan dan penagihan pinjaman, hingga kewajiban Penerima Pinjaman berakhir.</div>
+          </li>
+          <li>
+            <div>Pengalihan</div>
+            <ol type="a">
+              <li>
+                Setiap Pemberi Pinjaman dapat, tanpa memberikan pemberitahuan sebelumnya kepada Penerima Pinjaman, mengalihkan hak dan kewajibannya kepada pihak lain, sesuai ketentuan pengalihan hak dan kewajiban dalam perjanjian kerjasama antara JULO dengan Pemberi Pinjaman no. 1.JTF.201707.
+              </li>
+              <li>
+                Penerima Pinjaman menyetujui dan mengakui keabsahan pengalihan yang dilakukan setiap Pemberi Pinjaman berdasarkan Pasal 7 (a) di atas, dan tidak akan mengajukan keberatan atas pengalihan yang dilakukan demikian.
+              </li>
+              <li>
+                Penerima Pinjaman tidak diperkenankan mengalihkan atau mentransfer haknya atau kewajibannya kepada pihak lain.
+              </li>
+            </ol>
+          </li>
+          <li>
+            <div>Pernyataan Persetujuan</div>
+            <div>Penerima Pinjaman dan JULO mengerti atas hak dan kewajiban masing-masing pihak, sesuai dengan yang tertuang  pada <a href="https://www.julo.co.id/terms-and-conditions" class="syarat-ketentuan">Syarat & Ketentuan</a> dan akan senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan Perjanjian ini. Sengketa yang mungkin timbul dari penafsiran dan/atau pelaksanaan Perjanjian ini akan diselesaikan melalui musyawarah untuk mencapai mufakat antara kedua belah pihak dan/atau melalui jalur hukum yurisdiksi yang kompeten. Hal yang belum dituangkan dalam Perjanjian ini akan diatur di kemudian hari melalui Perubahan Perjanjian (Addendum), yang merupakan persetujuan lebih lanjut antara Pemberi Pinjaman dan Penerima Pinjaman, dan bagian yang tidak terpisahkan dari Perjanjian ini, tidak memerlukan tanda tangan ulang dan segala bentuk kesepakatan berupa tanda tangan yang telah diberikan akan berlaku sepanjang tidak menyimpang dari penggunaan fasilitas atau pelaksanaan Perjanjian ini.</div>
+          </li>
+          <li>
+            <div>Keadaan Kahar</div>
+            <div>Definisi Keadaan Kahar adalah suatu keadaan tanpa kesalahan ataupun kelalaian yang diakibatkan oleh salah satu Pihak yang terjadi diluar kendali Pihak tersebut, dimana Pihak tersebut secara wajar tidak mampu untuk mencegah atau mengatasinya, termasuk namun tidak terbatas pada bencana alam,wabah penyakit, perang(baik dideklarasikan maupun tidak), invasi, konflik bersenjata, kerusuhan, demonstrasi, revolusi atau kudeta, tindak terorisme, sabotase atau kerusakan akibat kriminalisme, gangguan listrik, gangguan sistem atau jaringan pihak ketiga lainnya atau perubahan peraturan perundang-undangan atau kebijakan pemerintah yang dapat mempengaruhi kemampuan salah satu Pihak ataupun Para Pihak. Dalam keadaan kahar, Penerima Pinjaman tetap bertanggung jawab atas kewajibannya berdasarkan Perjanjian ini.</div>
+          </li>
+      </ol>
+      <p>
+        Perjanjian ini dibuat oleh JULO secara elektronik dan secara sah, serta mengikat Para Pihak terhitung mulai dari hari dan tanggal tersebut diatas. Perjanjian ini memiliki kekuatan hukum yang sama dengan perjanjian yang dicetak, ditulis tangan dan ditandatangani secara sadar dan tanpa paksaan dari pihak manapun, serta dilindungi oleh UU. No. 11/2008 tentang Informasi dan Transaksi Elektronik, dan Peraturan Pemerintah No.82/2012 tentang Penyelenggaraan Sistem dan Transaksi Elektronik, dan Peraturan Pelaksananya. Segala penyalahgunaan atas dokumen perjanjian ini akan ditindak sesuai dengan hukum dan peraturan yang berlaku.
+      </p>
+      </div>
+      <div class="wrapper-signature">
+        <div class="signature">
+          <p class="signature-date">
+            Jakarta, {{ date_today }}
+          </p>
+          <p class="signature-font">Eko Yulianto</p>
+          <p class="signature-name">
+            Eko Yulianto <br />
+            (dalam kapasitasnya sebagai kuasa
+            Pemberi Pinjaman)
+          </p>
+          <p>
+            Jabatan : Legal Specialist (Kuasa Direksi – PT. Julo Teknologi Finansial)
+          </p>
+        </div>
+      </div>
+  </body>
+</html>

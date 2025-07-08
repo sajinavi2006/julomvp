@@ -1,0 +1,1 @@
+Hi {{firstname}}, selamat ulang tahun yang ke-21! Ayo ajukan pinjaman tanpa jaminan pertama Anda, kunjungi {{applink}}

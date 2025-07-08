@@ -1,0 +1,1 @@
+Bayar Angsuran Anda sebelum {{deadline_date}} dan dapatkan cashback {{cashback_multiplier}} kali lipat!

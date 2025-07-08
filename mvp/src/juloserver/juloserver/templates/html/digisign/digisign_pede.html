@@ -1,0 +1,261 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #frameData {
+            border: none;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css" />
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        const token = '{{ user_token }}';
+        const appId = '{{ application_id }}';
+        const baseURL = "{{ base_url }}";
+        const successPageUrl = "https://statics.julo.co.id/success-page/index.html";
+        const failPageUrl = "{{ base_url }}api/sdk/v1/digisign_failed";
+        const url = {
+            userStatus: 'api/v2/digisign/user-status',
+            activate: 'api/v2/digisign/activate',
+            activation: 'api/v2/digisign/user-activation',
+            documentStatus: appId => `api/v2/digisign/document-status/${appId}`,
+            signDoc: appId => `api/v2/digisign/sign-document/${appId}`,
+            signedDoc: appId => `api/v2/submit-document-flag/${appId}`
+        }
+        let countTry = 0;
+        const limitTry = 20;
+        const time = 3000;
+
+        const $axios = axios.create({
+            baseURL,
+            timeout: 30000,
+            headers: {
+                "Authorization": `Token ${token}`
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <iframe id="frameData" style="width:100%; height:98vh"></iframe>
+    </div>
+    <div style="background: rgba(0, 0, 0, 0.3);
+        z-index:10; width:100%; height:100%;
+        position: fixed; top: 0; left: 0;" id="loader">
+        <img src="{% static 'images/julo/julo-loading.gif' %}" width="150"
+        style="position: absolute;
+            margin: auto; top: 0;
+            left: 0; right: 0;
+            bottom: 0;" />
+    </div>
+</body>
+
+<script>
+    async function checkUserStatus() {
+        return $axios.get(url.userStatus);
+    }
+
+    function retryCheckUserStatus() {
+        return new Promise((resolve, reject) => {
+            setTimeout(async () => {
+                if (countTry < limitTry) {
+                    try {
+                        const check = (await checkUserStatus()).data;
+                        if (check.digisign_mode) {
+                            if (check.is_registered) {
+                                countTry = 0;
+                                if (check.is_activated) {
+                                    resolve(1);
+                                } else {
+                                    resolve(2);
+                                }
+                            } else {
+                                countTry++;
+                                resolve(retryCheckUserStatus());
+                            }
+                        } else {
+                            resolve(0);
+                        }
+                    } catch (err) {
+                        if(err.response.status == 500 || err.response.status == 401){
+                            countTry = 0;
+                            resolve(-1);
+                        } else {
+                            countTry++;
+                            resolve(retryCheckUserStatus());
+                        }
+
+                    }
+                } else {
+                    countTry = 0;
+                    resolve(-1);
+                }
+            }, time);
+        });
+    }
+
+    async function loadDocStatus() {
+        showLoader();
+        const checkDocUpload = await retryCheckDocUpload(appId);
+        if (checkDocUpload == 1) {
+            try {
+                const template = (await $axios.get(url.signDoc(appId))).data;
+                document.getElementById("frameData").srcdoc = template;
+                hideLoader()
+            } catch (err) {
+                notifyFail();
+                failPage();
+            }
+
+        } else if (checkDocUpload == -1) {
+            notifyFail();
+            failPage();
+        } else if (checkDocUpload === 0){
+            await done();
+        }
+    }
+
+    function retryCheckDocUpload(appId) {
+        return new Promise((resolve, reject) => {
+            setTimeout(async () => {
+                if (countTry < limitTry) {
+                    try {
+                        const check = (await $axios.get(url.documentStatus(appId))).data;
+                        if (Object.keys(check).length > 0 && !check.digisign_mode) {
+                            countTry = 0;
+                            resolve(2);
+                        } else if (check.is_existed && !check.is_signed) {
+                            countTry = 0;
+                            resolve(1);
+                        } else if (check.is_existed && check.is_signed) {
+                            countTry = 0;
+                            resolve(0);
+                        } else {
+                            countTry++;
+                            resolve(retryCheckDocUpload(appId));
+                        }
+                    } catch (err) {
+                        countTry++;
+                        resolve(retryCheckDocUpload(appId));
+                    }
+                } else {
+                    countTry = 0;
+                    resolve(-1);
+                }
+            }, time);
+        });
+    }
+
+    async function loadActivateTemplate() {
+        try {
+            const template = (await $axios.get(url.activate)).data;
+            document.getElementById("frameData").srcdoc = template;
+            hideLoader()
+        } catch (err) {
+            notifyFail();
+            failPage();
+        }
+    }
+
+    function activation() {
+        return $axios.put(url.activation, {
+            "is_activated": true
+        })
+    }
+    async function done() {
+        const resultSignDoc = (await $axios.put(url.signedDoc(appId), {
+            is_sphp_signed: true
+        })).data;
+        if (resultSignDoc.success) {
+            //notifySuccess('tanda tangan')
+            successPage();
+        }
+    }
+
+    function notifyFail() {
+        Snackbar.show({
+            pos: 'bottom-right',
+            text: 'Maaf, terjadi kesalahan',
+        });
+    }
+
+    function notifySuccess(text) {
+        Snackbar.show({
+            pos: 'bottom-right',
+            text: `Berhasil ${text}`,
+        });
+    }
+    function successPage() {
+        hideLoader();
+        document.getElementById("frameData").removeAttribute("srcdoc");
+        window.location.assign(successPageUrl);
+    }
+    function failPage() {
+        hideLoader();
+        document.getElementById("frameData").removeAttribute("srcdoc");
+        document.getElementById("frameData").src = failPageUrl;
+    }
+
+    function hideLoader() {
+        document.getElementById('loader').style.visibility = 'hidden';
+    }
+
+    function showLoader() {
+        document.getElementById('loader').style.visibility = 'visible';
+    }
+
+    document.addEventListener("DOMContentLoaded", async function (event) {
+        let checkUserStatus = await retryCheckUserStatus();
+        if (checkUserStatus === 1) {
+            await loadDocStatus();
+        } else if (checkUserStatus === 2) {
+            await loadActivateTemplate()
+        } else if (checkUserStatus === 0) {
+            successPage();
+        } else if (checkUserStatus == -1) {
+            notifyFail();
+            failPage();
+        }
+
+    });
+
+    window.addEventListener("message", async event => {
+        if (event.data) {
+            let data = event.data;
+            if (typeof data == 'string' && data.length > 0) {
+                try {
+                    data = JSON.parse(data)
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            if (data.rc == "00" && data.username) {
+                try {
+                    const activationRes = (await activation()).data
+                    if (activationRes.success) {
+                        notifySuccess('aktivasi');
+                        await loadDocStatus();
+                    }
+                } catch (err) {
+                    console.log(err);
+                    notifyFail();
+                    failPage();
+                }
+            }
+            if (data.result == "01" && data.notif == "go back") {
+                window.parent.postMessage({
+                    data: false
+                }, window.parent.location.href);
+            }
+            if (data.status_document == "complete") {
+                await done();
+            }
+        }
+    }, false);
+</script>

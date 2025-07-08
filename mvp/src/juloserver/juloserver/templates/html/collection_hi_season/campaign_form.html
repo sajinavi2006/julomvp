@@ -1,0 +1,1403 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block css_inside %}
+label.error {
+    color: red;
+    padding-top: 8px;
+}
+input.error {
+    border-color: red !important;
+}
+{% endblock %}
+
+{% block list_title %}
+<!--########################### Action Button ###########################-->
+<div class="col-md-4">
+    Collection Hi Season Campaign
+</div>
+<div class="actions-wrapper row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-6 mx-auto">
+        <form method="post">
+            <input type="hidden" name="save_type" value="add" id="save_type" />
+            <div class="col-md-4 col-xs-12">
+                <button class="btn btn-success btn-rounded btn-block" id="btnSave" value="save" type="button">
+                    <strong> Save Changes </strong>
+                </button>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <button type="button" class="btn btn-warning btn-rounded btn-block" onclick="Refresh();">
+                    <strong> Reset </strong>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--########################### End Action Button ###########################-->
+{% endblock %}
+<!-- {% block list_subtitle %}{% endblock %} -->
+{% block content-list %}
+<!--########################### Campaign First Form ###########################-->
+<div class="row white-box m-b-0 p-b-0">
+    <form method="post" id="form_collection_hi_season_campaign" name="form_collection_hi_season_campaign" class="panel">
+       {% csrf_token %}
+       <div class="panel-body col-md-6 col-xs-12 panel-default">
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Campaign Name</label>
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align">
+                <input class="form-control mainForm" required="required" id="campaign_name_id" placeholder="-----" name="campaign_name_id" maxlength="100" type="text" value="" autocomplete="off"/>
+
+
+                <!-- Temporary Placement -->
+                <input type="hidden"id="campaign_name" name="campaign_name"/>
+                <input type="hidden" name="payment_terms_criteria" value="before"/>
+
+             </div>
+          </div>
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Campaign Start Period</label>
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align">
+                <input class="form-control mainForm datepicker" name="campaign_start_period_id" data-zdp_readonly_element="false" required="required" id="campaign_start_period_id" maxlength="None" placeholder="-----" type="text" value="" autocomplete="off"/>
+                <input type="hidden" id="campaign_start_period" value="" name="campaign_start_period" />
+             </div>
+          </div>
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Campaign End Period</label>
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align">
+                <input class="form-control mainForm datepicker" name="campaign_end_period_id" data-zdp_readonly_element="false" required="required" id="campaign_end_period_id" maxlength="None" placeholder="-----" type="text" value="" autocomplete="off"/>
+                <input type="hidden" id="campaign_end_period" value="" name="campaign_end_period" />
+             </div>
+          </div>
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Due Date Start</label>
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align">
+                <input class="form-control mainForm datepicker" name="due_date_start_id" data-zdp_readonly_element="false" required="required" id="due_date_start_id" maxlength="None" placeholder="-----" type="text" value="" autocomplete="off"/>
+                <input type="hidden" id="due_date_start" value="" name="due_date_start" />
+             </div>
+          </div>
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Due Date End</label>
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align">
+                <input class="form-control mainForm datepicker" name="due_date_end_id" data-zdp_readonly_element="false" required="required" id="due_date_end_id" maxlength="None" placeholder="-----" type="text" value="" autocomplete="off"/>
+                <input type="hidden" id="due_date_end" value="" name="due_date_end" />
+             </div>
+          </div>
+          <div class="form-group row align-middle">
+             <div class="col-md-4">
+                <label>Payment Terms</label>
+             </div>
+             <div class="col-md-8">
+                <div class="form-group row align-middle m-b-0">
+                   <div class="col-md-12">
+                       <select class="form-control mainForm" required="required" id="payment_terms_criteria" autocomplete="off">
+                            <option value="before" selected="selected">Before</option>
+                        </select>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div class="form-group row align-middle" id="dpd_wrapper">
+            <div class="col-md-4"></div>
+            <div class="col-md-8">
+                <div class="form-group row align-middle m-b-0">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2 text-right">
+                        <label>dpd</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input class="form-control rounded mainForm" name="start_dpd_id" value="" type="number" min="-10" max="10" placeholder="----" id="start_dpd_id" autocomplete="off"/>
+                        <input type="hidden" name="dpd" type="number" id="dpd" />
+                        <input type="hidden" name="end_dpd" type="number" id="end_dpd" />
+                        <input type="hidden" name="start_dpd" type="number" id="start_dpd" value="" />
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Eligible Partner Id</label>
+                <br />
+                Use comma seperator (,) for multiple ids
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align ui-widget">
+                <input id="eligible_partner_id" size="50" class="form-control mainForm" required="required" name="eligible_partner_id" value="" autocomplete="off">
+                <input type="hidden" id="eligible_partner_ids" value="" name="eligible_partner_ids" />
+             </div>
+          </div>
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Exclude Refinancing</label>
+             </div>
+             <div class="col-md-4 col-sm-12 txt-align">
+                <select class="form-control mainForm" required="required" id="exclude_pending_refinancing_id" name="exclude_pending_refinancing_id" autocomplete="off">
+                   <option value="-----" selected="selected">-----</option>
+                   <option value="true">True</option>
+                   <option value="false">False</option>
+                </select>
+                <input type="hidden" id="exclude_pending_refinancing" value="" name="exclude_pending_refinancing:boolean" />
+             </div>
+          </div>
+          <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Prize</label>
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align">
+                <textarea class="form-control mainForm" id="prize_id" required="required" placeholder="----" name="prize_id" maxlength="100" type="text" value="" autocomplete="off"></textarea>
+                <input type="hidden" id="prize" value="" name="prize" />
+             </div>
+          </div>
+           <div class="row form-group">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <label for="description">Announcement Date</label>
+             </div>
+             <div class="col-md-8 col-sm-12 txt-align">
+                <input class="form-control mainForm datepicker" name="announcement_date_id" data-zdp_readonly_element="false" required="required" id="announcement_date_id" maxlength="None" placeholder="-----" type="text" value="" autocomplete="off"/>
+                <input type="hidden" id="announcement_date" value="" name="announcement_date" />
+             </div>
+          </div>
+          <div class="row form-group p-t-30">
+             <div class="col-md-4 col-sm-12 txt-align">
+                <button class="btn btn-primary btn-rounded btn-block next btnNext" type="button">
+                   <h4>Next</h4>
+                </button>
+             </div>
+          </div>
+       </div>
+    </form>
+    <div class="col-md-6"></div>
+ </div>
+<!--########################### End Campaign First Form ###########################-->
+<div class="after_click_next" style="display: none;">
+<!--########################### App Banner & Schedule ###########################-->
+    <div class="row white-box p-t-0">
+        <hr />
+        <div class="col-12">
+            <h3 class="p-t-30 p-b-20">App Banner & Schedule</h3>
+            <div class="column column-top app-banner-and-schedule" style="display: none;">
+                <div class="header-content">
+                    <form id="in_app_banners" name="in_app_banners[]" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <table class="table toggle-circle table-hover table-striped" id="in_app_banners" name="in_app_banners[]">
+                            <tbody></tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--########################### End App Banner & Schedule ###########################-->
+<!--########################### On Click App Banner ###########################-->
+    <div class="row white-box">
+        <h3 class="p-t-30 p-b-20">On Click App Banner</h3>
+        <div class="col-md-12 col-sm-12 txt-align">
+            <form id="form_submit_on_click_banner" class="panel" enctype="multipart/form-data">
+                <div class="panel-body col-md-10 col-xs-12 panel-default">
+                        <div class="row form-group">
+                            <div class="col-md-2 col-sm-12 txt-align">
+                                <label for="description">Display Contents</label>
+                            </div>
+                            <div class="col-md-2 col-sm-12 txt-align">
+                                <select class="form-control" required="required" id="content_on_click_app_banner" name="[on_click_banner][banner_type]" autocomplete="off">
+                                    <option value="" selected="selected">----</option>
+                                    <option value="content_html">HTML</option>
+                                    <option value="content_image">Image</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8" id="content_on_click_app_banner_wrapper"></div>
+                        </div>
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+<!--########################### End On Click App Banner ###########################-->
+    <hr />
+<!--########################### Campaign Communications ###########################-->
+    <form method="post" id="campaign_comms" name="campaign_comms" class="panel border-0">
+        <div class="row row white-box campaign_communication p-b-0">
+        </div>
+        <div class="row text-center">
+            <h3 class="col-lg-6 m-t-0 add_more_email" style="cursor: copy;">Add Email Comms <i class="fa fa-plus-circle icon"></i></h3>
+            <h3 class="col-lg-6 m-t-0 add_more_pn" style="cursor: copy;">Add PN Comms <i class="fa fa-plus-circle icon"></i></h3>
+        </div>
+    </form>
+</div>
+
+  <!--########################### PN ADD/EDIT ###########################-->
+
+{% endblock %}
+
+
+{% block custom_link %}
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/Jako/jq.multiInput/dist/css/jq.multiinput.min.css" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'theme/nav-mini/css/custom.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="//code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <script src="{% static 'default/js/jquery.serializejson.js' %}"></script>
+    <!-- Sweet-Alert  -->
+
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <!-- Time Picker -->
+    <script
+    src="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/zebra_datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/bootstrap/zebra_datepicker.min.css">
+
+{% endblock %}
+
+{#</script>#}
+{#komen script#}
+<script>
+{% block script_bottom_inside %}
+
+    $(document).ready(function() {
+        $("#form_collection_hi_season_campaign").validate({
+            rules: {
+            campaign_name_id : {
+                required: true,
+                minlength: 3
+            },
+            campaign_start_period_id: {
+                required: true
+            },
+            campaign_end_period_id: {
+                required: true
+            }
+            },
+            messages : {
+            campaign_name: {
+                minlength: "Name should be at least 3 characters"
+            },
+            campaign_start_period_id: {
+                required: "Please enter campaign start period",
+                date: "Please enter campaign start period correctly",
+            },
+            campaign_end_period_id: {
+                required: "Please enter campaign start period",
+                date: "Please enter campaign start period correctly",
+            }
+            }
+        });
+    });
+    $(document).ready(function() {
+        $("#campaign_comms").validate();
+    });
+    $('#campaign_start_period_id').Zebra_DatePicker({
+        onSelect: function() {
+            $(this).change();
+            $('#campaign_start_period').val($(this).val());
+        },
+        format: 'Y-m-d',
+        direction: true,
+        strict: true,
+        pair: $('#campaign_end_period_id')
+    });
+
+    $('#campaign_end_period_id').Zebra_DatePicker({
+        onSelect: function() {
+            $(this).change();
+            $('#campaign_end_period').val($(this).val());
+        },
+        format: 'Y-m-d',
+        direction: 1
+    });
+    $('#due_date_start_id').Zebra_DatePicker({
+        onSelect: function() {
+            $(this).change();
+            $('#due_date_start').val($(this).val());
+        },
+        format: 'Y-m-d',
+        direction: true,
+        pair: $('#due_date_end_id')
+    });
+
+    $('#due_date_end_id').Zebra_DatePicker({
+        onSelect: function() {
+            $(this).change();
+            $('#due_date_end').val($(this).val());
+        },
+        format: 'Y-m-d',
+        direction: 1
+    });
+
+    $('#announcement_date_id').Zebra_DatePicker({
+        onSelect: function() {
+            $(this).change();
+            $('#announcement_date').val($(this).val());
+        },
+        format: 'Y-m-d',
+        direction: true,
+    });
+
+    $('#campaign_name_id').change(function(e) {
+        $('#campaign_name').val($(this).val());
+    });
+
+    $('#start_dpd_id').change(function(e) {
+        $('#start_dpd').val($(this).val());
+    });
+
+    $('#eligible_partner_id').change(function(e) {
+        $('#eligible_partner_ids').val($(this).val());
+    });
+
+    $('#eligible_partner_id').change(function(e) {
+        $('#eligible_partner_ids').val($(this).val());
+    });
+
+    $('#exclude_pending_refinancing_id').change(function(e) {
+        $('#exclude_pending_refinancing').val($(this).val());
+    });
+
+    $('#prize_id').change(function(e) {
+        $('#prize').val($(this).val());
+    });
+
+    // START MAIN FORM
+
+    // START FUNCTION SHOW PAYMENT TERMS CONTENT
+    $('#content_on_click_app_banner').on('change', function(e) {
+
+        selected = $(this).find('option:selected').val();
+        e.preventDefault();
+        cache: false
+        if (selected == '') {
+        }
+        else if (selected == 'content_html') {
+            $('#content_on_click_app_banner_wrapper').empty();
+            $('#content_on_click_app_banner_wrapper').append(
+                '<div class="col-md-12 content_html">'+
+                '<input type="hidden" name="[on_click_banner][banner_url]">'+
+                '    <div class="col-md-4 col-sm-12 txt-align">'+
+                '        <button type="button" class="btn btn-primary btn-block" id="btnPreview" system-id="" data-toggle="modal" data-target="#UploadHTML"><h4>Upload HTML</h4></button>'+
+                '    </div>'+
+                '    <div class="col-md-4 col-sm-12 txt-align">'+
+                '        <button type="button" class="btn btn-warning btn-block previewshow" id="btnPreview" system-id="" data-toggle="modal" data-target="#PrevHTML"><h4>Preview</h4></button>'+
+                '    </div>'+
+                '    <div class="modal fade" id="UploadHTML" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">'+
+                '        <div class="modal-dialog" role="document">'+
+                '            <div class="modal-content">'+
+                '                <div class="modal-header"><h5 class="modal-title">Upload HTML Banner Content</h5></div>'+
+                '                <div class="modal-body" style="overflow: hidden;">'+
+                '                    <textarea class="form-control" id="banner_content" name="[on_click_banner][banner_content]" type="text" value="" style="min-height: 70vh;"></textarea>'+
+                '                </div>'+
+                '                <div class="modal-footer">'+
+                '                   <button type="button" class="btn btn-success" data-dismiss="modal">Save</button></div>'+
+                '            </div>'+
+                '        </div>'+
+                '    </div>'+
+                '    <div class="modal fade" id="PrevHTML" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">'+
+                '        <div class="modal-dialog" role="document">'+
+                '            <div class="modal-content">'+
+                '                <div class="modal-header"><h5 class="modal-title">Preview HTML Banner Content</h5></div>'+
+                '                <div class="modal-body" id="PrevHTMLBody" style="overflow: hidden;min-height: 70vh;">'+
+                '                </div>'+
+                '                <div class="modal-footer"><button type="button" class="btn btn-secound" data-dismiss="modal">Close Preview</button></div>'+
+                '            </div>'+
+                '        </div>'+
+                '    </div>'+
+                '</div>');
+
+                    // START GET HTML CONTENT
+                    $(document).ready(function() {
+                        $("#banner_content").change(function () {
+                            var txt = $("#banner_content").val();
+                            document.getElementById("PrevHTMLBody").innerHTML = txt;
+                        })
+                    })
+                    // END GET HTML CONTENT
+        }
+        else if (selected == 'content_image') {
+            $('#content_on_click_app_banner_wrapper').empty();
+            $('#content_on_click_app_banner_wrapper').append(
+                '<div class="col-md-12 content_image">'+
+                '<input type="hidden" name="[on_click_banner][banner_content]">'+
+                '    <div class="col-md-4 col-sm-12 txt-align content_image">'+
+                '        <input type="file" accept="image/*" id="UploadImgOnClickAppBanner" name="[on_click_app_banner][][banner_image]" value="" class="btn-file editField form-control" readonly style="background: #4caf4c;border: 0;color: white;padding: 16px 4px;min-height: 53px;margin-bottom:4px">'+
+                '       <small class="text-red">Maximum file size: 2MB<br style=""> Please upload jpg, webp, png or jpeg</small>'+
+                '    </div>'+
+                '    <div class="col-md-2 col-sm-12 txt-align content_image">'+
+                '        <button type="button" class="btn btn-warning btn-block previewshow" id="btnPreview_banner_content" system-id="" data-toggle="modal" data-target="#banner_urlPrev"><h4>Preview</h4></button>'+
+                '    </div>'+
+                '       <div class="row form-group">'+
+                '           <div class="col-md-2 col-sm-12 txt-align">'+
+                '               <label for="description">Blog URL</label>'+
+                '           </div>'+
+                '           <div class="col-md-10 col-sm-12 txt-align ui-widget">'+
+                '               <input id="blog_url" size="50" class="form-control ui-autocomplete-input" required="" name="[on_click_banner][blog_url]" value="" autocomplete="off">'+
+                '           </div>'+
+                '       </div>'+
+                '    <div class="modal fade" id="banner_urlPrev" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">'+
+                '        <div class="modal-dialog" role="document">'+
+                '            <div class="modal-content">'+
+                '                <div class="modal-header"><h5 class="modal-title">Preview Banner Content</h5></div>'+
+                '                <div class="modal-body" style="overflow: hidden;">'+
+                '                    <div class="image" id="form_submit_on_click_banner_image" style=";min-height: 250px;"></div>'+
+                '                    <div id="form_submit_on_click_banner_input"></div>'+
+                '                </div>'+
+                '                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>'+
+                '            </div>'+
+                '        </div>'+
+                '    </div>'+
+                '</div>');
+
+                    // START UPLOAD IMAGE
+                    $(document).ready(function() {
+                        ocShowImage();
+                        $('#UploadImgOnClickAppBanner').change(function(e) {
+                        e.preventDefault();
+                        $('#form_submit_on_click_banner_input').empty();
+                        $('#form_submit_on_click_banner_image').empty();
+                        var data;
+
+                        data = new FormData();
+                        data.append( 'banner_image', $( '#UploadImgOnClickAppBanner' )[0].files[0] );
+                        var token = '{{csrf_token}}';
+                        var itemVal = document.getElementById('UploadImgOnClickAppBanner').value;
+                        var extension = itemVal.substring(itemVal.lastIndexOf(".") + 1, itemVal.length);
+                        if ((extension.toLowerCase() == 'jpg') || (extension.toLowerCase() == 'png') || (extension.toLowerCase() == 'jpeg') || (extension.toLowerCase() == 'webp')) {
+
+                            bannerImage = document.getElementById('UploadImgOnClickAppBanner');
+                            var $input = $(this);
+                            var file = $input[0].files[0];
+                            var reader = new FileReader();
+                            reader.onload = function() {
+                                var ocimg = JSON.parse(localStorage.getItem('ocimg')) || [];
+                                ocimg[$input.index('#UploadImgOnClickAppBanner')] = reader.result;
+                                localStorage.setItem('ocimg', JSON.stringify(ocimg));
+                                ocShowImage(ocimg);
+                                }
+                            reader.readAsDataURL(file);
+
+                            $.ajax({
+                                url : "{%url 'collection_hi_season:ajax_upload_banner_hi_season' %}",
+                                type : "POST",
+                                headers: {"X-CSRFToken": token},
+                                data : data,
+                                processData: false,
+                                contentType: false,
+                                cache: false,
+                                success : function(data) {
+                                    $('<input type="hidden" id="on_click_app_banner_image_url" value="" name="[on_click_banner][banner_url]">').prop('value', data.data.image_url).appendTo($('#form_submit_on_click_banner_input'))
+                                    },
+                                error : function(xhr,errmsg,err) {
+                                    swal("Error!", "Proses upload image terjadi kesalahan", "error")
+                                    }
+                                });
+                            } else {
+                                swal("Error!", "Unsupport image type. Please upload jpg, webp, png or jpeg", "error")
+                                $('#UploadImgOnClickAppBanner').val('');
+                            }
+                        });
+                        function ocShowImage(content) {
+                            $('#form_submit_on_click_banner_item').remove();
+                            var ocimg = content || JSON.parse(localStorage.getItem('ocimg')) || [];
+                            ocimg.forEach(function(img, i) {
+                                $('<img class="form_submit_on_click_banner_item" style="max-width: 100%;height: auto;" />').prop('src', img).appendTo($('#form_submit_on_click_banner_image').eq(i));
+                            })
+                        }
+                    });
+                    // END UPLOAD IMAGE
+        }
+
+    });
+    // END FUNCTION SHOW PAYMENT TERMS CONTENT
+
+    // START ELIGIBLE PARTNER IDs
+    $(function() {
+        var availableeligible_partner_id = [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"
+        ];
+
+        function split(val) {
+            return val.split(/,\s*/);
+        }
+
+        function extractLast(term) {
+            return split(term).pop();
+        }
+
+        $("#eligible_partner_id")
+            .on("keydown", function(event) {
+                if (event.keyCode === $.ui.keyCode.TAB &&
+                    $(this).autocomplete("instance").menu.active) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 0,
+                source: function(request, response) {
+                    response($.ui.autocomplete.filter(
+                        availableeligible_partner_id, extractLast(request.term)));
+                },
+                focus: function() {
+                    return false;
+                },
+                select: function(event, ui) {
+                    var terms = split(this.value);
+                    terms.pop();
+                    terms.push(ui.item.value);
+                    terms.push("");
+                    this.value = terms.join(", ");
+                    return false;
+                }
+            });
+    });
+    // END ELIGIBLE PARTNER IDs
+
+    // START BANNER SCHEDULE
+    $('.btnNext').click(function(e) {
+
+        var token = '{{csrf_token}}';
+        var json = {
+            "campaign_start_period" : $('#campaign_start_period').val(),
+            "due_date_start" : $('#due_date_start').val(),
+            "due_date_end" : $('#due_date_end').val(),
+            "start_dpd" : $('#start_dpd_id').val(),
+            "end_dpd" : $('#end_dpd').val(),
+            "announcement_date" : $('#announcement_date').val(),
+        };
+        var numColss = 1;
+        var data = JSON.stringify(json);
+        if ($.trim($("#campaign_name_id").val()) == "") {
+            swal("Error!", "Campaign Name is Required", "error");
+        } else if ($.trim($("#campaign_start_period_id").val()) == "") {
+            swal("Error!", "Campaign Start Period is Required", "error");
+        } else if ($.trim($("#campaign_end_period_id").val()) == "") {
+            swal("Error!", "Campaign End Period is Required", "error");
+        } else if ($.trim($("#due_date_start_id").val()) == "") {
+            swal("Error!", "Due Date Start is Required", "error");
+        } else if ($.trim($("#due_date_end_id").val()) == "") {
+            swal("Error!", "Due Date End is Required", "error");
+        } else if ($.trim($("#start_dpd_id").val()) == "") {
+            swal("Error!", "DPD is Required", "error");
+        } else if ($.trim($("#exclude_pending_refinancing_id").val()) == "-----") {
+            swal("Error!", "Exclude Refinancing is Required", "error");
+        } else if ($.trim($("#prize_id").val()) == "") {
+            swal("Error!", "Prize  is Required", "error");
+        } else if ($.trim($("#announcement_date_id").val()) == "") {
+            swal("Error!", "Announcement Date is Required", "error");
+        } else {
+            $.ajax({
+                url: "{%url 'collection_hi_season:ajax_generate_banner_schedule_hi_season' %}",
+                type: "POST",
+                headers: {
+                    "X-CSRFToken": token
+                },
+                data: data,
+                cache: false,
+                success: function(data, status, xhr) {
+                    $('.btnNext').prop("disabled", true);
+                    $('.after_click_next').show();
+                    $('.btnNext').css({
+                        'background-color': '#504c48',
+                        'border-color': '#504c48'
+                    });
+
+                    $('.app-banner-and-schedule').show()
+                    $(".mainForm").prop("disabled", true);
+                    var numCols = 1;
+                    for (var i = 0; i < data.data.list_app_banner_and_schedule.length; i++) {
+                        due_date = moment(data.data.list_app_banner_and_schedule[i].due_date).format('MMM. DD, YYYY');
+                        due_date_result = moment(data.data.list_app_banner_and_schedule[i].due_date).format('YYYY-MM-DD');
+                        start_showing_on = moment(data.data.list_app_banner_and_schedule[i].start_showing_on).format('MMM. DD, YYYY');
+                        removed_on = moment(data.data.list_app_banner_and_schedule[i].removed_on).format('MMM. DD, YYYY');
+                        removed_on_result = moment(data.data.list_app_banner_and_schedule[i].removed_on).format('YYYY-MM-DD');
+                        if (!(i % numCols))
+                        tRow = $('<tr>' +
+                            '<input type="hidden" type="number" name="[in_app_banners][][id]:number" value="" />');
+
+                        tCell = $('<td class="p-30 vertical-middle" id="' + i + '">').html(i + 1);
+                        $('#in_app_banners').append(tRow.append(tCell));
+
+                        tCell = $('<td class="p-30 vertical-middle">').text('Due Date');
+                        $('#in_app_banners').append(tRow.append(tCell));
+
+                        tCell = $('<td class="p-30 vertical-middle" id="due_date">').html(due_date + '<input type="hidden" name="[in_app_banners][][due_date]" value="' + due_date_result + '" />');
+                        $('#in_app_banners').append(tRow.append(tCell));
+
+                        tCell = $('<td class="p-30 vertical-middle">').text('Start Showing On');
+                        $('#in_app_banners').append(tRow.append(tCell));
+
+                        tCell = $('<td class="p-30 vertical-middle" id="start_showing_on">').html(start_showing_on + '<input type="hidden" name="[in_app_banners][][start_showing_on]" value="' + data.data.list_app_banner_and_schedule[i].start_showing_on + '" />');
+                        $('#in_app_banners').append(tRow.append(tCell));
+
+                        tCell = $('<td class="p-30 vertical-middle">').text('Removed On');
+                        $('#in_app_banners').append(tRow.append(tCell));
+
+                        tCell = $('<td class="p-30 vertical-middle" id="removed_on">').html(removed_on + '<input type="hidden" name="[in_app_banners][][removed_on]" value="' + removed_on_result + '" />');
+                        $('#in_app_banners').append(tRow.append(tCell));
+
+
+                        tCell = $('<td class="p-30 vertical-middle" id="banner_schedule_wrapper' + (i + 1) + '">').html(
+                            '<input type="file" accept="image/*" id="upload_image_app_banner_schedule' + (i + 1) + '" class="btn btn-default btn-file form-control editField" style="background: #4caf4c; border: 0; color: white; padding: 8px; min-height: 40px; margin-bottom: 4px;">' +
+                            '<small class="text-red">Maximum file size: 2MB<br style=""> Please upload jpg, webp, png or jpeg</small>'+
+                            '<button type="button" class="btn btn-block  btn-warning previewshow"  data-toggle="modal" data-target="#btnPreview_app_banner_schedule' + (i + 1) + '" style="margin-top:8px">Preview</button>' +
+                            '<input type="hidden" name="[in_app_banners][][banner_content]" value="image/html" />' +
+                            '<div class="modal fade" id="btnPreview_app_banner_schedule' + (i + 1) + '" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">' +
+                            '<div class="modal-dialog" role="document">' +
+                            '<div class="modal-content">' +
+                            '<div class="modal-header">' +
+                            '<h5 class="modal-title">Preview Image</h5>' +
+                            '</div>' +
+                            '<div class="modal-body" style="overflow: hidden;">' +
+                            '<div id="upload_image_app_banner_schedule_banner_image' + (i + 1) + '" style=";min-height: 250px;"></div>' +
+                            '<div id="upload_image_app_banner_schedule_banner_url' + (i + 1) + '"></div>' +
+                            '</div>' +
+                            '<div class="modal-footer">' +
+                            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>');
+                        $('#in_app_banners').append(tRow.append(tCell));
+                        $(document).ready(function() {
+                            absShowImage();
+                            var ids = (i + 1);
+                            $('#upload_image_app_banner_schedule'+ids+'').change(function(e) {
+                            e.preventDefault();
+                            $('#upload_image_app_banner_schedule_banner_image'+ids+'').empty();
+                            $('#upload_image_app_banner_schedule_banner_url'+ids+'').empty();
+                            var data;
+                            data = new FormData();
+                            data.append( 'banner_image', $('#upload_image_app_banner_schedule'+ids+'')[0].files[0] );
+                            var token = '{{csrf_token}}';
+                            var itemVal = document.getElementById('upload_image_app_banner_schedule'+ids+'').value;
+                            var extension = itemVal.substring(itemVal.lastIndexOf(".") + 1, itemVal.length);
+                            if ((extension.toLowerCase() == 'jpg') || (extension.toLowerCase() == 'png') || (extension.toLowerCase() == 'jpeg') || (extension.toLowerCase() == 'webp')) {
+
+                                bannerImage = document.getElementById('upload_image_app_banner_schedule'+ids+'');
+                                var $input = $(this);
+                                var file = $input[0].files[0];
+                                var reader = new FileReader();
+                                reader.onload = function() {
+                                    var absimg = JSON.parse(localStorage.getItem('absimg')) || [];
+                                    absimg[$input.index('#upload_image_app_banner_schedule'+ids+'')] = reader.result;
+                                    localStorage.setItem('absimg', JSON.stringify(absimg));
+                                    absShowImage(absimg);
+                                    }
+                                reader.readAsDataURL(file);
+
+                                $.ajax({
+                                    url : "{%url 'collection_hi_season:ajax_upload_banner_hi_season' %}",
+                                    type : "POST",
+                                    headers: {
+                                        "X-CSRFToken": token
+                                    },
+                                    data : data,
+                                        processData: false,
+                                        contentType: false,
+                                        success : function(data) {
+                                            if (data.data == "Unsupport image type. Please upload jpeg, png or jpeg") {
+                                                swal("Error!", "Unsupport image type. Please upload jpg, png or jpeg", "error")
+                                            }
+                                            else {
+                                                $('<input type="hidden" id="on_click_app_banner_image_url'+ids+'" value="" name="[in_app_banners][][banner_url]">').prop('value', data.data.image_url).appendTo($('#upload_image_app_banner_schedule_banner_url'+ids+''))
+                                            }
+                                        },
+                                        error : function(xhr,errmsg,err) {
+                                            swal("Error!", "Proses upload image terjadi kesalahan", "error")
+                                        }
+                                    });
+                                } else {
+                                    swal("Error!", "Unsupport image type. Please upload jpg, webp, png or jpeg", "error")
+                                    $('#upload_image_app_banner_schedule'+ids+'').val('');
+                                }
+                            });
+                            function absShowImage(content) {
+                                $('#form_submit_app_banner_schedule_item').remove();
+                                var absimg = content || JSON.parse(localStorage.getItem('absimg')) || [];
+                                absimg.forEach(function(img, i) {
+                                    $('<img class="form_submit_app_banner_schedule_item" style="max-width: 100%;height: auto;" />').prop('src', img).appendTo($('#upload_image_app_banner_schedule_banner_image'+ids+'').eq(i));
+                                })
+                            }
+
+                        });
+
+
+                    }
+
+                },
+            })
+        }
+    });
+    // END ON CLICK BANNER
+
+    // START ADD MORE BANNER COMMS  - EMAIL
+    $(document).ready(function() {
+        var max_fields = 10;
+        var wrapper = $(".campaign_communication");
+        var add_button_email = $(".add_more_email");
+        var add_button_pn = $(".add_more_pn");
+
+        var x = 1;
+        // START BANNER COMMS  - EMAIL
+        $(add_button_email).click(function(e) {
+            e.preventDefault();
+            if (x < max_fields) {
+                x++;
+                $(wrapper).append(
+                    '<div class="row row white-box p-0">' +
+                    '<hr class="m-0">' +
+                    '   <h3 class="col-lg-5 m-t-30 add_more">Campaign Communications Email</h3>' +
+                    '   <a href="javascript:;" data-target="reset" class="col-lg-6 text-right remove_field">' +
+                    '   <h3><i class="fa fa-trash icon"></i></h3>' +
+                    '   </a>' +
+                    '    <div class="panel-body col-md-12 col-xs-12 panel-default">' +
+                    '        <div class="row form-group">' +
+                    '           <div class="col-md-4 col-sm-12 txt-align">' +
+                    '              <label for="description">Type</label>' +
+                    '           </div>' +
+                    '           <div class="col-md-4 col-sm-12 txt-align">' +
+                    '              <select class="form-control" required="" id="type">' +
+                    '                 <option>Email</option>' +
+                    '              </select>' +
+                    '           </div>' +
+                    '        </div>' +
+                    '        <!--########################### EMAIL ADD/EDIT ###########################-->' +
+                    '        <div class="email' + x + '"">' +
+                    '           <!--########################### EMAIL HIDDEN VALUE ###########################-->' +
+                    '           <input type="hidden" id="comm_settings_id" type="number" value="{{ comm_settings_id }}" name="[campaign_comms][][comm_settings_id]:number" /> ' +
+                    '           <input type="hidden" id="type" value="email" name="[campaign_comms][][type]" />' +
+                    '           <input type="hidden" id="pn_title" value="" name="[campaign_comms][][pn_title]" /> ' +
+                    '           <input type="hidden" id="pn_body" value="" name="[campaign_comms][][pn_body]" />' +
+                    '           <!--########################### END EMAIL HIDDEN VALUE ###########################-->' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Template Code</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <input class="form-control validate disableField' + x + '" required="required" id="template_code' + x + '" placeholder="-----" name="[campaign_comms][][template_code]" maxlength="100" type="text" value="{{ template_code }}" />' +
+                    '              </div>' +
+                    '           </div>' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Sent at dpd</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-3 col-sm-12 txt-align">' +
+                    '                 <input class="form-control validate disableField' + x + '" required="required" id="sent_at_dpd_email' + x + '" placeholder="-----" name="[campaign_comms][][sent_at_dpd]" type="number" min="-10" max="10" value="{{ sent_at_dpd }}" />' +
+                    '              </div>' +
+                    '           </div>' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Sent Time</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-4 col-sm-12 txt-align input-icons">' +
+                    '                 <select class="form-control validate disableField' + x + '" name="[campaign_comms][][sent_time]" required="" autocomplete="off" id="sent_time">' +
+                    '                    <option value="07:00">07.00</option>' +
+                    '                    <option value="08:00">08.00</option>' +
+                    '                    <option value="09:00">09.00</option>' +
+                    '                    <option value="10:00">10.00</option>' +
+                    '                    <option value="11:00">11.00</option>' +
+                    '                    <option value="12:00">12.00</option>' +
+                    '                    <option value="13:00">13.00</option>' +
+                    '                    <option value="14:00">14.00</option>' +
+                    '                    <option value="15:00">15.00</option>' +
+                    '                    <option value="16:00">16.00</option>' +
+                    '                    <option value="17:00">17.00</option>' +
+                    '                    <option value="18:00">18.00</option>' +
+                    '                    <option value="19:00">19.00</option>' +
+                    '                    <option value="20:00">20.00</option>' +
+                    '                    <option value="21:00">21.00</option>' +
+                    '                    <option value="22:00">22.00</option>' +
+                    '                    <option value="23:00">23.00</option>' +
+                    '                    <option value="00:00">00.00</option>' +
+                    '                 </select>' +
+                    '                 <i class="fa fa-clock-o icon"></i>' +
+                    '              </div>' +
+                    '           </div>' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Email Subject</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <input class="form-control validate disableField' + x + '" required="required" id="email_subject' + x + '" placeholder="-----" name="[campaign_comms][][email_subject]" maxlength="100" type="text" value="{{ email_subject }}" />' +
+                    '              </div>' +
+                    '           </div>' +
+                    '        </div>' +
+                    '     </div>' +
+                    '     <div class="col-md-4 col-sm-12 txt-align email' + x + '" style="margin-bottom: 32px;">' +
+                    '        <form id="form-submit-banner">' +
+                    '           <div class="col-md-5 p-l-0 col-xs-12">' +
+                    '              <button type="button" class="btn btn-primary btn-block" id="btnPreview" system-id="upload_html_btn" data-toggle="modal" data-target="#UploadHTML_campaign_comms' + x + '">' +
+                    '                 <h4>Upload HTML</h4>' +
+                    '              </button>' +
+                    '           </div>' +
+                    '           <div class="col-md-4 p-l-0 col-xs-12">' +
+                    '              <button type="button" class="btn btn-warning btn-block" id="btnPreview" system-id="upload_html_btn" data-toggle="modal" data-target="#PrevHTML_campaign_comms' + x + '">' +
+                    '                 <h4>Preview</h4>' +
+                    '              </button>' +
+                    '           </div>' +
+                    '           <div class="col-md-3 p-l-0 col-xs-12">' +
+                    '              <button type="button" class="btn btn-success btn-block btnNextComsEmail' + x + '" id="btn_next_comms_email' + x + '" system-id="" data-target="#content-preview">' +
+                    '                 <h4>Next</h4>' +
+                    '              </button>' +
+                    '           </div>' +
+                    '        </form>' +
+                    '        <br>' +
+                    '        <div class="modal fade" id="PrevHTML_campaign_comms' + x + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                    '           <div class="modal-dialog" role="document">' +
+                    '              <div class="modal-content">' +
+                    '                 <div class="modal-header">' +
+                    '                    <h5 class="modal-title" id="exampleModalLabel">Preview Banner Content</h5>' +
+                    '                 </div>' +
+                    '                 <div class="modal-body" style="overflow: hidden;">' +
+                    '                    <div class="modal-body" id="PrevHTMLBody' + x + '" style="overflow: hidden;min-height: 70vh;">' +
+                    '                 </div>' +
+                    '                 <div class="modal-footer">'+
+                    '                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close Preview</button></div>' +
+                    '              </div>' +
+                    '           </div>' +
+                    '        </div>' +
+                    '        </div>' +
+                    '        <div class="modal fade" id="UploadHTML_campaign_comms' + x + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                    '           <div class="modal-dialog" role="document">' +
+                    '              <div class="modal-content">' +
+                    '                 <div class="modal-header">' +
+                    '                    <h5 class="modal-title" id="exampleModalLabel">Upload Banner Content</h5>' +
+                    '                 </div>' +
+                    '                 <div class="modal-body" style="overflow: hidden;">' +
+                    '                    <textarea class="form-control" id="email_content' + x + '" placeholder="----" name="[campaign_comms][][email_content]"  style="min-height: 70vh;" type="text" value="{{ email_content }}"></textarea>' +
+                    '                 </div>' +
+                    '                 <div class="modal-footer">'+
+                    '                   <button type="button" class="btn btn-warning" id="btnPreview" system-id="" data-toggle="modal" data-target="#PrevHTML_campaign_comms' + x + '" data-dismiss="modal">Preview</button>'+
+                    '                   <button type="button" class="btn btn-success" data-dismiss="modal">Save</button></div>' +
+                    '              </div>' +
+                    '           </div>' +
+                    '        </div>' +
+                    '     </div>' +
+                    '<div id="sparator_add_more_email' + x + '" style="height: 120px;width: 100%;position: absolute;bottom: 0;z-index: 9;background: white;"></div>'+
+                    '    <table class="table toggle-circle table-hover table-striped email' + x + '" id="resultComsEmail' + x + '">' +
+                    '        <tbody></tbody>' +
+                    '    </table>' +
+                    '</div>'); //add input box
+                    $(document).ready(function() {
+                        var ids = x;
+                        $('#email_content' + ids + '').change(function () {
+                            var txt = $('#email_content' + ids + '').val();
+                            document.getElementById('PrevHTMLBody' + ids + '').innerHTML = txt;
+                        });
+                    });
+                // START BANNER COMMS MORE FOR EMAIL
+                $('.btnNextComsEmail' + x + '').click(function(e) {
+                    var token = '{{csrf_token}}';
+                    var json = {
+                        "due_date_start": $('#due_date_start').val(),
+                        "due_date_end": $('#due_date_end').val(),
+                        'sent_at_dpd': $('#sent_at_dpd_email' + x + '').val(),
+                        "payment_terms_criteria": 'before',
+                    };
+                    var data = JSON.stringify(json);
+                    if ($.trim($('#template_code' + x + '').val()) == "") {
+                        swal("Error!", "Template Code is Required", "error");
+                    } else if ($.trim($('#sent_at_dpd_email' + x + '').val()) == "") {
+                        swal("Error!", "Sent at dpd is Required", "error");
+                    } else if ($.trim($('#email_subject' + x + '').val()) == "") {
+                        swal("Error!", "Email Subject is Required", "error");
+                    } else if ($.trim($('#email_content' + x + '').val()) == "") {
+                        swal("Error!", "Email HTML Content is Required", "error");
+                    }
+                    else {
+                        $.ajax({
+                            url: "{%url 'collection_hi_season:ajax_generate_comms_setting_schedule_hi_season' %}",
+                            type: "POST",
+                            headers: {
+                                "X-CSRFToken": token
+                            },
+                            data: data,
+                            success: function(data, status, xhr) {
+                                $('#btn_next_comms_email' + x + '').prop("disabled", true);
+                                $('#btn_next_comms_email' + x + '').css({
+                                    'background-color': '#504c48',
+                                    'border-color': '#504c48'
+                                });
+                                $('#sparator_add_more_email' + x + '').css({
+                                    'display': 'none',
+                                });
+                                $('.disableField' + x + '').prop("readonly", true);
+                                var numCols = 1;
+                                for (var i = 0; i < data.data.list_comms_setting_schedule.length; i++) {
+                                    due_date = moment(data.data.list_comms_setting_schedule[i].due_date).format('MMM. DD, YYYY');
+                                    sent_on = moment(data.data.list_comms_setting_schedule[i].sent_on).format('MMM. DD, YYYY');
+                                    due_date_result = moment(data.data.list_comms_setting_schedule[i].due_date).format('YYYY-MM-DD');
+                                    sent_on_result = moment(data.data.list_comms_setting_schedule[i].sent_on).format('YYYY-MM-DD');
+                                    if (!(i % numCols)) tRow = $('<tr id="{{ id }}">' +
+                                        '<input type="hidden" type="number" name="[campaign_comms][][banners][][id]:number" value="{{ id }}" />');
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="' + i + '">').html(i + 1);
+                                    $('#banners').append(tRow.append(tCell));
+                                    tCell = $('<td class="p-30 vertical-middle">').text('Due Date');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="due_date">').html(due_date + '<input type="hidden" name="[campaign_comms][][banners][][due_date]" value="' + due_date_result + '" />');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle">').text('Sent On');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="sent_on">').html(sent_on + '<input type="hidden" name="[campaign_comms][][banners][][sent_on]" value="' + sent_on_result + '" />');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="email_comms_banner_wrapper' + x + '' + (i + 1) + '">').html('<input required="required" type="file" accept="image/*" id="email_comms_banner' + x + '' + (i + 1) + '" class="btn btn-default btn-file form-control editField file-upload" readonly style="background: #4caf4c; border: 0; color: white; padding: 8px; min-height: 40px; margin-bottom: 4px;">' +
+                                        '<small class="text-red">Maximum file size: 2MB<br> Please upload jpg, webp, png or jpeg</small>'+
+                                        '<button type="button" class="btn btn-block  btn-warning previewshow"  data-toggle="modal" data-target="#PreviewImageModal' + x + '' + (i + 1) + '" style="margin-top:8px">Preview</button>' +
+                                        '<input type="hidden" name="[campaign_comms][][banners][][banner_content]" value="image/html" />' +
+                                        '<div class="modal fade" id="PreviewImageModal' + x + '' + (i + 1) + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                                        '<div class="modal-dialog" role="document">' +
+                                        '<div class="modal-content">' +
+                                        '<div class="modal-header">' +
+                                        '<h5 class="modal-title" id="exampleModalLabel">Preview Image</h5>' +
+                                        '</div>' +
+                                        '<div class="modal-body" style="overflow: hidden;">' +
+                                        '<div class="image" id="email_comms_banner_banner_image' + x + '' + (i + 1) + '" style=";min-height: 250px;"></div>' +
+                                        '<div id="email_comms_banner_banner_url' + x + '' + (i + 1) + '"></div>' +
+                                        '</div>' +
+                                        '<div class="modal-footer">' +
+                                        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>');
+                                    $('#resultComsEmail' + x + '').append(tRow.append(tCell));
+                                    $(document).ready(function() {
+
+                                        var parent_ids = (x);
+                                        var child_ids = (i + 1);
+                                        emailImg();
+                                        $('#email_comms_banner'+parent_ids+''+child_ids+'').change(function(e) {
+                                            $('#email_comms_banner_banner_image'+parent_ids+''+child_ids+'').empty();
+                                            $('#email_comms_banner_banner_url'+parent_ids+''+child_ids+'').empty();
+                                            e.preventDefault();
+                                            var data;
+                                            data = new FormData();
+                                            data.append( 'banner_image', $('#email_comms_banner'+parent_ids+''+child_ids+'')[0].files[0] );
+                                            var token = '{{csrf_token}}';
+                                            var itemVal = document.getElementById('email_comms_banner'+parent_ids+''+child_ids+'').value;
+                                            var extension = itemVal.substring(itemVal.lastIndexOf(".") + 1, itemVal.length);
+                                            if ((extension.toLowerCase() == 'jpg') || (extension.toLowerCase() == 'png') || (extension.toLowerCase() == 'jpeg') || (extension.toLowerCase() == 'webp')) {
+
+                                            bannerImage = document.getElementById('email_comms_banner'+parent_ids+''+child_ids+'');
+                                            var $input = $(this);
+                                            var file = $input[0].files[0];
+                                            var reader = new FileReader();
+                                            reader.onload = function() {
+                                                var emailimg = JSON.parse(localStorage.getItem('emailimg')) || [];
+                                                emailimg[$input.index('#email_comms_banner'+parent_ids+''+child_ids+'')] = reader.result;
+                                                localStorage.setItem('emailimg', JSON.stringify(emailimg));
+                                                emailImg(emailimg);
+                                                }
+                                            reader.readAsDataURL(file);
+
+                                            $.ajax({
+                                                url : "{%url 'collection_hi_season:ajax_upload_banner_hi_season' %}",
+                                                type : "POST",
+                                                headers: {
+                                                    "X-CSRFToken": token
+                                                },
+                                                data : data,
+                                                    processData: false,
+                                                    contentType: false,
+                                                    success : function(data) {
+                                                        $('<input type="hidden" id="email_comms_banner_banner_image" value="" name="[campaign_comms][][banners][][banner_url]">').prop('value', data.data.image_url).appendTo($('#email_comms_banner_banner_url'+parent_ids+''+child_ids+''))
+                                                    },
+                                                    error : function(xhr,errmsg,err) {
+                                                        swal("Error!", "Proses upload image terjadi kesalahan", "error")
+                                                    }
+                                                });
+                                            } else {
+                                                swal("Error!", "Unsupport image type. Please upload jpg, webp, png or jpeg", "error")
+                                                $('#email_comms_banner'+parent_ids+''+child_ids+'').val('');
+                                            }
+                                        });
+                                        function emailImg(content) {
+                                        $('#form_submit_email_comms_item').remove();
+                                        var emailimg = content || JSON.parse(localStorage.getItem('emailimg')) || [];
+                                        emailimg.forEach(function(img, i) {
+                                            $('<img class="form_submit_email_comms_item" style="max-width: 100%;height: auto;" />').prop('src', img).appendTo($('#email_comms_banner_banner_image'+parent_ids+''+child_ids+'').eq(i));
+                                        })
+                                    }
+                                    });
+                                }
+
+                            },
+                        })
+                    }
+
+                });
+                // END BANNER COMMS MORE FOR EMAIL
+            }
+            $(wrapper).on("click", ".remove_field", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+        })
+        });
+        // END BANNER COMMS  - EMAIL
+
+
+        // START BANNER COMMS  - PN
+        $(add_button_pn).click(function(e) {
+            e.preventDefault();
+            if (x < max_fields) {
+                x++;
+                $(wrapper).append(
+                    '<div class="row row white-box p-0">' +
+                    '<hr class="m-0">' +
+                    '   <h3 class="col-lg-5 m-t-30">Campaign Communications PN</h3>' +
+                    '   <a href="javascript:;" data-target="reset" class="col-lg-6 text-right remove_field">' +
+                    '   <h3><i class="fa fa-trash icon"></i></h3>' +
+                    '   </a>' +
+                    '    <div class="panel-body col-md-12 col-xs-12 panel-default">' +
+                    '        <div class="row form-group">' +
+                    '           <div class="col-md-4 col-sm-12 txt-align">' +
+                    '              <label for="description">Type</label>' +
+                    '           </div>' +
+                    '           <div class="col-md-4 col-sm-12 txt-align">' +
+                    '              <select class="form-control" required="" id="type">' +
+                    '                 <option value="pn">PN</option>' +
+                    '              </select>' +
+                    '           </div>' +
+                    '        </div>' +
+                    '        <!--########################### PN ADD/EDIT ###########################-->' +
+                    '        <div class="pn">' +
+                    '           <!--########################### PN HIDDEN VALUE ###########################-->' +
+                    '           <input type="hidden" id="comm_settings_id" type="number" value="{{ comm_settings_id }}" name="[campaign_comms][][comm_settings_id]:number" /> ' +
+                    '           <input type="hidden" id="type" value="pn" name="[campaign_comms][][type]" />' +
+                    '           <input type="hidden" id="email_subject" value="" name="[campaign_comms][][email_subject]" />' +
+                    '           <input type="hidden" id="email_content" value="" name="[campaign_comms][][email_content]" />' +
+                    '           <!--########################### END PN HIDDEN VALUE ###########################-->' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">PN Title</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <input class="form-control validate disableFieldPN' + x + '" required="required" id="pn_title' + x + '" placeholder="-----" name="[campaign_comms][][pn_title]" maxlength="100" type="text" value="{{ pn_title }}" />' +
+                    '              </div>' +
+                    '           </div>' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Template Code</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <input class="form-control validate disableFieldPN' + x + '" required="required" id="template_code' + x + '" placeholder="-----" name="[campaign_comms][][template_code]" maxlength="100" type="text" value="{{ template_code }}" />' +
+                    '              </div>' +
+                    '           </div>' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Sent at dpd</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-3 col-sm-12 txt-align">' +
+                    '                 <input class="form-control validate disableFieldPN' + x + '" required="required" id="sent_at_dpd_pn' + x + '" placeholder="-----" name="[campaign_comms][][sent_at_dpd]" min="-10" max="10" type="number" value="{{ sent_at_dpd }}" />' +
+                    '              </div>' +
+                    '           </div>' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Sent Time</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-4 col-sm-12 txt-align input-icons">' +
+                    '                 <select class="form-control validate" name="[campaign_comms][][sent_time]" required="" autocomplete="off" id="sent_time">' +
+                    '                    <option value="07:00">07.00</option>' +
+                    '                    <option value="08:00">08.00</option>' +
+                    '                    <option value="09:00">09.00</option>' +
+                    '                    <option value="10:00">10.00</option>' +
+                    '                    <option value="11:00">11.00</option>' +
+                    '                    <option value="12:00">12.00</option>' +
+                    '                    <option value="13:00">13.00</option>' +
+                    '                    <option value="14:00">14.00</option>' +
+                    '                    <option value="15:00">15.00</option>' +
+                    '                    <option value="16:00">16.00</option>' +
+                    '                    <option value="17:00">17.00</option>' +
+                    '                    <option value="18:00">18.00</option>' +
+                    '                    <option value="19:00">19.00</option>' +
+                    '                    <option value="20:00">20.00</option>' +
+                    '                    <option value="21:00">21.00</option>' +
+                    '                    <option value="22:00">22.00</option>' +
+                    '                    <option value="23:00">23.00</option>' +
+                    '                    <option value="00:00">00.00</option>' +
+                    '                 </select>' +
+                    '                 <i class="fa fa-clock-o icon"></i>' +
+                    '              </div>' +
+                    '           </div>' +
+                    '           <div class="row form-group">' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <label for="description">Body</label>' +
+                    '              </div>' +
+                    '              <div class="col-md-4 col-sm-12 txt-align">' +
+                    '                 <textarea class="form-control validate disableFieldPN' + x + '" required="required" id="pn_body' + x + '" placeholder="-----" name="[campaign_comms][][pn_body]" maxlength="100" type="textarea" value="{{ pn_body }}"></textarea>' +
+                    '              </div>' +
+                    '           </div>' +
+                    '        </div>' +
+                    '     </div>' +
+                    '   <form id="form-submit-banner">' +
+                    '       <div class="col-md-4 col-sm-12 txt-align pn">' +
+                    '           <button type="button" class="btn btn-success btn-block btnNextComsPn' + x + '" id="btn_next_comms_pn'+ x +'" system-id="" data-target="#content-preview">' +
+                    '            <h4>Next</h4>' +
+                    '           </button>' +
+                    '     </div>' +
+                    '   </form>'+
+                    '<div id="sparator_add_more_pn' + x + '" style="height: 120px;width: 100%;position: absolute;bottom: 0;z-index: 9;background: white;"></div>'+
+                    '    <table class="table toggle-circle table-hover table-striped resultComsPn" id="resultComsPn' + x + '">' +
+                    '        <tbody></tbody>' +
+                    '    </table>' +
+                    '</div>'); //add input box
+
+                // START BANNER COMMS MORE FOR PN
+                $('.btnNextComsPn' + x + '').click(function(e) {
+                    var token = '{{csrf_token}}';
+                    var json = {
+                        "due_date_start": $('#due_date_start').val(),
+                        "due_date_end": $('#due_date_end').val(),
+                        'sent_at_dpd': $('#sent_at_dpd_pn' + x + '').val(),
+                        "payment_terms_criteria": 'before',
+                    };
+                    var data = JSON.stringify(json);
+                    if ($.trim($('#pn_title' + x + '').val()) == "") {
+                        swal("Error!", "PN Title is Required", "error");
+                    } else if ($.trim($('#template_code' + x + '').val()) == "") {
+                        swal("Error!", "Template Code is Required", "error");
+                    } else if ($.trim($('#sent_at_dpd_pn' + x + '').val()) == "") {
+                        swal("Error!", "Sent at dpd is Required", "error");
+                    } else if ($.trim($('#pn_body' + x + '').val()) == "") {
+                        swal("Error!", "PN Body is Required", "error");
+                    } else {
+                        $.ajax({
+                            url: "{%url 'collection_hi_season:ajax_generate_comms_setting_schedule_hi_season' %}",
+                            type: "POST",
+                            headers: {
+                                "X-CSRFToken": token
+                            },
+                            data: data,
+                            success: function(data, status, xhr) {
+                                $('#btn_next_comms_pn' + x + '').prop("disabled", true);
+                                $('#btn_next_comms_pn' + x + '').css({
+                                    'background-color': '#504c48',
+                                    'border-color': '#504c48'
+                                });
+                                $('#sparator_add_more_pn' + x + '').css({
+                                    'display': 'none',
+                                });
+                                $('.disableFieldPN' + x + '').prop("readonly", true);
+                                var numCols = 1;
+                                for (var i = 0; i < data.data.list_comms_setting_schedule.length; i++) {
+                                    due_date = moment(data.data.list_comms_setting_schedule[i].due_date).format('MMM. DD, YYYY');
+                                    sent_on = moment(data.data.list_comms_setting_schedule[i].sent_on).format('MMM. DD, YYYY');
+                                    due_date_result = moment(data.data.list_comms_setting_schedule[i].due_date).format('YYYY-MM-DD');
+                                    sent_on_result = moment(data.data.list_comms_setting_schedule[i].sent_on).format('YYYY-MM-DD');
+                                    if (!(i % numCols)) tRow = $('<tr id="{{ id }}">' +
+                                        '<input type="hidden" type="number" name="[campaign_comms][][banners][][id]:number" value="{{ id }}" />');
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="' + i + '">').html(i + 1);
+                                    $('#banners').append(tRow.append(tCell));
+                                    tCell = $('<td class="p-30 vertical-middle">').text('Due Date');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="due_date">').html(due_date + '<input type="hidden" name="[campaign_comms][][banners][][due_date]" value="' + due_date_result + '" />');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle">').text('Sent On');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="sent_on">').html(sent_on + '<input type="hidden" name="[campaign_comms][][banners][][sent_on]" value="' + sent_on_result + '" />');
+                                    $('#banners').append(tRow.append(tCell));
+
+                                    tCell = $('<td class="p-30 vertical-middle" id="pn_comms_banner_wrapper' + x + '' + (i + 1) + '">').html('<input type="file" required="required" accept="image/*" id="pn_comms_banner' + x + '' + (i + 1) + '" class="btn btn-default btn-file form-control editField file-upload" readonly style="background: #4caf4c; border: 0; color: white; padding: 8px; min-height: 40px; margin-bottom: 4px;">' +
+                                        '<small class="text-red">Maximum file size: 2MB<br> Please upload jpg, webp, png or jpeg</small>'+
+                                        '<button type="button" class="btn btn-block  btn-warning previewshow"  data-toggle="modal" data-target="#PreviewImageModal' + x + '' + (i + 1) + '" style="margin-top:8px">Preview</button>' +
+                                        '<input type="hidden" name="[campaign_comms][][banners][][banner_content]" value="image/html" />' +
+                                        '<div class="modal fade" id="PreviewImageModal' + x + '' + (i + 1) + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                                        '<div class="modal-dialog" role="document">' +
+                                        '<div class="modal-content">' +
+                                        '<div class="modal-header">' +
+                                        '<h5 class="modal-title" id="exampleModalLabel">Preview Image</h5>' +
+                                        '</div>' +
+                                        '<div class="modal-body" style="overflow: hidden;">' +
+                                        '<div class="image" id="pn_comms_banner_banner_image' + x + '' + (i + 1) + '"></div>' +
+                                        '<div id="pn_comms_banner_banner_url' + x + '' + (i + 1) + '"></div>' +
+                                        '</div>' +
+                                        '<div class="modal-footer">' +
+                                        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</div>');
+                                    $('#resultComsPn' + x + '').append(tRow.append(tCell));
+                                    $(document).ready(function() {
+
+                                        var parent_ids = (x);
+                                        var child_ids = (i + 1);
+                                        pnImg();
+                                        $('#pn_comms_banner'+parent_ids+''+child_ids+'').change(function(e) {
+                                        e.preventDefault();
+                                        $('#pn_comms_banner_banner_image'+parent_ids+''+child_ids+'').empty();
+                                        $('#pn_comms_banner_banner_url'+parent_ids+''+child_ids+'').empty();
+                                        var data;
+                                        data = new FormData();
+                                        data.append( 'banner_image', $('#pn_comms_banner'+parent_ids+''+child_ids+'')[0].files[0] );
+                                        var token = '{{csrf_token}}';
+                                        var itemVal = document.getElementById('pn_comms_banner'+parent_ids+''+child_ids+'').value;
+                                        var extension = itemVal.substring(itemVal.lastIndexOf(".") + 1, itemVal.length);
+                                        if ((extension.toLowerCase() == 'jpg') || (extension.toLowerCase() == 'png') || (extension.toLowerCase() == 'jpeg') || (extension.toLowerCase() == 'webp')) {
+
+                                            bannerImage = document.getElementById('pn_comms_banner'+parent_ids+''+child_ids+'');
+                                            var $input = $(this);
+                                            var file = $input[0].files[0];
+                                            var reader = new FileReader();
+                                            reader.onload = function() {
+                                                var pnimg = JSON.parse(localStorage.getItem('pnimg')) || [];
+                                                pnimg[$input.index('#pn_comms_banner'+parent_ids+''+child_ids+'')] = reader.result;
+                                                localStorage.setItem('pnimg', JSON.stringify(pnimg));
+                                                pnImg(pnimg);
+                                                }
+                                            reader.readAsDataURL(file);
+                                            $.ajax({
+                                                url : "{%url 'collection_hi_season:ajax_upload_banner_hi_season' %}",
+                                                type : "POST",
+                                                headers: {
+                                                    "X-CSRFToken": token
+                                                },
+                                                data : data,
+                                                    processData: false,
+                                                    contentType: false,
+                                                    success : function(data) {
+                                                        $('<input type="hidden" id="pn_comms_banner_banner_image" value="" name="[campaign_comms][][banners][][banner_url]">').prop('value', data.data.image_url).appendTo($('#pn_comms_banner_banner_url'+parent_ids+''+child_ids+''))
+                                                    },
+                                                    error : function(xhr,errmsg,err) {
+                                                        swal("Error!", "Proses upload image terjadi kesalahan", "error")
+                                                    }
+                                                });
+                                            } else {
+                                                swal("Error!", "Unsupport image type. Please upload jpg, webp, png or jpeg", "error")
+                                                $('#pn_comms_banner'+parent_ids+''+child_ids+'').val('');
+                                            }
+                                        });
+                                        function pnImg(content) {
+                                        $('#form_submit_pn_comms_item').remove();
+                                        var pnimg = content || JSON.parse(localStorage.getItem('pnimg')) || [];
+                                        pnimg.forEach(function(img, i) {
+                                            $('<img class="form_submit_pn_comms_item" style="max-width: 100%;height: auto;" />').prop('src', img).appendTo($('#pn_comms_banner_banner_image'+parent_ids+''+child_ids+'').eq(i));
+                                        })
+                                    }
+                                    });
+                                }
+
+                            },
+                        })
+                    }
+                });
+                // END BANNER COMMS MORE FOR PN
+            }
+            $(wrapper).on("click", ".remove_field", function(e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            })
+        });
+        // END BANNER COMMS  - PN
+    });
+    // END ADD MORE BANNER COMMS -- EMAIL
+
+    // START SAVE FUNCTION
+    $('#btnSave').click(function(e) {
+
+        var token = '{{csrf_token}}';
+        var obj = $('form').serializeJSON();
+        if ($.trim($("#campaign_name_id").val()) == "") {
+            swal("Error!", "Campaign Name is Required", "error");
+        } else if ($.trim($("#campaign_start_period_id").val()) == "") {
+            swal("Error!", "Campaign Start Period is Required", "error");
+        } else if ($.trim($("#campaign_end_period_id").val()) == "") {
+            swal("Error!", "Campaign End Period is Required", "error");
+        } else if ($.trim($("#due_date_start_id").val()) == "") {
+            swal("Error!", "Due Date Start is Required", "error");
+        } else if ($.trim($("#due_date_end_id").val()) == "") {
+            swal("Error!", "Due Date End is Required", "error");
+        } else if ($.trim($("#start_dpd_id").val()) == "") {
+            swal("Error!", "DPD is Required", "error");
+        } else if ($.trim($("#prize_id").val()) == "") {
+            swal("Error!", " Prize  is Required", "error");
+        } else if ($.trim($("#upload_image_app_banner_schedule1").val()) == "") {
+            swal("Error!", "App Banner & Schedule is Required", "error");
+        } else if ($.trim($("#upload_image_app_banner_schedule2").val()) == "") {
+            swal("Error!", "App Banner & Schedule is Required", "error");
+        } else if ($.trim($("#announcement_date_id").val()) == "") {
+            swal("Error!", "Announcement Date is Required", "error");
+        } else {
+        $.ajax({
+            url: "{%url 'collection_hi_season:collection_hi_season_campaign_form' %}",
+            type: "POST",
+            headers: {
+                "X-CSRFToken": token
+            },
+            contentType: "application/json",
+            data: JSON.stringify(obj, null, 2),
+            success: function (data) {
+                swal({
+                    title: "Submitted",
+                    text: "Data berhasil tersimpan",
+                    type: "success"
+                },function() {
+                    $(location).attr('href', '/collection_hi_season/collection_hi_season_campaign_list/');
+                });
+		    },
+            error : function(xhr,errmsg,err) {
+                swal("Error!", err, errmsg)
+            }
+        })
+        }
+    });
+    // END SAVE FUNCTION
+
+    // START RELOAD FUNCTION
+    function Refresh() {
+        window.parent.location = window.parent.location.href;
+    }
+    $(document).ready(function() {
+        if (localStorage.length > 0 ) {
+                localStorage.clear();
+    }
+    })
+    // END RELOAD FUNCTION
+    $(document).ready(function() {
+    $('form').find("input[type='text'],textarea").val("");
+   });
+{% endblock %}
+{# </script>#}

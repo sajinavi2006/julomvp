@@ -1,0 +1,16 @@
+<div class="col-lg-3 col-sm-2 col-xs-12" v-if="blBucket.key === 'bl_T90plus'">
+  <a
+    :href="blBucket.url" 
+    target="_blank"
+  >
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase"><% blBucket.name %></h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% statement_dashboard[blBucket.key] %></span></li>
+      </ul>
+    </div>
+  </a>
+</div>

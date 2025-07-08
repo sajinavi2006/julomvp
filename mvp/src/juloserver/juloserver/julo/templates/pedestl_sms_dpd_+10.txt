@@ -1,0 +1,1 @@
+{{name}} segera bayar Pinjaman PEDE Pinter Anda berikut denda sebesar {{due_amount}}. Cara bayar, cek aplikasi PEDE.

@@ -1,0 +1,1450 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+
+{% block additional_title %}Payment: {{ payment_obj.id }} {% endblock %}
+
+{% block css_inside %}
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+  .pmt_event {
+    margin-top:10px !important;
+  }
+  td.day{
+    position:relative;
+  }
+  .enabled a{
+    color:black !important;
+    background:green !important;
+  }
+    td.day{
+    position:relative;
+  }
+  .a-btn{
+   cursor: pointer;
+  }
+
+  td.day.disabled:hover:before {
+      content: 'This date is disabled';
+      color: white;
+      background-color: grey;
+      top: 28px;
+      position: absolute;
+      width: 136px;
+      left: -34px;
+      z-index: 1000;
+      text-align: center;
+      padding: 2px;
+  }
+
+  td.disabled-date {
+      background-color: red !important;
+      color: white !important;
+  }
+
+  .modal-content {
+    width: 120%;
+  }
+  .no-strip {
+    border-top: none !important;
+
+  }
+  .select_cls {
+      width: 232px;
+      height: 36px;
+      border: solid 1px #d5d6d6;
+      background-color: #ffffff;
+  }
+  .red{color: red;}
+  .green{color: green;}
+  .no-left{padding-left:0px;}
+
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'loan_app:status_changes' %}">Status Payment</a></li>
+    <li class="active">Ubah/Update</li>
+{% endblock %}
+
+{% block list_title %}
+
+  <div class="row m-b-10">
+    <div class="col-md-2 col-xs-6 label-danger p-t-10">
+      <small>App-id</small>: {{ application.id|default:"-"|safe  }}
+    </div>
+    <div class="col-md-3 col-xs-6 label-success p-t-10">
+      <small>email</small>: {{ application.email|default:"-"|safe  }}
+    </div>
+    <div class="col-md-3 col-xs-6 label-danger p-t-10">
+      <small>name</small>: {{ application.fullname|default:"-"|safe  }}
+    </div>
+   <div class="col-md-3 col-xs-12 label-warning p-t-10">
+      <small>LOC-status</small>: <code>{{ loc.status|default:"-"|safe }}</code>
+    </div>
+  </div>
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<div id="loc-app">
+  <div class="row m-b-10 p-t-0">
+    <div class="col-md-12 col-xs-12">
+      <div class="row">
+        <!-- Application detail -->
+        <div class="col-md-6 col-xs-12">
+          <ul class="nav nav-tabs customtab tabs">
+            <li class="tab active">
+              <a href="#st" data-toggle="tab" aria-expanded="false" title="ST"><span class="visible-xs"><i class="fa fa-chevron-circle-down"></i></span> <span class="hidden-xs">ST</span></a>
+            </li>
+            <li class="tab"><a href="#dvc" data-toggle="tab" title="DVC">
+              <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">DVC</span></a>
+            </li>
+            <li class="tab"><a href="#loc" data-toggle="tab" title="LOC">
+              <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">LOC</span></a>
+            </li>
+          </ul>
+          <div id="slim_apps">
+            <div class="tab-content">
+              <!-- Tab Skip Tracing -->
+              <div class="tab-pane active" id="st">
+                <!-- Hidden Form -->
+                <div class="row" id="skip_trace" >
+                  <!-- Form Add Update ST -->
+                  <div id="form_skip_trace" hidden>
+                    <div class="col-md-3 col-xs-12 p-r-1" hidden>
+                      <input class="form-control" id="id_skiptrace">
+                    </div>
+                    <div class="col-md-3 col-xs-12 p-r-1">
+                      <input
+                        class="form-control" id="id_name"
+                        name="name" placeholder="Name">
+                    </div>
+                    <div class="col-md-3 col-xs-12 p-r-1">
+                      <input
+                        class="form-control" id="id_source"
+                        name="source" placeholder="Source">
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          +62
+                        </span>
+                        <input
+                          class="form-control" id="id_number_phone"
+                          name="phone" placeholder="Phone">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Button Form ST -->
+                  <div id="btn_form_skip_trace" class="col-md-2 col-xs-12" hidden>
+                    <!-- button + -->
+                    <button
+                      type="button" class="btn btn btn-success btn-rounded"
+                      id="id_btn_add_skip_trace">
+                      <i class="fa fa-plus-circle"></i>
+                    </button>
+                    <button
+                      type="button" class="btn btn btn-info btn-rounded"
+                      id="id_btn_update_skip_trace">
+                      <i class="fa fa-floppy-o"></i>
+                    </button>
+                    <button
+                      type="button" class="btn btn btn-danger btn-rounded"
+                      id="id_btn_cancel_skip_trace" onclick="HideFormSkipTrace();">
+                      <i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                  <div id="id_add_skip_trace">
+                    <div class="col-md-5 col-xs-12 p-l-20 p-r-10">
+                      <select
+                        class="form-control" id="id_sort_by"
+                        onchange="SortSkipTrace()">
+                        <option value="" selected="selected">Sort By ----</option>
+                        <option value="eff">Effectiveness</option>
+                        <option value="rec" >Recency</option>
+                        <option value="freq">Frequency</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3 col-xs-12">
+                      <button
+                        type="button" class="btn btn btn-success btn-block"
+                        onclick="ShowFormSkipTrace('Add',null);">
+                        Add Number &nbsp;&nbsp;
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <table
+                  id="skiptraceTable" class="display" cellspacing="0"
+                  width="100%" style="margin:0px;" >
+                  <thead id="skiptraceTable_head" style="background-color:#ffffff">
+                    <tr>
+                      <th id="sort_by_name">Name</th>
+                      <th class="no-sort">Source</th>
+                      <th class="no-sort">Action</th>
+                      <th id="sort_by_eff">Eff</th>
+                      <th id="sort_by_rec" style="white-space: nowrap;">Rec</th>
+                      <th id="sort_by_freq">Freq</th>
+                      <th id="sort_by_id">Id</th>
+                      <th >Phone Number</th>
+                      <th class="no-sort">Operator</th>
+                    </tr>
+                  </thead>
+                  <tbody id="skiptraceTable_body">
+                    {% if skiptrace_list %}
+                      {% for object in skiptrace_list %}
+                        <tr>
+                            <td>{{ object.contact_name|default:"-"|safe}}</td>
+                            <td>{{ object.contact_source|default:"-"|safe}}</td>
+                            <td>
+                              <button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded">
+                                <i class="fa fa-chevron-circle-down"></i>
+                              </button>
+                            </td>
+                            <td>{{ object.effectiveness|default:"-"|safe}}</td>
+                            <td style="white-space: nowrap;">{{ object.recency|date:"Y-m-d"|default:"-"|safe }}<br>{{ object.recency|date:"H:i:s"|safe }}</td>
+                            <td>{{ object.frequency|default:"-"|safe}}</td>
+                            <td >{{ object.id|default:"-"|safe}}</td>
+                            <td >{{ object.phone_number|default:"-"|safe}}</td>
+                            <td>{{ object.phone_operator|default:"-"|safe}}</td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- Tab personal -->
+              <div class="tab-pane" id="dvc">
+                {% include "object/loc_collection/tab_dvc.html" %}
+              </div>
+              <!-- Tab LOC -->
+              <div class="tab-pane" id="loc">
+                {% include "object/loc_collection/tab_loc.html" %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment detail -->
+        <div class="col-md-6 col-xs-12">
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <ul class="nav nav-tabs customtab tabs">
+                <li class="active tab">
+                  <a href="#last-statement-detail" data-toggle="tab">
+                    <span class="visible-xs" title="Payment Detail Info">
+                      <i class="fa fa-home"></i>
+                    </span>
+                    <span class="hidden-xs">Last Statement Detail</span>
+                  </a>
+                </li>
+                <li class="tab">
+                  <a href="#statement_list" data-toggle="tab" title="Payment Event Info">
+                    <span class="visible-xs">
+                      <i class="fa fa-user"></i>
+                    </span>
+                    <span class="hidden-xs">Statement List</span>
+                  </a>
+                </li>
+                <li class="tab">
+                  <a href="#bank_detail" data-toggle="tab" aria-expanded="true" title="Bank Info">
+                    <span class="visible-xs">
+                      <i class="fa fa-envelope-o"></i>
+                    </span>
+                    <span class="hidden-xs">Julo VA Info</span>
+                  </a>
+                </li>
+              </ul>
+              <div id="slim_pmts">
+                <div class="tab-content pmt_event">
+                  <!-- Tab Lst Statement Detail -->
+                  <div class="tab-pane active" id="last-statement-detail">
+                    <div class="col-xs-12">
+                      <table>
+                        <tr>
+                          <td class='m-r-10'>
+                            Loc ID
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;
+                            <icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <strong>
+                              <% last_statement.loc_id !== undefined ? last_statement.loc_id : '-' %>
+                            </strong>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class='m-r-10'>
+                            Statement Code
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;
+                            <icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <strong>
+                              <% last_statement.statement_code !== undefined ? last_statement.statement_code : '-' %>
+                            </strong>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class='m-r-10'>
+                            Billing Ampount
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;
+                            <icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <strong>
+                              <% last_statement.billing_amount !== undefined ? last_statement.billing_amount : '-' %>
+                            </strong>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class='m-r-10'>
+                            Minimum Payment
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <strong>
+                              <% last_statement.minimum_payment !== undefined ? last_statement.minimum_payment : '-' %>
+                            </strong>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class='m-r-10 m-t-10 m-b-10'>
+                            Statement Date
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <span class="label label-success">
+                              <% last_statement.cdate !== undefined ? last_statement.cdate : '-' %>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class='m-r-10'>
+                            Payment Due Date
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <strong>
+                              <% last_statement.payment_due_date !== undefined ? last_statement.payment_due_date : '-' %>
+                            </strong>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class='m-r-10'>
+                            Purchase Amount
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <strong>
+                              <% last_statement.purchase_amount !== undefined ? last_statement.purchase_amount : '-' %>
+                            </strong>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class='m-r-10'>
+                            Payment Amount
+                          </td>
+                          <td>
+                            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                            <strong>
+                              <% last_statement.payment_amount !== undefined ? last_statement.payment_amount : '-' %>
+                            </strong>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- Statement Summaries -->
+                  <div class="tab-pane" id="statement_list">
+                    <table
+                      id="demo-foo-pagination" class="table m-b-0 toggle-arrow-tiny"
+                      data-page-size="20">
+                      <thead>
+                        <tr>
+                          <th data-toggle="true" data-sort-ignore="true">
+                            <small>Statement Code</small>
+                          </th>
+                          <th data-toggle="true" data-sort-ignore="true"> 
+                            <small>Statement Date</small>
+                          </th>
+                          <th data-toggle="true" data-sort-ignore="true">
+                            <small>Payment Due Date</small>
+                          </th>
+                          <th data-toggle="true" data-sort-ignore="true">
+                            <small>Payment Amount</small>
+                          </th>
+                          <th data-toggle="true" data-sort-ignore="true">
+                            <small>Billing Amount</small>
+                          </th>
+                          <th data-hide="all" data-sort-ignore="true">
+                            <small>Remaining Amount</small>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody v-if="statement_summaries.length > 0">
+                        <small>
+                          <tr v-for="statement in statement_summaries">
+                            <td><small>
+                              <a class="a-btn"
+                                v-on:click="showTransactionDetail(statement.id)">
+                              <code>
+                                <% statement.statement_code %>
+                              </code>
+                              </a>
+                            </small></td>
+                            <td>
+                              <small>
+                                <% statement.cdate %>
+                              </small>
+                            </td>
+                            <td><small>
+                              <% statement.payment_due_date %>
+                            </small></td>
+                            <td>
+                              <small><% statement.payment_amount %></small>
+                            </td>
+                            <td>
+                              <small><% statement.billing_amount %></small>
+                            </td>
+                            <td>
+                              <small>
+                                <% statement.billing_amount - statement.payment_amount %>
+                              </small>
+                            </td>
+                          </tr>
+                        </small>
+                      </tbody>
+                      <tbody v-else>
+                        <small>
+                          <tr>
+                              <td colspan="7">
+                                  <code>-- Tidak ada data --</code>
+                              </td>
+                          </tr>
+                        </small>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Va List Detail -->
+                  <div class="tab-pane" id="bank_detail">
+                    <table
+                      id="demo-foo-pagination" class="table m-b-0 toggle-arrow-tiny"
+                      data-page-size="20">
+                      <thead>
+                        <tr>
+                          <th data-toggle="true" data-sort-ignore="true">
+                            <small>Bank Name</small>
+                          </th>
+                          <th data-toggle="true" data-sort-ignore="true"> 
+                            <small>Bank Code</small>
+                          </th>
+                          <th data-toggle="true" data-sort-ignore="true">
+                            <small>Va Number</small>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody v-if="va_list.length > 0">
+                        <small>
+                          <tr v-for="va in va_list">
+                            <td><small>
+                              <code><% va.bank_name %></code>
+                            </small></td>
+                            <td><small>
+                              <code><% va.bank_code %></code></small></td>
+                            <td><small>
+                              <% va.virtual_account %>
+                            </small></td>
+                          </tr>
+                        </small>
+                      </tbody>
+                      <tbody v-else>
+                        <small>
+                          <tr>
+                              <td colspan="7">
+                                  <code>-- Tidak ada data --</code>
+                              </td>
+                          </tr>
+                        </small>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Tab Payment list-->
+                  <div class="tab-pane" id="pmt_list">
+                      {% with loan_obj as object %}
+                          {% include "object/loan_status/include/tab_payment_list.html" %}
+                      {% endwith %}`
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- here is Notes Tab -->
+          </div>
+        </div>
+      </div>
+      <!-- end of row -->
+      <!-- form start -->
+      <div class="row">
+        <hr>
+        <!-- Form Change Status & Form Add Notes -->
+        <div class="col-md-6 col-xs-12 block_form form_center" style="height:300px;">
+          <!-- Button Ubah Status -->
+          <div class="row" v-if="isAddNotes === false && isChangeStatus === false">
+            <div class="col-md-6 col-md-offset-3 col-xs-12 m-t-30" id="id_form_selection">
+              <button 
+                id="id_btn_ubah_status"
+                class="btn btn-info btn-block text-uppercase waves-effect waves-light"
+                type="button"
+                v-on:click="changeStatus">
+                <i class="fa fa-pencil fa-fw"></i> Ubah Status
+              </button>
+            </div>
+          </div>
+          <!-- Button Add Notes -->
+          <div class="row" v-if="isAddNotes === false && isChangeStatus === false">
+            <div class="col-md-6 col-md-offset-3 col-xs-12 m-t-30" id="id_form_selection">
+              <button 
+                id="id_btn_ubah_status"
+                class="btn btn-danger btn-block text-uppercase waves-effect waves-light"
+                type="button"
+                v-on:click="addNotes">
+                <i class="fa fa-pencil fa-fw"></i> Add Notes
+              </button>
+            </div>
+          </div>
+          <!-- Form Ubah Status -->
+          <div class="row" v-if="isChangeStatus === true">
+            <div class="col-md-12 col-xs-12" id="id_form_selection">
+              <div
+                class="row" id="id_form_ubah_status"
+                aria-expanded="false">
+                {% if message_out_ubah_status %}
+                  <div class="alert alert-warning" id="id_error_div_2">
+                    <code>{{ message_out_ubah_status|escape }}</code><br/>
+                  </div>
+                {% endif %}
+                <div class="row">
+                  <div class="col-md-2 col-xs-12 m-t-10">
+                    <small>From: </small> 
+                    <code>
+                      {{ loc.status|default:"-"|safe }}
+                    </code>
+                    </div>
+                    <div class="col-md-1 col-xs-4 m-t-10">
+                      <small>To: </small>
+                    </div>
+                    <div class="col-md-8 col-xs-8{% if form.status_to.errors %} has-error {% endif %}">
+                        <select class="form-control" v-model="change_status.status">
+                          {% if loc.status == 'freeze' %}
+                            <option value="active">Active</option>
+                          {% else %}
+                            <option value="freeze">Freeze</option>
+                          {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row m-t-10">
+                  <div 
+                    class="col-md-12 col-sm-12 form-group m-r-10">
+                    <label>Freeze Reason</label>
+                    <textarea 
+                      class="form-control"
+                      v-model="change_status.freeze_reason"
+                      :disabled="change_status.status == 'active'">
+                    </textarea>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 col-sm-4 col-xs-6">
+                    <button 
+                      id="id_batal_ubah_status"
+                      class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button"
+                      v-on:click="isChangeStatus = false">
+                      Batal
+                    </button>
+                  </div>
+                  <div class="col-md-6 col-sm-4 col-xs-6">
+                    <button 
+                      class="btn btn-default btn-block text-uppercase waves-effect waves-light" type="submit" name="ubah_status" id="submit_status"
+                      v-on:click="onChangeStatus">
+                      Simpan
+                    </button>
+                  </div>
+                </div>
+              </div>
+                <!-- end row -->
+
+            </div>
+            <!-- end col-md-12 -->
+          </div>
+          <!-- Form AddNotes -->
+          <div class="row" v-if="isAddNotes === true">
+            <div class="row m-t-10" v-if="isAddNotes === true">
+              <div class="col-md-12 col-sm-12 form-group m-r-10">
+                <select class="form-control" v-model="note_statement">
+                  <option v-for="note_statement in statement_summaries" :value="note_statement.id">
+                    <% note_statement.statement_code %>
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-12 col-sm-12 form-group m-r-10">
+                <textarea class="form-control" rows="8" v-model="notes">
+                </textarea>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-4 col-xs-6">
+                  <button id="id_batal_simpan_note" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button"
+                  v-on:click="isAddNotes=false">Batal</button>
+                </div>
+                <div class="col-md-6 col-sm-4 col-xs-6">
+                  <button id="id-submit-simpan-note" class="btn btn-default btn-block text-uppercase waves-effect waves-light" type="submit" name="simpan_note" v-on:click="saveNotes">Simpan Note</button>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- Notes -->
+        <div class="col-md-6 col-xs-12">
+          <div class="col-md-12 col-xs-12">
+            <ul class="nav nav-tabs customtab tabs">
+              <li class="active tab">
+                <a href="#loc-note-list" data-toggle="tab">
+                  <span class="visible-xs" title="LOC Notes">
+                    <i class="fa fa-home"></i>
+                  </span>
+                  <span class="hidden-xs">Notes</span>
+                </a>
+              </li>
+            </ul>
+            <div id="slim_pmts">
+                <div class="tab-content pmt_event">
+                  <!-- Tab Lst Statement Detail -->
+                  <div class="tab-pane active" id="last-statement-detail">
+                    <div class="col-xs-12">
+                      <table v-if="loc_notes.length > 0" class="table">
+                        <thead>
+                          <tr>
+                            <!-- <th width="5%">#</th> -->
+                            <th width="15%">Waktu</th>
+                            <!-- <th width="10%" class="text-right">Tipe</th> -->
+                            <th width="50%">Content / Catatan</th>
+                            <th width="20%">Statement Code</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="note in loc_notes">
+                            <td> 
+                              <label class="label label-purple m-b-10">
+                                <% note.cdate %>
+                              </label>
+                            </td>
+                            <td> 
+                              <b>Agent:</b> <code><% note.agent %></code> <br/>
+                              <b>Catatan:</b> <% note.note_text %>
+                            </td>
+                            <td> 
+                              <code> <% note.statement_code %> </code>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table v-else>
+                        <tr>
+                          <th style="text-align: center;"><code>-----Tidak Ada Data------</code></th>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Detail Transaction -->
+  <div id="responsive-modal-transaction" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header label-warning">
+                  <h4 class="modal-title">Transaction Detail</h4> </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6 col-xs-6">
+                    <div class="col-md-6">
+                      Credit Limit
+                    </div>
+                    <div class="col-md-6">
+                      {{ loc.limit|f_rupiahs:"no"|safe}}
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-xs-6">
+                    <div class="col-md-6">
+                      Credit Available
+                    </div>
+                    <div class="col-md-6">
+                      {{ loc.available|f_rupiahs:"no"|safe}}
+                    </div>
+                  </div>
+                </div>
+                <br/><br/>
+                <div class="row">
+                  <table id="demo-foo-pagination" class="table m-b-0 toggle-arrow-tiny"
+                      data-page-size="20">
+                    <thead>
+                      <th>#</th>
+                      <th>event time</th>
+                      <th>statement date</th>
+                      <th>description</th>
+                      <th>transaction amount</th>
+                    </thead>
+                    <tbody v-if="statement.transactions !== undefined && statement.transactions.length > 0">
+                      <small>
+                        <tr v-for="(transaction, index) in statement.transactions">
+                          <td>
+                            <small><% index + 1 %></small>
+                          </td>
+                          <td>
+                            <small><% transaction.transaction_date %></small>
+                          </td>
+                          <td>
+                            <small><% statement.statement.cdate %></small>
+                          </td>
+                          <td>
+                            <small><% transaction.description %></small>
+                          </td>
+                          <td>
+                            <small><% transaction.amount %></small>
+                          </td>
+                        </tr>
+                        <tr class="no-strip">
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>Sub Total</td>
+                          <td><% statement.statement.purchase_amount - statement.statement.payment_amount%></td>
+                        </tr>
+                        <tr class="no-strip">
+                          <td class="no-strip" colspan="3">
+                          <td class="no-strip">Bunga</td>
+                          <td class="no-strip"><% statement.statement.interest_amount%></td>
+                        </tr>
+                        <tr class="no-strip">
+                          <td class="no-strip" colspan="3">
+                          <td class="no-strip"><b>Total Tagihan Bulan ini</td>
+                          <td class="no-strip"><% statement.statement.billing_amount%></td>
+                        </tr>
+                        <tr class="no-strip">
+                          <td class="no-strip" colspan="3"></td>
+                          <td class="no-strip">Minimum Pembayaran</td>
+                          <td class="no-strip"><% statement.statement.minimum_payment%></td>
+                        </tr>
+                      </small>
+                    </tbody>
+                    <tbody v-else>
+                      <small>
+                        <tr>
+                          <td colspan="5">
+                            <code>--Tidak Ada Data --</code>
+                          </td>
+                        </tr>
+                      </small>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-default waves-effect"
+                    data-dismiss="modal"
+                    v-on:click="modalClose">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+  <!-- DataTable css -->
+  <link href="{% static 'theme/plugins/bower_components/datatables/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'default/theme/css/buttons.dataTables.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block script_additional %}
+<!-- Plugin JavaScript -->
+<script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+<!-- Date Picker Plugin JavaScript -->
+<script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<!-- Date range Plugin JavaScript -->
+<script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+<!-- Footable -->
+<script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+<!--Style Switcher -->
+<script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+
+<!-- DataTable -->
+<script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'default/js/Skiptrace.js' %}"></script>
+<!-- vue js -->
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type="text/javascript">
+  var LocColletionList = new Vue({
+    el: '#loc-app',
+    delimiters: ["<%", "%>"],
+    data: {
+      csrftoken:'{{csrf_token}}',
+      loc_id: '{{loc.id}}',
+      loc_status: '{{loc.status}}',
+      last_statement: '',
+      statement_summaries:[],
+      transactions: [],
+      va_list: [],
+      statement: {},
+      isLoading: false,
+      isModalShow: false,
+      change_status:{'freeze_reason': '', 'status': ''},
+      notes: '',
+      note_statement: '',
+      loc_notes: [],
+      loc_status:{},
+      isChangeStatus: false,
+      isAddNotes: false,
+    },
+    beforeMount(){
+      self = this
+      self.getLastStatement();
+      self.getStatementSummaries();
+      this.getPaymentVaList();
+      self.getLocNotes();
+    },
+    methods: {
+      getLastStatement: function(){
+        var self = this
+        $.ajax({
+            url :  "{%url 'loc_collection:get_last_statement' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                loc_id: self.loc_id,
+              }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                // console.log(json); // log the returned json to the console
+                if(json.status == 'success'){
+                  self.last_statement = json.data
+                  self.note_statement = json.data.id
+                }else{
+                  console.log(json.message);
+                  self.ToastDanger('Error', 'Get Last Statement Data');
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              self.ToastDanger('Error','Get Last Statement Data');
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more
+            }
+        }); // end of ajax
+      },
+      getStatementSummaries: function(){
+        var self = this
+        $.ajax({
+            url :  "{%url 'loc_collection:get_statement_summaries' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                loc_id: self.loc_id,
+              }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                // console.log(json); // log the returned json to the console
+                if(json.status == 'success'){
+                  self.statement_summaries = JSON.parse(json.data)
+                }else{
+                  console.log(json.message);
+                  self.ToastDanger('Error', 'Get Statement Summaries Data');
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              self.ToastDanger('Error','Get Statement Summaries Data');
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more
+            }
+        }); // end of ajax
+      },
+      getPaymentVaList: function() {
+        var self = this
+        $.ajax({
+            url :  "{%url 'loc_collection:get_va_list' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                loc_id: self.loc_id,
+              }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                // console.log(json); // log the returned json to the console
+                if(json.status == 'success'){
+                  self.va_list = JSON.parse(json.data)
+                }else{
+                  console.log(json.message);
+                  self.ToastDanger('Error', 'Get Va List Data');
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              self.ToastDanger('Error','Get Va List Data');
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more
+            }
+        }); // end of ajax
+      },
+      showTransactionDetail: function(statement_id) {
+        var self = this
+        self.transactions = [];
+        self.isLoading = true;
+        console.log(statement_id)
+        $.ajax({
+            url :  "{%url 'loc_collection:get_transaction_list' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                statement_id: statement_id,
+              }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                // console.log(json); // log the returned json to the console
+                if(json.status == 'success'){
+                  self.statement = JSON.parse(json.data);
+                  $('#responsive-modal-transaction').css('display', 'block');
+                }else{
+                  console.log(json.message);
+                  self.ToastDanger('Error', 'Get Transactions Data');
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              self.ToastDanger('Error','Get Transactions Data');
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more
+            }
+        }); // end of ajax
+      },
+      modalClose: function() {
+        var self = this
+        self.transactions = []
+        self.statement_trans = {}
+        $('#responsive-modal-transaction').css('display', 'none');
+      },
+      changeStatus: function() {
+        console.log('ubah')
+        var self = this
+        this.isChangeStatus = true
+        $('#id_form_ubah_status').css('height', '50vh')
+      },
+      addNotes: function() {
+        var self = this
+        this.isAddNotes = true
+      },
+      onChangeStatus: function() {
+        var self = this
+        if (self.change_status.status === '') {
+          self.ToastDanger('Warning', 'status could not be empty')
+        } else {
+          var data = {
+            loc_id: self.loc_id,
+            status: self.change_status.status
+          }
+          if (self.change_status.status === 'freeze') {
+            data.freeze_reason = self.change_status.freeze_reason
+          } 
+          $.ajax({
+              url :  "{%url 'loc_collection:change_status' %}/", // the endpoint
+              type : "GET", // http method
+              data : data, // data sent with the get request
+              // handle a successful response
+              success : function(json) {
+                  // console.log(json); // log the returned json to the console
+                  if(json.status == 'success'){
+                    self.ToastSuccess('Success', 'Update Status successful')
+                    location.reload();
+                  }else{
+                    console.log(json.message);
+                    self.ToastDanger('Error', 'Update Status');
+                  }
+              },
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                self.ToastDanger('Error','Update Status');
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more
+              }
+          }); // end of ajax
+        }
+      },
+      saveNotes: function(){
+        var self = this
+        if (self.notes === '') {
+          self.ToastDanger('Warning', 'notes could not be empty!!')
+        } else {
+          $.ajax({
+              url :  "{%url 'loc_collection:add_notes' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                loc_id: self.loc_id,
+                statement_id: self.note_statement,
+                note_text: self.notes
+              }, // data sent with the get request
+              // handle a successful response
+              success : function(json) {
+                  // console.log(json); // log the returned json to the console
+                  if(json.status == 'success'){
+                    self.ToastSuccess('Success', 'Add Notes successful')
+                    location.reload();
+                  }else{
+                    console.log(json.message);
+                    self.ToastDanger('Error', 'Add Notes');
+                  }
+              },
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                self.ToastDanger('Error','Add Notes');
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more
+              }
+          }); // end of ajax
+        }
+      },
+      getLocNotes: function(){
+        var self = this
+        $.ajax({
+            url :  "{%url 'loc_collection:get_notes' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                loc_id: self.loc_id,
+              }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                // console.log(json); // log the returned json to the console
+                if(json.status == 'success'){
+                  self.loc_notes = json.data
+                  console.log(json)
+                }else{
+                  console.log(json.message);
+                  self.ToastDanger('Error', 'Get Note List Data');
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              self.ToastDanger('Error','Get Note List Data');
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more
+            }
+        }); // end of ajax
+      },
+      ToastSuccess: function(header_msg, body_message){
+       $.toast({
+         heading: header_msg,
+         text: body_message,
+         position: 'top-right',
+         loaderBg:'#ff6849',
+         icon: 'success',
+         hideAfter: 1500,
+         stack: 6
+       });
+      },
+      ToastDanger: function(header_msg, body_message){
+        $.toast({
+          heading: header_msg,
+          text: body_message,
+          position: 'top-right',
+          loaderBg:'#ff6849',
+          icon: 'error',
+          hideAfter: 2800
+        });
+      }
+    },
+  });
+
+  $('#slim_pmts').slimScroll({
+        // position: 'left',
+        height: '48vh',
+        railVisible: true,
+        alwaysVisible: true
+    });
+
+  $('#slim_apps').slimScroll({
+      // position: 'left',
+      height: '48vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  jQuery(document).ready(function() {
+    //SkipTrace document ready for load table
+    $('#dvc').removeClass('active');
+    $('#st').addClass('active');
+
+    GLOBAL_TABLE = $('#skiptraceTable').DataTable( {
+        "paging": false,
+        "searching": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "order": [[ 3, 'desc' ], [ 6, 'asc' ]],
+        "columnDefs": [
+          {
+            "targets"  : "no-sort",
+            "orderable": false,
+          },
+          {
+            "targets": [0,1,2,3,4,5,8],
+            "orderSequence": ["desc"]
+          },
+          {
+            "targets": [6,7],
+            "visible": false
+          },
+          {"targets": [0], "data": "NAME"},
+          {"targets": [1], "data": "SOURCE"},
+          {"targets": [2], "data": "ACTION"},
+          {"targets": [3], "data": "EFF"},
+          {"targets": [4], "data": "REC"},
+          {"targets": [5], "data": "FREQ"},
+          {"targets": [6], "data": "ID"},
+          {"targets": [7], "data": "NUMBER_PHONE"},
+          {"targets": [8], "data": "OPERATOR"},
+        ]
+    } );
+
+    $('#skiptraceTable tbody').on('click', 'td #id_call_skip_trace', function () {
+        var tr = $(this).closest('tr');
+        var row = GLOBAL_TABLE.row( tr );
+        var row_data = GLOBAL_TABLE.row( tr ).data();
+
+        if ( row.child.isShown() ) {
+            ActionCall(1,row_data.ID);
+            if(GLOBAL_HOLD_ACTION){
+              $(this).find('i').attr( 'class', 'fa fa-chevron-circle-down' );
+              $(this).attr( 'class', 'btn btn btn-success btn-rounded' );
+              row.child.hide();
+              tr.removeClass('shown');
+            }
+        }
+        else {
+            GLOBAL_OBJ_START_TS.id = row_data.ID;
+            GLOBAL_OBJ_START_TS.time = GetTime();
+            GLOBAL_ARR_START_TS.push(GLOBAL_OBJ_START_TS);
+            GLOBAL_OBJ_START_TS = {};
+            $(this).find('i').attr( 'class', 'fa fa-times' );
+            $(this).attr( 'class', 'btn btn btn-danger btn-rounded' );
+            row.child( format(row.data(), '', '', 'loc') ).show();
+            tr.addClass('shown');
+        }
+      } );
+
+    $('#id_btn_add_skip_trace').on( 'click', function () {
+      SaveSkipTrace();
+    } );
+
+    $('#id_btn_update_skip_trace').on( 'click', function () {
+      UpdateSkipTrace();
+    } );
+
+    $.ajaxSetup({
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
+    //load_call_result example
+    $.ajax({
+          url :  "{% url 'payment_status:load_call_result' %}/", // the endpoint
+          type : "GET", // http method
+
+          // handle a successful response
+          success : function(json) {
+              GLOBAL_ARR_BTN_CALL = json.data;
+              GLOBAL_ARR_BTN_CALL.shift();
+          },
+
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+      });
+
+    // alert("Document is ready");
+    $('#id_status_to').on('change', function() {
+      // alert( this.value );
+      if(this.value != ''){
+        set_reason_list(this.value);
+      }
+    });
+
+    window.scroll(0,80);
+
+    $(".mask").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    jQuery('.mydatepicker, #datepicker').datepicker({
+               format: 'dd-mm-yyyy',
+               buttonClasses: ['btn', 'btn-sm'],
+               applyClass: 'btn-danger',
+               cancelClass: 'btn-inverse',
+               dateLimit: {
+                   days: 6
+               },
+               autoclose: true,
+               todayHighlight: true,
+               todayBtn: "linked",
+           });
+
+  });
+
+  function SaveSkipTrace(){
+      var obj_skiptrace = GetFormSkipTrace();
+      var result = ValidateFormSkipTrace(obj_skiptrace);
+      //console.log(obj_skiptrace);
+      if(result.isValid){
+        $.ajax({
+            url :  "{% url 'payment_status:add_skiptrace' %}/",
+            type : "POST",
+            data : {
+                  application : {{application.id}},
+                  contact_name : obj_skiptrace.name,
+                  contact_source : obj_skiptrace.source,
+                  phone_number: obj_skiptrace.number_phone
+            },
+
+            statusCode: {
+              404: function(json) {
+                toast_warning('Warning 404!',json['responseText']);
+              },
+              400: function(json) {
+                toast_warning('Warning 400!',json['responseText']);
+              },
+              405: function(json) {
+                toast_warning('Warning 405!',json['responseText']);
+              },
+              200: function(json) {
+                toast_success('Success','Add skiptrace '+json.data.contact_name);
+                GLOBAL_TABLE.row.add( {
+                  "NAME": json.data.contact_name,
+                  "SOURCE": json.data.contact_source,
+                  "OPERATOR": formating(json.data.phone_operator),
+                  "EFF": formating(json.data.effectiveness),
+                  "REC": formatingDate(json.data.recency),
+                  "FREQ": formating(json.data.frequency),
+                  "ID": json.data.id,
+                  "NUMBER_PHONE": json.data.phone_number,
+                  "ACTION": '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>'
+                } ).order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+                ResetFormSkipTrace();
+                HideFormSkipTrace();
+              },
+            },
+
+            // handle a successful response
+            success : function(json) {
+                //console.log("success add: "+json.data);
+            },
+            // handle a non-successful response
+            error : function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+      }else{
+        toast_warning('Warning',result.reason);
+      }
+  }
+
+  function UpdateSkipTrace(){
+    var obj_skiptrace = GetFormSkipTrace();
+    var result = ValidateFormSkipTrace(obj_skiptrace);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'payment_status:update_skiptrace' %}/",
+          type : "POST",
+          data : {
+                skiptrace_id: obj_skiptrace.id,
+                application : {{application.id}},
+                contact_name : obj_skiptrace.name,
+                contact_source : obj_skiptrace.source,
+                phone_number: obj_skiptrace.number_phone
+          },
+
+          statusCode: {
+            404: function(json) {
+              toast_warning('Warning 404!',json['responseText']);
+            },
+            400: function(json) {
+              toast_warning('Warning 400!',json['responseText']);
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            200: function(json) {
+              toast_success('Success','Update skiptrace '+json.data.contact_name);
+              var tr = $(obj_skiptrace.row_table).parents('tr').prev();
+              var data = GLOBAL_TABLE.row( tr ).data();
+              var row = GLOBAL_TABLE.row( tr );
+              row.child.hide();
+              tr.removeClass('shown');
+              data.NAME =  json.data.contact_name;
+              data.SOURCE = json.data.contact_source;
+              data.OPERATOR = formating(json.data.phone_operator);
+              data.EFF = formating(json.data.effectiveness);
+              data.REC = formatingDate(json.data.recency);
+              data.FREQ = formating(json.data.frequency);
+              data.ID = json.data.id;
+              data.NUMBER_PHONE = json.data.phone_number;
+              data.ACTION = '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>';
+              GLOBAL_TABLE.row(tr)
+                    .data(data)
+                    .order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+              ResetFormSkipTrace();
+              HideFormSkipTrace();
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success update: "+json.data);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_warning('Warning',result.reason);
+    }
+  }
+
+  function ActionCall(id,skiptrace_id, self){
+    var obj = {};
+    var obj_time = GetTS(skiptrace_id);
+    obj.id = id ;
+    obj.skiptrace_id = skiptrace_id;
+    obj.application_id = {{application.id}};
+    obj.start_ts = obj_time.start;
+    obj.end_ts = obj_time.end;
+    var result = ValidateActionCall(obj);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'payment_status:skiptrace_history' %}/",
+          type : "POST",
+          data : {
+                skiptrace : obj.skiptrace_id,
+                application : obj.application_id,
+                start_ts : obj.start_ts,
+                end_ts : obj.end_ts,
+                call_result: obj.id
+          },
+          statusCode: {
+            404: function(json) {
+              toast_warning('Warning 404!',json['responseText']);
+            },
+            400: function(json) {
+              toast_warning('Warning 400!',json['responseText']);
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            200: function(json) {
+              if(json.data){
+                var tr = $(self).parents('tr').prev();
+                var data = GLOBAL_TABLE.row( tr ).data();
+                var row = GLOBAL_TABLE.row( tr );
+                row.child.hide();
+                tr.removeClass('shown');
+                data.NAME =  json.data.contact_name;
+                data.SOURCE = json.data.contact_source;
+                data.OPERATOR = formating(json.data.phone_operator);
+                data.EFF = formating(json.data.effectiveness);
+                data.REC = formatingDate(json.data.recency);
+                data.FREQ = formating(json.data.frequency);
+                data.ID = json.data.id;
+                data.NUMBER_PHONE = json.data.phone_number;
+                data.ACTION = '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>';
+                GLOBAL_TABLE.row(tr)
+                      .data(data)
+                      .order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+                ResetFormSkipTrace();
+                HideFormSkipTrace();
+                toast_success('Success',json.messages);
+              }
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success ",json);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_danger('Failed!!',result.reason);
+    }
+  }
+
+  function autodialcall(number_phone){
+      $.ajax({
+          url :  "{% url 'app_status:trigger_autodial' %}/",
+          type : "GET",
+          data : {
+                number_phone : number_phone,
+                user_extension : GLOBAL_USER_EXTENSION
+          },
+
+          // handle a successful response
+          success : function(json) {
+
+              if (json.status == "success"){
+                toast_success('Click2Call',json.messages);
+              } else if(json.status == "failed"){
+                toast_danger('Click2Call',json.messages);
+              }
+          },
+
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              toast_danger('Click2Call Failed!', err);
+                }
+        })
+  }
+</script>
+{% endblock %}

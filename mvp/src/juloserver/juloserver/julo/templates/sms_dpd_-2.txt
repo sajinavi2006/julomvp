@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Angsuran {{payment_number}} Anda {{ due_amount }} jatuh tempo {{ due_date }}. Info: {{url}}. Bayar hari ini {{due_date_minus_2}} utk dpt Ekstra Cashback {{cashback_multiplier}}x dari normal cashback {{ payment_cashback_amount }}

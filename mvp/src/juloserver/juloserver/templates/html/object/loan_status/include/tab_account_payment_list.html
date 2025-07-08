@@ -1,0 +1,141 @@
+{% load default unit %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/bootstrap.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+
+<style>
+  table.dataTable thead th {
+    border-bottom: 0;
+  }
+  table.dataTable tfoot th {
+    border-top: 0;
+
+  }
+  table.dataTable {
+    border-collapse: collapse;
+  }
+</style>
+
+<script>
+  function assignTimestamp(){
+    var date_columns = document.getElementsByClassName('date-col');
+    for (var i=0; i<date_columns.length; i++){
+      date = date_columns[i].innerText;
+      ts = Date.parse(date);
+      date_columns[i].setAttribute('data-order', ts);
+    }
+  }
+  $(document).ready( function () {
+    assignTimestamp();
+    $('#account_payment_table').DataTable({
+      searching: false,
+      paging: false,
+      info: false,
+      ordering: true,
+      order:[[2,'asc']],
+      columnDefs: [{
+      orderable: false,
+      targets: "no-sort",
+    }]
+
+    });
+    $(".btnTotalDueAmount").popover({
+        placement: 'bottom',
+        html: 'true',
+        title : '<strong style="color: #666666;">Total Overdue Unpaid Due Amount</strong>',
+        content : '<strong style="color: #666666;">{{ total_unpaid_due_amount|f_rupiahs:"no"|safe }}</strong>'
+      })
+} );
+</script>
+
+<table id="account_payment_table" class="table m-b-0 toggle-arrow-tiny" data-page-size="25">
+    <thead>
+        <tr>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true"> <small>Acc-Pmt-ID#</small> </th>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true"> <small>Status</small> </th>
+            <th data-toggle="true" data-sort-ignore="true"> <small>DueDate</small> </th>
+            <th data-toggle="true" data-sort-ignore="true"> <small>Dpd</small> </th>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true"> <small>PaidDate</small> </th>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true">
+                <small>
+                    Due Amount
+                    <button type="button" class="btn btn-link text-info btnTotalDueAmount" data-trigger="focus">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </button>
+                </small>
+            </th>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true"> <small>Principal</small> </th>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true"> <small>Late Fee</small> </th>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true"> <small>Interest</small> </th>
+            <th class="no-sort" data-toggle="true" data-sort-ignore="true"> <small>Details</small> </th>
+        </tr>
+    </thead>
+    <tbody>
+        <small>
+        {% for pmt_obj in payment_list %}
+            <tr>
+                <td>
+                  <a href="{% url 'account_payment_status:change_status' pmt_obj.id %}" target="_blank">
+                    <strong><small>{{ pmt_obj.id }}</small></strong>
+                  </a>
+                </td>
+                <td><small><code>{{ pmt_obj.status.status_code }}</code></small></td>
+                <td class='date-col'><small>{{ pmt_obj.due_date|date:"d M Y"|default:"-"|safe }}</small></td>
+                {% if pmt_obj.status.status_code in paid_status_codes %}
+                <td><small>-</small></td>
+                {% else %}
+                <td><small><code>{{ pmt_obj.dpd|default:"-"|safe }}</code></small></td>
+                {% endif %}
+                <td><small>{{ pmt_obj.paid_date|date:"d M Y"|default:"-"|safe}}</small></td>
+                <td><small>{{ pmt_obj.due_amount|f_rupiahs:"no"|safe }}</small></td>
+                <td><small>{{ pmt_obj.principal_amount|f_rupiahs:"no"|safe }}</small></td>
+                <td><small>{{ pmt_obj.late_fee_amount|f_rupiahs:"no"|safe }}</small></td>
+                <td><small>{{ pmt_obj.interest_amount|f_rupiahs:"no"|safe }}</small></td>
+                <td style="border: none;"> <button type="button" class="btn btn-info btn-rounded pymt-info" title="Detail"><i class="fa fa-info"></i>
+                  <div class="pymt-body" style="display:none;">
+                    <strong>
+                        <table>
+                          <tr>
+                            <td>Paid Amount</td>
+                            <td >&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>{{ pmt_obj.paid_amount|f_rupiahs:"no"|safe }}</td>
+                          </tr>
+                          <tr>
+                            <td>Cashback Earned</td>
+                            <td >&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>{{ sum_of_cashback_earned|f_rupiahs:"no"|safe }}</td>
+                          </tr>
+                          <tr>
+                            <td>Cashback Redeem</td>
+                            <td>&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>{{ sum_of_cashback_redeemed|f_rupiahs:"no"|safe }}</td>
+                          </tr>
+                        </table>
+                      </strong>
+                  </div>
+                </button></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7">
+                    <code>-- Tidak ada data --</code>
+                </td>
+            </tr>
+        {% endfor%}
+        </small>
+    </tbody>
+    <tfoot>
+        <tr>
+          {% if object.loan_status.status_code == 240 %}
+            <td colspan="7">
+                    <div class="m-t-10 align-buttons">
+                        <button class="btn btn-danger m-b-5"
+                                title="restructure"
+                                data-toggle="modal"
+                                data-target="#modal-restructuring">
+                            <i class="fa fa-dollar fa-fw"></i> Restructure
+                        </button>
+                    </div>
+            </td>
+            {% endif %}
+        </tr>
+    </tfoot>
+</table>

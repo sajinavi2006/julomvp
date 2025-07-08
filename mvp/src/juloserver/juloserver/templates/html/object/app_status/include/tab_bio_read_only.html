@@ -1,0 +1,167 @@
+{% load unit %}
+
+<!-- 
+<div class="row">
+  <div class="col-md-5 col-xs-6"> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  </div>
+</div>
+ -->
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Nama Lengkap</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.fullname|default:"-"|safe}}
+  </div>
+  
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Customer ID</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.customer_id|default:"-"|safe}}
+  </div>
+  
+</div>
+
+<div class="row ">
+  <div class="col-md-5 col-xs-6 m-b-10"> <strong>Email</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.email|default:"-"|safe}}
+  </div>
+  
+</div>
+
+<div class="row ">
+  <div class="col-md-5 col-xs-6"> <strong>Tgl. Lahir</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    
+      {{object.dob|date:"d M Y"|safe}} - Usia: {{object.dob|age|safe}} Tahun
+    
+  </div>
+  
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Jenis Kelamin</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.gender|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">  <strong>No. KTP</strong></div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.ktp|default:"-"|safe}}
+  </div>
+</div>
+
+
+<div class="row p-b-10">
+  <div class="col-md-5 col-xs-6"> <strong>Alamat Tempat Tinggal</strong> 
+    <br/><br/>
+    {% include "object/app_status/include/open_gmap.html" %}
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+      
+        {{ object.address_street_num }} <br/>
+        {{ object.address_kecamatan }} -
+        {{ object.address_kelurahan }} <br/>
+        {{ object.address_kabupaten }} -
+        {{ object.address_provinsi }}  <br/>
+        {{ object.address_kodepos }} 
+      
+  </div>
+  
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Ditempati Sejak</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    
+      {{ object.occupied_since|date:"d M Y"|safe}} - 
+      Durasi: {{ object.occupied_since|age|safe}} Tahun
+    
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Status Domisili</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.home_status|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>No. HP1</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.mobile_phone_1|no_hp|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Ada WA1</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.has_whatsapp_1|yesno:"Ya, Tidak"|safe}}<br/>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>No. HP2</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.mobile_phone_2|no_hp|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Ada WA2</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.has_whatsapp_2|yesno:"Ya, Tidak"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>HP Milik Sendiri</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.is_own_phone|yesno:"Ya, Tidak"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Twitter Username</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.twitter_username|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Instagram Username</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.instagram_username|default:"-"|safe}}
+  </div>
+</div>
+
+<hr> 
+<!-- Facebook DATA -->
+{% if fb_obj %}
+    {% include "object/app_status/include/tab_fb.html" %}
+{% else %}
+    <code>-FB Data: Tidak ada Data-</code>
+{% endif %}
+
+

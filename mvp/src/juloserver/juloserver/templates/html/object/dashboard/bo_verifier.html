@@ -1,0 +1,3607 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{% block meta %}
+    <!-- <meta http-equiv="refresh" content="120"> -->
+{% endblock %}
+
+{% block custom_css %}
+  <!-- morris CSS -->
+  <!-- <link href="{% static 'theme/plugins/bower_components/morrisjs/morris.css' %}" rel="stylesheet"> -->
+  <!-- toast -->
+  <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block css_inside %}
+  .status_font {
+    font-size: 24px;
+  }
+  .analytics-info {
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .panel{
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .container-fluid {
+    background-color: white;
+  }
+  hr{
+    margin-top: 0px !important;
+    margin-bottom: 10px !important;
+  }
+   .clearFix
+   {
+       clear:both;
+   }
+   .panel.panel-chat
+   {
+       position: fixed;
+       bottom:0;
+       right:10px;
+       max-width: 800px;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat.panel-chat-extend
+   {
+       position: fixed;
+       bottom:0;
+       right:60em;
+       max-width: 800px;
+       height:50em;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat .panel-heading
+   {
+       background: #4b67a8;
+       border: 1px solid #2e4588;
+       color:#FFF;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(1)
+   {
+       text-decoration: none;
+       width: 800px;
+       color:#FFF;
+       font-weight: bold;
+       float:left;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(2)
+   {
+       text-decoration: none;
+       max-width: 11px;
+       width: 11px;
+       color:#FFF;
+       float:right;
+   }
+   .panel.panel-chat .panel-body
+   {
+       display: block;
+       padding: 10px;
+       margin: 0;
+       max-height: 350px;
+       height: 350px;
+       border-left: 1px solid #b2b2b2;
+       border-right: 1px solid #b2b2b2;
+       background: white;
+       overflow: auto;
+   }
+   .panel.panel-chat .panel-body::-webkit-scrollbar {
+        display: none;
+    }
+    .panel.panel-chat .panel-body-extend
+    {
+        display: block;
+        padding: 10px;
+        margin: 0;
+        max-height: 40em;
+        height: 40em;
+        border-left: 1px solid #b2b2b2;
+        border-right: 1px solid #b2b2b2;
+        background: white;
+        overflow: auto;
+    }
+    .panel.panel-chat .panel-body-extend::-webkit-scrollbar {
+         display: none;
+     }
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .custom-button{
+      border: 2px solid #4CAF50;
+      background-color: white;
+      color: green;
+      padding: 5px 28px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .custom-button:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .status-box {
+      background: #ffffff;
+      margin-bottom: 15px;
+    }
+    .status-box-title {
+      padding: 20px 25px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+    .status-box-footer {
+      padding: 25px;
+      text-align: center;
+    }
+    .status-box-title-text{
+      font-weight: 600;
+      color: #2B2B2B
+    }
+    .fs-24{
+      font-size: 24px
+    }
+    .load-card-title{
+      padding: 25px 25px 0px 25px;
+      border-bottom: 1px solid #eee;
+    }
+    .load-card-body{
+      padding: 10px 25px 25px;
+    }
+    .p-0{
+      padding: 0px;
+    }
+    .card-tag{
+      position: absolute;
+      top: 5px;
+      right: 12px;
+      text-transform: uppercase;
+      background-color: white;
+      padding: 0px 5px;
+      border-radius: 10%;
+      color: #2B2B2B;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .dark-color{
+      color: "#2B2B2B"
+    }
+    .light-color{
+      color: "#fff"
+    }
+{% endblock %}
+
+
+{% block script_head %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-19175540-9', 'auto');
+    ga('send', 'pageview');
+
+    window.onbeforeunload = function() {
+      return "Jangan refresh ketika auto chooser berlangsung, anda yakin?";
+    };
+  </script>
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+
+<!-- Page Content -->
+  <div id="page-wrapper">
+    <div id="app1" class="container-fluid">
+
+    <div id="modal-process-disbursement" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header label-success">
+                <h4 class="modal-title" >Title</h4> </div>
+                <div class="modal-body" >
+                    Body
+                </div>
+                <div class="modal-footer">
+                    <button id="process-disburse" type="button" class="btn btn-danger waves-effect" data-dismiss="modal" data-id="" data-method="">Proses</button>
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="row collapse" id="app-partner">
+      <!-- .row status aplikasi 120 - 180 -->
+      <div class="row">
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <label class="label label-info text-default">To-Do</label>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+
+            <a href="{% url 'app_status:list_priority_w_status' 120 %}" id="app_priority_120" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 120
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['120'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 121 %}" id="app_priority_121" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading"> 121
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['121'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 122 %}" id="app_priority_122" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading"> 122
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['122'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 123 %}" id="app_priority_123" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading"> 123
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['123'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 124 %}" id="app_priority_124" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading"> 124
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['124'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 125 %}" id="app_priority_125" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading"> 125
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['125'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 126 %}" id="app_priority_26" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading"> 126
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['126'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 130 %}" id="app_priority_30" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading"> 130
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['130'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 132 %}" id="app_priority_32" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 132
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['132'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 134 %}" id="app_priority_34" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 134
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['134'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 141 %}" id="app_priority_141" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 141
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['141'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6 col-lg-offset-1 col-sm-offset-1 col-xs-offset-1">
+            <a href="{% url 'app_status:list_priority_w_status' 163 %}" id="app_priority_163" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 163
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['163'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 164 %}" id="app_priority_164" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 164
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['164'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 165 %}" id="app_priority_165" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 165
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['165'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 170 %}" id="app_priority_170" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 170
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['170'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 175 %}" id="app_priority_175" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 175
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['175'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 177 %}" id="app_priority_177" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 177
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['177'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 180 %}" id="app_priority_180" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 180
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['180'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 181 %}" id="app_priority_181" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 181
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['181'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 190 %}" id="app_priority_190" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 190
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_priority_dashboard.to_do['190'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+      </div>
+      <!--/.row -->
+
+
+      <!-- .row status aplikasi 110 - 181 -->
+      <div class="row">
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <!-- <button class="btn btn-default">To Follow Up</button> -->
+            <label class="label label-info text-default">To Follow Up</label>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 105 %}" id="app_priority_105" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">105</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"><span class="counter text-success"><% app_priority_dashboard.follow_up['105'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 110 %}" id="app_priority_110" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">110</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"><span class="counter text-success"><% app_priority_dashboard.follow_up['110'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 131 %}" id="app_priority_131" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">131</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"> <span class="counter text-purple"><% app_priority_dashboard.follow_up['131'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 138 %}" id="app_priority_138" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">138</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"><span class="counter text-warning"><% app_priority_dashboard.follow_up['138'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 140 %}" id="app_priority_140" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">140</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"><span class="counter text-warning"><% app_priority_dashboard.follow_up['140'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 160 %}" id="app_priority_160" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">160</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"> <span class="text-info"><% app_priority_dashboard.follow_up['160'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 162 %}" id="app_priority_162" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">162</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"> <span class="text-info"><% app_priority_dashboard.follow_up['162'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_priority_w_status' 172 %}" id="app_priority_172" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">172</h3><hr>
+              <ul class="list-inline">
+                <li class="text-right"> <span class="text-info"><% app_priority_dashboard.follow_up['172'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+
+      </div>
+      <!--/.row -->
+
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <h4 class="page-title">
+            <button class="btn btn-warning  btn-block left collapsed" type="button" data-toggle="collapse" data-target="#graveyard-2" aria-expanded="false" aria-controls="graveyard">Graveyard</button>
+          </h4>
+        </div>
+      </div>
+
+        <!-- .row status aplikasi 120 - 170  col-lg-offset-1 -->
+      <div class="row collapse" id="graveyard-2" aria-expanded="false" style="height: 0px;">
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6 col-lg-offset-1 col-md-offset-1">
+            <a href="{% url 'app_status:list_w_status' 106 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.106.color|default:'null' }};color:{{ status_color.106.content_color }};">
+                    {% if status_color.106.display_text %}
+                    <span class="card-tag">{{status_color.106.display_text}}</span>
+                    {% endif %}
+                  106
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['106'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 111 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.111.color|default:'null' }};color:{{ status_color.111.content_color }};">
+                    {% if status_color.111.display_text %}
+                    <span class="card-tag">{{status_color.111.display_text}}</span>
+                    {% endif %}
+                  111
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['111'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 133 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.133.color|default:'null' }};color:{{ status_color.133.content_color }};">
+                    {% if status_color.133.display_text %}
+                    <span class="card-tag">{{status_color.133.display_text}}</span>
+                    {% endif %}
+                  133
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['133'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 135 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.135.color|default:'null' }};color:{{ status_color.135.content_color }};">
+                    {% if status_color.135.display_text %}
+                    <span class="card-tag">{{status_color.135.display_text}}</span>
+                    {% endif %}
+                  135
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['135'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 136 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.136.color|default:'null' }};color:{{ status_color.136.content_color }};">
+                    {% if status_color.136.display_text %}
+                    <span class="card-tag">{{status_color.136.display_text}}</span>
+                    {% endif %}
+                  136
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['136'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 137 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.137.color|default:'null' }};color:{{ status_color.137.content_color }};">
+                    {% if status_color.137.display_text %}
+                    <span class="card-tag">{{status_color.137.display_text}}</span>
+                    {% endif %}
+                  137
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['137'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 139 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.139.color|default:'null' }};color:{{ status_color.139.content_color }};">
+                    {% if status_color.139.display_text %}
+                    <span class="card-tag">{{status_color.139.display_text}}</span>
+                    {% endif %}
+                  139
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['139'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 142 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.142.color|default:'null' }};color:{{ status_color.142.content_color }};">
+                    {% if status_color.139.display_text %}
+                    <span class="card-tag">{{status_color.142.display_text}}</span>
+                    {% endif %}
+                  142
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['142'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 143 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.143.color|default:'null' }};color:{{ status_color.143.content_color }};">
+                    {% if status_color.143.display_text %}
+                    <span class="card-tag">{{status_color.143.display_text}}</span>
+                    {% endif %}
+                  143
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['143'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 161 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.161.color|default:'null' }};color:{{ status_color.161.content_color }};">
+                    {% if status_color.161.display_text %}
+                    <span class="card-tag">{{status_color.161.display_text}}</span>
+                    {% endif %}
+                  161
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['161'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 171 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.171.color|default:'null' }};color:{{ status_color.171.content_color }};">
+                    {% if status_color.171.display_text %}
+                    <span class="card-tag">{{status_color.171.display_text}}</span>
+                    {% endif %}
+                  171
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['171'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+      </div>
+      <!--/.row -->
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-col-xs-6">
+          <h4 class="page-title">
+            <a href="{% url 'app_status:list' %}" target="_blank">
+              <button class="btn btn-success btn-block">Aplikasi</button>
+            </a>
+          </h4>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-col-xs-6 col-lg-offset-6 col-md-offset-6">
+          <h4 class="page-title">
+            <a class="waves-effect waves-light" href="javascript:void(0)">
+              <button class="btn btn-primary btn-block right-side-toggle"><i class="fa fa-search fa-fw"></i> Check Application-Locked List</button>
+            </a>
+          </h4>
+        </div>
+      </div>
+
+      <!-- .row status aplikasi 120 - 180 -->
+      <div class="row">
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <label class="label label-info text-default">To-Do</label>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:app_status_100_agent_assisted' 100 %}" id="app_100_agent_assisted" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.100.color }};color:{{ status_color.100.content_color }};">
+                  {% if status_color.100.display_text %}
+                  <span class="card-tag">{{status_color.100.display_text}}</span>
+                  {% endif %}
+                100 - agent assisted-leadgen
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['100_agent_assisted'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {% checkusergroup in ['j1_agent_assisted_100'] %}
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+                <a href="{% url 'app_status:list_w_status' '100_j1_assisted_agent' %}" id="app_priority_100" target="_blank">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"> 100 - Dibantu
+                        </div>
+                        <div class="panel-wrapper collapse in" aria-expanded="true">
+                            <div class="panel-body">
+                                <span class="status_font text-success"><% app_dashboard.to_do['agent_assisted_100'] %></span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+          </div>
+          {% endcheckusergroup %}
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+
+            <a href="{% url 'app_status:list_w_status' 120 %}" id="app_120" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.120.color }};color:{{ status_color.120.content_color }};">
+                  {% if status_color.120.display_text %}
+                  <span class="card-tag">{{status_color.120.display_text}}</span>
+                  {% endif %}
+                  120
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['120'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 121 %}" id="app_121" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.121.color }};color:{{ status_color.121.content_color }};">
+                  {% if status_color.121.display_text %}
+                  <span class="card-tag">{{status_color.121.display_text}}</span>
+                  {% endif %}
+                121
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['121'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' '121_grab' %}" id="app_121_grab" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.121.color }};color:{{ status_color.121.content_color }};">
+                  {% if status_color.121.display_text %}
+                  <span class="card-tag">{{status_color.121.display_text}}</span>
+                  {% endif %}
+                121 - Grab
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['121_grab'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' '121_jstarter' %}" id="app_121_jstarter" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.121.color }};color:{{ status_color.121.content_color }};">
+                  {% if status_color.121.display_text %}
+                  <span class="card-tag">{{status_color.121.display_text}}</span>
+                  {% endif %}
+                121 - Julo Starter
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['121_jstarter'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 122 %}" id="app_122" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.122.color }};color:{{ status_color.122.content_color }};">
+                  {% if status_color.121.display_text %}
+                  <span class="card-tag">{{status_color.122.display_text}}</span>
+                  {% endif %}
+                122
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['122'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 123 %}" id="app_123" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.123.color }};color:{{ status_color.123.content_color }};">
+                  {% if status_color.123.display_text %}
+                  <span class="card-tag">{{status_color.123.display_text}}</span>
+                  {% endif %}
+                123
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['123'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 124 %}" id="app_124" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.124.color }};color:{{ status_color.124.content_color }};">
+                  {% if status_color.124.display_text %}
+                  <span class="card-tag">{{status_color.124.display_text}}</span>
+                  {% endif %}
+                124
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['124'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 124.1 %}" id="app_124_j1" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.124.color }};color:{{ status_color.124.content_color }};">
+                  {% if status_color.124.display_text %}
+                  <span class="card-tag">{{status_color.124.display_text}}</span>
+                  {% endif %}
+                124 - j1
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['124_j1'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 125 %}" id="app_125" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.125.color }};color:{{ status_color.125.content_color }};">
+                  {% if status_color.125.display_text %}
+                  <span class="card-tag">{{status_color.125.display_text}}</span>
+                  {% endif %}
+                125
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['125'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 126 %}" id="app_126" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.126.color }};color:{{ status_color.126.content_color }};">
+                  {% if status_color.126.display_text %}
+                  <span class="card-tag">{{status_color.126.display_text}}</span>
+                  {% endif %}
+                126
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['126'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 127.1 %}" id="app_127_j1" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.127.color }};color:{{ status_color.127.content_color }};">
+                  {% if status_color.127.display_text %}
+                  <span class="card-tag">{{status_color.127.display_text}}</span>
+                  {% endif %}
+                127 - j1
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['127_j1'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 128.1 %}" id="app_128_j1" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.128.color }};color:{{ status_color.128.content_color }};">
+                  {% if status_color.128.display_text %}
+                  <span class="card-tag">{{status_color.128.display_text}}</span>
+                  {% endif %}
+                128 - j1
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['128_j1'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 130 %}" id="app_130" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.130.color }};color:{{ status_color.130.content_color }};">
+                  {% if status_color.130.display_text %}
+                  <span class="card-tag">{{status_color.130.display_text}}</span>
+                  {% endif %}
+                130
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['130'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 130.1 %}" id="app_130_j1" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.130.color }};color:{{ status_color.130.content_color }};">
+                  {% if status_color.130.display_text %}
+                  <span class="card-tag">{{status_color.130.display_text}}</span>
+                  {% endif %}
+                130 - j1
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['130_j1'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          </div>
+        <div class="row">
+          <div class="col-lg-1 col-sm-1 col-xs-6 col-lg-offset-1 col-sm-offset-1 col-xs-offset-1">
+            <a href="{% url 'app_status:list_w_status' 132 %}" id="app_132" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.132.color }};color:{{ status_color.132.content_color }};">
+                    {% if status_color.132.display_text %}
+                    <span class="card-tag">{{status_color.132.display_text}}</span>
+                    {% endif %}
+                  132
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['132'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6 ">
+            <a href="{% url 'app_status:list_w_status' '132_grab' %}" id="app_132_grab" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.132.color }};color:{{ status_color.132.content_color }};">
+                    {% if status_color.134.display_text %}
+                    <span class="card-tag">{{status_color.132.display_text}}</span>
+                    {% endif %}
+                  132 - GRAB
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['132_grab'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6 ">
+            <a href="{% url 'app_status:list_w_status' 134 %}" id="app_134" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.134.color }};color:{{ status_color.134.content_color }};">
+                    {% if status_color.134.display_text %}
+                    <span class="card-tag">{{status_color.134.display_text}}</span>
+                    {% endif %}
+                  134
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['134'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 141 %}" id="app_141" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.141.color }};color:{{ status_color.141.content_color }};">
+                    {% if status_color.141.display_text %}
+                    <span class="card-tag">{{status_color.141.display_text}}</span>
+                    {% endif %}
+                  141
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['141'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 141.1 %}" id="app_141_j1" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.141.color }};color:{{ status_color.141.content_color }};">
+                    {% if status_color.141_j1.display_text %}
+                    <span class="card-tag">{{status_color.141.display_text}}</span>
+                    {% endif %}
+                  141 - j1
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['141_j1'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 144 %}" id="app_144" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 144
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['144'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 145 %}" id="app_145" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading"> 145
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['145'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 150 %}" id="app_150" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.150.color }};color:{{ status_color.150.content_color }};">
+                    {% if status_color.150.display_text %}
+                    <span class="card-tag">{{status_color.150.display_text}}</span>
+                    {% endif %}
+                  150
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['150'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 150.1 %}" id="app_150_j1" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.150.color }};color:{{ status_color.150.content_color }};">
+                    {% if status_color.150.display_text %}
+                    <span class="card-tag">{{status_color.150.display_text}}</span>
+                    {% endif %}
+                  150 - j1
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['150_j1'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 153 %}" id="app_153" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.153.color }};color:{{ status_color.153.content_color }};">
+                    {% if status_color.153.display_text %}
+                    <span class="card-tag">{{status_color.153.display_text}}</span>
+                    {% endif %}
+                  153
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['153'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 155 %}" id="app_155" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.155.color }};color:{{ status_color.155.content_color }};">
+                    {% if status_color.155.display_text %}
+                    <span class="card-tag">{{status_color.155.display_text}}</span>
+                    {% endif %}
+                  155
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['155'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 163 %}" id="app_163" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.163.color }};color:{{ status_color.163.content_color }};">
+                    {% if status_color.163.display_text %}
+                    <span class="card-tag">{{status_color.163.display_text}}</span>
+                    {% endif %}
+                  163
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['163'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 165 %}" id="app_165" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.165.color }};color:{{ status_color.165.content_color }};">
+                    {% if status_color.165.display_text %}
+                    <span class="card-tag">{{status_color.165.display_text}}</span>
+                    {% endif %}
+                  165
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['165'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 170 %}" id="app_170" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.170.color }};color:{{ status_color.170.content_color }};">
+                    {% if status_color.170.display_text %}
+                    <span class="card-tag">{{status_color.170.display_text}}</span>
+                    {% endif %}
+                  170
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['170'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-lg-1 col-sm-1 col-xs-6 col-lg-offset-1 col-sm-offset-1 col-xs-offset-1">
+            <a href="{% url 'app_status:list_w_status' 175 %}" id="app_175" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.175.color }};color:{{ status_color.175.content_color }};">
+                    {% if status_color.175.display_text %}
+                    <span class="card-tag">{{status_color.175.display_text}}</span>
+                    {% endif %}
+                  175
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['175'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 175.1 %}" id="app_175_j1" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.175.color }};color:{{ status_color.175.content_color }};">
+                    {% if status_color.175.display_text %}
+                    <span class="card-tag">{{status_color.175.display_text}}</span>
+                    {% endif %}
+                  175 - J1
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['175_j1'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' '175_mtl' %}" id="app_175_mtl" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.175.color }};color:{{ status_color.175.content_color }};">
+                    {% if status_color.175.display_text %}
+                    <span class="card-tag">{{status_color.175.display_text}}</span>
+                    {% endif %}
+                  175 - Revive MTL
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['175_mtl'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 177 %}" id="app_177" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.177.color }};color:{{ status_color.177.content_color }};">
+                    {% if status_color.177.display_text %}
+                    <span class="card-tag">{{status_color.177.display_text}}</span>
+                    {% endif %}
+                    177
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['177'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 179 %}" id="app_179" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.179.color }};color:{{ status_color.179.content_color }};">
+                    {% if status_color.179.display_text %}
+                    <span class="card-tag">{{status_color.179.display_text}}</span>
+                    {% endif %}
+                    179
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['179'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 180 %}" id="app_180" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.180.color }};color:{{ status_color.180.content_color }};">
+                    {% if status_color.180.display_text %}
+                    <span class="card-tag">{{status_color.180.display_text}}</span>
+                    {% endif %}
+                  180
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['180'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 181 %}" id="app_181" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.181.color }};color:{{ status_color.181.content_color }};">
+                    {% if status_color.181.display_text %}
+                    <span class="card-tag">{{status_color.181.display_text}}</span>
+                    {% endif %}
+                  181
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['181'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 190 %}" id="app_190" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.190.color }};color:{{ status_color.190.content_color }};">
+                    {% if status_color.190.display_text %}
+                    <span class="card-tag">{{status_color.190.display_text}}</span>
+                    {% endif %}
+                  190
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['190'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' '191_jstarter' %}" id="app_191_jstarter" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.191.color }};color:{{ status_color.191.content_color }};">
+                  {% if status_color.191.display_text %}
+                  <span class="card-tag">{{status_color.191.display_text}}</span>
+                  {% endif %}
+                191 - JTurbo
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do['191_jstarter'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_0_turbo' %}" id="app_0_turbo" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.0.color }};color:{{ status_color.0.content_color }};">
+                  {% if status_color.0.display_text %}
+                  <span class="card-tag">{{status_color.0.display_text}}</span>
+                  {% endif %}
+                0 - JTurbo
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="text-success">click for details</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+      </div>
+      <!--/.row -->
+
+
+      <div class="row">
+          <!-- Cashback Buckets -->
+              <!-- request -->
+              <div class="col-lg-1 col-sm-1 col-xs-6  col-lg-offset-1 col-sm-offset-1 col-xs-offset-1">
+                <a href="{% url 'app_status:list_w_status' 999 %}" id="app_cashback_request" target="_blank">
+                  <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px; background-color:{{ status_color.cashback_request.color }};color:{{ status_color.cashback_request.content_color }};">
+                        {% if status_color.cashback_request.display_text %}
+                        <span class="card-tag">{{status_color.cashback_request.display_text}}</span>
+                        {% endif %}
+                      Cashback Request
+                    </div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                      <div class="panel-body">
+                        <span class="status_font text-success"><% app_dashboard.to_do['cashback_request'] %></span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Pending -->
+              <div class="col-lg-1 col-sm-1 col-xs-6 ">
+                <a href="{% url 'app_status:list_w_status' 998 %}" id="app_cashback_pending" target="_blank">
+                  <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px">Pending Cashback
+                    </div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                      <div class="panel-body">
+                        <span class="status_font text-success"><% app_dashboard.to_do['cashback_pending'] %></span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <!-- Failed -->
+              <div class="col-lg-1 col-sm-1 col-xs-6">
+                <a href="{% url 'app_status:list_w_status' 997 %}" id="app_cashback_failed" target="_blank">
+                  <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px">Failed Cashback
+                    </div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                      <div class="panel-body">
+                        <span class="status_font text-success"><% app_dashboard.to_do['cashback_failed'] %></span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <!-- Overpaid -->
+              <div class="col-lg-1 col-sm-1 col-xs-6">
+                <a href="{% url 'app_status:list_w_status' 996 %}" id="app_overpaid_verification" target="_blank">
+                  <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px">Verifying Overpaid
+                    </div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                      <div class="panel-body">
+                        <span class="status_font text-success"><% app_dashboard.to_do['overpaid_verification'] %></span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <!-- END of Cahsback Buckets -->
+              {% checkusergroup in ['bo_finance'] %}
+              <!-- Paylater Buckets -->
+              <div class="col-lg-1 col-sm-1 col-xs-6">
+                <a href="{% url 'app_status:disburse_summary' %}" id="app_paylater" target="_blank">
+                  <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px">Bulk Disbursement
+                    </div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                      <div class="panel-body">
+                        <span class="status_font text-success">{{ disbursement_summary_count }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <!-- END of Cahsback Buckets -->
+              {% endcheckusergroup %}
+
+              {% load sales_ops_tags %}
+              {% sales_ops_bucket %}
+
+              <!-- Balance Consolidation -->
+              {% load balance_consolidation_tags %}
+              {% balance_consolidation_bucket %}
+              <!-- END of Balance Consolidation Bucket -->
+
+               <!-- Julo Financing -->
+               {% load julo_financing_tags %}
+               {% julo_financing_bucket %}
+               <!-- END of Julo Financing Bucket -->
+
+      </div>
+      <!--/.row -->
+
+
+      <!-- .row status aplikasi 110 - 181 -->
+      <div class="row">
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <!-- <button class="btn btn-default">To Follow Up</button> -->
+            <label class="label label-info text-default">To Follow Up</label>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 105 %}" id="app_105" target="_blank">
+            <div class="status-box analytics-info">
+              <div class="status-box-title" style="background-color:{{ status_color.105.color|default:'white' }};">
+                  {% if status_color.105.display_text %}
+                  <span class="card-tag">{{status_color.105.display_text}}</span>
+                  {% endif %}
+                <span class="status-box-title-text" style="color:{{ status_color.105.content_color }};">105</span>
+              </div>
+              <div class="status-box-footer">
+                  <span class="counter text-success fs-24"><% app_dashboard.follow_up['105'] %></span>
+              </div>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 110 %}" id="app_110" target="_blank">
+            <div class="status-box analytics-info">
+              <div class="status-box-title" style="background-color:{{ status_color.110.color|default:'white' }};">
+                  {% if status_color.110.display_text %}
+                  <span class="card-tag">{{status_color.110.display_text}}</span>
+                  {% endif %}
+                <span class="status-box-title-text" style="color:{{ status_color.110.content_color }};">110</span>
+              </div>
+              <div class="status-box-footer">
+                <span class="counter text-success fs-24"><% app_dashboard.follow_up['110'] %></span>
+              </div>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 131 %}" id="app_131" target="_blank">
+              <div class="status-box analytics-info">
+                  <div class="status-box-title" style="background-color:{{ status_color.131.color|default:'white' }};">
+                      {% if status_color.131.display_text %}
+                      <span class="card-tag">{{status_color.131.display_text}}</span>
+                      {% endif %}
+                      <span class="status-box-title-text" style="color:{{ status_color.131.content_color }};">131</span>
+                  </div>
+                  <div class="status-box-footer">
+                    <span class="counter text-purple fs-24"><% app_dashboard.follow_up['131'] %></span>
+                  </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 138 %}" id="app_138" target="_blank">
+                <div class="status-box analytics-info">
+                    <div class="status-box-title" style="background-color:{{ status_color.138.color|default:'white' }};">
+                        {% if status_color.138.display_text %}
+                        <span class="card-tag">{{status_color.138.display_text}}</span>
+                        {% endif %}
+                      <span class="status-box-title-text" style="color:{{ status_color.138.content_color }};">138</span>
+                    </div>
+                    <div class="status-box-footer">
+                        <span class="counter text-warning fs-24"><% app_dashboard.follow_up['138'] %></span>
+                    </div>
+                </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 140 %}" id="app_140" target="_blank">
+                <div class="status-box analytics-info">
+                    <div class="status-box-title" style="background-color:{{ status_color.140.color|default:'white' }};">
+                        {% if status_color.140.display_text %}
+                        <span class="card-tag">{{status_color.140.display_text}}</span>
+                        {% endif %}
+                      <span class="status-box-title-text" style="color:{{ status_color.140.content_color }};">140</span>
+                    </div>
+                    <div class="status-box-footer">
+                        <span class="counter text-warning fs-24"><% app_dashboard.follow_up['140'] %></span>
+                    </div>
+                </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 160 %}" id="app_160" target="_blank">
+                <div class="status-box analytics-info">
+                    <div class="status-box-title" style="background-color:{{ status_color.160.color|default:'white' }};">
+                        {% if status_color.160.display_text %}
+                        <span class="card-tag">{{status_color.160.display_text}}</span>
+                        {% endif %}
+                      <span class="status-box-title-text" style="color:{{ status_color.160.content_color }};">160</span>
+                    </div>
+                    <div class="status-box-footer">
+                        <span class="text-info fs-24"><% app_dashboard.follow_up['160'] %></span>
+                    </div>
+                </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 162 %}" id="app_162" target="_blank">
+                <div class="status-box analytics-info">
+                    <div class="status-box-title" style="background-color:{{ status_color.162.color|default:'white' }};">
+                        {% if status_color.162.display_text %}
+                        <span class="card-tag">{{status_color.162.display_text}}</span>
+                        {% endif %}
+                      <span class="status-box-title-text" style="color:{{ status_color.162.content_color }};">162</span>
+                    </div>
+                    <div class="status-box-footer">
+                        <span class="text-info fs-24"><% app_dashboard.follow_up['162'] %></span>
+                    </div>
+                </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 172 %}" id="app_172" target="_blank">
+                <div class="status-box analytics-info">
+                    <div class="status-box-title" style="background-color:{{ status_color.172.color|default:'white' }};">
+                        {% if status_color.172.display_text %}
+                        <span class="card-tag">{{status_color.172.display_text}}</span>
+                        {% endif %}
+                      <span class="status-box-title-text" style="color:{{ status_color.172.content_color }};">172</span>
+                    </div>
+                    <div class="status-box-footer">
+                        <span class="text-info fs-24"><% app_dashboard.follow_up['172'] %></span>
+                    </div>
+                </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-12">
+            <a href="{% url 'app_status:list_w_status' 181 %}" id="app_181" target="_blank">
+                <div class="status-box analytics-info">
+                    <div class="status-box-title" style="background-color:{{ status_color.181.color|default:'white' }};">
+                        {% if status_color.181.display_text %}
+                        <span class="card-tag">{{status_color.181.display_text}}</span>
+                        {% endif %}
+                      <span class="status-box-title-text" style="color:{{ status_color.181.content_color }};">181</span>
+                    </div>
+                    <div class="status-box-footer">
+                        <span class="text-danger fs-24"><% app_dashboard.follow_up['181'] %></span>
+                    </div>
+                </div>
+            </a>
+          </div>
+
+          <div class="col-lg-2 col-sm-2 col-xs-12">
+            <a href="{% url 'app_status:list_w_status' 199 %}" target="_blank">
+            <div class="white-box analytics-info" style="padding: 0px;">
+              <div style="padding: 20px 25px; border-bottom: 1px solid #eee;background-color:{{ status_color.courtesy_call.color|default:'white' }};color:{{ status_color.courtesy_call.content_color }};">
+                  {% if status_color.courtesy_call.display_text %}
+                  <span class="card-tag">{{status_color.courtesy_call.display_text}}</span>
+                  {% endif %}
+                <span class="box-title fs-24"><small>Courtesy</small> Call <small>(180)</small></span>
+              </div>
+              <ul class="list-inline" style="padding: 25px;">
+                <li class="text-right"><span class="text-danger"><% app_dashboard.follow_up.courtesy_call %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <h4 class="page-title">
+            <button class="btn btn-warning  btn-block left collapsed" type="button" data-toggle="collapse" data-target="#graveyard" aria-expanded="false" aria-controls="graveyard">Graveyard</button>
+          </h4>
+        </div>
+      </div>
+
+      <!-- .row status aplikasi 120 - 170  col-lg-offset-1 -->
+      <div class="row collapse" id="graveyard" aria-expanded="false" style="height: 0px;">
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6 col-lg-offset-1 col-md-offset-1">
+            <a href="{% url 'app_status:list_w_status' 106 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.106.color|default:'null' }};color:{{ status_color.106.content_color }};">
+                    {% if status_color.106.display_text %}
+                    <span class="card-tag">{{status_color.106.display_text}}</span>
+                    {% endif %}
+                  106
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['106'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 111 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.111.color|default:'null' }};color:{{ status_color.111.content_color }};">
+                    {% if status_color.111.display_text %}
+                    <span class="card-tag">{{status_color.111.display_text}}</span>
+                    {% endif %}
+                  111
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['111'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 133 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.133.color|default:'null' }};color:{{ status_color.133.content_color }};">
+                    {% if status_color.133.display_text %}
+                    <span class="card-tag">{{status_color.133.display_text}}</span>
+                    {% endif %}
+                  133
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['133'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 135 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.135.color|default:'null' }};color:{{ status_color.135.content_color }};">
+                    {% if status_color.135.display_text %}
+                    <span class="card-tag">{{status_color.135.display_text}}</span>
+                    {% endif %}
+                  135
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['135'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 136 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.136.color|default:'null' }};color:{{ status_color.136.content_color }};">
+                    {% if status_color.136.display_text %}
+                    <span class="card-tag">{{status_color.136.display_text}}</span>
+                    {% endif %}
+                  136
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['136'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 137 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.137.color|default:'null' }};color:{{ status_color.137.content_color }};">
+                    {% if status_color.137.display_text %}
+                    <span class="card-tag">{{status_color.137.display_text}}</span>
+                    {% endif %}
+                  137
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['137'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 139 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.139.color|default:'null' }};color:{{ status_color.139.content_color }};">
+                    {% if status_color.139.display_text %}
+                    <span class="card-tag">{{status_color.139.display_text}}</span>
+                    {% endif %}
+                  139
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['139'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 142 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.142.color|default:'null' }};color:{{ status_color.142.content_color }};">
+                    {% if status_color.139.display_text %}
+                    <span class="card-tag">{{status_color.142.display_text}}</span>
+                    {% endif %}
+                  142
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['142'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 143 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.143.color|default:'null' }};color:{{ status_color.143.content_color }};">
+                    {% if status_color.143.display_text %}
+                    <span class="card-tag">{{status_color.143.display_text}}</span>
+                    {% endif %}
+                  143
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['143'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 161 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.161.color|default:'null' }};color:{{ status_color.161.content_color }};">
+                    {% if status_color.161.display_text %}
+                    <span class="card-tag">{{status_color.161.display_text}}</span>
+                    {% endif %}
+                  161
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['161'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-sm-1 col-xs-col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 171 %}" target="_blank">
+              <div class="panel panel-warning">
+                <div class="panel-heading" style="background-color:{{ status_color.171.color|default:'null' }};color:{{ status_color.171.content_color }};">
+                    {% if status_color.171.display_text %}
+                    <span class="card-tag">{{status_color.171.display_text}}</span>
+                    {% endif %}
+                  171
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.graveyard['171'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+      </div>
+      <!--/.row -->
+
+
+
+
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <a href="{% url 'loan_status:list' 'all' %}" target="_blank">
+            <h4 class="page-title"><button class="btn btn-danger btn-block left">Loan</button></h4>
+          </a>
+        </div>
+      </div>
+
+      <!-- .row status loan -->
+      <div class="row">
+
+        <div class="col-lg-10 col-sm-10 col-xs-12 col-lg-offset-1">
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '210' %}" id="loan_210" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.210.color|default:'white' }};">
+                    {% if status_color.210.display_text %}
+                    <span class="card-tag">{{status_color.210.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.210.content_color }};">210</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['210'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '211' %}" id="loan_211" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.211.color|default:'white' }};">
+                    {% if status_color.211.display_text %}
+                    <span class="card-tag">{{status_color.211.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.211.content_color }};">211</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['211'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '212' %}" id="loan_212" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.212.color|default:'white' }};">
+                    {% if status_color.212.display_text %}
+                    <span class="card-tag">{{status_color.212.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.212.content_color }};">212</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['212'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '213' %}" id="loan_213" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.213.color|default:'white' }};">
+                    {% if status_color.213.display_text %}
+                    <span class="card-tag">{{status_color.213.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.213.content_color }};">213</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['213'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '215' %}" id="loan_215" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.215.color|default:'white' }};">
+                    {% if status_color.215.display_text %}
+                    <span class="card-tag">{{status_color.215.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.215.content_color }};">215</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['215'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '216' %}" id="loan_216" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.216.color|default:'white' }};">
+                    {% if status_color.216.display_text %}
+                    <span class="card-tag">{{status_color.216.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.216.content_color }};">216</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['216'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '218' %}" id="loan_218" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.218.color|default:'white' }};">
+                    {% if status_color.218.display_text %}
+                    <span class="card-tag">{{status_color.218.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.218.content_color }};">218</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['218'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '220' %}" id="loan_220" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.220.color|default:'white' }};">
+                    {% if status_color.220.display_text %}
+                    <span class="card-tag">{{status_color.220.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.220.content_color }};">220</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['220'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '240' %}" id="loan_240" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.240.color|default:'white' }};">
+                    {% if status_color.240.display_text %}
+                    <span class="card-tag">{{status_color.240.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.240.content_color }};">240</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"> <span class="counter text-purple"><% loan_dashboard['240'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '250' %}" id="loan_250" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.250.color|default:'white' }};">
+                    {% if status_color.250.display_text %}
+                    <span class="card-tag">{{status_color.250.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.250.content_color }};">250</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-info"><% loan_dashboard['250'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '210' %}" id="loan_210_j1" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.210.color|default:'white' }};">
+                    {% if status_color.210.display_text %}
+                    <span class="card-tag">{{status_color.210.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.210.content_color }};">210 - j1</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['210_j1'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' '220' %}" id="loan_220_j1" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.220.color|default:'white' }};">
+                    {% if status_color.220.display_text %}
+                    <span class="card-tag">{{status_color.220.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.220.content_color }};">220 - J1</h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% loan_dashboard['220_j1'] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-12">
+            <a href="{% url 'loan_status:list' 'cdr' %}" id="loan_due_date" target="_blank">
+            <div class="white-box analytics-info p-0">
+                <div class="load-card-title" style="background-color:{{ status_color.cycle_day_requested.color|default:'white' }};">
+                    {% if status_color.cycle_day_requested.display_text %}
+                    <span class="card-tag">{{status_color.cycle_day_requested.display_text}}</span>
+                    {% endif %}
+                  <h3 class="box-title" style="color:{{ status_color.cycle_day_requested.content_color }};"><small>Change</small> Due Date <small>Request</small></h3>
+                </div>
+              <ul class="list-inline two-part load-card-body">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-danger"><% loan_dashboard.cycle_day_requested %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+      <!--/.row -->
+
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+          <a href="{% url 'app_status:list' %}" target="_blank">
+            <h4 class="page-title"><button class="btn btn-danger btn-block left" style="background-color: #f2dede; border-color: #f2dede; color: #a94442;">Deleted</button></h4>
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-10 col-sm-10 col-xs-12 col-lg-offset-1">
+          <div class="col-lg-3 col-sm-3 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 185 %}" id="deleted_185" target="_blank">
+              <div class="panel panel-danger">
+                <div class="panel-heading" style="background-color: #f2dede; border-color: #f2dede; color: #a94442;"> 185
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font" style="color: #a94442;"><% app_dashboard.deletion['185'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-3 col-xs-6">
+            <a href="{% url 'app_status:list_w_status' 186 %}" id="deleted_186" target="_blank">
+              <div class="panel panel-danger">
+                <div class="panel-heading" style="background-color: #f2dede; border-color: #f2dede; color: #a94442;"> 186
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font" style="color: #a94442;"><% app_dashboard.deletion['186'] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="container">
+        	<div class="row" id="app2">
+            <div class="col-4">
+              <div class="panel panel-chat mini" style="z-index: 1">
+                <div class="panel-heading">
+                  <a href="#" class="chatMinimize" onclick="return false"><span>Autodialer</span></a>
+                  <div class="clearFix"></div>
+                </div>
+                <div class="panel-body" style="height: 0px; display: none;">
+                  <div>
+                    <div v-if="state==='STOP'">
+                      <p class="text-center" style="margin-top:70px;">Pilih Tipe Auto Dialer</p>
+                      <div class="text-center">
+                        <input type="radio" id="pvemployer" value=122 v-model="options">
+                        <label for="pvemployer" style="padding-right: 20px">122</label>
+                        <input type="radio" id="pvapplicant" value=124 v-model="options">
+                        <label for="pvapplicant" style="padding-right: 20px">124</label>
+                        <input type="radio" id="pvapplicant-j1" value=124.1 v-model="options">
+                        <label for="pvapplicant" style="padding-right: 20px">124 - J1</label>
+                        <input type="radio" id="pvemployer2" value=138 v-model="options">
+                        <label for="pvemployer2" style="padding-right: 20px">138</label>
+                        <input type="radio" id="pvoffer" value=140 v-model="options">
+                        <label for="pvoffer" style="padding-right: 20px">140</label>
+                        <input type="radio" id="activationcall" value=141 v-model="options">
+                        <label for="activationcall" style="padding-right: 20px">141</label>
+                        <input type="radio" id="activationcall_j1" value=141.1 v-model="options">
+                        <label for="activationcall" style="padding-right: 20px">141 - J1</label>
+                        <input type="radio" id="pvsphp" value=160 v-model="options">
+                        <label for="pvsphp" style="padding-right: 20px">160</label>
+                        <input type="radio" id="bucket172" value=172 v-model="options">
+                        <label for="bucket172" style="padding-right: 20px">172</label>
+                        <input type="radio" id="courtesycall" value=180 v-model="options">
+                        <label for="courtesycall" style="padding-right: 20px">180</label>
+                        <!-- use 1000 as prefix for collections option because options declared as integer -->
+                        <input type="radio" id="collections_close_to_due" value=1000531 v-model="options">
+                        <label for="collections_close_to_due" style="padding-right: 20px">T-3 T-1</label>
+                        <input type="radio" id="collections_due" value=10000 v-model="options">
+                        <label for="collections_due" style="padding-right: 20px">T-0</label>
+                      </div>
+                      <button v-if="options < 1" class="btn btn-basic btn-block disabled">PLAY</button>
+                      <button v-else class="btn btn-success btn-block" v-on:click="playBtn">PLAY</button>
+                    </div>
+                    <div v-if="state==='WAITING'">
+                      <transition name="fade">
+                        <div class="row">
+                          <div class="col-12 text-center">
+                            <img style="width:20em" src="{% static 'images/julo/loading.gif' %}" alt="loading">
+                          </div>
+                          <div class="col-12">
+                            <h2 class="text-center"><% callProcess %></h2>
+                          </div>
+                          <div class="col-12">
+                            <button class="btn btn-danger btn-block" v-on:click="stopBtn">STOP</button>
+                          </div>
+                        </div>
+                      </transition>
+                    </div>
+                    <div v-if="state==='PLAYING'" class="col-12">
+                      <div class="row" style="border-bottom:1px solid;">
+                        <div class="col-md-6">
+                          <p v-if="callType==='COLLECTION CALL'">Payment Id :</p>
+                          <p v-else>Application Id :</p>
+                          <a :href="urlobj" target="_blank" v-on:click="linkBtn">
+                              <% object_id %> - <% email %>
+                          </a>
+                            <img v-if="logic_flag==='blue'" style="width:2em" src="{% static 'images/autodialer/flag_blue.png' %}" alt="blue_flag">
+                            <img v-if="logic_flag==='green'" style="width:2em" src="{% static 'images/autodialer/flag_green.png' %}" alt="green_flag">
+                          <p>Bank Name Validation : <span v-if="bank_name_status==='SUCCESS'" style="color:Green" > <% bank_name_status %> </span> <span v-else style="color:Red" > <% bank_name_status %> </span>
+                              <button v-on:Click="btn_reload_bank_validation_status"> <i class="fa fa-refresh"></i></button>
+                          </p>
+                        </div>
+                        <div class="col-md-6">
+                          <button v-if="['ACTIVATION CALL'].indexOf(callType) != -1 && button.change_status" class="btn btn-success" v-on:Click="changestatusBtn">Pindah Status</button>
+                          <div v-if="['COURTESY CALL'].indexOf(callType) != -1 && button.courtesy">
+                            <button class="btn btn-success" v-on:Click="courtesyBtn">Success</button>
+                            <button class="btn btn-warning" v-on:click="emailBtn">Email</button>
+                          </div>
+                          <button v-if="['FOLLOW UP'].indexOf(callType) != -1 && button.fu" class="btn btn-success" v-on:Click="followUpBtn">FU Success</button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-8">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <h4>Current Call :</h4>
+                            </div>
+                            <div class="col-md-9">
+                              <h4><% objName %> - <% callType %></h4>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div v-if="skiptrace.length >= 1" class="row" style="border:2px solid grey;padding:10px 0px;margin-left: 10px 10px;">
+                              <div class="col-md-4">
+                                <div class="row">
+                                  <p v-if="['PV EMPLOYER'].indexOf(callType) != -1" style="cursor:pointer" v-on:click="goToGoogle" class="text-center" style="color:green"><% skiptrace[callIndex].contact_name %></p>
+                                  <p v-else class="text-center" style="color:green"><% skiptrace[callIndex].contact_name %></p>
+                                </div>
+                                <div class="row">
+                                  <p class="text-center unselectable" style="color:green"><% skiptrace[callIndex].contact_source %></p>
+                                </div>
+                                <div class="row" style="cursor:pointer">
+                                  <p class="text-center" v-on:click="copySTBtn" style="color:green"><% skiptrace[callIndex].phone_number.replace('+62','0') %></p>
+                                </div>
+                              </div>
+                              <div v-if="callLength-callIndex > 1" class="col-md-4">
+                                <div class="row">
+                                  <p class="text-center unselectable"><% skiptrace[callIndex+1].contact_name %></p>
+                                </div>
+                                <div class="row">
+                                  <p class="text-center unselectable"><% skiptrace[callIndex+1].contact_source %></p>
+                                </div>
+                                <div class="row">
+                                  <p class="text-center unselectable"><% skiptrace[callIndex+1].phone_number.replace('+62','0') %></p>
+                                </div>
+                              </div>
+                              <div v-if="callLength-callIndex > 2" class="col-md-4">
+                                <div class="row">
+                                  <p class="text-center unselectable"><% skiptrace[callIndex+2].contact_name %></p>
+                                </div>
+                                <div class="row">
+                                  <p class="text-center unselectable"><% skiptrace[callIndex+2].contact_source %></p>
+                                </div>
+                                <div class="row">
+                                  <p class="text-center unselectable"><% skiptrace[callIndex+2].phone_number.replace('+62','0') %></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div v-else class="row" style="border:2px solid grey;padding:10px 0px;margin-left: 10px 10px;">
+                              <div v-if="object_id == false" class="col-md-12">
+                                <img style="width:10em" src="{% static 'images/julo/loading.gif' %}" alt="loading">
+                              </div>
+                              <p class="text-center unselectable">Tidak ada Skiptrace</p>
+                            </div>
+                          </div>
+                          <div v-if="skiptrace.length >= 0 && button.skiptrace" class="row" style="padding-top:1em;padding-bottom:1em;">
+                            <div class="col-md-4">
+                              <button class="btn btn-block" v-on:click="notconnectedBtn(object_id, '2', object_type)">Not Connected</button>
+                            </div>
+                            <div class="col-md-4">
+                              <button class="btn btn-block" v-on:click="rjtBtn(object_id, '3', object_type)">Rejected/Busy</button>
+                            </div>
+                            <div class="col-md-4">
+                              <button class="btn btn-block" v-on:click="noAnswerBtn(object_id, '4', object_type)">No Answer</button>
+                            </div>
+                          </div>
+                          <div v-if="skiptrace.length >= 0 && button.skiptrace" class="row">
+                            <div class="col-md-4">
+                              <button class="btn" v-on:click="wpcBtn(object_id, '5', object_type)">WPC</button>
+                            </div>
+                            <div class="col-md-4">
+                              <button class="custom-button" v-on:click="rpcBtn(object_id, '6', object_type)">RPC and Next App</button>
+                            </div>
+                            <div class="col-md-4">
+                              <button class="btn btn-block" v-on:click="nextBtn(object_id, '6', object_type)">RPC and Next Phone</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3" style="margin-left:3em;padding-top:5px;">
+                          <div class="row text-right" style="padding: 5px 3px;">
+                            <div v-if="counter.countdown" style="margin-left:5px">
+                              <a v-if="counter.started" v-on:click="counter.started=!counter.started" href="#" class="btn btn-warning">
+                                <span class="fa fa-pause-circle-o"></span>
+                              </a>
+                              <a v-else href="#" v-on:click="counter.started=!counter.started" class="btn btn-success">
+                                <span class="fa fa-play"></span>
+                              </a>
+                            </div>
+                            <div v-else>
+                              <a href="#" v-on:click="stopBtn" class="btn btn-danger">
+                                <span class="fa fa-close"></span>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="row text-center" style="border-style: solid">
+                            <h1 v-text="counter.count_sec"></h1>
+                          </div>
+                          <div v-if="button.tag && callLength-callIndex <= 1" class="row text-center" style="padding-top:5px;">
+                            <button class="btn" v-on:click="tagBtn">#</button>
+                            <textarea v-model="note" style="border-style: solid" class="form-control"></textarea>
+                          </div>
+                          <div v-if="callLength-callIndex >= 1" class="row text-center" style="padding-top:5px;">
+                            <button class="btn btn btn-warning btn-rounded" v-on:click="callBtn"><i class="fa fa-phone"></i></button>
+                            <button class="btn btn btn-danger btn-rounded" v-on:click="hangBtn"><i class="fa fa-phone"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearFix"></div>
+                </div>
+              </div>
+            </div>
+            <!-- SPHP & Courtesy Call -->
+            <div class="col-4" v-if="['ACTIVATION CALL','COURTESY CALL'].indexOf(callType) != -1">
+              <transition name="slide-fade">
+                <div class="panel panel-chat panel-chat-extend">
+                  <div v-if="callType==='ACTIVATION CALL'" class="panel-heading">
+                      <span>SURAT PERJANJIAN HUTANG PIUTANG</span>
+                      <div class="clearFix"></div>
+                  </div>
+                  <div v-if="callType==='COURTESY CALL'" class="panel-heading">
+                      <span>COURTESY CALL</span>
+                      <div class="clearFix"></div>
+                  </div>
+                  <div class="panel-body-extend" id="script">
+                  </div>
+          	    </div>
+              </transition>
+            </div>
+            <!--  -->
+        	</div>
+        </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /#page-wrapper -->
+
+{% endblock %}
+
+{% block script_additional %}
+
+  <!--Morris JavaScript -->
+  <!-- <script src="{% static 'theme/plugins/bower_components/raphael/raphael-min.js' %}"></script> -->
+  <!-- <script src="{% static 'theme/plugins/bower_components/morrisjs/morris.js' %}"></script> -->
+
+  <!-- Custom Theme JavaScript -->
+  <!-- <script src="{% static 'theme/nav-inverse/js/dashboard4.js' %}"></script> -->
+  <script type="text/javascript">
+    $(function(){
+        $(".panel.panel-chat > .panel-heading > .chatMinimize").click(function(){
+            if($(this).parent().parent().hasClass('mini'))
+            {
+                $(this).parent().parent().removeClass('mini').addClass('normal');
+
+                $('.panel.panel-chat > .panel-body').animate({height: "350px"}, 500).show();
+
+            }
+            else
+            {
+                $(this).parent().parent().removeClass('normal').addClass('mini');
+
+                $('.panel.panel-chat > .panel-body').animate({height: "0"}, 500);
+
+                setTimeout(function() {
+                    $('.panel.panel-chat > .panel-body').hide();
+                    $('.panel.panel-chat > .panel-footer').hide();
+                }, 500);
+
+
+            }
+
+        });
+        $(".panel.panel-chat > .panel-heading > .chatClose").click(function(){
+            $(this).parent().parent().remove();
+        });
+    })
+    function copyToClipboard(text) {
+        if (window.clipboardData && window.clipboardData.setData) {
+            // IE specific code path to prevent textarea being shown while dialog is visible.
+            return clipboardData.setData("Text", text);
+
+        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+            var textarea = document.createElement("textarea");
+            textarea.textContent = text;
+            textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+            } catch (ex) {
+                console.warn("Copy to clipboard failed.", ex);
+                return false;
+            } finally {
+                document.body.removeChild(textarea);
+                $.toast({
+                  heading: 'success',
+                  text: 'success copy '+ text,
+                  position: 'top-right',
+                  loaderBg:'#ff6849',
+                  icon: 'success',
+                  hideAfter: 1500,
+                  stack: 6
+                });
+            }
+        }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+  <script type="text/javascript" src="{% static 'default/js/vue.js' %}"></script>
+  <script type="text/javascript">
+    var app1 = new Vue({
+      el: '#app1',
+      delimiters: ["<%", "%>"],
+      data: {
+        app_dashboard : {},
+        app_priority_dashboard : {},
+        payment_dashboard : {},
+        loan_dashboard : {},
+        loc_payment_dashboard: {},
+        loc_payment_bucket_list: [
+          { 'name': 'T-1',
+            'key': 'Tmin1',
+            'url': '{% url "loc_collection:list" "Tmin1" %}'
+          },
+          { 'name': 'T0',
+            'key': 'T0',
+            'url': '{% url "loc_collection:list" "T0" %}'
+          },
+          { 'name': 'T +1 to T +29',
+            'key': 'T1to29',
+            'url': '{% url "loc_collection:list" "T1to29" %}'
+          },
+          { 'name': 'T > 29',
+            'key': 'Tplus30',
+            'url': '{% url "loc_collection:list" "Tplus30" %}'
+          },
+        ],
+        window_tab_status:true
+      },
+      beforeMount(){
+        this.get_bucket_count();
+      },
+      methods: {
+        get_bucket_count: function () {
+          if (!this.window_tab_status){return}
+          console.log('Get list')
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:get_dashboard_bucket_count' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                csrfmiddlewaretoken: this.csrftoken
+                }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+                  if(json.status == "success"){
+                    self.app_dashboard = json.app_dashboard
+                    self.app_priority_dashboard = json.app_priority_dashboard
+                    self.payment_dashboard = json.payment_dashboard
+                    self.loan_dashboard = json.loan_dashboard
+                  }
+
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  this.callProcess = 'we have an erorr while getting data'
+              }
+          }); // end of ajax
+        },
+        get_loc_bucket_count: function () {
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:get_loc_collection_agent_bucket' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                csrfmiddlewaretoken: this.csrftoken
+                }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+                  if(json.status == "success"){
+                    self.loc_payment_dashboard = json.loc_payment_dashboard
+                  }
+
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  this.callProcess = 'we have an erorr while getting data'
+              }
+          }); // end of ajax
+        },
+        SetWindowTabStatus: function(status) {
+          this.window_tab_status = status
+        },
+      }
+    })
+  </script>
+  <script type="text/javascript">
+    var app2 = new Vue({
+      el: '#app2',
+      delimiters: ["<%", "%>"],
+      data: {
+        state:'STOP',
+        callProcess: '',
+        objName: '',
+        object_id: '',
+        object_type: '',
+        email: '',
+        callType: '',
+        callIndex: 0,
+        callLength: 0,
+        skiptrace: [],
+        urlobj:'',
+        start_ts:'',
+        tabs: '',
+        bank_name_status : 'Belum Tersedia',
+        stselected: 0,
+        button: {
+          change_status: true,
+          courtesy: true,
+          tag: true,
+          fu: true,
+          skiptrace: true
+        },
+        stopbtn: false,
+        options: 0,
+        counter: {
+          countdown: false,
+          count_sec: 0,
+          started: false
+        },
+        decision: {
+          is_failed: 0,
+          hashtag: 0
+        },
+        note: ''
+      },
+      methods: {
+        countdown : function() {
+          var self = this
+          this.counter.countdown = true
+          this.counter.started = true
+            function tick() {
+                if(!self.counter.started){
+                  setTimeout(tick, 1000);
+                }
+                else if( self.counter.count_sec > 0 ) {
+                  self.counter.count_sec--
+                  setTimeout(tick, 1000);
+                } else {
+                  self.autodialer_session({object_id: self.object_id, session_stop: 1, object_type: self.object_type})
+                  if(self.object_type == 'application'){
+                    self.unlocked_app(self.object_id);
+                  }else{
+                    self.unlocked_payment(self.object_id);
+                  }
+                  self.reset_app()
+                  self.play()
+                }
+            }
+            tick();
+        },
+        stopBtn : function() {
+          if(this.object_id != ''){
+            this.autodialer_history(this.object_id, 'Button Stop Clicked', this.object_type)
+          }
+          this.autodialer_agent_status('stop')
+          this.stop()
+        },
+        startBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Start Clicked', this.object_type)
+        },
+        playBtn: function() {
+          this.autodialer_agent_status('start')
+        },
+        pauseBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Paused Clicked', this.object_type)
+        },
+        rpcBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button RPC Clicked', object_type)
+          this.button.skiptrace = false
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            is_failed: this.decision.is_failed,
+            hashtag: this.decision.hashtag,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        wpcBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button WPC Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        rjtBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button Rejected Clicked', object_type)
+          this.stselected = result
+          console.log('rjtBtn')
+          console.log({object_id: object_id, call_result: result, object_type: this.object_type})
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        notconnectedBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button NotConnected Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        noAnswerBtn : function(object_id, result, object_type) {
+          console.log('noanswerbutton', this.callIndex, this.get_current_skiptrace_id())
+          this.autodialer_history(object_id, 'Button No Answer Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        nextBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button Next Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({object_id: object_id, call_result: result, object_type: this.object_type})
+          this.next_and_update()
+        },
+        copySTBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Copy ST Clicked', this.object_type)
+          this.copyclipboard(this.get_current_phone().replace('+62','0'))
+        },
+        goToGoogle : function () {
+          this.autodialer_history(this.object_id, 'Button Go To Google Search Clicked', this.object_type)
+          window.open(`http://google.com/search?q=${this.skiptrace[this.callIndex].contact_name}`, '_blank')
+        },
+        linkBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Link to App Clicked', this.object_type)
+        },
+        changestatusBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Change Status Clicked', this.object_type)
+          this.changeStatus(this.object_id)
+          this.button.change_status=false
+        },
+        tagBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Hashtag Clicked', this.object_type)
+          this.decision.is_failed = 1
+          this.decision.hashtag = 1
+          this.toastSuccess('has tag success')
+          this.button.tag = false
+        },
+        followUpBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Fu Success Clicked', this.object_type)
+          this.autodialer_session({object_id: this.object_id, is_fu: 1, object_type: this.object_type})
+          this.toastSuccess('Follow Up success')
+          this.button.fu = false
+        },
+        choiceBtn : function () {
+          this.autodialer_history(this.object_id, 'Button Choice App Clicked', this.object_type)
+        },
+        courtesyBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Courtesy Success Clicked', this.object_type)
+          this.autodialer_session({object_id: this.object_id, courtesy_result: 'CC Call', object_type: this.object_type})
+          this.successCourtesy()
+          this.button.courtesy=false
+        },
+        emailBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Courtesy Email Clicked', this.object_type)
+          this.autodialer_session({object_id: this.object_id, courtesy_result: 'CC Email', object_type: this.object_type})
+          this.emailCourtesy()
+          // this.button.courtesy=false
+        },
+        callBtn : function () {
+          this.autodialer_history(this.object_id, 'Button Call Clicked', this.object_type)
+          this.click_to_call('call')
+        },
+        hangBtn : function () {
+          this.autodialer_history(this.object_id, 'Button Hangup Clicked', this.object_type)
+          this.click_to_call('hangup')
+        },
+        // methods core
+        calling_applicant : function(){
+          this.click_to_call('call')
+          this.copyclipboard(this.get_current_phone().replace('+62','0'))
+          this.start_ts = this.get_time()
+        },
+        btn_reload_bank_validation_status : function() {
+            this.autodialer_history(this.object_id, 'Button Reload Bank Validation Status Clicked', this.object_type)
+        },
+        stop : function(){
+          if (this.skiptrace.length >= 1) {
+            this.update_st(1)
+          }
+          if(this.object_id != ''){
+            this.autodialer_session({object_id: this.object_id, session_stop: 1, object_type: this.object_type})
+            if(this.object_type == 'application'){
+              this.unlocked_app(this.object_id)
+            }else{
+              this.unlocked_payment(this.object_id)
+            }
+          }
+          this.reset_app()
+          this.state = 'STOP'
+          this.stopbtn = false
+        },
+        play : function(){
+          this.state = 'WAITING'
+          this.getAppAndPhone()
+        },
+        can_skip : function(){
+          return this.decision.hashtag && this.decision.is_failed
+        },
+        skip : function(){
+          if (!this.can_skip()) {
+            this.toastDanger('Cannot skip app, Please click the hashtag button first.')
+            console.log('cannot skip app.')
+            return
+          }
+          console.log('skip');
+          data = { object_id: this.object_id,
+                   is_failed: this.decision.is_failed,
+                   hashtag: this.decision.hashtag,
+                   call_result: this.stselected,
+                   session_stop: 1,
+                   object_type: this.object_type,
+                   note: this.note
+                 }
+          console.log(data)
+          this.autodialer_session(data)
+        },
+        next : function(){
+          this.callIndex += 1
+        },
+        update_st_select : function(select){
+          if(select == '6'){
+            this.update_st(6)
+            this.countdown()
+          }else{
+            this.update_st(select)
+            this.not_happy_path_st()
+          }
+        },
+        not_happy_path_st : function(){
+          console.log('not_happy_path_st')
+          if (this.callLength-this.callIndex > 1) {
+            this.next()
+            this.calling_applicant()
+          }else{
+            this.callProcess = 'there is no contact available to call, next to other app'
+            this.skip()
+          }
+        },
+        next_and_update : function (select) {
+          this.update_st(6)
+          this.not_happy_path_st()
+        },
+        // methods ajax
+        getAppAndPhone : function(){
+          this.callProcess = 'getting phone number'
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:ajax_get_application_autodialer' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                  options: self.options
+                }, // data sent with the get request
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.status == "success"){
+                    self.callProcess = 'we get one app for you'
+                    self.skiptrace = json.telphone
+                    self.callLength = json.telphone.length
+                    self.object_id = json.object_id
+                    self.objName = json.object_name
+                    self.object_type = json.object_type
+                    self.email = json.email
+                    self.callType = json.subject
+                    self.counter.count_sec = json.session_delay
+                    self.logic_flag = json.logic_flag
+                    self.bank_name_status = json.bank_name_status
+                    if (json.object_type == "application"){
+                      self.lock_application(json.object_id)
+                    }else{
+                      self.lock_payment(json.object_id)
+                    }
+                    self.autodialer_session({object_id: json.object_id, session_start: 1, object_type: json.object_type})
+                  }
+                  else {
+                    // console.log(json.message);
+                    self.callProcess = 'tidak ada aplikasi yang tersedia, coba sesaat lagi'
+                    self.stopbtn = true
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  this.callProcess = 'we have an erorr while getting data'
+              }
+          }); // end of ajax
+        },
+        lock_application : function(app_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'app_status:set_app_locked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { application_id: app_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    self.callProcess = 'locking app successful'
+                    self.state = 'PLAYING'
+                    self.urlobj = "{%url 'app_status:change_status' 123456 %}".replace(/123456/, app_id)
+                    if (['ACTIVATION CALL','COURTESY CALL'].indexOf(self.callType) != -1){
+                      self.getScript(app_id)
+                    }else{
+                      self.tabs = window.open(self.urlobj, '_blank')
+                    }
+                    setTimeout(self.calling_applicant(), 3000)
+                  }
+                  else {
+                    self.callProcess = json.reason
+                    // setTimeout(self.getAppAndPhone(), 2000)
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                console.log(xhr, errmsg, err)
+                  this.callProcess = 'we got an error while lock the app'
+              }
+          }); // end of ajax
+        },
+        lock_payment : function(payment_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'payment_status:set_payment_locked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { payment_id: payment_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    self.callProcess = 'locking payment successful'
+                    self.state = 'PLAYING'
+                    self.urlobj = "{%url 'payment_status:change_status' 123456 %}".replace(/123456/, payment_id)
+                    self.tabs = window.open(self.urlobj, '_blank')
+                    setTimeout(self.calling_applicant(), 3000)
+                  }
+                  else {
+                    self.callProcess = json.reason
+                    // setTimeout(self.getAppAndPhone(), 2000)
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                console.log(xhr, errmsg, err)
+                  this.callProcess = 'we got an error while lock the payment'
+              }
+          }); // end of ajax
+        },
+        unlocked_app : function(app_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'app_status:set_app_unlocked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { application_id: app_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    console.log("app success to unlock");
+                  }
+                  else {
+                    self.callProcess = "app failed to unlock"
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        unlocked_payment : function(payment_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'payment_status:set_payment_unlocked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { payment_id: payment_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    console.log("payment success to unlock");
+                  }
+                  else {
+                    self.callProcess = "payment failed to unlock"
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        getScript: function(app_id) {
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:get_script_for_agent' %}/", // the endpoint
+              type : "GET", // http method
+              data : { application_id: app_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.status == "failed"){
+                    self.script = json.message
+                  }
+                  else {
+                    var htmlString = json
+                        , parser = new DOMParser()
+                        , doc = parser.parseFromString(htmlString, "text/html");
+                    var element = doc.body.firstChild;
+                    $("#script").append(element)
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        emailCourtesy: function(){
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'app_status:ajax_courtesy_email' %}/",
+              type : "POST",
+              data : {
+                    application_id : self.object_id
+              },
+
+              // handle a successful response
+              success : function(json) {
+                if (json.status == "success"){
+                  self.toastSuccess('send email success')
+                  this.button.courtesy=false
+                } else if(json.status == "failed"){
+                  console.log(json);
+                  self.toastDanger('send email failed')
+                }
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        successCourtesy: function () {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'app_status:ajax_update_courtesy' %}/",
+              type : "POST",
+              data : {
+                    application_id : self.object_id
+              },
+              // handle a successful response
+              success : function(json) {
+                if (json.status == "success"){
+                  self.toastSuccess('courtesy success')
+                } else if(json.status == "failed"){
+                  console.log(json);
+                  self.toastDanger('courtesy failed')
+                }
+
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        changeStatus: function(){
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_change_status' %}/",
+              type : "POST",
+              data : {
+                    application_id : self.object_id,
+                    status_to : {{ activation_call_change_status }},
+                    reason : "activation call success",
+                    notes : "agent success activation call"
+              },
+              // handle a successful response
+              success : function(json) {
+                  if (json.status == "success"){
+                    self.toastSuccess('change status success')
+                  } else if(json.status == "failed"){
+                    console.log(json);
+                    self.toastDanger('change status failed')
+                  }
+
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        btn_reload_bank_validation_status: function(){
+          const self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'app_status:ajax_bank_validation' %}/",
+              type : "GET",
+              data : {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                  app_id: self.object_id,
+              },
+              // handle a successful response
+              success : function(json) {
+                    self.bank_name_status = json.data.validation_status != null ? json.data.validation_status : 'Belum Tersedia'
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        update_st : function(option){
+          var self = this
+          var end_ts = this.get_time()
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          if (!self.get_current_skiptrace_id()) {
+            console.log('update_st: no skiptrace id')
+            return
+          }
+          $.ajax({
+              url :  "{% url 'payment_status:skiptrace_history' %}/",
+              type : "POST",
+              data : {
+                    skiptrace : this.get_current_skiptrace_id(),
+                    application : self.object_id,
+                    start_ts : self.start_ts,
+                    end_ts : end_ts,
+                    call_result: option,
+                    from_autodialer:true
+                  },
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('berhasil update skiptrace');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log("success ",json);
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        autodialer_history : function(obj_id, action, obj_type) {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_autodialer_history_record' %}/",
+              type : "POST",
+              data : {
+                    object_id: obj_id,
+                    action: action,
+                    object_type: obj_type
+                  },
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('berhasil update history');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log("success ",json);
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        unlock_autodialer : function(status) {
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:ajax_unlock_autodialer_agent' %}/", // the endpoint
+              type : "GET", // http method
+              data : {csrfmiddlewaretoken: this.csrftoken}, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.status == "success"){
+                    swal("Unlocked!", json.messages, "success");
+                  }
+                  else {
+                    swal("Failed", json.messages, "error");
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        autodialer_agent_status : function(status) {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_autodialer_agent_status' %}/",
+              type : "POST",
+              data : {
+                    agent_status : status
+                  },
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('agent available');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log("success ",json);
+                  if(json.status == "success"){
+                    if(status == 'start'){
+                      self.play()
+                    }
+                  }else{
+                    if(json.message == "agent already started autodialer" ){
+                      swal({
+                          title: "Autodialer terkunci",
+                          text: "Pastikan autodialer tidak aktif di windows lain sebelum melakukan unlock autodialer",
+                          type: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#DD6B55",
+                          confirmButtonText: "Yes, Unlock Autodialer",
+                          cancelButtonText: "Cancel",
+                          closeOnConfirm: false,
+                          closeOnCancel: false
+                      }, function(isConfirm){
+                          if (isConfirm) {
+                              self.unlock_autodialer()
+                          } else {
+                              swal("Cancel", "okey di cancel :)", "error");
+                          }
+                      });
+                    }else if (json.message == "agent already stoped autodialer") {
+                      self.toastDanger("agent already stoped autodialer")
+                    }
+                  }
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        autodialer_session : function(data) {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          var data = data
+          data['app_status'] = self.options
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_autodialer_session_status' %}/",
+              type : "POST",
+              data : data,
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('session berhasil');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                if(json.status == 'success'){
+                  console.log('autodialer_session')
+                  return true
+                  console.log(json)
+                  if(self.state == 'WAITING'){
+                    self.autodialer_history(data.object_id, 'Button Play Clicked', self.object_type)
+                  }
+                  return ('success')
+                }
+                return('failed')
+                  //console.log("success ",json);
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+                  return ('error')
+              }
+          }).done(function(res) {
+            console.log('done autodialer')
+            if (data.hashtag && data.is_failed) {
+              console.log('hashtag and failed');
+              if(self.object_type == 'application'){
+                self.unlocked_app(self.object_id)
+              }else{
+                self.unlocked_payment(self.object_id)
+              }
+              self.reset_app()
+              self.play()
+            }
+          });
+        },
+        click_to_call : function(call_type) {
+          var self = this
+          if (!this.get_current_skiptrace_id()) {
+            console.log('click_to_call: no skiptrace id')
+            return
+          }
+          $.ajax({
+              url :  "{%url 'app_status:trigger_autodial' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                        number_phone: self.get_current_phone().replace('+62','0'),
+                        skiptrace_id: self.get_current_skiptrace_id(),
+                        call_type: call_type
+                     },
+              // data sent with the get request
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.status == "success"){
+                    self.toastSuccess(json.message)
+                  }
+                  else {
+                    self.callProcess = json.reason
+                    self.toastDanger('trigger click_to_call failed')
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                console.log(xhr, errmsg, err)
+                  this.callProcess = 'we got an error while click to call'
+              }
+          }); // end of ajax
+        },
+        // methods helper
+        reset_app : function(){
+          this.callProcess = ''
+          this.objName = ''
+          this.object_id = ''
+          this.callType = ''
+          this.callIndex = 0
+          this.callLength = 0
+          this.skiptrace = []
+          this.urlobj = ''
+          this.start_ts = ''
+          this.tabs = ''
+          this.bank_name_status = 'Belum Tersedia'
+          this.stselected = 0
+          this.stopbtn = false
+          this.counter.countdown = false
+          this.counter.count_sec = 0
+          this.counter.started = false
+          this.button.change_status = true
+          this.button.courtesy = true
+          this.button.tag = true
+          this.button.skiptrace = true
+          this.button.fu = true
+          this.decision.is_failed = 0
+          this.decision.hashtag = 0
+          this.note = ''
+        },
+        get_time : function(){
+          var date = moment().format().toString();
+          return date;
+        },
+        copyclipboard : function(text) {
+          copyToClipboard(text)
+        },
+        toastDanger : function(msg){
+          $.toast({
+            heading: 'Failed',
+            text: msg,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            bgColor: '#ff6849',
+            textColor: '#fff',
+            icon: 'error',
+            hideAfter: 5000,
+            stack: 6
+          });
+        },
+        toastSuccess : function(msg) {
+          $.toast({
+            heading: 'Success',
+            text: msg,
+            position: 'top-right',
+            icon: 'success',
+            hideAfter: 1500,
+            stack: 6
+          });
+        },
+        get_current_phone: function() {
+          let skiptrace_obj = this.skiptrace[this.callIndex]
+          if (skiptrace_obj) {
+            return skiptrace_obj.phone_number
+          }
+          return '-no-number-'
+        },
+        get_current_skiptrace_id: function() {
+          let skiptrace_obj = this.skiptrace[this.callIndex]
+          if (skiptrace_obj) {
+            return skiptrace_obj.skiptrace_id
+          }
+          return null
+        },
+      }
+    })
+  </script>
+  <script src="{% static 'theme/plugins/moment/moment.min.js' %}"></script>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      $('#mnu_dashboard_li').addClass('active');
+      $('#mnu_dashboard_li a:first').addClass('active');
+
+      setInterval(function () {
+        app1.get_bucket_count();
+      }, 30000)
+  });
+
+  // Active
+  window.addEventListener('focus', ActionActiveTab);
+
+  // Inactive
+  window.addEventListener('blur', ActionInactiveTab);
+
+  function ActionActiveTab(){
+    console.log('Active tab')
+    app1.SetWindowTabStatus(true);
+  }
+  function ActionInactiveTab(){
+    console.log('Inactive tab')
+    app1.SetWindowTabStatus(false);
+  }
+
+{% endblock %}

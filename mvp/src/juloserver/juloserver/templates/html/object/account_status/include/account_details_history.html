@@ -1,0 +1,37 @@
+{% load default unit %}
+
+
+<div id="slim_history_note">
+  <!-- customtab -->
+  <ul class="nav nav-tabs customtab tabs">
+     <li class="active tab">
+      <a href="#app_note_history" data-toggle="tab"> <span class="visible-xs" title="Status History and Notes History">
+      <i class="fa fa-home"></i></span> <span class="hidden-xs">Status History and Notes History</span> </a>
+    </li>
+    <li class="tab"><a href="#email_sms_history" data-toggle="tab" title="EMAIL/SMS History">
+      <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Email and SMS History</span> </a>
+    </li>    
+    <li class="tab"><a href="#skip_trace_history" data-toggle="tab" title="Application Note History">
+      <span class="hidden-xs">Skiptrace History</span></a>
+    </li>    
+  </ul>
+
+  <!-- .row -->
+  <div class="tab-content pmt_event">
+    <!-- Tab Payment App note history -->
+    <div class="tab-pane active" id="app_note_history">
+        {% include "object/account_status/include/account-history.html" %}
+   </div>
+
+    <!-- Tab Payment SMS history -->
+    <div class="tab-pane" id="email_sms_history">
+      {% include "object/payment_status/include/tab_email_sms_history.html" %}
+    </div>    
+
+    <!-- Tab skiptrace history -->
+    <div class="tab-pane" id="skip_trace_history">
+      {% include "object/app_status/include/skiptrace_history.html" %}
+    </div>   
+
+  </div>
+</div>

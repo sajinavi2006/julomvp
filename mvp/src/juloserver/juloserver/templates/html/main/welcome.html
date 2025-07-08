@@ -1,0 +1,280 @@
+{% extends "common/layout_nonuser.html" %}
+
+
+{% block additional_css %}
+
+{% load static from staticfiles %}
+	<!--My admin Custom CSS -->
+	<link href="{% static 'theme/plugins/bower_components/owl.carousel/owl.carousel.min.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'theme/plugins/bower_components/owl.carousel/owl.theme.default.css' %}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+{% block inside_body %}
+
+	<!-- Page Content -->
+  	<div id="page-wrapper">
+    <div class="container-fluid">
+
+
+      <!-- .row -->
+      <div class="row m-t-10">
+        <div class="col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-wrapper p-b-12 collapse in">
+
+              <div id="owl-demo" class="owl-carousel owl-theme">
+                <div class="item"><img src="{% static 'theme/plugins/images/heading-bg/slide1.jpg' %}" alt="Owl Image">
+                  <div class="carousel-caption">
+                    <h3 class="text-white font-600">Julo Finance</h3>
+                    <p> Julo Finance memberi solusi keuangan Anda. </p>
+                  </div>
+                </div>
+                <div class="item"><img src="{% static 'theme/plugins/images/heading-bg/slide3.jpg' %}" alt="Owl Image"></div>
+                <div class="item"><img src="{% static 'theme/plugins/images/heading-bg/slide4.jpg' %}" alt="Owl Image"></div>
+                <div class="item"><img src="{% static 'theme/plugins/images/heading-bg/slide6.jpg' %}" alt="Owl Image"></div>
+                <div class="item"><img src="{% static 'theme/plugins/images/heading-bg/slide2.jpg' %}" alt="Owl Image"></div>
+              </div>
+
+            </div>
+            <!-- end ./panel-wrapper p-b-12 collapse in-->
+          </div>
+        </div>
+      </div>
+      <!-- ./row -->
+
+      <!-- .row -->
+      <div class="row">
+
+      <!-- /.col-lg-4 -->
+        <div class="col-lg-4 col-sm-4">
+          <div class="panel panel-inverse">
+            <div class="panel-heading text-center"> Kalkulasi
+              <div class="pull-right">
+              </div>
+            </div>
+
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+              <div class="panel-body">
+
+                <div class="user-bg white-bg">
+                  <div class="overlay-box white-bg" >
+                    <div class="user-content">
+                      <button type="button" class="btn btn-danger btn-circle icon-lg"><i class="fa fa-calculator fa-2x" aria-hidden="true"></i> </button>
+                    <p class="vertical-middle p-10 text-center text-white">Dengan sistem kami,
+                        temukan penawaran pinjaman
+                        untuk solusi keuangan Anda
+                    </p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.col-lg-4 -->
+
+
+        <!-- /.col-lg-4 -->
+        <div class="col-lg-4 col-sm-4">
+          <div class="panel panel-inverse">
+            <div class="panel-heading text-center"> Data Keuangan
+              <div class="pull-right">
+              </div>
+            </div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+              <div class="panel-body">
+
+                <div class="user-bg">
+                  <div class="overlay-box">
+                    <div class="user-content">
+                    <button type="button" class="btn btn-danger btn-circle icon-lg"><i class="fa fa-archive fa-2x" aria-hidden="true"></i> </button>
+                    <p class="vertical-middle p-10 text-center text-white">Pilih solusi terbaik kami, Lengkapi data
+                    Solusi akan segera terwujud
+                    </p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.col-lg-4 -->
+        <!-- /.col-lg-4 -->
+        <div class="col-lg-4 col-sm-4">
+          <div class="panel panel-inverse">
+            <div class="panel-heading text-center"> Cashback
+              <div class="pull-right">
+              </div>
+            </div>
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+              <div class="panel-body">
+
+                <div class="user-bg">
+                  <div class="overlay-box">
+                    <div class="user-content">
+                    <button type="button" class="btn btn-danger btn-circle icon-lg"><i class="fa fa-money fa-2x" aria-hidden="true"></i> </button>
+
+                    <p class="vertical-middle p-10 text-center text-white">silahkan download Android App untuk mewujudkan impian Anda
+                    </p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.col-lg-4 -->
+      </div>
+      <!--/.row -->
+
+      <!-- .row -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+          <div class="panel panel-danger">
+            <div class="panel-heading text-center">
+            Ayo daftar sekarang dan solusi akan cepat terwujud
+            </div>
+            <div class="panel-wrapper collapse in">
+              <div class="panel-body">
+                <form class="form-material form-horizontal" method="GET">
+                <div class="row">
+                  <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                    <div class="form-group ">
+                      <label class="col-sm-12">Lacak Status Aplikasi</label>
+                      <div class="col-sm-12">
+                        <input id="lacak_paket" type="text" ng-model = "lacakAngJSField" class="form-control form-control-line" placeholder="no aplikasi anda ">
+                        <span class="help-block"><small>Silahkan masukan no aplikasi </small></span> </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                      <h5 class="m-t-50 text-center hidden-xs">Klik disini!</h5>
+                      <a href="{{ lacakAngJSField }}">
+                        <button class="btn btn-success btn-rounded waves-effect waves-light btn-block" type="button"><span class="btn-label"><i class="fa fa-paper-plane-o"></i></span>Lacak</button>
+                      </a>
+                  </div>
+                </div>
+
+
+                </form>
+              </div>
+            </div>
+          </div>
+         </div>
+      </div>
+      <!-- /.row -->
+
+      <!-- row -->
+      <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+          <div class="white-box">
+            <div class="row">
+
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <h3 class="box-title m-t-10"><i class="ti-book"></i> Julo Finance </h3>
+                  <hr>
+                  <ul class="list-icons">
+                    <li><a href="{% url 'about_us' %}"><h6><i class="ti-angle-right text-danger"></i> Tentang Perusahaan</h6></a></li>
+                    <li><h6><i class="ti-angle-right text-danger"></i> Syarat dan ketentuan</h6></li>
+                    <li><h6><i class="ti-angle-right text-danger"></i> FAQ</h6> </li>
+                    <li><h6><i class="ti-angle-right text-danger"></i> Kerahasiaan dan Kebijakan</h6>   </li>
+                    <li><h6><i class="ti-angle-right text-danger"></i> Daftar Barang Terlarang </h6></li>
+                  </ul>
+              </div>
+
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <h3 class="box-title m-t-10"><i class="ti-settings"></i> Hubungan </h3>
+                  <hr>
+                  <ul class="list-icons">
+                    <li><h6><i class="fa fa-chevron-right text-danger"></i> Hubungi Kami</h6> </li>
+                    <li><a href="#"><h6><i class="fa fa-chevron-right text-danger"></i> Daftar Menjadi mitra kami </h6></a></li>
+                    <li><a href="#"><h6><i class="fa fa-chevron-right text-danger"></i> Reset Password</h6></a> </li>
+                  </ul>
+              </div>
+
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <h3 class="box-title m-t-10"><i class="ti-light-bulb"></i> Tutorial <span class="label label-info m-l-5">Baru</span></h3>
+                <hr>
+                  <ul class="list-icons">
+                    <li><h6><i class="fa fa-chevron-right text-danger"></i> Pengajuan Aplikasi </h6></li>
+                    <li><a href="#lacak_paket"><h6><i class="fa fa-chevron-right text-danger"></i> Lacak Aplikasi</h6></a></li>
+                    <li><h6><i class="fa fa-chevron-right text-danger"></i> Bagaimana cara mendaftar</h6> </li>
+                  </ul>
+              </div>
+
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <h3 class="box-title m-t-10"><i class="ti-location-pin"></i> Alamat</h3>
+                <hr>
+                  <h6>
+                    <address>
+                    <strong>
+                    PT Julo Finance
+                    </strong> <br>
+                    Jl. Tebet Utara,  <br>
+                    ---s <br>
+                    Jakarta Selatan <br>
+                    <abbr title="Phone">Telp:</abbr>(021) xyz-12312
+                    </address>
+                    <address>
+                    <strong>Customer Service</strong> <br>
+                    <a href="mailto:#">cs@julofinance.com</a>
+                    </address>
+                  </h6>
+              </div>
+
+            </div>
+            <!-- ./row -->
+
+          </div>
+        </div>
+      </div>
+      <!-- ./row -->
+
+    </div>
+    <!-- /.container-fluid -->
+
+  </div>
+  <!-- /#page-wrapper -->
+
+{% endblock %}
+
+{% block script_additional %}
+
+	<!-- jQuery for carousel -->
+	<script src="{% static 'theme/plugins/bower_components/owl.carousel/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'theme/plugins/bower_components/owl.carousel/owl.custom.js' %}"></script>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+	jQuery(document).ready(function() {
+	    // Switchery
+        var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+        $('.js-switch').each(function() {
+            new Switchery($(this)[0], $(this).data());
+
+        });
+	    // For select 2
+
+	    $(".select2").select2();
+	    $('.selectpicker').selectpicker();
+
+	    $("input[name='berat_actual']").TouchSpin({
+	        min: 0,
+	        max: 1000,
+	        step: 1,
+	        decimals: 0,
+	        boostat: 5,
+	        maxboostedstep: 10,
+	        postfix: 'kg'
+    	});
+
+    	$("#id_welcome_dashboard a:first").addClass("active");
+    });
+{% endblock %}
+

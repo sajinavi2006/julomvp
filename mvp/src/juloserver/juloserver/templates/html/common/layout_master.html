@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" {% block html_angular %} {% endblock %}>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+{% load static from staticfiles %}
+
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/julo/favicon.ico' %}">
+    <title>{% block additional_title %}Julo Finance {% endblock %}</title>
+  
+    {% block meta %}{% endblock %}
+    
+    {% block master_css %}{% endblock %}
+      
+    {% block custom_css %}{% endblock %}
+    
+    {% block additional_css %}{% endblock %}
+      
+    {% block custom_link %}{% endblock %}
+    
+    {% block master_script %}{% endblock %}
+    
+    {% block script_head %}{% endblock %}
+  
+    <style type="text/css">
+      {% block css_inside %}{% endblock %}
+      {% block css_common %}{% endblock %}
+    </style>
+  </head>
+  
+  <body id="id_body" {% block body_class %}{% endblock %} {% block body_angular %} {% endblock %} >
+  
+    {% block data_hidden %}
+      <span id="julo_proj_url" class="hidden">{{ PROJECT_URL }}</span>
+    {% endblock %}
+    
+    {% block body %}{% endblock %}
+  
+    {% block custom_script %}{% endblock %}
+    
+    {% block script_additional %}{% endblock %}
+    
+    {% block script_bottom %}{% endblock %}
+    
+    {% block script_end %}{% endblock %}
+    
+  </body>
+
+</html>

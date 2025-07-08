@@ -1,0 +1,190 @@
+{% load unit %}
+<div id="preloader_name_bank_validation" class="preloader-name-bank-validation" style="display: none; text-align: center; margin-top: 25%">
+    <div class="cssload-speeding-wheel"></div>
+</div>
+<table class="table table-hover table-striped name-bank-validation-table" id="name_bank_vaidation_table">
+  <thead>
+    <tr>
+      <th colspan="2">
+        <strong style="margin-right: 5px">Bank Name Validation</strong>
+        {% if object.application_status.status_code == experiment.target_status and object.is_julo_one or object.application_status.status_code == experiment.target_status and object.is_julo_one_ios or object.application_status.status_code in julo_one_bank_name_status and object.is_julo_one or object.application_status.status_code in julo_one_bank_name_status and object.is_julo_one_ios or object.application_status.status_code == 190 and object.is_julo_one or object.application_status.status_code == 190 and object.is_julo_one_ios or object.application_status.status_code in julo_one_bank_name_status and is_grab or object.application_status.status_code == 190 and object.is_grab or object.application_status.status_code == 141 and object.is_julover or object.application_status.status_code == 144 and object.is_julo_one or object.application_status.status_code == 144 and object.is_julo_one_ios or object.status == 190 and object.is_jstarter %}
+          <button id="btn_reload_bank_validation_status"> <i class="fa fa-refresh"></i></button>
+          <button id="btn_validate_bank" style = "margin-right: 5px">Validate</button>
+          {% if object.is_grab %}
+            <button id="btn_validate_bank_grab" style = "margin-right: 5px">Validate Grab</button>
+          {% endif %}
+        {% endif %}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validation Status</b>
+        </div>
+        <div id="id_validation_status" class="col-xs-6">
+          <p><code id="id_julo_one_validation_status">{{ name_bank_validation.validation_status|default:"-"|safe }}</code></p>
+        </div>
+      </td>
+    </tr>
+    {% if object.is_grab %}
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Grab Validation Status</b>
+        </div>
+        <div id="id_validation_status_grab" class="col-xs-6">
+          <p><code id="validation_status_grab">-</code></p>
+        </div>
+      </td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Reason</b>
+        </div>
+        <div id="id_bank_validate_reason" class="col-xs-6">
+          <p><code>{{ name_bank_validation.reason|default:"-"|safe }}</code></p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Bank Name</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text"
+                   class="form-control"
+                   list="banks"
+                   name="banks"
+                   id="id_disbursement_bank_name"
+                   value="{{object.bank_name}}">
+              <datalist class="form_control" id="banks">
+                {% for bank in bank_list %}
+                  <option value="{{ bank }}">{{ bank }}</option>
+                {% endfor %}
+              </datalist>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>No. Rekening</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text"
+                   class="form-control"
+                   name="account_number"
+                   id="id_account_number"
+                   value="{{object.bank_account_number}}">
+          </div>
+        </div>
+          {% if is_suspect_va == True %}
+        <div class="col-xs-2 no-left">
+          <i class="fa fa-warning fa-fw text-danger" style="color: red" data-toggle="tooltip" data-placement="top" title="Suspicious bank account"></i>
+        </div>
+          {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Nama Sesuai Rekening Bank</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text"
+                   class="form-control"
+                   id="validation_name_in_bank_id"
+                   value='{{ object.name_in_bank }}'/>
+              {% if name_bank_validation.validated_name %}
+                <span class="input-group-addon" id="btn_bank_name_paste" onclick="paste_validated_name()"><i class="glyphicon glyphicon-paste"></i></span>
+                  <script>
+                      function paste_validated_name(){
+                          var validated_name = document.getElementById("id_validated_name").value;
+                          document.getElementById("validation_name_in_bank_id").value = validated_name;
+                      }
+                  </script>
+              {% endif %}
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validated Name</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text"
+                   class="form-control"
+                   id="id_validated_name"
+                   value='{{ name_bank_validation.validated_name }}'
+                   readonly="true"/>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validation Method</b>
+        </div>
+        <div class="col-xs-6">
+          {% if object.application_status_id == 181 or object.application_status_id == 170 or object.application_status_id == 180 or object.application_status_id == 165 or object.application_status_id == 190 %}
+            {{ name_bank_validation.method|default:"-"|safe}}
+            <select id="name_bank_validation_method_id" class="form-control hide">
+              <option selected value="{{name_bank_validation.method }}">
+                {{ name_bank_validation.method|default:"-"|safe}}
+              </option>
+            </select>
+          {% else %}
+            <div class="input-group input-group-sm">
+              <select id="name_bank_validation_method_id" class="form-control">
+                {% for validation_method in validation_method_list %}
+                  {% if validation_method == name_bank_validation.method %}
+                    <option selected value="{{name_bank_validation.method }}">
+                      {{ name_bank_validation.method|default:"-"|safe}}
+                    </option>
+                  {% else %}
+                    <option value="{{ validation_method }}">
+                      {{ validation_method|default:"-"|safe}}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validation ID</b>
+        </div>
+        <div id="id_validation_id" class="col-xs-6">
+          {{ name_bank_validation.validation_id|default:"-"|safe }}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Partner</b>
+        </div>
+        <div id="id_partner" class="col-xs-6">
+          {{ object.partner.name|default:"-"|safe }}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

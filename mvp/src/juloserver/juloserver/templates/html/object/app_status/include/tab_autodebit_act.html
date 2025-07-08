@@ -1,0 +1,365 @@
+{% load unit %}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<div id="preloader_name_bank_validation" style="display: none; text-align: center; margin-top: 25%">
+    <div class="cssload-speeding-wheel"></div>
+</div>
+<table class="table table-hover table-striped" id="name_bank_vaidation_table">
+  <tbody>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Bank</b>
+        </div>
+        <div id="id_validation_status" class="col-xs-6">
+            {% if object.bank_name == 'BANK CENTRAL ASIA, Tbk (BCA)' %}
+                <p>{{ object.bank_name|default:"-" }}</p>
+            {% else %}
+                <p>-</p>
+            {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Nomor Rekening</b>
+        </div>
+        <div id="id_bank_validate_reason" class="col-xs-6">
+            {% if object.bank_name == 'BANK CENTRAL ASIA, Tbk (BCA)' %}
+                <p>{{ object.bank_account_number|default:"-" }}</p>
+            {% else %}
+                <p>-</p>
+            {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Nama Rekening</b>
+        </div>
+        <div id="id_bank_validate_reason" class="col-xs-6">
+            {% if object.bank_name == 'BANK CENTRAL ASIA, Tbk (BCA)' %}
+                <p>{{ object.name_in_bank|default:"-" }}</p>
+            {% else %}
+                <p>-</p>
+            {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Eksperimen</b>
+        </div>
+        <div id="id_bank_validate_reason" class="col-xs-6" style="display: flex; justify-content: space-between; width: 65%;">
+            <p>{{ is_group_experiment|default:"-" }}</p>
+            {% if is_group_experiment == 'Ya' %}
+                <button type="button" class="btn" id="call_autodebit_change_deduction_day" style="background-color: #FC0D21 !important; color: #ffffff !important;">CHANGE DEDUCTION DAY</button>
+            {% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Siklus Hari Autodebet</b>
+        </div>
+        <div id="id_bank_validate_reason" class="col-xs-6">
+            <p>{{ deduction_cycle_day|default:"-" }}</p>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="autodebit_activation_modal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="top: 300px; height: 100% !important;">
+        <div class="modal-content" style="height: 70vh;width: 100%;">
+
+            <div class="modal-body confirm-modal" style="height: 100%; width:100%">
+                <iframe id="frameData" style="height:100%; width:100%"></iframe>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="autodebit_message_modal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="top: 300px !important;">
+        <div class="modal-content">
+
+            <div class="modal-body confirm-modal">
+                <span id="modal-message"></span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="autodebit_history_modal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="width: 1200px;">
+        <div class="modal-content" style="width: 100%;">
+
+            <div class="modal-body confirm-modal">
+                <table class="table table-hover table-striped" id="autodebit_history_table">
+                    <tr>
+                        <th>No</th>
+                        <th>Agent</th>
+                        <th>Agent ID</th>
+                        <th>Status</th>
+                        <th>Tanggal Registrasi</th>
+                        <th>Tanggal Aktivasi</th>
+                        <th>Tanggal Expired</th>
+                        <th>Tanggal Request Delete</th>
+                    </tr>
+                    {% for autodebet in autodebet_obj %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ autodebet.agent.username|default:"-" }}</td>
+                            <td>{{ autodebet.agent_id|default:"-" }}</td>
+                            <td> 
+                                {% if autodebet.is_use_autodebet == True %}
+                                    <span class="label label-rouded label-success pull-center small" id="is_use_autodebit_status">
+                                        Aktif
+                                    </span>
+                                {% else %}
+                                    <span class="label label-rouded label-danger pull-center small" id="is_use_autodebit_status">
+                                        Tidak Aktif
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>{{ autodebet.registration_ts|date:"d M Y H:i:s"|default:"-" }}</td>
+                            <td>{{ autodebet.activation_ts|date:"d M Y H:i:s"|default:"-" }}</td>
+                            <td>{{ autodebet.failed_ts|date:"d M Y H:i:s"|default:"-" }}</td>
+                            <td>{{ autodebet.deleted_request_ts|date:"d M Y H:i:s"|default:"-" }}</td>
+                        </tr>
+                    {% endfor %}
+                  </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom: 2%">
+    <button type="button" class="btn btn-success" id="call_autodebit_bca" style="background-color: #03A9F3 !important; color: #ffffff !important;">ACTIVATION</button>
+    <button type="button" class="btn" id="call_autodebit_history" style="background-color: #707070 !important; color: #ffffff !important;">HISTORY</button>
+    <button type="button" class="btn" id="call_autodebit_reset" style="background-color: #FC0D21 !important; color: #ffffff !important;">RESET</button>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="autodebit-note-modal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="top: 300px !important; display: flex;">
+        <div class="modal-content" style="width: 100%;">
+
+            <div class="modal-body confirm-modal">
+                <div class="col-xs-12">
+                    <form class="form-horizontal" id="status_form_autodebit" role="form" method="POST">
+                      {% csrf_token %}
+                      <div class="row">
+                        <div class="col-md-12 col-xs-12">
+                            <div class="row" id="id-form-simpan-note-autodebit" aria-expanded="false" style="height: 0px;">
+                              <div class="row m-t-10">
+                                <div class="col-md-12 col-sm-12 form-group m-r-10" style="margin-left: 0;">
+                                  {{ form.autodebit_notes }}
+                                </div>
+                              </div>
+              
+                              <div class="row m-t-10">
+                                  <div class="form-group col-md-12 col-sm-4 col-xs-6" style="margin-left: 0;">
+                                    <button id="id-submit-simpan-note-autodebit" class="btn btn-info btn-block text-uppercase waves-effect waves-light" name="simpan_note" type="submit">Selesai</button>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="responsive-modal-reset-autodebit-account" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-danger">
+                <h4 class="modal-title">Reset Autodebet Account</h4> </div>
+            <div class="modal-body">
+              Autodebet account {{ app_obj.id|safe }} akan di reset, apakah anda yakin?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-success waves-effect" data-dismiss="modal" id="reset_autodebit_button">Ya, reset autodebet account</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="responsive-modal-change-deduction-cyle-day" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-danger">
+                <h4 class="modal-title">Ubah tanggal jatuh tempo</h4> </div>
+            <div class="modal-body">
+              Apakah Anda yakin mengubah tanggal pendebetan customer sesuai dengan tanggal jatuh tempo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-success waves-effect" data-dismiss="modal" id="autodebit_change_deduction_day">Ya, ganti tanggal jatuh tempo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="application/javascript">
+    function get_webview_url() {
+        var csrftoken = getCookie('csrftoken');
+        var ret_val;
+        $.ajax({
+            url :  "{%url 'app_status:ajax_get_autodebit_bca_webview' %}/",
+            type : "POST",
+            async: false,
+            data : {
+                    account_id : {{object.account_id|default:'null'}},
+                    application_xid: {{object.application_xid}},
+                    customer_id: {{object.customer_id}}
+            },
+            // handle a successful response
+            success : function(json) {
+                ret_val = json
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        return ret_val;
+    }
+
+    function change_autodebit_deduction_day() {
+        var ret_val;
+        $.ajax({
+            url :  "{%url 'app_status:ajax_change_autodebit_deduction_day' %}/",
+            type : "POST",
+            async: false,
+            data : {
+                    account_id : '{{object.account_id}}' === 'None' ? null : {{ object.account_id }},
+                    customer_id: {{object.customer_id}}
+            },
+            // handle a successful response
+            success : function(json) {
+                ret_val = json
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        return ret_val;
+    }
+
+    function reset_autodebit_account(){
+        var csrftoken = getCookie('csrftoken');
+        var ret_val;
+        $.ajax({
+            url :  "{%url 'app_status:ajax_reset_autodebit_account' %}/",
+            type : "POST",
+            async: false,
+            data : {
+                    account_id : '{{object.account_id}}',
+                    application_xid: '{{object.application_xid}}',
+                    customer_id: '{{object.customer_id}}'
+            },
+            // handle a successful response
+            success : function(json) {
+                ret_val = json
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+        return ret_val;
+    }
+
+    $("#call_autodebit_bca").click(function(){
+        let data = get_webview_url()
+
+        if(data.status == 'failed'){
+            $('#autodebit_message_modal').modal('show');
+            $('#modal-message').text(data.message)
+        } else {
+            $("#autodebit_activation_modal").modal("show");
+            $("#frameData").attr("src", data.webview_url)
+        }
+    })
+
+    $('#call_autodebit_history').click(function(){
+        $('#autodebit_history_modal').modal('show');
+    })
+
+    function formValidationNoteModal(oEvent) {
+      if(document.getElementById("id_autodebit_notes").value.length > 0 )
+      {
+        document.getElementById("id-submit-simpan-note-autodebit").disabled = false;
+        $("#id-submit-simpan-note-autodebit").removeClass("btn-default");
+        $("#id-submit-simpan-note-autodebit").addClass("btn-info");
+      }else {
+        document.getElementById("id-submit-simpan-note-autodebit").disabled = true;
+        $("#id-submit-simpan-note-autodebit").addClass("btn-default");
+        $("#id-submit-simpan-note-autodebit").removeClass("btn-info");
+      }
+    }
+
+    $("#call_autodebit_reset").click(function(){
+        $('#responsive-modal-reset-autodebit-account').modal('show');
+    })
+
+    $("#call_autodebit_change_deduction_day").click(function(){
+        $('#responsive-modal-change-deduction-cyle-day').modal('show');
+    })
+
+    $("#reset_autodebit_button").click(function(){
+        let data = reset_autodebit_account()
+        if(data.status == 'failed'){
+            $('#autodebit_message_modal').modal('show');
+            $('#modal-message').text(data.message)
+        }
+    })
+
+    $("#autodebit_change_deduction_day").click(function(){
+        let data = change_autodebit_deduction_day()
+        if(data.status == 'failed'){
+            $('#autodebit_message_modal').modal('show');
+            $('#modal-message').text(data.message)
+        }
+        location.reload()
+    })
+
+    $(document).ready(function () {
+        // $('#id_autodebit_notes').keyup(function (event) {
+        //     formValidationNoteModal(event);
+        // })
+        window.addEventListener("message", receiveMessage, false)
+        })
+
+    function receiveMessage(event) {
+        try {
+            if (event.data === 'Success') {
+                $("#autodebit_activation_modal").modal("hide");
+                $("#autodebit-note-modal").modal("show");
+            }
+            else {
+                console.log(event);
+            }
+            } catch (e) {
+                console.log(e);
+        }
+    }
+</script>

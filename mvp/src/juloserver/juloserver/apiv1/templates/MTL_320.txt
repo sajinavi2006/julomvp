@@ -1,0 +1,4 @@
+Pembayaran Angsuran ke-{{payment_seq}} Anda terlambat!<br>
+Transfer sekarang juga {{due_amount}} ke {{julo_bank_name}}, nomor rekening {{julo_bank_account_number}}. Biaya keterlambatan akan muncul jika pembayaran tidak dilakukan hari ini.<br>
+<br>
+Jika Anda telah melakukan pembayaran, informasi akan ter-update dalam 1 hari kerja. Kunjungi halaman <a href="http://www.julofinance.com/android/goto/loan_activity">Aktivitas Pinjaman</a> untuk mengunggah kwitansi / bukti transfer, atau untuk melihat jadwal angsuran.

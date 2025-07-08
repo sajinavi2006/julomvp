@@ -1,0 +1,157 @@
+{% load unit utils %}
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Offer ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.id|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Offer No
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.offer_number|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Loan Amount Offer
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.loan_amount_offer|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Loan Duration Offer
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.loan_duration_offer|default:"-"|safe}}</strong> {{ object.application.determine_kind_of_installment }}
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Installment Amount Offer
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.installment_amount_offer|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+    <tr>
+    <td colspan="2">
+      <hr>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Special First Payment Date Offer
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.special_first_payment_date|date:"d-m-Y"}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      First Payment Date Offer
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.first_payment_date|date:"d-m-Y"}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      First Installment Amount Offer
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.first_installment_amount|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <hr>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      is Accepted
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.is_accepted|yesno:"Ya, Tidak"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Offer Accepted TS
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.offer_accepted_ts|date:"d M Y H:i:s"|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Offer EXP Date
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.offer_exp_date|date:"d M Y"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <hr>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Interest Rate Monthly
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.interest_rate_monthly|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Loan Amount Received
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.loan_amount_received|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td class='m-r-10'>
+      Cashback Total
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.cashback_total_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td class='m-r-10'>
+      Cashbak Potential
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.cashback_potential|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+
+</table>

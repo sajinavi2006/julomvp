@@ -1,0 +1,71 @@
+{% load unit %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h4>SURAT PERJANJIAN HUTANG PIUTANG</h4>
+        <p>Pada hari ini, {{ now|date:"d M Y" }}, saya yang bertanda tangan di bawah ini:</p>
+        <table>
+            <tbody>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;width: 100px;">Nama</th>
+                <td>:&nbsp;{{ object.fullname }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir</th>
+                <td>:&nbsp;{{ object.dob|date:"d M Y" }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP</th>
+                <td>:&nbsp;{{ object.ktp }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon</th>
+                <td>:&nbsp;+62 {{ object.mobile_phone_1 }} </td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat</th>
+                <td>:&nbsp;
+                        {{ object.address_street_num }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kecamatan }} -
+                        {{ object.address_kelurahan }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kabupaten }} -
+                        {{ object.address_provinsi }}  <br/>&nbsp;&nbsp;
+                        {{ object.address_kodepos }} 
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p>Menyatakan bahwa saya menyetujui dengan pihak JULO atas ketentuan-ketentuan perjanjian sebagai berikut:</p>
+        <table>
+            <tbody>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">1.</td>
+                <td>Bahwa saya mengajukan permohonan pinjaman sebesar <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b> kepada pihak JULO.</td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">2.</td>
+                <td>Bahwa pihak JULO telah menyetujui peminjaman uang tunai sebesar <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b> kepada saya.</td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">3.</td>
+                <td>Bahwa saya berjanji untuk melunasi pinjaman dengan melakukan pembayaran kepada pihak JULO sebesar <b>{{ object.loan.installment_amount|f_rupiahs:"no" }}</b>  setiap bulan pada tanggal <b><i>{{ object.loan.cycle_day }}</i></b>, selama {{ object.loan.loan_duration }}  bulan, dari tanggal <b><i>{{ object.loan.payment_set.first.due_date|date:"d M Y" }}</i></b> sampai dengan <b><i>{{ object.loan.payment_set.last.due_date|date:"d M Y" }}</i></b>.</td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">4.</td>
+                <td>Bahwa saya akan melakukan pembayaran setiap bulan selambat-lambatnya pada tanggal <b>{{ object.loan.cycle_day }}</b>. Keterlambatan melebihi 5 hari akan dikenakan biaya sebesar <b>{{ object.loan.late_fee_amount|f_rupiahs:"no" }}</b> per bulan, untuk setiap angsuran yang terlambat.</td>
+            </tr>
+            </tbody>
+        </table>
+        </br>
+        <p>Pembayaran setiap bulan akan dilakukan ke rekening Virtual Account dengan detail sebagai berikut:</p>
+        <table>
+            <tbody>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama bank</th>
+                <td>: {{ object.loan.julo_bank_name }} </td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; padding-right: 20px; vertical-align: top; white-space: nowrap;">Nomor rekening</th>
+                <td>: {{ object.loan.julo_bank_account_number }} </td>
+            </tr>
+            </tbody>
+        </table>
+        </br>
+        <p>Surat perjanjian ini adalah sah dan mengikat sesuai dengan aturan KUH Perdata, dan saya menandatangani secara sadar dan tanpa paksaan dari pihak manapun.</p>
+    </div>
+
+</div>
+

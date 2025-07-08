@@ -1,0 +1,1 @@
+Nasabah yth,angs {{payment_number}} Anda {{due_amount}} jatuh tempo {{due_date}}. Mhn byr tepat waktu agar tidak denda ke {{bank_name}} a/n JULO no VA {{account_number}}. WA CS 082211127334

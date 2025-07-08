@@ -1,0 +1,2 @@
+account_id,email,principal_waiver,interest_waiver,late_fee_waiver,offer,expired_at
+1463,test@gmail.com,0.5,100,100,R4,2100-08-01

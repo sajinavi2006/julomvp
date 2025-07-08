@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/custom.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/regular.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/all.css">
+    <style type="text/css">
+        div#preloader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 999;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        {#background: #333 url('/assets/images/loading.gif') no-repeat center center;#}
+
+        }
+
+        .payment-detail2 {
+            margin: auto;
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .small-text {
+            margin-top: 2px;
+            font-size: 14px;
+            color: #5e5e5e;
+        }
+
+        .no-space {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .less-space {
+            padding-left: 5px;
+            padding-right: 0px;
+        }
+
+        .header h4 {
+            display: none;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .header {
+                display: block;
+            }
+
+            .header h2 {
+                display: none;
+            }
+
+            .header h4 {
+                width: calc(100% - 85px);
+                display: inline-block;
+                font-size: 10px;
+                color: white;
+            }
+
+            .jumbotron .logo {
+                width: 85px;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .payment-value {
+                font-size: 13px;
+            }
+
+            .small-text {
+                font-size: 10px;
+            }
+
+            .payment-detail2 {
+                padding: 10px 5px;
+            }
+
+            .prologue-text {
+                font-size: 15px !important;
+            }
+
+            .prologue-note {
+                font-size: 12px !important;
+            }
+
+
+        }
+
+
+    </style>
+
+    <title>julo</title>
+</head>
+
+<body>
+
+<div class="jumbotron">
+    <div class="logo"><img src="https://julo.co.id/assets/img/logo-primary.png"/></div>
+    <div class="container header">
+        <h2 style="text-align: right; margin-bottom:-45px;">{{ fullname }}</h2>
+        <h4 style="text-align: right; margin-bottom: -20px;">{{ fullname }}</h4>
+        <h2 style="text-align: right">{{ email }}</h2>
+        <h4 style="text-align: right">{{ email }}</h4>
+    </div>
+</div>
+<div id="summary_content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="prologue-text"><strong>Halo. {{ fullname_with_title }}</strong></p>
+                <div style="background-color: #F3FCFF">
+                    <p class="prologue-note" style="color: #08ACF0; text-align: center; border-top: solid #08ACF0">
+                        Terima kasih atas kepercayaan Anda untuk memilih
+                        <br>
+                        JULO sebagai solusi keuangan Anda.</p>
+                </div>
+                <p class="prologue-text">
+                    <strong>Agar dapat membantu Anda secara tepat mohon lengkapi info dibawah ini:</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="billing-container">
+            <div class="container">
+                <div class="row">
+                    <form id="form-submit" method="post" action="{{ url }}">
+                        {% csrf_token %}
+                        <!-- <div class="form-group">
+                            <label for="mobile-phone-1">Nomor HP yang dapat dihubungi</label>
+                            <input name="mobile_phone_1" type="tel" pattern="^(^\+62\s?|^62\s?|^0)(\d{3,4}-?){2}\d{3,4}$" class="form-control" id="mobile-phone-1"
+                                   placeholder="Contoh: 081234567896" required oninvalid="this.setCustomValidity('Nomor Handphone wajib diisi dengan format seperti contoh')"
+    oninput="this.setCustomValidity('')">
+                        </div> -->
+                        <!-- <div class="form-group">
+                            <label for="mobile-phone-2">Nomor HP pribadi lainnya yang dapat dihubungi: <span>(tidak wajib)</span></label>
+
+                            <input name="mobile_phone_2" type="text" class="form-control" id="mobile-phone-2"
+                                   placeholder="Contoh: 081234567896">
+                        </div> -->
+                        <div class="form-group">
+                            <label for="reason">Status pekerjaan saat ini :</label>
+                            <select name="main_reason" class="form-control" id="reason" required oninvalid="this.setCustomValidity('Status pekerjaan wajib diisi')"
+    oninput="this.setCustomValidity('')">
+                                <option disabled selected value><small>Pilih status pekerjaan saat ini</small></option>
+                                {% for main_reason in main_reasons %}
+                                    <option value="{{ main_reason.id }}">{{ main_reason.reason }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="montly-income">Pendapatan bulanan saat ini :</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" style="background-color: white">Rp</div>
+                                </div>
+                                <input name="new_income" type="text" class="form-control number-separator" id="montly-income"
+                                       required oninvalid="this.setCustomValidity('Pendapatan bulanan wajib diisi')"
+    oninput="this.setCustomValidity('')">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="montly-expense">Pengeluaran bulanan saat ini :</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" style="background-color: white">Rp</div>
+                                </div>
+                                <input name="new_expense" type="text" class="form-control number-separator" id="montly-expense" oninput="this.setCustomValidity('')">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            Dengan menekan tombol "Kirim", Anda telah menyatakan bahwa data yang diberikan di atas adalah benar dan Anda berminat untuk mengikuti program keringanan pinjaman JULO.
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; background-color: #08ACF0">
+                            Kirim
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="billing-container">
+            <h3>Rincian Tagihan</h3>
+            <div class="row mb-3">
+                <div class="col-6 themed-grid-col">
+                    <div class="billDetails">
+                        <label>Nama :</label>
+                        <p><span class="fullname"></span></p>
+                    </div>
+                </div>
+                <div class="col-6 themed-grid-col">
+                    <div class="billDetails">
+                        <label>Tanggal Jatuh Tempo :</label>
+                        <p><span class="due_date"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12 themed-grid-col">
+                    <div class="billDetails">
+                        <label>Deskripsi :</label>
+                        <p class="Desc"></p>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12 themed-grid-col">
+                    <div class="billDetails">
+                        <p>Total</p>
+                        <p class="due_amount"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+        <div class="container">
+        </div>
+    </div>
+
+    <div class="footer-top">
+        <div class="logo-footer">
+            <img src="https://julo.co.id/assets/img/julo-primary-logo-blue.png"/>
+        </div>
+        <div class="copyright">
+            <p>
+                © Copyright 2021 PT JULO Teknologi Finansial - All Rights Reserved
+            </p>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-area">
+
+            <div class="footer-conent">
+                <p>PT. JULO TEKNOLOGI FINANSIAL merupakan perusahaan penyedia layanan pinjaman online yang terdaftar dan
+                    berada dalam pengawasan oleh Otoritas Jasa Keuangan (OJK) dengan nomor registrasi S-589/NB.213/2018
+                    sesuai dengan Hukum Republik Indonesia dan Peraturan Otoritas Jasa Keuangan nomor 77/POJK.01/2016.
+                    Oleh karena itu,
+                    PT JULO TEKNOLOGI FINANSIAL berkomitmen untuk menjunjung tinggi integritas dan melaksanakan
+                    perlindungan konsumen sesuai dengan hukum yang berlaku.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% load static from staticfiles %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'default/js/easy-number-separator.js' %}"></script>
+    <script type="application/javascript">
+        $("form#form-submit").submit(function (e) {
+            montly_expense = document.getElementById("montly-expense");
+            if ($("input#montly-expense").val() == "") {
+                montly_expense.setCustomValidity("Pengeluaran Bulanan wajib diisi");
+                montly_expense.reportValidity();
+                return false;
+            }
+
+            income_val = parseInt($("input#montly-income").val().replace(/,/g, ""));
+            expense_val = parseInt($("input#montly-expense").val().replace(/,/g, ""));
+            if (expense_val >= income_val) {
+                montly_expense.setCustomValidity("Pengeluaran Bulanan harus lebih kecil dari Pendapatan Bulanan");
+                montly_expense.reportValidity();
+                return false;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

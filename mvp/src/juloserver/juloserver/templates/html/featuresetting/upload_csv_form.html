@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+{% load static from staticfiles %}
+{% block content %}
+    {% if data_table %}
+    <h2>CSV Format</h2>
+    <table style="border: 1px solid black;">
+        <tr>
+            {% for property in data_table.property %}
+                <td style="border: 1px solid black;"><b>{{ property }}</b></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for data in data_table.data %}
+                <td style="border: 1px solid black;">{{ data|linebreaksbr }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <br />
+    {% endif %}
+
+    {% if last_successful_whitelist %}
+        Last Successful Whitelist Upload at: <b><i>{{last_successful_whitelist|date:"M. d, Y H:i:s"|default:"-"|safe }}</i></b>
+    {% endif %}
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+            <button type="submit">Upload CSV</button>
+    </form>
+{% endblock %}

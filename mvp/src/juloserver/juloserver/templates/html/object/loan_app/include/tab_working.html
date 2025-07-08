@@ -1,0 +1,101 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Tipe Pekerjaan</strong> <br>
+    <p class="text-muted">{{ object.job_type|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Diskripsi Pekerjaan</strong> <br>
+    <p class="text-muted">{{ object.job_description|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Nama Perusahaan</strong> <br>
+    <p class="text-muted">{{ object.company_name|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>No. Telp Perush.</strong> <br>
+    <p class="text-muted">{{ object.company_phone_number|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Tgl. Mulai Bekerja</strong> <br>
+    <p class="text-muted">{{ object.job_start|date:"d M Y"|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Pendapatan per Bulan</strong> <br>
+    <p class="text-muted">{{ object.monthly_income|f_rupiahs:"no"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Nama Perusahaan</strong> <br>
+    <p class="text-muted">{{ object.company_name|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Pendapatan 1,2,3</strong> <br>
+    <p class="text-muted">
+      {{ object.income_1|f_rupiahs:"no"|safe}}, 
+      {{ object.income_2|f_rupiahs:"no"|safe}}, 
+      {{ object.income_3|f_rupiahs:"no"|safe}}
+    </p>
+    </p>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Pend. Terakhir</strong> <br>
+    <p class="text-muted">{{ object.last_education|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Tahun Lulus</strong> <br>
+    <p class="text-muted">{{ object.graduation_year|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>GPA</strong> <br>
+    <p class="text-muted">{{ object.gpa|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r">
+    <strong>Kendaraan</strong> <br>
+    <p class="text-muted">
+      {{ object.vehicle_type_1|default:"-"|safe}}, 
+      {{ object.vehicle_ownership_1|default:"-"|safe}}
+    </p>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 b-r">
+    <strong>Pendapatan Lain</strong> <br>
+    <p class="text-muted">{{ object.has_other_income|yesno:"Ya, Tidak"|safe}}</p>
+  </div>
+  <div class="col-md-4 col-xs-6 b-r">
+    <strong>Besar Pendapatn Lain</strong> <br>
+    <p class="text-muted">{{ object.other_income_amount|f_rupiahs:"no"|safe}}</p>
+  </div>
+  <div class="col-md-4 col-xs-6 b-r">
+    <strong>Sumber Pendapatan Lain</strong> <br>
+    <p class="text-muted">{{ object.other_income_source|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 b-r">
+    <strong>Biaya Sewa Rumah Bulanan</strong> <br>
+    <p class="text-muted">{{ object.monthly_housing_cost|f_rupiahs:"no"|safe}}</p>
+  </div>
+  <div class="col-md-4 col-xs-6 b-r">
+    <strong>Pengeluaran Rutin Bulanan</strong> <br>
+    <p class="text-muted">{{ object.monthly_expenses|f_rupiahs:"no"|safe}}</p>
+  </div>
+  <div class="col-md-4 col-xs-6 b-r">
+    <strong>Total Tagihan Hutang</strong> <br>
+    <p class="text-muted">{{ object.total_current_debt|f_rupiahs:"no"|safe}}</p>
+  </div>
+</div>
+<hr>

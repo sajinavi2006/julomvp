@@ -1,0 +1,99 @@
+{% load unit utils i18n %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-4 m-b-20">
+            <b style="font-size: 120%">Limit is Generated</b>
+        </div>
+        <table>
+            <tbody>
+            <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;width: 150px;">Limit yang disetujui&nbsp;</td>
+                <td>:&nbsp;&nbsp;<strong>{{ limit_info.account_limit|f_rupiahs:"no"|safe }}</strong></td>
+            </tr>
+            <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Bunga per bulan&nbsp;</td>
+                <td>:&nbsp;&nbsp;<strong>{{ limit_info.self_interest }}</strong> sampai <strong>{{ limit_info.other_interest }}</strong> tergantung transaksi</td>
+            </tr>
+            <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tujuan Transaksi pertama&nbsp;</td>
+                <td>:&nbsp;&nbsp;<strong>{{ object.loan_purpose }}</strong></td>
+            </tr>
+            <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Uraian Tujuan transaksi&nbsp;</td>
+                <td>:&nbsp;&nbsp;<strong>{{ object.loan_purpose_desc }}</strong></td>
+            </tr>
+            <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tanggal Bayar Cicilan&nbsp;</td>
+                <td>:&nbsp;&nbsp;<strong>{{ limit_info.cycle_day }}</strong> setiap bulannya</td>
+            </tr>
+            <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Bank Customer&nbsp;</td>
+                <td>:&nbsp;&nbsp;<strong>{{ object.bank_name }}</strong></td>
+            </tr>
+            <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No rek. Customer&nbsp;</td>
+                <td>:&nbsp;&nbsp;<strong>{{ object.bank_account_number }}</strong></td>
+            </tr>
+            {% language 'id' %}
+                <tr><td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. Lahir&nbsp;</td>
+                    <td>:&nbsp;&nbsp;<strong>{{ object.dob|date:"d F Y" }}</strong></td>
+                </tr>
+            {% endlanguage %}
+            </tbody>
+        </table>
+
+        </br>
+        <p>Selamat {{ object.fullname_with_title }},</p>
+        <table>
+            <tbody>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">1.</td>
+                  <td style="padding-bottom: 15px;">Atas rekomendasi <strong>sistem</strong>, Kredit Limit JULO yang disetujui sebesar <strong>{{ limit_info.account_limit|f_rupiahs:"no"|safe }}</strong> dan akan aktif dalam beberapa menit dan akan ada notifikasi lebih lanjut di aplikasi JULO serta disarankan untuk menggunakan seluruh limit yg diberikan.
+                  </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">2.</td>
+                {% if not limit_info.is_entry_level %}
+                    <td>
+                        Bapak/Ibu bisa klik Tarik Dana di aplikasi untuk pencairan pinjaman tunai. Biasanya langsung cair dalam 1 jam, atau paling lambat dalam 24 jam.
+                    </td>
+                {% else %}
+                    <td>
+                        Bapak/Ibu bisa gunakan untuk transaksi di aplikasi. Biasanya langsung cair dalam 1 jam, atau paling lambat dalam 24 jam.
+                    </td>
+                {% endif %}
+            </tr>
+            {% if not limit_info.concurrency %}
+              <tr>
+                <td style="text-align: left; vertical-align: top;"></td>
+                <td>Kemudian di transaksi awal JULO, <strong>{{ object.gender|bapak_or_ibu_lower|safe }}</strong> hanya bisa memiliki 1 pinjaman aktif ya. Jika sudah melakukan pembayaran tepat waktu beberapa kali, nantinya memungkinkan beberapa pinjaman sekaligus sampai batas limit kredit (Jika ada sisa limit yg belum digunakan)</td>
+              </tr>
+            {% endif %}
+            <tr>
+              <td style="text-align: left; vertical-align: top;"></td>
+              <td style="padding-bottom: 15px;">Bunga di tiap transaksi ada di kisaran <strong>{{ limit_info.self_interest }}</strong> sampai <strong>{{ limit_info.other_interest }}</strong></td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">3.</td>
+                <td>Utk pembayaran cicilan transaksi pastikan sebelum jatuh tempo, di tanggal <strong>{{ limit_info.cycle_day }}</strong> setiap bulannya untuk menghindari denda keterlambatan.</td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">4.</td>
+                <td>Lebih baik lagi jika Bapak/Ibu membayar sebelum tgl jatuh tempo supaya bisa mendapat cashback saat pelunasan dan kenaikan limit di kemudian hari</td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">5.</td>
+                <td>Bila tidak ada transaksi maka tidak ada biaya yang harus dibayar. Tapi usahakan rutin untuk digunakan dan bayar tepat waktu agar limit dan fitur bisa bertambah.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        </br>
+        <table>
+            <tbody>
+            <tr>
+                <td style="padding-bottom: 15px;">
+                    Kemudian yang terakhir untuk diperhatikan, setiap transaksi Memiliki SPHP sah sesuai Hukum Perdata akan tertera via Aplikasi JULO.
+                </td>
+            </tr>
+            <tr>
+                <td>Selamat bergabung bersama JULO. Semoga kita bisa bekerjasama dengan baik, <strong>{{ object.gender|bapak_or_ibu_lower|safe }}</strong>. Selamat siang dan selamat beraktivitas kembali, jangan lupa berikan rating 5 bintang di google playstore JULO. Terima kasih.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

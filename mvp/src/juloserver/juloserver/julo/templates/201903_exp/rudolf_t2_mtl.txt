@@ -1,0 +1,1 @@
+{{name}}, sy Rudolf dr JULO. Hari ini hari terakhir utk dpt Ekstra Cashback {{cashback_multiplier}}x dari normal cashback {{ payment_cashback_amount }} dgn membayar hari ini {{due_date_minus_2}}, Angsuran {{ payment_number }} Anda {{ due_amount }} jatuh tempo {{ due_date }}. Cara bayar: {{url}} dan cek aplikasi anda.

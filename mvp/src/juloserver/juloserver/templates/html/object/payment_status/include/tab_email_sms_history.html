@@ -1,0 +1,105 @@
+{% load default unit %}
+<table class="table">
+        <thead>
+          <tr>
+
+            <th width="15%">Waktu/Status</th>
+
+            <th width="70%">Content</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%  for his_email_sms in email_sms_list %}
+            {%if his_email_sms.type_data == 'Email' %}
+               <tr class="warning">
+
+                <td>
+                  <label class="label label-warning">
+                    {{ his_email_sms.cdate|date:"d M Y H:i:s" }}
+                  </label><br/>
+                   <label class="label label-danger">
+                    {{ his_email_sms.type_data }}
+                  </label><br/>
+                    To :<br/>
+                    {% for value in his_email_sms.to_email|email_fil1 %}
+                    <label class="label label-warning">
+                      {{value}}
+                    </label><br/>
+                    {% endfor %}
+                    Cc :<br/>
+                    {% for value in his_email_sms.cc_email|email_fil1 %}
+                    <label class="label label-warning">
+                      {{value}}
+                    </label><br/>
+                    {% empty %}
+                    -- No Cc --
+                    {% endfor %}
+                  <label class="label label-danger">
+                    {{ his_email_sms.status }}
+                  </label><br/>
+                </td>
+
+                <td>
+                  <strong>Kategori:</strong><br/>
+                  {{ his_email_sms.category }}<br/><br/>
+                  <strong>Subject:</strong>&nbsp;{{ his_email_sms.subject|default:'-'|safe }}<br/><br/>
+
+                  <strong>Pesan:</strong>
+                  <button type="button" class="btn btn-success previewshow" id="btnPreview" content-id="{{ forloop.counter }}" data-target="#content-preview">Preview</button>
+                  <textarea  class="hide"  id="email_content_{{ forloop.counter }}" readonly>{{ his_email_sms.message_content }}</textarea>
+
+                </td>
+              </tr>
+            {% else %}
+              <tr class="warning">
+
+                <td>
+                  <label class="label label-success">
+                    {{ his_email_sms.cdate|date:"d M Y H:i:s" }}
+                  </label><br/>
+                  <label class="label label-purple">
+                    {{ his_email_sms.type_data }}
+                  </label><br/>
+                  <label class="label label-success">
+                    {{ his_email_sms.to_mobile_phone }}
+                  </label><br/>
+                  <label class="label label-purple">
+                    {{ his_email_sms.phone_number_type }}
+                  </label><br/>
+                  <label class="label label-success">
+                    {{ his_email_sms.status }}
+                  </label><br/>
+                </td>
+                <td>
+                  <strong>Kategori:</strong><br/>
+                  {{ his_email_sms.category }}<br/><br/>
+                 <strong>Pesan:</strong>
+                  {{ his_email_sms.message_content|default:'-'|linebreaks }}
+                </td>
+              </tr>
+            {% endif %}
+          {% empty %}
+            <tr>
+              <td colspan="2">
+                <span> Tidak ada Data </span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <!--########################### modal content preview ###############################################-->
+<div id="content-preview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content modal-preview">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Content HTML Preview</h4>
+            </div>
+            <div class="modal-body modal-custom-body" style="overflow:scroll;">
+                <div class="row" id="preview_div">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--########################### modal content preview ###############################################-->

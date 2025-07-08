@@ -1,0 +1,369 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        #outlook a {
+            padding: 0
+        }
+
+        .ReadMsgBody {
+            width: 100%
+        }
+
+        .ExternalClass {
+            width: 100%
+        }
+
+        .ExternalClass * {
+            line-height: 100%
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%
+        }
+
+        table, td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic
+        }
+
+        p {
+            display: block;
+            margin: 13px 0
+        }
+
+        .td_pad4 {
+            padding-left: 4%
+        }
+
+        .responsive {
+            width: 5%
+        }
+
+        .btn-bayar {
+            width: 25%;
+            padding-top: 10px
+        }
+
+        .calendar {
+            width: 2%
+        }
+
+        @media only screen and (max-width: 600px) {
+            .responsive {
+                width: 15%
+            }
+
+            .btn-bayar {
+                width: 50%;
+                padding-top: 10px
+            }
+
+            .calendar {
+                width: 7%
+            }
+        }
+
+        #julo-website a {
+            color: white;
+            text-decoration: none
+        }
+
+        .btn-circle-bayar {
+            background-color: #14627B;
+            border: none;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            border-radius: 8px;
+            width: 25%;
+        }
+
+        .banner {
+            width: 100%;
+            height: auto;
+            background-image: url("http://127.0.0.1:8000/static/images/email/test.png");
+            background-position: center center;
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+    </style>
+    <style type="text/css">
+        @media only screen and (max-width: 480px) {
+            @-ms-viewport {
+                width: 320px
+            }@viewport {
+            width: 320px
+        }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        @import url(https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700);
+    </style>
+    <style type="text/css">
+        @media only screen and (min-width: 480px) {
+            .mj-column-per-100 {
+                width: 100% !important
+            }
+
+            .mj-column-px-50 {
+                width: 50px !important
+            }
+        }
+    </style>
+</head>
+
+<body style="background: #E1E8ED;">
+<div class="mj-container">
+    <table width="100%">
+        <tr>
+            <td>
+                <img src="{{ early_payback_event }}" style="width:100%">
+            </td>
+        </tr>
+    </table>
+    <div style="margin:0px auto;max-width:100%;background:white;">
+        <table role="presentation" cellpadding="0" cellspacing="0" style="font-size:0px;width:100%;background:white;"
+               align="center" border="0">
+            <tbody>
+            <tr>
+                <td style="text-align:center;vertical-align:top;direction:ltr;font-size:0px;padding:20px 0px;">
+                    <div class="mj-column-per-100 outlook-group-fix"
+                         style="vertical-align:top;display:inline-block;direction:ltr;font-size:13px;text-align:left;width:100%;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+                            <tbody>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Halo {{ fullname_with_title }},<br/><br>
+                                        Ada kabar baik khusus untuk Anda! JULO menawarkan promo diskon pembayaran bunga
+                                        sebesar 30% yang dapat Anda nikmati mulai dari
+                                        {{ start_promo }} hingga {{ end_promo }}
+
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Dengan promo yang kami tawarkan, Anda akan mendapatkan diskon sebesar 30% dari
+                                        total biaya bunga - senilai {{ total_interest_discount }} - apabila Anda
+                                        melunasi lebih awal seluruh cicilan Anda paling lambat tanggal {{ end_promo }}!
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Selama periode promo, kami juga akan menghapus denda keterlambatan pembayaran
+                                        cicilan Anda (jika ada).
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Berikut adalah detil cicilan yang masih harus Anda bayarkan:
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;padding:10px 25px;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;"
+                                    align="left">
+                                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="1">
+                                        <thead>
+                                        <tr>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 5%;">
+                                                Angsuran<br/>
+                                                Ke-
+                                            </td>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 10%;">
+                                                Nilai
+                                                Angsuran
+                                            </td>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 10%;">Due
+                                                Date
+                                            </td>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 10%;">
+                                                Keterlambatan<br/>Hari Ke-
+                                            </td>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 10%;">
+                                                Terbayar<br/>(Ya/Tidak)
+                                            </td>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 10%;">
+                                                Total Denda
+                                            </td>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 10%;">
+                                                Total
+                                                Terbayar
+                                            </td>
+                                            <td valign="middle" align="center" style="padding-top: 1px;width: 10%;">
+                                                Jumlah yang
+                                                <br/>harus<br/> dibayarkan
+                                            </td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for payment in table_list %}
+                                            <tr>
+                                                <td align="center">{{payment.payment_number}}</td>
+                                                <td align="center">{{payment.installment_principal}}</td>
+                                                <td align="center">{{payment.due_date}}</td>
+                                                <td align="center">{{payment.dpd}}</td>
+                                                <td align="center">
+                                                    {% if payment.is_paid == "Tidak" %}
+                                                        <span style="color: #E05129;">Tidak</span>
+                                                    {% else %}
+                                                        {{payment.is_paid}}
+                                                    {% endif %}
+                                                </td>
+                                                <td align="center">{{payment.late_fee_amount}}</td>
+                                                <td align="center">{{payment.paid_amount}}</td>
+                                                <td align="center">{{payment.due_amount}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td align="center"><b>Total</b></td>
+                                            <td align="center"><b>{{ total_installment_amount }}</b></td>
+                                            <td align="center"></td>
+                                            <td align="center"></td>
+                                            <td align="center"></td>
+                                            <td align="center"><b>{{ total_current_late_fee }}</b></td>
+                                            <td align="center"></td>
+                                            <td align="center"><b>{{ total_due_amount }}</b></td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Dalam kondisi normal (tanpa diskon), total nilai pelunasan harus Anda bayarkan
+                                        (terhitung dari cicilan yang sudah jatuh tempo dan cicilan yang belum jatuh
+                                        tempo) adalah sebesar = {{ total_before_discount }}.
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        <b>Apabila Anda melakukan pembayaran selama masa promo</b>, total nilai cicilan yang
+                                        masih harus Anda bayarkan <br/>
+                                        (terhitung dari cicilan yang sudah jatuh tempo dan cicilan yang belum jatuh
+                                        tempo) adalah sebesar = {{ total_discount }}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Harap diingat bahwa diskon 30% biaya bunga dan penghapusan denda keterlambatan
+                                        (jika ada) hanya akan berlaku apabila Anda melunasi cicilan sejumlah yang telah
+                                        kami sebutkan di atas paling lambat tanggal {{ end_promo }}!
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Yuk, segera lunasi lebih awal cicilan Anda dengan memanfaatkan promo spesial
+                                        ini! Untuk informasi lebih lanjut, silahkan menghubungi Petugas Kami di:
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Untuk informasi lebih lanjut, silahkan menghubungi Petugas Kami di:
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        <ul>
+                                            <li>WhatsApp – 0813-1778-2065</li>
+                                            <li>Layanan Telepon - 02150718800 atau 02150718822</li>
+                                            <li>Email – collections@julo.co.id</li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:center; font-weight:500;"
+                                         align="center">
+                                        <a class="btn-circle-bayar" href="https://go.onelink.me/zOQD/epay"><b
+                                                style="color:white;">Bayar
+                                            Sekarang</b></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        Syarat & Ketentuan:
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="word-wrap:break-word;font-size:0px;padding:10px 25px;" align="left">
+                                    <div style="cursor:auto;color:#5e5e5e;font-family:Montserrat, Roboto, Helvetica, Arial, sans-serif;font-size:15px;line-height:120%;text-align:left; font-weight:500;">
+                                        <ol>
+                                            <li>Selama masa promo, Anda hanya diharuskan untuk membayar
+                                                sebesar {{ total_discount }}. Apabila Anda membayar lebih dari jumlah
+                                                tersebut, JULO tidak dapat memberikan pengembalian kelebihan dana.
+                                            </li>
+                                            <br/>
+                                            <li>Setelah masa promo berakhir, total cicilan yang masih harus Anda lunasi
+                                                kembali menjadi sebesar {{ total_before_discount }}.
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+</div>
+</body>
+
+</html>

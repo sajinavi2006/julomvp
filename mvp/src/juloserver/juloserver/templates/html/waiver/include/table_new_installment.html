@@ -1,0 +1,52 @@
+{% load currency %}
+<div>
+    <p class="table-header">
+        Sisa Tagihan
+    </p>
+    <table class="table table-bordered same-height" id="sisa_angsuran">
+        <thead class="web-portal-thead">
+            <tr>
+                <th class="align-middle">Principal</th>
+                <th class="align-middle">Interest</th>
+                <th class="align-middle">Late Fee</th>
+                <th class="align-middle">Sisa Tagihan</th>
+                <th class="exclude-min align-middle">Paid Off Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account_payment_request in account_payment_requests %}
+                <tr>
+                    <td class="align-middle extend-padding">
+                        <span>{{ account_payment_request.remaining_principal_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="remaining_principal_amount_{{ account_payment_request.index }}" value="{{ account_payment_request.remaining_principal_amount }}">
+                    </td>
+                    <td class="align-middle extend-padding">
+                        <span>{{ account_payment_request.remaining_interest_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="remaining_interest_amount_{{ account_payment_request.index }}" value="{{ account_payment_request.remaining_interest_amount }}">
+                    </td>
+                    <td class="align-middle extend-padding">
+                        <span>{{ account_payment_request.remaining_late_fee_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="remaining_late_fee_amount_{{ account_payment_request.index }}" value="{{ account_payment_request.remaining_late_fee_amount }}">
+                    </td>
+                    <td class="align-middle extend-padding">
+                        <span>{{ account_payment_request.total_remaining_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="total_remaining_amount_{{ account_payment_request.index }}" value="{{ account_payment_request.total_remaining_amount }}">
+                    </td>
+                    <td class="align-middle">
+                        <span>{{ account_payment_request.is_paid_off|default:"-" }}</span>
+                        <input type="hidden" name="remaining_paid_off_{{ account_payment_request.index }}" value="{{ account_payment_request.is_paid_off }}">
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="align-middle extend-padding font-weight-bold" id="all_remaining_principal_amount">{{ all_remaining_principal_amount|add_rupiah_separator }}</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_remaining_interest_amount">{{ all_remaining_interest_amount|add_rupiah_separator }}</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_remaining_late_fee_amount">{{ all_remaining_late_fee_amount|add_rupiah_separator }}</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_total_remaining_amount">{{ all_total_remaining_amount|add_rupiah_separator }}</td>
+                <td class="align-middle">&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

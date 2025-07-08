@@ -1,0 +1,88 @@
+{% load unit %}
+<div class="row">
+    <div id="additional_address_number" style="margin-left: 2%; font-weight: bold"></div>
+</div>
+<div class="row" style="margin-top: 2%">
+    <label class="col-md-3" for="street_number">Alamat tempat tinggal </label>
+    <div class="col-md-9">
+        <textarea class="form-control" id="street_number" rows="3" required></textarea>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+    <label class="col-md-3" for="provinsi">Provinsi </label>
+    <div class="col-md-9">
+       <input type="text" class="form-control" id="provinsi" list="select-list-provinsi" onkeyup="get_cities()">
+        <datalist id="select-list-provinsi">
+            <option value=""></option>#}
+            {% for province in provinces %}
+                <option value="{{ province }}" >{{ province }}</option>
+            {% endfor %}
+        </datalist>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+  <label class="col-md-3">Kabupaten/Kota </label>
+    <div class="col-md-9">
+       <input type="text" class="form-control" id="kabupaten" list="select-list-kabupaten" onkeyup="get_districts()" disabled>
+        <datalist class="col-md-9" id="select-list-kabupaten">
+            <option value=""></option>
+        </datalist>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+  <label class="col-md-3" for="kecamatan">Kecamatan </label>
+    <div class="col-md-9">
+       <input type="text" class="form-control" id="kecamatan" list="select-list-kecamatan" onkeyup="get_subdistricts()" disabled>
+        <datalist id="select-list-kecamatan">
+            <option value=""></option>
+        </datalist>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+  <label class="col-md-3" for="kelurahan">Kelurahan </label>
+    <div class="col-md-9">
+       <input type="text" class="form-control" id="kelurahan" list="select-list-kelurahan" disabled>
+        <datalist id="select-list-kelurahan">
+            <option value=""></option>
+        </datalist>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+    <label class="col-md-3" for="kode_pos">Kode Pos </label>
+    <div class="col-md-9">
+       <input type="text" class="form-control" id="kode_pos" list="select-list-kode-pos" maxlength="5">
+        <datalist id="select-list-kode-pos">
+            <option value=""></option>
+        </datalist>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+    <label class="col-md-3" for="occupied_since">Ditempati sejak </label>
+    <div class="col-md-9">
+        <div class="input-group">
+           <input class="form-control mydatepicker" id="occupied_since" autocomplete="off" placeholder="yy-mm-dd" data-date-format='yy-mm-dd' required="" type="text">
+           <span class="input-group-addon" id="OccupiedSinceSetDate" onclick="set_today('occupied_since');"><i class="icon-calender"></i></span>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 1%">
+    <label class="col-md-3" for="home_status">Status Domisili </label>
+    <div class="col-md-9">
+        <select name="home_status" id="home_status" class="form-control">
+            <option value=""></option>
+            <option value="Kos">Kos</option>
+            <option value="Milik keluarga">Milik keluarga</option>
+            <option value="Milik sendiri, lunas">Milik Sendiri, lunas</option>
+            <option value="Milik sendiri, mencicil">Milik Sendiri, mencicil</option>
+            <option value="Kontrak">Kontrak</option>
+        </select>
+    </div>
+</div>
+

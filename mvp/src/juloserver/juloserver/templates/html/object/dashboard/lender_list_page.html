@@ -1,0 +1,595 @@
+{% extends "common/theme1/layout_theme1.html" %}
+{% load model template default unit %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+
+
+{% block custom_css %}
+{% load static from staticfiles %}
+  <!-- Footable CSS -->
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+    <!-- toast CSS -->
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+    <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+  <!-- <link href="{% static 'default/css/pagination-julo.css' %}" type="text/css"> -->
+{% endblock %}
+
+{% block script_head %}
+{% endblock %}
+
+
+{% block css_inside %}
+  ul.pagination_julo {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+  }
+
+  ul.pagination_julo li {
+    display: inline;
+  }
+
+  ul.pagination_julo li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+  }
+
+  .pagination_julo li:first-child a {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .pagination_julo li:last-child a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  ul.pagination_julo li a.active {
+    background-color: #ff6849;
+    color: white;
+    border: 1px solid #ff6849;
+  }
+  ul.pagination_julo li a.disabled
+  {
+    cursor: not-allowed;
+    pointer-events: none; // Future-proof disabling of clicks
+    .opacity(.65);
+    .box-shadow(none);
+  }
+
+  ul.pagination_julo li a:hover:not(.active) {
+    background-color: #ddd;
+  }
+
+  .scroll-top-wrapper {
+    position: fixed;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    text-align: center;
+    z-index: 99999999;
+    background-color: #777777;
+    color: #eeeeee;
+    width: 50px;
+    height: 48px;
+    line-height: 48px;
+    right: 30px;
+    bottom: 30px;
+    padding-top: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+  }
+  .scroll-top-wrapper:hover {
+    background-color: #888888;
+  }
+  .scroll-top-wrapper.show {
+      visibility:visible;
+      cursor:pointer;
+    opacity: 1.0;
+  }
+  .scroll-top-wrapper i.fa {
+    line-height: inherit;
+  }
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+<div class="scroll-top-wrapper ">
+  <span class="scroll-top-inner">
+    <i class="fa fa-2x fa-arrow-circle-up"></i>
+  </span>
+</div>
+
+<div id="page-wrapper">
+
+  <div class="">
+
+    <div class="row bg-title"  style="display: none;">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">
+          {% block breadcrumb_title %}Data{% endblock %}
+        </h4>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+          {% block breadcrumb_path %}
+            <li><a href="#">Parent</a></li>
+            <li><a href="#">Sub Parent</a></li>
+            <li class="active">Active child</li>
+          {% endblock %}
+        </ol>
+      </div>
+      <!-- /.col-lg-12 -->
+    </div>
+
+    <!-- /row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="white-box">
+          {% block list_title %}
+            Partner Page : <code>{{login_username}}</code>
+          {% endblock %}
+          <br />
+
+          <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size={{results_per_page}}>
+            <thead>
+              <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+                  <th data-toggle="true" data-sort-ignore="true" class="julo-sort-number"> No </th>
+                  <th data-toggle="phone" data-sort-ignore="true"> Application XID </th>
+                  <th class="text-center" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="product_line__product_line_type"> PLine</th>
+                  <th data-toggle="phone" data-sort-ignore="true" class="julo-sort-wider julo-sort-header" data-julo-sort="application_status__status_code"> Status</th>
+                  <th data-toggle="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="udate"> UDate</th>
+                  <th data-sort-ignore="true" class="julo-sort-wider julo-sort-header" data-julo-sort="partner">Partner</th>
+                  <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">Actions</th>
+                  <th data-hide="all"> Detail </th>
+              </tr>
+            </thead>
+            <div class="form-inline padding-bottom-15">
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6 col-xs-12 hidden-xs">
+
+                </div>
+              </div>
+
+            </div>
+            <tbody>
+              {% if object_list %}
+                {% for object in object_list %}
+                  <tr>
+                    <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+                      <td class="text-center">
+                          {{ object.application_xid|default:"-"|safe}}
+                      </td>
+                      <td class="text-center">
+                        {% include "object/app_status/include/td_prod_line.html" %}
+                      </td>
+                      <td>
+                          <code>{{ object.application_status.status_code|default:"-"|safe}}</code>
+                      </td>
+                      <td>
+                        <strong>
+                          {{ object.udate|date:"Y-m-d H:i:s"|safe }}
+                        </strong>
+                      </td>
+                      <td class="text-center">
+                          {%if object.partner_id %}
+                              {% if object.partner.type != "receiver" %}
+                                {{ object.partner.name }}
+                              {% else %}
+                                  -
+                              {% endif %}
+                          {% else %}
+                              -
+                          {% endif %}
+                      </td>
+                      <td class='text-center'>
+                            <div class="btn-group m-r-10">
+                            <button aria-expanded="false" data-toggle="dropdown" class="btn btn-primary btn-rounded dropdown-toggle waves-effect waves-light" type="button">
+                               --Pilih-- <span class="caret"></span>
+                            </button>
+                              <ul role="menu" class="dropdown-menu">
+                                  <li>
+                                    <a href="#" title='approve' onclick="change_app_status({{ object.id }}, 170, 'approved', 'Partner Approved');">
+                                        <button class="btn btn-success btn-block">Approve</button>
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="#" title='denied' onclick="change_app_status({{ object.id }}, 134, 'denied', 'Partner Denied');">
+                                        <button class="btn btn-danger btn-block">Denied</button>
+                                    </a>
+                                  </li>
+                              </ul>
+                            </div>
+                        </td>
+                      <td>
+                        {% include "object/app_status/include/td_details.html" %}
+                      </td>
+                    </tr>
+                {% endfor %}
+              {% else %}
+                  <tr>
+                      <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+                  </tr>
+              {% endif %}
+
+            </tbody>
+          </table>
+          <tfoot>
+            <tr>
+              <td colspan="5"><div class="text-right">
+                  {% pagination2 is_paginated paginator page_obj q 4 %}
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        </div>
+
+
+       <!-- /.modal payment event-->
+       <div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header label-warning">
+                      <h4 class="modal-title" id="modal_title">Title</h4> </div>
+                  <div class="modal-body" id="modal_body">
+                    Body
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="close_btn()">Tutup</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="modal-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header label-success">
+                      <h4 class="modal-title" id="modal-locked-app_title">Title</h4> </div>
+                  <div class="modal-body" id="modal-locked-app_body">
+                    Body
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-warning waves-effect" id="see_app" data-dismiss="modal" onclick="see_only_btn();">Lihat Aplikasi</button>
+                      <button type="button" class="btn btn-custom waves-effect" id="lock_edit_app" data-dismiss="modal" onclick="go_locked_app();">Lock dan Edit Aplikasi</button>
+                      <button type="button" class="btn btn-default waves-effect" id="cancel_app" data-dismiss="modal" onclick="close_btn();">Batal</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="modal-see-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header label-success">
+                      <h4 class="modal-title" id="modal_see_title">Title</h4> </div>
+                  <div class="modal-body" id="modal_see_body">
+                    Body
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-warning waves-effect" data-dismiss="modal" onclick="see_only_btn();">Lihat Aplikasi</button>
+                      <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+</div>
+<!-- /.page-wrapper -->
+
+{% endblock %}
+
+{% block script_common_list %}
+    $(document).scroll(function() {
+        if ($(window).scrollTop() > 100) {
+          $('.scroll-top-wrapper').addClass('show');
+        } else {
+          $('.scroll-top-wrapper').removeClass('show');
+        }
+    });
+
+    $('.scroll-top-wrapper').on('click', scrollToTop);
+
+    function scrollToTop() {
+      verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+      element = $('body');
+      offset = element.offset();
+      offsetTop = offset.top;
+      $('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
+    }
+
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  // using jQuery
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      // console.log(cookieValue);
+      return cookieValue;
+  }
+
+  function clearSearchForm(){
+    $("#id_search_q").val('');
+    $("#id_sort_q").val('');
+    $("#id_sortby").val('');
+    $("#id_status_app").val([]);
+    $("#id_status_now_1").val([]);
+    $("#id_status_now_0").val([]);
+    check_bebas_selected();
+    try{
+        document.getElementById('id_err_msg').innerHTML='';
+    }
+    catch(err) {
+    }
+  }
+    function goBack() {
+        window.history.back();
+    }
+
+  function check_bebas_selected(){
+    //console.log("check_bebas_selected");
+    var status = $("#id_status_now_1").is(':checked');
+    if (status==true){
+        $("#id_toggle_tgl_entry").toggle(true);
+    }else{
+        $("#id_toggle_tgl_entry").toggle(false);
+    }
+  }
+  function check_priode_selected(){
+    //console.log("check_priode_selected");
+    var status_0 = $("#id_status_now_0").is(':checked');
+    var status_1 = $("#id_status_now_1").is(':checked');
+    if (status_0==true || status_1==true){
+      $("#id_pencarian_tgl").toggle();
+    }
+  }
+
+  window.onload = function() {
+
+  }
+  function handler_0() {
+      // console.log('clicked 0');
+      var status = $("#id_status_now_0").is(':checked');
+      if (status==true){
+        $("#id_toggle_tgl_entry").toggle(false);
+      }
+  }
+  function handler_1() {
+      //console.log('clicked 1');
+      check_bebas_selected();
+  }
+
+  // Daterange picker
+  $('.input-daterange-timepicker').daterangepicker({
+      timePicker: true,
+      format: 'DD/MM/YYYY H:mm',
+      timePickerIncrement: 5,
+      timePicker12Hour: true,
+      timePickerSeconds: false,
+      buttonClasses: ['btn', 'btn-sm'],
+      applyClass: 'btn-danger',
+      cancelClass: 'btn-inverse'
+  });
+
+  function check_localStorage(){
+    if (typeof(Storage) !== "undefined") {
+        console.log("Code for localStorage/sessionStorage.");
+        return 0;
+    } else {
+        console.log("Sorry! No Web Storage support..");
+        return -1;
+    }
+  }
+
+  function set_localStorage(key, value){
+    if(check_localStorage()){
+      localStorage.setItem(key, value);
+      return 0;
+    }
+    return -1;
+  }
+
+  function get_localStorage(key){
+     if(check_localStorage()){
+      return localStorage.getItem(key);
+    }
+    return "";
+  }
+
+  function remove_localStorage(key){
+    if(check_localStorage()){
+      localStorage.removeItem(key);
+      return 0;
+    }
+    return -1;
+
+  }
+
+  function close_btn(){
+    window.location.reload(true);
+  }
+
+  function open_new_tabs(url_selected){
+    // If the web browser type is Safari
+    //alert(navigator.userAgent);
+    if(navigator.userAgent.indexOf("Chrome")!=-1)
+    {
+      //console.log('hihihi');alert('hihihi');
+      window.location.reload(true);
+      var win = window.open(url_selected, '_blank');
+      win.focus();
+    }
+    else {
+      //console.log('hohoho');alert('hohoho');
+      window.location.href = url_selected;
+    }
+  }
+
+  function see_only_btn(){
+    var app_id = localStorage.app_selected; //get_localStorage("app_selected");
+    var url_selected = "/app_status/change_status/"+app_id;
+    open_new_tabs(url_selected);
+  }
+
+  function go_locked_app(){
+    var app_id = localStorage.app_selected; //get_localStorage("app_selected");
+    set_locked_n_edit_app(app_id);
+  }
+
+  function change_app_status(app_id, status_to, reason, notes){
+    $.ajaxSetup({
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+    });
+    $.ajax({
+        url :  "{%url 'dashboard:ajax_change_status' %}/", // the endpoint
+        type : "POST", // http method
+        data : { application_id: app_id,
+                 status_to: status_to,
+                 reason: reason,
+                 notes : notes
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            //console.log(json); // log the returned json to the console
+
+            if (json.status == "success"){
+              //redirect this page
+              //console.log("sukses");
+              window.location.reload()
+            }
+            else {
+              //show notification that app was locked
+              //console.log(json.message);
+              $("#modal_title").html("Proses Gagal");
+              $("#modal_body").html(""+ json.message);
+              $('#responsive-modal-success').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            //console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_title").html("!! Error !!");
+            $("#modal_body").html("Error on getting data from server");
+            $('#responsive-modal-success').modal('show');
+        }
+
+
+    }); // end of ajax
+
+  }//end of function
+
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+
+      var url = '{{request.path}}';
+      if(url.includes('app_status')){
+        $('#list_sort_loan_status').remove();
+        $('#list_sort_payment_status').remove();
+        $('#list_sort_agent').remove();
+      }else if(url.includes('loan_status')){
+        $('#list_sort_app_status').remove();
+        $('#list_sort_payment_status').remove();
+        $('#list_sort_agent').remove();
+      }else if(url.includes('payment_status')){
+        $('#list_sort_app_status').remove();
+        $('#list_sort_loan_status').remove();
+      }
+
+      var sort_value = $("#id_sort_q").val();
+      $("#id_sortby").val(sort_value);
+  });
+
+  function setSortBy(){
+    var result = $("#id_sortby").val();
+    $("#id_sort_q").val(result);
+  }
+{% endblock %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+
+    <!-- Footable -->
+    <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+    <!--FooTable init-->
+    <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <script src="{% static 'default/js/julo-sorting.js' %}"></script>
+
+
+{% endblock %}

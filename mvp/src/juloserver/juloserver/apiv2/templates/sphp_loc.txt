@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <style>
+    body {
+      color: #5E5E5E;
+    }
+    h4 {
+      color: #0598D0;
+      text-align: center;
+    }
+  </style>
+<body>
+  <h4>SURAT PERJANJIAN HUTANG PIUTANG</h4>
+  <p>Pada hari ini, <b>{{ date_today | safe }}</b>, saya yang bertanda tangan di bawah ini:</p>
+  <table>
+      <tbody>
+        <tr>
+            <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama:</th>
+            <td>{{ application.fullname | safe }}</td>
+        </tr>
+        <tr>
+            <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir:</th>
+            <td>{{ dob | safe }}</td>
+        </tr>
+        <tr>
+            <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP:</th>
+            <td>{{ application.ktp | safe }}</td>
+        </tr>
+        <tr>
+            <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon:</th>
+            <td>{{ application.mobile_phone_1 | safe }}</td>
+        </tr>
+        <tr>
+            <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat:</th>
+            <td>{{ full_address | safe }}</td>
+        </tr>
+      </tbody>
+  </table>
+  <p>Menyatakan bahwa saya menyetujui dengan pihak <b>PT. JULO TEKNOLOGI FINANSIAL</b> (selanjutnya disebut JULO) atas ketentuan-ketentuan perjanjian sebagai berikut:</p>
+  <table>
+      <tbody>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">1.</td>
+          <td style="padding-bottom:5px;">
+              Bahwa saya mengajukan permohonan limit kredit dengan nomor pengajuan <b>{{application.application_xid}}</b> melalui pihak JULO, dan telah disetujui limit kredit sebesar <b>{{ limit_amount }}</b> kepada saya.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">2.</td>
+          <td style="padding-bottom:5px;">
+              Bahwa saya berjanji untuk melunasi limit kredit dengan melakukan pembayaran kepada pihak JULO sesuai dengan penggunaan limit kredit yang tertera di aplikasi JULO sebelum tanggal jatuh tempo yang jatuh 3 hari setelah tanggal cetak tagihan pada tanggal <b>{{ statement_day }}</b> setiap bulan-nya.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">3.</td>
+          <td>
+              Bahwa jika saya terlambat melunasi pinjaman kepada pihak JULO, adalah kewajiban dan tanggung jawab saya untuk membayar biaya keterlambatan atau denda sebesar 20% dari total jumlah penagihan bulan ini atau minimum Rp 15.000,- (mana yang lebih besar).
+          </td>
+        </tr>
+      </tbody>
+  </table>
+  <p>Pembayaran akan dilakukan ke rekening Virtual Account (VA) yang  tertera di aplikasi JULO setelah limit kredit aktif.</p>
+
+  <p>Saya dan JULO wajib melaksanakan ketentuan yang diatur dalam Perjanjian ini dengan sebaik-baiknya serta senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan Perjanjian ini.</p>
+  <p>Pertanyaan atau persoalan yang timbul karena penafsiran dan/atau pelaksanaan Perjanjian ini akan diselesaikan secara musyawarah dengan itikad baik untuk mencapai mufakat oleh para pihak.</p>
+  <p>Surat perjanjian ini adalah sah dan mengikat sesuai dengan aturan KUH Perdata, dan saya menandatangani secara sadar dan tanpa paksaan dari pihak manapun.</p>
+</body>
+</html>

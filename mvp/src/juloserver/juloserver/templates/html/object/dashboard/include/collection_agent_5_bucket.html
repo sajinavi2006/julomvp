@@ -1,0 +1,83 @@
+{% load unit %}
+<div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_90to119'%}" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase">T+90 to T+119</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.T90to119 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_120to179'%}" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase">T+120 to T+179</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.T120to179 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_plus180'%}" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase">T+180 <i class="linea-icon linea-aerrow" data-icon="&#xe04b;"></i></i> ++</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.Tplus180 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+</div>
+<div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_5_ptp'%}" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title">PTP</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.PTPagent5 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_5_ignore_called'%}" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title">Ignore Called</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.IgnoreCalledAgent5 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_5_whatsapp'%}" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title">WA</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.WhatsappAgent5 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+</div>

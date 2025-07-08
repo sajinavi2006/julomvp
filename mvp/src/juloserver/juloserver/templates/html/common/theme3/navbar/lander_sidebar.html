@@ -1,0 +1,162 @@
+<!-- .Side panel -->
+  <div class="side-mini-panel">
+       <ul class="mini-nav">
+
+              <div class="togglediv"><a href="javascript:void(0)" id="togglebtn"><i class="ti-menu"></i></a></div>
+
+              <!-- .Dashboard -->
+              <li class="selected">
+                <a href="javascript:void(0)"><i class="linea-icon linea-basic" data-icon="v"></i></a>
+                    <div class="sidebarmenu">
+                        <!-- Left navbar-header -->
+                          <h3 class="menu-title">Dashboard</h3>
+                          <ul class="sidebar-menu">
+                              	<li><a href="{%url 'welcome' %}"><i class="fa fa-dashboard m-r-10"></i>Beranda</a></li>
+					            <li><a href="{%url 'partner:profile' %}"><i class="ti-user m-r-10"></i>Profil</a></li>
+					            <li><a href="{%url 'account:change_usrpwd_in' %}"><i class="fa fa-key"></i> Ubah Password</a></li>
+					            <hr>
+					            <li><a href="javascript:void(0)"><i class="ti-email m-r-10"></i>Inbox</a></li>
+					            <li>
+					            	<a href="{% url 'logout'%}" class="waves-effect hidden-md hidden-lg hidden-sm"><i class="fa fa-power-off m-r-10"></i> <span class="hide-menu">Log out</span></a>
+						        	<a href="javascript:void(0)" alt="alert" class="img-responsive model_img hidden-xs" id="signout-warning2">
+						        		<i class="fa fa-power-off"></i> <span class="hide-menu">Log out</span> 
+						        	</a>
+					            </li>
+                          </ul>
+                          <!-- Left navbar-header end -->
+                    </div>
+              </li>
+              <!-- /.Dashboard -->
+
+              <!-- .Order -->
+              <li class=""><a href="javascript:void(0)"><i data-icon=")" class="linea-icon linea-basic"></i></a>
+                    <div class="sidebarmenu">
+                        <!-- Left navbar-header -->
+                          <h3 class="menu-title">Order</h3>
+                          <ul class="sidebar-menu">
+                          	<li><a href="javascript:void(0)">Baru Tanpa AWB</a></li>
+				            <li><a href="javascript:void(0)">Baru</a></li>
+				            
+				            <li class="menu">
+                                <a href="javascript:void(0)">
+                                   <span>On Delivery</span> <span class="label label-rouded label-megna">4</span><i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="sub-menu">
+                                  	<li> <a href="javascript:void(0)">Kurir</a></li>
+					                <li> <a href="javascript:void(0)">Penjemputan</a></li>
+					                <li> <a href="javascript:void(0)">Origin Transit</a></li>
+					                <li> <a href="javascript:void(0)">Destination Transit</a></li>
+                                </ul>
+                            </li>
+                            
+				            <li class="menu">
+                                <a href="javascript:void(0)">
+                                   <span>On Problem</span> <span class="label label-rouded label-purple">4</span><i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="sub-menu">
+                                  	<li> <a href="javascript:void(0)">Batal Penjemputan</a></li>
+					                <li> <a href="javascript:void(0)">Telat Penjemputan</a></li>
+					                <li> <a href="javascript:void(0)">Telat Pengiriman</a></li>
+					                <li> <a href="javascript:void(0)">Bermasalah</a></li>
+                                </ul>
+                            </li>
+                            
+                            <li class="menu">
+                                <a href="javascript:void(0)">
+                                   <span>Selesai</span> <span class="label label-rouded label-info">4</span><i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="sub-menu">
+                                  	<li> <a href="javascript:void(0)">POD</a></li>
+				                <li> <a href="javascript:void(0)">Batal Selesai</a></li>
+				                <li> <a href="javascript:void(0)">Masalah Selesai</a></li>
+				                <li> <a href="javascript:void(0)">Payment TO</a></li>
+                                </ul>
+                            </li>
+                           
+				            <li><a href="javascript:void(0)">Lihat Semuanya</a></li>
+                              
+                          </ul>
+                          <!-- Left navbar-header end -->
+                    </div> 
+              </li>
+              <!-- /.Order -->
+				
+        
+              <!-- .Operasional -->
+              <li><a href="javascript:void(0)"><i data-icon="/" class="linea-icon linea-basic"></i></a>
+                    <div class="sidebarmenu">
+                        <!-- Left navbar-header -->
+                          <h3 class="menu-title">Operasional</h3>
+                          <ul class="sidebar-menu">
+                              	<li><a href="javascript:void(0)">AWB Siap Pakai</a></li>
+					            <li><a href="javascript:void(0)">Order Baru Tanpa AWB</a></li>
+					            <li><a href="javascript:void(0)">Order Baru</a></li>
+					            <li><a href="javascript:void(0)">Tugas Kurir</a></li>
+					            <li><a href="javascript:void(0)">Update Status Order</a></li>
+                          </ul>
+                          <!-- Left navbar-header end -->
+                    </div> 
+              </li>
+              <!-- /.Operasional -->
+				
+              <!-- .Manajemen Ops -->
+              <li class=""><a href="javascript:void(0)"><i data-icon="&#xe00b;" class="linea-icon linea-basic fa-fw"></i></a>
+                  <div class="sidebarmenu">
+                        <!-- Left navbar-header -->
+                          <h3 class="menu-title">Manajemen Operasional</h3>
+                          <ul class="sidebar-menu">
+                               <li><a href="javascript:void(0);">Service</a></li>
+					           <li><a href="javascript:void(0)">Harga</a></li>
+					           <li><a href="javascript:void(0)">Promo</a></li>
+					           <li><a href="javascript:void(0)">Promo Area</a></li>
+					           <li><a href="javascript:void(0)">Area Tidak Terjangkau</a></li>
+                          </ul>
+                          <!-- Left navbar-header end -->
+                    </div> 
+              </li>  
+              <!-- /.Manajemen Ops -->
+
+              <!-- .Manajemen User -->
+              <li class=""><a href="javascript:void(0)"><i data-icon="&#xe008;" class="linea-icon linea-basic fa-fw"></i></a>
+                    <div class="sidebarmenu">
+                        <!-- Left navbar-header -->
+                          <h3 class="menu-title">Manajemen User</h3>
+                          <ul class="sidebar-menu">
+                              <li><a href="javascript:void(0);">Dispatcher</a></li>
+                              <li><a href="javascript:void(0);">Kurir</a></li>
+                          </ul>
+                          <!-- Left navbar-header end -->
+                    </div>
+              </li>
+              <!-- /.Manajemen User -->
+
+              <!-- .Settlement -->
+              <li class=""><a href="javascript:void(0)"><i data-icon="&#xe006;" class="linea-icon linea-basic fa-fw"></i></a>
+                  <div class="sidebarmenu">
+                      <!-- Left navbar-header -->
+                        <h3 class="menu-title">Settlement</h3>
+                        <ul class="sidebar-menu">
+                            <li><a href="javascript:void(0);">Invoice Mitra</a> </li>
+                        </ul>
+                        <!-- Left navbar-header end -->
+                  </div>
+              </li>
+              <!-- /.Settlement -->
+
+              <!-- .Libur -->
+              <li class=""><a href="javascript:void(0)"><i data-icon="O" class="linea-icon linea-software fa-fw"></i></a>
+                  <div class="sidebarmenu">
+                      <!-- Left navbar-header -->
+                        <h3 class="menu-title">Libur</h3>
+                        <ul class="sidebar-menu">
+                            <li><a href="javascript:void(0);">Libur Nasional</a></li>
+                            <li><a href="javascript:void(0);">Libur Perusahaan</a></li>
+                        </ul>
+                        <!-- Left navbar-header end -->
+                  </div>
+              </li>
+              <!-- /.Libur -->
+
+           </ul>
+  </div>
+  <!-- /.Side panel -->

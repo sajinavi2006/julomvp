@@ -1,0 +1,833 @@
+{% load static from staticfiles %}
+<script type="text/javascript">
+function show_similar_faces(url_selected, application_id){
+    var csrftoken = getCookie('csrftoken');
+    var linebreak = document.createElement("br");
+
+    const months = {
+      0: 'Jan',
+      1: 'Feb',
+      2: 'Mar',
+      3: 'Apr',
+      4: 'May',
+      5: 'Jun',
+      6: 'Jul',
+      7: 'Aug',
+      8: 'Sep',
+      9: 'Oct',
+      10: 'Nov',
+      11: 'Dec'
+    }
+
+    $("#modal-face-similarity-app_title").html("Face Check");
+
+    $.ajax({
+      url :  url_selected, // the endpoint
+      type : "GET", // http method
+      data : {
+              application_id: application_id,
+              csrfmiddlewaretoken: csrftoken,
+            }, // data sent with the get request
+
+      // handle a successful response
+      success : function(json) {
+          // set var into localstorage
+          // console.log(json); // log the returned json to the console
+          if (json.customer_application_id !== undefined){
+            var data_row = document.getElementById("face_recognition_data_row");
+            if (json.customer_image !== undefined) {
+
+              var data_customer = document.getElementById("face_similarity_data_customer");
+              var crop_selfie = $("#img_crop_selfie_face_recognition");
+              var ktp = $("#img_ktp_face_recognition");
+
+              if(crop_selfie !== undefined && ktp !== undefined){
+                $.each(JSON.parse(json.customer_image), function(i, obj) {
+                  //console.log(obj, i);
+
+                  $.each(obj, function(i, obj_item) {
+                    //console.log(obj_item);
+                    if(obj_item.image_type == 'crop_selfie'){
+                      crop_selfie.attr('src', obj_item.image_url);
+                    }
+                    else if(obj_item.image_type == 'ktp_self'){
+                      ktp.attr('src', obj_item.image_url);
+                    }
+                  });
+                });
+              }
+              var cDate = new Date(json.customer_cdate);
+              $("#customer_app_id").html(': '+json.customer_application_id);
+              $("#customer_apply_date").html(': '+cDate.getDate()+' '+months[cDate.getMonth()]+' '+cDate.getFullYear());
+              $("#customer_address").html(': '+json.customer_address_street_num);
+              $("#customer_provinsi").html(': '+json.customer_address_provinsi);
+              $("#customer_kabupaten").html(': '+json.customer_address_kabupaten);
+              $("#customer_kecamatan").html(': '+json.customer_address_kecamatan);
+              $("#customer_kelurahan").html(': '+json.customer_address_kelurahan);
+              $("#customer_nik").html(': '+json.customer_ktp);
+              $("#customer_email").html(': '+json.customer_email);
+              $("#customer_full_name").html(': '+json.customer_fullname);
+              $("#customer_pob").html(': '+json.customer_birth_place);
+              $("#customer_dob").html(': '+json.customer_dob);
+              $("#customer_bank_name").html(': '+json.customer_bank_name);
+              $("#customer_bank_account_name").html(': '+json.customer_bank_account_name);
+              $("#customer_bank_account_number").html(': '+json.customer_bank_account_number);
+              $("#customer_android_id").html(': '+json.customer_android_id);
+              $("#customer_device_name").html(': '+json.customer_device_name);
+            }
+            
+            var data_matched = null;
+            var ktp = null;
+            var crop_selfie = null;
+            
+            if (typeof json.matched_ktp !== undefined) {
+              //console.log(json.matched_ktp);
+              if(json.matched_ktp !== undefined) {
+                  $.each(JSON.parse(json.matched_ktp), function(i, obj) {
+                    //console.log(obj, i);
+
+                    $.each(obj, function(i, obj_item) {
+                      //console.log(obj_item);
+                      ktp = null;
+                      if (typeof obj_item.image_source !== 'undefined')
+                      {
+                        if ($("#img_ktp_face_recognition_"+obj_item.image_source).length){
+                          ktp = document.getElementById("img_ktp_face_recognition_"+obj_item.image_source);
+                        } else {
+                          ktp = document.createElement("img");
+                          ktp.setAttribute("id", "img_ktp_face_recognition_"+obj_item.image_source);
+                          ktp.setAttribute("class", "img-responsive face-check-rounded-images image-boxed-size-ktp mb-12");
+                          ktp.setAttribute("src", "{% static 'images/icons/ic-placeholder.png' %}");
+                        }
+
+                        if ($("#face_similarity_data_"+obj_item.image_source).length){
+                          data_matched = document.getElementById("face_similarity_data_"+obj_item.image_source);
+                        } else {
+                          data_matched = document.createElement("div");
+                          data_matched.setAttribute("id", "face_similarity_data_"+obj_item.image_source);
+                          data_matched.setAttribute("class", "col-xs-8 justify-content-start");
+                          data_matched.setAttribute("style", "width: 500px;min-width: 500px;");
+                          data_row.appendChild(data_matched);
+                        }
+                        data_matched.prepend(ktp);
+                      }
+
+                      if(obj_item.image_type == 'ktp_self'){
+                        if(obj_item.image_ext == '.pdf'){
+                          ktp.setAttribute("src", "{% static 'images/collections/image-pdf.png' %}");
+                        }
+                        else {
+                          if (obj_item.image_url) {
+                            ktp.setAttribute("src", obj_item.image_url);
+                          }
+                        }
+                      }
+                    });
+                  });
+              }
+            }
+
+            if (typeof json.matched_selfie !== undefined) {
+              //console.log(json.matched_selfie);
+              if(json.matched_selfie !== undefined) {
+                  $.each(JSON.parse(json.matched_selfie), function(i, obj) {
+                    //console.log(obj, i);
+
+                    $.each(obj, function(i, obj_item) {
+                      //console.log(obj_item);
+                      ktp = null;
+                      crop_selfie = null;
+                      if (typeof obj_item.application !== 'undefined')
+                      {
+                        if ($("#img_crop_selfie_face_recognition_"+obj_item.application).length){
+                          crop_selfie = document.getElementById("img_crop_selfie_face_recognition_"+obj_item.application);
+                        } else {
+                          crop_selfie = document.createElement("img");
+                          crop_selfie.setAttribute("id", "img_crop_selfie_face_recognition_"+obj_item.application);
+                          crop_selfie.setAttribute("class", "img-responsive face-check-rounded-images image-boxed-size-selfie");
+                          crop_selfie.setAttribute("src", "{% static 'images/icons/ic-placeholder.png' %}");
+                        }
+
+                        if ($("#face_similarity_data_"+obj_item.application).length){
+                          data_matched = document.getElementById("face_similarity_data_"+obj_item.application);
+                        } else {
+                          data_matched = document.createElement("div");
+                          data_matched.setAttribute("id", "face_similarity_data_"+obj_item.application);
+                          data_matched.setAttribute("class", "col-xs-5 justify-content-start");
+                          data_row.appendChild(data_matched);
+                        }
+
+                        if ($("#img_ktp_face_recognition_"+obj_item.application).length){
+                          data_matched = document.getElementById("face_similarity_data_"+obj_item.application);
+                        } else {
+                          ktp = document.createElement("img");
+                          ktp.setAttribute("id", "img_ktp_face_recognition_"+obj_item.application);
+                          ktp.setAttribute("class", "img-responsive face-check-rounded-images image-boxed-size-ktp");
+                          ktp.setAttribute("src", "{% static 'images/icons/ic-placeholder.png' %}");
+                          data_matched.prepend(ktp);
+                        }
+
+                        data_matched.prepend(crop_selfie);
+
+                        if(obj_item.image_ext == '.pdf'){
+                          crop_selfie.setAttribute("src", "{% static 'images/collections/image-pdf.png' %}");
+                        }
+                        else {
+                          if (obj_item.image_url) {
+                            crop_selfie.setAttribute("src", obj_item.image_url);
+                            var img = $('<input type="hidden" id="ca_div_hidden_value_selfie_'+obj_item.application+'" value="'+obj_item.image+'">');
+                            $('#img_crop_selfie_face_recognition_'+obj_item.application).append(img);
+                          }
+                        }
+                      }
+
+                      if (typeof obj_item.image_source !== 'undefined')
+                      {
+                        if ($("#img_crop_selfie_face_recognition_"+obj_item.image_source).length){
+                          crop_selfie = document.getElementById("img_crop_selfie_face_recognition_"+obj_item.image_source);
+                        } else {
+                          crop_selfie = document.createElement("img");
+                          crop_selfie.setAttribute("id", "img_crop_selfie_face_recognition_"+obj_item.image_source);
+                          crop_selfie.setAttribute("class", "img-responsive face-check-rounded-images image-boxed-size-selfie");
+                          crop_selfie.setAttribute("src", "{% static 'images/icons/ic-placeholder.png' %}");
+                        }
+
+                        if ($("#face_similarity_data_"+obj_item.image_source).length){
+                          data_matched = document.getElementById("face_similarity_data_"+obj_item.image_source);
+                        } else {
+                          data_matched = document.createElement("div");
+                          data_matched.setAttribute("id", "face_similarity_data_"+obj_item.image_source);
+                          data_matched.setAttribute("class", "col-xs-5 justify-content-start");
+                          data_row.appendChild(data_matched);
+                        }
+
+                        if ($("#img_ktp_face_recognition_"+obj_item.image_source).length){
+                          data_matched = document.getElementById("face_similarity_data_"+obj_item.image_source);
+                        } else {
+                          ktp = document.createElement("img");
+                          ktp.setAttribute("id", "img_ktp_face_recognition_"+obj_item.image_source);
+                          ktp.setAttribute("class", "img-responsive face-check-rounded-images image-boxed-size-ktp");
+                          ktp.setAttribute("src", "{% static 'images/icons/ic-placeholder.png' %}");
+                          data_matched.prepend(ktp);
+                        }
+
+                        data_matched.prepend(crop_selfie);
+
+                        if(obj_item.image_ext == '.pdf'){
+                          crop_selfie.setAttribute("src", "{% static 'images/collections/image-pdf.png' %}");
+                        }
+                        else {
+                          if (obj_item.image_url) {
+                            crop_selfie.setAttribute("src", obj_item.image_url);
+                            var img = $('<input type="hidden" id="ca_div_hidden_value_selfie_'+obj_item.image_source+'" value="'+obj.pk+'">');
+                            $('#img_crop_selfie_face_recognition_'+obj_item.image_source).append(img);
+                          }
+                        }
+                      }
+                    });
+                  });
+              }
+            }
+
+            if (json.data_matched_image !== undefined) {
+              var app_ids = [];
+
+              $.each(JSON.parse(json.data_matched_image), function(i, obj) {
+                //console.log(obj, i);
+
+                var app_id = obj.pk;
+                app_ids.push(app_id);
+
+                if($("#ca_body_table_"+app_id).length === 0) {
+                  var create_table = document.createElement("table");
+                  create_table.setAttribute("class", "ca_table table table-hover table-striped table-similarity mt-16");
+
+                  var cb = $('<span class="image-boxed-size-checkbox"><input type="checkbox" id="cb_input_checkbox_'+app_id+'" value="'+app_id+'" name="face_recognition_checkbox">&nbsp;<label for="comms_channel2_3">Match</label></input></span><a class="right similar-move font-14 font-error-30 pr-12 bold" href="#">Pindahkan <img src="{% static 'images/icons/ic-arrow-right.svg' %}" class="ml-8"/></a>');
+                  $('#face_similarity_data_'+app_id).append(cb);
+
+                  var container = document.getElementById("face_similarity_data_"+app_id);
+                  create_table.setAttribute("id", "ca_table_data_"+app_id);
+                  container.appendChild(create_table);
+
+                  var create_tbody = document.createElement("tbody");
+                  create_tbody.setAttribute("id", "ca_body_table_"+app_id);
+                  create_table.appendChild(create_tbody);
+
+                  var create_tr = document.createElement("tr");
+                  create_tbody.appendChild(create_tr);
+
+                  var create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_app_id_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  var create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("style", "border-top: none");
+                  create_td.setAttribute("id", "ca_td_body_app_id_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  var create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_app_id_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  var create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_app_id_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_apply_date_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_apply_date_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_apply_date_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_apply_date_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  var dt = $('<input type="hidden" id="ca_div_hidden_value_apply_date_'+app_id+'">');
+                  $('#ca_td_body_apply_date_'+app_id).append(dt);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_geo_loc_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_geo_loc_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_geo_loc_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_geo_loc_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_distance_value = document.createElement("span");
+                  create_distance_value.setAttribute("id", "ca_distance_value_geo_loc_"+app_id);
+                  create_div_value.appendChild(create_distance_value);
+
+                  create_map_button = document.createElement("a");
+                  create_map_button.setAttribute("id", "ca_map_button_geo_loc_"+app_id);
+                  create_map_button.setAttribute("target", "_blank");
+                  create_map_button.setAttribute("title", "Open Google Map");
+                  create_div_value.appendChild(create_map_button);
+
+                  create_map_icon = document.createElement("img");
+                  create_map_icon.setAttribute("id", "ca_map_icon_geo_loc_"+app_id);
+                  create_map_icon.setAttribute("src", "{% static 'images/icons/ic-location-marker.svg' %}");
+                  create_map_icon.setAttribute("style", "color: blue;");
+                  create_map_button.appendChild(create_map_icon);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_address_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_address_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_address_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_address_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_provinsi_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_provinsi_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_provinsi_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_provinsi_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_kabupaten_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_kabupaten_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_kabupaten_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_kabupaten_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_kecamatan_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_kecamatan_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_kecamatan_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_kecamatan_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_kelurahan_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_kelurahan_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_kelurahan_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_kelurahan_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_nik_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_nik_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_nik_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_nik_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_email_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_email_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_email_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_email_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_full_name_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_full_name_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_full_name_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_full_name_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_pob_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_pob_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_pob_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_pob_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_dob_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_dob_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_dob_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_dob_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_bank_name_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_bank_name_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_bank_name_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_bank_name_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_bank_account_name_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_bank_account_name_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_bank_account_name_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_bank_account_name_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_bank_account_number_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_bank_account_number_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_bank_account_number_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_bank_account_number_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_android_id_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_android_id_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_android_id_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_android_id_"+app_id);
+                  create_td.appendChild(create_div_value);
+
+                  create_tr = document.createElement("tr");
+                  create_tr.setAttribute("id", "ca_tr_body_device_name_"+app_id);
+                  create_tbody.appendChild(create_tr);
+
+                  create_td = document.createElement("td");
+                  create_td.setAttribute("class", "col-xs-12 table-similarity-word-wrap py-16");
+                  create_td.setAttribute("id", "ca_td_body_device_name_"+app_id);
+                  create_tr.appendChild(create_td);
+
+                  create_div_field = document.createElement("div");
+                  create_div_field.setAttribute("class", "col-xs-4 no-left bold font-neutrals-100");
+                  create_div_field.setAttribute("id", "ca_div_field_device_name_"+app_id);
+                  create_td.appendChild(create_div_field);
+
+                  create_div_value = document.createElement("div");
+                  create_div_value.setAttribute("class", "col-xs-8 font-neutrals-70 semi-bold");
+                  create_div_value.setAttribute("id", "ca_div_value_device_name_"+app_id);
+                  create_td.appendChild(create_div_value);
+                }
+
+                $.each(obj, function(i, obj_item) {
+                  //console.log(obj_item);
+                  $("#ca_div_field_app_id_"+app_id).html('Application ID');
+                  $("#ca_div_value_app_id_"+app_id).html(': <a class="see_app" target="_blank" style="cursor: pointer;">'+app_id+'</a> <code style="padding: 1.5px 8px;border-radius: 100px;background: hsla(var(--hsl-error-10), 1);color: hsla(var(--hsl-error-30), 1);border: 1px solid hsla(var(--hsl-error-30), 1);margin-left: 8px;">'+obj_item.application_status+'</code>');
+                  $("#ca_div_field_apply_date_"+app_id).html('Apply Date');
+                  var cDate = new Date(obj_item.cdate);
+                  var cMonth = cDate.getMonth() + 1;
+                  $("#ca_div_hidden_value_apply_date_"+app_id).val(cDate.getFullYear()+'-'+cMonth+'-'+cDate.getDate());
+                  $("#ca_div_value_apply_date_"+app_id).html(': '+cDate.getDate()+' '+months[cDate.getMonth()]+' '+cDate.getFullYear());
+                  $("#ca_div_field_geo_loc_"+app_id).html('Geo Location Distance');
+                  $("#ca_distance_value_geo_loc_"+app_id).html(': -');
+
+                  $("#ca_div_field_address_"+app_id).html('Address');
+                  if(json.customer_address_street_num === obj_item.address_street_num) {
+                    $("#ca_div_value_address_"+app_id).html(': '+obj_item.address_street_num);
+                  }else{
+                    $("#ca_div_value_address_"+app_id).html(': '+obj_item.address_street_num);
+                  }
+                  if(obj_item.address_street_num === null) {
+                    $("#ca_div_value_address_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_provinsi_"+app_id).html('Provinsi');
+                  if(json.customer_address_provinsi === obj_item.address_provinsi) {
+                    $("#ca_div_value_provinsi_"+app_id).html(': '+obj_item.address_provinsi);
+                  }else{
+                    $("#ca_div_value_provinsi_"+app_id).html(': '+obj_item.address_provinsi);
+                  }
+                  if(obj_item.address_provinsi === null) {
+                    $("#ca_div_value_provinsi_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_kabupaten_"+app_id).html('Kabupaten');
+                  if(json.customer_address_kabupaten === obj_item.address_kabupaten) {
+                    $("#ca_div_value_kabupaten_"+app_id).html(': '+obj_item.address_kabupaten);
+                  }else{
+                    $("#ca_div_value_kabupaten_"+app_id).html(': '+obj_item.address_kabupaten);
+                  }
+                  if(obj_item.address_kabupaten === null) {
+                    $("#ca_div_value_kabupaten_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_kecamatan_"+app_id).html('Kecamatan');
+                  if(json.customer_address_kecamatan === obj_item.address_kecamatan) {
+                    $("#ca_div_value_kecamatan_"+app_id).html(': '+obj_item.address_kecamatan);
+                  }else{
+                    $("#ca_div_value_kecamatan_"+app_id).html(': '+obj_item.address_kecamatan);
+                  }
+                  if(obj_item.address_kecamatan === null) {
+                    $("#ca_div_value_kecamatan_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_kelurahan_"+app_id).html('Kelurahan');
+                  if(json.customer_address_kelurahan === obj_item.address_kelurahan) {
+                    $("#ca_div_value_kelurahan_"+app_id).html(': '+obj_item.address_kelurahan);
+                  }else{
+                    $("#ca_div_value_kelurahan_"+app_id).html(': '+obj_item.address_kelurahan);
+                  }
+                  if(obj_item.address_kelurahan === null) {
+                    $("#ca_div_value_kelurahan_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_nik_"+app_id).html('NIK');
+                  if(json.customer_ktp === obj_item.ktp) {
+                    $("#ca_div_value_nik_"+app_id).html(': '+obj_item.ktp);
+                  }else{
+                    $("#ca_div_value_nik_"+app_id).html(': '+obj_item.ktp);
+                  }
+                  if(obj_item.ktp === null) {
+                    $("#ca_div_value_nik_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_email_"+app_id).html('Email');
+                  if(json.customer_email === obj_item.email) {
+                    $("#ca_div_value_email_"+app_id).html(': '+obj_item.email);
+                  }else{
+                    $("#ca_div_value_email_"+app_id).html(': '+obj_item.email);
+                  }
+                  if(obj_item.email === null) {
+                    $("#ca_div_value_email_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_full_name_"+app_id).html('Full Name');
+                  if(json.customer_fullname === obj_item.fullname) {
+                    $("#ca_div_value_full_name_"+app_id).html(': '+obj_item.fullname);
+                  }else{
+                    $("#ca_div_value_full_name_"+app_id).html(': '+obj_item.fullname);
+                  }
+                  if(obj_item.fullname === null) {
+                    $("#ca_div_value_full_name_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_pob_"+app_id).html('POB');
+                  if(json.customer_birth_place === obj_item.birth_place) {
+                    $("#ca_div_value_pob_"+app_id).html(': '+obj_item.birth_place);
+                  }else{
+                    $("#ca_div_value_pob_"+app_id).html(': '+obj_item.birth_place);
+                  }
+                  if(obj_item.birth_place === null) {
+                    $("#ca_div_value_pob_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_dob_"+app_id).html('DOB');
+                  if(json.customer_dob === obj_item.dob) {
+                    $("#ca_div_value_dob_"+app_id).html(': '+obj_item.dob);
+                  }else{
+                    $("#ca_div_value_dob_"+app_id).html(': '+obj_item.dob);
+                  }
+                  if(obj_item.dob === null) {
+                    $("#ca_div_value_dob_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_bank_name_"+app_id).html('Bank Name');
+                  if(json.customer_bank_name === obj_item.bank_name) {
+                    $("#ca_div_value_bank_name_"+app_id).html(': '+obj_item.bank_name);
+                  }else{
+                    $("#ca_div_value_bank_name_"+app_id).html(': '+obj_item.bank_name);
+                  }
+                  if(obj_item.bank_name === null) {
+                    $("#ca_div_value_bank_name_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_bank_account_name_"+app_id).html('Bank Account Name');
+                  if(json.customer_bank_account_name === obj_item.name_in_bank) {
+                    $("#ca_div_value_bank_account_name_"+app_id).html(': '+obj_item.name_in_bank);
+                  }else{
+                    $("#ca_div_value_bank_account_name_"+app_id).html(': '+obj_item.name_in_bank);
+                  }
+                  if(obj_item.name_in_bank === null) {
+                    $("#ca_div_value_bank_account_name_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_bank_account_number_"+app_id).html('Bank Account Number');
+                  if(json.customer_bank_account_number === obj_item.bank_account_number) {
+                    $("#ca_div_value_bank_account_number_"+app_id).html(': '+obj_item.bank_account_number);
+                  }else{
+                    $("#ca_div_value_bank_account_number_"+app_id).html(': '+obj_item.bank_account_number);
+                  }
+                  if(obj_item.bank_account_number === null) {
+                    $("#ca_div_value_bank_account_number_"+app_id).html('<strong>null</strong>');
+                  }
+
+                  $("#ca_div_field_android_id_"+app_id).html('Android ID');
+                  $("#ca_div_field_device_name_"+app_id).html('Device Name');
+                });
+                if(json.device_data_matched_image !== null){
+                  $.each(JSON.parse(json.device_data_matched_image), function(i, obj) {
+                    //console.log(obj, i);
+                    var dev_id = obj.pk;
+                    $.each(obj, function(i, obj_item) {
+                      //console.log(obj_item);
+                      if(json.customer_android_id === obj_item.android_id) {
+                        $("#ca_div_value_android_id_"+app_id).html(': '+obj_item.android_id);
+                      }else{
+                        $("#ca_div_value_android_id_"+app_id).html(': '+obj_item.android_id);
+                      }
+
+                      if(json.customer_device_name === obj_item.device_model_name) {
+                        $("#ca_div_value_device_name_"+app_id).html(': '+obj_item.device_model_name);
+                      }else{
+                        $("#ca_div_value_device_name_"+app_id).html(': '+obj_item.device_model_name);
+                      }
+                    });
+                  });
+                } else {
+                  $("#ca_div_value_android_id_"+app_id).html('<strong>null</strong>');
+                  $("#ca_div_value_device_name_"+app_id).html('<strong>null</strong>');
+                }
+              });
+              if(json.geo_data_matched_image !== null){
+                $.each(JSON.parse(json.geo_data_matched_image), function(i, obj) {
+                  //console.log(obj, i);
+
+                  $.each(obj, function(i, obj_item) {
+                    //console.log(obj_item);
+                    $("#ca_map_button_geo_loc_"+obj_item.application).attr('href', 'https://www.google.com/maps/?q='+obj_item.latitude+','+obj_item.longitude);
+                    var distance = getDistanceFromLatLonInKm(json.customer_geo_data_lat,json.customer_geo_data_lon,obj_item.latitude,obj_item.longitude).toFixed(1);
+                    $("#ca_distance_value_geo_loc_"+obj_item.application).html(': '+distance+' km ');
+                  });
+                });
+              } else {
+                $.each(app_ids, function( key, app_id ) {
+                    $("#ca_distance_value_geo_loc_"+app_id).html('<strong>null</strong> ');
+                });
+              }
+            }
+            
+            //handle if no data found
+            if (json.data_matched_image === null) {
+              $("#face_recognition_data_row").html('<div id="similar-no-data" class="col-xs-4 bold font-neutrals-100" style="display: flex; width: 100%; height: 100vh; justify-content: center; align-items: center;">No Matches Found</div>');
+            }
+          }
+
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+          console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          $("#modal-face-similarity-app_body").html("Error on getting data from server");
+      }
+    });
+
+    $("#modal-face-similarity-app").on('show', function () {
+          $(this).find('.modal-body').css({
+                width:'auto', //probably not needed
+                height:'auto', //probably not needed
+                'max-height':'100%'
+          });
+    });
+    $("#modal-face-similarity-app").modal('show');
+  }
+</script>

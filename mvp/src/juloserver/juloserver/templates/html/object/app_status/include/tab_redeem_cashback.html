@@ -1,0 +1,274 @@
+{% load unit %}
+{% load default unit %}
+
+<table>
+    <tr>
+      <td class='m-r-10'>
+        Available Balance:
+      </td>
+      <td>
+        &nbsp;<strong>{{ application.customer.wallet_balance_available|f_rupiahs:"no"|safe }}</strong>
+      </td>
+    <tr>
+      <td colspan="2">
+        <hr style="border-style: dashed; border-color: #8c8c8c; font-weight:2px;"></hr>
+      </td>
+    </tr>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Transaction Date
+      </td>
+      <td>
+        &nbsp;<strong>{{ cashback_transfer.cdate|date:"d M Y H:i:s" }}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Redeem Cashback Amount
+      </td>
+      <td>
+        <div class="input-group input-group-sm ">
+          <input type="number"
+                  class="form-control"
+                  name="cashback_redeem_amount"
+                  id="id_cashback_redeem_amount"
+                  requeired
+                  value="{{cashback_transfer.redeem_amount}}" />
+        </div>
+        
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Transfer Amount
+      </td>
+      <td>
+        &nbsp;<strong id="id_cashback_transfer_amount"> {{ cashback_transfer.transfer_amount|f_rupiahs:"no"|safe }}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Admin Fee
+      </td>
+      <td>
+        &nbsp;<strong id="id_cashback_admin_fee"> {{ cashback_transfer.redeem_amount|subtract:cashback_transfer.transfer_amount |f_rupiahs:"no"|safe }}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Method
+      </td>
+      <td>
+        <div class="input-group input-group-sm">
+          <input type="text"
+                 class="form-control"
+                 list="partner_transfers"
+                 name="partner_transfers"
+                 id="id_cashback_partner_transfer"
+                 value="{{cashback_transfer.partner_transfer}}">
+            <datalist class="form_control" id="partner_transfers">
+              {% for partner in partner_transfers %}
+                <option value="{{ partner }}">{{ partner }}</option>
+              {% endfor %}
+            </datalist>
+        </div>
+        
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Bank Name
+      </td>
+      <td>
+        <div class="input-group input-group-sm">
+          <input type="text"
+                 class="form-control"
+                 list="banks"
+                 name="banks"
+                 id="id_cashback_bank_name"
+                 value="{{cashback_transfer.bank_name}}">
+            <datalist class="form_control" id="banks">
+              {% for bank in bank_list %}
+                <option value="{{ bank }}">{{ bank }}</option>
+              {% endfor %}
+            </datalist>
+        </div>
+        
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Bank Code
+      </td>
+      <td>
+        &nbsp;<strong id="id_cashback_bank_code">{{ cashback_transfer.bank_code|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Bank Account Number
+      </td>
+      <td>
+        <div class="input-group input-group-sm ">
+          <input type="text"
+                 patter="[0-9]"
+                 class="form-control"
+                 name="bank_number"
+                 id="id_cashback_bank_number"
+                 value="{{cashback_transfer.bank_number}}">
+        </div>
+        
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Name in Bank
+      </td>
+      <td>
+        <div class="input-group input-group-sm ">
+          <input type="text"
+                 class="form-control"
+                 name="name_in_bank"
+                 id="id_cashback_name_in_bank"
+                 value="{{cashback_transfer.name_in_bank}}">
+        </div>
+        
+      </td>
+    </tr>
+    {% if cashback_transfer.transfer_status == 'APPROVED' or cashback_transfer.transfer_status == 'REQUESTED' or cashback_transfer.transfer_status == 'FAILED' %}
+    <tr>
+      <td></td>
+      <td align="right">
+        <br/>
+        <button
+          class="btn btn-danger"
+          id="id_update_cashback"
+          onClick="updateCashback()"
+        >
+          Update
+        </button>
+      </td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td colspan="2">
+        <hr style="border-style: dashed; border-color: #8c8c8c; font-weight:2px;"></hr>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Transfer Status
+      </td>
+      <td>
+        &nbsp;<strong>{{ cashback_transfer.transfer_status|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Transfer External Id
+      </td>
+      <td>
+        &nbsp;<strong>{{ cashback_external_id|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Transfer Retry Times
+      </td>
+      <td>
+        &nbsp;<strong>{{ cashback_retry_times|default:"0"|safe}}</strong>
+      </td>
+    </tr>
+    {% if cashback_transfer.failure_code %}
+      <tr>
+        <td class='m-r-10'>
+          Failure Code
+        </td>
+        <td>
+          &nbsp;<code>{{ cashback_transfer.failure_code|default:"-"|safe}}</code>
+        </td>
+      </tr>
+      <tr>
+        <td class='m-r-10'>
+          Failure Message
+        </td>
+        <td>
+          &nbsp;<code>{{ cashback_transfer.failure_message|default:"-"|safe}}</code>
+        </td>
+      </tr>
+    {% endif %}
+    <tr>
+      <td class='m-r-10'>
+        Validation Status
+      </td>
+      <td>
+        &nbsp;<strong>{{ cashback_transfer.validation_status|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Validated Name
+      </td>
+      <td>
+        &nbsp;<strong>{{ cashback_transfer.validated_name|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    {% if cashback_transfer.transfer_status != "REJECTED" and cashback_transfer.transfer_status != "COMPLETED"%}
+    <tr>
+      <td class='m-r-10'>
+        Notes
+      </td>
+      <td>
+        <textarea id="cashback_note_id" class="form-control"></textarea>
+      </td>
+    </tr>
+    {% endif %}
+</table>
+
+{% if cashback_transfer.transfer_status == "REQUESTED" %}
+  <div class="col-md-6 col-xs-6 m-t-30">
+    <button
+      class="btn btn-primary"
+      id="approve_redeem_cashback"
+      onClick="process_cashback_transfer_request('APPROVED', '{{ cashback_transfer.id }}')"
+    >
+      Approve
+    </button>
+    <button
+      class="btn btn-danger"
+      id="reject_redeem_cashback"
+      onClick="process_cashback_transfer_request('REJECTED', '{{ cashback_transfer.id }}')"
+    >
+      Reject
+    </button>
+  </div>
+{% endif %}
+{% if cashback_transfer.transfer_status == "FAILED" or cashback_transfer.validation_status = "INVALID ACCOUNT" or cashback_transfer.transfer_status == "APPROVED" or cashback_transfer.validation_status = "INITIATED" %}
+  <div class="col-md-6 col-xs-6 m-t-30">
+    {% if cashback_transfer.partner_transfer == 'Manual' %}
+      <button
+        class="btn btn-primary"
+        id="complete_redeem_cashback"
+        onClick="retryCashbackTransfer()"
+      >
+        Completed
+      </button>
+    {% elif cashback_transfer.partner_transfer == 'Xfers' or cashback_transfer.partner_transfer == 'Bca' %}
+      <button
+        class="btn btn-primary"
+        id="retry_redeem_cashback"
+        onClick="retryCashbackTransfer()"
+      >
+        Retry
+      </button>
+    {% endif %}
+      <button
+        class="btn btn-danger"
+        id="reject_redeem_cashback"
+        onClick="process_cashback_transfer_request('REJECTED', '{{ cashback_transfer.id }}')"
+      >
+        Reject
+      </button>
+    </div>
+{% endif %}

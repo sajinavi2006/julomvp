@@ -1,0 +1,348 @@
+<table class="ca_table table">
+    <thead>
+        <tr>
+            <th class="bold col-xs-9" colspan="3" style="border:none;padding:0px 15px 15px 0px;">Berikut adalah data yang diubah oleh pengguna:</th>
+            <th class="btn-default col-xs-3" style="width:25%;border:none;padding:15px;background:#f1f1f1;">
+                <div style="text-align: center;">App-ID: <span class="bold">{{ object.id }}</span></div>
+            </th>
+        </tr>
+        <tr style="padding-top:10px;">
+            <th style="border:none;"></th>
+            <th class="text-bold" style="background:#f1f1f1;padding: 15px;border:none;">Data dari video call</th>
+            <th class="text-bold" style="background:#f1f1f1;padding: 15px;border:none;">Data yang diubah pengguna</th>
+            <th style="border:none;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr {% if edited_data.ktp_self.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-md-3 bold text-label" style="border-top:none;">KTP Image:</td>
+            <td style="padding:10px; align-items: center;" class="col-md-3">
+                <a href="{{ data_video_call.ktp_self }}" target="_blank">
+                    <img src="{{ data_video_call.ktp_self }}" alt="KTP Image" style="width: 100px;">
+                </a>
+            </td>
+
+            <td style="padding:10px; align-items: center;" class="col-md-3">
+                <a href="{{ edited_data.ktp_self.value }}" target="_blank">
+                    <img src="{{ edited_data.ktp_self.value }}" alt="KTP Image" style="width: 100px;">
+                </a>
+            </td>
+            {% if edited_data.ktp_self.is_different %}
+                <td class="col-md-3 text-flag" style="border-top:none;">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-md-3 text-flag" style="border-top:none;">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.selfie.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-md-3 bold text-label">Selfie:</td>
+            <td style="padding:10px; align-items: center;" class="col-md-3">
+                <a href="{{ data_video_call.selfie }}" target="_blank" title="Klik untuk melihat gambar">
+                    <img src="{{ data_video_call.selfie }}" alt="Selfie Image" style="width: 100px;">
+                </a>
+            </td>
+            <td style="padding:10px; align-items: center;" class="col-md-3">
+                <a href="{{ edited_data.selfie.value }}" target="_blank" title="Klik untuk melihat gambar">
+                    <img src="{{ edited_data.selfie.value }}" alt="Selfie Image" style="width: 100px;">
+                </a>
+            </td>
+            {% if edited_data.selfie.is_different %}
+                <td class="col-md-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-md-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.nama.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Nama Lengkap:</td>
+            <td>
+                <div>{{ data_video_call.nama }}</div>
+            </td>
+            <td>
+                 <div>{{ edited_data.nama.value }}</div>
+            </td>
+            {% if edited_data.nama.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.nik.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="bold">No. KTP:</td>
+            <td>
+                <div>{{ data_video_call.nik }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.nik.value }}</div>
+            </td>
+            {% if edited_data.nik.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag bg-colour">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.tgl_lahir.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Tanggal Lahir:</td>
+            <td>
+                <div>{{ data_video_call.tgl_lahir }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.tgl_lahir.value }}</div>
+            </td>
+            {% if edited_data.tgl_lahir.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.tempat.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Tempat Lahir:</td>
+            <td>
+                <div>{{ data_video_call.tempat }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.tempat.value }}</div>
+            </td>
+            {% if edited_data.tempat.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.status_perkawinan.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Status Pernikahan:</td>
+            <td>
+                <div>{{ data_video_call.status_perkawinan }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.status_perkawinan.value }}</div>
+            </td>
+            {% if edited_data.status_perkawinan.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.jenis_kelamin.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Jenis Kelamin:</td>
+            <td>
+                <div>{{ data_video_call.jenis_kelamin }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.jenis_kelamin.value }}</div>
+            </td>
+            {% if edited_data.jenis_kelamin.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.pekerjaan.is_different or not is_match_for_job %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Pekerjaan:</td>
+            <td>
+                <div>{{ data_video_call.pekerjaan }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.pekerjaan.value }}</div>
+            </td>
+            {% if is_match_for_job %}
+                {% if edited_data.pekerjaan.is_different %}
+                    <td class="col-xs-3 text-flag">
+                        <span class="registration-method-warning font-warning-30 warning">
+                            Diubah
+                        </span>
+                    </td>
+                {% else %}
+                    <td class="col-xs-3 text-flag">
+                        <span class="registration-method">
+                            Tidak diubah
+                        </span>
+                    </td>
+                {% endif %}
+            {% else %}
+            <td class="col-xs-3 text-flag">
+                <span class="registration-method-danger">
+                    Data bermasalah
+                </span>
+                <button class="btn" style="background:transparent!important;color: #000;" data-bs-toggle="tooltip" data-bs-placement="left" title="Tolong ganti pekerjaan sesuai mapping yang ada">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                </button>
+            </td>
+            {% endif %}
+
+        </tr>
+        <tr {% if edited_data.alamat.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Alamat:</td>
+            <td>
+                <div>{{ data_video_call.alamat }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.alamat.value }}</div>
+            </td>
+            {% if edited_data.alamat.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.provinci.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Provinsi:</td>
+            <td>
+                <div>{{ data_video_call.provinci }}</div>
+            </td>
+             <td>
+                <div>{{ edited_data.provinci.value }}</div>
+            </td>
+            {% if edited_data.provinci.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.kota_or_kabupaten.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Kabupaten:</td>
+            <td>
+                <div>{{ data_video_call.kota_or_kabupaten }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.kota_or_kabupaten.value }}</div>
+            </td>
+            {% if edited_data.kota_or_kabupaten.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.kecamatan.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Kecamatan:</td>
+            <td>
+                <div>{{ data_video_call.kecamatan }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.kecamatan.value }}</div>
+            </td>
+            {% if edited_data.kecamatan.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+        <tr {% if edited_data.kel_desa.is_different %} style="background-color: #fde5ce!important;" {% endif %} class="padding-setup">
+            <td class="col-xs-3 bold text-label">Kelurahan:</td>
+            <td>
+                <div>{{ data_video_call.kel_desa }}</div>
+            </td>
+            <td>
+                <div>{{ edited_data.kel_desa.value }}</div>
+            </td>
+            {% if edited_data.kel_desa.is_different %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method-warning font-warning-30 warning">
+                        Diubah
+                    </span>
+                </td>
+            {% else %}
+                <td class="col-xs-3 text-flag">
+                    <span class="registration-method">
+                        Tidak diubah
+                    </span>
+                </td>
+            {% endif %}
+        </tr>
+    </tbody>
+</table>
+

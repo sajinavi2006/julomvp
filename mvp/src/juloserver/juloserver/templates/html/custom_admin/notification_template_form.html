@@ -1,0 +1,53 @@
+{% extends "admin/base_site.html" %}
+{% load static from staticfiles %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ notif_form.as_table }}
+            {% if form_status == 'update' %}
+                <tr id="current_image_layout">
+                    <td><b>current image :</b></td>
+                    <td><img src="{{ image_url }}" height="300" width="300"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="center">
+                        <button type="button" id="btnChangeImage">Change Image</button>
+                        <input type="hidden" id="isChangeImage" name="is_change_image" value="false">
+                    </td>
+                </tr>
+            {% endif %}
+            <tr id="image_layout">
+                <td><b>Image :</b></td>
+                <td><input name="image" type="file" required></td>
+            </tr>
+        </table>
+        <div class="submit-row">
+            <input type="submit" value="Save" class="default" name="_save">
+        </div>
+    </form>
+    <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script type="application/javascript">
+        $(document).ready(function (e) {
+            {% if form_status == 'update' %}
+                $('#image_layout').hide()
+                $('input[name="image"]').removeAttr('required')
+            {% endif %}
+            $('#btnChangeImage').click(function () {
+                if ($('#current_image_layout').is(':visible')) {
+                    $('#current_image_layout').hide(200)
+                    $('#image_layout').show(200)
+                    $('#isChangeImage').val(true)
+                    $(this).html("Cancel")
+                    $('input[name="image"]').removeAttr('required')
+                } else {
+                    $('#current_image_layout').show(200)
+                    $('#image_layout').hide(200)
+                    $(this).html("Change Image")
+                    $('#isChangeImage').val(false)
+                    $('input[name="image"]').removeAttr('required')
+                }
+            })
+        })
+    </script>
+{% endblock %}

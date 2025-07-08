@@ -1,0 +1,82 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+{% block field_sets %}
+{% for fieldset in adminform %}
+  {% include "admin/includes/fieldset.html" %}
+    <p>Total Points for Partner: <span id="TOTAL_POINTS"></span></p>
+    <p>Active Points for Partner: <span id="ACTIVE_POINTS"></span></p>
+{% endfor %}
+{% endblock %}
+{% block admin_change_form_document_ready %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+        (function($) {
+            const token = '{{ token }}';
+            const baseURL = "{{ base_url }}"
+            const url = {
+                current_binary_check: '/api/partnership/v1/merchant/get_total_binary_check_score',
+            }
+            const $axios = axios.create({
+                baseURL,
+                timeout: 30000,
+                headers: {
+                    "Authorization": `Token ${token}`
+                }
+            });
+
+            function notifyFail() {
+                Snackbar.show({
+                    pos: 'bottom-right',
+                    text: 'Maaf, terjadi kesalahan',
+                });
+            }
+            var previousvalue = "";
+            function GetMerchantBinaryScore() {
+                if(previousvalue !== $("#id_partner").val())
+                        {
+                            previousvalue = $("#id_partner").val();
+                            try {
+                                const check = $axios.get(url.current_binary_check, {
+                                  params: {
+                                    partner_id: $("#id_partner").val()
+                                  }
+                                }).then((response) => {
+                                    document.getElementById("TOTAL_POINTS").textContent=response.data["data"]["total_score"];
+                                    document.getElementById("ACTIVE_POINTS").textContent=response.data["data"]["active_score"];
+                                  });;
+                            }
+                            catch (err) {
+                                notifyFail();
+                            }
+
+                        }
+                    }
+
+            $(document).ready(function() {
+                $('.add-another').click(function(e) {
+                    e.preventDefault();
+                    var event = $.Event('django:add-another-related');
+                    $(this).trigger(event);
+                    if (!event.isDefaultPrevented()) {
+                        showAddAnotherPopup(this);
+                    }
+                });
+                $("#id_partner").change(function(){
+                    GetMerchantBinaryScore();
+            });
+            $(document).ready( function() {
+                GetMerchantBinaryScore();
+            });
+
+
+
+
+            {% if adminform and add %}
+                $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
+            {% endif %}
+            });
+        })(django.jQuery);
+
+
+    </script>
+{% endblock %}

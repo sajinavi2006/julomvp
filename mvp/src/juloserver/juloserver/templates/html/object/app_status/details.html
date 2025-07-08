@@ -1,0 +1,80 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+
+{% load static from staticfiles %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/datatables/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'default/theme/css/buttons.dataTables.min.css' %}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+{% block breadcrumb_title %}
+  
+{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'app_status:list' %}">Download scraped-data xls</a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+ 
+{% block list_title %}
+        Data Aplikasi
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+    
+    {% include "object/app_status/include/details_all.html" %}
+    
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'app_status:list' %}">
+    <button id="back" type="button" class="btn btn-info">
+      <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+    </button>
+  </a>
+{% endblock %}
+
+
+{% block script_additional %}
+  <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+
+  <script src="{% static 'theme/plugins/bower_components/datatables/jquery.dataTables.min.js' %}"></script>
+
+
+  <!-- start - This is for export functionality only -->
+  <script src="{% static 'default/theme/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'default/theme/js/buttons.flash.min.js' %}"></script>
+  <script src="{% static 'default/theme/js/jszip.min.js' %}"></script>
+  <script src="{% static 'default/theme/js/pdfmake.min.js' %}"></script>
+  <script src="{% static 'default/theme/js/vfs_fonts.js' %}"></script>
+  <script src="{% static 'default/theme/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'default/theme/js/buttons.print.min.js' %}"></script>
+  <!-- end - This is for export functionality only -->
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+  jQuery.fn.delay = function(time,func){
+      this.each(function(){
+          setTimeout(func,time);
+      });
+
+      return this;
+  };
+
+  jQuery(document).ready(function() {
+    
+    // alert("Document is ready");
+    $('#appVerificationTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    });
+
+
+  });
+{% endblock %}

@@ -1,0 +1,158 @@
+{% load default unit %}
+
+
+<div id="slim_history_note">
+  <!-- customtab -->
+  <ul class="nav nav-tabs customtab tabs">
+     <li class="active tab">
+      <a href="#app_status_history" data-toggle="tab"> <span class="visible-xs" title="Status History and Notes History">
+      <i class="fa fa-home"></i></span> <span class="hidden-xs">Status History and Notes History</span> </a>
+    </li>
+    <li class="tab"><a href="#email_sms_history" data-toggle="tab" title="EMAIL/SMS History">
+      <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Email and SMS History</span> </a>
+    </li>
+    <li class="tab"><a href="#app_note_history" data-toggle="tab" title="Application Note History">
+      <span class="hidden-xs">Application Notes</span></a>
+    </li>
+    <li class="tab"><a href="#skip_trace_history" data-toggle="tab" title="Application Note History">
+      <span class="hidden-xs">Skiptrace History</span></a>
+    </li>
+    <li class="tab"><a href="#wallet_note" data-toggle="tab" title="Cashback Note">
+      <span class="hidden-x s">Cashback Note</span></a>
+    </li>
+    <li class="tab"><a href="#cootek_history" data-toggle="tab" title="Cootek History">
+      <span class="hidden-x s">Cootek History</span></a>
+    </li>
+  </ul>
+
+  <!-- .row -->
+  <div class="tab-content pmt_event">
+    <!-- Tab payment details -->
+    <div class="tab-pane active" id="app_status_history">
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="15%">Waktu/Status</th>
+            <th width="70%">Content / Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%  for his_note_obj in history_note_list %}
+            {%if his_note_obj.type_data == 'Notes' %}
+               <tr class="success">
+                <td>
+                  <label class="label label-warning">
+                    {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                  </label><br/>
+                   <label class="label label-danger">
+                    {{ his_note_obj.type_data }}
+                  </label>
+                </td>
+
+                <td>
+                  Agent: <code>{{ his_note_obj.added_by|default:'-'|safe }}</code><br/>
+                  <strong>Catatan:</strong>
+                  {{ his_note_obj.extra_data.call_note.contact_source}}
+                  /{{ his_note_obj.extra_data.call_note.phone_number }}
+                  /{{ his_note_obj.extra_data.call_note.call_result }}
+                  /{{ his_note_obj.extra_data.call_note.spoke_with }}
+                  /{{ his_note_obj.extra_data.call_note.non_payment_reason }}<br/>
+                  {{ his_note_obj.note_text|default:'-'|linebreaks|escape }}
+                </td>
+              </tr>
+            {% elif his_note_obj.type_data == 'Account Assignment Change' %}
+               <tr class="success">
+                <td>
+                  <label class="label label-warning">
+                    {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                  </label><br/>
+                  <label class="label label-danger">
+                    {{ his_note_obj.type_data }}
+                  </label>
+                </td>
+
+                <td>
+                  <strong>Assignment Reason: </strong> {{ his_note_obj.assignment_reason }} <br/>
+                  <strong>New Assignment: </strong>
+                    {% if not his_note_obj.new_assignment %}
+                        Inhouse
+                    {% else %}
+                        {{ his_note_obj.new_assignment }}
+                    {% endif %}
+                    <br/>
+                    <strong>Old Assignment: </strong>
+                        {% if not his_note_obj.old_assignment %}
+                            Inhouse
+                        {% else %}
+                            {{ his_note_obj.old_assignment }}
+                        {% endif %}
+                        <br/>
+                </td>
+              </tr>
+            {% else %}
+              {%if his_note_obj.change_reason == 'system_triggered' %}
+                <!-- do nothing -->
+              {% else %}
+                <tr class="warning">
+                  <td>
+                    <label class="label label-success">
+                      {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                    </label><br/>
+                    <label class="label label-purple">
+                      {{ his_note_obj.type_data }}
+                    </label>
+                  </td>
+                  <td>
+                    Agent: <code>{{ his_note_obj.changed_by|default:'-'|safe }}</code><br/>
+                    Status: <label class="label label-info">
+                      {{ his_note_obj.status_old|safe }}
+                    </label>
+                    &nbsp;&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                    <label class="label label-success">
+                      {{ his_note_obj.status_new|safe }}
+                    </label>
+                    <br/>
+                    <strong>Alasan :</strong>
+                    {{ his_note_obj.change_reason|default:'-'|linebreaks|escape|safe }}
+                  </td>
+                </tr>
+              {% endif %}
+            {% endif %}
+          {% empty %}
+            <tr>
+              <td colspan="2">
+                <span> Tidak ada Data </span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab Payment SMS history -->
+    <div class="tab-pane" id="email_sms_history">
+      {% include "object/payment_status/include/tab_email_sms_history.html" %}
+    </div>
+
+    <!-- Tab Payment App note history -->
+    <div class="tab-pane" id="app_note_history">
+         {% include "object/payment_status/include/app-history.html" %}
+    </div>
+
+    <!-- Tab skiptrace history -->
+    <div class="tab-pane" id="skip_trace_history">
+      {% include "object/app_status/include/skiptrace_history.html" %}
+    </div>
+
+    <!-- Tab skiptrace history -->
+    <div class="tab-pane" id="wallet_note">
+      {% include "object/payment_status/include/wallet_history.html" %}
+    </div>
+
+    <!-- Tab cootek history -->
+    <div class="tab-pane" id="cootek_history">
+      {% include "object/payment_status/include/cootek_history.html" %}
+    </div>
+
+  </div>
+</div>

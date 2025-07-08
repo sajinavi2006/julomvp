@@ -1,0 +1,258 @@
+{% load utils %}
+{% load format_date %}
+{% load currency %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'plugins/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/css/custom.css' %}"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'plugins/css/regular.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/css/all.css' %}">
+    <style type="text/css">
+        .payment-detail2 {
+            margin: auto;
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .small-text {
+            margin-top: 2px;
+            font-size: 14px;
+            color: #5e5e5e;
+        }
+
+        .no-space {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .less-space {
+            padding-left: 5px;
+            padding-right: 0px;
+        }
+
+        .illustration {
+            text-align: center;
+            width: 440px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .illustration {
+                width: 70%;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .payment-value {
+                font-size: 13px;
+            }
+
+            .small-text {
+                font-size: 10px;
+            }
+
+            .payment-detail2 {
+                padding: 10px 5px;
+            }
+
+            .illustration {
+                width: 80%;
+            }
+        }
+
+        .phonenumber-one {
+                margin-left:44px;
+                margin-bottom: 0px;
+            }
+
+        .phonenumber-two {
+                margin-left:106px;
+                margin-bottom: 0px;
+            }
+
+        .phonenumber-three {
+                margin-left:106px;
+            }
+
+        .email {
+            margin-left: 53px;
+        }
+
+        .whatsapp {
+                margin-left: 15px;
+            }
+
+        @media only screen and (max-width: 768px) {
+            .phonenumber-one {
+                margin-left:36px;
+                margin-bottom: 0px;
+            }
+            .phonenumber-two {
+                margin-left:83px;
+                margin-bottom: 0px;
+            }
+            .phonenumber-three {
+                margin-left:83px;
+            }
+            .email {
+                margin-left: 43px;
+            }
+            .whatsapp {
+                margin-left: 15px;
+            }
+        }
+
+    </style>
+
+    <title>julo</title>
+</head>
+
+<body>
+
+<div class="jumbotron">
+    <div class="logo"><img src="{% static 'images/julo/JULO_logo_white_small.png' %}"/></div>
+    <div class="container header">
+        <h2>Permohonan Keringanan Cicilan</h2>
+    </div>
+</div>
+<div id="summary_content">
+    <div class="container">
+    {% if not not_found %}
+        <div class="row">
+            <div class="col-md-12">
+                <p>Halo. {{ fullname_with_title }}</p>
+                <p>Terima kasih atas kepercayaan Anda untuk memilih JULO sebagai solusi keuangan Anda.</p>
+                <p id="default-text">
+                    Sehubungan dengan kondisi yang disebabkan oleh wabah COVID-19, JULO akan meringankan beban
+                    cicilan Anda dengan cara:
+                </p>
+                <ul>
+                    <li>Meringankan cicilan anda menjadi <strong>{{ prerequisite_amount|add_rupiah_and_separator }}</strong>
+                        selama periode April-Juli 2020.</li>
+                    <li>Menghapuskan denda keterlambatan Anda sebesar {{ late_fee_discount|add_rupiah_and_separator }}</li>
+                    <li>Memperpanjang tenor cicilan</li>
+                </ul>
+
+                <p>Silahkan lakukan pembayaran cicilan JULO Anda sebesat {{ prerequisite_amount|add_rupiah_and_separator }} paling lambat {{ first_due_date|format_date_to_locale_format }} melalui nomor
+                    Virtual Account berikut:</p><br>
+                <p>VA {{ bank_name }} : {{ va_number }}</p>
+                <p>Kode bank : {{ bank_code|default:"-"|safe }}</p><br>
+                <p style="color: red">Jika Anda tidak membayar cicilan pertama paling lambat 5 hari setelah
+                    penawaran ini disetujui. Proses Pengurangan Cicilan akan otomatis dibatalkan.</p>
+            </div>
+        </div>
+
+        <div class="billing-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12  payment-detail2">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col" style="text-align: center">Pembayaran#</th>
+                                <th scope="col" style="text-align: center">Jatuh Tempo</th>
+                                <th scope="col" style="text-align: center">Cicilan</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for payment in payments %}
+                                <tr>
+                                    <td style="text-align: center">{{ payment.payment_number }}</td>
+                                    <td style="text-align: center">{{ payment.due_date|format_date_to_locale_format }}</td>
+                                    <td style="text-align: center">{{ payment.due_amount|add_rupiah_and_separator }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row" id="pymentdets">
+                <div class="col-md-12">
+                    <p>Berikut ketentuan yang akan Anda terima selama program berlangsung:</p>
+                    <ul>
+                        <li>Seluruh cashback yang Anda miliki saat ini akan hilang. Namun Anda akan tetap mendapatkan
+                            cashback di pembayaran selanjutnya jika membayar tepat waktu.
+                        </li>
+                        <li>Anda tidak dapat meningkatkan poin dan mengikuti promo lain yang sedang berjalan.</li>
+                    </ul>
+                    <p>Untuk informasi lebih lanjut, silahkan menghubungi Petugas Kami di email korespondensi di
+                        collections@julo.co.id atau hubungi Customer Service Julo melalui CS Inbound (Call Center): 021 395 099 57 / Collections Inbound: 021 5091 9036 / 021 5091 9037</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p>PT. Julo Teknologi Finansial</p>
+                </div>
+            </div>
+
+        {% else %}
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="{% static 'images/loan_refinancing/expired.png' %}" class="illustration">
+                </div>
+            </div>
+        {% endif %}
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <br/>
+                    Apabila ada pertanyaan lebih lanjut, silahkan hubungi JULO customer care melalui:
+                    <br/><br/>Telpon: <label class="phonenumber-one">021-5091-9036</label>
+                    <br/><label class="phonenumber-two">021-5091-9037</label>
+                    <br/>Email: <label class="email" ><a href="mailto:collections@julo.co.id">collections@julo.co.id</a></label>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+</div>
+
+<div class="footer-top">
+    <div class="logo-footer">
+        <img src="{% static 'images/julo/JULO_logo_blue_small.png' %}"/>
+    </div>
+    <div class="copyright">
+        <p>
+            © Copyright 2020 PT JULO Teknologi Finansial - All Rights Reserved
+        </p>
+    </div>
+</div>
+<footer class="footer">
+    <div class="footer-area">
+
+        <div class="footer-conent">
+            <p>PT. JULO TEKNOLOGI FINANSIAL merupakan perusahaan penyedia layanan pinjaman online yang terdaftar dan
+                berada dalam pengawasan oleh Otoritas Jasa Keuangan (OJK) dengan nomor registrasi S-589/NB.213/2018
+                sesuai dengan Hukum Republik Indonesia dan Peraturan Otoritas Jasa Keuangan nomor 77/POJK.01/2016.
+                Oleh karena itu,
+                PT JULO TEKNOLOGI FINANSIAL berkomitmen untuk menjunjung tinggi integritas dan melaksanakan
+                perlindungan konsumen sesuai dengan hukum yang berlaku.</p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+</body>
+
+</html>

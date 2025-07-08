@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+{% load static from staticfiles %}
+{% block content %}
+    <div class="module" id="changelist">
+            <div class="results">
+                <table id="result_list" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="sortable column-title">
+                            <div class="text"><a href="?o=1">VENDOR TYPE</a></div>
+                            <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="column-action">
+
+                            <div class="text"><span>VENDOR NAME</span></div>
+                            <div class="clear"></div>
+                        </th>
+                        <th scope="col" class="column-action">
+                            <div class="text"><span>ACCOUNT DISTRIBUTION RATIO</span></div>
+                            <div class="clear"></div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in data %}
+                        <tr class="row{% if forloop.counter|divisibleby:2 %}2{% else %}1{% endif %}">
+                            <td class="field-title">
+                                <a href="{% url 'collection_vendor_admin:collection-vendor-ratio-update' item.vendor_types %}">{{ item.vendor_types }}</a>
+                            </td>
+                            <td class="field-title">{{ item.vendor_names }}</td>
+                            <td class="field-title">{{ item.account_distribution_ratios }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+{% endblock %}

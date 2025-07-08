@@ -1,0 +1,71 @@
+{% load unit %}
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Available Cashback Amount: </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group m-t-10">
+                <span class="input-group-addon">Rp.</span>
+                <input class="form-control mask" id="id_available_cashback_cash_amount" maxlength="15" name="available_cashback" type="text" disabled value="{{ payment_obj.loan.customer.wallet_balance_available|f_rupiahs:'no_currency'|safe}}">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Use Cashback Amount: </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group m-t-10">
+                <span class="input-group-addon">Rp.</span>
+                <input class="form-control mask" id="id_cashback_cash_amount" maxlength="15" name="cashback_amount" required="" type="text">
+            </div>
+            <span class="help-block">
+              <small>Masukan besar amount cashback yang dicairkan</small>
+            </span>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-6 col-sm-12 form_event-group">
+          <label class="col-md-12 col-sm-12">Transfer Date: </label>
+          <div class="col-md-12 col-sm-12">
+              <div class="input-group">
+                 <input class="form-control cashbackdatepicker" id="id_cashback_event_date" name="paid_date" placeholder="dd-mm-yyyy" required="" type="text">
+                 <span class="input-group-addon" onclick="set_today('id_cashback_event_date');"><i class="icon-calender"></i></span> 
+              </div>
+              <span class="help-block">
+                <small>Masukan tanggal transfer ...</small>
+              </span>
+          </div>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Transfer to : </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Bank Name </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group m-t-10">
+                <input class="form-control" id="id_cashback_bank_name"  name="bank name" type="text" value="{{ payment_obj.loan.application.bank_name|safe}}">
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Name in bank </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group m-t-10">
+                <input class="form-control" id="id_cashback_name_in_bank" name="name in bank" type="text" value="{{ payment_obj.loan.application.name_in_bank|safe}}">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Bank Account No </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group m-t-10">
+                <input class="form-control" id="id_cashback_bank_account_no" name="bank account number" type="text" value="{{ payment_obj.loan.application.bank_account_number|safe}}">
+            </div>
+        </div>
+    </div>
+  </div>

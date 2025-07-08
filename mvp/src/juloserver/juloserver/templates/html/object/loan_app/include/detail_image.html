@@ -1,0 +1,74 @@
+{% load unit %}
+
+<div class="row">
+  <!-- .col -->
+  <div class="col-sm-6 m-t-20">
+    <h4 class="font-bold">Dokumen yang Perlu di verifikasi</h4>
+  </div>
+  <div class="col-sm-6  m-t-20">
+    <a href=" {% url 'loan_app:app_multi_image_upload' object.id %}" title='Upload'>
+        <button class="btn btn-outline  btn-danger btn-rounded m-b-5"><i class="fa fa-image fa-fw"></i> Upload Dokumen Baru </button>
+    </a>
+  </div>
+
+  <div class="col-sm-12">
+    <hr>
+      {% for document in image_list %}
+        <div class="col-sm-2">
+          <small>{{ document.image_type|display_safe }}
+          </small>
+          {% if document.image_ext == '.pdf' %}
+{% load static from staticfiles %}
+            <a href="{{ document.image_url }}" title="{{ document.image_type|display_safe }} ({{document.image_ext}})">
+              <img src="{% static 'images/collections/image-pdf.png' %}" class="img-responsive m-t-30 m-b-30"  />
+            </a>
+            <a href="{{ document.image_url }}" target="_blank">
+                <button id="see_pdf" type="button" class="btn btn-success btn-block m-t-30">
+                    <i class="fa fa-back"></i> <small>Lihat File</small>
+                </button>
+            </a>
+          {% else %}
+            <a class="image-popup-vertical-fit" href="{{ document.image_url }}" title="{{ document.image_type|display_safe }} ({{document.image_ext}})">
+              <div class="watermarked">
+                <img src="{{ document.image_url }}" class="img-responsive" />
+              </div>
+            </a>
+            <a href="{% url 'loan_app:detail_image_edit' document.id %}" target="_blank">
+                <button id="edit_image" type="button" class="btn btn-success btn-block">
+                    <i class="fa fa-back"></i> <small>Edit Gambar</small>
+                </button>
+            </a>
+          {% endif %}
+          <br/>
+        </div>
+      {% empty %}
+        <p>
+        <strong>Dokumen Tidak Tersedia</strong>
+        </p>
+      {% endfor %}
+      {% if is_partnership_leadgen %}
+        {% for document in list_image_partnership_liveness %}
+          <div class="col-sm-2">
+            <small>{{ document.image_type|display_safe }}
+            </small>
+            {% load static from staticfiles %}
+            <a target="_blank" class="image-popup-vertical-fit" href="{{ document.image_url }}"
+              title="{{ document.image_type|display_safe }}">
+              <div class="watermarked">
+                <img src="{{ document.image_url }}" class="img-responsive" />
+              </div>
+            </a>
+            <a href="{% url 'loan_app:detail_image_edit' document.id %}" target="_blank">
+              <button id="edit_image" type="button" class="btn btn-success btn-block">
+                <i class="fa fa-back"></i> <small>Edit Gambar</small>
+              </button>
+            </a>
+            <br />
+          </div>
+        {% endfor %}
+      {% endif %}
+
+  </div>
+  <!-- /.col -->
+</div>
+<!-- .row -->

@@ -1,0 +1,126 @@
+{% extends "common/theme1/layout_admin.html" %}
+{% load template %}
+
+
+{% block custom_css %}
+{% load static from staticfiles %}
+  <!-- Footable CSS -->
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- <link href="{% static 'default/css/pagination-julo.css' %}" type="text/css"> -->
+{% endblock %}  
+
+{% block script_head %}
+{% endblock %}
+
+
+{% block css_inside %}
+  ul.pagination_julo {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+  }
+
+  ul.pagination_julo li {
+    display: inline;
+  }
+
+  ul.pagination_julo li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+  }
+
+  .pagination_julo li:first-child a {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .pagination_julo li:last-child a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  ul.pagination_julo li a.active {
+    background-color: #ff6849;
+    color: white;
+    border: 1px solid #ff6849;
+  }
+  ul.pagination_julo li a.disabled
+  {
+    cursor: not-allowed;
+    pointer-events: none; // Future-proof disabling of clicks
+    .opacity(.65);
+    .box-shadow(none);
+  }
+
+  ul.pagination_julo li a:hover:not(.active) {
+    background-color: #ddd;
+  }
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row bg-title">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">
+          {% block breadcrumb_title %}Data{% endblock %}
+        </h4>
+      </div>
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+          {% block breadcrumb_path %}
+            <li><a href="#">Parent</a></li>
+            <li><a href="#">Sub Parent</a></li>
+            <li class="active">Active child</li>
+          {% endblock %}
+        </ol>
+      </div>
+      <!-- /.col-lg-12 -->
+    </div>
+
+    <!-- /row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="white-box">
+          <h3 class="box-title m-b-0">{% block list_title %}Data Pengguna{% endblock %}</h3>
+          <p class="text-muted m-b-20">{% block list_subtitle %}Subtitle Here{% endblock %}</p>
+
+          {% block content-list %}
+          {% endblock %}
+
+
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+</div>
+<!-- /.page-wrapper -->    
+      
+{% endblock %}
+
+{% block script_additional %}
+
+  <!-- Footable -->
+  <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+  <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+  
+  <!--FooTable init-->
+  <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+  <!--Style Switcher -->
+  <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+
+{% endblock %}

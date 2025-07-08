@@ -1,0 +1,200 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls admin_static %}
+
+{% block extrahead %}{{ block.super }}
+<style type="text/css">
+    .form-row {
+        overflow: visible !important;
+    }
+    .selectize-control {
+        width: 300px;
+        display: inline-grid;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+</style>
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+<script type="text/javascript">
+
+    var area = $('.special-event-binary-setting-control_area').selectize();
+    var job_type = $('.special-event-binary-setting-control_job').selectize();
+    var job_description_selectize = $('.job-description-control').selectize()[0].selectize;
+    var job_industry_selectize = $('.job-industry-control').selectize()[0].selectize;
+    var partner_ids_selectize = $('.partner-ids-control').selectize()[0].selectize;
+    var agent_assisted_partner_ids_selectize = $('.agent-assisted-partner-ids-control').selectize()[0].selectize;
+
+    var premium_area_checkbox = document.getElementsByName("is_premium_area");
+    var salaried_checkbox = document.getElementsByName("is_salaried");
+
+    var province = document.getElementsByClassName("form-row field-province");
+    var job_type_text_area = document.getElementsByClassName("form-row field-job_type");
+    var job_industry_text_area = document.getElementsByClassName("form-row field-job_industry");
+    var job_description_text_area = document.getElementsByClassName("form-row field-job_description");
+    var partner_ids_text_area = document.getElementsByClassName("form-row field-partner_ids");
+    var agent_assisted_partner_ids_text_area = document.getElementsByClassName("form-row field-agent-assisted-partner_ids");
+
+    job_type_text_area[0].style.display = 'none'
+
+
+    $(document).ready(function() {
+
+        if (premium_area_checkbox[0].checked==true){
+            province[0].style.display = 'none'
+        }
+
+
+
+        var job_data = JSON.parse($('#id_form_data').val())
+        job_industry_selectize.on("item_add", function(selected_value, item){
+            new_job_industry = job_data[selected_value]
+            $.each(new_job_industry, function(index, value ) {
+                new_option = selected_value + ':' + value
+                job_description_selectize.addOption({value: new_option, text: new_option});
+            });
+            job_description_selectize.addItem(selected_value + ':All')
+        })
+
+        job_description_selectize.on("item_add", function(selected_value, item){
+            splitted_value = selected_value.split(':')
+            if (splitted_value.length == 2 && splitted_value[1] != 'All') {
+                job_description_selectize.removeItem(splitted_value[0] + ':All', 1)
+            }
+            else if (splitted_value.length == 2 && splitted_value[1] == 'All') {
+                removed_industry = job_data[splitted_value[0]]
+                $.each(removed_industry, function(index, value ) {
+                    if (value != 'All')
+                        job_description_selectize.removeItem(splitted_value[0] + ':' + value);
+                });
+            }
+        })
+
+        partner_ids_selectize.on("item_add", function(selected_value, item){
+            splitted_value = selected_value.split(':')
+            if (splitted_value.length == 2 && splitted_value[1] != 'All') {
+                partner_ids_selectize.removeItem(splitted_value[0] + ':All', 1)
+            }
+            else if (splitted_value.length == 2 && splitted_value[1] == 'All') {
+                removed_data = job_data[splitted_value[0]]
+                $.each(removed_data, function(index, value ) {
+                    if (value != 'All')
+                        partner_ids_selectize.removeItem(splitted_value[0] + ':' + value);
+                });
+            }
+        })
+
+        partner_ids_selectize.on("item_remove", function(deselected_value, item){
+            deselected_data = job_data[deselected_value]
+            $.each(deselected_data, function(index, value ) {
+                deselected_option = deselected_value + ':' + value
+                partner_ids_selectize.removeOption(deselected_option);
+            });
+        })
+
+        // Start QOALA PARTNERSHIP - Leadgen Agent Assisted 22-11-2024
+        agent_assisted_partner_ids_selectize.on("item_add", function(selected_value, item){
+            splitted_value = selected_value.split(':')
+            if (splitted_value.length == 2 && splitted_value[1] != 'All') {
+                agent_assisted_partner_ids_selectize.removeItem(splitted_value[0] + ':All', 1)
+            }
+            else if (splitted_value.length == 2 && splitted_value[1] == 'All') {
+                removed_data = job_data[splitted_value[0]]
+                $.each(removed_data, function(index, value ) {
+                    if (value != 'All')
+                    agent_assisted_partner_ids_selectize.removeItem(splitted_value[0] + ':' + value);
+                });
+            }
+        })
+
+        agent_assisted_partner_ids_selectize.on("item_remove", function(deselected_value, item){
+            deselected_data = job_data[deselected_value]
+            $.each(deselected_data, function(index, value ) {
+                deselected_option = deselected_value + ':' + value
+                agent_assisted_partner_ids_selectize.removeOption(deselected_option);
+            });
+        })
+        // End QOALA PARTNERSHIP - Leadgen Agent Assisted 22-11-2024
+
+        job_industry_selectize.on("item_remove", function(deselected_value, item){
+            deselected_job_industry = job_data[deselected_value]
+            $.each(deselected_job_industry, function(index, value ) {
+                deselected_option = deselected_value + ':' + value
+                job_description_selectize.removeOption(deselected_option);
+            });
+        })
+
+        job_description_selectize.on("item_remove", function(selected_value, item){
+            splitted_value = selected_value.split(':')
+            check_existing = false;
+            if (splitted_value.length == 2) {
+                $.each(job_description_selectize.items, function(index, value) {
+                    if (value.includes(splitted_value[0] + ":")) {
+                        check_existing = true;
+                        return;
+                    }
+                });
+                if (!check_existing) {
+                    job_industry_selectize.removeItem(splitted_value[0]);
+                }
+            }
+        })
+    })
+
+    function OnChangeIsPremiumArea (checkbox){
+
+        if (checkbox.checked) {
+            province[0].style.display = 'none'
+            get_unselected_data(area, true)
+        }
+        else {
+            province[0].style.display = 'block'
+            get_unselected_data(area, true)
+        }
+    }
+
+
+    function get_unselected_data(data, is_selectize) {
+           if (!is_selectize){
+                selectize = data
+           }else{
+                selectize = data[0].selectize
+           }
+           old_data=selectize['items']
+           selectize.setValue(old_data, false)
+           unselected_data = selectize['currentResults']['items']
+           current_data = []
+           for(let i=0; i < unselected_data.length; i++){
+                current_data.push(unselected_data[i]['id'])
+           }
+           selectize.setValue(current_data, false);
+
+    }
+
+</script>
+<style>
+    .can_apply.hasValue .selectize-dropdown {
+    display: none !important;
+}
+.d-none {
+    display: none;
+}
+.d-block {
+    display: block;
+}
+.related-widget-wrapper {
+    float:none !important;
+  }
+</style>
+{% endblock %}

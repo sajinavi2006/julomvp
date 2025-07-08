@@ -1,0 +1,128 @@
+<html>
+<title>SURAT PERJANJIAN LLA{{application_xid}}</title>
+<style>
+    @page {
+        size: A4;
+        padding: 70px 100px;
+    }
+</style>
+
+<body>
+    <center>
+        <strong>
+            PERJANJIAN PEMBERIAN PINJAMAN<br/>
+            DAN PEMBERIAN KUASA<br/><br/>
+            ANTARA<br/><br/>
+            PT JULO TEKNOLOGI FINANSIAL<br/><br/>
+            &<br/><br/>{{lender_display_name}}<br/><br/>
+            Sehubungan dengan nomor Pinjaman<br/>
+            LLA{{application_xid}}<br/>
+            <strong>
+            </center>
+            <br/><br/><br/><br/><br/>
+            <div>
+                <p>Merujuk pada Adendum No. {{addendum_number}} dari Perjanjian Kerjasama Utama No. {{pks_number}},
+                Perjanjian Pemberian Pinjaman dan Pemberian Kuasa ini dibuat dan disetujui pada hari ini, tanggal
+                {{date_today}} oleh dan antara:</p>
+                <ol style="padding-inline-start: 16px;">
+                    <li>PT JULO TEKNOLOGI FINANSIAL (selanjutnya disebut "<strong>JULO</strong>") sebagai penyelenggara layanan Pinjam Menimjam Uang Berbasis Teknologi Informasi, sesuai dengan Peraturan OJK No.77/POJK.01/2016;</li><br/>
+
+                    <li>{{lender_display_name}}, suatu perusahaan yang didirikan berdasarkan hukum negara Republik Indonesia, beralamat di {{lender_address}}, yang diwakili oleh {{poc_name}} dalam kedudukannya sebagai {{poc_position}}, untuk dan oleh karenanya bertindak atas nama {{lender_display_name}} (selanjutnya disebut “PIHAK KEDUA”).</li><br/>
+                </ol>
+                <p>
+                    Pemberi Pinjaman menyatakan setuju untuk mengikatkan diri kepada JULO atas ketentuan-ketentuan sebagai berikut:
+                </p><br/>
+                <p><strong>PEMBERIAN KUASA</strong></p>
+                <ol style="padding-inline-start: 16px;">
+                    <li>
+                        Bahwa JULO sebagai platform yang menyediakan layanan pinjam meminjam uang berbasis teknologi informasi.
+                    </li><br/>
+                    <li>
+                        Pemberi Pinjaman, dengan tidak dapat ditarik kembali, memberikan otoritas dan kuasa kepada JULO untuk bertindak mewakili Pemberi Pinjaman dalam hal berikut ini:
+                    </li><br/>
+                        <ol style="padding-inline-start: 16px;" type="a">
+                            <li>
+                                Menandatangani dan mengikatkan diri ke dalam setiap dokumen dengan Penerima Pinjaman atau pihak terkait lainnya serta setiap perubahannya dari waktu ke waktu;
+                            </li>
+                            <li>
+                                Menerima informasi Penerima Pinjaman dan menggunakan informasi tersebut untuk melakukan verifikasi dan/atau tinjau kelayakan sesuai dengan kriteria yang telah ditetapkan;
+                            </li>
+                            <li>
+                                Menyalurkan dana Pinjaman sebesar jumlah Pinjaman kepada Penerima Pinjaman;
+                            </li>
+                            <li>
+                                Mengelola pemberian Pinjaman, termasuk menerima pembayaran pokok, bunga dan pembayaran lainnya terkait dengan pemberian Pinjaman;
+                            </li>
+                            <li>
+                                Mengirimkan atau memberikan pemberitahuan, persetujuan, tagihan, kepada Penerima Pinjaman;
+                            </li>
+                            <li>
+                                Melakukan penagihan kepada Penerima Pinjaman dengan cara yang layak, mengikuti aturan yang berlaku, dan sesuai dengan kebijakan penagihan JULO;
+                            </li>
+                            <li>
+                                Mengajukan tindakan hukum yang diperlukan, termasuk mengajukan gugatan, permohonan pailit, permohonan eksekusi (termasuk eksekusi jaminan), pendaftaran tagihan, voting kreditur, serta tindakan hukum lainnya, terhadap Penerima Pinjaman, setiap penanggung, setiap pemberi jaminan atau pihak terkait lainnya, apabila Penerima Pinjaman atau pihak terkait lainnya tersebut tidak mentaati ketentuan dalam Surat Perjanjian Hutang Piutang atau dokumen transaksi lainnya tanpa perlu adanya surat kuasa khusus terpisah dari Pemberi Pinjaman kepada JULO, dan termasuk menunjuk kuasa hukum untuk mengajukan tindakan hukum tersebut, di setiap forum atau pengadilan yang memiliki jurisdiksi, termasuk Pengadilan Negeri Jakarta Selatan; dan
+                            </li>
+                            <li>
+                                Melaksanakan hak, kekuasaan, wewenang dan kebijakan lainnya yang dipandang perlu oleh JULO sehubungan dengan pemberian Pinjaman.
+                            </li>
+                        </ol><br/>
+                    <li>
+                        Pemberian kuasa ini berlaku sepanjang jangka waktu Perjanjian Pemberian Pinjaman ini berlangsung ataupun selama durasi Pinjaman berjalan, mana yang lebih lama.
+                    </li><br/>
+                    <li>
+                        JULO dengan ini menerima pemberian kuasa tersebut, dengan tunduk pada ketentuan dalam Perjanjian ini.
+                    </li><br/>
+                </ol>
+                <p><strong>PEMBERIAN PINJAMAN</strong></p>
+                <ol style="padding-inline-start: 16px;">
+                    <li>
+                        Bahwa Pemberi Pinjaman menyetujui Pinjaman kepada Penerima Pinjaman melalui JULO dengan nomor Pinjaman {{application_xid}}, berupa uang tunai sebesar Rp {{loan_amount}} selama {{duration_month}} bulan dengan suku bunga {{interest_rate}} per bulan.
+                    </li><br/>
+                    <li>
+                        Bahwa pembayaran angsuran Pinjaman akan dilakukan setiap bulan pada tanggal {{cycle_day}} selama {{duration_month}} bulan sebesar {{installment_amount}} dimulai dari tanggal {{due_date_1}}. Keterlambatan akan dikenakan biaya sebesar {{late_fee_amount}} per bulan, untuk setiap angsuran yang terlambat, dengan total biaya keterlambatan tidak melebihi 100% dari nilai pokok Pinjaman.
+                    </li><br/>
+                    <li>
+                        Bahwa Pemberi Pinjaman setuju atas biaya layanan JULO sebesar {{service_fee}} % dari setiap pembayaran yang diterima dari Penerima Pinjaman.
+                    </li><br/>
+                </ol>
+                <p><strong>HAK DAN KEWAJIBAN</strong></p>
+                <ol style="padding-inline-start: 16px;">
+                    <li>
+                        Pemberi Pinjaman dan JULO mengerti atas hak dan kewajiban masing-masing pihak sesuai dengan yang tertuang pada Perjanjian Kerjasama Utama pasal 4 & 5, dan senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan Perjanjian ini.
+                    </li><br/>
+                    <li>
+                        Pemberi Pinjaman dan JULO mengerti bahwa masing-masing pihak dapat menunjuk pihak ketiga terkait penggunaan data Penerima Pinjaman, yang mana detail pihak ketiga disebutkan di dalam Syarat & Ketentuan. Penggunaan data tersebut terbatas hanya pada kesepakatan pinjam meminjam dan berlaku hanya sampai dengan kewajiban dari Penerima Pinjaman yang tertuang dalam perjanjian pinjam meminjam dengan Pemberi Pinjaman telah berakhir.
+                    </li><br/>
+                    <li>
+                        Pemberi Pinjaman (dalam Pasal ini disebut juga sebagai “Pemberi Pinjaman Lama”) berhak mengalihkan seluruh (dan bukan sebagian) hak-hak dan kewajibannya dalam Perjanjian ini dan dokumen terkait kepada setiap pihak lainnya yang telah terdaftar menjadi pemberi pinjaman di JULO (dalam Pasal ini disebut juga sebagai “Pemberi Pinjaman Baru”) dengan kesepakatan bersama dengan Pemberi Pinjaman Baru.
+                    </li><br/>
+                    <li>
+                        Apabila JULO sebagai Penyelenggara Layanan Pinjam Meminjam Uang Berbasis Teknologi Informasi tidak dapat melanjutkan kegiatan operasionalnya, JULO akan tetap menjalankan segala kewajibannya terkait dengan penyelesaian Pinjaman ini, termasuk namun tidak terbatas pada kegiatan penagihan, penyediaan informasi pelunasan, dan penyediaan sarana Virtual Account dan Escrow Account seperti yang tertuang di Surat Penjanjian Hutang Piutang dan di Syarat & Ketentuan.
+                    </li><br/>
+                </ol>
+                <p>
+                    Sengketa yang mungkin timbul dari penafsiran dan/atau pelaksanaan Perjanjian ini akan diselesaikan melalui musyawarah untuk mencapai mufakat antara kedua belah pihak, atau melalui jalur hukum yuridiksi Pengadilan Negeri Jakarta Selatan Republik Indonesia atau pengadilan manapun di setiap yuridiksi yang kompeten.
+                </p>
+                <p>
+                    DEMIKIANLAH PERJANJIAN INI DITANDATANGANI DAN DISETUJUI SECARA ELEKTRONIK OLEH PARA PIHAK PADA TANGGAL YANG DISEBUTKAN PERTAMA KALI DI ATAS DAN TANPA MEMERLUKAN TANDA TANGAN BASAH.
+                </p>
+
+            </div>
+            <div>
+                <table border="0" style="width: 100%; text-align: center;">
+                    <tr style="vertical-align: bottom;">
+                        <td></td>
+                        <td><img src="{{julo_logo}}" style="width: 200px" /></td>
+                    </tr>
+                    <tr>
+                        <td><br/><br/><br/><br/></td>
+                        <td><br/><br/><br/><br/></td>
+                    </tr>
+                    <tr>
+                        <td>{{lender_display_name}}</td>
+                        <td>PT JULO TEKNOLOGI FINANSIAL</td>
+                    </tr>
+                </table>
+            </div>
+    </body>
+</html>

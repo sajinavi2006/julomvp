@@ -1,0 +1,1 @@
+{{name}}, kami ingatkan Pinjaman PEDE Pinter Anda {{due_amount}} sdh TERLAMBAT. Mohon segera bayar: cek aplikasi. Abaikan jika sudah bayar.

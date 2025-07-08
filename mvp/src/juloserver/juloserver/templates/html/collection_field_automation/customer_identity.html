@@ -1,0 +1,87 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+{% load unit %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-1">
+            <a href="/collection_field/agent_field_dashboard"><img src="{% static 'images/black-left-button.png' %}" width="20px"></a>
+        </div>
+        <div class="col-md-2">
+            <h3 class="box-title m-b-0">KTP</h3>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div id="table_content" class="header-content"
+        style="margin-top:20px;display: flex;overflow-x: auto; height: 500px !important;overflow: scroll;">
+        <table class="table table-striped table-responsive text-nowrap">
+            <tr>
+                <td scope="col">KTP 
+                    <img src="{{ ktp }}" width="300px">
+                </td>
+            </tr>
+            <tr>
+                <td scope="col">Selfie 
+                    <img src="{{ ktp_selfie }}" width="300px">
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+{% endblock %}
+<script>
+    {% block script_bottom_inside %}
+        function ToastDanger(body_message) {
+            $.toast({
+                heading: 'Failure',
+                text: body_message,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'error',
+                hideAfter: 2800
+            });
+        }
+        function ToastSuccess(header_msg, body_message) {
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'success',
+                hideAfter: 1500,
+                stack: 6
+            });
+        }
+    {% endblock %}
+</script>

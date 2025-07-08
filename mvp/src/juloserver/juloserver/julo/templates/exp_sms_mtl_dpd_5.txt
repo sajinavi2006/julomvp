@@ -1,0 +1,1 @@
+Nsbh yth,angs {{payment_number}} Anda TERLAMBAT. Sblm denda bertambah, mari bayarkan {{due_amount}} ke {{bank_name}} a/n JULO no VA {{account_number}}. WA CS 082211127334

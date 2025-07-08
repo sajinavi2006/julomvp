@@ -1,0 +1,1 @@
+Data pengajuan pinjaman Anda tidak lengkap. Tim CS JULO telah mengirim instruksi untuk memenuhi kelengkapan dokumen ke email Anda di {{email}}. Silahkan cek email Anda dan ikuti langkah-langkah selanjutnya.

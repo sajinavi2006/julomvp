@@ -1,0 +1,50 @@
+{% load currency %}
+<div id="outstanding_amount" style="display: none; width: 50%;">
+    <p class="table-header">
+        <span class="glyphicon glyphicon-forward" aria-hidden="true" onclick="expandTable('outstanding_amount')"></span>
+        Outstanding Amount
+    </p>
+    <table class="table table-bordered">
+        <thead class="web-portal-thead">
+            <tr>
+                <th class="exclude-min exclude-min-60 align-middle">Jatuh Tempo ?</th>
+                <th class="align-middle">Principal</th>
+                <th class="align-middle">Interest</th>
+                <th class="align-middle">Late Fee</th>
+                <th class="align-middle">Need To Pay</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment_request in payment_requests %}
+                <tr>
+                    <td class="align-middle extend-padding">{{ payment_request.due_status|default:"-" }}</td>
+                    <td class="align-middle extend-padding">
+                        <span>{{ payment_request.outstanding_principal_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="outstanding_principal_amount_{{ payment_request.index }}" value="{{ payment_request.outstanding_principal_amount }}" >
+                    </td>
+                    <td class="align-middle extend-padding">
+                        <span>{{ payment_request.outstanding_interest_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="outstanding_interest_amount_{{ payment_request.index }}" value="{{ payment_request.outstanding_interest_amount }}" >
+                    </td>
+                    <td class="align-middle extend-padding">
+                        <span>{{ payment_request.outstanding_late_fee_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="outstanding_late_fee_amount_{{ payment_request.index }}" value="{{ payment_request.outstanding_late_fee_amount }}" >
+                    </td>
+                    <td class="align-middle extend-padding">
+                        <span>{{ payment_request.total_outstanding_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="total_outstanding_amount_{{ payment_request.index }}" value="{{ payment_request.total_outstanding_amount }}" >
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="extend-padding">&nbsp;</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_outstanding_principal_amount">{{ all_outstanding_principal_amount|add_rupiah_separator }}</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_outstanding_interest_amount">{{ all_outstanding_interest_amount|add_rupiah_separator }}</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_outstanding_late_fee_amount">{{ all_outstanding_late_fee_amount|add_rupiah_separator }}</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_total_outstanding_amount">{{ all_total_outstanding_amount|add_rupiah_separator }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

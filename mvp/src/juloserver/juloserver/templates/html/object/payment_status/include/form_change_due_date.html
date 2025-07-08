@@ -1,0 +1,44 @@
+{% load unit %}
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Rubah Tanggal Jatuh Tempo: </label>
+        <div class="col-md-12 col-sm-12">
+          <div class="col-md-12 col-sm-12">
+              <div class="input-group">
+                 <input class="form-control odatepicker" id="id_new_due_date" name="new_date" placeholder="dd-mm-yyyy" required="" type="text">
+              </div>
+              <span class="help-block">
+                <small>Masukan tanggal jatuh tempo yang ingin diubah.</small>
+              </span>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Fee Perubahan Tanggal Jatuh Tempo</label>
+        <div class="col-md-12 col-sm-12">
+          <div class="col-md-12 col-sm-12">
+              <div class="input-group">
+                 <input class="form-control" id="id_new_change_due_date_interest" 
+                        name="new_change_due_date_interest" placeholder=""
+                        required="true" type="text">
+              </div>
+              <span class="help-block">
+                <small>Masukan jumlah fee perubahan tanggal jatuh tempo default fee Rp.55,000.</small>
+              </span>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12 col-sm-12 form_event-group ">
+        <label class="col-md-12 col-sm-12">Catatan by-Ops: </label>
+        <div class="col-md-12 col-sm-12">
+            <textarea class="form-control" cols="20" id="id_note_change_due_date" name="pmt_notes" placeholder="Masukan catatan pada payment ini" required="" rows="10"></textarea>
+            <span class="help-block">
+              <small>Silahkan inputkan catatan pada payment ini bila ada (free-text).</small>
+            </span>
+        </div>
+      </div>
+  </div>

@@ -1,0 +1,100 @@
+{% load unit %}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group form-group">
+      <label class="col-md-12 col-sm-12">Catatan Form Waive Late fee :</label>
+      <div class="col-md-12 col-sm-12">
+          <span class="help-block">
+            <small>- Tidak berlaku untuk payment berstatus 330, 331 dan 332. <br></small>
+            <small>- Waive late fee amount tidak boleh lebih dari late fee amount. <br></small>
+            <small>- Waive late fee berlaku pada hari yang sama atau sesuai tanggal kadaluarsa yg ditentukan. <br></small>
+            <small>- Apabila customer tidak bayar pada hari yang telah ditentukan waive late fee akan hangus.</small>
+            <small class="waiver-unpaid-items text-danger"><br>- 'Waive Sampai dengan payment ke' secara default terisi hanya satu payment terlama.</small>
+            <small class="waiver-unpaid-items text-danger"><br>- Untuk Waive langsung beberapa payment silahkan gunakan fitur baru yg telah terintegrasi dengan portal simulasi.</small>
+          </span>
+      </div>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-sm-12 form_event-group form-group">
+      <label class="col-md-12 col-sm-12">Add Waive Late Fee Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input class="form-control mask" id="EtwlfaddLateFeeAmount" maxlength="11" required="" type="text">
+          </div>
+          <span class="help-block">
+            <small>Masukan besar waive late fee ...</small>
+            <br/><small class="waiver-unpaid-items">maksimum jumlah yang dapat di waived late fee harus lebih kecil atau sama dengan jumlah terutang <span class="all_late_fee">{{ total_max_waive_late_fee|f_rupiahs:"no"|default:"-"|safe }}</span></small>
+            <small class="waiver-late-fee-paid-items">maksimum jumlah yang dapat di waived late fee harus lebih kecil atau sama dengan jumlah terutang {{ total_max_waive_late_fee_paid|f_rupiahs:"no"|default:"-"|safe }}</small>
+          </span>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group form-group waiver-unpaid-items">
+      <label class="col-md-12 col-sm-12">Max Waive Late Fee Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input disabled="disabled" class="form-control mask" id="EtwlfMaxLateFeeAmount" maxlength="11" required="" type="text" value="{{ total_max_waive_late_fee|f_rupiahs:'no_currency'|safe}}">
+          </div>
+          <span class="help-block">
+            <small>Maksimal waive late fee ...</small>
+          </span>
+      </div>
+  </div>
+</div>
+
+<div class="row waiver-unpaid-items">
+  <div class="col-md-6 col-sm-12 form_event-group form-group">
+    <label class="col-md-12 col-sm-12">Waive Sampai dengan payment ke: </label>
+    <div class="col-md-12 col-sm-12">
+        <div class="input-group m-t-10">
+            <span class="input-group-addon">#</span>
+            <select class="form-control mask" id="EtwlfMaxLateFeePaymentNumber" onchange="UpdateRemainingAmount({{payment_obj.id}}, 'late_fee');">
+                {% for payment_number in payment_number_list %}
+                  <option value="{{payment_number}}">{{payment_number}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <span class="help-block">
+          <small>Untuk waive sebagian payment, isikan sampai dengan payment ke berapa </small>
+        </span>
+    </div>
+  </div>
+</div>
+
+<div class="row waiver-unpaid-items">
+  <div class="col-md-12 col-sm-12 form_event-group form-group">
+    <label class="col-md-12 col-sm-12">Waiver Validity Period: </label>
+    <div class="col-md-12 col-sm-12">
+      <div class="input-group m-t-10">
+        <div class="input-group input-group-sm">
+          <label for="late_fee_validity_period_type_today" class="checkbox-inline">
+            <input checked="checked" id="late_fee_validity_period_type_today" name="late_fee_validity_period_type" type="radio" value="today"> Today
+          </label>
+          <label for="late_fee_validity_period_type_specify_date" class="checkbox-inline m-l-30">
+            <input id="late_fee_validity_period_type_specify_date" name="late_fee_validity_period_type" type="radio" value="specify_date" class="abs-t-10">
+            <span class="abs-t-10 m-l-18"> to: </span>
+            <div class="input-group date l-50">
+                <input class="form-control" id="late_fee_validity_period_date" name="late_fee_validity_period_date" placeholder="dd-mm-yyyy" size="None" type="text" disabled value="">
+                <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group form-group">
+      <label class="col-md-12 col-sm-12">Catatan: </label>
+      <div class="col-md-12 col-sm-12">
+          <textarea class="form-control" cols="40" id="EtwlfNote" name="pmt_notes" placeholder="Masukan catatan" required="" rows="10"></textarea>
+          <span class="help-block">
+            <small>Silahkan inputkan catatan.</small>
+          </span>
+      </div>
+    </div>
+</div>

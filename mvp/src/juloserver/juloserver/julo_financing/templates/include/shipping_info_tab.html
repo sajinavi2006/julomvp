@@ -1,0 +1,70 @@
+{% load unit %}
+{% load static %}
+{% with j_financing_checkout=object.j_financing_checkout %}
+<table id="ca_table" class="ca_table table table-hover table-striped ">
+  <tbody>
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Alamat lengkap</strong>
+        </div>
+        <div class="col-xs-8">
+          <div class="input-group input-group-sm">
+           : {{ j_financing_checkout.additional_info.address }}
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Detail alamat</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+            : {{ j_financing_checkout.additional_info.address_detail }}
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Kurir</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+            : {{ j_financing_checkout.courier_name|default:'-' }}
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Nomor resi</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+           : {{ j_financing_checkout.courier_tracking_id|default:'-' }}
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% if is_locked_by_me %}
+    <tr>
+        <td class="col-xs-4">
+            <div class="col-xs-2 no-left">
+            <button type="button" data-toggle="modal" class="label-white btn text-info background-info" style="border-radius: 5px; margin-right: 5px; border-color: #03a9f3!important;" data-target="#shipping_info_modal">
+                Ubah Informasi Pengiriman
+            </button>
+            </div>
+        </td>
+      </tr>
+    {% endif %}
+  </tbody>
+</table>
+{% endwith %}

@@ -1,0 +1,350 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{% block meta %}
+    <!-- <meta http-equiv="refresh" content="120"> -->
+{% endblock %}
+
+{% block css_inside %}
+    .white-box {
+        padding-left: 100px;
+    }
+    .col-md-offset-2 {
+        margin-left: 125px;
+    }
+    .col-top-pad {
+        padding-top : 30px;
+    }
+    .col-md-offset-3 {
+        margin-left: 133px;
+    }
+    .grey-box {
+        background : #cccccc3d;
+        padding:12px;
+        border: 1px solid #ccc;
+    }
+    .col-top-pad-1 {
+        padding-top : 15px;
+    }
+    .col-align-center {
+        align:center;
+    }
+    .font_red {
+        color: red;
+    }
+    /* slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ff0000;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #00cc00;
+    }
+
+    input:disabled + .slider {
+      background-color: #cccccc;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+{% endblock %}
+{% block inside_body %}
+<div class="row m-b-12 p-t-0" id="app_payment_visibility">
+    <div class="col-md-12 col-xs-12">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="white-box">
+                    <h3 class="box-title m-b-0">CHANGE OF PAYMENT VISIBILITY</h3>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" >
+            {% csrf_token %}
+            <div class="col-md-2 col-xs-12  col-md-offset-2">
+              <label class="col-md-12 col-sm-12">Application ID:</label>
+              <div class="input-group m-t-10 ">
+                  <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                  <input class="form-control" v-model="appln_id" id="appln_id" name="appln_id" placeholder="Pencarian" type="text" maxlength="13">
+              </div>
+            </div>
+            <div class="col-md-4 col-xs-12">
+              <div class="col-md-3 col-xs-12"><label class="col-md-12 col-sm-12">&nbsp</label>
+                <button type="submit" class="btn btn-primary btn-rounded btn-block" v-on:click="search_application('search')">
+                    <strong><i class="fa fa-search"></i> Cari</strong>
+                </button>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-md-offset-2">
+                <br><br>
+            </div>
+        </div>
+        <div class="row m-b-12 p-t-0" v-if="show_channel">
+            <div class="col-md-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Application ID:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 "><span v-html="application.id"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Customer Name:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 ">
+                            <span v-html="application.fullname"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+<!--                    <div class="col-md-2 col-xs-12  col-md-offset-2">-->
+                        <table class="table table-striped" style="margin-left:6%; margin-right:4%; width:90%; margin-top:2%;">
+                            <thead>
+                            <tr>
+                                <th scope="col" style="text-align: center"> Available Payment Method</th>
+                                <th scope="col" style="text-align: center"> Channel Type</th>
+                                <th scope="col" style="text-align: center"> Is Shown to Customers? </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="payment_method in payment_methods">
+                                    <td style="text-align: center" v-html="payment_method.name"></td>
+                                    <td style="text-align: center" v-html="payment_method.channel_type"></td>
+                                    <td style="text-align: center">
+                                        <label class="switch">
+                                          <input type="checkbox"
+                                          :disabled="payment_method.channel_type == 'Primary'"
+                                          v-bind:checked="payment_methods_dict[payment_method.id].is_shown"
+                                          @change="change_is_shown(payment_method.id, $event)">
+                                          <span class="slider round"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-12  col-md-offset-2 ">
+                        <div class="col-md-6 col-xs-12 col-top-pad col-align-center">
+                            <button type="submit" class="btn btn-info btn-rounded" id="update_btn" 
+                            :disabled="btnDisable" v-on:click="update_payment_methods()">
+                                <strong>Submit</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-b-12 p-t-0" v-if="show_error">
+            <div class="col-md-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-8 col-xs-12  col-md-offset-3 ">
+                        <div class="col-md-12 col-xs-12 grey-box font_red">
+                            <span v-html="msg"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script type="text/javascript">
+
+var app_payment_visibility = new Vue({
+    el: '#app_payment_visibility',
+    data: {
+        appln_id: '',
+        application: {
+            id: null,
+            fullname: null
+        },
+        payment_methods: [],
+        payment_methods_dict: {},
+        show_channel: false,
+        show_error: false,
+        msg: '',
+        paymethod_id: '',
+        loan_id: null,
+        btnDisable: true
+    },
+    methods: {
+        search_application: function (type) {
+            self = this
+            $.ajax({
+                url :  "{%url 'dashboard:get_payments_visibility' %}/", // the endpoint
+                type : "GET", // http method
+                data : {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    appln_id: this.appln_id,
+                }, // data sent with the post request
+                // handle a successful response
+                success : function(json) {
+                    if(json.data.status == "success") {
+                        self.application.id = json.data.application_det.pk
+                        self.loan_id = json.data.loan
+                        self.application.fullname = json.data.application_det.fields.fullname
+                        self.payment_methods = json.data.payment_methods
+                        for (payment_method of self.payment_methods) {
+                            self.payment_methods_dict[payment_method.id] = payment_method;
+                        }
+                        self.show_channel = true
+                        self.show_error = false
+                        self.btnDisable = true
+                    } else {
+                        self.show_channel = false
+                        self.show_error = true
+                        self.msg = json.data.msg
+                        self.ToastDanger('Error', json.data.msg);
+                    }
+
+                },
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    self.ToastDanger('Error', 'some error occured!');
+                }
+            });
+        },
+        change_is_shown: function (payment_method_id, event) {
+            self = this
+            if (event.target.checked) {
+                self.payment_methods_dict[payment_method_id].is_shown = true
+            } else {
+                self.payment_methods_dict[payment_method_id].is_shown = false
+            }
+            self.btnDisable = false
+        },
+        update_payment_methods: function () {
+            self = this;
+            for (payment_method of self.payment_methods) {
+                payment_method_id = payment_method.id
+                payment_method.is_shown = self.payment_methods_dict[payment_method_id].is_shown
+            }
+            $.ajax({
+                url :  "{%url 'dashboard:update_payments_visibility' %}/", // the endpoint
+                type : "POST", // http method
+                data : {
+                    'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val(),
+                    'payment_methods': JSON.stringify(self.payment_methods)
+                },
+                // handle a successful response
+                success : function(json) {
+                    if(json.data.status == "success") {
+                        self.payment_methods = json.data.payment_methods
+                        self.show_channel = true
+                        self.show_error = false
+                        self.btnDisable = true
+                        swal("Sukses !", "Visibility setting payment channel berhasil diubah", "success");
+                    } else {
+                        self.show_channel = false
+                        self.show_error = true
+                        self.msg = json.data.msg
+                        self.ToastDanger('Error', json.data.msg);
+                    }
+
+                },
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    self.ToastDanger('Error', 'some error occured!');
+                }
+            });
+        },
+        ToastSuccess: function(header_msg, body_message){
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg:'#ff6849',
+                icon: 'success',
+                hideAfter: 1500,
+                stack: 6
+            });
+        },
+        ToastDanger: function(header_msg, body_message){
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg:'#ff6849',
+                icon: 'error',
+                hideAfter: 2800
+            });
+        }
+    }
+})
+
+</script>
+{% endblock %}

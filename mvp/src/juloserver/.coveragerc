@@ -1,0 +1,3 @@
+[run]
+omit = */migrations/*, */test*, */retroloads*, */new_migrations*, */commands*, *juloserver/androidcard*, *juloserver/collectioncrm*, *juloserver/crm*, *juloserver/julosoap*, *juloserver/line_of_credit*, *juloserver/mock*, *juloserver/monitor*, *juloserver/poc_nexmo*, *juloserver/portal*, *juloserver/qaapiv1*, *juloserver/promo_campaign*
+source = ./juloserver, ./collectioncrm

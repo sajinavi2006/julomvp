@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+  <style>
+    body {
+      color: #5E5E5E;
+    }
+    h4 {
+      color: #0598D0;
+      text-align: center;
+    }
+    tr {
+      align: center;
+    }
+    .installment {
+      width: 100%;
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+    #topBottomBorder {
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #topBorder {
+      border-top: 1px solid black;
+    }
+    #bottomBorder {
+      border-bottom: 1px solid black;
+    }
+    .hideExtra {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow:ellipsis;
+    }
+  </style>
+  <body>
+    <h4>PERJANJIAN HUTANG PIUTANG ("PERJANJIAN")</h4>
+    <p>Pada hari ini, <b>{{ date_today | safe }}</b>, saya yang bertanda tangan di bawah ini:</p>
+    <table>
+      <tbody>
+        <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama:</th>
+          <td>{{ application.fullname | safe }}</td>
+        </tr>
+        <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir:</th>
+          <td>{{ dob | safe }}</td>
+        </tr>
+        <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP:</th>
+          <td>{{ application.ktp | safe }}</td>
+        </tr>
+        <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon:</th>
+          <td>{{ application.mobile_phone_1 | safe }}</td>
+        </tr>
+        <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat:</th>
+          <td>{{ full_address | safe }}</td>
+        </tr>
+        <tr>
+          <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Rekening Bank:</th>
+          <td>{{ bank_account | safe }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Menyatakan bahwa saya setuju untuk mengikatkan diri kepada PT JULO TEKNOLOGI FINANSIAL
+        (selanjutnya disebut "<b>JULO</b>") atas ketentuan-ketentuan sebagai berikut:</p>
+    <table>
+      <tbody>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">1.</td>
+          <td style="padding-bottom:5px;">
+            Bahwa saya mengajukan permohonan pinjaman melalui JULO, dan telah
+            disetujui pinjaman uang tunai sebesar <b>{{ loan_amount | safe }}</b>
+            ("<b>Pinjaman</b>") kepada saya, Dana Pinjaman dikurangi biaya administrasi
+            sebesar <b>{{ origination_fee_amount | safe }}</b> akan dicairkan ke rekening saya
+            (sebagaimana dimaksud di atas) pada atau sekitar tanggal Perjanjian ini.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">2.</td>
+          <td style="padding-bottom:5px;">
+            Bahwa saya berjanji untuk melunasi Pinjaman dengan melakukan pembayaran
+            yang dibayarkan dalam waktu 20 (dua puluh) hari dimana pembayaran akan dimulai setelah
+            akhir hari ke 3 (tiga) setelah tanggal Perjanjian ini ("<b>Tanggal Permulaan Pembayaran</b>").
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">3.</td>
+          <td style="padding-bottom:5px;">
+            Bahwa pembayaran kembali akan dilakukan setiap hari kerja dengan jumlah setara
+            (untuk setiap pembayaran), yaitu sebesar Pinjaman dibagi 20 (dua puluh) hari kerja,
+            sebagaimana dirinci pada tabel sebagai berikut:
+            <table class="installment" style="margin-top:5px;">
+              <tr id ="topBottomBorder">
+                <th>Cicilan</th>
+                <th>Jumlah</th>
+                <th>Jatuh Tempo</th>
+              </tr>
+              {% for payment in payments %}
+                {% if forloop.last %}
+                  <tr id="bottomBorder">
+                {% else %}
+                  <tr>
+                {% endif %}
+                    <td>
+                      <div class="hideExtra">{{ payment.payment_number | safe }}</div>
+                    </td>
+                    <td>
+                      <div class="hideExtra">{{ payment.due_amount | safe }}</div>
+                    </td>
+                    <td>
+                      <div class="hideExtra">{{ payment.due_date | safe }}</div>
+                    </td>
+                  </tr>
+              {% endfor %}
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">4.</td>
+          <td style="padding-bottom:5px;">
+            Bahwa saya mengetahui dan menyetujui kegagalan dalam melakukan pembayaran dapat
+            mempengaruhi ketersediaan pinjaman dana dari JULO dengan jumlah yang lebih besar dan/atau bunga yang lebih kecil.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">5.</td>
+          <td style="padding-bottom:5px;">
+            Bahwa saya menyetujui dan tunduk kepada ketentuan-ketentuan yang terdapat pada lampiran
+            <a href="http://grab.com">Syarat & Ketentuan</a>.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; vertical-align: top;">6.</td>
+          <td style="padding-bottom:5px;">Bahwa saya juga memberikan kuasa kepada PT SOLUSI TRANSPORTASI INDONESIA untuk melakukan
+            pemotongan saldo dompet pengemudi Grab, sebagai cara pembayaran kembali Pinjaman yang telah
+            saya terima berikut biaya administrasi berdasarkan Perjanjian ini.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Perjanjian ini sah dan mengikat sesuai dengan ketentuan peraturan perundang-undangan yang berlaku,
+        dan saya menandatangani secara sadar dan tanpa paksaan dari pihak manapun. Lebih jauh, saya dengan ini
+        mengesampingkan keberlakuan Pasal 1266 KUH Perdata sepanjang pengakhiran Perjanjian ini tidak
+        memerlukan putusan pengadilan.</p>
+  </body>
+</html>

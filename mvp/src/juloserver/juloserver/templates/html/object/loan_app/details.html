@@ -1,0 +1,37 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+
+{% block breadcrumb_title %}
+  
+{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+ 
+{% block list_title %}
+        Data Aplikasi
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+    
+    {% include "object/loan_app/include/details_all.html" %}
+    
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'loan_app:list' %}">
+    <button id="back" type="button" class="btn btn-info">
+      <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+    </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+  });
+{% endblock %}

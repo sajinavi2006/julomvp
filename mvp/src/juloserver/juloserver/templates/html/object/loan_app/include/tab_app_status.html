@@ -1,0 +1,17 @@
+
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Application ID</strong> <br>
+    <p class="text-muted">{{object.id}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Status</strong> <br>
+    <p class="text-muted">{{ object.application_status|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Tgl. Buat</strong> <br>
+    <p class="text-muted">{{object.cdate|date:"d M Y H:i:s"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Tgl. Update</strong> <br>
+    <p class="text-muted">{{object.udate|date:"d M Y H:i:s"|safe}}</p>
+  </div>
+</div>
+<hr>

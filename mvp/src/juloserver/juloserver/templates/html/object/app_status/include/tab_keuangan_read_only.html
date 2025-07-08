@@ -1,0 +1,104 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Ada Penghasilan Lain?</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.has_other_income|yesno:"Ya, Tidak"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Besar Penghasilan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.other_income_amount|f_rupiahs:"no"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Sumber Penghasilan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.other_income_source|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Biaya Sewa/ Cicilan Rumah per Bulan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.monthly_housing_cost|f_rupiahs:"no"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Pengeluaran Rutin per Bulan (selain Rumah)</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.monthly_expenses|f_rupiahs:"no"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Total Cicilan Hutang per Bulan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.total_current_debt|f_rupiahs:"no"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Kendaraan Pribadi</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	
+      {{ object.vehicle_type_1|default:"-"|safe}}
+    
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Kepemilikan Kendaraan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	
+      {{ object.vehicle_ownership_1|default:"-"|safe}}
+    
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Nama Bank</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{object.bank_name|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Cabang Bank</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{object.bank_branch|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>No Rek</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{object.bank_account_number|default:"-"|safe}}
+  </div>
+</div>

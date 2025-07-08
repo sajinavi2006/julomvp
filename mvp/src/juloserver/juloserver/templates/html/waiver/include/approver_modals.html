@@ -1,0 +1,95 @@
+<div id="error_pop_up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Collection Offer Recommendations</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12" id="pop_msg">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="agentNoteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agentNoteModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Notes</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12" id="pop_msg">
+                        {% for note in notes %}
+                            <p>
+                                <strong>{{ note.layer }} : </strong><br/>
+                                {{ note.note }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="approverNoteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="approverNoteModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Approver Notes</h4>
+            </div>
+            <div class="modal-body">
+                <div id="approved_reason_type" class="approved_reason_type" style="display: none;">
+                    <label class="w170">Program Type</label>
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8">
+                            <select class="form-control" name="approved_reason_type">
+                                {% for product in approval_reason.products %}
+                                <option value="{{ product }}">{{ product }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="approved_reason" class="approved_reason" style="display: none;">
+                    <label class="w170">Reason</label>
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8">
+                            <select class="form-control" name="approved_reason">
+                                <option value="" selected disabled hidden>---</option>
+                                {% for reason in approval_reason.reasons %}
+                                <option value="{{ reason }}">{{ reason }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <label class="w170">Notes</label>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <textarea class="form-control" name="approver_notes"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="approver_button" type="button" class="btn waves-effect" data-dismiss="modal"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "waiver/include/collection_offers_portal_modal.html" %}

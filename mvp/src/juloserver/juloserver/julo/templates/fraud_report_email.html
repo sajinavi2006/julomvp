@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <h1>Fraud Report Email</h1>
+    </head>
+    <body>
+        <h2>Info Korban</h2>
+
+        <strong>NIK</strong>: <span>{{report.nik}}</span><br>
+        <strong>Nama</strong> : <span>{{report.application.fullname}}</span><br>
+        <strong>Nomor HP</strong> : <span>{{report.phone_number}}</span><br>
+        <strong>Email</strong> : <span>{{report.email}}</span><br>
+
+        <h2>Saya ingin melakukan laporan penipuan dengan detail sebagai berikut :</h2>
+
+        <strong>Jenis penipuan</strong> : <span>{{report.fraud_type}}</span><br>
+        <strong>Kronologi</strong> : <span>{{report.fraud_chronology}}</span><br>
+        <strong>Apakah memberikan OTP/PIN ?</strong> : <span>{{report.give_otp_or_pin}}</span><br>
+        <strong>Apakah mengalami kerugian material ?</strong> : <span>{{report.monetary_loss}}</span><br><br>
+
+        <strong>Berikut saya lampirkan bukti berupa foto / screenshoot yang dapat membantu penyelidikan terhadap laporan saya.</strong>
+    </body>
+</html>

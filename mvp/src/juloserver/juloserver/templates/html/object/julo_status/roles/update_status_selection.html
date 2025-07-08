@@ -1,0 +1,129 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+{% load unit %}
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"  rel="stylesheet" type="text/css" />
+{% endblock %}
+
+
+{% block css_inside %}
+  #id_status_to_all {
+    width: "400px";
+  }
+  .ms-container {
+    width: 750px;
+  }
+  .ms-container .ms-list{
+    height: 450px;
+  }
+
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'julo_status:status_selections' %}">Pindah Status</a></li>
+    <li class="active">Ubah/Update</li>
+{% endblock %}
+ 
+{% block list_title %}Ubah Data Pindah Status{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-10 col-xs-12 col-md-offset-1">
+    <form class="form-horizontal form-material" id="status_form" role="form" method="POST">
+      {% csrf_token %}
+      <h3 class="box-title m-t-10 m-b-0">Status Awal: </h3>
+      <p>
+        <span class="label label-purple">{{ status_obj.status_code }} - {{ status_obj.status }}</span> 
+      </p>
+
+      {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+      {% endfor %}
+
+       <div class="form-group {% if form.status_to_all.errors %} has-error {% endif %}">
+            <label class="col-md-12 col-sm-12">Silahkan Pilih Status Pindahan: </label>
+            <div class="col-md-12 col-sm-12">
+                <span class="help-block error_msg h5">
+                    {% if form.status_to_all.errors %}
+                        {{ form.status_to_all.errors.as_text }}
+                    {% endif %}
+                </span>
+                {%for form_item in form.status_to_all %}
+                  {{ form_item }}
+                  {{ form_item.id_for_label }}
+                  <br/>
+                {% endfor %}
+            </div>
+        </div>
+
+      <div class="form-group text-center m-t-20">
+        <div class="col-xs-12">
+          <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Simpan</button>
+        </div>
+      </div>
+     </p>
+    </form>
+  </div>
+</div>
+  
+<div class="row m-t-10 m-b-10">
+</div>
+    
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'julo_status:status_selections' %}">
+      <button id="back" type="button" class="btn btn-info">
+          <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+      </button>
+  </a>
+{% endblock %}
+
+
+{% block script_additional %}
+    <script type="text/javascript" src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'theme/nav-full/js/mask.js' %}"></script>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  jQuery.fn.delay = function(time,func){
+      this.each(function(){
+          setTimeout(func,time);
+      });
+
+      return this;
+  };
+  $(document).ready(function() {
+
+    // Executes when the HTML document is loaded and the DOM is ready
+    // alert("Document is ready");
+    var select_id = $('#id_status_to_all');
+    var option;
+
+    select_id.delay(200).find('option').each(function(i, e){
+      //console.log(i, $(e).val());
+      if($.inArray(parseInt($(e).val()), {{ status_exists }}) > -1){
+        option = jQuery(this);
+        option.attr('selected',true);
+      }
+    });
+    // For multiselect
+    $('#id_status_to_all').multiSelect();    
+  });
+  
+  /*jQuery(document).ready(function() {
+   });
+   */
+{% endblock %}
+
+
+
+
+

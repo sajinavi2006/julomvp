@@ -1,0 +1,67 @@
+{% load default unit %}
+{% load static %}
+{% load checkusergroup from common %}
+
+<table class="table">
+    <thead>
+        <tr>
+        <th width="15%">Waktu</th>
+        <th width="70%">Content / Catatan</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%if history_note_list%}
+        {%  for his_note_obj in history_note_list %}
+            <!-- Notes History -->
+            {%if his_note_obj.field_name == 'note'%}
+                <tr class="success">
+                <td>
+                <label class="label label-warning m-b-10">
+                    {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                </label><br/>
+                <label class="label label-danger">
+                    Notes
+                </label>
+                </td>
+                <td>
+                Agent: <code>{{ his_note_obj.agent|default:'-'|safe }}</code><br/>
+                <strong>Catatan:</strong>
+                {{ his_note_obj.value_new|default:'-'|linebreaks|escape }}
+                </td>
+            </tr>
+            <!-- Status History -->
+            {% else %}
+            <tr class="warning">
+                <td>
+                <label class="label label-success m-b-10">
+                    {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                </label><br/>
+                <label class="label label-purple">
+                    Status Changes
+                </label>
+                </td>
+                <td>
+                Agent: <code>{{ his_note_obj.agent|default:'-'|safe }}</code><br/>
+                Status: <label class="label label-info">
+                    {{ his_note_obj.value_old|safe }}
+                </label>
+                &nbsp;&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <label class="label label-success">
+                    {{ his_note_obj.value_new|safe }}
+                </label>
+                <br/>
+                <strong>Alasan :</strong>
+                {{ his_note_obj.change_reason|default:'-'|linebreaks|escape|safe }}
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="2">
+              <span> Tidak ada Data </span>
+            </td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>

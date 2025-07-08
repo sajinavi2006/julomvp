@@ -1,0 +1,187 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+{% load unit %}
+
+{% load static from staticfiles %}
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+
+[3:01]  
+{% endblock %}
+
+
+{% block css_inside %}
+
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'payment:list_partial_payment' %}">Data Payment</a></li>
+    <li class="active">Tambah Payment Event</li>
+{% endblock %}
+ 
+{% block list_title %}Tambah Payment Event{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-10 col-xs-12 col-md-offset-1">
+
+   {% if messages %}
+        <div class="alert alert-danger">
+        {% for message in messages %}
+            <strong>{{ message|escape }}</strong><br/>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <form class="form-horizontal" id="status_form" role="form" method="POST">
+      {% csrf_token %}
+      <h3 class="box-title m-t-10 m-b-0">Payment ID: {{ object_payment.id }}</h3>
+      <p>
+      {{ app_obj.email }} - {{ app_obj.fullname }}
+      </p>
+      <p>
+        <strong>
+          Status Payment Saat ini:</strong>
+        <br/>
+        <span class="label label-danger">{{ object_payment.status }}</span> 
+      </p>
+      <hr>
+      {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+      {% endfor %}
+
+      {% if form.errors %}
+        {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+     
+      <div class="row">
+
+        <div class="col-md-6 col-sm-12 form-group">
+            <label class="col-md-12 col-sm-12"> Payment Amount: </label>
+            <div class="col-md-12 col-sm-12">
+                <span class="help-block error_msg h5">
+                    {% if form.partial_payment.errors %}
+                        {{ form.partial_payment.errors.as_text }}
+                    {% endif %}
+                </span>
+                <div class="input-group m-t-10 {% if form.partial_payment.errors %} has-error {% endif %}"> 
+                    <span class="input-group-addon">Rp.</span>
+                    {{ form.partial_payment }}
+                </div>
+                <span class="help-block">
+                  <small>Masukan besar pembayaran parsial ...</small>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-12 form-group">
+            <label class="col-md-12 col-sm-12">Paid Date: </label>
+            <div class="col-md-12 col-sm-12">
+                <span class="help-block error_msg h5">
+                    {% if form.paid_date.errors %}
+                        {{ form.paid_date.errors.as_text }}
+                    {% endif %}
+                </span>
+                <div class="input-group">
+                   {{ form.paid_date }}
+                   <span class="input-group-addon"><i class="icon-calender"></i></span> </div>
+                <span class="help-block">
+                  <small>Masukan tanggal pembayaran  ...</small>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 form-group {% if form.notes.errors %} has-error {% endif %}">
+          <label class="col-md-12 col-sm-12">Catatan Payment by-Ops: </label>
+          <div class="col-md-12 col-sm-12">
+            User Entry: <strong>{%if user.email %}{{ user.email }} {% else %} {{ user }} {%endif%} </strong><br/>
+            Tgl Catat: <strong>{{ datetime_now|date:"d M Y H:i:s"|safe }}</strong>
+          </div>
+          <hr>
+          <div class="col-md-12 col-sm-12">
+              <span class="help-block error_msg h5">
+                  {% if form.notes.errors %}
+                      {{ form.notes.errors.as_text }}
+                  {% endif %}
+              </span>
+              {{ form.notes }}
+              <span class="help-block">
+                <small>Silahkan inputkan catatan pada payment ini bila ada (free-text).</small>
+              </span>
+          </div>
+        </div>
+    </div>
+
+      <div class="form-group text-center m-t-20">
+        <div class="col-xs-12">
+          <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Simpan</button>
+        </div>
+      </div>
+     </p>
+    </form>
+  </div>
+</div>
+  
+<div class="row m-t-10 m-b-10">
+</div>
+    
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'payment:list_partial_payment' %}">
+      <button id="back" type="button" class="btn btn-info">
+          <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+      </button>
+  </a>
+{% endblock %}
+
+
+
+{% block script_additional %}
+  <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}">
+  </script>
+  <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  jQuery.fn.delay = function(time,func){
+      this.each(function(){
+          setTimeout(func,time);
+      });
+
+      return this;
+  };
+  
+  jQuery(document).ready(function() {
+    
+    // alert("Document is ready");
+    $(".mask").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    jQuery('.mydatepicker, #datepicker').datepicker({
+               format: 'dd-mm-yyyy',
+               buttonClasses: ['btn', 'btn-sm'],
+               applyClass: 'btn-danger',
+               cancelClass: 'btn-inverse',
+               dateLimit: {
+                   days: 6
+               }
+           });
+
+  });
+   
+{% endblock %}

@@ -1,0 +1,76 @@
+{% load model template default unit %}
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Application ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.id|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Nama Lengkap
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.fullname|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      No KTP
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.ktp|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Tgl Lahir
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.dob|date:"d M Y"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Android Device
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.device|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Loan Amount Request
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan_amount_request|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Loan Duration Request
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan_duration_request|default:"-"|safe}} {{ object.determine_kind_of_installment }}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Waktu Daftar
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.cdate|date:"d M Y H:i:s"|safe}}</strong>
+    </td>
+  </tr>
+</table>

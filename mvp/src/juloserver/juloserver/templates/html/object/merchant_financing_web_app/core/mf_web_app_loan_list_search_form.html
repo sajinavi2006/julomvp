@@ -1,0 +1,154 @@
+{% load name %}
+
+
+<form class="form-horizontal collapse in" id='search-form' method='get' role="form">
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ form.non_field_errors }}</strong>
+        </div>
+    {% endif %}
+    {% if error_form %}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ error_form }}</strong>
+        </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div id="list_additional_field_search" class="col-md-3 col-xs-12 p-l-10 p-r-10" style="display: none;">
+          <label class="col-md-12 col-sm-12">Cari berdasarkan</label>
+          <div class="m-t-10 ">
+              {{ form.specific_column_search }}
+          </div>
+          <span class="help-block">
+            <small>*pilih salah satu untuk melakukan pencarian berdasarkan</small>
+          </span>
+        </div>
+        <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+          <label class="col-md-12 col-sm-12">Pencarian</label>
+          <div class="input-group m-t-10 {% if form.search_q.errors %} has-error {% endif %}">
+              <span class="input-group-addon"><i class="fa fa-search"></i></span>
+              {{ form.search_q }}
+          </div>
+          <span class="help-block">
+            <small>*app-id, email, hp, fullname, ktp, product-line-type, dll{{search_key}}</small>
+          </span>
+          <span class="help-block error_msg h5">
+              {% if form.search_q.errors %}
+                  {{ form.search_q.errors.as_text }}
+              {% endif %}
+          </span>
+        </div>
+        {% if status_app != 'with_status' %}
+          <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+            <label class="col-md-12 col-sm-12">Status</label>
+            <div class="m-t-10 {% if form.search_q.errors %} has-error {% endif %}">
+                {{ form.status_app }}
+            </div>
+            <span class="help-block">
+              <small>*pilih salah satu status app</small>
+            </span>
+            <span class="help-block error_msg h5">
+                {% if form.status_app.errors %}
+                    {{ form.status_app.errors.as_text }}
+                {% endif %}
+            </span>
+          </div>
+        {% endif %}
+        <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+          <label class="col-md-12 col-sm-12">Product Line</label>
+          <div class="m-t-10 {% if form.search_q.errors %} has-error {% endif %}">
+              {{ form.list_product_line }}
+          </div>
+          <span class="help-block">
+            <small>*pilih salah satu product line</small>
+          </span>
+          <span class="help-block error_msg h5">
+              {% if form.list_product_line.errors %}
+                  {{ form.list_product_line.errors.as_text }}
+              {% endif %}
+          </span>
+        </div>
+
+        <div class="col-md-4 col-xs-12 p-l-10 p-r-10" style="display:none;">
+          <div class="input-group m-t-10 {% if form.sort_q.errors %} has-error {% endif %}">
+              {{ form.sort_q }}
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12 p-l-10 p-r-10" style="display:none;">
+          <div class="input-group m-t-10 {% if form.sort_agent.errors %} has-error {% endif %}">
+              {{ form.sort_agent }}
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12 m-t-30">
+          <div class="col-md-4 col-xs-12">
+            <button type="submit" class="btn btn-primary btn-rounded btn-block">
+                <strong><i class="fa fa-search" ></i> Cari</strong>
+            </button>
+          </div>
+          <div class="col-md-5 col-xs-12">
+            <button type="button" class="btn btn-info btn-rounded" onClick="clearSearchForm();">
+                <strong><i class="fa fa-eraser fa-fw"></i> Kosongkan</strong>
+            </button>
+          </div>
+          {% if form.datetime_range %}
+            <div class="col-md-3 col-xs-12">
+              <a class="btn btn-danger center btn-rounded" role="button" data-toggle="collapse" href="#id_pencarian_tgl" aria-expanded="false" aria-controls="id_pencarian_tgl">
+                <i class="fa fa-calendar fa-fw"></i><i class="fa fa-arrow-down fa-fw"></i>
+              </a>
+            </div>
+          {% endif %}
+        </div>
+    </div>
+
+
+
+    <div class="collapse m-t-15" id="id_pencarian_tgl">
+      <div class="well">
+        <div class="row">
+          <div class="col-md-4 col-xs-12">
+            <label class="col-md-12 col-sm-12">Periode</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.status_now }}
+                <span class="help-block error_msg h5">
+                    {% if form.status_now.errors %}
+                        {{ form.status_now.errors.as_text }}
+                    {% endif %}
+                </span>
+            </div>
+          </div>
+          <div class="collapse col-md-8 col-xs-12" id="id_toggle_tgl_entry">
+            <h5 class="m-t-0">Tanggal Entry : </h5>
+              <div class="input-group m-t-10 {% if form.search_q.errors %} has-error {% endif %}">
+                  <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                  {{ form.datetime_range }}
+              </div>
+
+              <span class="help-block error_msg h5">
+                  {% if form.datetime_range.errors %}
+                      {{ form.datetime_range.errors.as_text }}
+                  {% endif %}
+              </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% comment %}
+    {% for field in form.visible_fields %}
+        <label for={{ field.name }}> {{ field.label }}</label>
+
+        <div class="input-group">
+        <div class="input-group-addon"><i class="fa fa-search" ></i></div>
+            {{ field }}
+        </div>
+        <br/>
+    {% endfor %}
+    {% endcomment %}
+</form>

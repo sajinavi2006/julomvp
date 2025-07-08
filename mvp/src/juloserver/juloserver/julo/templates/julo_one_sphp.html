@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    body {
+      color : #5E5E5E;
+      font-family: Montserrat;
+    }
+    h4 {
+      color : #0598D0;
+      text-align: center;
+    }
+    tr {
+      align: center;
+    }
+    .installment {
+      width: 100%;
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+    #topBottomBorder {
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #topBorder {
+      border-top: 1px solid black;
+    }
+    #bottomBorder {
+      border-bottom: 1px solid black;
+    }
+    .hideExtra {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow:ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <h4>SURAT PERJANJIAN HUTANG PIUTANG<br>
+      Nomor: {{ loan.loan_xid | safe }}</h4>
+  <br/>
+  <p>Surat Perjanjian Hutang Piutang ini dibuat dan disetujui pada tanggal {{ date_today | safe }}, oleh dan antara :</p>
+  <ol>
+    <li>Pemberi Pinjaman, berdasarkan Surat Kuasa no. SK001 diwakilkan oleh PT. JULO TEKNOLOGI FINANSIAL  (selanjutnya  disebut  <b>"JULO"</b>)  sebagai  penyelenggara  Layanan  Pinjam  Meminjam Uang Berbasis Teknologi Informasi, sesuai dengan Peraturan OJK No.77/POJK.01/2016.</li>
+    <li>Penerima Pinjaman yang memiliki identitas sebagai berikut:
+      <table>
+        <tbody>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama:</th>
+                <td>{{ application.fullname | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">Tgl. lahir:</th>
+                <td>{{ dob | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP:</th>
+                <td>{{ application.ktp | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. Telpon:</th>
+                <td>{{ application.mobile_phone_1 | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 100px;">Alamat:</th>
+                <td>{{ full_address | safe }}</td>
+            </tr>
+        </tbody>
+      </table>
+    </li>
+  </ol>
+  <p>Penerima Pinjaman menyatakan setuju untuk mengikatkan diri kepada JULO atas ketentuan-ketentuan sebagai berikut:</p>
+  <ol>
+    <li>Bahwa Penerima Pinjaman mengajukan permohonan dengan nomor perjanjian pinjaman {{loan.loan_xid | safe}} melalui JULO, dan telah disetujui pinjaman dalam bentuk {{ loan_type }} sebesar {{loan_amount | safe}} ("Pinjaman"), dengan biaya admin sebesar {{provision_fee_amount}} dan suku bunga sebesar {{interest_rate}}.</li>
+    <li>Bahwa Penerima Pinjaman berjanji untuk melunasi pinjaman dengan melakukan pembayaran sesuai dengan jadwal berikut ini:
+      <table class="installment" style="margin-top:5px;">
+        <tr id ="topBottomBorder">
+          <th>Cicilan</th>
+          <th>Jumlah</th>
+          <th>Jatuh Tempo</th>
+        </tr>
+        {% for payment in payments %}
+          {% if forloop.last %}
+            <tr id="bottomBorder">
+          {% else %}
+            <tr>
+          {% endif %}
+              <td>
+                <div class="hideExtra">{{ payment.payment_number | safe }}</div>
+              </td>
+              <td>
+                <div class="hideExtra">{{ payment.due_amount | safe }}</div>
+              </td>
+              <td>
+                <div class="hideExtra">{{ payment.due_date | safe }}</div>
+              </td>
+            </tr>
+        {% endfor %}
+      </table>
+    </li>
+    <li>Bahwa Penerima Pinjaman akan melakukan pembayaran setiap bulan sebelum tanggal jatuh tempo.
+      Keterlambatan akan dikenakan biaya denda sebesar {{late_fee_amount}} per bulan, untuk setiap angsuran yang terlambat, dengan total kumulatif tidak melebihi {{ max_total_late_fee_amount | safe }}.
+    </li>
+    <li>
+      Bahwa jika terjadi keterlambatan sebagaimana pasal 3 diatas, maka Penerima Pinjaman bersedia, setuju, dan
+      memberikan izin
+      kepada Pejabat JULO atau  pihak  yang  ditunjuk  JULO untuk   melakukan   penagihan   dan/atau   kunjungan   sesuai   dengan   peraturan   di   Indonesia.
+    </li>
+    <li>Bahwa pembayaran setiap bulan akan dilakukan ke rekening Virtual Account (VA) sebagai berikut:
+      <table frame="box" style="width:100%" border="0px">
+          <tbody>
+          <tr>
+              <td style="text-align: left;  vertical-align: top; white-space: nowrap;; padding-left:20px;"><b>{{ julo_bank_name | safe }}</b> {{ julo_bank_code | safe }}
+              </td>
+          </tr>
+          <tr>
+              <td style="text-align: left; vertical-align: top; white-space: nowrap; padding-left:20px;">Nomor VA:
+                  <b>{{ julo_bank_account_number | safe }}</b>
+              </td>
+          </tr>
+          </tbody>
+      </table>
+    </li>
+    <li>
+      Pemberian Kuasa<br/>
+      Bahwa merujuk pada Surat Kuasa no. SK001, JULO sebagai penyelenggara Layanan Pinjam Meminjam Uang Berbasis Teknologi Informasi diberikan otoritas dan kuasa penuh oleh Pemberi Pinjaman untuk bertindak mewakili Pemberi Pinjaman dalam hal menerima dan menggunakan segala informasi Penerima Pinjaman terkait permohonan dan penagihan pinjaman, hingga kewajiban Penerima Pinjaman berakhir.
+    </li>
+    <li>
+      Pengalihan<br/>
+      a.&nbsp;&nbsp;Setiap Pemberi Pinjaman dapat, tanpa memberikan pemberitahuan sebelumnya kepada Penerima Pinjaman, mengalihkan hak dan kewajibannya kepada pihak lain, sesuai ketentuan pengalihan hak dan kewajiban dalam perjanjian kerjasama antara JULO dengan Pemberi Pinjaman no. 1.JTF.201707.<br/>
+      b.&nbsp;&nbsp;Penerima Pinjaman menyetujui dan mengakui keabsahan pengalihan yang dilakukan setiap Pemberi Pinjaman berdasarkan Pasal 7 (a) di atas, dan tidak akan mengajukan keberatan atas pengalihan yang dilakukan demikian.<br/>
+      c.&nbsp;&nbsp;Penerima Pinjaman tidak diperkenankan mengalihkan atau mentransfer haknya atau kewajibannya kepada pihak lain.
+    </li>
+  <li>
+    Pernyataan Persetujuan
+  <p>
+    Penerima  Pinjaman  dan  JULO  mengerti  atas  hak  dan  kewajiban  masing-masing  pihak,  sesuai dengan yang tertuang pada Syarat & Ketentuan dan akan senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan Perjanjian ini.
+  </p>
+  <p>
+    Sengketa yang mungkin timbul dari penafsiran dan/atau pelaksanaan Perjanjian ini akan diselesaikan melalui musyawarah untuk mencapai mufakat antara kedua belah pihak dan/atau melalui jalur hukum yurisdiksi yang kompeten.
+  </p>
+  <p>
+    Hal  yang  belum  dituangkan  dalam  Perjanjian  ini  akan  diatur  di  kemudian  hari  melalui  Perubahan Perjanjian  (Addendum),  yang  merupakan  persetujuan  lebih  lanjut  antara  Pemberi  Pinjaman  dan Penerima  Pinjaman,  dan  bagian  yang  tidak  terpisahkan  dari  SPHP  ini, serta  tidak  memerlukan tanda tangan ulang.
+  </p>
+</li>
+  <li>
+    Keadaan Kahar
+      <p>
+          Definisi Keadaan Kahar adalah suatu keadaan tanpa kesalahan ataupun kelalaian yang
+          diakibatkan oleh salah satu Pihak yang terjadi diluar kendali Pihak tersebut, dimana Pihak
+          tersebut secara wajar tidak mampu untuk mencegah atau mengatasinya, termasuk namun tidak
+          terbatas pada bencana alam,wabah penyakit, perang(baik dideklarasikan maupun tidak),
+          invasi, konflik bersenjata, kerusuhan, demonstrasi, revolusi atau kudeta, tindak
+          terorisme, sabotase atau kerusakan akibat kriminalisme, ledakan nuklir, radio aktif atau
+          kontaminasi kimia atau ionisasi radiasi, tekanan gelombang akibat pesawat terbang atau
+          benda melayang lainnya yang berkecepatan suara atau di atas kecepatan suara, gangguan
+          listrik, gangguan sistem atau jaringan pihak ketiga lainnya atau perubahan peraturan
+          perundang-undangan atau kebijakan pemerintah yang dapat mempengaruhi kemampuan salah satu
+          Pihak ataupun Para Pihak. Dalam keadaan kahar, Penerima Pinjaman tetap bertanggung jawab
+          atas kewajibannya berdasarkan Perjanjian ini.
+      </p>
+  </li>
+</ol>
+<p>
+  Perjanjian ini dibuat oleh JULO secara elektronik dan secara sah, serta mengikat Para Pihak terhitung mulai dari hari dan tanggal tersebut diatas. Perjanjian ini memiliki kekuatan hukum yang sama dengan perjanjian yang dicetak, ditulis tangan dan ditandatangani secara sadar dan tanpa paksaan dari pihak manapun, serta dilindungi oleh UU. No. 11/2008 tentang Informasi dan Transaksi Elektronik, dan Peraturan Pemerintah No.82/2012 tentang Penyelenggaraan Sistem dan Transaksi Elektronik, dan Peraturan Pelaksananya.
+  Segala penyalahgunaan atas dokumen perjanjian ini akan ditindak sesuai dengan hukum dan peraturan yang berlaku.
+</p>
+  <br />
+</body>
+</html>

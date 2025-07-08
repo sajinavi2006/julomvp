@@ -1,0 +1,350 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+{% load static from staticfiles %}
+
+{% block css_inside %}
+  .bold {
+    font-weight: 500;
+    color: #2b2b2b;
+  }
+
+  @media (min-width: 768px) {
+    .header-content {
+      margin-left: 8%;
+    }
+
+    .content {
+      margin-left: 15%;
+    }
+
+    .header-title {
+      margin-left: 5%;
+    }
+  }
+
+  div > p {
+    font-weight: 500;
+    color: #2b2b2b;
+  }
+
+  .column-top {
+    margin-top: 25px;
+  }
+
+  .btn-julo {
+    background-color: #02A8F3;
+    border-color: #02A8F3;
+    border-radius: 5px;
+    height: 34px;
+    color: white;
+    font-size: 14px;
+    text-transform: uppercase;
+    width: 150px;
+  }
+
+  .btn-nav {
+    border-color: white;
+    border-bottom-color: #ebebeb;
+    border-width: 2px;
+    width: 170px;
+    border-shadow: none;
+  }
+
+  .btn-nav-active {
+    border-bottom-color: #fb9678;
+    color: #fb9678;
+  }
+
+  button:active {
+    border-style: none;
+  }
+
+  .edit-btn {
+    border-radius: 17px;
+    width: 100px;
+    height: 33px;
+    text-transform: uppercase;
+    background-color: #fec107;
+    color: #ffffff;
+  }
+
+  .modal-position {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .input-box {
+    margin-left: 10px;
+  }
+
+{% endblock %}
+
+
+{% block script_head %}
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-19175540-9', 'auto');
+  ga('send', 'pageview');
+
+  window.onbeforeunload = function () {
+    return "Jangan refresh ketika auto chooser berlangsung, anda yakin?";
+  };
+
+</script>
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+<div id="wrapper">
+  <div id="app" class="container-fluid" style="padding-right: 100px">
+    <div class="row">
+      <div class="header-title m-b-10 m-t-10">
+        <h5 style="text-transform: uppercase" class="bold">VA modifier</h5>
+      </div>
+    </div>
+    <div class="column column-top">
+        <div class="header-content">
+          <button
+            class="btn-nav"
+            @click="activeTab = 'auto'"
+            :class="{ 'btn-nav-active': activeTab === 'auto' }"
+          >Auto</button>
+          <button
+            class="btn-nav"
+            @click="activeTab = 'manual'"
+            :class="{ 'btn-nav-active': activeTab === 'manual' }"
+          >Manual</button>
+          <hr style="
+            margin-top: -2px;
+            border-color: #ebebeb;
+            border-width: 2px;"
+          >
+        </div>
+    </div>
+    <div v-show="activeTab === 'auto'">
+      <div class="column column-top">
+        <div class="header-content">
+          <div class="form-group">
+            <label for="list_agent" class="bold">Affected Date:</label>
+              <input type="text"
+                     v-model="selected_date"
+                     placeholder="Select Date"
+                     class="input-box"
+                     @focus="changeOnFocusDateType"
+                     @blur="changeOnBlurDateType">
+        </div>
+      </div>
+      <div class="column column-top">
+        <div class="header-content">
+          <div class="form-group">
+            <label for="select_repayment_channel" class="bold">Affected Repayment Channel:</label>
+            <select class="form-control"
+                    id="list_repayment_channels"
+                    v-model="selected_repayment_channel"
+                    @change="set_backup_va">
+              <option value='' disabled selected hidden>Select Affected Repayment Channel</option>
+              <option v-for="channel in list_repayment_channels"
+                      v-bind:value="channel.value"
+              >
+                <% channel.name %> VA
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="column column-top">
+        <div class="header-content">
+          <div class="form-group">
+            <label for="affected_repayment_channel" class="bold">Choose Secondary Preferred Channel:</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <div v-for="backup_va in list_backup_va">
+                    <input type="radio"
+                           v-bind:value=backup_va.value
+                           v-model="chosen_backup_va"
+                           style="margin-right: 5px;"><% backup_va.name %> VA
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="column column-top">
+        <div class="header-content">
+          <div class="form-group">
+            <button
+              type="button"
+              class="btn btn-julo"
+              @click="activateBackupRepaymentChannel()"
+              :disabled="is_data_completed"
+              data-toggle="modal"
+              data-target="#modalMessage"
+            >submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-show="activeTab === 'manual'">
+      <div class="column column-top">
+        <div class="header-content">
+            <h1>Development In Progress...</h1>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-position" :style="{ display: showFlex }" id="modalMessage" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 300px;">
+          <div class="modal-header" style="border-bottom: none">
+            <img :src="logo"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;" alt="verified_arrow">
+          </div>
+          <div class="modal-body" style="padding: 0;">
+            <p class="text-center" style="font-size: 24px;"><% response_status %></p>
+            <p class="text-center" style="font-weight: 300"><%response_message %></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button text-center"
+                    class="btn btn-primary text-center"
+                    style="background-color: #03a9f3;
+                           border-color: #03a9f3;
+                           width: 92px;
+                           height: 48px;
+                           border-radius: 5px;"
+                    data-dismiss="modal">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block script_additional %}
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type="text/javascript">
+  var AgentProperties = new Vue({
+      el: '#app',
+      delimiters: ["<%", "%>"],
+      data: {
+        csrftoken: '{{csrf_token}}',
+        isNavActive: false,
+        activeTab: 'auto',
+        showModal: false,
+        showFlex: '',
+        logo: '',
+        response_status: '',
+        response_message: '',
+        selected_date: '',
+        selected_repayment_channel: '',
+        list_repayment_channels: [],
+        chosen_backup_va: '',
+        list_backup_va: [],
+        backup_repayment_channels_dict: {}
+      },
+      beforeMount() {
+        this.getRepaymentChannels();
+      },
+      computed: {
+        is_data_completed() {
+          return !(this.selected_date && this.selected_repayment_channel && this.chosen_backup_va);
+        }
+      },
+      methods: {
+        set_backup_va(event) {
+          this.chosen_backup_va = false;
+          this.list_backup_va = this.backup_repayment_channels_dict[this.selected_repayment_channel];
+        },
+        changeOnFocusDateType(event) {
+          event.target.type = 'date'
+        },
+        changeOnBlurDateType(event) {
+          event.target.type = 'text'
+        },
+        getRepaymentChannels() {
+          var self = this;
+          $.ajax({
+            url :  "{%url 'dashboard:ajax_get_repayment_channels' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                  csrfmiddlewaretoken: self.csrftoken
+            },
+            // handle a successful response
+            success : function(json) {
+              if (json.status == "success") {
+                self.list_repayment_channels = json.list_repayment_channels;
+                self.backup_repayment_channels_dict = json.backup_repayment_channels_dict;
+              }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              console.log("Gagal", xhr.responseText);
+            }
+          })
+        },
+        activateBackupRepaymentChannel() {
+          var self = this;
+
+          $.ajax({
+            url :  "{%url 'dashboard:ajax_activate_backup_repayment_channel' %}/", // the endpoint
+            type : "POST", // ht  tp method
+            data : {
+              csrfmiddlewaretoken: self.csrftoken,
+              primary_repayment_channel: self.selected_repayment_channel,
+              selected_date: self.selected_date,
+              chosen_backup_va: self.chosen_backup_va
+            },
+            // handle a successful response
+            success : function(json) {
+              if (json.status == "success") {
+                self.showModal = true;
+                self.showFlex = 'flex';
+                self.response_status = 'Sukses!';
+                self.response_message = json.msg;
+                self.logo = '../../../../../static/images/collections/verified.png';
+                } else {
+                self.showModal = true;
+                self.showFlex = 'flex';
+                self.response_status = 'Gagal!';
+                self.response_message = json.msg;
+                self.logo = '../../../../../static/images/collections/fail-verified.png';
+              }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              console.log("Gagal", xhr.responseText);
+            }
+          })
+        },
+      }
+  })
+</script>
+{% endblock %}

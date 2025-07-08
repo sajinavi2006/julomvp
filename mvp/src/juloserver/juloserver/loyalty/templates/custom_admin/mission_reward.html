@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+{% load admin_static %}
+
+{% block admin_change_form_document_ready %}
+  {{ block.super }}
+  <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+  <script src="{% static 'default/js/loyalty/mission-reward-script.js' %}"></script>
+{% endblock %}

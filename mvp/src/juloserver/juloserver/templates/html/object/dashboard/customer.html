@@ -1,0 +1,48 @@
+{% extends "common/theme3/layout_customer.html" %}
+
+{% load checkusergroup from common %}
+{% load humanize %}
+	
+{% block custom_css %}
+	<!-- morris CSS -->
+{% endblock %}	
+
+{% block script_head %}
+{% endblock %}
+
+{% block inside_body %}
+{% endblock %}
+
+{% block script_additional %}
+
+	<!--Morris JavaScript -->
+	
+	<!-- Custom Theme JavaScript -->
+	
+{% endblock %}
+
+{% block script_bottom_inside %}
+	$(document).ready(function() {
+		 $.toast({
+	        heading: 'Selamat Datang {{ user.username }}',
+	        text: 'Silahkan Menikmati kemudahan yang kami tawarkan',
+	        position: 'top-right',
+	        loaderBg:'#ff6849',
+	        icon: 'info',
+	        hideAfter: 2500, 
+	        
+	        stack: 6
+	      });
+	      $('.vcarousel').carousel({
+	            interval: 3000
+	       });
+	       
+	    // Executes when the HTML document is loaded and the DOM is ready
+	    // alert("Document is ready");
+	    // $('#mnu_dashboard_li').addClass('active');
+	    //$('#mnu_dashboard_li a:first').addClass('active');
+	    
+	});
+{% endblock %}	
+	
+	

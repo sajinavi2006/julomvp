@@ -1,0 +1,62 @@
+
+<!-- customtab -->
+<ul class="nav nav-tabs tabs">
+  <li class="tab">
+    <a href="#status" data-toggle="tab"> <span class="visible-xs">
+    <i class="fa fa-home"></i></span> <span class="hidden-xs">Status & VCheckList-Data </span> </a> 
+  </li>
+  <li class="tab">
+    <a href="#personal" data-toggle="tab"> <span class="visible-xs">
+    <i class="fa fa-home"></i></span> <span class="hidden-xs">Data Pribadi</span> </a> 
+  </li>
+  <li class="tab"><a href="#loan" data-toggle="tab"> 
+    <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Pinjaman</span> </a> 
+  </li>
+  <li class="tab"><a href="#family" data-toggle="tab" aria-expanded="true"> 
+    <span class="visible-xs"><i class="fa fa-envelope-o"></i></span> <span class="hidden-xs">Keluarga</span> </a> 
+  </li>
+  <li class="tab"><a href="#working" data-toggle="tab" aria-expanded="false"> 
+    <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Pekerjaan</span> </a> 
+  </li>
+  <li class="active tab"><a href="#history" data-toggle="tab" aria-expanded="false"> 
+    <span class="visible-xs"><i class="fa fa-cog"></i></span> <span class="hidden-xs">Note History</span> </a> 
+  </li>
+  
+</ul>
+
+<div class="tab-content">
+  <!-- Tab History -->
+  <div class="tab-pane" id="status">
+    {% include "object/loan_app/include/tab_app_status.html" %}
+    {% include "object/app_status/include/tab_vchecklist.html" %}
+  </div>
+
+  <!-- Tab personal -->
+  <div class="tab-pane" id="personal">
+    {% include "object/loan_app/include/tab_personal.html" %}
+  </div>
+
+  <!-- Tab Pinjaman -->
+  <div class="tab-pane" id="loan">
+    {% include "object/loan_app/include/tab_loan.html" %}
+  </div>
+
+  <!-- Tab Keluarga -->
+  <div class="tab-pane" id="family">
+    {% include "object/loan_app/include/tab_family.html" %}
+  </div>
+
+  <!-- Tab Pekerjaan -->
+  <div class="tab-pane" id="working">
+    {% include "object/loan_app/include/tab_working.html" %}
+  </div>
+
+  <!-- Tab Pekerjaan -->
+  <div class="tab-pane active" id="history">
+    {% include "object/loan_app/include/tab_history.html" %}
+    <a href="{% url 'loan_app:create_app_note' object.id %}" title='tambah catatan'>
+        <button class="btn btn-success btn-rounded m-b-5"><i class="fa fa-plus fa-fw"></i>Tambah Note</button>
+    </a>
+  </div>
+
+</div>

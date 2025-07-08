@@ -1,0 +1,20 @@
+{% load checkusergroup from common %}
+{% checkusergroup in ['j_financing_admin'] %}
+  <!-- Smartphone Finanicng Bucket -->
+  {% with info=bucket_info %}
+    <div class="col-lg-1 col-sm-1 col-xs-6">
+      <a href="{% url 'julo_financing_crm:verification_list' %}" id="julo_financing_id" target="_blank">
+        <div class="panel panel-info">
+          <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px">{{info.title}}
+          </div>
+          <div class="panel-wrapper collapse in" aria-expanded="true">
+            <div class="panel-body">
+              <span class="status_font text-success">{{info.count}}</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  {% endwith %}
+  <!-- END of Smartphone Finanicng Bucket -->
+{% endcheckusergroup %}

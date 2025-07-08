@@ -1,0 +1,4 @@
+Pembayaran cicilan Anda ke-{{payment_seq}} terlambat!<br>
+Transfer sekarang juga {{due_amount}} ke {{julo_bank_name}}, nomor rekening {{julo_bank_account_number}}. 
+<br>
+Jika Anda telah melakukan pembayaran, informasi akan ter-update dalam 1 hari kerja. Kunjungi halaman <a href="http://www.julofinance.com/android/goto/agreement"><u>Perjanjian Hutang Piutang</u></a> untuk melihat jadwal cicilan.

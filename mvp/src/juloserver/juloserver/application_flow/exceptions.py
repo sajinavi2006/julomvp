@@ -1,0 +1,2 @@
+class PlayIntegrityDecodeError(Exception):
+    pass

@@ -1,0 +1,51 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat:400,700" />
+    <mj-attributes>
+      <mj-text font-size="12px" line-height="25px" />
+      <mj-all font-family="Montserrat, sans-serif" /> </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" align="right" src="https://s3-ap-southeast-1.amazonaws.com/julopublic/email_assets/Logo_JULO.jpg" /> </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text> Salam Hangat, JULOvers. </mj-text>
+        <mj-image src="https://julocampaign.julo.co.id/promo_ramadhan_2020/JULO-Ramadhan-High-Season-Email-Header-T-7.png" />
+        <mj-text>
+          <p>Memperingati bulan Suci Ramadan, JULO kembali hadir dengan kejutan menarik untuk Anda! </p>
+          <p>Hi {{fullname_with_title}}, yuk sambut bulan suci Ramadan dengan hadiah menarik dari JULO. Kali ini, Anda dapat berpartisipasi untuk memenangkan hadiah uang tunai senilai <span style="font-weight:700; font-size: 16px">5 juta rupiah!</span> Syaratnya
+            mudah, Anda hanya perlu membayar angsuran sebelum {{due_date}}. Kampanye ini hanya berlangsung dari 11 May 2020 - 8 Juni 2020.</p>
+          <p>Jika Anda telah mengikuti syarat tersebut, Anda secara otomatis akan terdaftar dalam undian Kami.</p> Yuk, bayar cicilan JULO Anda sekarang & bawa pulang hadiah uang tunainya😊 </p>
+        </mj-text>
+        <mj-button background-color="#1597DE" color="white" href={{payment_link}}>Bayar sekarang</mj-button>
+        <mj-text>
+          <p>Untuk informasi lebih lanjut anda dapat melihatnya disini <a href={{term_and_condition_link}}>Syarat & Ketentuan</a></p>
+        </mj-text>
+        <mj-divider border-width="1px" border-color="lightgrey"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-top=0>
+      <mj-group>
+        <mj-column>
+          <mj-text align="left" font-size="10px" padding-top=0>
+            <p>PT.JULO Teknologi Finansial </p>
+            <p>88@Kasablanka Tower A Lantai 5. Jl. Casablanka Raya Kav.88, Jakarta Selatan 12870</p>
+            <p>© Copyright PT JULO Teknologi Finansial - All Rights Reserved</p>
+          </mj-text>
+        </mj-column>
+        <mj-column>
+          <mj-social font-size="12px" icon-size="15px" mode="horizontal">
+            <mj-social-element name="facebook" href="https://www.facebook.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="linkedin" href="https://www.linkedin.com/company/juloindonesia"> </mj-social-element>
+            <mj-social-element name="twitter" href="https://twitter.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="youtube" href="https://www.youtube.com/channel/UCA9WsBMIg3IHxwVA-RvSctA"> </mj-social-element>
+            <mj-social-element name="instagram" href="https://www.instagram.com/juloindonesia"> </mj-social-element>
+          </mj-social>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+  </mj-body>
+</mjml>

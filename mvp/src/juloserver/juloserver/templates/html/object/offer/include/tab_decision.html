@@ -1,0 +1,126 @@
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Decision ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.id|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      is Non Froud
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.is_non_fraud|yesno:"Ya, Tidak"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      is Able to Pay
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.is_able_to_pay|yesno:"Ya, Tidak"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      is Willing To Pay
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.is_willing_to_pay|yesno:"Ya, Tidak"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      is Approved
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.is_approved|yesno:"Ya, Tidak"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Interest Rate
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.interest_rate|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Original Fee PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.origination_fee_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+    <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Late Fee PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.late_fee_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+   <tr>
+    <td class='m-r-10'>
+      Cashback Initial PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.cashback_initial_pct|default:"-"|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Cashback Payment PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.cashback_payment_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Monthly Saving
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.monthly_saving|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Saving Confidence PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.saving_confidence_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Max Monthly Payment
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.max_monthly_pmt|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  
+  
+ 
+
+</table>

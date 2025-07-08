@@ -1,0 +1,88 @@
+{% load model template default unit %}
+
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Loan Amount
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan_amount|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Loan Duration
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan_duration|default:"-"|safe}} {{ object.application.determine_kind_of_installment }}</strong> 
+    </td>
+  </tr>
+
+  <tr>
+    <td class='m-r-10'>
+      Installment Amount
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.installment_amount|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td colspan=2>
+      <hr>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Nama Lengkap
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.account.partnership_customer_data.application.fullname|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      No. HP
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.account.partnership_customer_data.phone_number|no_hp|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      No KTP
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.account.partnership_customer_data.nik|no_ktp|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Tgl Lahir
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.account.partnership_customer_data.application.dob|date:"d M Y"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      CDate
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.cdate|date:"d M Y H:i:s"|safe}}</strong>
+    </td>
+  </tr>
+</table>

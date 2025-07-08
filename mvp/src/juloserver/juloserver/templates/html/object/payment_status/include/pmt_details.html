@@ -1,0 +1,421 @@
+{% load unit utils %}
+{% load checkusergroup from common %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+  <li class="active tab">
+    <a href="#payment" data-toggle="tab">
+      <span class="visible-xs" title="Payment Detail Info">
+        <i class="fa fa-home"></i>
+      </span>
+      <span class="hidden-xs">Payment Detail</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#pmt_event" data-toggle="tab" title="Payment Event Info">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Payment Event</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#waiver_temp" data-toggle="tab" title="Waiver">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Waiver</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#bank_detail" data-toggle="tab" aria-expanded="true" title="Bank Info">
+      <span class="visible-xs">
+        <i class="fa fa-envelope-o"></i>
+      </span>
+      <span class="hidden-xs">VA Info</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#pmt_list" data-toggle="tab">
+      <span class="hidden-xs">Payment List</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#wallets" data-toggle="tab">
+      <span class="hidden-xs">Wallet List</span>\
+    </a>
+  </li>
+</ul>
+
+<div id="slim_pmts">
+  <div class="tab-content pmt_event">
+    <!-- Tab payment details -->
+    <div class="tab-pane active" id="payment">
+      <div class="col-xs-6">
+        <table>
+          <tr>
+            <td class='m-r-10'>
+              Loan ID
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ loan_obj.id|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              FDC Risky Customer
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              {% if application.is_fdc_risky %}
+                <span class="label label-red">Yes</span>
+              {% else %}
+                <strong>{{ application.is_fdc_risky|yesno:"Yes,No,-"|safe }}</strong>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Partner
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ application.partner_name|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Payment Status
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ status_current|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='m-r-10'>
+              dpd
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ payment_obj.dpd|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Customer Bucket Type
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                {% if customer_bucket_type == 'Stabilized' %}
+                    <span class="label label-red">Stabilized</span>
+                {% else %}
+                    <span class="label label-success">{{ customer_bucket_type }}</span>
+                {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10 m-t-10 m-b-10'>
+              pmt#
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <span class="label label-success">{{ payment_obj.payment_number|default:"-"|safe}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Due Date
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.due_date|date:"d M Y"|safe|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Due Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.due_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Late Fee Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.late_fee_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Cashback Earned
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.cashback_earned|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Date
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.paid_date|date:"d M Y"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.paid_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="col-xs-6">
+        <table>
+          <tr>
+            <td class='m-r-10'>
+              T1-10, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_1.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              T11-40, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_2.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              T41-70, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_3.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              T71-100, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_4.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              T101+++, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_5.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="col-xs-12">
+        <div class="m-t-10">
+          {% if is_iso_inactive %}
+            {% if payment_event_detail.status_event %}
+            
+            <button class="btn btn-danger m-b-5"
+                      id="add_payment_event"
+                      title="add Event Payment"
+                      data-toggle="modal"
+                      data-target="#responsive-modal"
+                      onclick="add_pmt_onclick();"
+                      name="actnbtns"
+                      >
+                <i class="fa fa-money fa-fw"></i> Add Payment Event
+              </button>
+            {% endif %}
+          {% endif %}
+          {% checkusergroup in ['collection_supervisor','bo_sd_verifier','admin_full'] %}
+            {% if customer.wallet_balance_available > 0 %}
+              <button class="btn btn-danger m-b-5"
+                      id="add_cashback_cash"
+                      title="Cashback Event"
+                      data-toggle="modal"
+                      data-target="#responsive-modal-cashback-cash" 
+                      name="actnbtns">
+                <i class="fa fa-credit-card fa-fw"></i> Cashback-Event
+              </button>
+            {% endif %}
+          {% endcheckusergroup %}
+          {% checkusergroup in ['collection_supervisor','bo_finance']  %}
+            {% if payment_obj.loan.application.partner.name == "doku" %}
+              <button id="id_btn_autodebet"
+                      class="btn btn-danger m-b-5"
+                      title="auto debet"
+                      data-toggle="modal"
+                      onclick="showModalDoku();"
+                      data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing" 
+                      name="actnbtns">
+                <i class="fa fa-money fa-fw"></i> DOKU
+              </button>
+            {% endif %}
+          {% endcheckusergroup %}
+          <!-- Due Dates and Cycle Day Send SMS, Email, Whatsapp Buttons -->
+          {% if is_iso_inactive %}
+            {% checkusergroup in ['collection_supervisor','bo_finance','collection_agent_2','collection_agent_3','collection_agent_4','collection_agent_5']  %}
+              {% if change_due_date_active %}
+                <button class="btn btn-danger m-b-5"
+                        id="id_btn_change_due_date"
+                        title="Change Due Date"
+                        data-toggle="modal"
+                        onclick="showChangeDueDate();" 
+                        name="actnbtns">
+                  <i class="fa fa-calendar fa-fw"></i> Due Dates
+                </button>
+              {% endif %}
+              {% if first_installment_btn_active %}
+                <button class="btn btn-success m-b-5"
+                        title="edit cycle day and first installment amount"
+                        data-toggle="modal"
+                        data-target="#modal-first-settlement" 
+                        name="actnbtns">
+                  <i class="fa fa-clock-o fa-fw"></i> Cycle Day and First Installment
+                </button>
+              {% endif %}
+            {% endcheckusergroup %}
+              {% if is_sms_email_button_unlocked %}
+                <button id="send_sms_button"
+                        class="btn btn-danger m-b-5"
+                        title="send_sms"
+                        data-toggle="modal"
+                        data-target="#responsive-modal-sms"
+                        onclick="send_sms_onclick();"
+                        name="actnbtns">
+                  <i class="fa fa-envelope-o fa-fw" ></i> Kirim SMS
+                </button>
+                <button id="send_email_button"
+                        class="btn btn-danger m-b-5"
+                        title="send_email"
+                        data-toggle="modal"
+                        data-target="#responsive-modal-email"
+                        onclick="send_email_onclick();"
+                        name="actnbtns">
+                  <i class="fa fa-envelope-o fa-fw"></i> Kirim Email
+                </button>
+              {% endif %}
+            {% if payment_obj.is_whatsapp %}
+              <button id="send_whatsapp"
+                      class="btn btn-success m-b-5"
+                      title="flag_as_whatsapp"
+                      onclick="ShowFormWhatsapp();" 
+                      name="actnbtns">
+                <i class="fa fa-whatsapp"></i> send Whatsapp
+              </button>
+            {% else %}
+              <button id="set_whatsapp"
+                      class="btn btn-success m-b-5"
+                      title="flag_as_whatsapp"
+                      onclick="ActionSetWhatsapp();" 
+                      name="actnbtns">
+                <i class="fa fa-whatsapp"></i> set Whatsapp
+              </button>
+            {% endif %}
+          {% endif %}
+          <button id="send_called_button"
+                  class="btn btn-success m-b-5"
+                  title="flag_as_called"
+                  data-toggle="modal"
+                  data-target="#responsive-modal-set-called" 
+                  name="actnbtns">
+            <i class="fa fa-envelope-o fa-fw"></i> set Called
+          </button>
+          <button id="send_reminder_button"
+                  class="btn btn-success m-b-5"
+                  title="flag_as_reminder"
+                  onclick="set_reminder();" 
+                  name="actnbtns">
+            <i class="fa fa-bell fa-fw"></i> set Reminder
+          </button>
+        </div>
+        {% checkusergroup in ['collection_supervisor','collection_agent_2','collection_agent_3','collection_agent_4','collection_agent_5']  %}
+          {% if loan_obj.is_ignore_calls %}
+            <button id="send_ignore_calls"
+                    class="btn btn-success m-b-5"
+                    title="flag_ignore_calls"
+                    onclick="set_ignore_calls('false');" 
+                    name="actnbtns">
+              <i class="fa fa-phone-square fa-fw"></i> set Ignore Calls
+            </button>
+          {% endif %}
+        {% endcheckusergroup %}
+        {% checkusergroup in ['collection_agent_2','collection_agent_3','collection_agent_4','collection_agent_5']  %}
+          {% if not loan_obj.is_ignore_calls %}
+            <button id="send_ignore_calls"
+                    class="btn btn-warning m-b-5"
+                    title="flag_ignore_calls"
+                    onclick="set_ignore_calls('true');" 
+                    name="actnbtns">
+              <i class="fa fa-phone-square fa-fw"></i> set Ignore Calls
+            </button>
+        {% endif %}
+        {% endcheckusergroup %}
+      </div>
+    </div>
+    <!-- Tab Payment event -->
+    <div class="tab-pane" id="pmt_event">
+      {% with payment_event_detail.payment_events as object %}
+        {% include "object/payment_status/include/tab_pmt_event.html" %}
+      {% endwith %}
+    </div>
+    <!-- Tab Payment event -->
+    <div class="tab-pane" id="waiver_temp">
+      {% with waiver_temps as object %}
+        {% include "object/payment_status/include/tab_waiver_temp.html" %}
+      {% endwith %}
+    </div>
+    <!-- bank_detail -->
+    <div class="tab-pane" id="bank_detail">
+      {% with loan_obj as object %}
+        {% include "object/payment_status/include/tab_loan_bank_info.html" %}
+      {% endwith %}
+    </div>
+    <!-- Tab Payment list-->
+    <div class="tab-pane" id="pmt_list">
+      {% with payments as payment_list %}
+        {% include "object/loan_status/include/tab_payment_list.html" %}
+      {% endwith %}`
+    </div>
+    <!-- Tab Payment list-->
+    <div class="tab-pane" id="wallets">
+      {% with wallets as wallets %}
+        {% include "object/loan_status/include/tab_wallet_list.html" %}
+      {% endwith %}`
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var actnbtns = document.getElementsByName("actnbtns");
+    if ("{{application_product_line.product_line_type}}" == 'J1'){
+      for (i in actnbtns){
+      actnbtns[i].disabled = true;
+    }
+    }
+  });
+</script>

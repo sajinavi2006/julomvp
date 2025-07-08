@@ -1,0 +1,523 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+
+{% block additional_title %}Lender Verification{% endblock %}
+
+{% block css_inside %}
+.scroll_app {
+    overflow-y: scroll;
+    height: 629;
+}
+.inline-field-with-radio-button {
+    width: calc(100% - 58px);
+    margin-left: 20px;
+    display: inline-block;
+}
+{% endblock %}
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+
+{% block list_title %}
+{% endblock %}
+{% block list_subtitle %}<h4> Verifikasi Pemberi Pinjaman</h4>{% endblock %}
+
+{% block content-list %}
+<div class="row m-b-12 p-t-0" id=lender-registration>
+    <br />
+    <div class="col-md-12 col-xs-12">
+        {% if isError %}
+            <span class="error-msg" style="color:red; text-align: center">{{ err_msg }}</span>
+        {% endif %}
+        <div class="col-md-5 col-md-offset-1">
+          <label><h4>Akun</h4></label>
+          <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Nama Pengguna <small style="color: red;">(wajib)</small></label>
+                      <input type="text" class="form-control" name="username"
+                        v-model="account.username"/>
+                  </div>
+              </div>
+              <div class="col-md-6"></div>
+          </div>
+          <hr>
+          <label><h4>Pemberi Pinjaman</h4></label>
+          <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Nama Pemberi Pinjaman <small style="color: red;">(wajib)</small></label>
+                      <input type="text" class="form-control" name="lender_name"
+                      v-model="lender.lender_name"/>
+                  </div>
+                  <div class="form-group">
+                      <label>Jenis Bisnis <small style="color: red;">(wajib)</small></label>
+                      <select class="form-control" name="business_type"
+                        v-model="lender.business_type">
+                        <option>---------</option>
+                        {% for business_type in BUSINESS_TYPES %}
+                          <option value='{{ business_type }}'>{{ business_type }}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Nama Tampilan Pemberi Pinjaman <small style="color: red;">(wajib)</small></label>
+                      <input type="text" class="form-control" name="lender_display_name"
+                      v-model="lender.lender_display_name"/>
+                  </div>
+                  <div class="form-group">
+                      <label>Sumber Dana <small style="color: red;">(wajib)</small></label>
+                      <select class="form-control" name="source_of_fund"
+                        v-model="lender.source_of_fund">
+                        <option>---------</option>
+                        {% for source_of_fund in SOURCE_OF_FUNDS %}
+                          <option value='{{ source_of_fund }}'>{{ source_of_fund }}</option>
+                        {% endfor %}
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label>Alamat Pemberi Pinjaman <small style="color: red;">(wajib)</small></label>
+                      <textarea class="form-control" name="lender_address"
+                        style="min-width: 100%; min-height: 100px;"
+                        v-model="lender.lender_address"></textarea>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Biaya Layanan (misal. 0.05) <small style="color: red;">(wajib)</small></label>
+                      <input type="number" class="form-control" name="service_fee"
+                        v-model="lender.service_fee"/>
+                  </div>
+                <div class="col-md-6">
+                </div>
+              </div>
+              <div class="col-md-12" style="padding: 0">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nomor Adendum <small style="color: red;">(wajib)</small></label>
+                        <input type="text" class="form-control" name="addendum_number"
+                          v-model="lender.addendum_number"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nomor PKS <small style="color: red;">(wajib)</small></label>
+                        <input type="text" class="form-control" name="pks_number"
+                        v-model="lender.pks_number"/>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-12" style="padding: 0">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Asuransi Pinjaman <small style="color: red;">(wajib)</small></label><br/>
+                        <input type="radio" name="insurance_boolean" value="true" v-model="insurance_boolean"> Ya
+                        <select class="form-control inline-field-with-radio-button" name="lender_insurance_id" v-model="lender.insurance">
+                          <option value="{{ INSURANCE.id }}" selected>{{ INSURANCE.name }}</option>
+                        </select><br>
+                        <input type="radio" name="insurance_boolean" value="false" v-model="insurance_boolean"> Tidak<br>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+              </div>
+          </div>
+          <hr>
+          <label><h4>Narahubung</h4></label>
+          <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Nama Narahubung <small style="color: red;">(wajib)</small></label>
+                      <input type="text" class="form-control" name="poc_name"
+                        v-model="lender.poc_name"/>
+                  </div>
+                  <div class="form-group">
+                      <label>Email Narahubung <small style="color: red;">(wajib)</small></label>
+                      <input type="text" class="form-control" name="poc_email"
+                        v-model="lender.poc_email"/>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Posisi Narahubung <small style="color: red;">(wajib)</small></label>
+                      <input type="text" class="form-control" name="poc_position"
+                        v-model="lender.poc_position"/>
+                  </div>
+                  <div class="form-group">
+                      <label>Nomor Telepon Narahubung <small style="color: red;">(wajib)</small></label>
+                      <input type="text" class="form-control" name="poc_phone"
+                        v-model="lender.poc_phone"/>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <label><h4>Kriteria</h4></label>
+          <div class="row">
+              <div class="col-md-6">
+                <label for="code">Daftar Profil Produk <small style="color: red;">(wajib)</small></label>
+                <select class="form-control" multiple="multiple" name="product_profile_list"
+                  v-model="product.product_profile_list">
+                  {% for product in PRODUCT_LIST %}
+                    {% if product.name in MTL_STL_PRODUCT %}
+                      <option value='{{product.id}}'>{{ product.name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="code">Nilai Kredit <small style="color: red;">(wajib)</small></label>
+                <select class="form-control" multiple="multiple" name="credit_score"
+                  v-model="customer.credit_score">
+                  {% for credit_score in CREDIT_SCORE_CHOICES %}
+                    <option value='{{credit_score}}'>{{ credit_score }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+          <hr>
+          <label><h4>Dokumen</h4></label>
+          <div class="row">
+            <div class="col-md-6">
+              <ul>
+                {% for document in DOCUMENTS %}
+                  {% if document %}
+                      <li>
+                        <a href="{{ document.document_url }}" target="_blank">
+                          {{ document.document_type|upper }}
+                        </a>
+                      </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <hr>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-xs-12">
+        <div class="col-md-10 col-md-offset-1">
+          <label><h4>Akun Bank</h4></label>
+          <div class="row">
+            {% for bank_account_type in BANK_ACCOUNT_TYPES %}
+              <div class="col-md-12 col-xs-12">
+                <div class="col-md-12">
+                  <label><h4>{{ bank_account_type|upper }}</h4></label>
+                  <div class="row">
+                    {% if bank_account_type not in BANK_ACCOUNT_VA %}
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Nama Bank <small style="color: red;">(wajib)</small></label>
+                          <select class="form-control" v-model="bank.{{ bank_account_type }}.bank_name">
+                            {% for bank in BANK_LIST %}
+                              <option value="{{ bank }}">{{ bank }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Nama Akun <small style="color: red;">(wajib)</small></label>
+                          <input type="text" class="form-control"
+                            v-model="bank.{{ bank_account_type }}.account_name"/>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Nomor Akun <small style="color: red;">(wajib)</small></label>
+                          <input type="text" class="form-control"
+                            v-model="bank.{{ bank_account_type }}.account_number"/>
+                        </div>
+                      </div>
+                    {% else %}
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label>Nomor VA <small style="color: red;">(wajib)</small></label>
+                          <input type="text" class="form-control"
+                            v-model="bank.{{ bank_account_type }}.account_number"/>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-xs-12" style="text-align: center">
+        <button class="button btn-primary waves-effect"
+          style="min-width: 60px" v-on:click="saveLenderAccount">
+          save
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% load static from staticfiles %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<!-- vue js -->
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type="text/javascript">
+var banks = {};
+{% for bank_account_type in BANK_ACCOUNT_TYPES %}
+  banks['{{ bank_account_type }}'] = {
+      bank_account_type: '{{ bank_account_type }}',
+      bank_name: '',
+      account_name: '',
+      account_number: '',
+      bank_account_status: 'active'
+    };
+{% endfor %}
+
+var LenderRegistration = new Vue({
+    el: '#lender-registration',
+    delimiters: ["<%", "%>"],
+    data: {
+        csrftoken:'{{csrf_token}}',
+        insurance_boolean: '',
+        lender_insurance_id: '{{ INSURANCE.id }}',
+        account: {
+          username: ''
+        },
+        product: {
+            type: 'Product List',
+            product_profile_list: [],
+            lender: null
+        },
+        customer: {
+            credit_score: [],
+            lender: null
+        },
+        lender: {
+            lender_name: '',
+            pks_number: '',
+            lender_address: '',
+            service_fee: '',
+            poc_name: '',
+            poc_email: '',
+            poc_position: '',
+            poc_phone: '',
+            business_type: '',
+            source_of_fund: '',
+            addendum_number: '',
+            lender_display_name: '',
+            id: '',
+            insurance: '{{ INSURANCE.id }}'
+        },
+        bank: banks
+    },
+    beforeMount(){
+        this.getLenderProduct()
+    },
+    methods: {
+        getLenderProduct: function() {
+          self = this
+          $.ajax({
+              url :  "{%url 'lender:ajax_get_lender' %}", // the endpoint
+              type : "GET", // http method
+              data : {
+                lender_id: '{{lender.id}}',
+              }, // data sent with the get request
+                // handle a successful response
+              success : function(json) {
+                  self.lender.lender_name = json.lender.fields.lender_name
+                  self.lender.pks_number = json.lender.fields.pks_number
+                  self.lender.lender_address = json.lender.fields.lender_address
+                  self.lender.service_fee = json.lender.fields.service_fee
+                  self.lender.poc_name = json.lender.fields.poc_name
+                  self.lender.poc_email = json.lender.fields.poc_email
+                  self.lender.poc_position = json.lender.fields.poc_position
+                  self.lender.poc_phone = json.lender.fields.poc_phone
+                  self.lender.business_type = json.lender.fields.business_type
+                  self.lender.source_of_fund = json.lender.fields.source_of_fund
+                  self.lender.addendum_number = json.lender.fields.addendum_number
+                  self.lender.insurance = json.lender.fields.insurance
+                  if (json.lender.fields.lender_display_name === null){
+                    self.lender.addendum_number = ''
+                  }
+                  self.lender.lender_display_name = json.lender.fields.lender_display_name
+                  if (json.lender.fields.lender_display_name === null){
+                    self.lender.lender_display_name = ''
+                  }
+                  if (json.lender.fields.insurance === null){
+                    self.lender.insurance = self.lender_insurance_id
+                  }
+                  self.lender.id = json.lender.pk
+              },
+                // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr)
+                  self.ToastDanger('failed get lender registration')
+              }
+          });
+        },
+        saveLenderAccount: function() {
+            self = this
+            username_validation = /^[a-zA-Z]+$/.test(self.account.username)
+            lender_name_validation = /^[a-zA-Z\s]+$/.test(self.lender.lender_name)
+            lender_display_name_validation = /^[a-zA-Z\s]+$/.test(self.lender.lender_display_name)
+            service_fee_validation = /^[0-9]*(.[0-9]*)$/.test(self.lender.service_fee)
+
+            poc_name_validation = /^[a-zA-Z\s]+$/.test(self.lender.poc_name)
+            poc_position_validation = /^[a-zA-Z\s]+$/.test(self.lender.poc_position)
+            poc_phone_validation = /^\+62[0-9]+$/.test(self.lender.poc_phone)
+
+            de_va_account_number_validation = /^[0-9]+$/.test(self.bank.deposit_va.account_number)
+            di_va_account_number_validation = /^[0-9]+$/.test(self.bank.disbursement_va.account_number)
+            re_va_account_number_validation = /^[0-9]+$/.test(self.bank.repayment_va.account_number)
+            rdl_account_number_validation = /^[0-9]+$/.test(self.bank.rdl.account_number)
+            w_account_number_validation = /^[0-9]+$/.test(self.bank.withdrawal.account_number)
+
+            rdl_account_name_validation = /^[a-zA-Z\s]+$/.test(self.bank.rdl.account_name)
+            w_account_name_validation = /^[a-zA-Z\s]+$/.test(self.bank.withdrawal.account_name)
+
+            if (self.account.username === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nama Pengguna tidak boleh kosong!!')
+            } else if (self.account.username !== '' && !username_validation) {
+                self.ToastDanger('kesalahan input data', 'Nama Pengguna harus alphabet dan tanpa spasi!!')
+            } else if (self.product.product_profile_list.length === 0) {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Daftar Profil Produk tidak boleh kosong!!')
+            } else if (self.customer.credit_score.length === 0) {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nilai Kredit tidak boleh kosong!!')
+            } else if (self.lender.lender_name === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nama Pemberi Pinjaman tidak boleh kosong!!')
+            } else if (self.lender.lender_name !== '' && !lender_name_validation) {
+                self.ToastDanger('kesalahan input data', 'Nama Pemberi Pinjaman harus alphabet!!')
+            } else if (self.lender.lender_display_name === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nama Tampilan Pemberi Pinjaman tidak boleh kosong!!')
+            } else if (self.lender.lender_display_name !== '' && !lender_display_name_validation) {
+                self.ToastDanger('kesalahan input data', 'Nama Tampilan Pemberi Pinjaman harus alphabet!!')
+            } else if (self.lender.lender_address === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Alamat Pemberi Pinjaman tidak boleh kosong!!')
+            } else if (self.lender.service_fee === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Biaya Layanan tidak boleh kosong!!')
+            } else if (self.lender.service_fee !== '' && !service_fee_validation) {
+                self.ToastDanger('kesalahan input data', 'service fee only number!!')
+            } else if (self.lender.addendum_number === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nomor Tambahan tidak boleh kosong!!')
+            } else if (self.lender.pks_number === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nomor PKS tidak boleh kosong!!')
+            } else if (self.insurance_boolean === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Pinjaman Asuransi tidak boleh kosong!!')
+            } else if (self.lender.business_type === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Jenis Usaha tidak boleh kosong!!')
+            } else if (self.lender.source_of_fund === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Sumber Dana tidak boleh kosong!!')
+            } else if (self.lender.poc_name === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nama Penanggung Jawab tidak boleh kosong!!')
+            } else if (self.lender.poc_name !== '' && !poc_name_validation) {
+                self.ToastDanger('kesalahan input data', 'Nama Penanggung Jawab harus alphabet!!')
+            } else if (self.lender.poc_email === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'poc email tidak boleh kosong!!')
+            } else if (self.lender.poc_position === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'poc position tidak boleh kosong!!')
+            } else if (self.lender.poc_position !== '' && !poc_position_validation) {
+                self.ToastDanger('kesalahan input data', 'POC position harus alphabet!!')
+            } else if (self.lender.poc_phone === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Nomor Telepon Penanggung Jawab tidak boleh kosong!!')
+            } else if (self.lender.poc_phone !== '' && !poc_phone_validation) {
+                self.ToastDanger('kesalahan input data', 'Nomor Telepon Penanggung Jawab harus angka dan menggunakan +62!!')
+            } else if (self.bank.deposit_va.account_number === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Deposit VA Nomor Akun tidak boleh kosong!!')
+            } else if (self.bank.deposit_va.account_number !== '' && !de_va_account_number_validation) {
+                self.ToastDanger('kesalahan input data', 'Deposit VA Nomor Akun harus angka!!')
+            } else if (self.bank.disbursement_va.account_number === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Disbursement VA Nomor Akun tidak boleh kosong!!')
+            } else if (self.bank.disbursement_va.account_number !== '' && !di_va_account_number_validation) {
+                self.ToastDanger('kesalahan input data', 'Disbursement VA Nomor Akun harus angka!!')
+            } else if (self.bank.rdl.bank_name === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'RDL Nama Bank tidak boleh kosong!!')
+            } else if (self.bank.rdl.account_name === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'RDL Nama Akun tidak boleh kosong!!')
+            } else if (self.bank.rdl.account_name !== '' && !rdl_account_name_validation) {
+                self.ToastDanger('kesalahan input data', 'RDL Nama Akun harus alphabet!!')
+            } else if (self.bank.rdl.account_number === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'RDL Nomor Akun tidak boleh kosong!!')
+            } else if (self.bank.repayment_va.account_number === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Repayment VA Nomor Akun tidak boleh kosong!!')
+            } else if (self.bank.repayment_va.account_number !== '' && !re_va_account_number_validation) {
+                self.ToastDanger('kesalahan input data', 'Repayment VA Nomor Akun harus angka!!')
+            } else if (self.bank.withdrawal.bank_name === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Withdrawal Nama Bank tidak boleh kosong!!')
+            } else if (self.bank.withdrawal.account_name === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Withdrawal Nama Akun tidak boleh kosong!!')
+            } else if (self.bank.withdrawal.account_name !== '' && !w_account_name_validation) {
+                self.ToastDanger('kesalahan input data', 'Withdrawal Nama Akun harus alphabet!!')
+            } else if (self.bank.withdrawal.account_number === '') {
+                self.ToastDanger('bidang yang wajib diisi tidak ada', 'Withdrawal Nomor Akun tidak boleh kosong!!')
+            } else if (self.bank.withdrawal.account_number !== '' && !w_account_number_validation) {
+                self.ToastDanger('kesalahan input data', 'Withdrawal Nomor Akun harus angka!!')
+            } else {
+                self.bank.repayment_va.bank_name = self.bank.rdl.bank_name
+                self.bank.repayment_va.account_name = self.bank.rdl.account_name
+                self.bank.deposit_va.bank_name = self.bank.rdl.bank_name
+                self.bank.deposit_va.account_name = self.bank.rdl.account_name
+
+                if(self.insurance_boolean != "true") {
+                  self.lender.insurance = ''
+                }
+                $.ajax({
+                    url :  "{%url 'lender:ajax_submit_verification' %}", // the endpoint
+                    type : "POST", // http method
+                    data : {
+                      product: JSON.stringify(self.product),
+                      customer: JSON.stringify(self.customer),
+                      lender: JSON.stringify(self.lender),
+                      account: JSON.stringify(self.account),
+                      bank: JSON.stringify(self.bank),
+                      csrfmiddlewaretoken: self.csrftoken
+                    }, // data sent with the get request
+                      // handle a successful response
+                    success : function(json) {
+                        console.log(json)
+                        self.ToastSuccess('success lender verification')
+                        window.location.href = json.url
+                    },
+                      // handle a non-successful response
+                    error : function(xhr,errmsg,err) {
+                        self.ToastDanger('failed lender verification',
+                                         xhr.responseText)
+                    }
+                });
+            }
+        },
+        ToastSuccess: function(header_msg, body_message){
+         $.toast({
+           heading: header_msg,
+           text: body_message,
+           position: 'top-right',
+           loaderBg:'#ff6849',
+           icon: 'success',
+           hideAfter: 1500,
+           stack: 6
+         });
+        },
+        ToastDanger: function(header_msg, body_message){
+         $.toast({
+           heading: header_msg,
+           text: body_message,
+           position: 'top-right',
+           loaderBg:'#ff6849',
+           icon: 'error',
+           hideAfter: 2800
+         });
+        }
+    }
+});
+</script>
+{% endblock %}

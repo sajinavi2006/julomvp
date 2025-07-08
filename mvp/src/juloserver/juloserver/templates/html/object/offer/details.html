@@ -1,0 +1,586 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+
+
+{% block additional_title %}Julo-{{ offer_obj.id }} {% endblock %}
+ 
+{% block custom_link %}
+
+
+{% endblock %}
+
+
+{% block css_inside %}
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+  .pmt_event {
+    margin-top:10px !important;
+  }
+    td.day{
+    position:relative;  
+  }
+  .enabled a{
+    color:black !important;
+    background:green !important;    
+  }
+    td.day{
+    position:relative;  
+  }
+
+  td.day.disabled:hover:before {
+      content: 'This date is disabled';
+      color: white;
+      background-color: grey;
+      top: 28px;
+      position: absolute;
+      width: 136px;
+      left: -34px;
+      z-index: 1000;
+      text-align: center;
+      padding: 2px;
+  }
+
+  td.disabled-date {
+      background-color: red !important;
+      color: white !important;
+  }
+
+  .modal-content {
+    width: 120%;
+  }
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+ 
+{% block list_title %} 
+
+    {% with offer_obj as object %}
+      <div class="row m-b-10">
+        <div class="col-md-2 col-xs-6 label-danger p-t-10">
+          <small>AppId</small>: {{ object.application.id|default:"-"|safe  }}
+        </div>
+        <div class="col-md-4 col-xs-6 label-warning p-t-10">
+          <small>product</small>: {{ object.product.product_name|default:"-"|safe  }}
+        </div>
+        <div class="col-md-2 col-xs-6 label-primary text-center p-t-10">
+          <small>is-Accepted</small>: <code>{{ object.is_accepted|yesno:"Yes, No"|safe }}</code>
+        </div>
+        <div class="col-md-4 col-xs-6 label-success p-t-10">
+          <small>email</small>: {{ object.application.email|default:"-"|safe  }}
+        </div>
+      </div>
+    {% endwith %}
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-12 col-xs-12">
+
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+         {% include "object/offer/include/offer_details.html" %}
+      </div>
+      
+      <!-- Application detail -->
+      <div class="col-md-6 col-xs-12">
+        {% with offer_obj.application as object %}
+          {% include "object/offer/include/offer_list.html" %}
+        {% endwith %}
+      </div>
+
+    </div>
+    <!-- end of row -->
+
+    <!-- form start -->
+    <div class="row">
+      <hr>
+      <div class="col-md-6 col-xs-12">
+      
+        {% if messages %}
+            <div class="alert alert-warning">
+            {% for message in messages %}
+                <code>{{ message|escape }}</code><br/>
+            {% endfor %}
+            </div>
+        {% endif %}
+
+
+        <form class="form-horizontal" id="status_form" role="form" method="POST">
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+          {% endfor %}
+
+          {% if form.errors %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="row m-t-10">
+            <code>Catatan Ops:</code>
+            <div class="col-md-12 col-sm-12 form-group {% if form.notes.errors %} has-error {% endif %}">
+              {{ form.notes }}
+            </div>
+          </div>
+          <!-- end row -->
+
+          <!-- /.modal payment event-->
+          <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header  label-warning">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title" id="compute_modal_title">Ubah Offer - AppID: {{offer_obj.application.id}}</h4> </div>
+                      <div class="modal-body">
+                        {% with offer_obj as object %}
+                          {% include "object/offer/include/form_offer.html" %}
+                        {% endwith %} 
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">
+                            <i class="fa fa-times fa-fw"></i>Batal
+                          </button>
+                          <button type="button" class="btn btn-danger waves-effect waves-light" name="ubah_offer" disabled="true" id="id_simpan_offer" onclick="editOffer({{offer_obj.application.id}}, true)">
+                            <i class="fa fa-save fa-fw"></i>Setuju
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div> 
+
+          <!-- /.modal payment event-->
+          <div id="responsive-compute-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header  label-danger">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="compute_modal_title">Compute Installment Amount Offer</h4> </div>
+                      <div class="modal-body" id="compute_modal_body">
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <button class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="submit" name="simpan_note">Simpan Note</button>
+              </div>
+            
+          </div>
+
+        </form>
+
+      </div>
+      <!-- form end -->
+
+      <div class="col-md-6 col-xs-12">
+        <!-- <div id="slim_history_note"> -->
+         {% with offer_obj as object %}
+             {% include "object/payment_status/include/payment_history.html" %}
+         {% endwith %}
+        <!-- </div> -->
+      </div>
+
+    </div>
+    <!-- end row -->
+
+  </div>
+  <!-- end col-md-12 -->
+</div>
+<!-- end root row -->
+  
+<div class="row m-t-10 m-b-10">
+</div>
+
+
+<!-- /.modal payment event-->
+<div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit</h4> </div>
+            <div class="modal-body">
+              Loan 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+{% endblock %}
+
+
+{% block button_part %}
+{% endblock %}
+
+
+
+{% block script_bottom_inside %}
+  GLOBAL_OFFER_ID_STATUS = 0;
+  // using jQuery
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      // console.log(cookieValue);
+      return cookieValue;
+  }
+
+  $('#slim_images').slimScroll({
+      // position: 'left',
+      height: '45vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+  
+  $('#slim_apps').slimScroll({
+      // position: 'left',
+      height: '45vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  
+  $('#slim_pmts').slimScroll({
+      // position: 'left',
+      height: '45vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  $('#slim_history_note').slimScroll({
+      // position: 'left',
+      height: '450px',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+
+  jQuery.fn.delay = function(time,func){
+      this.each(function(){
+          setTimeout(func,time);
+      });
+
+      return this;
+  };
+
+  $("#id_compute_installment" ).click(function() {
+    toast_warning('Sending', 'Wait until it is done');
+
+    var product = $("#id_form2-product option:selected").val();
+    var loan_amount = $("#id_form2-loan_amount_offer").val();
+    var loan_duration = $("#id_form2-loan_duration_offer").val();
+    var product_line = Number($("#product_line_code").text());
+    var STL = [20, 21];
+    var stl_found = STL.indexOf(product_line) > -1;
+
+    err_msg = "";
+    if(product==""){
+      err_msg = "Silahkan Pilih Product dahulu!";
+    }
+    else if(loan_amount=="0"){
+      err_msg = "Silahkan Inputkan Loan Amount dahulu!";
+    }
+    else if(loan_duration=="0"){
+      err_msg = "Silahkan Inputkan Loan Duration dahulu!";
+    }
+    else {
+      //alert( "all Okay" );
+      if (stl_found){
+        simulate_adjusted_payment(product, loan_amount, loan_duration, product_line);
+      } else{
+        compute_installment(product, loan_amount, loan_duration);
+        simulate_adjusted_payment(product, loan_amount, loan_duration, product_line);
+      }
+
+    }
+
+    if(err_msg!=""){
+      //show Error Msg on modal view
+      $("#compute_modal_body").html(""+ err_msg);
+      $('#responsive-compute-modal').modal('show');
+      //alert(""+ err_msg);
+    }
+  });
+
+  function compute_installment(product, loan_amount, loan_duration){
+    //console.log("hohoho check data dulu ya" + product + " , " + loan_amount+ + ", "+ loan_duration);
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'offers:ajax_compute_installment' %}/", // the endpoint
+        type : "GET", // http method
+        data : { product: product,
+                 loan_amount: loan_amount,
+                 loan_duration: loan_duration,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            //console.log(json); // log the returned json to the console
+            if (json.result == "successful!"){
+              //redirect this page
+              //console.log("sukses");
+              $("#id_form2-installment_amount_offer").val(''+json.reason);
+              set_disable_simpan_btn(0);
+            }
+            else {
+              //show notification that app was locked
+              //console.log(json.reason);
+              //$("#compute_modal_title").html("Lock Gagal");
+              $("#compute_modal_body").html(""+ json.reason);
+              $('#responsive-compute-modal').modal('show');
+              set_disable_simpan_btn(1);
+            }
+            toast_success("Done", "Compute Installment Amount Success");
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            //$("#compute_modal_title").html("!! Error !!");
+            $("#compute_modal_body").html("Error on getting data from server"+ err_msg);
+            $('#responsive-compute-modal').modal('show');
+        }
+    }); // end of ajax
+    
+  } // endof function
+
+  function set_disable_simpan_btn(disable_status){
+    if(disable_status==1){
+      document.getElementById("id_simpan_offer").disabled = true;
+      $("#id_simpan_offer").addClass("btn-default");
+      $("#id_simpan_offer").removeClass("btn-danger");
+    }
+    else {
+      document.getElementById("id_simpan_offer").disabled = false;
+      $("#id_simpan_offer").removeClass("btn-default");
+      $("#id_simpan_offer").addClass("btn-danger");
+    }    
+  }
+
+  function toast_warning(header_msg, body_message){
+    $.toast({
+        heading: header_msg,
+        text: body_message,
+        position: 'top-right',
+        loaderBg:'#ff6849',
+        icon: 'warning',
+        hideAfter: 800, 
+        stack: 6
+      });
+  }
+
+  function toast_success(header_msg, body_message){
+    $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'success',
+            hideAfter: 1200, 
+            stack: 6
+          });
+  }
+
+  function toast_danger(header_msg, body_message){
+    $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'error',
+            hideAfter: 1200
+            
+          });
+  }
+
+  function simulate_adjusted_payment(product, loan_amount, loan_duration, product_line){
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+    var product_line = Number($("#product_line_code").text());
+    var STL = [20, 21];
+    var stl_found = STL.indexOf(product_line) > -1;
+
+    $.ajax({
+        url :  "{%url 'offers:simulated_first_installment' %}/", // the endpoint
+        type : "GET", // http method
+        data : { product: product,
+                 new_due_date: $("#p_installment_date").val(),
+                 loan_amount: loan_amount,
+                 loan_duration: loan_duration,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            // console.log(json); // log the returned json to the console
+            if (json.result == "successful!"){
+              // console.log("sukses");
+              $("#p_installment_amount").val(json.output);
+              if (stl_found){
+                $("#id_form2-installment_amount_offer").val(''+json.output);
+                set_disable_simpan_btn(0);
+              }
+             
+            }
+            else {
+              //failed
+              console.log(json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    }); // end of ajax
+  }//end of function
+
+  function disableDay(){
+    //var disabledDates = [{}];
+    var disabledDates = [];
+    var csrftoken = getCookie('csrftoken');
+    var offer_id = {{ offer_obj.id }};
+
+    $.ajax({
+        url :  "{%url 'offers:ajax_unavailable_due_dates' %}/", // the endpoint
+        type : "GET", // http method
+        data : { offer_id: offer_id,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            // console.log(json); // log the returned json to the console
+            if (json.result == "successful!"){
+              // console.log("sukses");
+              for (var i in json.output){
+                disabledDates.push(json.output[i]);
+                //console.log(disabledDates);
+                console.log(disabledDates[2]);
+              }
+              return disabledDates;
+                //return '28-7-2017';
+            }
+            else {
+              //failed
+              console.log(json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+      })
+      .then(function(value) {
+        disabledDates = value.output;
+        // return value.output;
+        jQuery('.odatepicker, #p_installment_date').datepicker({
+                   datesDisabled: disabledDates,
+                   startDate: value.start,
+                   endDate: value.end,
+                   format: 'dd-mm-yyyy',
+                   buttonClasses: ['btn', 'btn-sm'],
+                   applyClass: 'btn-danger',
+                   cancelClass: 'btn-inverse',
+                   dateLimit: {
+                       days: 6
+                   },
+                   autoclose: true,
+                   todayHighlight: true,
+                   todayBtn: "linked",
+        });
+      });
+
+  }
+
+  jQuery(document).ready(function() {
+    
+    // alert("Document is ready");
+    window.scroll(0,80);
+    var offer_id = {{ offer_obj.id }};
+
+    $(".mask").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    $(".maskNumber").maskMoney({thousands:'', decimal:'', allowZero: true, suffix: '', precision:0});
+
+    set_disable_simpan_btn(1);
+    var due_date = $("#p_date_init").text();
+    $("#p_installment_date").val(due_date);
+    var first_due_amount = $("#p_amount_init").text();
+    $("#p_installment_amount").val(first_due_amount);
+
+    disableDay();
+
+  });
+
+  
+  function autoComputeInstalment(oEvent) { 
+    set_disable_simpan_btn(1);
+  }
+
+  function simulate_adjusted_payment_auto(oEvent) { 
+    if($('#p_installment_date').val() != "" ){
+      var product = $("#id_form2-product option:selected").val();
+      var l_amount = $("#id_form2-loan_amount_offer").val();
+      var l_duration = $("#id_form2-loan_duration_offer").val();
+      var offer_id = {{ offer_obj.id }}
+      simulate_adjusted_payment(product, l_amount, l_duration);
+    } else {
+      alert("simulate_adjusted_payment_auto failed");
+    }
+  }
+
+  window.onload = function () { 
+    var offer_product = document.getElementById("id_form2-product");
+    var offer_amount = document.getElementById("id_form2-loan_amount_offer");
+    var offer_duration = document.getElementById("id_form2-loan_duration_offer");
+    var payment_due_date = document.getElementById("p_installment_date");
+
+    offer_product.onchange = autoComputeInstalment;
+    offer_amount.onchange = autoComputeInstalment;
+    offer_duration.onchange = autoComputeInstalment;
+    payment_due_date.onchange = simulate_adjusted_payment_auto;
+  } 
+  
+
+{% endblock %}
+
+{% block script_end %}
+
+{% endblock %}

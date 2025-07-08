@@ -1,0 +1,6 @@
+Terima kasih anda telah mendaftar di JULO. Silahkan klik tautan di bawah untuk verifikasi email anda agar dapat digunakan di aplikasi JULO.
+
+{{link}}
+
+Hormat kami,
+Team JULO

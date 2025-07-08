@@ -1,0 +1,610 @@
+<!DOCTYPE html
+   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="id" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+   style="color-scheme:light dark">
+   <head>
+      <meta charset="utf-8">
+      <meta name="x-apple-disable-message-reformatting">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+      <meta name="color-scheme" content="light dark">
+      <meta name="supported-color-schemes" content="light dark">
+      <style>
+         :root {
+         color-scheme: light dark
+         }
+         .bt-secondary:visited {
+         color: #00acf0
+         }
+         .visited-text-white:visited {
+         color: #fff !important
+         }
+         .linkbutton{
+            display: inline-block;
+            width: 48.6%;
+         }
+         .linkbuttonleft{
+            margin-right: 1%;
+         }
+         .linkbuttonright{
+            margin-left: 1%;
+         }
+         @media (max-width:600px) {
+         .linkbutton{
+            display: block;
+            width: 99.6%;
+         }
+         .linkbuttonleft{
+            margin-right: 0;
+         }
+         .linkbuttonright{
+            margin-left: 0;
+         }
+         .sm-m-auto {
+            margin: auto !important
+         }
+         .sm-block {
+            display: block !important
+         }
+         .sm-table {
+            display: table !important
+         }
+         .sm-inline {
+            display: inline !important;
+         }
+         .sm-hidden {
+            display: none !important
+         }
+         .sm-h-3 {
+            height: 12px !important;
+         }
+         .sm-text-center {
+            text-align: center !important;
+            padding-bottom: 12px;
+         }
+         .sm-w-full {
+         width: 100% !important
+         }
+         .sm-max-w-5xl {
+         max-width: 512px !important
+         }
+         .sm-p-4 {
+         padding: 16px !important
+         }
+         .sm-px-1 {
+         padding-left: 4px !important;
+         padding-right: 4px !important
+         }
+         .sm-px-4 {
+         padding-left: 16px !important;
+         padding-right: 16px !important
+         }
+         .sm-px-6 {
+         padding-left: 24px !important;
+         padding-right: 24px !important
+         }
+         .sm-py-8 {
+         padding-top: 32px !important;
+         padding-bottom: 32px !important
+         }
+         .sm-text-2xl {
+         font-size: 24px !important
+         }
+         .sm-text-base {
+         font-size: 16px !important
+         }
+         .sm-text-sm {
+         font-size: 14px !important
+         }
+         .sm-text-xs {
+         font-size: 12px !important
+         }
+         }
+         @media (max-width:810px) {
+         .ipad-block {
+         display: block !important
+         }
+         .ipad-py-8 {
+         padding-top: 32px !important;
+         padding-bottom: 32px !important
+         }
+         .ipad-text-center {
+         text-align: center !important
+         }
+         }
+       
+      </style>
+   </head>
+   <body
+      style="-webkit-font-smoothing:antialiased;word-break:break-word;margin:0;width:100%;background-color:#f8fafc;padding:0">
+      <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+      <div role="article" aria-roledescription="email" aria-label lang="en">
+         <table style="width:100%;font-family:Nunito,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif"
+            cellpadding="0" cellspacing="0" role="presentation">
+            <tr>
+               <td align="center"
+                  style="background-color:#00acf0;background-image:linear-gradient(to bottom,var(--tw-gradient-stops));--tw-gradient-from:#00ACF0;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to);--tw-gradient-to:#008AC0;color:#404040">
+                  <table class="sm-w-full" style="width:640px" cellpadding="0" cellspacing="0" role="presentation">
+                     <tr>
+                        <td class="sm-py-8 sm-px-6" style="padding:48px;padding-bottom:12px;text-align:center"><a
+                           href="https://www.julo.co.id"><img
+                           src="https://www.julo.co.id/sites/default/files/newsletter/ic-logo-julo.png"
+                           width="176" alt="JULO"
+                           style="border:0;max-width:100%;vertical-align:middle"></a></td>
+                     </tr>
+                     <tr>
+                        <td class="sm-py-8 sm-px-6" style="width:512px;text-align:center;font-size:24px;font-weight:700;line-height:2;color:#fff;padding-bottom:32px;font-family:  'Nunito',sans-serif;">
+                           Pembayaran Tagihan Berhasil
+                        </td>
+                     </tr>
+                     <tr>
+                        <td align="center" class="sm-px-4" style="padding-left:24px;padding-right:24px">
+                           <table style="width:100%" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr>
+                                 <td class="sm-p-4"
+                                    style="border-radius:16px;background-color:#fff;padding:32px;font-size:16px;line-height:24px">
+                                    {% if not is_autodebet_offer %}
+                                    <img
+                                       src="https://www.julo.co.id/sites/default/files/newsletter/Payment_Success_Email_Header.png"
+                                       width="100%" alt="JULO Success Payment Banner" style="margin-bottom:16px;">
+                                    {% endif %}
+                                    <p class="sm-text-base" style="font-size:16px;font-weight:700;font-family:  'Nunito',sans-serif;margin-top: 0;">Hai, {{fullname}}!</p>
+                                    <p style="margin-top: 24px;margin-bottom:24px;font-size:16px">Terima kasih sudah melakukan pembayaran, ya! Berikut adalah detailnya:</p>
+                                    <table style="width:100%" cellpadding="0" cellspacing="0"
+                                       role="presentation">
+                                       <tr>
+                                          <td
+                                             style="border-radius:16px;background-color:#f5f5f5;padding:24px;text-align:center">
+                                             <table style="width:100%" cellpadding="0" cellspacing="0"
+                                                role="presentation">
+                                                <tbody>
+                                                   <tr
+                                                      style="width:512px;font-size:16px;font-weight:400;line-height:1.5;color:#404040">
+                                                      <td style="text-align:left;font-family: 'Nunito',sans-serif;">Nominal</td>
+                                                      <td style="text-align:right;font-weight:600;font-family: 'Nunito',sans-serif;">Rp{{paid_amount}}</td>
+                                                   </tr>
+                                                   <tr role="separator">
+                                                      <td style="height:8px"></td>
+                                                   </tr>
+                                                   {% if payment_method_name %}
+                                                   <tr
+                                                      style="width:512px;font-size:16px;font-weight:400;line-height:1.5;color:#404040">
+                                                      <td style="text-align:left;font-family: 'Nunito',sans-serif;">Metode pembayaran</td>
+                                                      <td style="text-align:right;font-weight:600;">
+                                                         <img width="40px"
+                                                            style="border-radius:4px;vertical-align:middle;"
+                                                            src="https://www.julo.co.id/sites/default/files/newsletter/{{payment_method_name|lower|slugify}}.png"
+                                                            alt="{{payment_method_name}}"><span
+                                                            class="sm-text-sm" style="margin-left:4px;font-family: 'Nunito',sans-serif;">{{payment_method_name}}</span>
+                                                      </td>
+                                                   </tr>
+                                                   {% endif %}
+                                                   <tr role="separator">
+                                                      <td style="height:8px"></td>
+                                                   </tr>
+                                                   <tr
+                                                      style="width:512px;font-size:16px;font-weight:400;line-height:1.5;color:#404040">
+                                                      <td style="text-align:left;font-family: 'Nunito',sans-serif;">Tanggal pembayaran</td>
+                                                      <td style="text-align:right;font-weight:600;font-family: 'Nunito',sans-serif;">
+                                                         {{transaction_date}}
+                                                      </td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                          </td>
+                                       </tr>
+                                       {% if cashback_amount %}
+                                       <tr role="separator">
+                                          <td style="height:20px"></td>
+                                       </tr>
+                                       <tr>
+                                          <td>
+                                             <table style=" background-image: url('https://www.julo.co.id/sites/default/files/newsletter/background_email_desktop.png'); /* Replace with your image URL */
+                                                background-size: cover; /* Ensures the image covers the entire div */
+                                                background-position: right bottom; /* Centers the image */
+                                                
+                                                background-repeat: no-repeat; /* Prevents tiling */
+                                                height: 48px;
+                                                width: 100%;
+                                                padding: 6px 12px 6px 12px;
+                                               
+                                                border-radius:  12px;
+                                                border: 1px 0px 0px 0px;
+                                                position: relative;
+
+                                                " >
+                                                <tr>
+                                                   <td style=":Align:center; height:35px; width:35px"><img src="https://www.julo.co.id/sites/default/files/newsletter/coin_email_desktop.png" alt="Newsletter Image"></td>
+                                                   <td style="width:50%">
+                                                      <table style="width:100%; height:100%;">
+                                                         <tr>
+                                                            <td style="
+                                                               color: rgba(64, 64, 64, 1);
+                                                               font-size: 14px;
+                                                               font-weight: 700;
+                                                               line-height: 16px;
+                                                               text-align: left;
+                                                               vertical-align:bottom;
+                                                               font-family: 'Nunito',sans-serif;
+                                                               ">Potensial Cashback</td>
+                                                         </tr>
+                                                         <tr>
+                                                            <td style="
+                                                               gap: 0px;
+                                                               opacity: 0px;
+                                                               font-size: 10px;
+                                                               font-weight: 400;
+                                                               line-height: 14px;
+                                                               text-align: left;
+                                                               color: rgba(117, 117, 117, 1);
+                                                               vertical-align:top;
+                                                               font-family: 'Nunito',sans-serif;
+                                                               ">Jika kamu lunasi tagihan sebelum {{cashback_exp_date}}</td>
+                                                         </tr>
+                                                      </table>
+                                                   </td>
+                                                   <td style="
+                                                      font-size: 14px;
+                                                      font-weight: 900;
+                                                      line-height: 14px;
+                                                      text-align: right;
+                                                      color: rgba(64, 64, 64, 1);
+                                                      width:50%;
+                                                      font-family: 'Nunito',sans-serif;
+                                                      ">Rp{{cashback_amount}}</td>
+                                                </tr>
+                                             </table>
+                                          </td>
+                                       </tr>
+                                       {% endif %}
+                                       {% if partial_payment %}
+                                       <tr role="separator">
+                                          <td style="height:20px"></td>
+                                       </tr>
+                                       <tr>
+                                          <td>
+                                             
+                                                <table style="
+                                                background: rgba(234, 240, 254, 1);
+
+                                                border: 1px solid rgba(131, 167, 250, 1);
+                                                width: 100%;
+                                                height: 48px;
+                                                min-width: 240px;
+                                                padding: var(--spacing2xs, 8px) var(--spacingxs, 12px) var(--spacing2xs, 12px) var(--spacingxs, 8px);
+                                                gap: var(--spacing2xs, 2px);
+                                                border-radius: var(--cornermd, 10px);
+                                                border: 1px 0px 0px 0px;
+                                                opacity: 0px;
+
+                                                ">
+                                                   <tr style=" margin: 0; /* Ensures no margin around the table */padding: 0;">
+                                                      <td><img style="width:12px; height:12px; vertical-align:center;
+                                                         padding-right:6px;"  alt="" src= "https://www.julo.co.id/sites/default/files/newsletter/ic_information_circle_blue.png"></td>
+                                                      <td style="
+                                                         font-size: 14px;
+                                                         font-weight: 700;
+                                                         line-height: 14px;
+                                                         text-align: left buttom;
+                                                         color: rgba(19, 43, 99, 1);
+                                                         margin: 0;
+                                                         border-collapse: collapse;
+                                                         padding: 0px 0px 0px 0px;
+                                                         font-family: 'Nunito',sans-serif;
+                                                         ">Perhatian</td>
+                                                   </tr>
+                                                   <tr style= " margin: 0; /* Ensures no margin around the table */ padding: 0;">
+                                                      <td></td>
+                                                      <td style="
+                                                         font-size: 12px; /* Font size */
+                                                         font-weight: 500; /* Bold font weight */
+                                                         align:left;
+                                                         line-height: 12px; /* Line height */
+                                                         color: rgba(36, 83, 194, 1);
+                                                         margin: 0;
+                                                         border-collapse: collapse;font-family: 'Nunito',sans-serif;">Jangan lupa untuk bayar sisa tagihanmu, ya! Kamu bisa cek halaman 
+                                                         <a href="https://r.julo.co.id/1mYI/tagihan" style = " 
+                                                            font-weight: 700;
+                                                            line-height: 16px; /* Line height */
+                                                            text-decoration: none; /* Remove underline by default */
+                                                            color: rgba(36, 83, 194, 1); /* Set text color */font-family: 'Nunito',sans-serif;">Tagihan</a> untuk lihat detail.
+                                                      </td>
+                                                   </tr>
+                                                </table>
+                                             
+                                          </td>
+                                       </tr>
+                                       {% endif %}
+                                       <tr role="separator">
+                                          <td style="height:20px"></td>
+                                       </tr>
+                                       <tr>
+                                          <td style="padding-bottom:12px">
+                                             <img
+                                                src="https://www.julo.co.id/sites/default/files/newsletter/Payment_Success_Email_Autodebit.png"
+                                                width="100%" alt="JULO Success Payment Banner">
+                                          </td>
+                                       </tr>
+                                       {% if is_autodebet_offer %}
+                                       <tr>
+                                          <td style="word-wrap:break-word;font-size:16px;padding-bottom:24px;"
+                                             align="left">
+                                          <div
+                                             style="cursor:auto;color:#5e5e5e;font-weight:500;font-family: 'Nunito',sans-serif;">
+                                             Biar gak telat lagi bayar tagihannya, <b>aktifin autodebit</b> aja. Anti kelupaan bayar!
+                                          </div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td style="word-wrap:break-word;font-size:14px;line-height:22px;padding-bottom:16px;"
+                                             align="left">
+                                          <div
+                                             style="border:1px solid #EDEDED;padding: 16px 16px 4px 16px;border-radius: 6px;cursor:auto;color:#5e5e5e;font-weight:500;font-family: 'Nunito',sans-serif;">
+                                             <div style="margin-bottom:8px"><b>Ini untungnya kalau kamu aktifin autodebit!</b></div>
+                                             <table style="width:100%; margin-top:2px;border-spacing: 0 14px" cellpadding="0" cellspacing="0" role="presentation">
+                                                <tr>
+                                                   <td style="vertical-align: middle;"><img style="width: 40px;margin-right: 16px;padding: 0;" src="https://www.julo.co.id/sites/default/files/newsletter/autodebet-otomatis-1.png"/></td>
+                                                   <td>
+                                                      <div><b>Pembayaran Otomatis</b></div>
+                                                      <div>Tagihanmu akan terbayar otomatis setiap bulannya</div>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td style="vertical-align: middle;"><img style="width: 40px;margin-right: 8px;padding: 0;" src="https://www.julo.co.id/sites/default/files/newsletter/periksa-data-1.png"/></td>
+                                                   <td>
+                                                      <div><b>Terhindar dari Skor Buruk SLIK OJK</b></div>
+                                                      <div>Kalau skormu baik, pinjaman atau transaksi di mana pun jadi lebih mudah</div>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td style="vertical-align: middle;"><img style="width: 40px;margin-right: 8px;padding: 0;" src="https://www.julo.co.id/sites/default/files/newsletter/liveness-smile-1.png"/></td>
+                                                   <td>
+                                                      <div><b>Bebas Panggilan Perihal Tagihan</b></div>
+                                                      <div>Jadi lebih tenang karena tanggal bayar tagihan udah diatur, jadi gak dihubungi lagi</div>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td style="vertical-align: middle;"><img style="width: 40px;margin-right: 8px;padding: 0;" src="https://www.julo.co.id/sites/default/files/newsletter/cashback-1.png"/></td>
+                                                   <td>
+                                                      <div><b>Cashback Berkali-kali Lipat</b></div>
+                                                      <div>Kamu bisa dapet cashback bayar tagihan dan dari fitur Autodebit (jika ada)!</div>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td style="vertical-align: middle;"><img style="width: 40px;margin-right: 8px;padding: 0;" src="https://www.julo.co.id/sites/default/files/newsletter/autodebet-anti-telat-1.png"/></td>
+                                                   <td>
+                                                      <div><b>Anti Kena Denda Telat Bayar</b></div>
+                                                      <div>Tiap bulan jadi tenang karena selalu terbayar maks. saat jatuh tempo (jika saldomu mencukupi)</div>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td style="vertical-align: middle;"><img style="width: 40px;margin-right: 8px;padding: 0;" src="https://www.julo.co.id/sites/default/files/newsletter/saving-easy-registration-1.png"/></td>
+                                                   <td>
+                                                      <div><b>Tak Perlu Repot</b></div>
+                                                      <div>Tak perlu copy dan paste nomor VA atau pakai metode manual saat bayar tagihan!</div>
+                                                   </td>
+                                                </tr>
+                                             </table>
+                                          </div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td style="word-wrap:break-word;font-size:16px;line-height:22px; padding-bottom: 12px;"
+                                             align="left">
+                                             <table style="width:100%; border-spacing: 0 0" cellpadding="0" cellspacing="0" role="presentation">
+                                                <tr>
+                                                   <td>
+                                                      <a class="linkbutton linkbuttonleft" href="https://r.julo.co.id/1mYI/autoIdfy" target="_blank" style="text-decoration: none;">
+                                                         <div style="color: #00ACF0;padding: 12px;border: 1px solid #00ACF0; text-align: center; border-radius: 6px; margin-bottom: 12px;">
+                                                            <b>Aktifkan via Agent JULO</b>
+                                                         </div>
+                                                      </a>
+                                                      <a class="linkbutton linkbuttonright" href="https://r.julo.co.id/1mYI/linkDebet" target="_blank" style="text-decoration: none;">
+                                                         <div style="background-color: #00ACF0;color: white;padding: 12px;border: 1px solid #00ACF0; text-align: center; border-radius: 6px; margin-bottom: 12px;">
+                                                            <b>Aktifkan Sekarang</b>
+                                                         </div>
+                                                      </a>
+                                                   </td>
+                                                </tr>
+
+                                             </table>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td style="word-wrap:break-word;font-size:14px;line-height:22px;padding-bottom:24px;text-align:center; border-bottom: 1px solid #EDEDED;"
+                                             align="left">
+                                             Bingung cara aktifinnya? Tonton tutorial aktifkan autodebit <a href="https://www.youtube.com/watch?v=7bDZqn7-tpQ" target="_blank" style="text-decoration: none;color:#00ACF0;"><b>di sini!</b></a>
+                                          </td>
+                                       </tr>
+                                       <tr role="separator">
+                                          <td style="height:28px"></td>
+                                       </tr>
+                                       {% endif %}
+                                       <tr>
+                                          <td style="word-wrap:break-word;font-size:16px;padding-bottom:24px;"
+                                             align="left">
+                                             <div
+                                                style="cursor:auto;color:#5e5e5e;font-weight:500;font-family: 'Nunito',sans-serif;">
+                                                Mohon berhati-hati terhadap modus penipuan melalui email, SMS,
+                                                Whatsapp, dan sosial media mengatasnamakan JULO. Informasi transaksi
+                                                dan program JULO hanya dikirim dari email resmi JULO yang
+                                                berakhiran @julo.co.id dan @juloperdana.co.id.
+                                             </div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td style="word-wrap:break-word;font-size:16px;"
+                                             align="left">
+                                             <div
+                                                style="cursor:auto;color:#5e5e5e;font-weight:500;font-family: 'Nunito',sans-serif;">
+                                                Pastikan juga bahwa Anda hanya melakukan pembayaran ke
+                                                Virtual Account yang tertera pada aplikasi JULO.
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </table>
+                                 </td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                     <tr role="separator">
+                        <td style="height:32px"></td>
+                     </tr>
+                  </table>
+                  <table style="width:100%;max-width:660px" cellpadding="0" cellspacing="0" role="presentation">
+                     <tr>
+                        <td align="center">
+                          <table cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                              <td>
+                                <img src="https://www.julo.co.id/sites/default/files/newsletter/ic-cs.png" style="margin-right: 8px; vertical-align: middle" alt="">
+                                <span class="sm-hidden" style="vertical-align: middle; font-weight: 700; color: #fff">Ada pertanyaan? Hubungi kami</span>
+                                <span class="sm-inline" style="display: none; vertical-align: middle; font-weight: 700; color: #fff">Ada pertanyaan? Hubungi kami</span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr role="separator">
+                        <td class="sm-h-3" style="height: 20px"></td>
+                      </tr>
+                      <tr>
+                        <td align="center">
+                          <table cellpadding="0" cellspacing="0" role="presentation">
+                            <tr>
+                              <td class="sm-text-center">
+                                <img src="https://www.julo.co.id/sites/default/files/newsletter/ic-mail.png" style="margin-right: 4px; vertical-align: middle" alt="">
+                                <a class="visited-text-white" href="mailto:cs@julo.co.id" style="vertical-align: middle; font-size: 14px; color: #fff; text-decoration-line: none">cs@julo.co.id</a>
+                              </td>
+                              <td class="sm-hidden" style="width: 18px"></td>
+                              <td class="sm-hidden">
+                                <img src="https://www.julo.co.id/sites/default/files/newsletter/ic-phone.png" style="margin-right: 4px; vertical-align: middle" alt="">
+                                <span style="vertical-align: middle; font-size: 14px; color: #fff">
+                                  <a href="tel:+622150919036" class="visited-text-white" style="font-weight: 700; color: #fff; text-decoration-line: none">021-5091 9036</a>︱
+                                  <a href="tel:+622150919037" class="visited-text-white" style="font-weight: 700; color: #fff; text-decoration-line: none">021-5091 9037</a>
+                                </span>
+                              </td>
+                            </tr>
+                            <tr role="separator">
+                              <td class="sm-h-2" style="height: 0"></td>
+                            </tr>
+                            <tr>
+                              <td class="sm-inline sm-text-center" style="display: none">
+                                <img src="https://www.julo.co.id/sites/default/files/newsletter/ic-phone.png" style="margin-right: 4px; vertical-align: middle" alt="">
+                                <span style="vertical-align: middle; font-size: 14px; color: #fff">
+                                  <a href="tel:+622150919036" class="visited-text-white" style="font-weight: 700; color: #fff; text-decoration-line: none">021-5091 9036</a>︱
+                                  <a href="tel:+622150919037" class="visited-text-white" style="font-weight: 700; color: #fff; text-decoration-line: none">021-5091 9037</a>
+                                </span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                     <tr role="separator">
+                        <td class="sm-h-2" style="height: 40px"></td>
+                      </tr>
+                     <tr>
+                        <td class="ipad-py-8"
+                           style="border-width:1px;border-left-width:0;border-right-width:0;border-style:dashed;border-color:#fff;padding-left:0;padding-right:0;padding-top:8px;padding-bottom:8px;color:#fff">
+                           <table style="width:100%" cellpadding="0" cellspacing="0" role="presentation">
+                              <tr class="sm-hidden" role="separator">
+                                 <td class="ipad-block" style="height:32px"></td>
+                              </tr>
+                              <tr>
+                                 <td class="ipad-text-center sm-hidden"
+                                    style="white-space:nowrap;font-weight:700;line-height:0"><a
+                                    href="https://go.onelink.me/app/downloadbutton"
+                                    class="visited-text-white"
+                                    style="margin-right:0;padding-right:10px;padding-left:10px;color:#fff;text-decoration-line:none"><span
+                                    style="vertical-align:middle;font-family: 'Nunito',sans-serif;">Download Aplikasi JULO
+                                    Gratis! </span><img width="79px"
+                                       src="https://www.julo.co.id/sites/default/files/newsletter/ic-google-play.png"
+                                       style="vertical-align:middle" alt=""></a><span
+                                       style="margin:0; padding-right:5px;font-family: 'Nunito',sans-serif;">Terdaftar dan diawasi oleh</span><img
+                                       width="39px"
+                                       src="https://www.julo.co.id/sites/default/files/newsletter/ic-ojk.png"
+                                       style="margin-left:4px;margin-right:2px;vertical-align:middle" alt="">
+                                    <img width="39px"
+                                       src="https://www.julo.co.id/sites/default/files/newsletter/ic-afpi-logo.png"
+                                       style="margin-right:2px;vertical-align:middle" alt=""> <img width="39px"
+                                       src="https://www.julo.co.id/sites/default/files/newsletter/ic-afpi.png"
+                                       style="vertical-align:middle" alt="">
+                                 </td>
+                                 <td class="sm-block" style="display:none">
+                                    <table class="sm-m-auto sm-text-sm"
+                                       style="width:100%;text-align:center;font-weight:700" cellpadding="0"
+                                       cellspacing="0" role="presentation">
+                                       <tr class="sm-m-auto" style="text-align:center">
+                                          <td class="sm-m-auto" style="text-align:center"><span
+                                             style="vertical-align:middle; font-family: 'Nunito',sans-serif;">Download Aplikasi JULO
+                                             Gratis!</span><img width="79px"
+                                                src="https://www.julo.co.id/sites/default/files/newsletter/ic-google-play.png"
+                                                style="vertical-align:middle" alt="">
+                                          </td>
+                                       </tr>
+                                       <tr role="separator">
+                                          <td style="height:24px"></td>
+                                       </tr>
+                                       <tr>
+                                          <td><span style="margin:0;padding:0; font-family: 'Nunito',sans-serif;">Terdaftar dan diawasi
+                                             oleh</span><img width="39px"
+                                                src="https://www.julo.co.id/sites/default/files/newsletter/ic-ojk.png"
+                                                style="margin-left:4px;margin-right:2px;vertical-align:middle"
+                                                alt=""> <img width="39px"
+                                                src="https://www.julo.co.id/sites/default/files/newsletter/ic-afpi-logo.png"
+                                                style="margin-right:2px;vertical-align:middle" alt=""> <img
+                                                width="39px"
+                                                src="https://www.julo.co.id/sites/default/files/newsletter/ic-afpi.png"
+                                                style="vertical-align:middle" alt="">
+                                          </td>
+                                       </tr>
+                                    </table>
+                                 </td>
+                              </tr>
+                              <tr class="sm-hidden" role="separator">
+                                 <td class="ipad-block" style="height:32px"></td>
+                              </tr>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+                  <table class="sm-w-full" style="width:640px" cellpadding="0" cellspacing="0" role="presentation">
+                     <tr role="separator">
+                        <td style="height:32px"></td>
+                     </tr>
+                     <tr>
+                        <td class="sm-px-1"
+                           style="text-align:center;font-size:12px;font-weight:700;line-height:4px;color:#fff;font-family: 'Nunito',sans-serif;">
+                           <p style="font-family: 'Nunito',sans-serif;">PT Julo Teknologi Finansial</p>
+                           <p style="font-family: 'Nunito',sans-serif;">88@Kasablanka Tower A Lantai 5. JL. Raya Casablanca</p>
+                           <p style="font-family: 'Nunito',sans-serif;">Kav.88, Jakarta Selatan 12870</p>
+                        </td>
+                     </tr>
+                     <tr role="separator">
+                        <td style="height:32px"></td>
+                     </tr>
+                     <tr>
+                        <td class="sm-px-1" style="text-align:center;font-size:14px;color:#fff;font-family: 'Nunito',sans-serif;">Keamananmu adalah
+                           prioritas kami. Pelajari tentang <a class="visited-text-white"
+                              href="https://www.julo.co.id/privacy-policy" style="color:#fff;font-family: 'Nunito',sans-serif;">kebijakan
+                           privasi</a> kami.
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="sm-px-1"
+                           style="padding-bottom:48px;text-align:center;font-size:12px;line-height:0;color:#fff">
+                           <p><a class="visited-text-white" href="https://www.julo.co.id/cara-bayar"
+                              style="color:#fff;font-family: 'Nunito',sans-serif;">Panduan Pembayaran</a> | <a class="visited-text-white"
+                              href="https://www.julo.co.id/faq" style="color:#fff;font-family: 'Nunito',sans-serif;">Pusat Bantuan</a> | <span
+                              class="sm-hidden" style="font-family: 'Nunito',sans-serif;">Unsubscribe</span></p>
+                           <p class="sm-block" style="display:none;line-height:12px;font-family: 'Nunito',sans-serif;">Unsubscribe</p>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

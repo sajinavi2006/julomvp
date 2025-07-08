@@ -1,0 +1,76 @@
+from __future__ import unicode_literals
+from django.conf.urls import include, url
+from rest_framework import routers
+from juloserver.integapiv1.views import (
+    AutoCallEventStatus,
+    AutoCallEventStatus138,
+    BcaAccessTokenView,
+    BcaInquiryBills,
+    BcaPaymentFlagInvocationView,
+    FaspayPaymentNotificationView,
+    FaspayTransactionApiView,
+    PingAutoCall,
+    PredictiveMissedCallView,
+    PrimoCallResultView,
+    QismoAssignAgentView,
+    RoboCallEventCallbackView,
+    SepulsaTransactionView,
+    SmsDeliveryCallbackView,
+    SMSMontyMobileView,
+    VoiceCallView,
+    VoiceCallResultView,
+    WhatsappDeliveryCallbackView,
+    XenditNameValidateEventCallbackView,
+    XenditDisburseEventCallbackView,
+    XfersWithdrawCallbackView,
+    GopayMidtransEventCallbackView,
+    VoiceCallRecordingCallback,
+    AyoconnectBeneficiaryCallbackView,
+    AyoconnectDisbursementCallbackApiView
+)
+
+from juloserver.email_delivery.views import EmailEventCallbackView
+
+router = routers.DefaultRouter()
+
+urlpatterns = [
+    url(r'^', include(router.urls)),
+    url(r'^callbacks/sms$', SmsDeliveryCallbackView.as_view(), name='nexmo_sms_callback'),
+    url(r'^callbacks/wa$', WhatsappDeliveryCallbackView.as_view()),
+    url(r'^callbacks/email$', EmailEventCallbackView.as_view()),
+    url(r'^callbacks/robocall$', RoboCallEventCallbackView.as_view()),
+    url(r'^callbacks/xendit_name_validate$',
+        XenditNameValidateEventCallbackView.as_view()),
+    url(r'^callbacks/xendit_disburse$', XenditDisburseEventCallbackView.as_view()),
+    url(r'^callbacks/faspay/transaction-inquiry/(?P<va>[0-9]+)/(?P<signature>[a-z0-9]+)?$',
+        FaspayTransactionApiView.as_view()),
+    url(r'^callbacks/faspay/payment-notification?$',
+        FaspayPaymentNotificationView.as_view()),
+    url(r'^callbacks/sepulsa/transaction$',
+        SepulsaTransactionView.as_view()),
+    url(r'^callbacks/qismo/assign-agent$',
+        QismoAssignAgentView.as_view()),
+    url(r'^callbacks/primo/call-results$',
+        PrimoCallResultView.as_view()),
+    url(r'^callbacks/voice-call/(?P<voice_type>[a-z_0-9]+)/(?P<identifier>[0-9]+)',
+        VoiceCallView.as_view()),
+    url(r'^callbacks/voice-call-result$', VoiceCallResultView.as_view()),
+    url(r'^callbacks/xfers/withdrawal$', XfersWithdrawCallbackView.as_view()),
+    url(r'callbacks/voice-call/ping-auto-call$', PingAutoCall.as_view(), name="ping_auto_call"),
+    url(r'callbacks/voice-call/auto-call-event-status$', AutoCallEventStatus.as_view(),
+        name="auto_call_event_callback"),
+    url(r'callbacks/voice-call/auto-call-event-status_138$',
+        AutoCallEventStatus138.as_view(),
+        name="auto_call_event_callback_status_138"),
+    url(r'callbacks/voice-call/predictive_missed_call_callback$',
+        PredictiveMissedCallView.as_view(),
+        name="predictive_missed_call_callback"),
+    url(r'^callbacks/sms-montly-mobile$', SMSMontyMobileView.as_view(), name="monty_sms_callback"),
+    url(r'^bca/oauth/token$', BcaAccessTokenView.as_view()),
+    url(r'^bca/va/bills$', BcaInquiryBills.as_view()),
+    url(r'^bca/va/payments$', BcaPaymentFlagInvocationView.as_view()),
+    url(r'^callbacks/gopay-cashback$', GopayMidtransEventCallbackView.as_view()),
+    url(r'^callbacks/voice-call-recording-callback$', VoiceCallRecordingCallback.as_view()),
+    url(r'^callbacks/ayoconnect/disbursement$', AyoconnectDisbursementCallbackApiView.as_view()),
+    url(r'^callbacks/ayoconnect/beneficiary$', AyoconnectBeneficiaryCallbackView.as_view())
+]

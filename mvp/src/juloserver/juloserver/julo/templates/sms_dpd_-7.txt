@@ -1,0 +1,1 @@
+Yth {{name}}, nikmati cashback {{payment_cashback_amount}} saat melunasi tagihan JULO Anda paling lambat {{due_date_in_4_days}}. Cek info di aplikasi.”

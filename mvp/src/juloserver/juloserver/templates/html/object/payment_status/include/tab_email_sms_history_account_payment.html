@@ -1,0 +1,108 @@
+{% load default unit %}
+
+<transition name="fade">
+  <div class="loading-email-sms-history" v-show="loading">
+    <span class="fa fa-spinner fa-spin"></span> Loading
+  </div>
+</transition>
+<table class="table">
+        <thead>
+          <tr>
+            
+            <th width="15%" class="th-sticky">Waktu/Status</th>
+            
+            <th width="70%" class="th-sticky">Content</th>
+          </tr>
+        </thead>
+        <tbody v-for="(his_email_sms, index) in emailSmsHistories">          
+               <tr class="warning" v-if="his_email_sms.type_data == 'Email'">
+                
+                <td>
+                  <label class="label label-warning">
+                    [[ his_email_sms.cdate ]]
+                  </label><br/>
+                   <label class="label label-danger">
+                    [[ his_email_sms.type_data ]]
+                  </label><br/>
+                    To :<br/>
+                    <span v-for="value in his_email_sms.to_email_list">
+                      <label class="label label-warning">
+                        [[value]] 
+                      </label><br/>
+                    </span>
+                    Cc :<br/>
+                    <span v-for="value in his_email_sms.cc_email_list">
+                      <label class="label label-warning">
+                        [[value]] 
+                      </label><br/>
+                    </span>
+                    <span v-if="!his_email_sms.cc_email_list?.length">
+                      -- No Cc --
+                    </span>
+                  <label class="label label-danger">
+                    [[his_email_sms.status]]
+                  </label><br/>
+                </td>
+
+                <td>
+                  <strong>Kategori:</strong><br/>
+                  [[his_email_sms.category]]<br/><br/>
+                  <strong>Subject:</strong>&nbsp;[[his_email_sms.subject || '-']]<br/><br/>
+
+                  <strong>Pesan:</strong>
+                  <button type="button" class="btn btn-success previewshow" id="btnPreview" :content-id="computeContentId(index)" data-target="#content-preview" @click="handleEmailPreview">Preview</button>
+                  <textarea  class="hide" :id="computeEmailId(index)" readonly>[[ his_email_sms.message_content ]]</textarea>
+
+                </td>
+              </tr>
+              <tr class="warning" v-else>
+                
+                <td>
+                  <label class="label label-success">
+                    [[his_email_sms.cdate]]
+                  </label><br/>
+                  <label class="label label-purple">
+                    [[his_email_sms.type_data]]
+                  </label><br/>
+                  <label class="label label-success">
+                    [[his_email_sms.to_mobile_phone]]
+                  </label><br/>
+                  <label class="label label-purple">
+                    [[his_email_sms.phone_number_type]]
+                  </label><br/>
+                  <label class="label label-success">
+                    [[his_email_sms.status]]
+                  </label><br/>
+                </td>
+                <td>
+                  <strong>Kategori:</strong><br/>
+                  [[his_email_sms.category]]<br/><br/>
+                 <strong>Pesan:</strong>
+                 <span v-html="his_email_sms.message_content_formatted ||'-'"></span>
+                </td>
+              </tr>
+        </tbody>
+        <tbody v-if="!emailSmsHistories.length">
+          <tr>
+            <td colspan="2">
+              <span> Tidak ada Data </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!--########################### modal content preview ###############################################-->
+<div id="content-preview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content modal-preview">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Content HTML Preview</h4>
+            </div>
+            <div class="modal-body modal-custom-body" style="overflow:scroll;">
+                <div class="row" id="preview_div">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--########################### modal content preview ###############################################-->

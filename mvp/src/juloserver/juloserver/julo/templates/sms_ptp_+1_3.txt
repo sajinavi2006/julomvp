@@ -1,0 +1,1 @@
+Yth {{name}}, Kami blm trma pmbayaran yg Anda janjikan {{ due_date }} Sjmlh {{due_amount}}. Harap segera lakukan pbayaran. Trm ksh

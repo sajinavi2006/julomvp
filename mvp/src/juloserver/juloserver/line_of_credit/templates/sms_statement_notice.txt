@@ -1,0 +1,3 @@
+Yth Bpk/Ibu, JULOKredit Anda akan jatuh tempo pd tgl {{due_date}} 
+dg min pembayaran {{minimum_payment}} Mhn abaikan jk sdh melakukan pembayaran.
+cs@julo.co.id.

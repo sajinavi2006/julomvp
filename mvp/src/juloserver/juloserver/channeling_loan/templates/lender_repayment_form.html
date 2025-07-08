@@ -1,0 +1,117 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load model template default unit %}
+
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+    .ml5 {
+        margin-left: 5px;
+    }
+    .w100 {
+        width: 100px;
+    }
+    .w300 {
+        width: 300px;
+    }
+    .grid {
+        display: grid;
+    }
+    textarea {
+        resize: vertical;
+    }
+    .lb-result {
+        font-size: larger;
+    }
+    .center {
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">Lender Repayment</h3>
+</div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' or message.tags == 'warning' or message.tags == 'debug' %}
+                <div class="alert alert-warning">
+                    <code>{{ message|escape }}</code><br/>
+                </div>
+            {% endif %}
+            {% if message.tags == 'info' or message.tags == 'success' %}
+                <div class="alert alert-success">
+                    <code>{{ message|escape }}</code><br/>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.lender_osp_account.errors %} has-error {% endif %}">
+            <label class="w250">Lender OSP Account:</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.lender_osp_account }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.balance_amount.errors %} has-error {% endif %}">
+            <label class="w250">Repayment Amount:</label>
+
+            <div class="col-md-12 col-sm-12">
+                {{ form.balance_amount }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-xs-12">
+                {% if not disabled %}
+                    <button class="mb10 btn btn-info" type="submit">Save</button>
+                {% endif%}
+                <a href="{% url 'channeling_loan_portal:lender_repayment_list' %}">
+                    <button id="back" type="button" class="mb10 btn btn-default">
+                        Kembali
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}
+
+{% block script_additional %}
+<script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#id_balance_amount").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    })
+</script>
+
+{% endblock %}

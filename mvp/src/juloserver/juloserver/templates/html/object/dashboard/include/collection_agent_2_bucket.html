@@ -1,0 +1,71 @@
+{% load unit %}
+<div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_1to4'%}" id="payment_t1" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase">T+1 to T+4</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.T1to4 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_5to15'%}" id="payment_t5" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase">T+5 to T+15</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-success"><% payment_dashboard.T5to15 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+  <div class="col-lg-4 col-sm-2 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_16to29'%}" id="payment_t16" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase">T+16 to T+29</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"> <span class="counter text-purple"><% payment_dashboard.T16to29 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+</div>
+<div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+  <div class="col-lg-6 col-sm-3 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_2_ptp'%}" id="payment_ptp" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title">PTP</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.PTPagent2 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+  <div class="col-lg-6 col-sm-3 col-xs-12">
+    <a href="{% url 'payment_status:list_v2' 'collection_agent_2_whatsapp'%}" id="payment_whatsapp" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title">WA</h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% payment_dashboard.WhatsappAgent2 %></span></li>
+      </ul>
+    </div>
+    </a>
+  </div>
+</div>

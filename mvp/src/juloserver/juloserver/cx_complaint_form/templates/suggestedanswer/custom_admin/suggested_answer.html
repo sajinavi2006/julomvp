@@ -1,0 +1,98 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}{{ block.super }}
+<style type="text/css">
+    .field-survey_answer_ids {
+        display: flex !important;
+        align-items: center !important;
+        gap: 15px;
+    }
+
+    .field-survey_answer_ids .form-field {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .selectize-control {
+        width: 70% !important;
+        min-width: 500px !important;
+        display: inline-grid;
+    }
+
+    .form-row {
+        overflow: visible !important;
+    }
+
+    .field-survey_answer_ids {
+        flex-wrap: wrap !important;
+        align-items: flex-start !important;
+    }
+    
+    .field-survey_answer_ids .error-message-container {
+        flex-basis: 100% !important;
+        order: 3 !important;
+        margin-top: 5px !important;
+        padding-left: 170px !important;
+    }
+    
+    .field-survey_answer_ids .errorlist {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .field-survey_answer_ids .errorlist li {
+        color: #ba2121 !important;
+        background: none !important;
+        list-style: none !important;
+        padding: 0 !important;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+{{ media }}
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var $select = $('.survey-answer-ids-control').selectize({
+            plugins: ['remove_button'],
+            placeholder: 'Select survey answers...',
+            allowEmptyOption: true,
+            dropdownParent: 'body'
+        })[0].selectize;
+
+        function updateWidth() {
+            var containerWidth = $('.field-survey_answer_ids').width();
+            $select.$control.css('width', Math.max(containerWidth, 500) + 'px');
+            $select.$dropdown.css('width', Math.max(containerWidth, 500) + 'px');
+        }
+        updateWidth();
+        $(window).on('resize', updateWidth);
+
+        $('.field-survey_answer_ids').each(function() {
+            var $errors = $(this).find('.errorlist');
+            if ($errors.length) {
+                $errors.wrapAll('<div class="error-message-container"></div>');
+                
+                var labelWidth = $(this).find('label').outerWidth();
+                $(this).find('.error-message-container').css('padding-left', labelWidth + 'px');
+                $(this).css('flex-wrap', 'wrap');
+            }
+        });
+    });
+</script>
+
+<style>
+    .related-widget-wrapper {
+        float: none !important;
+    }
+    .selectize-input {
+        width: 100% !important;
+    }
+</style>
+{% endblock %}

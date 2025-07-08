@@ -1,0 +1,191 @@
+{% load unit %}
+
+<div id="preloader_name_bank_validation" style="display: none; text-align: center; margin-top: 25%">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+<table class="table table-hover table-striped" id="name_bank_vaidation_table">
+  <thead>
+    <tr>
+      <th colspan="2">
+        <strong style="margin-right: 5px">Bank Name Validation</strong>
+        {% if object.validation_status == 'on_review' %}
+          {% if is_locked_by_me %}
+            <button class="btn" style="border-radius: 10px; border-color: #007bff!important; background-color: white;"
+              id="btn_reload_bank_validation_status">
+              <i class="fa fa-refresh"></i></button>
+            <button class="label-info btn text-white" style="border-radius: 10px" id="btn_validate_bank"
+              style="margin-right: 5px">Validate</button>
+          {% elif object.is_locked %}
+            <b>Tidak bisa melakukan verifikasi karena sedang dikunci oleh <code>{{object.locked_by_info}}</code></b>
+          {% else %}
+            <b>Tidak bisa melakukan verifikasi karena belum di-lock.</b>
+          {% endif %}
+        {% endif %}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validation Status</b>
+        </div>
+        <div  class="col-xs-6">
+          <p disable class="btn btn-danger text-red" style="
+              border-radius: 99px;
+              pointer-events: none;
+              padding: 2px 20px;
+              border-color: #E9948B;
+              background-color: #F7D8D4;
+              color: red;" id="id_validation_status"
+          style="margin-right: 5px">{{ name_bank_validation.validation_status|default:"-"|safe }}</p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Reason</b>
+        </div>
+        <div id="id_bank_validate_reason" class="col-xs-6">
+          <p><code>{{ name_bank_validation.reason|default:"-"|safe }}</code></p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Bank Name</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" list="banks" name="banks" id="id_disbursement_bank_name"
+              value="{{ name_bank_validation.bank_name|default:object.balance_consolidation.bank_name|safe }}">
+            <datalist class="form_control" id="banks">
+              {% for bank in bank_list %}
+              <option value="{{ bank }}">{{ bank }}</option>
+              {% endfor %}
+            </datalist>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-info btn-grp-default"
+                      onclick="setDefaultValue('id_disbursement_bank_name','{{ name_bank_validation.bank_name|default:object.balance_consolidation.bank_name|safe }}');">
+                <i class="fa fa-history fa-fw"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>No. Rekening</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" name="account_number" id="id_account_number"
+              value="{{name_bank_validation.account_number|default:object.balance_consolidation.bank_account_number|safe}}">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-info btn-grp-default"
+                      onclick="setDefaultValue('id_account_number','{{ name_bank_validation.account_number|default:object.balance_consolidation.bank_account_number|safe }}');">
+                <i class="fa fa-history fa-fw"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+        {% if is_suspect_va == True %}
+        <div class="col-xs-2 no-left">
+          <i class="fa fa-warning fa-fw text-danger" style="color: red" data-toggle="tooltip" data-placement="top"
+            title="Suspicious bank account"></i>
+        </div>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Nama Sesuai Rekening Bank</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" id="validation_name_in_bank_id"
+              value="{{name_bank_validation.name_in_bank|default:object.balance_consolidation.name_in_bank|safe}}" />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-info btn-grp-default"
+                      onclick="setDefaultValue('validation_name_in_bank_id','{{ name_bank_validation.name_in_bank|default:object.balance_consolidation.name_in_bank|safe }}');">
+                <i class="fa fa-history fa-fw"></i>
+              </button>
+            </span>
+            {% if name_bank_validation.validated_name %}
+            <span class="input-group-addon" id="btn_bank_name_paste" onclick="paste_validated_name()"><i
+                class="glyphicon glyphicon-paste"></i></span>
+            <script>
+              function paste_validated_name() {
+                var validated_name = document.getElementById("id_validated_name").value;
+                document.getElementById("validation_name_in_bank_id").value = validated_name;
+              }
+            </script>
+            {% endif %}
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validated Name</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" id="id_validated_name"
+              value='{{ name_bank_validation.validated_name }}' readonly="true" />
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validation Method</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            <select id="name_bank_validation_method_id" class="form-select">
+              {% for validation_method in validation_method_list %}
+              {% if validation_method == name_bank_validation.method %}
+              <option value="{{name_bank_validation.method }}">
+                {{ name_bank_validation.method|default:"-"|safe}}
+              </option>
+              {% else %}
+              <option value="{{ validation_method }}">
+                {{ validation_method|default:"-"|safe}}
+              </option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Validation ID</b>
+        </div>
+        <div id="id_validation_id" class="col-xs-6">
+          {{ name_bank_validation.validation_id|default:"-"|safe }}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Partner</b>
+        </div>
+        <div id="id_partner" class="col-xs-6">
+          {{ consolidation_verification.loan.partner.name|default:"-"|safe }}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

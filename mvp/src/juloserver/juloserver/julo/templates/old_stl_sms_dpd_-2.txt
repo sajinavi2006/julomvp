@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Pinjaman Anda {{due_amount}} jatuh tempo {{due_date}}. Cara bayar: {{url}} dan cek aplikasi anda.

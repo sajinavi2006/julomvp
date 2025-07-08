@@ -1,0 +1,719 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">AGENT REMOVAL</h3>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalRemovalConfirmation" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <h1 align="center">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #F9942D;"></span>
+                    </h1>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 150px">
+                    <p class="text-center" style="font-size: 20px;">
+                        <b>Apakah anda yakin untuk melakukan agent removal</b>
+                        <b class="label_all_assignment"></b>
+                    </p>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-default text-center"
+                                data-dismiss="modal" id="btnCancel">Kembali
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btn_submit_remove">Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalRemovalSuccess" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <img src="/static/images/collections/verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;">
+                </div>
+                <div class="modal-body" style="padding: 0;height: 150px">
+                    <p class="text-center" style="font-size: 20px;">
+                        <b>Success !</b>
+                    </p>
+                    <p class="text-center">Account berhasil diremove</p>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-primary text-center btnOk"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;">OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalTransferConfirmation" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <h1 align="center">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #F9942D;"></span>
+                    </h1>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">
+                    <div class="col-md-12">
+                        <p class="text-center" style="font-size: 20px;">
+                            <b>Pilih Username agent untuk di proses transfer</b>
+                            <b class="label_all_assignment_transfer"></b>
+                        </p>
+                    </div>
+                    <div class="col-md-12 m-b-30">
+                        <div class="input-group m-t-10 ">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input class="form-control" id="new_assigned_agent_username" placeholder="Agent Username"
+                               name="new_assigned_agent_username" maxlength="100" type="text"/>
+                        </div>
+                    </div>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-default text-center"
+                                data-dismiss="modal" id="btnCancel">Kembali
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btn_submit_transfer">Transfer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalTransferSuccess" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <img src="/static/images/collections/verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;">
+                </div>
+                <div class="modal-body" style="padding: 0;height: 150px">
+                    <p class="text-center" style="font-size: 20px;">
+                        <b>Success !</b>
+                    </p>
+                    <p class="text-center">Account berhasil di transfer</p>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-primary text-center btnOk"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;">OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="form_search" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="col-md-4 col-xs-12 p-l-10 p-r-10">
+                <label class="col-md-12 col-sm-12">Input Type</label>
+                <select class="form-control" id="input_mode" name="input_mode">
+                    <option value="agent_name_mode" selected>Agent Username</option>
+                    <option value="loan_or_account_mode">Loan/Account Id</option>
+                </select>
+            </div>
+                <div class="col-md-4 col-xs-12 p-l-10 p-r-10 agent_mode_page pre-show" style="display: none;">
+                    <label class="col-md-12 col-sm-12">Agent Username</label>
+                    <div class="input-group m-t-10 ">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input class="form-control" id="agent_username" placeholder="agent username"
+                           name="agent_username" maxlength="100" type="text" value="{{ agent_username }}"/>
+                    </div>
+                    <span class="help-block error_msg h5">
+                  </span>
+                </div>
+                <div class="col-md-4 col-xs-12 p-l-10 p-r-10 account_loan_mode_page pre-show" style="display: none;">
+                    <label class="col-md-12 col-sm-12">Loan/Account Id</label>
+                    <div class="input-group m-t-10 ">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input class="form-control" id="loan_or_account_id" name="loan_or_account_id" placeholder="Loan/Account Id"
+                               type="text" value="{{ loan_or_account_id }}">
+                    </div>
+                    <span class="help-block error_msg h5">
+                  </span>
+                </div>
+                <div class="col-md-3 col-xs-12 m-t-30 pre-show" style="">
+                    <button type="button" class="btn btn-info btn-rounded btn-block" id="btnSearch">
+                        <strong><i class="fa fa-search"></i> Cari</strong>
+                    </button>
+                </div>
+            </div>
+            {% if agent_assignment_list %}
+            <div class="col-md-4 pre-show bulk_section">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="hidden" name="will_all_removed_agent_assignment_ids" id="will_all_removed_agent_assignment_ids">
+                        <button type="button" class="btn btn-primary btn-rounded btn-block" id="btn_remove_all">
+                            Remove All
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="hidden" name="will_all_transfered_agent_assignment_ids" id="will_all_transfered_agent_assignment_ids">
+                        <button type="button" class="btn btn-danger btn-rounded btn-block" id="btn_transfer_all">
+                            Transfer All
+                        </button>
+                    </div>
+                </div>
+              </div>
+            {% endif %}
+        </div>
+    </form>
+    <div id="table_content" class="header-content" style="display: flex;overflow-x: auto; height: 500px !important;overflow: scroll;">
+        <table class="table table-striped table-responsive text-nowrap">
+            <thead>
+                <tr>
+                    <th scope="col" align="center" class="text-center">No</th>
+                    <th scope="col" align="center" class="text-center">Loan/Account ID</th>
+                    <th scope="col" align="center" class="text-center">PLine</th>
+                    <th scope="col" align="center" class="text-center">Full Name</th>
+                    <th scope="col" align="center" class="text-center">Status</th>
+                    <th scope="col" align="center" class="text-center">DPD</th>
+                    <th scope="col" align="center" class="text-center">Agent Name</th>
+                    <th scope="col" align="center" class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agent_assignment in agent_assignment_list %}
+                    <tr>
+                       <td align="center" class="text-center">
+                           <input type="hidden" name="agent_assignment_ids[]" value="{{ agent_assignment.id }}">
+                           {{ forloop.counter }}
+                       </td>
+                       <td align="center" class="text-center">{{ agent_assignment.loan_or_account_id }}</td>
+                       <td align="center" class="text-center">
+                           <span class="label label-rouded label-info pull-center small">
+                               {{ agent_assignment.product_line }}
+                           </span>
+                       </td>
+                       <td align="center" class="text-center">{{ agent_assignment.full_name }}</td>
+                       <td align="center" class="text-center"><code>{{ agent_assignment.status }}</code></td>
+                       <td align="center" class="text-center"><code>{{ agent_assignment.dpd }}</code></td>
+                       <td align="center" class="text-center">{{ agent_assignment.agent_name }}</td>
+                       <td align="center" class="text-center">
+                           <div class="row text-center">
+                               <div class="col-md-4">
+                                   <button type="button" class="btn btn-small btn-primary btn-rounded btn-block btn_remove"
+                                   agent_assignment_id="{{ agent_assignment.id }}">
+                                        Remove
+                                    </button>
+                               </div>
+                               <div class="col-md-4">
+                                   <button type="button" class="btn btn-small btn-danger btn-rounded btn-block btn_transfer"
+                                   agent_assignment_id="{{ agent_assignment.id }}">
+                                        Transfer
+                                    </button>
+                               </div>
+                           </div>
+                       </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="18">
+                            <div class="alert alert-info empty-info">
+                                <strong>Info!</strong> Tidak ada Data.
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+<script>
+{% block script_bottom_inside %}
+    function ToastDanger(body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'error',
+            hideAfter: 2800
+        });
+    }
+    function validateAgentRemoval() {
+        if ($('#agent_username').val().length == 0 && $('#loan_or_account_id').val().length == 0) {
+            ToastDanger('Mohon isi agent username atau loan/account ID')
+            return false
+        }
+        return true
+    }
+    function validateSearch(){
+        if ($('#agent_username').val().length == 0 && $('#loan_or_account_id').val().length == 0) {
+            ToastDanger('Mohon isi agent username atau loan/account ID')
+            return false
+        }
+        if ($('#input_mode').val() == 'agent_name_mode') {
+            if ($('#agent_username').val().length == 0){
+                ToastDanger('Mohon isi agent username')
+                return false
+            }
+        }else{
+            if ($('#loan_or_account_id').val().length == 0){
+                ToastDanger('Mohon isi loan/account ID')
+                return false
+            }
+            search_loan_or_account_id = $('#loan_or_account_id').val()
+            if (isNaN(search_loan_or_account_id)){
+                ToastDanger('Mohon isi loan/account ID dengan angka')
+                return false
+            }
+        }
+        return true
+    }
+    function validateAgentTransfer() {
+        if ($('#new_assigned_agent_username').val().length == 0) {
+            ToastDanger('Mohon isi agent username')
+            return false
+        }
+        if ($('#new_assigned_agent_username').val() == $('#agent_username').val()) {
+            ToastDanger('Agent yang diinput sama dengan kepemilikan sebelumnya')
+            return false
+        }
+        return true
+    }
+    $('.btnSave').click(function (e) {
+        save_type = $(this).val()
+        $('#modalConfirmation').modal('show')
+    })
+    function negative_response_swal(msg) {
+        swal({
+          title: "Gagal!",
+          html:true,
+          text: msg,
+          type: "error",
+          showCancelButton: true,
+          showConfirmButton: false,
+          cancelButtonColor: "#ffffff",
+          cancelButtonText: "Kembali",
+          closeOnCancel: true
+        });
+    }
+    $('.btnOk').click(function (e) {
+        $('#form_search').submit()
+    })
+    $('.btn_remove, #btn_remove_all').click(function (e) {
+        selected_id = $(this).attr('agent_assignment_id')
+        if (typeof selected_id !== typeof undefined && selected_id !== false) {
+            $('.label_all_assignment').text('')
+            $('#will_all_removed_agent_assignment_ids').val(selected_id)
+        }else{
+            // remove all btn doesnt have attr agent assignment id
+            $('.label_all_assignment').text('( All Active Assignment )')
+             agent_assignment_ids = $('input[name^=agent_assignment_ids]').map(function(idx, elem) {
+                return $(elem).val();
+              }).get();
+            $('#will_all_removed_agent_assignment_ids').val(
+                agent_assignment_ids.join(','))
+        }
+        $('#modalRemovalConfirmation').modal('show')
+    })
+    $('.btn_transfer, #btn_transfer_all').click(function (e) {
+        selected_id = $(this).attr('agent_assignment_id')
+        if (typeof selected_id !== typeof undefined && selected_id !== false) {
+            $('.label_all_assignment_transfer').text('')
+            $('#will_all_transfered_agent_assignment_ids').val(selected_id)
+        }else{
+            // remove all btn doesnt have attr agent assignment id
+            $('.label_all_assignment_transfer').text('( All Active Assignment )')
+             agent_assignment_ids = $('input[name^=agent_assignment_ids]').map(function(idx, elem) {
+                return $(elem).val();
+              }).get();
+            $('#will_all_transfered_agent_assignment_ids').val(
+                agent_assignment_ids.join(','))
+        }
+        $('#modalTransferConfirmation').modal('show')
+    })
+    $('#btn_submit_remove').click(function (e){
+        validate_status = validateAgentRemoval()
+        if (validate_status) {
+            $.ajax({
+                url: `{%url 'collection_vendor:process_agent_removal' %}`, // the endpoint
+                type: "POST", // http method
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    agent_assignment_ids: $('#will_all_removed_agent_assignment_ids').val(),
+                },
+                beforeSend: function( xhr ) {
+                    $('#btn_submit_remove').text("Loading...").prop('disabled', 'disabled')
+                },
+                success: function (json) {
+                    if (json.status == "success") {
+                        $('#modalRemovalConfirmation').modal('hide')
+                        $('#modalRemovalSuccess').modal('show')
+                    } else {
+                        negative_response_swal(json.messages);
+                    }
+                },
+            }).done(function (data){
+                $("#btn_submit_remove").text("Remove").prop('disabled', false)
+            })
+        }
+    })
+    $('#btn_submit_transfer').click(function (e){
+        validate_status = validateAgentTransfer()
+        if (validate_status) {
+            $.ajax({
+                url: `{%url 'collection_vendor:process_agent_transfer' %}`, // the endpoint
+                type: "POST", // http method
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    agent_assignment_ids: $('#will_all_transfered_agent_assignment_ids').val(),
+                    new_agent_username : $('#new_assigned_agent_username').val(),
+                },
+                beforeSend: function( xhr ) {
+                    $('#btn_submit_transfer').text("Loading...").prop('disabled', 'disabled')
+                },
+                success: function (json) {
+                    if (json.status == "success") {
+                        $('#modalTransferConfirmation').modal('hide')
+                        $('#modalTransferSuccess').modal('show')
+                    } else {
+                        negative_response_swal(json.messages);
+                    }
+                },
+            }).done(function (data){
+                $("#btn_submit_transfer").text("Transfer").prop('disabled', false)
+            })
+        }
+    })
+    $('#input_mode').change(function (e){
+        val = $(this).val()
+        if (val === ''){
+            $('.pre-show').hide()
+            return
+        }
+        $('.pre-show').show()
+        $('.bulk_section').hide()
+        if (val === 'agent_name_mode'){
+            $('#agent_username').val('')
+            $('.account_loan_mode_page').hide()
+            $('#table_content').hide()
+            $('.agent_mode_page').show(200)
+        }else{
+            $('#loan_or_account_id').val('')
+            $('#table_content').hide()
+            $('.account_loan_mode_page').show(200)
+            $('.agent_mode_page').hide()
+        }
+    });
+    $('#btnSearch').click(function (e){
+        validate_status = validateSearch()
+        if (validate_status) {
+            $('#form_search').submit()
+        }
+
+    });
+    {% if input_mode == 'agent_name_mode' %}
+        $('.account_loan_mode_page').hide()
+        $('.agent_mode_page').show(200)
+        $('#input_mode').val('agent_name_mode')
+        $('#loan_or_account_id').val('')
+        $('#table_content').show(200)
+    {% elif input_mode == 'loan_or_account_mode'%}
+        $('.account_loan_mode_page').show(200)
+        $('.agent_mode_page').hide()
+        $('#input_mode').val('loan_or_account_mode')
+        $('#agent_username').val('')
+        $('#table_content').show(200)
+    {% else %}
+        $('#input_mode').trigger('change')
+    {% endif %}
+    {% if error_message %}
+        negative_response_swal("{{error_message}}");
+    {% endif %}
+{% endblock %}

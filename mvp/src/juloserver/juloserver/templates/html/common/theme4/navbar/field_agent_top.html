@@ -1,0 +1,64 @@
+{% load checkusergroup from common %}
+{% load unit %}
+<nav class="navbar navbar-default navbar-static-top m-b-0">
+    <div class="navbar-header">
+    <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="ti-menu"></i></a>
+
+      <div class="top-left-part">
+        <a class="logo" href="{% url 'welcome' %}">
+{% load static from staticfiles %}
+          <b>
+            <img src="{% static 'images/julo/julo-logo-only.png' %}" alt="home" class="dark-logo"/>
+          </b>
+          <span class="hidden-xs">
+            <label class="label label-info"><strong>Julo Finance</strong></label>
+          </span>
+        </a>
+      </div>
+      <ul class="nav navbar-top-links navbar-left hidden-xs">
+        <li><a href="javascript:void(0)" class="open-close hidden-xs waves-effect waves-light" id="a_expanded"><i class="icon-arrow-left-circle ti-menu"></i></a></li>
+      </ul>
+      <ul class="nav navbar-top-links navbar-right pull-right">
+
+    {% if user.is_authenticated %}
+      <!-- /.dropdown -->
+            <li class="dropdown"> <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
+              <img src="{% static 'theme/plugins/images/users/unknown.png' %}" alt="user-img" width="36" class="img-circle">
+              <b class="hidden-xs">{{ user.username }} - {{ julo_current_role|display_safe }} </b> </a>
+              <ul class="dropdown-menu dropdown-user animated flipInY">
+                <li><a href="#"><i class="ti-user"></i> Profil Saya</a></li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="{% url 'logout' %}" class="visible-xs-* hidden-md hidden-lg hidden-sm"><i class="fa fa-power-off"></i> Logout</a>
+                  <a href="javascript:void(0)" alt="alert" class="img-responsive model_img hidden-xs" id="signout-warning"><i class="fa fa-power-off"></i> Logout</a>
+                </li>
+              </ul>
+              <!-- /.dropdown-user -->
+            </li>
+
+    {% else %}
+          <!-- /.dropdown -->
+          <li class="dropdown">
+            <a class="dropdown-toggle waves-effect waves-light" href="{% url 'login' %}">
+              <i class="icon-login"></i>
+            </a>
+            <!-- /.dropdown-tasks -->
+          </li>
+      {% endif %}
+
+    <li class="dropdown">
+          <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#">
+          </a>
+          <!-- /.dropdown-tasks -->
+        </li>
+      </ul>
+    </div>
+    <!-- /.navbar-header -->
+    <!-- /.navbar-top-links -->
+    <!-- /.navbar-static-side -->
+  </nav>
+
+  
+  
+  
+  

@@ -1,0 +1,1332 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Pinyon Script" rel="stylesheet">
+    <style>
+         @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: justify;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .header {
+            position: running(header);
+            text-align: center;
+        }
+        .footer {
+            position: running(footer);
+            text-align: center;
+        }
+        @page {
+            @top-center { content: element(header) }
+            @bottom-center { content: element(footer) }
+        }
+
+        h4 {
+            text-align: center;
+        }
+
+        .installment {
+            width: 100%;
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        #topBottomBorder {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        #bottomBorder {
+            border-bottom: 1px solid black;
+        }
+
+        .hideExtra {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .divContent {
+            padding-top: 15px;
+            page-break-before: always;
+        }
+
+        .spaceSign {
+            height: 120px;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .col {
+            flex: 1;
+            text-align: center;
+        }
+
+        .box-left {
+            float: left;
+            min-width: 100px;
+            text-align: left;
+        }
+
+        .box-right {
+            float: right;
+            min-width: 100px;
+            text-align: left;
+        }
+
+        .sig:after {
+            content: ".";
+            visibility: hidden;
+        }
+
+        ol.list-counter {
+            counter-reset: item;
+        }
+
+        ol.list-counter>li {
+            display: block;
+            margin-top: 10px;
+        }
+
+        ol.list-counter>li:before {
+            content: counters(item, ".") ". ";
+            counter-increment: item;
+            font-weight: bold;
+        }
+
+        ol.custom-list {
+            counter-reset: list;
+        }
+
+        ol.custom-list>li {
+            list-style: none;
+        }
+
+        ol.custom-list>li:before {
+            content: "(" counter(list, decimal) ")";
+            counter-increment: list;
+            margin-left: -22px;
+        }
+
+        .inline-list {
+            margin: 0 0 0 30px;
+        }
+
+        .inline-list-40 {
+            margin: 0 0 0 40px;
+        }
+
+        .signature-font {
+            font-family: Pinyon Script;
+            font-size: 22px;
+            padding-top: 47px;
+        }
+
+        .sig:after {
+            content: ".";
+            visibility: hidden;
+        }
+        .center-table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 80%; /* Adjust this value as needed */
+        }
+        
+        .center-table th, .center-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .center-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="divContent">
+        <div>
+            <h4>
+                PERJANJIAN PEMBERIAN PENDANAAN<br>
+                No. Perjanjian : {{hash_digi_sign}}
+            </h4>
+        </div>
+        <br />
+        <p>
+            Sebagai persyaratan awal sebelum Anda menandatangani Perjanjian Pemberian Fasilitas Pendanaan ini
+            (selanjutnya disebut <b>"Perjanjian Fasilitas"</b>), Anda wajib membaca, memeriksa, memahami Perjanjian
+            Fasilitas ini dengan memindahkan bilah gulir (<i>scroll bar</i>) yang tersedia dari bagian awal hingga akhir
+            dari Perjanjian Fasilitas ini, dengan penuh cermat dan kehati-hatian. <b>Tidak ada tuntutan/gugatan apa pun
+                oleh Anda kepada Pemberi Dana dan/atau JULO dari segala tanggung jawab terhadap kerugian yang terjadi
+                disebabkan dari kealpaan atau kelalaian Anda dengan tidak membaca, memeriksa atau memahami isi seluruh
+                Perjanjian fasilitas ini.</b>
+        </p>
+        <p>
+            Perjanjian Fasilitas ini disepakati dan ditandatangani pada tanggal {{ signed_date | safe }} (selanjutnya
+            disebut <b>"Tanggal Penandatanganan"</b>), oleh dan antara :
+        </p>
+        <ol>
+            <li>
+                <b>Pemberi Dana</b> yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai
+                berikut:
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">a. Nama
+                            </td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.fullname }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">b. Tgl.
+                                Lahir</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ dob }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">c. No.
+                                KTP</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.ktp }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">d. No.
+                                Telpon</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.mobile_phone_1 }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">d. Alamat
+                            </td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.full_address }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li>
+                <b>Penerima Dana</b>, yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai
+                berikut :
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                a. Nama/Perusahaan</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.company_name | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">
+                                b. Nama Perwakilan Perusahaan</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.poc_name | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                c. Nomor Izin Perusahaan Terkait</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.license_number | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                d. Alamat Terdaftar</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.lender_address | safe }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ol>
+        <p>
+            Untuk selanjutnya, Penerima Dana dan Pemberi Dana secara bersama-sama disebut juga <b>"Para Pihak"</b> dan
+            masing-masing disebut <b>"Pihak"</b>.
+        </p>
+        <p>
+            Anda juga diwajibkan membaca <b>lampiran 1. Syarat dan Ketentuan Umum</b> yang disediakan oleh JULO dan/atau Mitra Bisnis. Dengan Anda menekan fitur persetujuan <i>(consent)</i> yang akan muncul pada halaman Aplikasi Anda pada saat pengajuan Pendanaan, maka berarti Anda juga telah menyetujui Syarat dan Ketentuan Penggunaan sebagaimana laman website diatas. Syarat dan Ketentuan Penggunaan ini merupakan bagian yang tidak terpisahkan dengan Perjanjian Pendanaan Perjanjian Pendanaan mencakup hal-hal sebagai berikut.
+        </p>
+        <ol class="list-counter">
+            <li>
+                <b>KETENTUAN UMUM</b>
+                <ol class="list-counter">
+                    <li>
+                        <b>Definisi</b>
+                        <ol type="a">
+                            <li>
+                                <b>Akun</b> adalah rekening Pendanaan yang terdaftar berisi data tentang Anda dan dapat
+                                diakses melalui Sistem Elektronik JULO dan/atau Mitra Bisnis yang Anda unduh serta
+                                ditujukan untuk membantu Anda dalam mengakses kredit secara digital, melalui Sistem
+                                Elektronik JULO dan/atau Aplikasi Mitra Bisnis.
+                            </li>
+                            <li>
+                                <b>Sistem Elektronik JULO</b> adalah perangkat lunak yang dimiliki oleh PT. Julo
+                                Teknologi Finansial.
+                            </li>
+                            <li>
+                                </b>Aplikasi Mitra Bisnis</b> adalah perangkat lunak yang Sistem Elektroniknya dimiliki
+                                oleh Mitra Bisnis dengan merek "Amar Bank" yang bekerjasama baik secara eksklusif maupun
+                                inklusif dengan JULO,dengan mengunduhnya melalui akun playstore atau appstore pada
+                                masing-masing gawai (gadget/device) yang Anda miliki.
+                            </li>
+                            <li>
+                                </b>Dokumen-Dokumen Elektronik</b> adalah setiap Informasi elektronik yang dibuat,
+                                diteruskan, dikirimkan, diterima, atau disimpan, dapat dilihat, ditampilkan, dan/atau
+                                didengar melalui Sistem Elektronik milik JULO termasuk antara lain Perjanjian Pendanaan
+                                beserta segala Lampiran- Lampirannya, syarat dan ketentuan JULO lainnya,
+                                kebijakan-kebijakan JULO lainnya, form-form di dalam aplikasi, dan/atau informasi
+                                elektronik lainnya yang tidak tertuang dalam Perjanjian Pendanaan ini tetapi masuk dalam
+                                Sistem Elektronik yang dimiliki oleh JULO.
+                            </li>
+                            <li>
+                                </b>Pendanaan</b> adalah sebagaimana didefinisikan dalam pasal 1 ayat 1.4 huruf a
+                                Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                </b>Fitur JULO</b> adalah sebagaimana yang didefinisikan dalam pasal 9.3., Perjanjian
+                                Pendanaan ini.
+                            </li>
+                            <li>
+                                </b>JULO</b> adalah platform dengan merek dagang resmi yang terdaftar dan Sistem
+                                Elektronik yang dimiliki oleh PT. Julo Teknologi Finansial sebagai Pihak Penyelenggara
+                                yang berizin dan diawasi oleh Otoritas Jasa Keuangan sebagai Penyelenggara Layanan
+                                Pendanaan Bersama Teknologi Informasi (LPBBTI), yang dalam Perjanjian Pendanaan ini
+                                dipilih oleh Pemberi Dana sebagai mitra penyedia aplikasi yang menyediakan LPBBTI.
+                            </li>
+                            <li>
+                                </b>Kode PIN</b> adalah sejumlah kode unik atau nomor digit tertentu yang digunakan
+                                Penerima Dana untuk kepentingan sebagai sarana verifikasi untuk mendukung fungsi
+                                autentikasi Dokumen- Dokumen Elektronik.
+                            </li>
+                            <li>
+                                </b>Layanan JULO</b> adalah LPBBTI, yang mana pada pokoknya mempertemukan Pemberi Dana
+                                dengan Penerima Dana dalam melakukan pendanaan konvensional secara langsung melalui
+                                Sistem Elektronik yang dimiliki dan dikelola mutlak oleh JULO.
+                            </li>
+                            <li>
+                                </b>Merchant</b> adalah pihak ketiga yang bekerjasama dengan JULO dan/atau Mitra Bisnis
+                                sebagai penjual barang dan/atau jasa yang memiliki physical store atau bentuk usaha toko
+                                fisik maupun toko online.
+                            </li>
+                            <li>
+                                </b>Mitra Bisnis</b> adalah pihak ketiga yang bekerjasama dengan JULO dengan pola
+                                partnership/ kemitraan untuk menunjang bisnis JULO dalam memberikan Layanan JULO.
+                            </li>
+                            <li>
+                                <b>OJK</b> adalah Otoritas Jasa Keuangan, yang merupakan Lembaga yang mengatur serta
+                                mengawasi perusahaan penyelenggaraan LPBBTI.
+                            </li>
+                            <li>
+                                </b>Pemegang Akun</b> berarti sebagaimana yang didefinisikan pada Pasal 1.2 huruf a
+                                Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                </b>Penerima Dana</b> adalah perorangan atau badan hukum yang menerima Pendanaan melalui
+                                Layanan JULO.
+                            </li>
+                            <li>
+                                </b>Pemberi Dana</b> adalah perorangan atau badan hukum yang memberikan Pendanaan
+                                melalui Layanan JULO.
+                            </li>
+                            <li>
+                                </b>Permohonan Pengajuan Pendanaan</b> adalah permohonan yang dilakukan oleh Penerima
+                                Dana untuk mendapatkan persetujuan dari Pemberi Dana atas sebesar Pendanaan tertentu
+                                yang tersedia bagi Penerima Dana.
+                            </li>
+                            <li>
+                                </b>Permohonan Penggunaan Pendanaan</b> adalah permohonan yang dilakukan oleh Penerima
+                                Dana untuk penggunaan/pencairan Pendanaan.
+                            </li>
+                            <li>
+                                </b>Sistem Elektronik</b> adalah serangkaian perangkat dan prosedur elektronik yang
+                                berfungsi mempersiapkan, mengumpulkan, mengolah, menganalisis, menyimpan, menampilkan,
+                                mengumumkan, mengirimkan, dan/atau menyebarkan Informasi Elektronik.
+                            </li>
+                            <li>
+                                </b>Surat Keterangan Lunas</b> adalah surat yang diberikan oleh setiap Pemberi Dana
+                                kepada Penerima Dana melalui JULO yang menyatakan bahwa Penerima Dana tidak ada lagi
+                                kewajiban pembayaran yang tertunggak berdasarkan Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                </b>SKRTP</b> adalah sebagaimana yang didefinisikan di dalam pasal 2.1.7., Perjanjian
+                                Pendanaan ini.
+                            </li>
+                            <li>
+                                </b>Tanda Tangan Elektronik</b> adalah sebagaimana yang didefinisikan di dalam pasal 9.4
+                                huruf a, Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                </b>Transaksi Pendanaan</b> adalah setiap transaksi yang dilakukan oleh Penerima Dana
+                                melalui Aplikasi Mitra Bisnis.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Penerbitan dan Penggunaan Akun atau Layanan JULO</b>
+                        <ol type="a">
+                            <li>
+                                Penerima Dana adalah Pemegang Akun yang mana artinya Pemegang Akun dimungkinkan untuk
+                                memiliki akun JULO dan/atau Mitra Bisnis secara bersamaan atau salah satu dari keduanya.
+                                Pemegang Akun tidak akan mengizinkan orang lain untuk menggunakan Akunnya dan akan
+                                selalu menjaga Akun dan nomor identifikasi pemilik Akun yang diterbitkan, dan menjaga
+                                kerahasiaan data lain termasuk namun tidak terbatas email dan password milik pemegang
+                                Akun.
+                            </li>
+                            <li>
+                                Penerima Dana bertanggung jawab atas Pendanaan yang diberikan Pemberi Dana sehubungan
+                                dengan Akun dan untuk semua biaya terkait yang timbul dari Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                Penerima Dana juga wajib mematuhi seluruh ketentuan penggunaan Akun sebagaimana Lampiran
+                                1 Syarat dan Ketentuan Penggunaan, serta segala resiko yang timbul akibat penggunaan
+                                Akun.
+                            </li>
+                            <li>
+                                Penerima Dana harus memberitahukan kepada Mitra Bisnis atau JULO sesegera mungkin setiap
+                                perubahan Akun termasuk namun tidak terbatas pekerjaan, alamat kantor, alamat rumah,
+                                nomor telepon Penerima Dana, dan juga dapat menyampaikan keluhan atau pengaduan terkait
+                                tentang Pendanaan, dengan cara sebagai berikut :
+                                <ol>
+                                    <li>
+                                        Kantor Mitra Bisnis :
+                                        <ol type="a">
+                                            <li>dapat mengirimkan pesan melalui email : <a href="mailto:help@dana.id">help@dana.id</a> atau</li>
+                                            <li>dapat menggunakan Live Chat pada Aplikasi atau</li>
+                                            <li>cara lain yang dapat dilihat di Aplikasi atau laman website Mitra
+                                                Bisnis.</li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        Kantor JULO :
+                                        <ol type="a">
+                                            <li>dapat mengirimkan pesan melalui email : <a href="mailto:cs@julo.co.id">cs@julo.co.id</a> atau</li>
+                                            <li>dapat menggunakan Live Chat pada Aplikasi atau</li>
+                                            <li>cara lain yang dapat dilihat di Aplikasi atau laman website JULO.</li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Untuk mengaktifkan Akun Mitra Bisnis yang Anda miliki, Anda wajib mengisi informasi
+                                berupa termasuk namun tidak terbatas data diri Anda untuk serangkaian proses uji tuntas
+                                nasabah (customer due diligence) seperti proses identifikasi, verifikasi dan pemantauan
+                                yang dilakukan Mitra Bisnis dan/atau JULO. Setelah itu, Permohonan Pengajuan Pendanaan
+                                Anda akan diproses dan dinilai terlebih dahulu oleh Mitra Bisnis dan/atau JULO sebelum
+                                disetujui oleh Pemberi Dana. Untuk mengaktifkan layanan, Anda dapat melakukan transaksi
+                                melalui Aplikasi Mitra Bisnis dan mendapatkan Surat Konfirmasi Rincian Transaksi
+                                Pendanaan (selanjutnya disebut "SKRTP") yang mana berfungsi sebagai ringkasan informasi
+                                untuk setiap Permohonan Penggunaan Pendanaan.
+                            </li>
+                            <li>
+                                Persetujuan atas Permohonan Penggunaan Pendanaan dan pencairan dana akan dinyatakan
+                                berhasil dengan ditandai berhasilnya pemrosesan pembayaran transaksi Anda dan bersamaan
+                                dengan diterbitkannya Perjanjian Pendanaan ini dan SKRTP yang telah ditandatangani
+                                Pemberi Dana.
+                            </li>
+                            <li>
+                                Setiap detail transaksi atas Pendanaan yang tertuang dalam SKRTP, yang mana dalam jumlah
+                                berapapun yang Anda gunakan dan dinyatakan berhasil ini menunjukan bahwa Anda telah
+                                sepakat, membaca, dan memahami seluruh ketentuan dalam Perjanjian Pendanaan ini maupun
+                                setiap SKRTP yang Anda terima, dengan teliti, penuh kesadaran, dan tanpa pengaruh dari
+                                pihak mana pun.
+                            </li>
+                            <li>
+                                SKTRP yang dimaksud sebagaimana huruf e pada ayat ini adalah SKRTP yang telah Anda
+                                setujui dengan mengklik fitur persetujuan yang akan muncul di dalam Aplikasi Mitra
+                                Bisnis yang Anda miliki atau memasukan Kode PIN yang Anda miliki pada saat melakukan
+                                transaksi ataupun cara lain sesuai kesepakatan Para Pihak.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Sumber Fasilitas Pendanaan</b>
+                        <p class="inline-list">
+                            Sumber Pendanaan yang disalurkan kepada Anda untuk melakukan transaksi Pendanaan adalah
+                            sepenuhnya berasal dari dan dimiliki oleh Pemberi Dana yang terdaftar pada dan bekerjasama
+                            dengan JULO. JULO hanya memfasilitasi penyaluran dana dari Pemberi Dana dengan cara
+                            meneruskan dana Pendanaan tersebut kepada Anda secara langsung maupun kepada Anda secara
+                            tidak langsung melalui Mitra Bisnis. Oleh karena itu, segala risiko yang timbul dari
+                            Pendanaan sepenuhnya ditanggung oleh Anda dan Pemberi Dana.
+                        </p>
+                    </li>
+                    <li>
+                        <b>Pendanaan</b>
+                        <ol type="a">
+                            <li>
+                                Setiap jenis transaksi yang Anda lakukan (baik Transaksi Pertama atau Transaksi
+                                setelahnya) akan dianggap sebagai dan merupakan Permohonan Penggunaan Pendanaan, dan
+                                dalam hal ini disetujui berdasarkan penilaian oleh Mitra Bisnis dan/atau JULO yang mana
+                                kriteria terhadap penilaian tersebut sudah ditetapkan berdasarkan kriteria yang
+                                diberikan oleh Pemberi Dana (selanjutnya disebut <b>"Pendanaan"</b>).
+                            </li>
+                            <li>
+                                Jenis transaksi sebagaimana yang dimaksud dapat dilakukan pembelian barang dan/atau jasa
+                                melalui Merchant yang berkerjasama dengan Mitra Bisnis dan/atau JULO (jika ada) dan
+                                transaksi lain yang dibenarkan Undang-Undang sesuai dengan izin yang dimiliki Mitra
+                                Bisnis dan/atau JULO.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Keberlakuan Perjanjian Pendanaan</b>
+                        <ol type="a">
+                            <li>
+                                Perjanjian Pendanaan ini merupakan perjanjian yang sah dan mengikat bagi Anda dan
+                                berlaku juga sebagai perjanjian antara Anda dengan Pemberi Dana.
+                            </li>
+                            <li>
+                                Dokumen-Dokumen Elektronik merupakan satu-kesatuan dan bagian yang tidak terpisahkan
+                                satu sama lain, termasuk namun tidak terbatas Perjanjian Pendanaan ini beserta segala
+                                addendumnya.
+                            </li>
+                            <li>
+                                Jika terdapat perbedaan makna atau penafsiran tentang segala ketentuan yang berkaitan
+                                dengan pemberian Pendanaan, yang terdapat pada Perjanjian Pendanaan, Syarat dan
+                                Ketentuan Penggunaan dan Kebijakan Privasi, maka yang berlaku adalah Perjanjian
+                                Pendanaan.
+                            </li>
+                            <li>
+                                Jika terdapat perbedaan makna atau penafsiran tentang segala ketentuan yang berkaitan
+                                aturan penggunaan umum, yang terdapat pada Perjanjian Pendanaan, Syarat dan Ketentuan
+                                Penggunaan dan Kebijakan Privasi, maka yang berlaku adalah Syarat dan Ketentuan
+                                Penggunaan.
+                            </li>
+                            <li>
+                                Jika terdapat perbedaan makna tentang segala ketentuan yang berkaitan aturan
+                                perlindungan penggunaan data pribadi, yang terdapat pada Perjanjian Pendanaan, Syarat
+                                dan Ketentuan Penggunaandan Kebijakan Privasi, maka yang berlaku adalah Kebijakan
+                                Privasi.
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>KETENTUAN POKOK</b>
+                <ol class="list-counter">
+                    <li>
+                        <b>Rincian Pendanaan</b>
+                        <p class="inline-list">
+                            Pendanaan yang disetujui Pemberi Dana adalah sebesar jumlah Pendanaan yang dapat berubah
+                            dari waktu ke waktu berdasarkan penilaian JULO dan atas persetujuan Penerima Dana. Jika Anda
+                            setuju menggunakan Pendanaan tersebut, dengan memilih, menerima, mengaktifkan dan/atau
+                            menggunakan Pendanaan yang muncul pada Aplikasi Mitra Bisnis, maka Anda wajib mengetahui
+                            ketentuan rincian Pendanaan sebagai berikut :
+                        </p>
+                        <ol class="list-counter">
+                            <li>
+                                <b>Pendanaan</b>
+                                <ol type="a">
+                                    <li>
+                                        Setiap persetujuan Pendanaan, Pemberi Dana memiliki wewenang menetapkan jumlah
+                                        Pendanaan
+                                        yang akan disalurkan kepada Anda, berdasarkan penilaian kelayakan kredit oleh
+                                        JULO.
+                                    </li>
+                                    <li>
+                                        Tanpa mengurangi ketentuan tersebut di atas dari pasal ini dan pasal lain
+                                        terkait yang
+                                        diatur dalam Perjanjian Pendanaan ini, Pemberi Dana, atas kebijakannya sendiri
+                                        dan dari
+                                        waktu ke waktu, menaikkan atau mengurangi jumlah Pendanaan yang ditetapkan,
+                                        sebagai
+                                        hasil dari penilaian yang wajar oleh JULO atas Akun dan/ atau informasi mengenai
+                                        Penerima Dana yang relevan yang tersedia bagi JULO. Kenaikan atau pengurangan
+                                        jumlah
+                                        Pendanaan tersebut akan diberitahukan oleh JULO kepada Penerima Dana dari waktu
+                                        ke
+                                        waktu.
+                                    </li>
+                                    <li>
+                                        Apabila jumlah Pendanaan tidak mencukupi maka persetujuan yang dimaksud pada
+                                        pasal 1.1.2
+                                        huruf f secara otomatis tidak akan berlaku dan transaksi tidak dapat dilakukan
+                                        dengan
+                                        menggunakan Pendanaan dari Aplikasi Mitra Bisnis.
+                                    </li>
+                                    <li>
+                                        Bahwa, Pendanaan akan dapat digunakan jika setiap pembayaran kembali dilakukan
+                                        oleh
+                                        Penerima Dana atau saldo pada Pendanaan tersedia kembali/mencukupi untuk
+                                        digunakan dalam
+                                        bertransaksi.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Manfaat Ekonomi Pendanaan</b>
+                                <ol type="a">
+                                    <li>
+                                        <b>Bunga Pendanaan</b>. Atas penggunaan Pendanaan, Anda akan dikenakan Bunga
+                                        Pendanaan
+                                        sesuai Bunga Pendanaan yang tercantum pada halaman Akun yang Anda miliki atau
+                                        setiap
+                                        SKRTP pada Aplikasi atau Aplikasi Mitra Bisnis.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Nilai Angsuran</b>
+                                <p class="inline-list">
+                                    Nilai Angsuran berarti besarnya nilai angsuran tergantung pada :
+                                </p>
+                                <ol type="a">
+                                    <li>Total Pendanaan yang didanai;</li>
+                                    <li>Jangka waktu pembayaran angsuran yang Anda pilih;</li>
+                                    <li>Bunga Pendanaan yang berlaku sesuai dengan jangka waktu angsuran yang Anda
+                                        pilih; Nilai
+                                        Angsuran yang Anda bayarkan untuk setiap jangka waktu pembayaran angsuran
+                                        tercantum pada
+                                        SKRTP di Sistem Elektronik JULO atau Aplikasi Mitra Bisnis;</li>
+                                    <li>Rincian besaran angsuran terhadap Pendanaan yang telah disetujui akan
+                                        dicantumkan dalam
+                                        SKRTP.</li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Jangka Waktu Pembayaran Angsuran</b>
+                                <p class="inline-list">
+                                    Jangka waktu pembayaran angsuran dapat merujuk pada setiap SKRTP yang Anda terima.
+                                </p>
+                            </li>
+                            <li>
+                                <b>Denda Keterlambatan</b>
+                                <p class="inline-list">
+                                    Anda akan dikenakan Denda Keterlambatan apabila Anda lalai membayar jumlah Tagihan
+                                    yang
+                                    telah jatuh tempo pada Tanggal Jatuh Tempo pembayaran. Denda Keterlambatan tersebut
+                                    dimulai
+                                    setelah lewat Masa Tenggang dan akan diakumulasikan untuk masing-masing penggunaan
+                                    Pendanaan
+                                    sesuai dengan Denda yang akan tercantum (jika ada) pada halaman transaksi di
+                                    Aplikasi atau
+                                    Aplikasi Mitra Bisnis.
+                                </p>
+                            </li>
+                            <li>
+                                <b>Riwayat Transaksi (History Transaction)</b>
+                                <p class="inline-list">
+                                    Anda dapat mengetahui seluruh riwayat transaksi penggunaan Pendanaan yang Anda
+                                    miliki dengan
+                                    membaca dan memahami seluruh dokumen SKRTP yang dapat diakses pada halaman Akun Anda
+                                    ataupun
+                                    dengan media lain yang akan disediakan oleh JULO dan/atau Mitra Bisnis sesuai
+                                    kebijakan yang
+                                    berlaku di JULO dan/atau Mitra Bisnis.
+                                </p>
+                            </li>
+                            <li>
+                                <b>Surat Konfirmasi Rincian Transaksi Pendanaan (SKRTP)</b>
+                                <ol type="a">
+                                    <li>SKRTP merupakan dokumen elektronik yang Anda akan terima pada saat Anda
+                                        melakukan setiap
+                                        transaksi apapun dengan menggunakan Pendanaan yang tersedia pada Sistem
+                                        Elektronik JULO
+                                        atau Aplikasi Mitra Bisnis (format SKRTP tercantum dalam Lampiran 3. Contoh
+                                        Surat
+                                        Konfirmasi Transaksi Pendanaan (SKRTP)). SKRTP ini merupakan bagian yang tidak
+                                        terpisahkan dengan Perjanjian Pendanaan dan kebijakan JULO yang dapat berubah
+                                        dari waktu
+                                        ke waktu sesuai kesepakatan Para Pihak.</li>
+                                    <li>Seluruh dokumen SKRTP yang Anda miliki saat ini akan tetap berlaku dan mengikat
+                                        sebagai
+                                        bukti Permohonan Penggunaan Pendanaan Anda, sepanjang Penerima Dana masih
+                                        terdapat
+                                        kewajiban yang tertagih dan jangka waktu pembayarannya masih aktif.</li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Pembayaran Kembali</b>
+                                <p class="inline-list">
+                                    Setiap penggunaan Pendanaan dari Permohonan Penggunaan Pendanaan Anda beserta biaya-
+                                    biaya
+                                    sebagaimana pasal 2.1.2, denda keterlambatan (jika ada) atau dengan kata lain setiap
+                                    Angsuran Anda akan ditagihkan kepada Anda dan Anda wajib melakukan pembayaran
+                                    kembali pada
+                                    sebelum atau sesuai tanggal jatuh tempo sebagaimana yang dirincikan pada setiap
+                                    SKRTP yang
+                                    Anda miliki.
+                                </p>
+                            </li>
+                            <li>
+                                <b>Pembayaran Dipercepat</b>
+                                <p class="inline-list">
+                                    Untuk pembayaran kembali, Anda dapat melakukan pembayaran kembali lebih cepat dari
+                                    tanggal
+                                    jatuh tempo sebagaimana yang dirincikan pada setiap SKRTP yang Anda miliki, tanpa
+                                    dikenakan
+                                    biaya tambahan apapun dari JULO (kecuali ditentukan sebaliknya oleh JULO di kemudian
+                                    hari
+                                    dengan pemberitahuan kepada Anda).
+                                </p>
+                            </li>
+                            <li>
+                                <b>Jaminan</b>
+                                <p class="inline-list">
+                                    Untuk menjamin kepastian Pembayaran Kembali dengan tertib dan sebagaimana mestinya,
+                                    maka
+                                    Penerima Dana dan/atau pihak ketiga yang ditunjuk Penerima Dana dapat memberikan
+                                    jaminan,
+                                    selama dalam pelaksanaan Pendanaan ini dipersyaratkan atas jaminan yang ditentukan
+                                    oleh
+                                    Pemberi Dana yang dalam hal ini juga menjadi pihak penerima jaminan oleh karenanya
+                                    Penerima
+                                    Dana setuju bahwa Pemberi Dana dan/atau pihak ketiga yang ditunjuk Pemberi Dana
+                                    dapat
+                                    melakukan eksekusi atas jaminan sebagaimana yang diperlukan berdasarkan Perjanjian
+                                    Pendanaan
+                                    ini. Penjaminan disini yaitu termasuk namun tidak terbatas penanggungan yang
+                                    dilakukan baik
+                                    dari perorangan maupun badan hukum dan/atau jaminan kebendaan yang diatur
+                                    berdasarkan
+                                    peraturan perundang-undangan meliputi gadai, fidusia, hak tanggungan, hipotek kapal
+                                    dan resi
+                                    gudang, yang mana beberapa atau keseluruhan penjaminan tersebut dapat menjadikan
+                                    Perjanjian
+                                    Pendanaan menjadi dasar penjaminan dan eksekusi jaminan, atau sebaliknya jika
+                                    diperlukan
+                                    ketentuan lebih lanjut Para Pihak dapat mengaturnya melalui perjanjian jaminan yang
+                                    terpisah
+                                    dari Perjanjian Pendanaan ini.
+                                </p>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>HAK DAN KEWAJIBAN</b>
+                <ol class="list-counter">
+                    <li>
+                        <b>Hak dan Kewajiban Pemberi Dana</b><br />
+                        <p class="inline-list">
+                            Dengan tidak mengesampingkan hak-hak dan kewajiban-kewajiban lain yang diatur dalam
+                            Perjanjian Pendanaan ini, hak dan kewajiban Pemberi Dana, adalah sebagai berikut:
+                        </p>
+                        <ol type="a">
+                            <li>
+                                Wajib menyediakan Pendanaan dan mencairkan Pendanaan kepada Anda sesuai Perjanjian
+                                Pendanaan ini.
+                            </li>
+                            <li>
+                                Wajib melaksanakan seluruh ketentuan-ketentuan dalam Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                Berhak menolak atau memberikan persetujuan pemberian Pendanaan berdasarkan penilaiannya
+                                dan/atau penilaian skor kredit yang disediakan JULO.
+                            </li>
+                            <li>
+                                Berhak menerima pembayaran secara penuh atas seluruh kewajiban pembayaran tagihan Anda
+                                termasuk namun tidak terbatas, pembayaran kembali Pendanaan, Biaya Provisi, Bunga
+                                Pendanaan, Denda Keterlambatan (Jika Ada), serta biaya-biaya lain berdasarkan Perjanjian
+                                Pendanaan ini (Jika Ada).
+                            </li>
+                            <li>
+                                Berhak melaksanakan segala proses penagihan atas seluruh kewajiban pembayaran Anda
+                                termasuk namun tidak terbatas penagihan melalui JULO atau dengan menunjuk pihak ketiga
+                                lainnya yang ditunjuk JULO atau Pemberi Dana, serta memberikan peringatan secara
+                                tertulis dalam hal Penerima Dana mengalami keterlambatan pembayaran, Penerima Dana
+                                setuju bahwa proses penagihan dapat dilakukan melalui tata cara sebagai berikut :
+                                <ol type="i">
+                                    <li>
+                                        <i>Desk Collection</i>, yaitu penagihan melalui sarana komunikasi elektronik,
+                                        seperti telepon, SMS, surat elektronik, dan/atau media komunikasi elektronik
+                                        lainnya ke nomor telepon atau email yang terdaftar pada Sistem Elektronik JULO;
+                                    </li>
+                                    <li>
+                                        <i>Field Collection</i>, yaitu penagihan melalui kunjungan lapangan ke alamat
+                                        Penerima Dana yang terdaftar pada Sistem Elektronik JULO;
+                                    </li>
+                                    <li>
+                                        Tata cara lain yang disyaratkan dan diperbolehkan oleh Asosiasi, OJK atau
+                                        pemerintah yang berwenang lainnya.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Berhak mengambil tindakan yang diperlukan dalam hal Penerima Dana tidak menjalankan atau
+                                melakukan pelanggaran atas pelaksanaan hak dan kewajiban berdasarkan Perjanjian
+                                Pendanaan ini, termasuk namun tidak terbatas melaporkan kepada OJK ke dalam Daftar
+                                Hitam.
+                            </li>
+                            <li>
+                                Berhak untuk memindahkan dan mengalihkan Pendanaan dan Tagihan sesuai dengan Perjanjian
+                                Pendanaan ini.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Hak dan Kewajiban Penerima Dana</b>
+                        <p class="inline-list-40">
+                            Dengan tidak mengesampingkan hak-hak dan kewajiban-kewajiban lain yang diatur dalam
+                            Perjanjian Pendanaan ini, hak dan kewajiban Anda sebagai Penerima Dana adalah sebagai
+                            berikut:
+                        </p>
+                        <ol type="a">
+                            <li>
+                                Wajib membayar secara penuh kewajiban pembayaran atas Pendanaan yang diberikan pada
+                                tanggal jatuh tempo pembayaran, termasuk namun tidak terbatas untuk membayar Bunga
+                                Pendanaan dan Denda Keterlambatan (apabila ada) dan biaya-biaya relevan sebagaimana
+                                relevan berdasarkan Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                Wajib memberitahukan Pemberi Dana dan/atau JULO atas setiap terjadinya perubahan data
+                                atau informasi dari Penerima Dana.
+                            </li>
+                            <li>
+                                Wajib melaksanakan seluruh ketentuan-ketentuan dalam Perjanjian Pendanaan ini dan Hukum
+                                yang berlaku dengan itikad baik dan penuh tanggung jawab.
+                            </li>
+                            <li>
+                                Berhak menerima Pendanaan dan menerima pencairan dana berdasarkan Perjanjian Pendanaan
+                                ini.
+                            </li>
+                            <li>
+                                Berhak melakukan pembayaran dipercepat.
+                            </li>
+                            <li>
+                                Berhak untuk mendapatkan informasi atau akses informasi mengenai status Pendanaan yang
+                                diterima dengan benar, akurat dan tidak menyesatkan.
+                            </li>
+                            <li>
+                                Berhak mengajukan permohonan bukti atas seluruh kewajiban pembayaran secara penuh, yang
+                                telah dilakukan oleh Penerima Dana kepada Pemberi Dana. Permohonan bukti pembayaran ini
+                                akan diberikan dalam bentuk Surat Keterangan Lunas yang akan disampaikan secara
+                                elektronik melalui Aplikasi Mitra Bisnis dan sesuai dengan standar operasional pemberian
+                                Surat Keterangan Lunas dari JULO.
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PENGALIHAN</b>
+                <ol class="list-counter">
+                    <li>
+                        Anda mengakui dan menyetujui bahwa Pemberi Dana dapat memindahkan atau mengalihkan setiap dana
+                        yang masih terutang dan Tagihan kepada pihak lain termasuk namun tidak terbatas pada bank,
+                        Lembaga keuangan bukan bank atau institusi keuangan lainnya dengan tunduk hukum yang berlaku.
+                    </li>
+                    <li>
+                        Penerima Dana tidak dapat mengalihkan, baik sebagian maupun seluruh hak dan kewajiban yang
+                        timbul dari atau terkait dengan Pendanaan berdasarkan Perjanjian Pendanaan ini kepada pihak
+                        manapun, tanpa persetujuan dari Pemberi Dana.
+                    </li>
+                    <li>
+                        Penerima Dana menyetujui dan mengakui keabsahan pengalihan yang dilakukan setiap Pemberi Dana
+                        berdasarkan ayat 4.1 pada pasal ini, dan tidak akan mengajukan keberatan atas pengalihan yang
+                        dilakukan demikian.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PAJAK, BEA METERAI DAN BIAYA-BIAYA LAIN</b>
+                <ol class="list-counter">
+                    <li>
+                        Para Pihak setuju bahwa segala kewajiban perpajakan, biaya bea materai dan/atau biaya-biaya lain
+                        (Jika Ada) yang dikenakan pemerintah saat ini atau yang akan datang dalam bentuk apapun yang
+                        dikenakan, dipungut atau dipungut oleh atau atas nama otoritas pemerintahan, yang timbul
+                        berdasarkan Perjanjian Pendanaan ini akan menjadi beban masing-masing Pihak atau salah satu
+                        Pihak sesuai dengan ketentuan perpajakan yang berlaku di negara Republik Indonesia dan/atau
+                        kesepakatan Para Pihak.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PENGGUNAAN DATA PRIBADI</b>
+                <ol class="list-counter">
+                    <li>
+                        Dengan menyetujui Perjanjian Pendanaan ini, Anda menyatakan bahwa Anda telah membaca dan
+                        menyetujui Kebijakan Data Pribadi, yang dapat diakses pada website JULO atau sebagaimana yang
+                        tercantum dalam <b>Lampiran 2. Kebijakan Data Pribadi</b>. Oleh karenanya, Anda wajib membaca,
+                        memahami dan mengerti kebijakan Data Pribadi JULO dan/atau Mitra Bisnis. Kebijakan Data Pribadi
+                        ini merupakan bagian yang tidak terpisahkan dengan Perjanjian Pendanaan dan kebijakan JULO
+                        dan/atau Mitra Bisnis ini dapat berubah dari waktu ke waktu tanpa memerlukan persetujuan Para
+                        Pihak.
+                    </li>
+                    <li>
+                        Dengan Anda menekan fitur persetujuan <i>(consent)</i> yang akan muncul pada halaman Aplikasi
+                        Mitra Bisnis, pada saat pengajuan Pendanaan, maka Anda juga telah menyetujui Kebijakan Data
+                        Pribadi JULO dan/atau Mitra Bisnis.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>MEKANISME PENYELESAIAN SENGKETA</b>
+                <ol class="list-counter">
+                    <li>
+                        Penafsiran dan pelaksanaan Perjanjian Pendanaan ini dan segala akibatnya diatur dan ditafsirkan
+                        menurut hukum Republik Indonesia.
+                    </li>
+                    <li>
+                        Apabila terjadi perselisihan atau sengketa antara Para Pihak yang timbul berdasarkan Perjanjian
+                        Pendanaan ini, Para Pihak sepakat untuk menyelesaikannya terlebih dahulu dengan cara musyawarah
+                        untuk mencapai mufakat. Apabila sengketa tersebut tidak dapat diselesaikan dengan cara
+                        musyawarah, Para Pihak sepakat untuk menyerahkan kepada dan diselesaikan di tingkat akhir
+                        arbitrase di Indonesia yang diselenggarakan oleh Lembaga Alternatif Penyelesaian Sengketa Sektor
+                        Jasa Keuangan (<b>"LAPS SJK"</b>), sesuai ketentuan LAPS SJK yang berlaku pada saat itu.
+                        Arbitrase akan dilangsungkan dengan 1 (Satu) orang arbiter dan Bahasa yang digunakan dalam
+                        arbitrase adalah Indonesia.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PERNYATAAN DAN JAMINAN</b>
+                <ol class="list-counter">
+                    <li>
+                        Penerima Dana dengan ini menyatakan dan menjamin Pemberi Dana bahwa :
+                        <ol type="a">
+                            <li>
+                                Penerima Dana adalah Warga Negara Indonesia dan tunduk secara sah pada hukum Republik
+                                Indonesia, yang merupakan orang perorangan yang cakap hukum untuk mengadakan dan
+                                melaksanakan Perjanjian Pendanaan ini, sesuai ketentuan perundang-undangan yang berlaku,
+                                dan telah mendapatkan seluruh persetujuan dan perizinan yang dibutuhkan (termasuk namun
+                                tidak terbatas kepada persetujuan pasangan) untuk menandatangani Perjanjian Pendanaan
+                                ini.
+                            </li>
+                            <li>
+                                Penerima Dana telah membaca dan memahami dan telah mendapatkan saran yang diperlukan
+                                mengenai keberlakuan dari Perjanjian Pendanaan ini.
+                            </li>
+                            <li>
+                                Seluruh fakta, data, informasi, dokumen dan keterangan yang Anda berikan untuk
+                                mendapatkan Pendanaan adalah benar, jelas, jujur, terbaru, akurat dan lengkap.
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>LAIN-LAIN</b>
+                <ol class="list-counter">
+                    <li>
+                        Setiap komunikasi dan pemberitahuan yang diisyaratkan atau diperbolehkan untuk diberikan kepada
+                        Para Pihak dibuat secara tertulis melalui pengumuman, surat elektronik, surat tercatat, Aplikasi
+                        Mitra Bisnis, Platform Penyelenggara, nomor telepon resmi JULO, atau melalui media komunikasi
+                        lainnya.
+                    </li>
+                    <li>
+                        Apabila satu atau lebih ketentuan dalam Perjanjian Pendanaan ini menjadi tidak berlaku, tidak
+                        sah atau tidak dapat dilaksanakan dalam cara apapun menurut Hukum yang berlaku, hal tersebut
+                        tidak mempengaruhi keabsahan, keberlakuan, dan dapat dilaksanakannya ketentuan-ketentuan lain
+                        dalam Perjanjian Pendanaan ini.
+                    </li>
+                    <li>
+                        <b>Fitur JULO</b>, sebagaimana dijelaskan di bawah ini :
+                        <ol type="a">
+                            <li>
+                                ialah fungsi/karakteristik dalam hal teknologi, yang dimiliki dan/atau disediakan pada
+                                Sistem Elektronik JULO dengan tujuan membantu memudahkan Penerima Dana dalam melakukan
+                                transaksi dengan Sistem Elektronik JULO.
+                            </li>
+                            <li>
+                                Setiap fitur yang disediakan oleh JULO kepada Anda dan Fitur lainnya yang dimiliki JULO
+                                dan/atau Fitur yang diperoleh dari kerjasama dengan Mitra Bisnis, yang mana akan terus
+                                diperbaharui, ditambahkan, dihapus, diganti, dan/atau dirilis ulang, dan hal ini
+                                merupakan sepenuhnya kebijakan dan kewenangan JULO.
+                            </li>
+                            <li>
+                                Tanpa mengurangi maksud pasal 9.4, Setiap atau beberapa penggunaan Fitur JULO oleh Anda
+                                sebagaimana yang diperlukan dalam Dokumen-Dokumen Elektronik, JULO berhak membutuhkan
+                                tindakan persetujuan tertentu di luar Perjanjian Pendanaan ini, yang menginstruksikan
+                                dan/atau mengizinkan JULO mengakses dan memproses data-data yang Anda berikan untuk
+                                tujuan penggunaan fitur tersebut, seperti termasuk namun tidak terbatas pernyataan dan
+                                persetujuan Anda, yang diperoleh secara elektronik pada Sistem Elektronik JULO dan cara
+                                lain yang akan disepakati Para Pihak. Persetujuan ini merupakan bagian dari pernyataan
+                                tambahan yang merupakan satu-kesatuan yang tidak terpisahkan dan sebagai bentuk
+                                pelaksanaan dari Perjanjian Pendanaan ini, yang sama mengikatnya dan sah secara hukum.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Tanda Tangan Elektronik.</b>
+                        <ol type="a">
+                            <li>
+                                Tanda Tangan Elektronik adalah tanda tangan yang berupa informasi elektronik yang
+                                dilekatkan, terasosiasi atau terkait informasi elektroniknya yang digunakan sebagai alat
+                                verifikasi dan autentikasi.
+                            </li>
+                            <li>
+                                Penggunaan tanda tangan elektronik oleh Penerima Dana pada Dokumen-Dokumen Elektronik,
+                                yang mana merupakan satu-kesatuan daripadanya adalah sah, benar dan mengikat secara
+                                hukum yang sama kuatnya dengan tanda tangan fisik.
+                            </li>
+                            <li>
+                                Para Pihak dapat menggunakan tanda tangan elektronik untuk satu atau beberapa dokumen
+                                dari Dokumen-Dokumen Elektronik dengan klasifikasi tertentu, baik dengan, maupun tanpa
+                                menggunakan sertifikat elektronik yang dibuat oleh penyelenggara sertifikat elektronik
+                                Indonesia yang terdaftar di instansi terkait, sepanjang memenuhi persyaratan yang diatur
+                                dalam Undang- Undang mengenai informasi dan transaksi elektronik atau sejenisnya.
+                                Pengklasifikasian tersebut diatur sesuai standar operasional prosedur yang berlaku di
+                                JULO dan/atau Mitra Bisnis.
+                            </li>
+                            <li>
+                                Dalam hal proses autentikasi tambahan, jika diperlukan, Penerima Dana dengan ini
+                                memberikan kuasa kepada Pemberi Dana untuk menyematkan tanda tangan elektronik pada
+                                setiap Perjanjian Pendanaan dan SKRTP atau Dokumen-Dokumen Elektronik lainnya, dengan
+                                tata cara yang diinstruksikan oleh JULO dan/atau Mitra Bisnis sesuai peraturan yang
+                                berlaku terkait tanda tangan elektronik, termasuk namun tidak terbatas dengan cara
+                                menekan fitur persetujuan (consent) yang akan muncul pada setiap SKRTP dan/atau
+                                Dokumen-Dokumen Elektronik lainnya, atau memasukan Kode PIN yang Anda miliki ataupun
+                                cara lain yang sah sesuai kesepakatan Para Pihak.
+                            </li>
+                            <li>
+                                Para Pihak mengetahui dan sepakat bahwa Tanda Tangan Elektronik yang disematkan
+                                sebagaimana huruf d ayat ini adalah Tanda Tangan elektronik yang keabsahannya diatur dan
+                                distandarisasi oleh standar operasional prosedur yang berlaku di JULO dan/atau Mitra
+                                Bisnis.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        Pemberi Dana dan/atau JULO telah menyusun Perjanjian Pendanaan ini dengan maksud menyeragamkan
+                        atau menstandarisasikan isi dan bentuk Perjanjian Pendanaan ini secara elektronik, terkait
+                        bentuk kegiatan, skema dan/atau model pendanaan yang dilakukan antara Pemberi Dana dan Penerima
+                        Dana. Apabila terdapat segala bentuk Perjanjian Pendanaan lainnya yang berbeda dari isi dan
+                        bentuk Perjanjian Pendanaan ini akan segera disesuaikan dengan standar Perjanjian Pendanaan ini
+                        di kemudian hari.
+                    </li>
+                    <li>
+                        Pemberi Dana dan/atau JULO dan/atau Mitra Bisnis dapat memberikan akses kepada Penerima Dana
+                        untuk dapat mencetak Perjanjian Pendanaan ini. Dalam hal ini, Perjanjian Pendanaan bersifat
+                        elektronik, sehingga memungkinkan Penerima Dana tidak dapat mencetak keseluruhan lampiran berupa
+                        tautan sehingga memerlukan tindakan tambahan untuk mengakses terlebih dahulu lampiran-lampiran
+                        bertautan tersebut.
+                    </li>
+                    <li>
+                        Perjanjian ini telah disesuaikan dengan ketentuan peraturan perundang-undangan termasuk
+                        ketentuan Peraturan Otoritas Jasa Keuangan.
+                    </li>
+                    <li>
+                        Menyimpang dari hal-hal yang bertentangan, ketentuan Perjanjian Pendanaan ini dapat
+                        sewaktu-waktu diubah atau diubah secara tertulis dengan persetujuan bersama Para Pihak dan tidak
+                        ada modifikasi atau tambahan pada bagian manapun dari Perjanjian Pendanaan ini kecuali dibuat
+                        dengan Adendum/Amandemen tertulis yang ditandatangani oleh perwakilan resmi Para Pihak.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>MEKANISME PENYELESAIAN HAK dan KEWAJIBAN SESUAI JIKA JULO TIDAK DAPAT MELANJUTKAN KEGIATAN
+                    OPERASIONALNYA.</b>
+                <ol class="list-counter">
+                    <li>
+                        Pemberi Dana melalui JULO akan menginformasikan kepada Penerima Dana mengenai rencana
+                        penghentian Layanan JULO dalam jangka waktu tertentu yang akan diinformasikan beserta alasan dan
+                        rencana penyelesaian hak dan kewajiban baik antara JULO dengan Penerima Dana maupun Pemberi Dana
+                        melalui Sistem Elektronik milik JULO dan/atau media lain yang relevan, sebelum rencana tersebut
+                        dilakukan.
+                    </li>
+                    <li>
+                        Penyelesaian hak dan kewajiban JULO kepada seluruh pengguna baik Penerima Dana maupun Pemberi
+                        Dana dapat dilakukan melalui :
+                        <ol type="a">
+                            <li>
+                                posisi akhir pengalihan porfolio Pendanaan yang tertunggak dari Penerima Dana;
+                            </li>
+                            <li>
+                                tata cara atau mekanisme lain yang akan disepakati Para Pihak dalam Perjanjian Pendanaan
+                                ini.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        Tanpa mengurangi maksud pasal 10.1 dan pasal 10.2 Perjanjian Pendanaan ini, penyelesaian hak dan
+                        kewajiban wajib diselesaikan sejak persetujuan yang akan disampaikan ke OJK kepada JULO.
+                    </li>
+                    <li>
+                        Mekanisme dan jangka waktu penyelesaian seluruh kewajiban yang timbul dalam penyelenggaraan
+                        LPBBTI ditetapkan oleh OJK dengan memperhatikan rencana tindak lanjut yang disampaikan oleh
+                        JULO.
+                    </li>
+                    <li>
+                        Pemberi Dana dapat melakukan mekanisme apapun yang disebutkan pada pasal 10.2, dengan
+                        kesepakatan terlebih dahulu dengan Penerima Dana.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>FORCE MAJEURE</b>
+                <ol class="list-counter">
+                    <li>
+                        Pengertian Force Majeure adalah suatu keadaan tanpa kesalahan atau kelalaian yang disebabkan
+                        oleh salah satu Pihak yang terjadi di luar kendali Pihak tersebut, dimana Pihak tersebut secara
+                        wajar tidak dapat mencegah atau mengatasinya, termasuk namun tidak terbatas pada bencana alam,
+                        wabah penyakit, perang (dinyatakan atau tidak), invasi, konflik bersenjata, kerusuhan,
+                        demonstrasi, revolusi atau kudeta, tindakan terorisme, sabotase atau kerusakan karena
+                        kriminalisme, ledakan nuklir, kontaminasi radioaktif atau kimia atau radiasi ionisasi, gelombang
+                        tekanan yang disebabkan oleh pesawat terbang atau lainnya benda terbang yang melaju dengan
+                        kecepatan suara atau di atas kecepatan suara, gangguan listrik, gangguan sistem atau jaringan
+                        pihak ketiga lainnya atau perubahan peraturan perundang-undangan atau kebijakan pemerintah yang
+                        dapat mempengaruhi kemampuan salah satu Pihak atau Para Pihak. Dalam keadaan force majeure,
+                        Penerima Dana tetap bertanggung jawab atas kewajibannya berdasarkan Perjanjian Pendanaan ini.
+                    </li>
+                    <li>
+                        JULO dan/atau Mitra Bisnis atas permintaan Pemberi Dana atau berdasarkan kuasa Pemberi Dana,
+                        dapat menghentikan layanan Pendanaan kepada Anda atau mengambil tindakan atau langkah-langkah
+                        yang dipandang perlu oleh JULO, setiap saat jika terjadi Force Majeure sebagaimana yang
+                        disebutkan pada pasal 11.1 ini.
+                    </li>
+                </ol>
+            </li>
+        </ol>
+    </div> 
+    <div>
+        <p>
+            <b>DEMIKIAN</b>, Perjanjian Pendanaan beserta Lampiran-Lampirannya, yang disetujui atau ditandatangani secara elektronik (termasuk menggunakan tanda tangan elektronik) sesuai dengan ketentuan dalam Undang-Undang Republik Indonesia No. 11 Tahun 2008 tanggal 21 April 2008 tentang informasi dan Transaksi Elektronik berikut dengan segala perubahan/amandemennya dan peraturan pelaksananya beserta segala perubahan/amandemennya, dari waktu ke waktu oleh Para Pihak atau perwakilannya yang sah dan mempunyai kekuatan yang sama dengan perjanjian yang dibuat dan ditandatangani secara fisik.
+        </p>
+        <div class="row">
+            <div class="col">
+                <div class="box-left">
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"><b>Penerima Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign"> 
+                            {% if qris_signature %}
+                                <img height="auto" src="{{qris_signature|safe}}" style="border:0;display:block;outline:none;text-decoration:none;height:auto" />
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="sig">{{ application.fullname }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="box-right">
+                    <div class="row">
+                        <div>Jakarta, {{ signed_date }}</div>
+                    </div>
+                    <div class="row">
+                        <div><b>Pemberi Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign">
+                            <div class="signature-font">{{ lender.poc_name }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>{{ lender.poc_name }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <div class="divContent">
+        <h4>Lampiran 1</h4>
+        <h4>SYARAT DAN KETENTUAN PENGGUNAAN</h4>
+        <ol type="a">
+            <li>Syarat dan Ketentuan Mitra Bisnis <a href="https://www.julo.co.id/terms-and-conditions">(dalam bentuk tautan)</a></li>
+        </ol>
+
+        <h4>Lampiran 2</h4>
+        <h4>KEBIJAKAN DATA</h4>
+        <h4>PRIBADI</h4>
+        <ol type="a">
+            <li>Kebijakan Privasi Mitra Bisnis <a href="https://www.julo.co.id/privacy-policy">(dalam bentuk tautan)</a></li>
+        </ol>
+
+        <h4>Lampiran 3</h4>
+        <h4>SURAT KONFIRMASI RINCIAN TRANSAKSI PENDANAAN</h4>
+        <h4>Nomor : </h4>
+
+        <p>Surat Konfirmasi Rincian Transaksi Pendanaan (selanjutnya disebut "SKRTP") ini dibuat dan disetujui pada
+            tanggal ..., oleh dan antara:</p>
+        <ol class="list-counter">
+            <li>
+                <b>Pemberi Dana</b> yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai
+                berikut:
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; width: 35%;">a. Nama
+                            </td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; width: 35%;">b. Tgl.
+                                Lahir</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; width: 35%;">c. No.
+                                KTP</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; width: 35%;">d. No.
+                                Telpon</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; width: 35%;">d. Alamat
+                            </td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li>
+                <b>Penerima Dana</b>, yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai
+                berikut :
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                a. Nama/Perusahaan</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">
+                                b. Nama Perwakilan Perusahaan</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                c. Nomor Izin Perusahaan Terkait</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                d. Alamat Terdaftar</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ol>
+
+        <p>Untuk selanjutnya, Penerima Dana dan JULO secara bersama-sama disebut juga "Para Pihak" dan masing- masing
+            disebut "Pihak".</p>
+
+        <p>Penerima Dana menyatakan setuju untuk mengikatkan diri kepada JULO atas ketentuan-ketentuan sebagai berikut:
+        </p>
+
+        <ol>
+            <li>Bahwa Penerima Dana mengkonfirmasi dan setuju bahwa pengajuan Pendanaan yang disetujui akan diberikan
+                dalam bentuk Pendanaan berupa pemberian jumlah Pendanaan tertentu kepada Penerima Dana sebagaimana yang
+                tertuang dalam Perjanjian Pendanaan No. {{ hash_digi_sign }}. Penerima Dana dapat melakukan
+                transaksi jika jumlah Pendanaan mencukupi.</li>
+            <li>Bahwa Penerima Dana dengan ini mengkonfirmasi untuk mengajukan Permohonan Penggunaan Pendanaan dengan
+                nomor SKRTP melalui JULO, dan telah disetujui sebesar Rp ("pokok pinjaman")
+                dan Bunga Pendanaan sebesar Rp. Permohonan Penggunaan Pendanaan ini akan memotong jumlah
+                Pendanaan yang tersedia.</li>
+            <li>Bahwa Penerima Dana mengkonfirmasi dan berjanji untuk melunasi Dana dengan melakukan pembayaran Nilai Angsuran sesuai Tabel Angsuran berikut ini:
+                <table class="center-table">
+                    <tr>
+                        <th>Cicilan</th>
+                        <th>Jumlah</th>
+                        <th>Jatuh Tempo</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                </table>
+                <p>Berdasarkan Tabel Angsuran diatas, maka jangka waktu adalah</p>
+            </li>
+            <li>
+                Bahwa Penerima Dana akan mengkonfirmasi untuk melakukan pembayaran setiap bulan sebelum tanggal jatuh tempo. Keterlambatan akan dikenakan biaya Denda Keterlambatan sebesar % per hari, untuk setiap angsuran yang terlambat, dengan total kumulatif tidak melebihi Rp.
+            </li>
+            <li>
+                Bahwa pembayaran setiap bulan akan dilakukan langsung oleh Penerima Dana melalui Aplikasi Milik Mitra Bisnis.
+            </li>
+            <li>
+                Pernyataan Persetujuan
+                <ol type="a">
+                    <li>
+                        Penerima Dana dan Pemberi Dana mengerti atas hak dan kewajiban masing-masing pihak, sesuai dengan yang tertuang pada Perjanjian Pendanaan sesuai No. {{ hash_digi_sign }} dan akan senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan SKRTP ini.
+                    </li>
+                    <li>
+                        Hal yang belum dituangkan dalam SKRTP ini akan diatur di kemudian hari melalui Perubahan SKRTP (Addendum), yang merupakan persetujuan lebih lanjut antara Pemberi Dana dan Penerima Dana, dan bagian yang tidak terpisahkan dari SKRTP ini, serta tidak memerlukan tanda tangan ulang.
+                    </li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+    <div>
+        <p>
+            <b>DEMIKIAN</b>, SKRTP ini disetujui atau ditandatangani secara elektronik (termasuk menggunakan tanda tangan elektronik) sesuai dengan ketentuan dalam Undang-Undang Republik Indonesia No. 11 Tahun 2008 tanggal 21 April 2008 tentang informasi dan Transaksi Elektronik berikut dengan segala perubahan/amandemennya dan peraturan pelaksananya beserta segala perubahan/amandemennya, dari waktu ke waktu oleh Para Pihak atau perwakilannya yang sah dan mempunyai kekuatan yang sama dengan perjanjian yang dibuat dan ditandatangani secara fisik.
+        </p>
+        <div class="row">
+            <div class="col">
+                <div class="box-left">
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"><b>Penerima Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign"></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="box-right">
+                    <div class="row">
+                        <div>Jakarta, </div>
+                    </div>
+                    <div class="row">
+                        <div><b>Pemberi Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div><b></b></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign">
+                            <div class="signature-font"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block extrastyle %}
+{{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; Balance Configuration
+</div>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="submit/" id="deposit_form">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <td>Lender</td>
+                <td>Master Lender</td>
+                <td>Manual Lender Balance</td>
+                <td>Xfers Lender Flow</td>
+                <td>Xfers Token</td>
+                <td>Pre Fund Channeling Flow</td>
+                <td>BSS Balance Include</td>
+                <td>Only Escrow Balance</td>
+                <td>Low Balance Notification</td>
+                <td>Minimum Balance Notification</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lender in lenders %}
+            <tr>
+                <td>
+                    <label>{{ lender.lender_name }}</label>
+                </td>
+                <td>
+                    <input type="checkbox" class="master_lender" value="{{ lender.id }}" name="{{ lender.id }}_is_master_lender" id="id_{{ lender.id }}_is_master_lender" {%if lender.is_master_lender %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="checkbox" class="manual_lender_balance" value="{{ lender.id }}" name="{{ lender.id }}_is_manual_lender_balance" id="id_{{ lender.id }}_is_manual_lender_balance" {%if lender.is_manual_lender_balance %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="checkbox" class="xfers_lender_flow" value="{{ lender.id }}" name="{{ lender.id }}_is_xfers_lender_flow" id="id_{{ lender.id }}_is_xfers_lender_flow" {%if lender.is_xfers_lender_flow %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="text" class="xfers_token" name="{{ lender.id }}_xfers_token" id="id_{{ lender.id }}_xfers_token"  {%if not lender.is_xfers_lender_flow %}disabled{% endif %} value="{{ lender.xfers_token|default:'' }}">
+                </td>
+                <td>
+                    <input type="checkbox" class="pre_fund_channeling_flow" value="{{ lender.id }}" name="{{ lender.id }}_is_pre_fund_channeling_flow" id="id_{{ lender.id }}_is_pre_fund_channeling_flow" {%if lender.is_pre_fund_channeling_flow %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="checkbox" class="bss_balance_include" value="{{ lender.id }}" name="{{ lender.id }}_is_bss_balance_include" id="id_{{ lender.id }}_is_bss_balance_include" {%if lender.is_bss_balance_include %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="checkbox" class="only_escrow_balance" value="{{ lender.id }}" name="{{ lender.id }}_is_only_escrow_balance" id="id_{{ lender.id }}_is_only_escrow_balance" {%if lender.is_only_escrow_balance %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="checkbox" class="low_balance_notification" value="{{ lender.id }}" name="{{ lender.id }}_is_low_balance_notification" id="id_{{ lender.id }}_is_low_balance_notification" {%if lender.is_low_balance_notification %}checked{% endif %}>
+                </td>
+                <td>
+                    <input type="text" class="minimum_balance" data-type="currency" name="{{ lender.id }}_minimum_balance" id="id_{{ lender.id }}_minimum_balance"  {%if not lender.is_low_balance_notification %}disabled{% endif %} value="{{ lender.minimum_balance }}">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br/>
+    <div class="submit-row">
+        <input type="hidden" name="master_lender" id="id_master_lender">
+        <input type="submit" value="Submit" class="default submit-button" name="_save">
+    </div>
+</form>
+
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script type="text/javascript">
+    $("input[data-type='currency']").on({
+        keyup: function() {
+            formatCurrency($(this));
+        },
+        blur: function() {
+            formatCurrency($(this), "blur");
+        }
+    });
+
+    function formatNumber(n) {
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+
+    function formatCurrency(input, blur) {
+        var input_val = input.val();
+        form = input.parents("form");
+        button = form.find(".submit-button");
+        if (input_val === "") {
+            button.prop("disabled", true);
+            return;
+        }
+        button.prop("disabled", false);
+        var original_len = input_val.length;
+        var caret_pos = input.prop("selectionStart");
+        input_val = formatNumber(input_val);
+        input.val(input_val);
+        var updated_len = input_val.length;
+        caret_pos = updated_len - original_len + caret_pos;
+        input[0].setSelectionRange(caret_pos, caret_pos);
+
+        transaction_type = $("select[name=transaction_type]").val();
+        if (transaction_type == "repayment" && total_repayment < 0 && form.attr("id") == "deposit_form") {
+            button.prop("disabled", true);
+        }
+    }
+
+    $("form#withdrawal_form").on("submit", function(){
+        $("input[data-type='currency']").each(function(){
+            $(this).val($(this).val().replace(/\D/g, ""));
+        });
+    });
+
+    function change_master_lender(elm) {
+        master_lender = $("input#id_master_lender");
+        $(".master_lender:checkbox:not(:checked)").prop('disabled', $(elm).prop('checked'));
+        if ($(elm).prop('checked')) {
+            master_lender.val($(elm).val());
+        } else {
+            master_lender.val("");
+        }
+    }
+
+    function change_manual_lender_balance(elm) {
+        lender_id = $(elm).val();
+        checked = $(elm).prop('checked');
+        $(".xfers_lender_flow[name="+lender_id+"_is_xfers_lender_flow]").prop('disabled', $(elm).prop('checked'));
+        bss_balance_include = $(".bss_balance_include[name="+lender_id+"_is_bss_balance_include]");
+        only_escrow_balance = $(".only_escrow_balance[name="+lender_id+"_is_only_escrow_balance]");
+        if (!checked) {
+            bss_balance_include.prop('checked', false);
+            only_escrow_balance.prop('checked', false);
+            $(".xfers_token[name="+lender_id+"_xfers_token]").attr('disabled', true);
+        }
+        bss_balance_include.prop('disabled', false);
+        only_escrow_balance.prop('disabled', false);
+    }
+
+    function change_xfers_lender_flow(elm) {
+        lender_id = $(elm).val();
+        $(".manual_lender_balance[name="+lender_id+"_is_manual_lender_balance]").prop('disabled', $(elm).prop('checked'));
+        $(".bss_balance_include[name="+lender_id+"_is_bss_balance_include]").prop('disabled', $(elm).prop('checked'));
+        $(".only_escrow_balance[name="+lender_id+"_is_only_escrow_balance]").prop('disabled', $(elm).prop('checked'));
+        $(".xfers_token[name="+lender_id+"_xfers_token]").attr('disabled', !$(elm).prop('checked'));
+    }
+
+    function change_bss_balance_include(elm) {
+        lender_id = $(elm).val();
+        $(".xfers_lender_flow[name="+lender_id+"_is_xfers_lender_flow]").prop('disabled', $(elm).prop('checked'));
+        $(".only_escrow_balance[name="+lender_id+"_is_only_escrow_balance]").prop('disabled', $(elm).prop('checked'));
+        $(".manual_lender_balance[name="+lender_id+"_is_manual_lender_balance]").prop('checked', $(elm).prop('checked'));
+    }
+
+    function change_only_escrow_balance(elm) {
+        lender_id = $(elm).val();
+        $(".xfers_lender_flow[name="+lender_id+"_is_xfers_lender_flow]").prop('disabled', $(elm).prop('checked'));
+        $(".bss_balance_include[name="+lender_id+"_is_bss_balance_include]").prop('disabled', $(elm).prop('checked'));
+        $(".manual_lender_balance[name="+lender_id+"_is_manual_lender_balance]").prop('checked', $(elm).prop('checked'));
+    }
+
+    function change_low_balance_notification(elm) {
+        lender_id = $(elm).val();
+        $(".minimum_balance[name="+lender_id+"_minimum_balance]").attr('disabled', !$(elm).prop('checked'));
+    }
+
+    $(".master_lender").on("change", function(){
+        change_master_lender(this);
+    });
+
+    $(".manual_lender_balance").on("change", function(){
+        change_manual_lender_balance(this);
+    });
+
+    $(".xfers_lender_flow").on("change", function(){
+        change_xfers_lender_flow(this);
+    });
+
+    $(".bss_balance_include").on("change", function(){
+        change_bss_balance_include(this);
+    });
+
+    $(".only_escrow_balance").on("change", function(){
+        change_only_escrow_balance(this);
+    });
+
+    $(".low_balance_notification").on("change", function(){
+        change_low_balance_notification(this);
+    });
+
+    $(document).ready(function() {
+        $(".master_lender:checked").each(function(index, elm){
+            change_master_lender(elm);
+        });
+        $(".manual_lender_balance:checked").each(function(index, elm){
+            change_manual_lender_balance(elm);
+        });
+        $(".xfers_lender_flow:checked").each(function(index, elm){
+            change_xfers_lender_flow(this);
+        });
+        $(".bss_balance_include:checked").each(function(index, elm){
+            change_bss_balance_include(this);
+        });
+        $(".only_escrow_balance:checked").each(function(index, elm){
+            change_only_escrow_balance(this);
+        });
+        $(".low_balance_notification:checked").each(function(index, elm){
+            change_low_balance_notification(this);
+        });
+    });
+</script>
+{% endblock %}

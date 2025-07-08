@@ -1,0 +1,70 @@
+{% extends "email/agen_assisted_base_email.html" %}
+
+{% block content %}
+<table>
+    <tr>
+        <td colspan="100" align="left"
+            style="width:100%; text-align: left; vertical-align: middle; word-wrap:break-word; padding-bottom:24px">
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Hai {{fullname}},
+            </p>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                {% if is_pin_created %}
+                Kamu belum memenuhi kriteria. Tapi tenang, <br>
+                kamu masih bisa daftar ulang, kok!
+                {% else %}
+                Kamu belum memenuhi kriteria, tapi kamu  <br>
+                masih bisa ajukan lagi dengan Buat PIN dan <br>
+                lanjut proses pengajuan, kok!
+                {% endif %}
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100" align="center"
+            style="width:100%; background-color: #F5F5F5; text-align: center; vertical-align: middle; word-wrap:break-word; padding:32px 16px;">
+
+            {% if is_pin_created %}
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:700;line-height: 24px;">
+                Klik tombol di bawah untuk daftar ulang JULO, ya!
+            </p>
+            <br>
+            <br>
+            <a href="{{action_url}}" class="primary-btn" style="background-color: #00ACF0;border: none;border-radius: 8px;color: #ffffff;padding: 8px 16px;text-align: center;text-decoration: none;display: block;">
+                <span style="font-family: 'Nunito', sans-seriffont-size: 14px;font-style: normal;font-weight: 700;line-height: 22px;">
+                Daftar Ulang
+                </span>
+            </a>
+            {% else %}
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:700;line-height: 24px;">
+                Klik tombol Buat PIN Sekarang agar dapat ajukan ulang, ya!
+            </p>
+            <br>
+            <br>
+            <a href="{{action_url}}" class="primary-btn" style="background-color: #00ACF0;border: none;border-radius: 8px;color: #ffffff;padding: 8px 16px;text-align: center;text-decoration: none;display: block;">
+                <span style="font-family: 'Nunito', sans-seriffont-size: 14px;font-style: normal;font-weight: 700;line-height: 22px;">
+                    Buat PIN Sekarang
+                </span>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100" align="left"
+            style="width:100%; text-align: left; vertical-align: middle; word-wrap:break-word; padding-top:24px;">
+            {% if not is_pin_created %}
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Tombol <span style="font-weight:700;">Buat PIN Sekarang</span> hanya berlaku selama 24 jam sejak email
+                ini kamu terima, dan hanya berlaku untuk satu kali percobaan, ya!
+            </p>
+            {% endif %}
+            <br>
+            <br>
+            <p style="margin:0;color:#404040;font-family: 'Nunito', sans-serif;font-style: normal;font-size:16px;font-weight:400;line-height: 24px;">
+                Salam, <br>
+                JULO
+            </p>
+        </td>
+    </tr>
+</table>
+{% endblock %}

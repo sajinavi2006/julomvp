@@ -1,0 +1,59 @@
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+
+<!-- Left navbar-header -->
+  <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+       <ul class="nav" id="side-menu">
+        <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+          <!-- input-group -->
+          <div class="input-group custom-search-form">
+            <input type="text" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+            </span> </div>
+          <!-- /input-group -->
+        </li>
+        <li class="user-pro"> <a href="#" class="waves-effect">
+        	{{ nav_profile_logo|safe }}
+        	<span class="hide-menu">{{ user.username }}<span class="fa arrow"></span></span></a>
+        	
+        <li class="nav-small-cap m-t-10">--- Main Menu</li>
+        <li> 
+        	<a href="{%url 'dashboard:bo_credit_analyst' %}" class="waves-effect"><i class="linea-icon linea-basic fa-fw" data-icon="v"></i> 
+        	<span class="hide-menu"> Beranda <span class="fa arrow"></span> 
+        	</a>
+        </li>
+		
+		<li class="nav-small-cap m-t-10">--- Main Menu</li>
+   
+    <li class="nav-small-cap">--- Support</li>
+    {%if julo_roles|length > 1 %}
+
+      <li class="user-pro">
+        <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-circle-o text-danger"></i> <span class="hide-menu"><br/>Ubah Role</span></a>
+        <ul class="nav nav-second-level">
+          {% for role_item in julo_roles %}
+            <li> <a href="{{ role_item.url }}" class="waves-effect">
+              <span class="hide-menu small">{{ role_item.role }}</span>
+              </a>
+            </li>
+          {% empty %}
+            <li> <a href="javascript:void(0)"><i class="ti-briefcase"></i> Tidak Ada</a> </li>
+          {% endfor %}
+          </ul>
+
+      </li>
+    {% endif %}
+
+
+  	<li> 
+    	<a href="#" class="waves-effect"><i class="fa fa-file-o fa-2x text-success m-b-10" data-icon="v"></i> 
+    	<span class="hide-menu"> <br>Ubah Status Aplikasi <span class="fa arrow"></span> 
+    	</a>
+    </li>
+
+      </ul>
+    </div>
+  </div>
+  <!-- Left navbar-header end -->

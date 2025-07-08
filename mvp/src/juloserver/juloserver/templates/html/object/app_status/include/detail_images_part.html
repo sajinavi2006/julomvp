@@ -1,0 +1,47 @@
+{% load checkusergroup from common %}
+{% load unit utils %}
+
+{% if document.image_url %}
+  <div class="col-sm-3 text-center">
+    {% if document.image_ext == '.pdf'%}
+      {% load static from staticfiles %}
+      <a id="href_{{document.id}}" class="m-b-20 center-block" href="#" title="{{ document.image_type|display_safe }} ({{document.image_ext}})">
+        <div class="watermarked">
+          <img id="img_{{document.id}}" src="{% static 'images/icons/ic-placeholder.png' %}" class="img-responsive m-t-30 m-b-30"  />
+        </div>
+      </a>
+      <a id="button_href_{{document.id}}" href="#" target="_blank">
+          <button id="see_pdf" type="button" class="btn btn-success btn-block m-t-30">
+              <i class="fa fa-back"></i> <small>Lihat File</small>
+          </button>
+      </a>
+    {% else %}
+      <a id="href_{{document.id}}" class="image-popup-vertical-fit m-b-20 center-block" href="#" title="{{ document.image_type|display_safe }} ({{document.image_ext}})">
+        <div class="watermarked">
+          <img id="img_{{document.id}}" src="{% static 'images/icons/ic-placeholder.png' %}" class="img-responsive" />
+        </div>
+      </a>
+      {% if document.image_type != 'signature_ss'%}
+        <a href="{% url 'loan_app:detail_image_edit' document.id %}" target="_blank">
+            <button id="edit_image" type="button" class="btn btn-success btn-block">
+                <i class="fa fa-back"></i> <small>Edit Gbr</small>
+            </button>
+        </a>
+      {% endif %}
+    {% endif %}
+    {% if 'payment_status' not in request.path %}
+      <small>
+        {% if document.image_status == 0 and document.image_type != 'signature_ss'%}
+          <button id="btn_kirim_ulang_{{document.id}}" class="btn btn-default btn-block" onclick="ImageResubmissionClick({{document.id}});"><small>Mohon Dikirim Ulang</small></button>
+        {% elif document.image_status == 1 and document.image_type != 'signature_ss'%}
+          <button id="btn_kirim_ulang_{{document.id}}" class="btn btn-danger btn-block" onclick="ImageResubmissionClick({{document.id}});"><small>Batalkan Kirim Ulang</small></button>
+        {% elif document.image_status == -1 and document.image_type != 'signature_ss'%}
+           <button class="btn-default">{{ document.image_status|display_img_status }}</button><br/>
+        {% endif %}
+      </small>
+    {% endif %}
+    <small class="m-t-10 center-block">
+      {{ document.image_type|display_safe }}
+    </small>
+  </div>
+{% endif %}

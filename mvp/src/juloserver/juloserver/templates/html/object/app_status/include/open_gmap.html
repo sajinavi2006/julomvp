@@ -1,0 +1,16 @@
+{% load unit %}
+{% if object.addressgeolocation %}
+    {% if object.gmap_url %}
+    <a href="{{ object.addressgeolocation }}" target="_blank" title="Open Google Map">
+    <button type="button" class="button btn-success btn-block btn-outline p-10"><i class="fa fa-map fa-fw"></i>Konf GPS Saja</button>
+    </a>
+    {%else%}
+    <a href="{{ object.addressgeolocation }}" target="_blank" title="Open Google Map">
+    <button type="button" class="button btn-success btn-block btn-outline p-10"><i class="fa fa-map fa-fw"></i>Konfirmasi GPS</button>
+    </a>
+    {%endif%}
+{%else%}
+    {% if object.gmap_url %}
+    <!-- Deprecated! not use konfirmasi alamat + gps -->
+    {%endif%}
+{% endif %}

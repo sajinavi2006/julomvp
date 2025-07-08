@@ -1,0 +1,281 @@
+{% load unit %}
+<div class="row">
+  <div class="col-md-6 col-xs-6 calculate-border-right">
+    <table class="calculate-table" style="width:100%;">
+      <tr>
+        <th style="text-decoration: underline;">TOTAL ADJUSTED INCOME</th>
+        <th style="text-align:right;"><span id="total_adjusted_income">{{ calculation_results.total_adjusted_income|f_rupiahs:"no_currency"|default:"0"|safe}}</span></th>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Monthly income</td>
+        <td style="text-align:right;"><span  id="monthly_income">{{ calculation_results.monthly_income|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Work tenure adjustment</td>
+        <td style="text-align:right;"><span id="work_tenure_adjustment">{{ calculation_results.work_tenure_adjustment|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Job adjustment</td>
+        <td style="text-align:right;"><span id="job_adjustment">{{ calculation_results.job_adjustment|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Other income</td>
+        <td style="text-align:right;"><span id="other_income">{{ app_obj.other_income_amount|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Other income adjustment</td>
+        <td style="text-align:right;"><span id="other_income_adjustment">{{ calculation_results.other_income_adjustment|percentage_100|default:"0.0"|safe}}%</span></td>
+      </tr>
+    </table>
+
+    <table class="calculate-table" style="width:100%;" >
+      <tr>
+        <th style="text-decoration: underline;">TOTAL ADJUSTED EXPENSES</th>
+        <th style="text-align:right;"><span id="total_adjusted_expense">{{ calculation_results.total_adjusted_expense|f_rupiahs:"no_currency"|default:"0"|safe}}</span></th>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Monthly expense</td>
+        <td style="text-align:right;"><span id="monthly_expense">{{ app_obj.monthly_expenses|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Housing cost</td>
+        <td style="text-align:right;"><span id="housing_cost">{{ app_obj.monthly_housing_cost|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Undisclosed expenses</td>
+        <td style="text-align:right;"><span id="undisclosed_expense">{{ calculation_results.undisclosed_expense|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Dependents expense</td>
+        <td style="text-align:right;"><span id="dependent_expense">{{ calculation_results.dependent_expense|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+    </table>
+  </div>
+
+
+  <div class="col-md-6 col-xs-6 calculate-border-left">
+    <table class="calculate-table" style="width:95%;">
+      <tr>
+        <th style="text-decoration: underline;">AFFORDABLE PAYMENT</th>
+        <th style="text-align:right;"><span id="affordable_payment">{{ calculation_results.affordable_payment|f_rupiahs:"no_currency"|default:"0"|safe}}</span></th>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Max affordable simple</td>
+        <td style="text-align:right;"><span id="max_affordable_simple">{{ calculation_results.max_affordable_simple|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Max affordable DTI</td>
+        <td style="text-align:right;"><span id="max_affordable_dti">{{ calculation_results.max_affordable_dti|f_rupiahs:"no_currency"|default:"0"|safe}}</span></td>
+      </tr>
+    </table>
+    <table class="calculate-table" style="width:95%;">
+      <tr>
+        <th style="text-decoration: underline;">PRODUCT RATES</th>
+        <th style="text-align:right;"></th>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Monthly interest rate</td>
+        <td style="text-align:right;"><span id="monthly_interest_rate">{{ product_rate.monthly_interest_rate|percentage_100}}%</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Annual interest rate</td>
+        <td style="text-align:right;"><span id="annual_interest_rate">{{ product_rate.annual_interest_rate|percentage_100}}%</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Origination</td>
+        <td style="text-align:right;"><span id="origination">{{ product_rate.origination_fee_rate|percentage_100}}%</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Late</td>
+        <td style="text-align:right;"><span id="late">{{ product_rate.late_fee_rate|percentage_100}}%</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Cashback 1</td>
+        <td style="text-align:right;"><span id="cashback1">{{ product_rate.cashback_initial_rate|percentage_100}}%</span></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;Cashback 2</td>
+        <td style="text-align:right;"><span id="cashback2">{{ product_rate.cashback_payment_rate|percentage_100}}%</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="mx-auto" style="width: 100%; margin-top:20px;">
+  <button id="btn_calculate" type="button" class="btn btn btn-success btn-block" style="width:95%;" onclick="actionCalculate();">
+    Calculate
+  </button>
+</div>
+
+<table id="calculate_offer_0" class="calculate-offer">
+  <tr>
+    <td width='30%'>OFFER TYPE</td>
+    <td width='70%' id="calculate_offer_0_offer_type">AS IS</td>
+  </tr>
+  <tr>
+    <td>Product Name</td>
+    <td id="calculate_offer_0_product"></td>
+  </tr>
+  <tr>
+    <td>Loan amount</td>
+    <td id="calculate_offer_0_loan_amount">
+    </td>
+  </tr>
+  <tr>
+    <td>Loan Duration</td>
+    <td id="calculate_offer_0_loan_duration">
+    </td>
+  </tr>
+  <tr>
+    <td>Installment Amount Offer</td>
+    <td id="calculate_offer_0_installment_amount">
+    </td>
+  </tr>
+  <tr>
+    <td>First Payment Amount</td>
+    <td id="calculate_offer_0_p_installment_amount"></td>
+  </tr>
+  <tr>
+    <td>First Payment Date</td>
+    <td id="calculate_offer_0_p_installment_date"></td>
+  </tr>
+  <tr>
+    <td>Special First Payment Date</td>
+    <td id="calculate_offer_0_p_special_first_date"></td>
+  </tr>
+</table>
+{% if offers %}
+  {% for offer in offers %}
+    <table id="calculate_offer_{{forloop.counter}}" class="calculate-offer calculate-choices" onclick="showmodalOffer({{forloop.counter}});">
+      {% if offer.is_accepted %}
+        <tr style="border-bottom-style:solid;border-bottom-width:2px; border-bottom-color:#00c292;">
+          <td style="text-align: center;" colspan="2"><strong>ACCEPTED</strong></td>
+        </tr>
+      {% endif %}
+      <tr>
+        <td width='30%'>OFFER ID</td>
+        <td width='70%' id="calculate_offer_{{forloop.counter}}_id">{{offer.id|default:'-'}}</td>
+      </tr>
+      <tr>
+        <td>Product Name</td>
+        <td id="calculate_offer_{{forloop.counter}}_product" >{{offer.product|default:'-'}}</td>
+      </tr>
+      <tr>
+        <td>Loan amount</td>
+        <td id="calculate_offer_{{forloop.counter}}_loan_amount">{{offer.loan_amount_offer|f_rupiahs:"no_currency"|default:'-'}}</td>
+      </tr>
+      <tr>
+        <td>Loan Duration</td>
+        <td id="calculate_offer_{{forloop.counter}}_loan_duration">{{offer.loan_duration_offer|default:'-'}} {{offer.application.determine_kind_of_installment}}</td>
+      </tr>
+      <tr>
+        <td>Installment Amount Offer</td>
+        <td id="calculate_offer_{{forloop.counter}}_installment_amount">{{offer.installment_amount_offer|f_rupiahs:"no_currency"|default:'-'}}</td>
+      </tr>
+      <tr>
+        <td>First Payment Amount</td>
+        <td id="calculate_offer_{{forloop.counter}}_p_installment_amount">{{offer.first_installment_amount|f_rupiahs:"no_currency"|default:'-'}}</td>
+      </tr>
+      <tr>
+        <td>First Payment Date</td>
+        <td id="calculate_offer_{{forloop.counter}}_p_installment_date">{{offer.first_payment_date|date:"Y-m-d"|default:'-'}}</td>
+      </tr>
+      <tr>
+        <td>Special First Payment Date</td>
+        <td id="calculate_offer_{{forloop.counter}}_p_special_first_date">{{offer.special_first_payment_date|date:"Y-m-d"|default:'-'}}</td>
+      </tr>
+    </table>
+    <input id="calculate_offer_{{forloop.counter}}_id_value" type="text" hidden="true" value="{{offer.id}}">
+    <input id="calculate_offer_{{forloop.counter}}_product_value" type="text" hidden="true" value="{{offer.product.product_code}}">
+    <input id="calculate_offer_{{forloop.counter}}_loan_amount_value" type="text" hidden="true" value="{{offer.loan_amount_offer}}">
+    <input id="calculate_offer_{{forloop.counter}}_loan_duration_value" type="text" hidden="true" value="{{offer.loan_duration_offer}}">
+    <input id="calculate_offer_{{forloop.counter}}_installment_amount_value" type="text" hidden="true" value="{{offer.installment_amount_offer}}">
+    <input id="calculate_offer_{{forloop.counter}}_p_installment_amount_value" type="text" hidden="true" value="{{offer.first_installment_amount}}">
+    <input id="calculate_offer_{{forloop.counter}}_p_installment_date_value" type="text" hidden="true" value="{{offer.first_payment_date|date:'Y-m-d'}}">
+  {% endfor %}
+{% else %}
+  <table id="calculate_offer_1" class="calculate-offer calculate-choices" onclick="showmodalOffer(1);">
+    <tr>
+      <td width='30%'>OFFER ID</td>
+      <td width='70%' id="calculate_offer_1_id"></td>
+    </tr>
+    <tr>
+      <td>Product Name</td>
+      <td id="calculate_offer_1_product"></td>
+    </tr>
+    <tr>
+      <td>Loan amount</td>
+      <td id="calculate_offer_1_loan_amount"></td>
+    </tr>
+    <tr>
+      <td>Loan Duration</td>
+      <td id="calculate_offer_1_loan_duration"></td>
+    </tr>
+    <tr>
+      <td>Installment Amount Offer</td>
+      <td id="calculate_offer_1_installment_amount"></td>
+    </tr>
+    <tr>
+      <td>First Payment Amount</td>
+      <td id="calculate_offer_1_p_installment_amount"></td>
+    </tr>
+    <tr>
+      <td>First Payment Date</td>
+      <td id="calculate_offer_1_p_installment_date"></td>
+    </tr>
+    <tr>
+      <td>Special First Payment Date</td>
+      <td id="calculate_offer_1_p_special_first_date"></td>
+    </tr>
+  </table>
+
+  <table id="calculate_offer_2" class="calculate-offer calculate-choices" onclick="showmodalOffer(2);">
+    <tr>
+      <td width='30%' >OFFER ID</td>
+      <td width='70%' id="calculate_offer_2_id"></td>
+    </tr>
+    <tr>
+      <td>Product Name</td>
+      <td id="calculate_offer_2_product"></td>
+    </tr>
+    <tr>
+      <td>Loan amount</td>
+      <td id="calculate_offer_2_loan_amount"></td>
+    </tr>
+    <tr>
+      <td>Loan Duration</td>
+      <td id="calculate_offer_2_loan_duration"></td>
+    </tr>
+    <tr>
+      <td>Installment Amount Offer</td>
+      <td id="calculate_offer_2_installment_amount"></td>
+    </tr>
+    <tr>
+      <td>First Payment Amount</td>
+      <td id="calculate_offer_2_p_installment_amount"></td>
+    </tr>
+    <tr>
+      <td>First Payment Date</td>
+      <td id="calculate_offer_2_p_installment_date"></td>
+    </tr>
+    <tr>
+      <td>Special First Payment Date</td>
+      <td id="calculate_offer_2_p_special_first_date"></td>
+    </tr>
+  </table>
+
+  <input id="calculate_offer_1_id_value" type="text" hidden="true">
+  <input id="calculate_offer_1_product_value" type="text" hidden="true">
+  <input id="calculate_offer_1_loan_amount_value" type="text" hidden="true">
+  <input id="calculate_offer_1_loan_duration_value" type="text" hidden="true">
+  <input id="calculate_offer_1_installment_amount_value" type="text" hidden="true">
+  <input id="calculate_offer_1_p_installment_amount_value" type="text" hidden="true">
+  <input id="calculate_offer_1_p_installment_date_value" type="text" hidden="true">
+  <input id="calculate_offer_2_id_value" type="text" hidden="true">
+  <input id="calculate_offer_2_product_value" type="text" hidden="true">
+  <input id="calculate_offer_2_loan_amount_value" type="text" hidden="true">
+  <input id="calculate_offer_2_loan_duration_value" type="text" hidden="true">
+  <input id="calculate_offer_2_installment_amount_value" type="text" hidden="true">
+  <input id="calculate_offer_2_p_installment_amount_value" type="text" hidden="true">
+  <input id="calculate_offer_2_p_installment_date_value" type="text" hidden="true">
+{% endif %}

@@ -1,0 +1,5 @@
+{% if object.application_status.status_code == experiment.target_status and object.is_julo_one or object.application_status.status_code == 141 and object.is_julover or object.application_status.status_code == 144 and object.is_julo_one %}
+  {% include "object/app_status/include/table_name_bank_validation_julo_one.html" %}
+{% else %}
+  {% include "object/app_status/include/table_name_bank_validation_readonly.html" %}
+{% endif %}

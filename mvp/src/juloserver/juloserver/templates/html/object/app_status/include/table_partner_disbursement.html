@@ -1,0 +1,76 @@
+{% load unit %}
+{% for disbursement_  in partner_disbursement %}
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th colspan="2"><strong>Disbursement Details</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Disburse Method</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="input-group input-group-sm">
+            {{ disbursement_.method|default:"-"|safe }}
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Saldo</b>
+        </div>
+        <div class="col-xs-6">
+          <div class="col-md-12 col-xs-12 " style="border: 2px solid {% if julo_balance < 1000000 %}red{% else %}green{% endif %}">
+            {{ disbursement_.julo_balance|f_rupiahs:"no"|safe}}
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Dana yang ditransfer</b>
+        </div>
+        <div class="col-xs-6">
+          {{ disbursement_.amount|f_rupiahs:"no"|safe }}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Disburse ID</b>
+        </div>
+        <div class="col-xs-6">
+          {{ disbursement_.disburse_id|default:"-"|safe }}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Disburse Status</b>
+        </div>
+        <div class="col-xs-6">
+          <p><code>{{ disbursement_.disburse_status|default:"-"|safe }}</code></p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="col-xs-12">
+        <div class="col-xs-4 no-left">
+          <b>Reason</b>
+        </div>
+        <div class="col-xs-6">
+          <p><code>{{ disbursement_.reason|default:"-"|safe }}</code></p>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+{% endfor %}

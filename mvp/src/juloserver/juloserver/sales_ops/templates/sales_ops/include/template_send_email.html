@@ -1,0 +1,26 @@
+{% block email_template %}
+
+{% with agent_name=object.latest_agent_assignment.agent_name agent_promo_code=object.latest_agent_assignment.agent.get_agent_promo_code %}
+GLOBAL_TEMPLATE_EMAIL = "Hi {{ object.latest_application.fullname | default:'-'}},<br><br>"+
+"Perkenalkan Saya {{ agent_name | default:'-' }} dari JULO, terimakasih sudah merespon telepon dari kami. <br><br>"+
+"Selamat, kamu mendapatkan kode promo spesial untuk cashback sebesar {{ agent_promo_code.promo_code_benefit_discount_value | default:'-' }}! "+
+"Masukkan {{ agent_promo_code.code | default:'-' }} di kolom KODE PROMO sebelum ttd digital/rekam suara. <br><br>"+
+"Syarat & Ketentuan Kode Promo:<br>"+
+"Minimal transaksi {{ agent_promo_code.minimum_transaction_amount | default:'-' }}<br>"+
+"Berlaku sampai {{ object.latest_agent_assignment.agent_promo_code_expiration_date | default:'-' }}<br><br>"+
+"Ayo gunakan sebelum kode promomu hangus! <br><br><br>"+
+"Jika kamu memiliki kendala silahkan klik "+
+"https://www.julo.co.id/faq/kontak atau menghubungi call center kami di 021-50919034/021-50919035<br><br>"+
+"JULO | CARA DAFTAR DI JULO KREDIT DIGITAL https://youtu.be/aKhNeee0b8Y<br><br>"+
+"JULO | 5 Langkah Mudah Ajukan Pinjaman https://www.youtube.com/watch?v=4-y5iTRC4Xg<br><br><br>"+
+"Salam Hangat,<br>"+
+"{{ agent_name | default:'-' }}"
+{% endwith %}
+
+$('#email_error_message').hide();
+$('#email_subject').val('Khusus Pelanggan Setia JULO, Ini Hadiahmu!');
+$('#to_email').val('{{ object.latest_application.email }}');
+tinymce.activeEditor.setContent(GLOBAL_TEMPLATE_EMAIL);
+GLOBAL_EMAIL_SENDER = "cs@julo.co.id";
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% load model template default unit %}
+
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Application ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan.application.id|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+   <tr>
+    <td class='m-r-10'>
+      Customer ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan.customer.id|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan=2>
+      <hr>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Due Date
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.due_date|date:"d M Y"|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Due Amount
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.due_amount|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Late Fee Amount
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.late_fee_amount|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Case Back Earned
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.cashback_earned|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan=2>
+      <hr>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Nama Lengkap
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.loan.application.fullname|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      No. HP
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.loan.application.mobile_phone_1|no_hp|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      No KTP
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.loan.application.ktp|no_ktp|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Tgl Lahir
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan.application.dob|date:"d M Y"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Loan Amount
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan.loan_amount|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Loan Duration
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.loan.loan_duration|default:"-"|safe}} {{ object.loan.application.determine_kind_of_installment }}</strong> 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      CDate
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.cdate|date:"d M Y H:i:s"|safe}}</strong>
+    </td>
+  </tr>
+</table>

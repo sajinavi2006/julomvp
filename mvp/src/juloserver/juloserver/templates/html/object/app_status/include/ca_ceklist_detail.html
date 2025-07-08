@@ -1,0 +1,57 @@
+{% load unit %}
+  <td id='ca_{{field_name|default:''}}_{{object.group_name|default:''}}' class="{{ object.group_name|ca_class|default:""|safe}}">
+    <i id='ca_checklist_{{field_name|default:''}}_{{object.group_name|default:''}}' class="fa {{object.checklist_value|ca_checklist|default:''|safe}} fa-lg ca-check" aria-hidden="true" onclick="checklistCA('{{field_name|default:''}}_{{object.group_name|default:''}}');">
+      <input id='ca_checklist_value_{{field_name|default:''}}_{{object.group_name|default:''}}' type="text" value="{{object.checklist_value}}" hidden="true">
+      <input id='ca_checklist_temp_{{field_name|default:''}}_{{object.group_name|default:''}}' type="text" value="{{object.checklist_value}}" hidden="true">
+    </i>
+    <i id='ca_comment_{{field_name|default:''}}_{{object.group_name|default:''}}' class="fa {{object.comments|ca_comment|default:''|safe}} fa-lg ca-info" aria-hidden="true" >
+      {% if field_name == 'monthly_income' and object.group_name == 'dv' and pd_bank_scrape_model_result == True%}
+         <div class="ca-comment-title" style="display:none;">
+             <h5 style="color:white;">{{ object.group_name|upper|default:"-"|safe}} - {{field_name|default:''}}&nbsp;|&nbsp</h5>
+         </div>
+         <div class="ca-comment-text" style="display:none;">
+             <div class="commentText">
+                  <p class="ca-paragraph">sudah diverifikasi oleh system</p>
+             </div>
+         </div>
+      {% else %}
+         <div class="ca-comment-title" style="display:none;">
+             <h5 style="color:white;">{{ object.group_name|upper|default:"-"|safe}} - {{field_name|default:''}}&nbsp;|&nbsp;
+                <i class="fa fa-pencil ca-edit" aria-hidden="true" onclick="editCommentCA('{{field_name|default:''}}_{{object.group_name|default:''}}');"></i></h5>
+         </div>
+         <div class="ca-comment-text" style="display:none;">
+             <div class="actionBox">
+              <div class="form-inline">
+                  <div class="form-group">
+                      <textarea id="ca_comment_value_{{field_name|default:''}}_{{object.group_name|default:''}}" class="form-control input-sm" type="text" placeholder="Your comments" rows="4"></textarea>
+                      <textarea id='ca_comment_value_temp_{{field_name|default:''}}_{{object.group_name|default:''}}' type="text" hidden="true">{{object.comments.0.comment}}</textarea>
+                  </div>
+                  <div class="form-group">
+                      <button class="btn btn-success btn-sm" onclick="addCommentCA('{{field_name|default:''}}_{{object.group_name|default:''}}');"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                  </div>
+              </div>
+              <ul id="ca_comment_list_{{field_name|default:''}}_{{object.group_name|default:''}}" style="overflow: scroll;overflow-x: hidden;" class="commentList">
+                  <li id="ca_comment_new_{{field_name|default:''}}_{{object.group_name|default:''}}" style="display:none;">
+                      <br>
+                      <div class="commentText">
+                          <span><strong>{{user.username}}</strong></span>
+                          <p id="ca_comment_new_value_{{field_name|default:''}}_{{object.group_name|default:''}}" class="ca-paragraph"></p>
+                        <span class="date sub-text">Baru saja.</span>
+                      </div>
+                  </li>
+                {%  for obj in object.comments %}
+                  <li>
+                      <br>
+                      <div class="commentText">
+                          <span ><strong >{{obj.agent}}</strong>
+                          <p class="ca-paragraph">{{obj.comment|linebreaksbr}}</p>
+                          <span class="date sub-text">{{obj.cdate|date_slice}}</span>
+                      </div>
+                  </li>
+                {% endfor %}
+              </ul>
+          </div>
+         </div>
+      {% endif %}
+    </i>
+  </td>

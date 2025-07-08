@@ -1,0 +1,66 @@
+{% extends 'admin/change_form.html' %}
+
+{% block admin_change_form_document_ready %}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+var timer = null;
+
+function setTime() {
+  ++totalSeconds;
+  secondsLabel.innerHTML = pad(totalSeconds % 60);
+  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+
+function make_call() {
+  var id_test_to_call_number = document.getElementById("id_test_to_call_number").value;
+  if (!id_test_to_call_number){
+    $("#errorbox").modal('show');
+
+  }
+  else{
+    $.ajax({
+        url :  "{%url 'app_status:nexmo-call-test' %}", // the endpoint
+        type : "POST", // http method
+
+        // handle a successful response
+        success : function(json) {
+
+        },
+    }); // end of ajax
+
+    // timer
+    clearTimeout(timer)
+    timer = null;
+    totalSeconds =0;
+    timer = setInterval(setTime, 1000);
+    $("#myModal").modal('show');
+  }
+
+    } // end of function
+
+
+function hideCloseButton(){
+   $('.modal-header .close').css('display', 'none');
+   $('.modal-footer').css('border-top', 'none');
+}
+
+hideCloseButton();
+// delete button ui adjusted
+$('.submit-row a.deletelink').css('height','35px');
+</script>
+{% endblock %}

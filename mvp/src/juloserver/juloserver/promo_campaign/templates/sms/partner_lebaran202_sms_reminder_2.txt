@@ -1,0 +1,1 @@
+ Hari Terakhir kesempatan menangkan 5jt rupiah! Jangan sampai terlewat. Bayar sekarang {{payment_link}}

@@ -1,0 +1,177 @@
+{% extends "common/layout_master.html" %}
+
+{% block master_css %}
+	
+{% load static from staticfiles %}
+	<!-- Bootstrap Core CSS -->
+	<link href="{% static 'theme/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+	<!-- animation CSS -->
+	<link href="{% static 'theme/nav-full/css/animate.css' %}" rel="stylesheet">
+	<!-- Custom CSS -->
+	<link href="{% static 'theme/nav-full/css/style.css' %}" rel="stylesheet">
+	<!-- color CSS -->
+	<link href="{% static 'theme/nav-full/css/colors/orange.css' %}" id="theme"  rel="stylesheet">
+
+{% endblock %}
+
+{% block master_script %}
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+{% endblock %}
+
+{% block body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+<section id="wrapper" class="login-register">
+  <div class="login-box login-sidebar">
+    <div class="white-box">
+    
+      <form class="form-horizontal form-material" id="loginform" method="post" action="/login/">
+      	{% csrf_token %}
+      	
+        <a href="{% url 'welcome'%}" class="text-center db">
+        	<img src="{% static 'images/julo/julo-logo-blue-tight-3.png' %}" alt="Beranda" /><br/>
+        	<!-- <img src="{% static 'images/julo/julo-text.png' %}" alt="Beranda" /> -->
+        </a>  
+
+        {% if errors %}
+        	<br/>
+            <div id="id_toast_err_visible" class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <span>Nama Pengguna atau Password Salah,
+                Silahkan masukan dengan benar.</span>
+            </div>
+            <div class="myadmin-alert myadmin-alert-icon myadmin-alert-click alert-warning myadmin-alert-top alerttop"> 
+        		<i class="fa fa-user"></i>Nama Pengguna atau Password Salah, atau akun belum diaktivasi, silahkan cek email untuk aktivasi. <a href="#" class="closed">&times;</a> 
+        	</div>
+        {% endif %}
+        
+        {% if next %}
+            {% if user.is_authenticated %}
+	            <p id="id_toast_visible" class="alert alert-danger m-t-10">Akun ini bukan milik anda dan anda tidak memiliki akses untuk melihat halaman ini. <br/> Untuk lanjut,
+	            silahkan login dengan akun yang memiliki akses.</p>
+	            <div class="myadmin-alert myadmin-alert-icon myadmin-alert-click alert-success myadmin-alert-top alerttop"> 
+            		<i class="ti-user"></i> Akun ini bukan milik anda dan anda tidak memiliki akses untuk melihat halaman ini. Untuk lanjut,
+	            silahkan login dengan akun yang memiliki akses. <a href="#" class="closed">&times;</a> 
+            	</div>
+            {% else %}
+            	<p id="id_toast_visible" class="alert alert-danger m-t-10 showtop">Mohon login untuk lihat halaman ini..</p>
+            	<div class="myadmin-alert myadmin-alert-icon myadmin-alert-click alert-success myadmin-alert-top alerttop"> 
+            		<i class="ti-user"></i> Mohon login untuk lihat halaman ini. <a href="#" class="closed">&times;</a> 
+            	</div>
+            {% endif %}
+        {% endif %}
+        
+        <div class="form-group m-t-20">
+          <div class="col-xs-12">
+            <input id="id_username" name="username" class="form-control" type="text" required placeholder="Nama Pengguna atau email">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <input name="password" id="id_password" class="form-control" type="password" required placeholder="Password">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12">
+            <div class="checkbox checkbox-primary pull-left p-t-0">
+              <input id="checkbox-signup" type="checkbox" value="yes" id="PersistentCookie" name="PersistentCookie">
+              <label for="checkbox-signup"> Remember me </label>
+            </div>
+            <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right"><i class="fa fa-lock m-r-5"></i> Lupa Password?</a> </div>
+        </div>
+        <div class="form-group text-center">
+          <div class="col-xs-12">
+            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit" >Log In</button>
+            <input type="hidden" name="next" value="{{ next }}" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+            <div class="social">
+            <a href="javascript:void(0)" class="btn  btn-facebook" data-toggle="tooltip"  title="Login with Facebook"> 
+            	<i aria-hidden="true" class="fa fa-facebook"></i> </a> 
+            <a href="javascript:void(0)" class="btn btn-googleplus" data-toggle="tooltip"  title="Login with Google"> 
+            	<i aria-hidden="true" class="fa fa-google-plus"></i> </a> 
+            </div>
+          </div>
+          <div class="col-sm-12 text-center">
+            <p>Buat akun di julo? <a href="#" class="text-primary m-l-5"><b>Daftar</b></a></p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block script_bottom %}
+	
+	<!-- jQuery -->
+	<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+	<!-- Bootstrap Core JavaScript -->
+	<script src="{% static 'theme/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	<!-- Menu Plugin JavaScript -->
+	<script src="{% static 'theme/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js' %}"></script>
+	
+	<!--slimscroll JavaScript -->
+	<script src="{% static 'theme/nav-full/js/jquery.slimscroll.js' %}"></script>
+	<!--Wave Effects -->
+	<script src="{% static 'theme/nav-full/js/waves.js' %}"></script>
+	<!-- Custom Theme JavaScript -->
+	<script src="{% static 'theme/nav-full/js/custom.min.js' %}"></script>
+	<!--Style Switcher -->
+	<script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+{% endblock %}
+
+{% block script_end %}
+	<script type="text/javascript">
+		var flag_show = false;
+		
+		$(".myadmin-alert .closed").click(function(event){
+		  $(this).parents(".myadmin-alert").fadeToggle(350);
+		  return false;
+		}); 
+		$(".showtop").click(function(){
+	        $(".alerttop").fadeToggle(350);
+	    });
+	    
+	    function check_status_toast(){
+	    	var status = $('body').find('#id_toast_visible');
+	    	if (status.length >= 1){
+	    		//alert("FIND");
+	    		$(".alerttop").fadeToggle(350);
+	    		flag_show = true;
+	    	}
+	    	else {
+	    		//alert("NOT FIND");
+	    	}
+	    }
+	    
+	    function check_status_err_toast(){
+	    	var status = $('body').find('#id_toast_err_visible');
+	    	if (status.length >= 1){
+	    		$(".alerttop").fadeToggle(350);
+	    		flag_show = true;
+	    	}
+	    }
+	    
+	    $(document).ready(function() {
+		    check_status_toast();
+		    check_status_err_toast();
+		    
+		    setInterval(function(){
+		    		$(".alerttop").fadeToggle(350);
+		    	}, 5000);
+		});
+
+	</script>
+{% endblock %}
+

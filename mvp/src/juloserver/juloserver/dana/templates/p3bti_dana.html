@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pinyon+Script">
+<title>SURAT PERJANJIAN LLA {{no_SKP3}}</title>
+<style>
+
+    .table-loan tbody tr td {
+        text-align: left;
+        word-wrap: break-word;
+        border: 1px solid black;
+    }
+
+    .table-loan tbody tr th {
+        border: 1px solid black;
+    }
+
+    .table-wrapper{
+        padding-top: 50px;
+    }
+
+    .table-loan {
+        border-collapse: collapse;
+        width: 100%;
+        table-layout: fixed;
+        padding-bottom: 50px;
+    }
+
+    .table-loan tr{
+        padding: 10px;
+    }
+
+    .table-loan td{
+        padding: 10px;
+    }
+
+    .table-criteria tr{
+        height: 30px;
+    }
+    .table-criteria .table-criteria-col-3{
+        padding-left: 30px;
+    }
+
+    .container {
+        padding: 50px 100px;
+        width: 1200px;
+        height: 2040px;
+        font-size: 22px;
+        margin: 0 auto;
+    }
+
+    .divContent {
+        padding-top: 15px;
+    }
+
+    ol {
+        margin: 1em;
+        padding-inline-start: 50px;
+    }
+
+    .justify_content {
+        text-align: justify;
+        padding-top: 1em;
+    }
+
+    ol.section2 {
+        counter-reset: section;
+        padding-inline-start: 50px;
+        padding-left: 0;
+        padding-top: 15px;
+        display:block;
+        margin-left:0;
+    }
+    li {
+        padding-left: 1em;
+        padding-top: 1em;
+        text-align: justify;
+    }
+
+    ol.section2>li {
+        counter-increment: section;
+        position: relative;
+        padding-left: 4em;
+        margin-bottom: 0.5em;
+        line-height: 1.5;
+        display:block;
+        margin-left:0;
+    }
+
+    ol.section2>li::before {
+        content: counters(section, ".") " ";
+        counter-increment: item;
+        position: absolute;
+        left: 0;
+        height: 100%;
+    }
+
+    ol.com-sect {
+        counter-reset: com-sect;
+        padding-inline-start: 50px;
+        margin: 0;
+        padding: 0;
+    }
+
+    ol.com-sect.com3-sect>li{
+        padding-left: 80px;
+    }
+
+    .com-sect.space-sect>li{
+        margin-top: 40px;
+    }
+
+    .com-sect.space-sect>li:first-child{
+        margin : 0;
+    }
+
+    ol.com-sect-normal{
+        margin:0;
+        padding:0;
+        padding-left: 20px;
+    }
+
+    ol.com-sect-normal>li{
+        padding : 0 0 0 20px;
+    }
+
+    li {
+        padding-left: 1em;
+        padding-top: 1em;
+        text-align: justify;
+    }
+
+    ol.com-sect>li {
+        counter-increment: com-sect;
+        position: relative;
+        display:block;
+        padding : 0 0 0 50px;
+    }
+
+    ol.list-sect{
+        margin: 0 0 40px 0;
+    }
+    
+
+
+    .list-sect.nospace-sect{
+        margin-bottom: 0;
+    }
+
+    .list-sect.nospace-sect li{
+        padding : 0 0 0 10px;
+    }
+
+    ol.com-sect>li::before {
+        content: counters(com-sect, ".") ".";
+        counter-increment: item_1;
+        position: absolute;
+        left: 0;
+        height: 100%;
+        margin-right: 1em;
+    }
+    ol.table-same{
+        margin: 0;
+        padding: 0 0 0 20px;
+    }
+    .table-same{
+        list-style-type: lower-latin;
+    }
+    .table-same li {
+        padding : 0;
+    }
+    .table-same li span {
+            display: inline-block;
+            position: relative;
+            vertical-align: top;
+            word-wrap: break-word;
+    }
+    .table-same li>span:first-child {
+            width: 30%;
+            padding-right: 5px;
+    }
+    .table-same li>span:nth-child(2) {
+            width: 65%;
+            padding-right: 5px;
+    }
+    .table-same li>span:first-child {
+            display: inline-block;
+            position: relative;
+            padding-right: 5px;
+            vertical-align: top;
+            text-align: left;
+    }
+    .table-same li>span:first-child:after{
+            content: ":";
+            position : absolute;
+            right: 0;
+            top : 0;
+            bottom : 0;
+    }
+    .pasal_heading {
+            text-align: center;
+            padding-top: 1em;
+            font-weight: bold;
+    }
+
+    .container *{
+        font-family: Arial, sans-serif !important;
+        line-height: 1.5 !important;
+        font-size: 11pt !important;
+    }
+
+    .title-sect{
+        margin-top: 40px;
+    }
+
+    .title-sect *{
+        text-align: center;
+        display: block;
+    }
+    .signature-font {
+        font-size: 30pt !important;
+        font-family: Pinyon Script, sans-serif !important;
+    }
+
+</style>
+
+<body>
+    <div class="container">
+        <div align="left">
+            Diperbaharui sejak tanggal : 30 Juni 2023
+        </div>
+        <div class = "title-sect">
+            <strong>
+                PERJANJIAN PENYALURAN PENDANAAN BERBASIS TEKNOLOGI INFORMASI (P3BTI)
+                <br />
+                ANTARA
+                <br>
+                PEMBERI DANA
+                <br>
+                DENGAN
+                <br>
+                PENYELENGGARA LPBBTI
+                <br>
+                No. P3BTI : {{no_SKP3}}
+            </strong>
+        </div>
+        <div class="justify_content">
+            Sebagai persyaratan awal sebelum Anda menandatangani Perjanjian Penyaluran Pendanaan Berbasis Teknologi Informasi ini (selanjutnya disebut <b>"Perjanjian"</b>), Anda wajib membaca, memeriksa, dan memahami Perjanjian ini dengan memindahkan bilah gulir (scroll bar) yang tersedia dari bagian awal hingga akhir dari Perjanjian ini, dengan penuh cermat dan kehati-hatian. 
+            <b>Tidak ada tuntutan/gugatan apa pun oleh Anda kepada Penyelenggara LPBBTI atas  segala tanggung jawab terhadap kerugian yang terjadi disebabkan oleh kealpaan atau kelalaian Anda dengan tidak membaca, memeriksa atau memahami isi seluruh Perjanjian ini.</b>
+        </div>
+        <div class="justify_content">
+            Perjanjian ini dibuat dan ditandatangani pada tanggal {{today_datetime}} (selanjutnya
+            disebut <b>"Tanggal Penandatanganan"</b>), oleh dan antara :
+        </div>
+        <ol class="list-sect">
+            <li>
+                <b>Pemberi Dana</b> yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai berikut :
+                <ol class="table-same">
+                    <li>
+                        <span>Nama Perusahaan</span> <span>{{ lender_company_name }}</span>
+                    </li>
+                    <li>
+                        <span>Nama Perwakilan Perusahaan</span> <span>{{ lender_poc_name }}</span>
+                    </li>
+                    <li>
+                        <span>Nomor Izin Perusahaan Terkait</span> <span>{{ lender_license_no }}</span>
+                    </li>
+                    <li>
+                        <span>Alamat Terdaftar</span> <span>{{ lender_address }}</span>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>Penyelenggara LPBBTI</b> yaitu perusahaan dengan detail identitas legalitas sebagai berikut :
+                <ol class="table-same">
+                    <li>
+                        <span>Nama Perusahaan</span> <span>PT Julo Teknologi Finansial</span>
+                    </li>
+                    <li>
+                        <span>Nama Perwakilan Perusahaan</span> <span>Gharnis Athe M. Ginting</span>
+                    </li>
+                    <li>
+                        <span>Jabatan</span> <span>Kuasa Direktur</span>
+                    </li>
+                    <li>
+                        <span>Nomor Izin Perusahaan Terkait</span> <span>KEP-16/D.05/2020</span>
+                    </li>
+                    <li>
+                        <span>Alamat Terdaftar</span> <span>Eightyeight @ Kasablanka Office Tower Lantai 10 Unit E,
+                            Jl. Casablanca Raya Kav. 88, Menteng Dalam, Tebet,
+                        </span>
+                    </li>
+
+                </ol>
+            </li>
+        </ol>
+        <div class="justify_content">
+            Pemberi Dana dan Penyelenggara LPBBTI selanjutnya secara bersama-sama disebut "Para Pihak" dan secara
+            sendiri-sendiri disebut "Pihak".
+        </div>
+        <div class="justify_content">
+            Anda dianggap telah membaca <b>Syarat dan Ketentuan Umum</b> yang disediakan oleh Penyelenggara LPBTTI
+            pada tautan web berikut <a href="https://www.julo.co.id/terms-and-conditions">https://www.julo.co.id/terms-and-conditions</a>. Syarat dan Ketentuan Umum ini merupakan bagian yang tidak terpisahkan dari Perjanjian ini serta Syarat dan Ketentuan Umum ini dapat berubah dari waktu ke waktu tanpa memerlukan persetujuan Para Pihak.
+        </div>
+        <span align="justify">
+            Sebelumnya Para Pihak menerangkan terlebih dahulu hal-hal sebagai berikut:
+        </span>
+        <div class="justify_content">
+            <ol class="list-sect nospace-sect" start="A" type="A">
+                <li>
+                    Bahwa Pemberi Dana bermaksud untuk menjalin kerja sama dengan Penyelenggara LPBBTI sehubungan dengan pendanaan kepada Penerima Dana dari Pemberi Dana melalui platform Penyelenggara LPBBTI;
+                </li>
+                <li>
+                    Bahwa Penyelenggara LPBBTI adalah perusahaan yang terdaftar dan diawasi Otoritas Jasa Keuangan berdasarkan Surat Tanda Berizin No. KEP-16/D.05/2020 tanggal 19 Mei 2020, yang menawarkan jasa penyaluran pendanaan dengan mempertemukan pihak Pemberi Dana dengan pihak Penerima Dana;
+                </li>
+                <li>
+                    Bahwa Para Pihak telah sepakat untuk menjalin suatu kerja sama dalam hal pendanaan kepada Penerima Dana atau dengan kata lain perjanjian kerja sama pemberian fasilitas layanan pendanaan bersama berbasis teknologi informasi dengan sumber pendanaan yang berasal dari Pemberi Dana sehubungan ditujukan untuk produk JULO Partnership (Close-Loop) : Dana Cicil yang dilaksanakan sesuai dengan ketentuan hukum yang berlaku di Indonesia;
+                </li>
+                <li>
+                    Bahwa kerja sama tersebut akan dilakukan dengan cara Pemberi Dana menyediakan Fasilitas  LPBBTI (sebagaimana didefinisikan di bawah ini) yang kemudian disalurkan kepada Penerima Dana yang telah disepakati melalui platform Penyelenggara LPBBTI.
+                </li>
+            </ol>
+        </div>
+        <div class="justify_content">
+            Berdasarkan hal-hal tersebut di atas, Para Pihak sepakat untuk mengadakan Perjanjian, dengan syarat-syarat dan ketentuan-ketentuan sebagai berikut:
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                <strong>
+                    Pasal 1
+                    <br>
+                    DEFINISI
+                </strong>
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Kecuali ditentukan lain, istilah-istilah dalam Perjanjian ini didefinisikan sebagai berikut:
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    <b>"Angsuran"</b> berarti jumlah pembayaran kembali atas Fasilitas Pendanaan berupa nilai angsuran yang terdiri dari Pokok Pendanaan, Bunga Pendanaan, dan/atau Denda Keterlambatan yang wajib dibayar oleh Penerima Dana pada setiap tanggal jatuh tempo pembayarannya sebagaimana ditentukan dalam Perjanjian Pemberian Fasilitas Pendanaan.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Batas Kredit"</b> berarti sejumlah batas  maksimum jumlah pinjaman tertentu yang dapat dimanfaatkan/digunakan oleh Penerima Dana yang disetujui Pemberi Dana berdasarkan analisa kelayakan kredit oleh Penyelenggara LPBBTI sesuai dengan kriteria yang diberikan oleh Pemberi Dana.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Biaya Layanan"</b> berarti margin yang menjadi hak Penyelenggara LPBBTI setelah memperhitungkan margin sebagaimana dijelaskan dalam Pasal 5 ayat 1 Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Bunga Pendanaan"</b> memiliki arti sebagaimana diberikan padanya pada Pasal 3 ayat 3 butir 3.1.3.2.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"CDD"</b> berarti singkatan dari <i>Customer Due Diligence</i> yaitu penerapan Prinsip Mengenal Nasabah terhadap Penerima Dana yang berupa kegiatan identifikasi, verifikasi, dan pemantauan yang hasil laporannya disampaikan oleh Penyelenggara LPBBTI kepada Pemberi Dana untuk memastikan bahwa transaksi yang dilakukan oleh Penerima Dana sesuai dengan profil Penerima Dana tersebut.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Denda Keterlambatan"</b> memiliki arti sebagaimana diberikan padanya pada Pasal 3 ayat 3 butir 3.1.3.7.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Dokumen Pengantar Pencairan Secara Elektronik"</b> berarti sekumpulan dokumen terkait permohonan Fasilitas Pendanaan kepada Pemberi Dana, disertai dengan dokumen softcopy yang memuat data dan informasi mengenai kelengkapan Perjanjian Pemberian Fasilitas Pendanaan dan dokumen terkait lainnya, jika ada.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Fasilitas Pendanaan"</b> berarti fasilitas pemberian pinjaman tunai kepada Penerima Dana yang disediakan oleh Pemberi Dana sesuai dengan prosedur penilaian kelayakan dan analisa pemberian kredit yang ditetapkan oleh Pemberi Dana dan/atau Penyelenggara LPBBTI yang disalurkan secara channeling melalui Penyelenggara LPBBTI berdasarkan Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Hapus Buku"</b> berarti tindakan administratif Pemberi Dana untuk menghapus kewajiban atas Fasilitas Pendanaan yang memiliki kualitas macet dari neraca sebesar Fasilitas Pendanaan Penerima Dana tanpa menghapus Hak Tagih yang dijelaskan lebih lanjut pada Lampiran 2.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Hapus Tagih"</b> berarti tindakan Pemberi Dana untuk menghapus kewajiban Penerima Dana atas Fasilitas Pendanaan yang tidak dapat diselesaikan yang dijelaskan lebih lanjut pada Lampiran 2.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Hari Kalender"</b> berarti hari Senin sampai dengan Minggu, termasuk hari libur yang berada di dalam 1 (satu) tahun kalender Masehi.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Hari Kerja"</b> berarti hari dimana Pemberi Dana beroperasi dan menjalankan kliring sesuai ketetapan Pemberi Dana di Indonesia.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Kewajiban Penerima Dana"</b> berarti setiap kewajiban pembayaran yang terutang atau wajib dibayar oleh Penerima Dana kepada Penyelenggara LPBBTI untuk selanjutnya dibayarkan ke pihak Pemberi Dana berdasarkan Perjanjian Pemberian Fasilitas Pendanaan.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Layanan Pendanaan Bersama Berbasis Teknologi Informasi" atau "LPBBTI"
+                                    </b>
+                                    adalah penyelenggaraan layanan jasa keuangan untuk mempertemukan Pemberi Dana dengan Penerima Dana dalam rangka melakukan Perjanjian Pemberian Fasilitas Pendanaan dalam mata uang rupiah secara langsung melalui sistem elektronik dengan menggunakan jaringan internet sebagaimana diatur dalam POJK P2P beserta segala amendemennya, peraturan Otoritas Jasa Keuangan, surat edaran Otoritas Jasa Keuangan, dan/atau peraturan perundang-undangan lainnya yang terkait.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Pemberi Dana"</b> berarti pihak yang menyalurkan Fasilitas Pendanaan melalui Perjanjian Pemberian Fasilitas Pendanaan.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Penerima Dana"</b> berarti penerima Fasilitas Pendanaan, dari Pemberi Dana, yang memenuhi kriteria yang ditetapkan dalam Lampiran berdasarkan format Lampiran 1 Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Perjanjian Pemberian Fasilitas Pendanaan"</b> berarti perjanjian antara Penerima Dana dan Pemberi Dana di mana, dalam penandatanganan Perjanjian Pemberian Fasilitas Pendanaan ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Platform"</b> berarti sistem elektronik milik, dan dikelola oleh, Penyelenggara LPBBTI dalam menjalankan kegiatan usahanya yaitu mobile application yang dikenal dengan aplikasi Julo.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"POJK P2P"</b> berarti Peraturan OJK No.10/POJK.05/2022 tanggal 4 Juli 2022 yang mengatur tentang Layanan Pendanaan Bersama Berbasis Teknologi Informasi, beserta segala amendemen dan peraturan pelaksananya.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Regulator"</b> berarti institusi pemerintah yang mengatur tentang finansial teknologi atau layanan pinjam meminjam uang berbasis teknologi informasi, termasuk di dalamnya Otoritas Jasa Keuangan, Bank Indonesia, dan lembaga lainnya yang ditunjuk oleh Pemerintah Negara Republik Indonesia.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Rekening Penampungan"</b> berarti rekening giro atas nama Penyelenggara LPBBTI yang berfungsi sebagai escrow account yang terdaftar pada Penyelenggara LPBBTI atau nomor rekening lainnya yang disetujui oleh Pemberi Dana yang digunakan untuk menampung:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Jumlah pencairan Fasilitas Pendanaan yang akan disalurkan ke Penerima Dana;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Dana hasil pembayaran Angsuran dan/atau kewajiban Penerima Dana lainnya kepada Pemberi Dana melalui Penyelenggara LPBBTI sebagai pengelola Fasilitas Pendanaan;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Setiap penyetoran kembali kelebihan jumlah pencairan Fasilitas Pendanaan untuk dikembalikan kepada Pemberi Dana.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Suku Bunga"</b> berarti tingkat suku bunga yang menjadi bagian Pemberi Dana sebagaimana diatur pada Pasal 5 ayat 2 Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Tanggal Jatuh Tempo"</b> memiliki arti sebagaimana diberikan padanya pada Pasal 3 ayat 3 butir 3.1.5. Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Tabel Ringkasan Persetujuan Pemberian Pendanaan" (atau dapat disebut "Tabel Ringkasan")</b> adalah tabel yang merincikan seluruh detail biaya-biaya fasilitas dari setiap transaksi yang dilakukan masing-masing Penerima Dana beserta manfaat ekonomi yang timbul dan diterima oleh Para Pihak. Tabel ini merupakan bagian yang tidak dapat dipisahkan dan menjadi satu kesatuan dari Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <b>"Total Pokok Pendanaan"</b> memiliki arti sebagaimana diberikan padanya pada Pasal 3. ayat 3 butir 3.1.2 Perjanjian ini.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Penafsiran
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Penyebutan bentuk tunggal dalam Perjanjian ini termasuk juga bentuk jamak, demikian pula sebaliknya;
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penyebutan "hari" dalam Perjanjian ini adalah merujuk pada setiap hari yang jatuh dalam kalender masehi, kecuali disebutkan sebagai Hari Kerja sebagaimana didefinisikan pada Pasal 1 ayat 1.1 Perjanjian ini. 
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                Penunjukan kepada:
+                                <ol class="com-sect">
+                                    <li>
+                                        <div>
+                                            Suatu surat/dokumen berarti penunjukan kepada surat/dokumen tersebut berikut dengan semua dan setiap perubahan dan/atau penambahannya dan/atau pembaharuannya; dan
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Suatu Pihak dalam Perjanjian ini termasuk juga para penerima pengalihan serta pengganti hak dan kewajibannya yang sah. 
+                                        </div>
+                                    </li>
+                                </ol>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Semua dan setiap perhitungan berkenaan dengan Perjanjian ini akan dilakukan dengan mempergunakan ketentuan sebagai berikut:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Berkaitan dengan pembayaran Angsuran faktor perhitungan 360 (tiga ratus enam puluh) Hari Kalender dalam setahun. 
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Berkaitan dengan pembayaran selain Angsuran dihitung sesuai dengan perhitungan sistem Pemberi Dana yang telah disepakati oleh Para Pihak.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penyetoran setiap dana oleh Pemberi Dana kepada Penyelenggara LPBBTI dalam rekening pencairan dan/atau Penyelenggara LPBBTI kepada Pemberi Dana dalam Rekening Penampungan berdasarkan Perjanjian ini berarti dana yang harus efektif (<i>good fund</i>).
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Judul
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Semua dan setiap judul pasal atau butir dalam Perjanjian ini dibuat hanya untuk kemudahan saja dan tidak dapat digunakan untuk memberikan penafsiran pada Perjanjian ini.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    Lampiran
+                    <ol class="com-sect">
+                        <li>
+                            Setiap Lampiran (berikut perubahan dan/atau penambahannya) dalam Perjanjian ini merupakan satu kesatuan dan bagian yang tidak terpisahkan dari Perjanjian ini.
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 2
+                <br />
+                RUANG LINGKUP, HAK & KEWAJIBAN PARA PIHAK
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        <b>Ruang Lingkup Kerja Sama</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Para Pihak bekerja sama dalam menyediakan Fasilitas Pendanaan yang disediakan oleh Pemberi Dana kepada Penerima Dana melalui pemanfaatan teknologi informasi yang dimiliki oleh Penyelenggara LPBBTI.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penyelenggara LPBBTI akan menyalurkan Fasilitas Pendanaan kepada Penerima Dana berdasarkan persetujuan pendanaan yang diberikan oleh Pemberi Dana.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>Hak & Kewajiban</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                Hak & Kewajiban Umum Penyelenggara LPBBTI
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Sehubungan dengan pemberian Fasilitas Pendanaan kepada Penerima Dana, Pemberi Dana sepakat untuk menunjuk Penyelenggara LPBBTI untuk melakukan penyaluran Fasilitas Pendanaan dari Pemberi Dana dan menjalankan fungsi sebagai pengelola Fasilitas Pendanaan.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Penyelenggara LPBBTI menyampaikan daftar Penerima Dana yang berdasarkan penilaiannya layak untuk mendapatkan Fasilitas Pendanaan dan telah memenuhi syarat dan ketentuan pemberian Fasilitas Pendanaan yang ditetapkan dan disepakati oleh Pemberi Dana berdasarkan Perjanjian ini.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Penyelenggara LPBBTI bekerja sama dengan Pemberi Dana sebagai Pihak yang membantu Pemberi Dana dalam penyediaan Fasilitas Pendanaan kepada Penerima Dana dengan Total Pokok Pendanaan sesuai dengan analisa yang diberikan oleh Penyelenggara LPBBTI dan persetujuan dari Pemberi Dana serta ketentuan yang telah disepakati dalam Perjanjian ini.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Penyelenggara LPBBTI wajib menyediakan akses informasi kepada Pemberi Dana atas penggunaan dananya.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Penyelenggara LPBBTI wajib mencantumkan keterangan atau informasi mengenai jangka waktu Fasilitas Pendanaan, termin pembayaran, dan biaya keseluruhan termasuk manfaat ekonomi Fasilitas Pendanaan yang dipublikasi untuk Pemberi Dana maupun Penerima Dana secara jelas pada Sistem Elektronik yang digunakan oleh Penyelenggara LPBBTI.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Penyelenggara LPBBTI akan melaksanakan setiap hak Pemberi Dana sehubungan dengan perlindungan atas pemberian Fasilitas Pendanaan, tanpa terkecuali, termasuk melakukan penagihan pembayaran Fasilitas Pendanaan kepada Penerima Dana serta hal-hal lainnya yang terkait Fasilitas Pendanaan termasuk upaya-upaya dalam penyelesaian kewajiban Penerima Dana.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Penyelenggara LPBBTI akan menyalurkan dana Fasilitas Pendanaan kepada Penerima Dana setelah menerima persetujuan secara langsung dari Pemberi Dana atau dengan kata lain persetujuan pendanaan dari Pemberi Dana  tidak diberikan  secara otomatis;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Penyelenggara LPBBTI wajib memastikan bahwa Sistem Elektronik Penyelenggara LPBBTI adalah benar dimiliki, dikuasai, dan dikelola oleh Penyelenggara LPBBTI.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Tindakan-tindakan lainnya yang diperlukan sehubungan dengan pelaksanaan tugas dan tanggung jawab Penyelenggara LPBBTI sesuai kapasitasnya selaku pengelola fasilitas berdasarkan Perjanjian ini, baik dengan ataupun tanpa adanya surat kuasa terpisah dari Pemberi Dana (sebagaimana diperlukan).
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Kewajiban Penyelenggara LPBBTI sebagai pengelola Fasilitas Pendanaan:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Tanpa mengesampingkan kewajiban pengelola fasilitas sebagaimana diatur dalam pasal-pasal lain dalam Perjanjian ini, kewajiban Penyelenggara LPBBTI,  antara lain,  adalah sebagai berikut:
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Memasarkan Fasilitas Pendanaan kepada calon Penerima Dana sesuai ketentuan dan kebijakan Penyelenggara LPBBTI yang berlaku;
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Melakukan evaluasi terhadap calon Penerima Dana yang akan dibiayai sesuai persyaratan yang telah ditetapkan oleh Pemberi Dana;
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Melakukan segala sesuatu yang berkaitan baik langsung maupun tidak langsung dengan Fasilitas Pendanaan, termasuk namun tidak terbatas pada melakukan proses Know Your Customer terhadap Penerima Dana berdasarkan ketentuan dalam Perjanjian ini, tanpa mengesampingkan kewajiban Pemberi Dana untuk melakukan proses Know Your Customer berdasarkan peraturan perundang-undangan yang berlaku;
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Mematuhi ketentuan Perjanjian ini dan peraturan perundang-undangan yang berlaku dalam menyalurkan Fasilitas Pendanaan kepada Penerima Dana sesuai dengan bidang usaha pengelola Fasilitas Pendanaan.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Mengawasi Penerima Dana agar selalu memenuhi dan menaati ketentuan Perjanjian Pemberian Fasilitas Pendanaan dan melaksanakan, memelihara serta menjaga setiap hak Pemberi Dana berdasarkan Perjanjian Pemberian Fasilitas Pendanaan.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Membuat serta memelihara sistem pembukuan/pencatatan yang dapat mengakomodasi setiap perkembangan pendanaan Penerima Dana.Sistem tersebut wajib diterapkan secara terus menerus, konsisten dan mencerminkan posisi Angsuran atau setiap Kewajiban Penerima Dana yang sesungguhnya.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Dalam hal penagihan Angsuran, Penyelenggara LPBBTI wajib mengupayakan agar pembayaran kembali kepada Pemberi Dana pada setiap saat dilakukan oleh Penerima Dana sesuai dengan jadwal Angsuran yang harus diterima dari Penerima Dana baik dengan usahanya sendiri ataupun bekerja sama dengan penagih yang ditunjuknya.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Menyetorkan hasil pembayaran Penerima Dana sebesar kewajibannya setiap bulan ke Rekening Penampungan Penyelenggara LPBBTI.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Melakukan administrasi atas Fasilitas Pendanaan yang diberikan kepada Penerima Dana yang mencakup dokumentasi identitas Penerima Dana untuk keperluan pelaporan Sistem Layanan Informasi Keuangan (SLIK) yang dikelola Otoritas Jasa Keuangan serta menginformasikan pelaporan tersebut ke Penerima Dana (jika diperlukan).
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Menangani proses pencairan, pembayaran, pencatatan, dan administrasi atas Fasilitas Pendanaan yang diperlukan.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Melakukan penagihan/memberikan surat peringatan terhadap Penerima Dana yang mempunyai tunggakan Kewajiban Penerima Dana berdasarkan Perjanjian Pemberian Fasilitas Pendanaan.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Melakukan distribusi atas setiap pembayaran Kewajiban Penerima Dana dan/atau pembayaran lainnya yang diperoleh Penyelenggara LPBBTI sesuai hak Pemberi Dana sebagaimana diatur dalam Perjanjian ini dan Perjanjian Pemberian Fasilitas Pendanaan.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Memberitahukan Pemberi Dana jika terjadi perubahan alamat dan/atau penutupan atau penambahan kantor cabang Penyelenggara LPBBTI.
+                                                        </div> 
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Memastikan keabsahan dan kebenaran data dan informasi Penerima Dana dan juga laporan yang disampaikan kepada Pemberi Dana, termasuk namun tidak terbatas kepada data dan informasi mengenai data pribadi Penerima Dana dan status pembayarannya.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Memastikan dan memelihara keamanan infrastruktur atau sistem milik Penyelenggara LPBBTI yang digunakan untuk pelaksanaan Perjanjian ini sesuai dengan ketentuan yang berlaku termasuk namun tidak terbatas pada ketentuan mengenai penerapan manajemen risiko dalam penggunaan teknologi informasi.
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div> 
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                Hak & Kewajiban Pemberi Dana
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Pemberi Dana melakukan penilaian terhadap Penerima Dana yang disampaikan oleh Penyelenggara LPBBTI dan memberikan keputusan terkait Penerima Dana yang layak mendapatkan Fasilitas Pendanaan yang kemudian disampaikan kepada Penyelenggara LPBBTI. Fasilitas Pendanaan disediakan kepada Penerima Dana berdasarkan analisa yang dilakukan oleh Penyelenggara LPBBTI, yang berdasarkan penilaiannya Penerima Dana layak mendapatkan Fasilitas Pendanaan dan telah memenuhi syarat dan ketentuan pemberian Fasilitas Pendanaan yang ditetapkan dan disepakati oleh Pemberi Dana berdasarkan Perjanjian ini.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Pemberian Fasilitas Pendanaan berdasarkan Perjanjian ini tunduk kepada semua ketentuan/peraturan perundang-undangan yang berlaku baik ketentuan terkait  Pemberi Dana maupun ketentuan LPBBTI serta ketentuan-ketentuan yang akan dinyatakan berlaku oleh Regulator dan/atau otoritas berwenang lainnya yang wajib dipatuhi oleh Para Pihak, khususnya ketentuan/peraturan terkait pemberian Fasilitas Pendanaan antara lain sebagai berikut:
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Pemberi Dana melakukan pengawasan terhadap penilaian kelayakan terhadap Penerima Dana berdasarkan laporan hasil penilaian berupa Quality Assurance (QA) yang disampaikan oleh Penyelenggara LPBBTI kepada Pemberi Dana secara berkala setiap bulan;
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Pemberi Dana memiliki risiko langsung atas penyediaan Fasilitas Pendanaan yang disalurkan kepada Penerima Dana;
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Perjanjian Pemberian Fasilitas Pendanaan dilakukan antara Penerima Dana dengan Penyelenggara LPBBTI sebagai pihak yang diberi kuasa bertindak untuk dan atas nama Pemberi Dana;
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Setiap pembayaran Angsuran atau perolehan yang diterima dari Penerima Dana, sehubungan dengan pelaksanaan Perjanjian ini adalah manfaat ekonomi yang diterima Pemberi Dana dan Penyelenggara LPBBTI.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Jika diberlakukan, keuntungan Pemberi Dana akan dihitung setelah dikurangi Biaya Layanan bagi Penyelenggara LPBBTI dan biaya-biaya lain berdasarkan Perjanjian ini; serta
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Penyelenggara LPBBTI tidak menjamin risiko kredit dan tidak berkewajiban untuk mengambil alih atau melunasi sebagian atau seluruh Kewajiban Penerima Dana dalam hal Penerima Dana tersebut gagal untuk memenuhi kewajibannya kepada Pemberi Dana berdasarkan Perjanjian Pemberian Fasilitas Pendanaan.
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>Prinsip Kerja Sama LPBBTI</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Fasilitas Pendanaan yang telah mendapat keputusan dari Pemberi Dana akan disampaikan kepada Penyelenggara LPBBTI kemudian diteruskan ke Penerima Dana untuk selanjutnya dilakukan penandatanganan Perjanjian Pemberian Fasilitas Pendanaan dan dilakukan pencairan Fasilitas Pendanaan.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Nilai Total Pokok Pendanaan sesuai keputusan kredit Pemberi Dana dan Perjanjian Pemberian Fasilitas Pendanaan, serta dicairkan kepada Penerima Dana melalui Penyelenggara LPBBTI dalam Rekening Penampungan yang tercatat sebagai <i>escrow account</i>, di mana nilai Total Pokok Pendanaan tersebut harus  ditempatkan dalam Rekening Penampungan selambat-lambatnya dalam 2 (dua) Hari Kerja. Sisa nilai Total Pokok Pendanaan atau dana pencairan dari Pemberi Dana yang tidak digunakan untuk transaksi Fasilitas Pendanaan akan dikirimkan kembali ke rekening Pemberi Dana yang ditunjuk sebagaimana Perjanjian lain yang terpisah dari Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Pembayaran Angsuran dan/atau Kewajiban Penerima Dana dilakukan Penerima Dana melalui virtual account yang disediakan oleh Penyelenggara LPBBTI. Penyelenggara LPBBTI, tanpa penundaan harus menyediakan/mentransferkan nominal sejumlah Angsuran dan/atau Kewajiban Penerima Dana yang dibayarkan tersebut ke Rekening Penampungan.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>Platform</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Platform dapat diakses oleh calon Penerima Dana untuk mengajukan Fasilitas
+                                    Pendanaan.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penyelenggara LPBBTI menjamin bahwa Platformnya memiliki standar keamanan yang baik, sistem penyimpanan data yang baik, pencatatan (log) aktivitas yang akurat dan dapat dipertanggungjawabkan, dan hasil pencatatan (log) aktivitas di Platform dapat dibaca dan dipahami.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penyelenggara LPBBTI meletakkan aplikasi permohonan dan Perjanjian Pemberian Fasilitas Pendanaan di Platform dengan penempatan yang jelas, mudah diakses dan terlihat oleh Penerima Dana.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Pemberi Dana dapat memberikan masukan terhadap pengaturan di Platform sehubungan dengan pelaksanaan Perjanjian ini.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>Write-Off (Hapus Buku) dan Hapus Tagih</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Pemberi Dana dapat menghapuskan piutang yang dimiliki dengan cara melakukan hapus buku setelah 90 hari sejak jatuh tempo dan/atau jangka waktu lain yang akan ditentukan bersama dikemudian hari.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Ketentuan pasal 2 ayat 5 butir 5.1 dapat direview kembali dan disesuaikan jika terdapat perubahan tertentu yang diatur oleh peraturan atau kebijakan baru yang dikeluarkan pemerintah terkait Hapus Buku dan Hapus Tagih.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>Pemberian Kuasa Kepada Penyelenggara LPBBTI</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Pemberian kuasa berdasarkan ayat ini adalah mewakili Pemberi Dana sebatas memfasilitasi Pendanaan kepada Penerima Dana sehubungan dengan pelaksanaan tugas dan tanggung jawab Penyelenggara LPBBTI sesuai kapasitasnya selaku pengelola Fasilitas Pendanaan berdasarkan Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Pemberian kuasa berdasarkan ayat ini akan berakhir setelah seluruh Kewajiban Penerima Dana kepada Pemberi Dana berdasarkan Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penunjukan kuasa kepada Penyelenggara LPBBTI untuk memberikan informasi batas kredit kepada Penerima Dana berdasarkan kriteria fasilitias pendanaan yang diberikan oleh Pemberi Dana sebagaimana yang tercantum dalam Pasal 3.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penunjukan Kuasa kepada Penyelenggara LPBBTI untuk melaksanakan setiap hak Pemberi Dana sehubungan dengan perlindungan atas pemberian Fasilitas Pendanaan, tanpa terkecuali, melakukan penagihan pembayaran Fasilitas Pendanaan kepada Penerima Dana serta hal-hal lainnya yang terkait Fasilitas Pendanaan termasuk namun tidak terbatas memfasilitasi analisa kelayakan kredit yang nantinya analisa tersebut akan menghasilkan scoring, upaya-upaya dalam penyelesaian kewajiban Penerima Dana seperti menunjukan Pihak Ketiga untuk melakukan penagihan (jika diperlukan).
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 3
+                <br />
+                KRITERIA UMUM FASILITAS PENDANAAN
+            </h1>
+        </div>
+        <div>
+            Fasilitas Pendanaan kepada Penerima Dana berdasarkan Perjanjian ini dilakukan dengan memperhatikan kriteria sebagai berikut:
+        </div>
+        <div>
+            <ol class="com-sect space-sect">
+                <li>
+                    <div>
+                    <b>Penerima Dana</b>
+                    <ol class="com-sect">
+                        <li>
+                            <div>
+                                Penerima Dana yang berhak menerima Fasilitas Pendanaan adalah Penerima Dana yang memenuhi kriteria sebagaimana diatur Lampiran 1 Perjanjian ini:
+                                <ol class="com-sect">
+                                    <li>
+                                        <div>
+                                            Pelaksanaan pemberian Fasilitas Pendanaan oleh Pemberi Dana melalui
+                                            Penyelenggara LPBBTI kepada Penerima Dana dilakukan dengan tata cara sebagai
+                                            berikut:
+                                            <ol class="com-sect com3-sect">
+                                                <li>
+                                                    <div>
+                                                        <ol class="com-sect com3-sect">
+                                                            <li>
+                                                                <div>
+                                                                    Penerima Dana yang boleh mengajukan Fasilitas Pendanaan adalah Penerima Dana yang telah memenuhi kriteria yang ditentukan dalam Lampiran 1 Perjanjian ini, yang telah mendapatkan penilaian kredit (<i>credit scoring</i>) sesuai dengan standar yang berlaku yang ditentukan berdasarkan Perjanjian ini dan dengan memperhatikan peraturan perundang-undangan.
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div>
+                                                                    Penerima Dana yang menyampaikan dokumen identitas. Bukti identitas Penerima Dana berupa: Kartu Tanda Penduduk (KTP); dan/atau dokumen lainnya yang merupakan identitas dari Penerima Dana.
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div>
+                                                                    Penerima Dana yang menyampaikan bukti mengenai tempat tinggal; dan
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div>
+                                                                    Penerima Dana yang menyampaikan bukti penghasilan berupa: Nomor Pokok Wajib Pajak, atau slip gaji, atau surat keterangan gaji, atau rekening koran/giro/tabungan, atau bukti penghasilan lain dengan jumlah minimal penghasilan akan ditetapkan oleh Penyelenggara LPBBTI.
+                                                                </div>
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Penyelenggara LPBBTI akan melakukan verifikasi terhadap kebenaran informasi dan data-data yang diberikan oleh calon Penerima Dana tersebut di atas,
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Penyelenggara LPBBTI wajib mengirimkan informasi dan data Penerima Dana kepada Pemberi Dana, tidak melebihi 1 (satu) Hari Kerja sejak tanggal persetujuan permohonan Penerima Dana, diantaranya:
+                                            <ol class="com-sect com3-sect">
+                                                <li>
+                                                    <div>
+                                                        Informasi Penerima Dana, diantaranya dapat berupa: nama, nomor KTP, alamat tempat tinggal, tempat dan tanggal lahir, jumlah penghasilan per bulan, alamat surel, nomor telepon, nilai penilaian kredit (<i>credit scoring</i>), Total Pokok Pendanaan, dan jangka waktu;
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div>
+                                                        <i>Database</i> atas data sebagaimana dimaksud ayat 1 butir 1.1.3. poin 1.1.3.1. di atas akan secara bersama dimiliki oleh Pemberi Dana dan Penyelenggara LPBBTI, sehingga Para Pihak berwenang sepenuhnya untuk menggunakan <i>database</i> tersebut untuk keperluan usaha masing-masing sesuai dengan ketentuan peraturan perundang-undangan yang berlaku; dan
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div>
+                                                        Nomor Perjanjian Pemberian Fasilitas Pendanaan, yang telah ditandatangani secara elektronik akan diberikan kepada Pemberi Dana saat dimintakan oleh Pemberi Dana.
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Pemberi Dana, melakukan verifikasi data berdasarkan ketentuan
+                                            peraturan perundang-undangan yang berlaku
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Penyelenggara LPBBTI akan mengirimkan pemberitahuan kembali kepada
+                                            Penerima Dana sebagai konfirmasi atas Perjanjian Pemberian Fasilitas Pendanaan yang
+                                            telah diberikan Pemberi Dana tersebut.
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Perjanjian Pemberian Fasilitas Pendanaan akan dikirimkan kepada
+                                            Penerima Dana melalui media elektronik.
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Pemberi Dana dapat melakukan perubahan atau penambahan dengan
+                                            menentukan kriteria lain yang lebih spesifik untuk calon Penerima Dana yang
+                                            ditentukan dalam perjanjian lain.
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div>
+                                            Rincian data atau kriteria resiko lainnya (<i>Risk Acceptance Criteria</i>) yang bersifat spesifik diluar kriteria umum sebagaimana yang dijelaskan pada Pasal ini, akan ditentukan oleh Pemberi Dana dengan memberitahukan kepada Penyelenggara yang penentuannya dapat berubah sewaktu-waktu sesuai kriteria tertentu yang akan ditentukan oleh Pemberi Dana terdapat dalam <b>Lampiran 2 Kriteria Khusus Fasilitas Pendanaan</b> atau melalui sistem elektronik Penyelenggara LPBBTI yang diinformasikan terlebih dahulu kepada LPBBTI ataupun dengan cara lain yang disepakati Para Pihak, yang manapun keberlakuannya merupakan satu kesatuan dari pelaksanaan Pasal ini.
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </li>
+                    </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>TATA CARA PENCAIRAN FASILITAS</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Setiap kali terjadi permintaan Fasilitas Pendanaan oleh Penerima Dana, Penyelenggara LPBBTI akan meneruskan permintaan tersebut kepada Pemberi Dana dengan disertai informasi sebagaimana yang telah disepakati oleh para pihak.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penerima Dana yang akan direkomendasikan oleh Penyelenggara LPBBTI kepada Pemberi Dana adalah Penerima Dana yang memenuhi ketentuan sebagaimana Lampiran 1 Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Pencairan Fasilitas Pendanaan dapat dilakukan secara harian maupun gabungan transaksi beberapa hari sesuai dengan permohonan Penyelenggara LPBBTI yang disampaikan kepada Pemberi Dana, dan Pemberi Dana akan mengirimkan pemberitahuan kepada Penyelenggara LPBBTI mengenai telah diterimanya permohonan tersebut.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Apabila dari hasil pemeriksaan Pemberi Dana terdapat hal-hal yang tidak memenuhi syarat-syarat yang telah ditentukan di dalam Perjanjian ini, Pemberi Dana berhak menolak baik sebagian maupun seluruh permohonan pencairan Fasilitas Pendanaan yang diajukan oleh Penerima Dana melalui Penyelenggara LPBBTI dan selanjutnya, terhadap penolakan ini, Pemberi Dana akan menyampaikan pemberitahuan kepada Penyelenggara LPBBTI selambat-lambatnya 1 (satu) Hari Kerja setelah diterimanya permohonan dari Penyelenggara LPBBTI beserta alasannya.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Apabila, setelah dilakukan pemeriksaan oleh Pemberi Dana terhadap struktur fasilitas sebagaimana diatur pada ayat 3 pasal ini, seluruh informasi dan data Penerima Dana telah memenuhi syarat-syarat yang ditentukan di dalam Perjanjian ini, maka Pemberi Dana akan mencairkan Fasilitas kepada Penerima Dana melalui Penyelenggara LPBBTI, guna diteruskan kepada Penerima Dana.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Apabila tidak ada penolakan dari Pemberi Dana sebagaimana dimaksud pada ayat 2 butir 2.4 Pasal ini, maka tanggal pencairan atas Fasilitas Pendanaan oleh Pemberi Dana, yang dilakukan dengan cara transfer ke Rekening Penampungan, adalah pada hari yang sama dengan permintaan pencairan apabila permintaan diajukan kepada Pemberi Dana sebelum pukul 14.00 WIB, atau pada Hari Kerja berikutnya apabila permintaan pencairan diajukan setelah pukul 14.00 WIB, atau disepakati oleh Para Pihak pada perjanjian lain.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Dalam hal berakhirnya Perjanjian ini sebagaimana dinyatakan dalam Pasal 4 Perjanjian ini, Penyelenggara LPBBTI tidak dapat lagi melakukan permintaan pencairan Fasilitas Pendanaan lebih lanjut kepada Pemberi Dana.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>STRUKTUR FASILITAS</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Para Pihak sepakat dan setuju untuk menetapkan Total Pokok Pendanaan dan struktur Fasilitas Pendanaan untuk Penerima Dana sebagaimana tercantum dalam Perjanjian Pemberian Fasilitas Pendanaan sebagai berikut:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                <b>Jenis Fasilitas</b>
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Fasilitas Pendanaan dalam bentuk dana tunai yang bersifat revolving/Pendanaan dengan
+                                                            Batas Kredit Pendanaan.
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Pemberi Dana telah memberikan kuasa kepada Penyelenggara LPBBTI untuk menentukan analisa kelayakan kredit yang nantinya analisa tersebut akan menghasilkan scoring dan Batas Kredit yang diterima Penerima Dana sebagaimana Pasal 3 ayat 3 butir 3.1.2.
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Total Pokok Pendanaan</b>
+                                                <br/>
+                                                Total Pokok Pendanaan yaitu besaran jumlah awal/pokok yang diberikan kepada Penerima Dana sebagaimana yang ditentukan dalam Tabel Ringkasan sesuai analisa kredit yang dilakukan oleh Penyelenggara LPBBTI. Untuk besaran maksimal Pokok Pendanaan untuk masing-masing Penerima Dana dalam Batas Kredit yang ditentukan sebesar  Rp. 2.000.000.000,- (dua miliar Rupiah).
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Manfaat Ekonomi Pendanaan</b>
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Bunga Pendanaan
+                                                            <br/>
+                                                            Bunga Pendanaan yang wajib dibayarkan oleh Penerima Dana atas pencairan Fasilitas Pendanaan yang diperolehnya, disepakati berupa besaran biaya balas jasa (pendapatan) yang dibebankan kepada Penerima Dana. Bunga Pendanaan akan menjadi hak sepenuhnya Pemberi Dana yang besaran akan ditentukan dari masing-masing tiap transaksi sebagaimana Tabel Ringkasan. . Besaran Bunga ini dapat berubah dari waktu ke waktu sesuai kesepakatan Para Pihak yang akan diberitahukan terlebih dahulu oleh Penyelenggara LPBBTI secara tertulis kepada Pemberi Dana dan penyesuaian tidak memerlukan addendum atas Perjanjian ini, melainkan cukup disesuaikan pada Tabel Ringkasan.
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Jangka Waktu Fasilitas</b>
+                                                <br />
+                                                Penerima Dana wajib melakukan pembayaran Angsuran atas Fasilitas Pendanaan yang telah dicairkan oleh Pemberi Dana melalui Penyelenggara LPBBTI dalam jangka waktu maksimal 9 (sembilan) bulan sejak tanggal pencairan Fasilitas Pendanaan oleh Pemberi Dana, yang harus dibayarkan oleh Penerima Dana pada setiap Tanggal Jatuh Tempo yang ditetapkan.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Tanggal Jatuh Tempo</b>
+                                                <br />
+                                                Tanggal yang ditetapkan kepada Penerima Dana untuk melakukan pembayaran Angsuran pada setiap bulan selama Jangka Waktu Fasilitas.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Nilai Angsuran</b>
+                                                <br />
+                                                Jumlah pembayaran kembali oleh Penerima Dana atas Fasilitas Pendanaan yang diperolehnya, yaitu sebesar Total Pokok Pendanaan beserta Bunga Pendanaan serta biaya-biaya lain sebagaimana diatur di dalam Perjanjian Pemberian Fasilitas Pendanaan (sebagaimana berlaku), yang wajib dibayar tepat waktu oleh Penerima Dana pada Tanggal Jatuh Tempo yang ditetapkan.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Denda Keterlambatan</b>
+                                                <br />
+                                                Sanksi yang diberikan Pemberi Dana kepada Penerima Dana apabila Penerima Dana melakukan pembayaran kembali melebihi Tanggal Jatuh Tempo yang ditetapkan, disepakati setiap bulan keterlambatan dari Angsuran tertunggak. Pemberi Dana sepakat bahwa Penyelenggara LPBBTI berhak menerima dan/atau melakukan perubahan terhadap besar Denda Keterlambatan sesuai kebijakan Penyelenggara LPBBTI dengan pemberitahuan tertulis terlebih dahulu kepada Pemberi Dana. Besaran Denda Keterlambatan akan dicantumkan pada Tabel Ringkasan. Besaran biaya Denda Keterlambatan ini dapat berubah dari waktu ke waktu sesuai kesepakatan Para Pihak yang akan diberitahukan terlebih dahulu oleh Penyelenggara LPBBTI secara tertulis kepada Pemberi Dana dan penyesuaian tidak memerlukan addendum atas Perjanjian ini, melainkan cukup disesuaikan pada Tabel Ringkasan.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Tujuan Penggunaan Fasilitas Pendanaan</b>
+                                                <br />
+                                                Pemberi Dana sepakat bahwa penyaluran Fasilitas Pendanaan yang dilakukannya melalui Penyelenggara LPBTTI digunakan untuk kebutuhan sehari hari.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <b>Alamat Korespondensi</b>
+                                                <br />
+                                                Alamat tempat tinggal Penerima Dana yang dapat dipergunakan oleh Para Pihak untuk melakukan pengiriman surat tercatat ataupun kunjungan dalam hal terjadi tunggakan oleh Penerima Dana.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>TATA CARA PEMBAYARAN KEMBALI FASILITAS</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Penerima Dana wajib melakukan pembayaran Angsuran dan/atau Kewajiban Penerima Dana sesuai Perjanjian Pemberian Fasilitas Pendanaan yang diberikan Pemberi Dana tersebut sebesar nilai Angsuran dan/atau Denda Keterlambatan pada Tanggal Jatuh Tempo yang ditetapkan sebagaimana tersebut dalam Pasal 3 ayat 3.1 butir 3.1.5 dari Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Seluruh pembayaran Penerima Dana (baik seluruhnya ataupun sebagian) wajib dilakukan melalui Penyelenggara LPBBTI, untuk kemudian diteruskan kepada Pemberi Dana guna membayar terlebih dahulu Total Pokok Pendanaan beserta Suku Bunga.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penerusan oleh Penyelenggara LPBBTI atas  pembayaran kembali Penerima Dana kepada Pemberi Dana harus dilakukan selambat-lambatnya 1 (satu) Hari Kerja setelah diterimanya pembayaran Angsuran oleh Penerima Dana di Rekening Penampungan sebagaimana dimaksud pada Pasal 3 ayat 4 butir 4.2. dari Perjanjian ini dengan cara transfer ke rekening Pemberi Dana.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penyelenggara LPBBTI akan memastikan ketersediaan semua pembayaran kembali atas penggunaan Fasilitas Pendanaan oleh Penerima Dana yang telah diterima dari Penerima Dana sehingga pada saat Tanggal Jatuh Tempo pembayaran oleh Penyelenggara LPBBTI kepada Pemberi Dana berdasarkan Perjanjian ini, telah tersedia dana untuk pembayaran Angsuran di rekening Penyelenggara LPBBTI;
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>MEKANISME PENAGIHAN PENDANAAN</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Mekanisme penagihan yang dilakukan oleh Penyelenggara LPBBTI dapat dilakukan melalui beberapa cara sebagai berikut:
+                                    <ol class="com-sect-normal" type="a">
+                                        <li>
+                                            <div>
+                                                <i>Desk Collection</i>, yaitu penagihan melalui sarana komunikasi elektronik, seperti telepon, SMS, surat elektronik, dan/atau media komunikasi elektronik lainnya ke nomor telepon atau email yang terdaftar pada Aplikasi JULO;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <i>Field Collection</i>, yaitu penagihan melalui kunjungan lapangan ke alamat Penerima Dana yang terdaftar pada Aplikasi JULO;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Tata cara lain sesuai dengan peraturan perundang-undangan.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Prosedur penagihan dilakukan dalam beberapa pengelompokkan (bucket), yang terdiri dari:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Bucket Reminder:
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Mengerjakan T-5 sampai dengan tanggal jatuh tempo (T0)
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Diawali mengerjakan data T-5 sampai dengan T-1, dilanjutkan jam 11:30 dengan
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Bucket 1: Bucket ini dikerjakan oleh staf penagihan internal.
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Internal Desk Collector
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 1 - 10: menghubungi HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customer tidak merespon telepon pribadinya.
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan List PTP (Janji Bayar): menghubungi HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customer tidak merespon telepon pribadinya.
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Internal Field Collector
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 6-10 sesuai dengan data account yang diserahkan dan melakukan penagihan melalui kunjungan ke alamat Customer
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Bucket 2: Bucket ini dikerjakan oleh staf penagihan internal.
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Internal Desk Collector
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 11-40: telepon HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customer tidak merespon telepon pribadinya
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan PTP list (janji bayar): telepon HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customer tidak merespon telepon pribadinya
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Internal Field Collector
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 16-40 sesuai dengan data account yang diserahkan dan melakukan penagihan melalui kunjungan ke alamat Customer
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Bucket 3 : Bucket ini dikerjakan oleh staf penagihan internal dan staf penagihan external (Desk Collector, Field Collector & Vendor Agency External)
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Internal Desk Collector
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 41-70: telepon HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customer tidak merespon telepon pribadinya
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan PTP list (janji bayar): telepon HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customertidak merespon telepon pribadinya
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Internal Field Collector
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 46-70 sesuai dengan data account yang diserahkan dan melakukan penagihan melalui kunjungan ke alamat Customer
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            Vendor agency External
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 41-70 sesuai dengan data account yang diserahkan
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Bucket 4: Bucket ini dikerjakan oleh team Vendor Agency External
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            Vendor Agency External
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 71-90 sesuai dengan data account yang diserahkan
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div>
+                                                Bucket 5 : Bucket ini dikerjakan oleh staf penagihan internal dan staf penagihan external (Desk Collector, Field Collector & Vendor Agency External)
+                                                <ol class="com-sect com3-sect">
+                                                    <li>
+                                                        <div>
+                                                            <i>Internal Desk Collector</i>
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD mulai dari 91-360 : telepon HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customer tidak merespon telepon pribadinya
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan List PTP (janji bayar): telepon HP 1 dan 2, HP kerabat, HP suami/istri, telepon kantor apabila Customer tidak merespon telepon pribadinya
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            <i>Internal Field Collector</i>
+                                                            <ol class="com-sect com3-sect">
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 98-360 sesuai dengan data account yang diserahkan dan melakukan penagihan melalui kunjungan ke alamat Customer Vendor Agency External
+                                                                    </div>
+                                                                </li>
+                                                                <li>
+                                                                    <div>
+                                                                        Mengerjakan DPD 98-720 sesuai dengan data account yang diserahkan
+                                                                    </div>
+                                                                </li>
+                                                            </ol>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>MITIGASI RISIKO ATAS PENDANAAN MACET</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Apabila Penerima Dana melalaikan kewajibannya di dalam melakukan pembayaran Angsuran dalam jumlah dan Tanggal Jatuh Tempo, maka Penyelenggara LPBBTI (baik secara langsung maupun tidak langsung) akan melakukan penagihan kepada Penerima Dana baik itu secara lisan ataupun tertulis sesuai kebijakan penagihan yang berlaku pada Penyelenggara LPBBTI.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Upaya penagihan yang dilakukan Penyelenggara LPBBTI atau pihak penagihan yang ditunjuk oleh Penyelenggara LPBBTI, wajib dilaksanakan jika tidak terdapat pembayaran dari Penerima Dana terhitung setelah Tanggal Jatuh Tempo Fasilitas Pendanaan Penerima Dana tersebut.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Untuk setiap kali keterlambatan pembayaran Angsuran sebagaimana di atas, maka Penerima Dana wajib membayar Denda Keterlambatan dalam jumlah tersebut, yang akan terus dibebankan kepada Penerima Dana terhitung sejak Tanggal Jatuh Tempo sampai dengan tanggal pelunasannya, Denda Keterlambatan mana sepenuhnya menjadi hak Penyelenggara LPBBTI berdasarkan Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Apabila disepakati oleh Pemberi Dana, Penyelenggara LPBBTI dapat memfasilitasi penyelesaian pendanaan macet melalui klaim asuransi dengan pihak ketiga penyedia asuransi yang bekerjasama dengan Penyelenggara LPBBTI yang mana untuk klaim asuransi tergantung dari besaran premi dan ketentuan pertanggungan yang akan diatur di dalam dokumen asuransi atau polis terpisah dari Perjanjian.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Apabila disepakati oleh Pemberi Dana, Penyelenggara LPBBTI dapat memfasilitasi penyelesaian pendanaan macet melalui eksekusi atas objek jaminan yang ditampung dan disimpan oleh pihak lain yang bekerjasama dengan Penyelenggara LPBBTI dan memiliki kewenangan berdasarkan peraturan perundang-undangan.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+
+
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 4
+                <br />
+                JANGKA WAKTU KERJA SAMA
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Perjanjian ini berlaku efektif sejak ditandatangani dan akan berlaku terus menerus sampai dengan adanya pengakhiran  ("<b>Jangka Waktu Kerja Sama</b>") dan diperpanjang secara otomatis untuk periode yang sama kecuali apabila diakhiri oleh salah satu Pihak dengan pemberitahuan tertulis 30 (tiga puluh) Hari Kerja sebelum berakhirnya Jangka Waktu Kerja Sama.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Tanpa mengesampingkan ketentuan ayat 1 di atas, Para Pihak dapat mengakhiri Perjanjian ini sebelum Jangka Waktu Kerja Sama berdasarkan persetujuan tertulis dari masing-masing Pihak.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Atas berakhirnya Perjanjian ini oleh sebab tidak dilakukan perpanjangan sebagaimana dimaksud dalam ayat 1 di atas, atau oleh karena pengakhiran sebagaimana dimaksud dalam ayat 2 di atas, maka Para Pihak wajib untuk tetap memenuhi dan menyelesaikan semua kewajiban-kewajiban berdasarkan: (i) Perjanjian ini, (ii) Perjanjian Pemberian Fasilitas Pendanaan, dan/atau (iii) perjanjian atau dokumen lain sehubungan dengan Perjanjian ini dan/atau Perjanjian Pemberian Fasilitas Pendanaan, sampai dengan seluruh kewajiban Para Pihak tersebut telah terpenuhi.
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 5
+                <br />
+                BIAYA LAYANAN, SUKU BUNGA DAN BIAYA-BIAYA LAIN
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        <b>Biaya Layanan</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Penyelenggara LPBBTI berhak menentukan sendiri Imbalan Jasa  yang akan diterima oleh Penyelenggara LPBBTI atas penyaluran Fasilitas Pendanaan ke Penerima Dana. Biaya Layanan ini akan dibebankan langsung kepada Pemberi Dana, yang besarannya diterima dan dihitung dari setiap transaksi pembayaran kembali sebagaimana tertuang pada Tabel Ringkasan.
+                                </div>
+                            </li>
+                        </ol>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Penentuan besaran atau tarif Biaya Layanan yaitu sebesar 5 (lima) persen dari angsuran pembayaran kembali. Besaran Biaya Layanan ini dapat berubah dari waktu ke waktu sesuai kesepakatan Para Pihak yang akan diberitahukan terlebih dahulu oleh Penyelenggara LPBBTI secara tertulis kepada Pemberi Dana dan penyesuaian tidak memerlukan addendum atas Perjanjian ini, melainkan cukup disesuaikan pada Tabel Ringkasan.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <b>Suku Bunga (Jika Ada)</b>
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Pemberi Dana dapat menetapkan Suku Bunga dan/atau biaya lain-lain atas pemberian Fasilitas Pendanaan kepada Penerima Dana melalui Penyelenggara LPBBTI yang akan menjadi bagian Pemberi Dana, yaitu dengan detail besaran dan ketentuannya sebagaimana yang diatur dalam perjanjian terpisah dari Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Pihak Pemberi Dana dan Penyelenggara LPBBTI akan melakukan review dan evaluasi dari waktu ke waktu setiap bulan atas nilai Suku Bunga yang berlaku, yang setiap perubahannya disepakati bersama dan dicantumkan dalam dokumen atau berita acara perubahan atau Suku Bunga yang ditandatangani oleh Para Pihak.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Para Pihak dapat menentukan dan mengubah Suku Bunga, Denda Keterlambatan, dan biaya-biaya lain (jika ada) yang disepakati pada perjanjian lain selain Perjanjian ini.
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 6
+                <br />
+                PAJAK DAN BEA MATERAI
+            </h1>
+        </div>
+        <div>
+            Para Pihak setuju bahwa segala kewajiban perpajakan dan/atau bea materai (Jika Ada) yang diberlakukan oleh pemerintah saat ini atau yang akan datang dalam bentuk apapun yang dikenakan, dipungut oleh atau atas nama otoritas pemerintahan, yang timbul berdasarkan Perjanjian ini akan menjadi beban masing-masing Pihak atau salah satu Pihak sesuai dengan ketentuan perpajakan yang berlaku di negara Republik Indonesia berikut dengan segala amandemen dan/atau kesepakatan Para Pihak.
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 7
+                <br />
+                PERNYATAAN DAN JAMINAN
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Para Pihak dengan ini menjamin hal-hal sebagai berikut:
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Para Pihak dalam hal ini diwakili oleh pihak yang berwenang untuk melakukan tindakan-tindakan hukum untuk dan atas nama masing-masing perseroan sehingga Perjanjian ini sah secara hukum dan masing-masing Pihak baik Penyelenggara LPBBTI maupun Pemberi Dana dapat melaksanakan hak dan kewajibannya.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Bahwa masing-masing Pihak wajib memberitahukan apabila terjadi perubahan atau penggantian susunan pengurus di dalam badan hukum masing-masing, yang dapat mengakibatkan berubahnya pihak-pihak yang berwenang untuk melakukan tindakan hukum untuk dan atas nama masing-masing perseroan.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Bahwa Para Pihak telah mempunyai izin-izin yang diperlukan dalam melaksanakan kegiatan usahanya termasuk melaksanakan kerja sama LPBBTI ini sebagaimana mestinya dari Regulator.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Bahwa penandatanganan Perjanjian ini tidak bertentangan dengan pasal-pasal yang tercantum dalam anggaran dasar yang berlaku bagi masing-masing Pihak dan perubahan-perubahannya ataupun perjanjian-perjanjian lainnya yang telah dan/atau akan dibuat atau ditandatangani oleh Para Pihak dengan pihak lain mana pun juga.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Bahwa Para Pihak, sejauh pengetahuannya, tidak sedang berada dalam keadaan lalai untuk melaksanakan kewajiban apa pun baik kepada pihak mana pun juga, kewajiban mana dapat memengaruhi pelaksanaan Perjanjian ini.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Penyelenggara LPBBTI dengan ini menyatakan, menjamin, dan mengikatkan diri bahwa:
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Pada tanggal Perjanjian ini, struktur modal Penyelenggara LPBBTI dan susunan para pengurus Penyelenggara LPBBTI adalah sebagaimana yang tercantum dalam dokumen yang telah disampaikan kepada Pemberi Dana dan hingga saat tanggal ditandatanganinya Perjanjian ini tidak terdapat suatu perubahan atasnya. Penyelenggara LPBBTI akan memberitahukan kepada Pemberi Dana apabila terjadi perubahan susunan pengurus dan/atau kepemilikan saham, serta perubahan jenis bidang usaha.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Segala data yang diberikan kepada Pemberi Dana adalah data sebenarnya sesuai asli, dan  Penyelenggara LPBBTI tidak akan melakukan pendanaan ulang ke pihak lain atas Penerima Dana yang telah dibiayai oleh Pemberi Dana, termasuk didalamnya double pledge/financing. Penyelenggara LPBBTI juga berjanji bahwa setiap pernyataan dan jaminan di atas adalah benar dan dipenuhi sepanjang Jangka Waktu Kerja Sama.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Penyelenggara LPBBTI akan memberitahukan secara tertulis selambat-lambatnya 60 (enam puluh) Hari Kalender sebelumnya kepada Pemberi Dana dalam hal-hal sebagai berikut:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Melakukan penarikan modal disetor Penyelenggara LPBBTI;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Melakukan perubahan bidang usaha atau jenis kegiatan usahanya, kecuali penyesuaian KBLI atas bidang usaha yang sama berdasarkan KBLI yang terkini;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Mengalihkan atau menyebabkan beralihnya usaha kepada pihak mana pun;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Melakukan pembayaran baik pokok, bunga, maupun pembayaran lain atas utang pemegang saham;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Melakukan merger (penggabungan), konsolidasi (peleburan), dan/atau akuisisi (pengambilalihan);
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Membayar atau membayar kembali tagihan-tagihan atau piutang-piutang berupa apa pun juga yang sekarang dan/atau di kemudian hari akan diberikan oleh para pemegang saham mitra baik berupa jumlah pokok, bunga, dan biaya lainnya;
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Setiap perubahan anggaran dasar, susunan pengurus dan pengawas, dan susunan pemegang saham.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal-sect">
+            <div class="pasal_heading">
+                <h1>
+                    Pasal 8
+                    <br />
+                    PENGAKHIRAN PERJANJIAN
+                </h1>
+            </div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Perjanjian ini berakhir karena sebab-sebab berikut:
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Jangka Waktu Kerja Sama sebagaimana dalam Perjanjian ini berakhir dan tidak diperpanjang oleh Para Pihak.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Berdasarkan kesepakatan Para Pihak.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Diakhiri oleh salah satu Pihak apabila salah satu Pihak melanggar ketentuan mana pun dari Perjanjian ini, dan Pihak yang melanggar tidak dapat memperbaiki pelanggaran tersebut dalam waktu 30 (tiga puluh) Hari Kalender sejak menerima pemberitahuan tertulis tentang pelanggaran dari Pihak yang tidak melanggar.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Apabila ada ketentuan peraturan perundang-undangan dan/atau kebijakan lain yang dikeluarkan oleh instansi yang berwenang yang melarang keberlangsungan Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Otoritas Jasa Keuangan atau instansi yang berwenang memerintahkan penghentian Perjanjian ini.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Dalam hal salah satu Pihak ingin mengakhiri Perjanjian ini sebelum jangka waktu berakhirnya Perjanjian sebagaimana dimaksud pada ayat (1) Pasal ini, maka Pihak yang akan mengakhiri wajib memberitahukan secara tertulis kepada Pihak lainnya paling lambat 30 (tiga puluh) Hari Kalender sebelum tanggal pengakhiran Perjanjian ini dikehendaki.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Apabila sampai dengan tanggal pengakhiran Perjanjianyang dikehendaki sebagaimana dimaksud pada ayat (2) Pasal ini, Pihak yang menerima pemberitahuan tidak memberikan jawaban dalam jangka waktu paling lama 30 (tiga puluh) Hari Kalender sejak diterimanya pemberitahuan, maka Pihak yang menerima pemberitahuan tersebut dianggap setuju dengan pengakhiran tersebut.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Berakhirnya Perjanjian akibat pengakhiran sebagaimana dimaksud pada ayat (2) Pasal ini tidak membebaskan Para Pihak dari kewajiban yang belum diselesaikan sehubungan dengan pelaksanaan Perjanjian ini.
+                </li>
+                <li>
+                    <div>
+                        Para Pihak sepakat bahwa setelah berakhirnya Perjanjian ini, maka berlaku ketentuan sebagai berikut:
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Berakhirnya Perjanjian ini tidak menghilangkan hak dan kewajiban dari masing-masing Pihak yang telah timbul sampai dengan tanggal Perjanjian ini berakhir termasuk diantaranya:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Para Pihak wajib untuk melakukan proses pemisahan infrastruktur integrasi teknologi antara Penyelenggara LPBBTI dan Pemberi Dana dengan waktu penyelesaian paling lama 3 (tiga) bulan setelah berakhirnya Perjanjian ini.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Masing-masing Pihak tidak boleh menggunakan nama dagang, merek dagang, merek layanan atau logo dari setiap jenis yang mirip dengan merek dagang milik Pihak lainnya. Para Pihak wajib tanpa penundaan dan dengan biayanya sendiri, memulai dan menyelesaikan semua langkah hukum dan administratif yang diperlukan untuk menghapus nama dagang, merek dagang, merek layanan atau logo Pihak lainnya dari seluruh dan segala materi di mana nama dagang, merek dagang, merek layanan atau logo Pihak lainya yang digunakan.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Seluruh data Penerima Dana yang berada di sistem masing-masing Pihak menjadi milik masing-masing Pihak dan penggunaannya menjadi tanggung jawab dari masing-masing Pihak.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Hak dan kewajiban Para Pihak yang belum dipenuhi pada saat pengakhiran Perjanjian ini sebagaimana dimaksud pada ayat (5) Pasal ini masih tetap berlangsung dan tunduk pada ketentuan-ketentuan yang telah disepakati dalam Perjanjian ini <b>sampai</b> dengan diselesaikan oleh Para Pihak.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Dalam hal terjadi pengakhiran Perjanjian, Para Pihak sepakat untuk mengesampingkan Pasal 1266 dan 1267 Kitab Undang-Undang Hukum Perdata, sepanjang dipersyaratkan adanya perintah atau putusan pengadilan untuk pengakhiran dan/atau pembatalan suatu perjanjian.
+                    </div>
+                </li>
+            </ol>
+        </div>
+    <div class="pasal-sect">
+        <div class="pasal_heading">
+            <h1>
+                Pasal 9
+                <br />
+                PEMERIKSAAN
+            </h1>
+        </div>
+        <div>
+        <ol class="com-sect">
+            <li>
+                <div>
+                    Pemberi Dana dan atau pihak lain yang ditunjuk Pemberi Dana dan yang disetujui oleh Penyelenggara LPBBTI, dari waktu ke waktu dapat melakukan pemeriksaan secara langsung kepada kegiatan pelaksanaan penyaluran Fasilitas Pendanaan dan pelaksanaan CDD yang dilakukan oleh Penyelenggara LPBBTI serta memberikan akses untuk melakukan pemeriksaan pada sistem yang digunakan oleh Penyelenggara LPBBTI dan/atau semua dokumen, pembukuan, catatan, dan bukti-bukti, termasuk mendapatkan hasil fotokopi dan atau soft copy-nya terbatas untuk semua transaksi sehubungan dengan kerja sama ini.
+                </div>
+            </li>
+            <li>
+                <div>
+                    Atas pemeriksaan yang dilakukan sebagaimana ayat 1 pasal ini, Pemberi Dana akan menginformasikan kepada Penyelenggara LPBBTI selambat-lambatnya 7 (tujuh) Hari Kerja sebelumnya dengan pemberitahuan tertulis.
+                </div>
+            </li>
+            <li>
+                <div>
+                    Penyelenggara LPBBTI wajib memberikan bantuan dan mendampingi Pemberi Dana apabila perlu untuk keperluan audit internal maupun eksternal Pemberi Dana.
+                </div>
+            </li>
+        </ol>
+    </div>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 10
+                <br />
+                PENGALIHAN HAK PEMBERI DANA
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Apabila diminta oleh Pemberi Dana, Penyelenggara LPBBTI wajib melakukan pemindahan, pengalihan dan penyerahan sebagaimana dimaksud dalam ayat 2 Pasal ini. Untuk keperluan tersebut, Pemberi Dana dengan ini memberikan kuasa kepada  Penyelenggara LPBBTI untuk melakukan tindakan-tindakan yang diperlukan sehubungan dengan pelaksanaan pengalihan hak Pemberi Dana dalam Pasal ini.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Pemberi Dana dapat mengalihkan sebagian atau seluruh hak atas kewajiban-kewajibannya, dengan ketentuan wajib dengan pemberitahuan tertulis terlebih dahulu kepada Penyelenggara LPBBTI selambat-lambatnya 7 (tujuh) Hari Kerja sebelum pengalihan tersebut dilakukan;
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Setelah pengalihan, penyerahan atau sub-partisipasi oleh Pihak yang mengalihkan, maka para penerima hak tersebut berhak untuk mendapatkan keuntungan berdasarkan syarat-syarat dan ketentuan yang termaktub dalam Perjanjian ini, seolah-olah penerima hak tersebut adalah sebagai pihak yang mengadakan perjanjian tersebut.
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 11
+                <br />
+                PENYELESAIAN PENGADUAN PENERIMA DANA
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Penyelenggara LPBBTI wajib menindaklanjuti dan menyelesaikan setiap pengaduan Penerima Dana terkait pelaksanaan Perjanjian Pemberian Fasilitas Pendanaan sesuai dengan mekanisme pelayanan dan penyelesaian pengaduan bagi Penerima Dana yang berlaku pada Penyelenggara LPBBTI.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Setiap pengaduan Penerima Dana yang tidak dapat diselesaikan oleh Penyelenggara LPBBTI, maka Para Pihak dapat mengadakan pertemuan berdasarkan permintaan dari salah satu Pihak dan untuk keperluan tersebut.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Para Pihak sepakat bahwa pengajuan dan/atau penyelesaian pengaduan Penerima Dana tidak akan mengurangi hak dan kewajiban Para Pihak sehubungan dengan pelaksanaan Perjanjian ini.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Dalam hal Penerima Dana melakukan komunikasi langsung kepada Pemberi Dana, maka Pemberi Dana akan meminta Penyelenggara LPBBTI untuk turut menyelesaikan pengaduan dari Penerima Dana.
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 12
+                <br />
+                PILIHAN HUKUM DAN PENYELESAIAN PERSELISIHAN
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Setiap perselisihan yang timbul dari atau yang berhubungan dengan Perjanjian ini atau pelaksanaannya, hal mana meliputi keberadaan dan keabsahan Perjanjian ini termasuk Pasal ini, ruang lingkup, arti, pembentukan, interpretasi atau penetapan terhadapnya, wajib sedapat mungkin diselesaikan melalui musyawarah antara Para Pihak. Setiap perselisihan atau perbedaan pendapat yang tidak dapat diselesaikan secara musyawarah oleh Para Pihak dalam jangka waktu 30 (tiga puluh) Hari Kalender sejak perselisihan tersebut ditemukan, maka peselisihan atau perbedaan pendapat tersebut harus diselesaikan melalui Pengadilan Negeri Jakarta Selatan.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Adanya perselisihan antara Para Pihak tentang arti ketentuan dalam Perjanjian, ini atau pelaksanaan Perjanjian ini tidak membebaskan Para Pihak atau salah satu Pihak untuk melaksanakan kewajibannya yang telah jatuh tempo atau kewajiban lainnya yang jatuh tempo sementara suatu perselisihan belum diselesaikan.
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="pasal_heading">
+            <h1>
+                Pasal 13
+                <br />
+                MEKANISME PENYELESAIAN HAK dan KEWAJIBAN SESUAI JIKA PENYELENGGARA LPBBTI TIDAK DAPAT MELANJUTKAN KEGIATAN OPERASIONALNYA.
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Penyelenggara LPBBTI akan menginformasikan kepada Pemberi Dana mengenai rencana penghentian Layanan JULO dalam jangka waktu tertentu yang akan diinformasikan beserta alasan dan rencana penyelesaian hak dan kewajiban baik antara Penyelenggara LPBBTI dengan Pemberi Dana maupun Penerima Dana melalui Sistem Elektronik milik JULO dan/atau media lain yang relevan, sebelum rencana tersebut dilakukan.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Penyelesaian hak dan kewajiban Penyelenggara LPBBTI kepada seluruh pengguna baik Pemberi Dana maupun Penerima Dana dapat dilakukan melalui :
+                        <ol class="com-sect-normal" type="a">
+                            <li>
+                                <div>
+                                    posisi akhir pengalihan porfolio Pendanaan yang tertunggak dari Penerima Dana;
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    tata cara atau mekanisme lain yang akan disepakati Para Pihak dalam Perjanjian Fasilitas ini.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Tanpa mengurangi maksud pasal 13.1 dan pasal 13.2 Perjanjian ini, penyelesaian hak dan kewajiban wajib diselesaikan sejak persetujuan yang akan disampaikan ke OJK kepada Penyelenggara LPBBTI.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Mekanisme dan jangka waktu penyelesaian seluruh kewajiban yang timbul dalam penyelenggaraan LPBBTI ditetapkan oleh OJK dengan memperhatikan rencana tindak lanjut yang disampaikan oleh Penyelenggara LPBBTI.
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Pemberi Dana dapat melakukan mekanisme apapun yang disebutkan pada pasal 13.2, dengan kesepakatan terlebih dahulu dengan Penerima Dana.
+                    </div>
+                </li>
+            </ol>
+        </div>
+        
+        <div class="pasal_heading">
+            <h1>
+                Pasal 14
+                <br />
+                KEADAAN KAHAR
+            </h1>
+        </div>
+        <div>
+            <ol class="com-sect">
+                <li>
+                    <div>
+                        Hal-hal yang terjadi di luar kekuasaan salah satu Pihak yang bukan merupakan kelalaian atau kesalahan Pihak tersebut sehingga ia tidak dapat melaksanakan kewajiban-kewajibannya dalam Perjanjian ini dianggap sebagai Keadaan Kahar antara lain:
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Kejadian alam seperti: gempa bumi, angin ribut, banjir, wabah dan kejadian-kejadian lain yang serupa yang mengakibatkan tidak memungkinkan Para Pihak untuk melakukan sebagian atau seluruh kewajiban-kewajibannya dalam Perjanjian ini.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Akibat perbuatan manusia, seperti:
+                                    <ol class="com-sect">
+                                        <li>
+                                            <div>
+                                                Perang, invasi bersenjata, reaksi yang tidak dapat dipastikan, blokade, pemberontakan, gangguan sipil, serangan atau sebab serupa lainnya, termasuk terjadinya moratorium, kepailitan, likuidasi atau pembubaran pihak lainnya yang mengakibatkan Pihak tersebut tidak dapat melaksanakan kewajiban-kewajibannya dalam Perjanjian ini.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Sesuatu perubahan mendasar dalam situasi politik atau perundang-undangan atau keuangan atau perekonomian di negara Republik Indonesia yang menurut salah satu Pihak dapat mengakibatkan berkurangnya kemampuan salah satu Pihak secara material untuk melaksanakan kewajibannya berdasarkan Perjanjian ini.
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                Sebab-sebab lain seperti: peraturan, keputusan atau petunjuk yang dikeluarkan oleh pemerintah Republik Indonesia yang menyebabkan efek material yang merugikan yang mempengaruhi Para Pihak di dalam melaksanakan kewajiban-kewajibannya.
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Pemberitahuan Keadaan Kahar
+                        <ol class="com-sect">
+                            <li>
+                                <div>
+                                    Apabila terjadi Keadaan Kahar, maka Pihak yang terkena kejadian Keadaan Kahar tersebut wajib memberitahukan kejadian tersebut secara tertulis kepada Pihak lainnya selambat-lambatnya dalam waktu 7 (tujuh) Hari Kalender setelah terjadinya Keadaan Kahar tersebut.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Dalam jangka waktu 7 (tujuh) Hari Kalender sejak diterimanya pemberitahuan sebagaimana dimaksud dalam ayat 2 Pasal ini, Para Pihak setuju untuk berunding tentang pelaksanaan hak-hak dan kewajiban-kewajiban masing-masing Pihak akibat terjadinya Keadaan Kahar.
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    Kesepakatan yang dihasilkan dalam perundingan sebagaimana dimaksud dalam ayat 2 butir 2.2. Pasal ini wajib dituangkan dalam bentuk tertulis ditandatangani oleh Para Pihak.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div>
+            <p align="justify"><b>DEMIKIAN</b>, Perjanjian ini disetujui atau ditandatangani secara elektronik (termasuk menggunakan tanda tangan elektronik) sesuai dengan ketentuan dalam Undang-Undang Republik Indonesia No. 11 Tahun 2008 tentang Informasi dan Transaksi Elektronik berikut dengan segalaamendemennya dan peraturan pelaksananya beserta segala  amendemennya, dari waktu ke waktu oleh Para Pihak atau perwakilannya yang sah dan mempunyai kekuatan yang sama dengan perjanjian yang dibuat dan ditandatangani secara fisik.</p>
+        </div>
+        <div>
+            <table border="0" style="width: 100%; text-align: left;">
+                <tr style="vertical-align: top;">
+                    <td style="width: 50%;">
+                        <p>
+                            <b>PEMBERI DANA,</b>
+                        </p>
+                    </td>
+                    <td style="width: 50%;">
+                        <p><b>
+                                PENYELENGGARA LPBBTI
+                                <br />
+                                PT JULO TEKNOLOGI FINANSIAL
+                            </b></p>
+                    </td>
+                </tr>
+                <tr style="vertical-align: center;">
+                    <td style="width: 50%;height:125px;">
+                        {% if no_SKP3 %}
+                            <span class="signature-font" style="width: 150px" >{{ lender_poc_name }}</span>
+                        {% endif %}
+                    </td>
+                    <td style="width: 50%;">
+                        <span class="signature-font" style="width: 150px" >{{ director_poc_name }}</span>
+                    </td>
+                </tr>
+                <tr style="vertical-align: top;">
+                    <td style="width: 50%;">
+                        <p>
+                            {{ lender_poc_position }}
+                            <br>
+                            {{ lender_poc_name }}
+                        </p>
+                    </td>
+                    <td style="width: 50%;">
+                        <p>
+                            {{ director_poc_position }}
+                            <br>
+                            {{ director_poc_name }}
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="page-break-after: always;"></div>
+        <div class="table-wrapper">
+            <div class="pasal_heading">
+                <h1>
+                    Lampiran 1<br>
+                    Tabel Ringkasan Persetujuan Pemberian Pendanaan
+                </h1>
+            </div>
+            <table class="table-loan">
+                <tr>
+                    <th style="width: 8%">No. Perjanjian Pemberian Fasilitas Pendanaan</th>
+                    <th style="width: 11%">Total Pokok Fasilitas Pendanaan</th>
+                    <th style="width: 7%">Tenor </th>
+                    <th style="width: 10%">Total Persentase Bunga Pendanaan per keseluruhan tenor</th>
+                    <th style="width: 8%">Total Angsuran Perbulan</th>
+                    <th style="width: 15% !important;">Biaya Denda Keterlambatan per hari (apabila telat)</th>
+                    <th style="width: 11%">Biaya Layanan</th>
+                    <th style="width: 11%">Kewajiban Pajak Pertambahan Nilai Pemberi Dana atas Biaya Layanan</th>
+                    <th style="width: 11%">Kewajiban Pajak Penghasilan Pemberi Dana atas Bunga Pendanaan</th>
+                    <th style="width: 8%">Detail Rekening Escrow</th>
+                </tr>
+                {% for loan in loans %}
+                    <tr>
+                        <td><span>{{ loan.loan_xid }}</span></td>
+                    {% if loan.disbursement_id %}
+                        <td><span>Rp. {{ loan.loan_disbursement_amount}}</span></td>
+                    {% else %}
+                        <td><span>Rp. {{ loan.loan_amount}}</span></td>
+                    {% endif %}
+                        <td style="text-align: center;"><span>{{ loan.loan_duration }}</span></td>
+                        <td style="text-align: center;"><span>{{ loan.total_interest }}%</span></td>
+                        <td><span>Rp. {{ loan.installment_amount }}</span></td>
+                        <td><span>Rp. {{loan.late_fees}}</span></td>
+                        <td>
+                            {% for platform_fee in loan.platform_fees %}
+                            <div>{{platform_fee}}</div>
+                            <br/>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for platform_tax_fee in loan.platform_tax_fees %}
+                            <div>{{platform_tax_fee}}</div>
+                            <br/>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for interest_tax_fee in loan.interest_tax_fees %}
+                            <div>{{interest_tax_fee}}</div>
+                            <br/>
+                            {% endfor %}
+                        </td>
+                        <td><span>425350011</span></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div style="page-break-after: always;"></div>
+        <div class="table-wrapper">
+            <div class="pasal_heading">
+                <h1>
+                    Lampiran 2<br>
+                    Kriteria Khusus Fasilitas Pendanaan
+                </h1>
+            </div>
+            <table class="table-criteria table-loan">
+                <tr>
+                    <th style="width: 115px">No</th>
+                    <th>Parameter Kriteria Fasilitas Pendanaan</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Identity Doc : KTP, Selfie dengan KTP</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Active User</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Tidak di dalam blacklist database</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Tidak terkategori ke dalam daftar hitam JULO</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Memenuhi kriteria skor Kredit</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Tidak dalam daftar pengguna gagal bayar</td>
+                </tr>
+            </table>
+            <p>*Dapat berubah sewaktu-waktu dengan atau tanpa informasi tertulis selama dapat disepakati oleh Para Pihak.</p>
+        </div>
+    </div>
+</body>
+</html>

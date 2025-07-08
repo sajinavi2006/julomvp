@@ -1,0 +1,500 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+{% load static from staticfiles %}
+
+{% block additional_title %}JULO x {{ channeling_type }} - Channeling Loan{% endblock %}
+
+{% block meta %}
+    <!-- remarked if for production -->
+    <!-- <meta http-equiv="refresh" content="3" > -->
+{% endblock %}
+
+{% block breadcrumb_title %}{{ channeling_type }} Channeling Loan{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Loan list</a></li>
+    <li class="active">Seluruhnya</li>
+{% endblock %}
+
+{% block list_title %}Channeling Loan : <code>{{ channeling_type }}</code> {% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|linebreaks }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% block search-form %}
+        <form class="form-horizontal collapse in" id='search-form' method='get' role="form">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ form.non_field_errors }}</strong>
+                </div>
+            {% endif %}
+            {% if error_form %}
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ error_form }}</strong>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+                    <label class="col-md-12 col-sm-12">Status</label>
+                    <div class="m-t-10">
+                        {{ form.channeling_status }}
+                    </div>
+                    <span class="help-block">
+                        <small>*pilih salah satu channeling status</small>
+                    </span>
+                </div>
+                <div class="col-md-4 col-xs-12 m-t-30">
+                    <div class="col-md-4 col-xs-12">
+                        <button type="submit" class="btn btn-primary btn-rounded btn-block">
+                            <strong><i class="fa fa-search" ></i> Cari</strong>
+                        </button>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <button type="button" class="btn btn-info btn-rounded" onClick="clearSearchForm();">
+                            <strong><i class="fa fa-eraser fa-fw"></i> Kosongkan</strong>
+                        </button>
+                    </div>
+                    <div class="col-md-3 col-xs-12">
+                        <a class="btn btn-danger center btn-rounded" role="button" data-toggle="collapse" href="#id_pencarian_tgl" aria-expanded="false" aria-controls="id_pencarian_tgl">
+                        <i class="fa fa-calendar fa-fw"></i><i class="fa fa-arrow-down fa-fw"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 pull-right col-xs-12 m-t-30">
+                    <div class="dropdown col-md-4 col-xs-4">
+                        <button class="dropdown-toggle btn btn-info btn-rounded btn-block" type="button" id="dropdownMenuUploadButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <strong><i class="fa fa-upload" ></i> Send Request</strong>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuUploadButton" style="width: 100%">
+                            {% if channeling_type != 'BNI' %}
+                                <a href="{% url 'channeling_loan_portal:download' channeling_type=channeling_type file_type='disbursement' %}" data-original-url="{% url 'channeling_loan_portal:download' channeling_type=channeling_type file_type='disbursement' %}" class="bdropdown-item btn btn-info btn-block" {% if channeling_type != 'SMF' %} target="_blank" {% endif %} id="id_download_data">Disbursement</a>
+                            {% endif %}
+                            {% if channeling_type != 'SMF' %}
+                                {% if channeling_type == "FAMA" or channeling_type == "DBS" %}
+                                    <a id="id_repayment_button" data-toggle="modal" data-target="#modalRepaymentUploader" class="dropdown-item btn btn-info btn-block">Repayment</a>
+                                    <a id="id_reconciliation_button" data-toggle="modal" data-target="#modalReconciliationUploader" class="dropdown-item btn btn-info btn-block">Reconciliation</a>
+                                {% elif channeling_type == 'BNI' %}
+                                    <a id="id_repayment_button" data-toggle="modal" data-target="#modalRepaymentUploader" class="dropdown-item btn btn-info btn-block">Repayment</a>
+                                {% else %}
+                                    <a id="id_repayment_button" data-toggle="modal" data-target="#modalRepaymentSendData" class="dropdown-item btn btn-info btn-block">Repayment</a>
+                                    <a href="{% url 'channeling_loan_portal:download' channeling_type=channeling_type file_type='reconciliation' %}" data-original-url="{% url 'channeling_loan_portal:download' channeling_type=channeling_type file_type='reconciliation' %}" class="bdropdown-item btn btn-info btn-block" target="_blank" id="id_download_data_reconciliation">Reconciliation</a>
+                                    {% if channeling_type == 'PERMATA' %}
+                                        <a id="id_permata_early_payoff_button" data-toggle="modal" data-target="#modalPermataEarlyPayoffUploader" class="dropdown-item btn btn-info btn-block">Early Payoff</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if channeling_type != 'BNI' and channeling_type != 'SMF' %}
+                        <div class="dropdown col-md-4 col-xs-4">
+                            <button class="dropdown-toggle btn btn-primary btn-rounded btn-block" type="button" id="dropdownMenuDownloadButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <strong><i class="fa fa-download" ></i> Get Response</strong>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuDownloadButton" style="width: 100%">
+                                <a href="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=disbursement" data-original-url="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=disbursement" class="dropdown-item btn btn-info btn-block" target="_blank" id="id_download_approval">Disbursement Approval</a>
+                                <a href="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=repayment" data-original-url="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=repayment" class="dropdown-item btn btn-info btn-block" target="_blank" id="id_download_approval_repayment">Repayment Approval</a>
+                                <a href="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=reconciliation" data-original-url="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=reconciliation" class="dropdown-item btn btn-info btn-block" target="_blank" id="id_download_approval_reconciliation">Reconciliation Approval</a>
+                                {% if channeling_type == 'PERMATA' %}
+                                    <a href="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=early_payoff" data-original-url="{% url 'channeling_loan_portal:download_approval' channeling_type %}?file_type=early_payoff" class="dropdown-item btn btn-info btn-block" id="id_download_approval_early_payoff">Early Payoff Approval</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xs-4">
+                            <a id="id_upload_button" data-toggle="modal" data-target="#modalUploader" class="dropdown-item btn btn-info btn-rounded btn-block"><strong><i class="fa fa-pencil" ></i> Update Channeling Status</strong></a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="collapse m-t-15" id="id_pencarian_tgl">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <label class="col-md-12 col-sm-12">Periode</label>
+                            <div class="col-md-12 col-sm-12">
+                                {{ form.status_now }}
+                                <span class="help-block error_msg h5">
+                                    {% if form.status_now.errors %}
+                                        {{ form.status_now.errors.as_text }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="collapse col-md-8 col-xs-12" id="id_toggle_tgl_entry">
+                            <h5 class="m-t-0">Tanggal Entry : </h5>
+                            <div class="input-group m-t-10 {% if form.search_q.errors %} has-error {% endif %}">
+                                <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+                                {{ form.datetime_range }}
+                            </div>
+                            <span class="help-block error_msg h5">
+                                {% if form.datetime_range.errors %}
+                                    {{ form.datetime_range.errors.as_text }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    {% endblock %}
+
+    <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size="{{ results_per_page }}">
+        <thead>
+            <tr id="julo-sort-form" data-julo-sort-form="search-form">
+                <th data-sort-ignore="true">&nbsp;</th>
+                <th data-sort-ignore="true"> No </th>
+                <th data-sort-ignore="true"> Loan-XID </th>
+                <th data-sort-ignore="true"> Loan-ID </th>
+                <th data-sort-ignore="true"> Product Name </th>
+                <th data-sort-ignore="true"> Lender Name </th>
+                <th data-sort-ignore="true"> Full Name</th>
+                <th data-sort-ignore="true"> Loan Amount </th>
+                <th data-sort-ignore="true"> Loan Duration </th>
+                <th data-sort-ignore="true"> Interest to {{ channeling_type }} </th>
+                <th data-sort-ignore="true"> Channeling Status </th>
+                <th data-sort-ignore="true"> Created Date </th>
+            </tr>
+        </thead>
+        <div class="form-inline padding-bottom-15">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-xs-12 hidden-xs"></div>
+            </div>
+        </div>
+        <tbody>
+            {% if object_list %}
+                {% for object in object_list %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+                        <td>
+                            <code>{{ object.loan.loan_xid|default:"-"|safe }}</code>
+                        </td>
+                        <td>
+                            <code>{{ object.loan.id|default:"-"|safe }}</code>
+                        </td>
+                        <td>
+                            {{ object.loan.transaction_method.fe_display_name|default:"-"|safe }}
+                        </td>
+                        <td>
+                            {{ object.loan.lender.lender_name|default:"-"|safe }}
+                        </td>
+                        <td>
+                            {{ object.channeling_eligibility_status.application.fullname|default:"-"|safe }}
+                        </td>
+                        <td>
+                            <strong>{{ object.loan.loan_amount|f_rupiahs:"no"|safe }}</strong>
+                        </td>
+                        <td>
+                            <code>{{ object.loan.loan_duration|default:"-"|safe }}</code>
+                        </td>
+                        <td>
+                            <strong>{{ object.channeling_interest_amount|f_rupiahs:"no"|safe }}</strong>
+                        </td>
+                        <td>
+                            <code>{{ object.channeling_status|default:"-"|safe }}</code>
+                        </td>
+                        <td>
+                            {{ object.cdate|date:"d M Y H:i:s"|default:"-"|safe }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                <div class="text-right">
+                    {% pagination2 is_paginated paginator page_obj parameters %}
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+
+    <div id="modalUploader" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalUploader" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal collapse in" id='upload-form' method='post' role="form" enctype="multipart/form-data" action="{% url 'channeling_loan_portal:sync_disbursement' channeling_type %}?{{ parameters }}">
+                    <div class="modal-header label-warning">
+                        <h4 class="modal-title">Upload channeling loan data</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12 col-lg-12">
+                                <label class="w100">File Upload:</label>
+                                <input id="id_file_field" name="file_field" type="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info waves-effect">Upload</button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRepaymentSendData" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRepaymentSendData" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal collapse in" id='upload-form' method='get' role="form" enctype="multipart/form-data" action="{% url 'channeling_loan_portal:download' channeling_type=channeling_type file_type='repayment' %}">
+                    <div class="modal-header label-warning">
+                        <h4 class="modal-title">Upload repayment loan data</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12 col-lg-12">
+                                <label class="w100">File Upload:</label>
+                                <input id="status_now" name="status_now" type="hidden" value="False">
+                                {{ form.datetime_range }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info waves-effect">Upload</button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalRepaymentUploader" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRepaymentUploader" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal collapse in" id='repayment_upload-form' method='post' role="form" enctype="multipart/form-data" action="{% url 'channeling_loan_portal:upload_repayment' channeling_type %}">
+                    <div class="modal-header label-warning">
+                        <h4 class="modal-title">Upload channeling repayment data</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12 col-lg-12">
+                                <label class="w100">File Upload:</label>
+                                <input id="id_repayment_file_field" name="repayment_file_field" type="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info waves-effect">Upload</button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalReconciliationUploader" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalReconciliationUploader" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal collapse in" id='reconciliation_upload-form' method='post' role="form" enctype="multipart/form-data" action="{% url 'channeling_loan_portal:upload_reconciliation' channeling_type %}">
+                    <div class="modal-header label-warning">
+                        <h4 class="modal-title">Upload channeling reconciliation data</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12 col-lg-12">
+                                <label class="w100">File Upload:</label>
+                                <input id="id_reconciliation_file_field" name="reconciliation_file_field" type="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info waves-effect">Upload</button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalPermataEarlyPayoffUploader" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPermataEarlyPayoffUploader" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal collapse in" id='permata_early_payoff_upload-form' method='post' role="form" enctype="multipart/form-data" action="{% url 'channeling_loan_portal:send_permata_early_payoff_request' %}">
+                    <div class="modal-header label-warning">
+                        <h4 class="modal-title">Send Permata early payoff data</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12 col-lg-12">
+                                <label class="w100">File Upload:</label>
+                                <input id="id_file_field" name="file_field" type="file">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info waves-effect">Upload</button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+    function clearSearchForm(){
+        $("#id_search_q").val('');
+        $("#id_status_app").val([]);
+        $("#id_status_now_1").val([]);
+        $("#id_status_now_0").val([]);
+        check_bebas_selected();
+        if ( $("#id_pencarian_tgl").hasClass('in') ) {
+            check_priode_selected();
+        }
+        try{
+            document.getElementById('id_err_msg').innerHTML='';
+        }
+        catch(err) {
+        }
+    }
+    function goBack() {
+        window.history.back();
+    }
+    function check_bebas_selected(){
+        var status = $("#id_status_now_1").is(':checked');
+        if (status==true){
+            $("#id_toggle_tgl_entry").toggle(true);
+        }else{
+            $("#id_toggle_tgl_entry").toggle(false);
+        }
+    }
+    function check_priode_selected(){
+        var status_0 = $("#id_status_now_0").is(':checked');
+        var status_1 = $("#id_status_now_1").is(':checked');
+        if (status_0==true || status_1==true){
+            $("a[aria-controls=id_pencarian_tgl]").trigger('click');
+        }
+    }
+
+    window.onload = function() {
+        var ex1 = document.getElementById('id_status_now_0');
+        var ex2 = document.getElementById('id_status_now_1');
+        ex1.onclick = handler_0;
+        ex2.onclick = handler_1;
+
+        // disabled tgl start and end
+        check_bebas_selected();
+        check_priode_selected();
+    }
+    function handler_0() {
+        // console.log('clicked 0');
+        var status = $("#id_status_now_0").is(':checked');
+        if (status==true){
+          $("#id_toggle_tgl_entry").toggle(false);
+        }
+    }
+    function handler_1() {
+        //console.log('clicked 1');
+        check_bebas_selected();
+    }
+
+    // Daterange picker
+    $('.input-daterange-timepicker').daterangepicker({
+        timePicker: true,
+        format: 'DD/MM/YYYY H:mm',
+        timePickerIncrement: 5,
+        timePicker12Hour: true,
+        timePickerSeconds: false,
+        buttonClasses: ['btn', 'btn-sm'],
+        applyClass: 'btn-danger',
+        cancelClass: 'btn-inverse'
+    });
+
+    $('#modalRepaymentSendData .input-daterange-timepicker').daterangepicker({
+        timePicker: true,
+        format: 'DD/MM/YYYY',
+        timePicker: false,
+        buttonClasses: ['btn', 'btn-sm'],
+        applyClass: 'btn-danger',
+        cancelClass: 'btn-inverse'
+    });
+
+    $(document).ready(function() {
+        // Executes when the HTML document is loaded and the DOM is ready
+        //alert("Document is ready");
+        window.scroll(0,80);
+        download_button = $("#id_download_data");
+        download_button.attr("href", download_button.data('original-url') + window.location.search)
+        download_button = $("#id_download_data_repayment");
+        download_button.attr("href", download_button.data('original-url') + window.location.search)
+        download_button = $("#id_download_data_reconciliation");
+        download_button.attr("href", download_button.data('original-url') + window.location.search)
+      })
+
+    $('#modalRepaymentUploader').on('show.bs.modal', function (e) {
+        $('#repayment_upload-form')[0].reset();
+    });
+    $('#repayment_upload-form').submit(function(event){
+        setTimeout(function(){
+            $('#modalRepaymentUploader').modal('hide');
+            $('ul.messages').remove();
+        }, 1000);
+    });
+{% endblock %}
+
+
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <!-- Footable -->
+    <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+    <!--FooTable init-->
+    <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+    <script src="{% static 'default/js/julo-sorting.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+
+{% endblock %}

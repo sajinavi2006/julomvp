@@ -1,0 +1,181 @@
+{% load unit %}
+{% load static %}
+
+<table id="ca_table" class="ca_table table table-hover table-striped ">
+  <tbody>
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Fintech</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+              {{ balance_cons_form.fintech }}
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-info btn-grp-default"
+                        onclick="setDefaultValue('id_fintech','{{ object.fintech|safe }}');">
+                  <i class="fa fa-history fa-fw"></i>
+                </button>
+              </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Loan Principal Amount</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+            <span class="input-group-addon">Rp.</span>
+            {{ balance_cons_form.loan_principal_amount }}
+            <span class="input-group-btn"
+                  onclick="setDefaultValue('id_loan_principal_amount', '{{ object.loan_principal_amount|safe }}');">
+              <button type="button" class="btn btn-info btn-grp-default">
+                <i class="fa fa-history fa-fw"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Loan Outstanding Amount</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm {% if balance_cons_form.loan_outstanding_amount.errors %} has-error {% endif %}">
+            <span class="input-group-addon">Rp.</span>
+            {{ balance_cons_form.loan_outstanding_amount }}
+            <span class="input-group-btn"
+                  onclick="setDefaultValue('id_loan_outstanding_amount', '{{ object.loan_outstanding_amount|safe }}');">
+              <button type="button" class="btn btn-info btn-grp-default">
+                <i class="fa fa-history fa-fw"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Disbursement Date</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm {% if balance_cons_form.disbursement_date.errors %} has-error {% endif %}">
+            {{ balance_cons_form.disbursement_date }}
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-info btn-grp-default"
+                      onclick="setDefaultValue('id_disbursement_date', '{{ object.disbursement_date|date:'Y-m-d'|safe }}');">
+                <i class="fa fa-history fa-fw"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Due Date</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm {% if balance_cons_form.disbursement_date.errors %} has-error {% endif %}">
+            {{ balance_cons_form.due_date }}
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-info btn-grp-default"
+                      onclick="setDefaultValue('id_due_date', '{{ object.due_date|date:'Y-m-d'|safe }}');">
+                <i class="fa fa-history fa-fw"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Created Date</strong>
+        </div>
+        <div class="col-xs-4">
+          {{ object.cdate|date:"M. d, Y H:i:s"|default:"-"|safe }}
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>FDC Inquiry Creation Date</strong>
+        </div>
+        <div class="col-xs-4">
+          {{ latest_fdc_inquiry.cdate|date:"M. d, Y H:i:s"|default:"-"|safe }}
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Bonus Insentif</strong>
+        </div>
+        <div class="col-xs-4">
+            <div class="input-group input-group-sm">
+              {% if limit_incentive and limit_incentive.bonus_limit %}
+                Rp. {{ limit_incentive.bonus_limit|default:"-"|safe}}
+              {% else %}
+                -
+              {% endif %}
+            </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Total Limit Kredit</strong>
+        </div>
+        <div class="col-xs-4">
+            <div class="input-group input-group-sm">
+              {% if limit_incentive and limit_incentive.increase_limit %}
+                Rp. {{ limit_incentive.increase_limit|default:"-"|safe}}
+              {% else %}
+                -
+              {% endif %}
+            </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Eligible for BalCon</strong>
+        </div>
+        <div class="col-xs-4">
+            <div class="input-group input-group-sm">
+              {% if limit_incentive and limit_incentive.eligible != None %}
+                {% if limit_incentive.eligible %}
+                  <strong class="text-success bold">Yes</strong>
+                {% else %}
+                  <strong class="text-danger font-weight-bold">No</strong>
+                {% endif%}
+              {% else %}
+                -
+              {% endif %}
+            </div>
+        </div>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

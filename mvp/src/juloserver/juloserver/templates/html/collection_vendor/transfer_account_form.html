@@ -1,0 +1,543 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">TRANSFER NEW ACCOUNT</h3>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalMessage" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 300px;">
+          <div class="modal-header" style="border-bottom: none">
+            <img src="/static/images/collections/verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;">
+          </div>
+          <div class="modal-body" style="padding: 0;height: 100px">
+            <p class="text-center" style="font-size: 24px;"><b>Sukses!</b></p>
+            <p class="text-center" style="font-weight: 300" id="modal_content"></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #03a9f3;
+                           border-color: #03a9f3;
+                           width: 92px;
+                           height: 48px;
+                           border-radius: 5px;"
+                    data-dismiss="modal" id="btnOk">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-position" id="modalConfirmation" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 400px;">
+          <div class="modal-header" style="border-bottom: none">
+            <h1 align="center">
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #F9942D;"></span>
+            </h1>
+          </div>
+          <div class="modal-body" style="padding: 0;height: 150px">
+            <p class="text-center" style="font-size: 24px;">
+                <b>Apakah anda yakin ingin melakukan transfer account ?</b>
+            </p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center" id="btnOkToSubmit">Transfer</button>
+              <button type="button"
+                    class="btn btn-default text-center"
+                    data-dismiss="modal" id="btnCancel">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form method="get" id="form-collection-account-transfer">
+        <div class="row">
+            <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+              <label class="col-md-12 col-sm-12">Product Type</label>
+              <select class="form-control" id="product_type" name="product_type" placeholder="Type Application Xid">
+                    <option value="">Chose Product</option>
+                    {% for product_type_val, product_type_name in available_products %}
+                        <option value="{{ product_type_val }}"
+                                {% if selected_available_product == product_type_val %}selected {% endif %}>
+                            {{ product_type_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 col-xs-12 p-l-10 p-r-10 pre-j1 pre-show" style="display: none;">
+              <label class="col-md-12 col-sm-12">Application Xid</label>
+              <div class="input-group m-t-10 ">
+                  <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                  <input class="form-control" id="application_xid" name="application_xid" placeholder="Type Application Xid" type="text" value="{{ application_xid }}">
+              </div>
+              <span class="help-block error_msg h5">
+              </span>
+            </div>
+            <div class="col-md-3 col-xs-12 p-l-10 p-r-10 after-j1 pre-show" style="display: none;">
+              <label class="col-md-12 col-sm-12">Account Id</label>
+              <div class="input-group m-t-10 ">
+                  <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                  <input class="form-control" id="account_id" name="account_id" placeholder="Type Account Id" type="text" value="{{ account_id }}">
+              </div>
+              <span class="help-block error_msg h5">
+              </span>
+            </div>
+            <div class="col-md-4 col-xs-12 m-t-30 pre-show" style="display: none;">
+              <div class="col-md-4 col-xs-12">
+                <button type="submit" class="btn btn-primary btn-rounded btn-block">
+                    <strong><i class="fa fa-search"></i> Cari</strong>
+                </button>
+              </div>
+            </div>
+        </div>
+    </form>
+    {% if is_show %}
+    <form method="post" id="form-collection-account-transfer-submit">
+        {% csrf_token %}
+        <input type="hidden" name="transfer_from_id" value="{{ transfer_from_id }}">
+        <input type="hidden" name="transfer_from_labels" value="{{ transfer_from_labels }}">
+        <input type="hidden" name="payment_id" value="{% if payment_id == '-' %}0{% else %}{{ payment_id }}{% endif %}">
+        <input type="hidden" name="is_julo_one" value="{{ is_julo_one }}">
+        {% if is_julo_one %}
+        <input type="hidden" name="account_payment_id" value="{% if account_payment_id == '-' %}0{% else %}{{ account_payment_id }}{% endif %}">
+        {% endif %}
+        <table>
+            <tr>
+                <td style="width: 26%">Application ID</td>
+                <td><b>:{{ application_id }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">Assign Time (at Vendor)</td>
+                <td><b>:{{ assign_time }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">DPD (as of Assign Time)</td>
+                <td><b>:{{ dpd_assign_time }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">DPD (as of Today)</td>
+                <td><b>:{{ dpd_today }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">Subbucket (as of Assign Time)</td>
+                <td><b>:{{ sub_bucket_assign_time }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">Subbucket (as of Today)</td>
+                <td><b>:{{ sub_bucket_today }}</b></td>
+            </tr>
+            {% if is_julo_one %}
+            <tr>
+                <td style="width: 26%">Account ID</td>
+                <td><b>:{{ account_id }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">Account Payment ID</td>
+                <td><b>:{{ account_payment_id }}</b></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td style="width: 26%">Loan ID</td>
+                <td><b>:{{ loan_id }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">Payment ID</td>
+                <td><b>:{{ payment_id }}</b></td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td style="width: 26%">Customer Name</td>
+                <td><b>:{{ customer_name }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">Customer Email</td>
+                <td><b>:{{ customer_email }}</b></td>
+            </tr>
+            <tr>
+                <td style="width: 26%">Transfer From</td>
+                <td><b>:{{ transfer_from }}</b></td>
+            </tr>
+        </table>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Transfer To:</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <select class="form-control" id="vendor_name" name="vendor_name">
+                    <option value=""></option>
+                    <option value="inhouse">Inhouse</option>
+                    {% for vendor in vendors %}
+                        <option value="{{ vendor.id }}">{{ vendor.vendor_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Transfer Reason:</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <textarea class="form-control" name="transfer_reason" id="transfer_reason"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-12 txt-align">
+            </div>
+            <div class="col-md-4 col-sm-12 txt-align">
+                <input type="hidden" name="save_type" value="{{ save_type }}" id="save_type">
+                <button class="btn btn-primary btnSave" value="save_continue" type="button" style="background-color: #03a9f3;
+                           border-color: #03a9f3;">Submit and Transfer other account</button>
+                <button class="btn btn-primary btnSave" value="save" type="button" style="background-color: #03a9f3;
+                           border-color: #03a9f3;">Submit</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+<script>
+{% block script_bottom_inside %}
+    {% if success %}
+        $('#modalMessage').modal('show')
+    {% endif %}
+    function ToastDanger (body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'error',
+            hideAfter: 2800
+        });
+    }
+    function validate(){
+        if ($('#vendor_name').val().length == 0){
+            ToastDanger('Mohon pilih "Transfer To" dari dropdown yang tersedia')
+            return false
+        }
+        if ($('#transfer_reason').val().length == 0){
+            ToastDanger('Mohon isi "Transfer Reason"')
+            return false
+        }
+        if ($('input[name="payment_id"]').val().length == 0 && $('input[name="account_payment_id"]').val().length == 0){
+            ToastDanger('Payment atau Account Payment belum memasuki kriteria B5')
+            return false
+        }
+        return true
+
+    }
+    $('.btnSave').click(function (e){
+        $('#save_type').val($(this).val())
+        validate_status = validate()
+        if (validate_status){
+            $('#modalConfirmation').modal('show')
+        }
+    })
+    $('#btnOkToSubmit').click(function (e){
+        $(this).text('Please wait ...').attr('disabled','disabled');
+        $('#form-collection-account-transfer-submit').submit()
+    })
+    $('#btnOk').click(function (e){
+        save_type = '{{ save_type }}'
+        if(save_type=='save'){
+            window.location.replace("{%url 'collection_vendor:transfer_account_list' %}/");
+        }else{
+            window.location.replace("{%url 'collection_vendor:add_new_transfer_account' %}/");
+        }
+    })
+    {% if error_message %}
+        ToastDanger("{{ error_message }}")
+    {% endif %}
+    $('#product_type').change(function (e){
+        val = $(this).val()
+        if (val === ''){
+            $('.pre-show').hide()
+            return
+        }
+        $('.pre-show').show()
+        if (val === 'j1' || val === 'grab'){
+            $('#application_xid').val('')
+            $('.pre-j1').hide()
+            $('.after-j1').show(200)
+        }else{
+            $('#account_id').val('')
+            $('.pre-j1').show(200)
+            $('.after-j1').hide()
+        }
+    })
+    $('#product_type').trigger('change')
+
+{% endblock %}

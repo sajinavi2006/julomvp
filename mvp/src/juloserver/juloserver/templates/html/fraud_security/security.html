@@ -1,0 +1,538 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load template %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+
+{% block additional_title %}Fraud Security{% endblock %}
+{% block breadcrumb_title %}Fraud Security{% endblock %}
+{% block breadcrumb_path %}
+<li><a href="#">Fraud Security</a></li>
+<li class="active">{{ status_title }}</li>
+{% endblock %}
+
+{% block list_title %}Fraud Security{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block css_inside %}
+.table tr {
+    cursor: pointer;
+}
+.hiddenRow {
+    padding: 0 4px !important;
+    background-color: #e4e7ea;
+    font-size: 13px;
+}
+
+td {
+  word-wrap: break-word;
+  <!-- max-width: 160px; -->
+}
+
+.dropdown-pos {
+  position: relative;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.pagination > li > a:focus {
+    background-color: #fff;
+}
+{% endblock %}
+{% block content-list %}
+<div id="payment-list">
+  <form class="row">
+    <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Pencarian</label>
+      <div class="input-group m-t-10">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <input
+            type="text"
+            name="query"
+            value="{{ query | safe }}"
+            class="form-control"
+            aria-describedby="basic-addon1"
+            placeholder="Pencarian"
+        >
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12 m-t-30">
+      <div class="col-md-4 col-xs-12">
+        <button type="submit" class="btn btn-primary btn-rounded btn-block">
+          <strong><i class="fa fa-search" ></i> Cari</strong>
+        </button>
+      </div>
+      <div class="col-md-4 col-xs-12">
+        <button id="addBtn" type="button" class="btn btn-info btn-rounded">
+          <strong> Add</strong>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div class="collapse m-t-15" id="id_pencarian_tgl">
+    <div class="well">
+      <div class="row">
+        <div class="col-md-4 col-xs-12">
+          <label class="col-md-12 col-sm-12">Periode</label>
+          <div class="col-md-12 col-sm-12">
+            <input type="checkbox" id="checkbox" v-model="today_checked" v-on:click="TodayAction">
+            <label for="checkbox"> Hari ini </label>
+            &nbsp;&nbsp;&nbsp;
+            <input type="checkbox" id="checkbox" v-model="freeday_checked" v-on:click="FreedayAction">
+            <label for="checkbox"> Bebas hari </label>
+          </div>
+        </div>
+        <div class="collapse col-md-8 col-xs-12" id="id_toggle_tgl_entry">
+          <h5 class="m-t-0">Tanggal Entry : </h5>
+            <div class="input-group m-t-10 ">
+              <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+              <input class="form-control input-daterange-timepicker" id="id_datetime_range" name="datetime_range" type="text">
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="collapse m-t-15" id="id_pencarian_tgl">
+    <span class="input-group-addon"><i class="fa fa-calendar fa-fw"> Reassign</i></span>
+  </div>
+  <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" :data-page-size="max_row_per_page">
+    <thead>
+
+      <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+        <th data-toggle="true" data-sort-ignore="true"> Id </th>
+
+        <th  data-sort-ignore="true"> Android ID </th>
+        <th data-sort-ignore="true">Type</th>
+        <th class="text-center">Customer ID</th>
+        <th data-hide="phone">Reason</th>
+        <th data-toggle="phone"></i> UDate </th>
+
+      </tr>
+
+    </thead>
+    <!-- <div class="form-inline padding-bottom-15">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-xs-12 hidden-xs">
+        </div>
+      </div>
+    </div> -->
+
+    <tbody>
+      {%for obj in device_list%}
+        <tr class="parent-row">
+          <td >
+            <span>{{ obj.id }}</a></span>
+          </td>
+          <td >
+            {%if obj.object_id%}
+            {{ obj.object_id }}
+            {%else%}
+            {{ obj.android_id }}
+            {%endif%}
+          </td>
+          <td >
+            {%if obj|verbose_name == "blacklisted fraudster"%}
+            <code>blacklist</code>
+            {%else%}
+            <code>whitelist</code>
+            {%endif%}
+          </td>
+          <td >
+            {{ obj.customer_id|default:"-"}}
+          </td>
+          <td >
+            {%if obj.reason %}
+              {{ obj.reason }}
+            {%else%}
+              {{ obj.blacklist_reason }}
+            {%endif%}
+          </td>
+          <td >
+            <strong>
+              {{ obj.udate|date:"Y-m-d H:i:s"|safe }}
+            </strong>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" class="text-center"><i>Tidak ada data</i></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- <tfoot>
+    <tr>
+      <td>
+        <div class="text-center">
+          <ul class="pagination">
+            <li v-for="(n, index) in page_array" v-bind:class="GetClassPagination(n)" v-on:click="ChoosePage(n)">
+              <a v-if="n == 0" href="#">...</a>
+              <a v-else href="#"><% n %></a>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  </tfoot> -->
+  <!-- /.modal update agent-->
+  <div id="responsive-modal-edit-agent" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="AsignAgent" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header label-danger">
+          <h4 class="modal-title">Assign Agent</h4> </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Select Type</label>
+              <select v-model="form_agent_type_selected" class="form-control" v-on:change="SelectedAgentType">
+                <option value=""> -- </option>
+                <option  v-for="agent_type in list_agent_type" v-bind:value="agent_type.value">
+                  <% agent_type.label %>
+                </option>
+              </select>
+            </div>
+            <div class="form-group" v-show="form_agent_type_selected != ''">
+              <label>Select Agent</label>
+              <select v-model="form_agent_selected" class="form-control">
+                <option value=""> -- </option>
+                <option  v-for="agent in list_filter_agent_selected" v-bind:value="agent.id">
+                  <% agent.username %>
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" v-on:click="CleanFormSelectedAgent">Batal</button>
+            <button type="button" class="btn btn-success waves-effect" v-on:click="UpdateAgent">Update</button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- modal lock payment-->
+  <div id="modal-locked-payment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header label-success">
+          <h4 class="modal-title"><% title_payment_lock %></h4>
+        </div>
+        <div class="modal-body">
+          <% body_payment_lock %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning waves-effect" data-dismiss="modal" v-on:click="OpenNewTab();">Lihat Payment</button>
+          <button type="button" class="btn btn-custom waves-effect" data-dismiss="modal" v-on:click="SetPaymentLocked(payment_id_selected);" v-if="status_lock_payment">Lock dan Edit Payment</button>
+          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal success-->
+  <div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header label-warning">
+          <h4 class="modal-title" id="modal_title">Title</h4> </div>
+        <div class="modal-body" id="modal_body">
+          Body
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="close_btn()">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal add-->
+  <div id="add-blacklist-whitelist" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header label-success">
+          <h4 class="modal-title">Add Blacklist/Whitelist</h4>
+        </div>
+        <div class="modal-body">
+          <form id="add-blacklist-whitelist_form" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 col-sm-12 txt-align">
+                    <label for="description">Type:</label>
+                </div>
+                <div class="col-md-6 col-sm-12 txt-align">
+                  <select class="form-control product_selector" id="add_type" name="type">
+                      <option value="" selected="selected">Choose One</option>
+                          <option value="blacklist">Blacklist</option>
+                          <option value="whitelist">Whitelist</option>
+                  </select>
+                  <div class="text-danger small hidden js-error-text" data-field="type"></div>
+                </div>
+            </div>
+            <br>
+            <!-- end row -->
+            <div class="row">
+                <div class="col-md-6 col-sm-12 txt-align">
+                <label for="description">Android ID and Customer ID:</label>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 col-sm-12 txt-align">
+                    <input disabled class="form-control" name="device_id" id="device_id"
+                                            placeholder="Android ID" rows="5" required></input>
+                </div>
+                <div class="col-md-4 col-sm-12 txt-align">
+                  <input disabled class="form-control" name="customer_id" id="customer_id"
+                                          placeholder="Customer ID" rows="5" required></input>
+              </div>
+              <div class="col-md-2 col-sm-12 txt-align">
+                <button type="button" name="add_entry_btn" id="add_entry_btn" class="btn btn-success waves-effect">Add</button>
+              </div>
+            </div>
+            <br>
+            <!-- end row -->
+            <div class="row">
+              <div class="col-md-4 col-sm-12 txt-align">
+              <label for="description">Data:</label>
+              </div>
+              <div class="col-md-8 col-sm-12 txt-align">
+                  <textarea class="form-control" name="add_data" id="add_data"
+                                          placeholder="Data" rows="5" required></textarea>
+                  <div class="text-danger small hidden js-error-text" data-field="data"></div>
+              </div>
+          </div>
+            <br>
+            <!-- end row -->
+            <div class="row">
+                <div class="col-md-4 col-sm-12 txt-align">
+                  <label for="description">Reason:</label>
+                </div>
+                <div class="col-md-8 col-sm-12 txt-align">
+                    <textarea class="form-control" name="add_reason" id="add_reason"
+                                            placeholder="Reason" rows="2" required></textarea>
+                  <div class="text-danger small hidden js-error-text" data-field="reason"></div>
+                </div>
+            </div>
+            <!-- end row -->
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button id="submit_add_form" name="submit_add_form" type="submit" class="btn btn-success waves-effect">Save</button>
+          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<!-- modal confirm-->
+<div id="confirm-submit-data" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-warning">
+        <h4 class="modal-title" id="modal_title">Confirm Add Data</h4> </div>
+      <div class="modal-body" id="modal_body">
+        Please confirm to add data
+      </div>
+      <div class="modal-footer">
+        <button id="cancel_submit_form" type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cancel</button>
+        <button id="confirm_submit_form" name="confirm_submit_form" type="button" class="btn btn-success waves-effect" data-dismiss="modal">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% load static from staticfiles %}
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+<!-- Page plugins css -->
+<link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+<!-- Date picker plugins css -->
+<link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+<!-- Daterange picker plugins css -->
+<link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+<link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+<!-- Plugin JavaScript -->
+<script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+<!-- Date Picker Plugin JavaScript -->
+<script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<!-- Date range Plugin JavaScript -->
+<script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+<!-- Footable -->
+<script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+<!--Style Switcher -->
+<script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+
+<script>
+$(document).ready(function() {
+    $('#addBtn').click(function (e) {
+    $("#add-blacklist-whitelist").modal('show');
+  })
+  $('#add_type').change(function() {
+    if ($('option:selected', this).val() == "blacklist"){
+        $("#customer_id").attr("disabled", "disabled");
+        $("#customer_id").hide()
+        $("#device_id").removeAttr("disabled");
+        $("#add_data").val("")
+      }
+    else if ($('option:selected', this).val() == "whitelist"){
+      $("#customer_id").removeAttr("disabled");
+      $("#customer_id").show()
+      $("#device_id").removeAttr("disabled");
+    }
+    else
+    {
+      $("#customer_id").attr("disabled", "disabled");
+      $("#device_id").attr("disabled", "disabled");
+        }
+    $("#device_id").val("")
+    $("#customer_id").val("")
+    });
+  $("#add_entry_btn").click(function() {
+    var device_id = $("#device_id").val()
+    var customer_id = $("#customer_id").val()
+    var data = $("#add_data")
+    var to_add = device_id.toString()
+    if(customer_id != ""){
+      to_add = to_add + "," + customer_id.toString()
+    }
+    if (data.val() == ""){
+      data.val(to_add)
+    }
+    else
+    {
+      tmp = data.val()
+      data.val(tmp + "\n" + to_add)
+    }
+    $("#device_id").val("")
+    $("#customer_id").val("")
+    });
+  })
+  function ToastDanger(body_message) {
+          $.toast({
+              heading: 'Failure',
+              text: body_message,
+              position: 'top-right',
+              loaderBg: '#ff6849',
+              icon: 'error',
+              hideAfter: 10000
+          });
+      }
+  function ToastSuccess(header_msg, body_message) {
+      $.toast({
+          heading: header_msg,
+          text: body_message,
+          position: 'top-right',
+          loaderBg: '#ff6849',
+          icon: 'success',
+          hideAfter: 1500,
+          stack: 6
+      });
+    }
+
+  function showError(parent_selector, error_data) {
+    selector = parent_selector + ' .js-error-text';
+    error_text_doms = document.querySelectorAll(selector);
+
+    // Hide all text label
+    error_text_doms.forEach(function(dom, idx, data) {
+      dom.textContent = null;
+      dom.classList.toggle('hidden');
+    })
+    if (!error_data) return;
+
+    // Show the text label based on error_data
+    for (field in error_data) {
+      dom = document.querySelector(selector + '[data-field="'+field+'"]');
+      error_message = error_data[field];
+      if (!dom) {
+        return alert(error_message);
+      }
+
+      dom.textContent = error_message;
+      dom.classList.remove('hidden');
+    }
+
+  }
+
+    $("#cancel_submit_form").click(function (e) {
+      $("#add-blacklist-whitelist").modal('show');
+    });
+    $("#submit_add_form").click(function(e) {
+      $("#add-blacklist-whitelist").modal('hide');
+      $("#confirm-submit-data").modal('show');
+    })
+
+  $("#confirm_submit_form").click(function(e) {
+    var add_data = $("#add_data").val()
+    var add_reason = $("#add_reason").val()
+    var add_type = $("#add_type").val()
+    var send_data = {
+          "type": add_type,
+          "reason": add_reason,
+          "data": add_data}
+    e.preventDefault();
+    showError('#add-blacklist-whitelist', {});
+    $.ajax({
+        type: "POST",
+        url: "{%url 'fraud_security:security' %}",
+        data: send_data,
+        headers: {
+                    "X-CSRFToken": "{{csrf_token}}"
+                },
+        success: function(result) {
+          if(result.status == 'success'){
+            ToastSuccess('Success','Added Entry');
+            window.location.reload()
+          }
+          else {
+            $("#add-blacklist-whitelist").modal('show');
+            if(result.error_message) {
+              showError('#add-blacklist-whitelist', result.responseJSON.errors)
+              ToastDanger(result.error_message);
+              return
+            }
+            ToastDanger('Terjadi kesalahan pada server. (200)');
+          }
+        },
+        error: function(result) {
+          $("#add-blacklist-whitelist").modal('show');
+          if (result.responseJSON && result.responseJSON.error_message) {
+            showError('#add-blacklist-whitelist', result.responseJSON.errors)
+            ToastDanger(result.responseJSON.error_message)
+            return
+          }
+          ToastDanger("Tidak berhasil terhubung dengan server.");
+        }
+      });
+  });
+</script>
+
+<script>
+  function search_query(){
+    query = document.getElementById("query_value").value
+    window.open("{%url 'fraud_security:security' %}" + "?query=" + query ,'_self');
+  }
+</script>
+
+{% endblock %}

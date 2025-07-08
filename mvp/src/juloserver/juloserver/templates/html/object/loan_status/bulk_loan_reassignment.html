@@ -1,0 +1,443 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+{% load static from staticfiles %}
+
+{% block css_inside %}
+  .bold {
+    font-weight: 500;
+    color: #2b2b2b;
+  }
+
+  @media (min-width: 768px) {
+    .header-content {
+      margin-left: 8%;
+    }
+
+    .content {
+      margin-left: 15%;
+    }
+
+    .header-title {
+      margin-left: 5%;
+    }
+  }
+
+  div > p {
+    font-weight: 500;
+    color: #2b2b2b;
+  }
+
+  .column-top {
+    margin-top: 25px;
+  }
+
+  .btn-julo {
+    background-color: #02A8F3;
+    border-color: #02A8F3;
+    width: 45%;
+    border-radius: 5px;
+    height: 50px;
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  .btn-copy {
+    background-color: #ffffff;
+    border: solid 1px #3fb171;
+    border-radius: 3px;
+    height: 50px;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #3fb272;
+  }
+
+  /* The Overlay (background) */
+  .overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+    display: none;
+  }
+
+  .overlay-content {
+    position: relative;
+    top: 25%;
+    text-align: center;
+    margin: auto;
+    width: 480px;
+    height: 360px;
+    border-radius: 3px;
+    background-color: #ffffff;
+  }
+
+  .success_text{
+    height: 40px;
+    font-family: Poppins;
+    font-size: 29px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.48;
+    letter-spacing: normal;
+    text-align: center;
+    color: #575757;
+    margin-top:24px;
+  }
+
+  .failed_text{
+    height: 48px;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal
+    line-height: 1.56;
+    letter-spacing: normal;
+    text-align: center;
+    color: #dd2e44;
+    margin-top:16px
+  }
+
+{% endblock %}
+
+
+{% block script_head %}
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-19175540-9', 'auto');
+  ga('send', 'pageview');
+
+  window.onbeforeunload = function () {
+    return "Jangan refresh ketika auto chooser berlangsung, anda yakin?";
+  };
+</script>
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+<div id="wrapper">
+  <div id="app" class="container-fluid" style="padding-right: 100px">
+    <div class="row">
+      <div class="header-title m-b-10 m-t-10">
+        <h5 style="text-transform: uppercase" class="bold">loan reassignment</h5>
+      </div>
+    </div>
+    <div class="column m-t-20">
+      <div class="header-content">
+        <p>Select list of customers</p>
+      </div>
+      <div class="content">
+        <p style="display: inline">Import file</p>
+        <input type="file" name="csv_file" ref="file" accept="csv/*" @change="HandleFileUpload()" />
+      </div>
+    </div>
+    <div class="column column-top">
+      <div class="header-content">
+        <div class="form-group">
+          <label for="assign_to_agent_or_vendor" class="bold">Assign to Agent/Vendor</label>
+          <select class="form-control" id="agent_types" @change="GetSelectedAgentData()">
+            <option value='' disabled selected hidden>Select Agent/Vendor</option>
+            <option value="vendor">Vendor</option>
+            <option value="agent">Agent</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="column column-top">
+      <div class="header-content">
+        <div class="form-group">
+          <label for="select_bucket" class="bold">Select bucket</label>
+          <select class="form-control" id="list_buckets" @change="GetSelectedAgentData()">
+            <option value='' disabled selected hidden>Select Bucket</option>
+            <option v-for="bucket in list_bucket_types" v-bind:value="bucket.value">
+              <% bucket.name %>
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="column column-top">
+      <div class="header-content">
+        <div class="form-group">
+          <label for="list_agent" class="bold">List of Agent/Vendor</label>
+          <select class="form-control" id="list_agents">
+            <option value='' disabled selected hidden>List of Agent/Vendor</option>
+            <option v-for="agent in list_selected_agents" :value="agent">
+              <% agent %>
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row text-center" style="margin-top: 32px">
+      <div class="col-12 col-xs-12">
+        <button type="button" class="btn btn-julo" v-on:click="ReassignLoans()">submit</button>
+      </div>
+    </div>
+    <!-- overlay -->
+    <div id="myNav" class="overlay">
+      <!-- Overlay content -->
+      <div class="overlay-content">
+        <div class="content-success">
+          <img src="../../../static/images/common/verified.png" style="margin-top: 42px"></img>
+          <div class="success_text">Sukses!</div>
+          <div style="margin-top: 16px;font-size: 16px;">Agent berhasil dipindahkan</div>
+          <div>
+            <button type="button" class="btn btn-julo" style="margin-top: 45px;" v-on:click="CloseNav">OK</button>
+          </div>
+        </div>
+        <div class="content-nodata">
+          <img src="../../../static/images/common/failed.png" style="margin-top: 42px"></img>
+          <div class="success_text">Data tidak ditemukan</div>
+          <div style="margin-top: 16px;font-size: 16px;">mohon untuk mengulang proses pemindahan</div>
+          <div>
+            <button type="button" class="btn btn-julo" style="margin-top: 45px;" v-on:click="CloseNav">OK</button>
+          </div>
+        </div>
+        <div class="content-failed">
+          <img src="../../../static/images/common/failed.png" style="margin-top: 42px"></img>
+          <div class="failed_text"><% error_loans_count %> pinjaman tidak dapat dipindahkan karena ketidakcocokan bucket
+          </div>
+          <div style="margin-top: 16px">mohon untuk mengulang proses pemindahan</div>
+          <div style="margin-top: 34px">
+            <button type="button" class="btn btn-copy">Copy
+              <% error_loans_count %> loan
+              id</button>
+            <button type="button" class="btn btn-julo" style="margin-left: 26px;width:92px"
+              v-on:click="CloseNav">OK</button>
+          </div>
+          <textarea id="message_error_loans" style="display:none"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block script_additional %}
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script type="text/javascript">
+  var BulkLoanReassignment = new Vue({
+    el: '#app',
+    delimiters: ["<%", "%>"],
+    data: {
+      csrftoken: '{{csrf_token}}',
+      bucket_type: '',
+      assign_to: '',
+      list_bucket_types: [],
+      list_bucket_data: [],
+      list_selected_agents: [],
+      file: '',
+      error_loans: "",
+      error_loans_count: 0,
+    },
+    beforeMount() {
+      this.GetBucketAndAgentData();
+    },
+    methods: {
+      GetBucketAndAgentData() {
+        var self = this;
+        $.ajax({
+          url: "{%url 'loan_status:ajax_bulk_loan_reassignment_get_data' %}/", // the endpoint
+          type: "GET", // http method
+          data: {
+            csrfmiddlewaretoken: self.csrftoken
+          },
+          // handle a successful response
+          success: function (json) {
+            if (json.status == "success") {
+              self.ToastSuccess("Sukses", json.messages);
+              self.list_bucket_types = json.data.bucket_types;
+              self.list_agents = json.data.list_agents;
+            }
+            else {
+              self.ToastDanger("Gagal", 'gagal mendapat data');
+            }
+          },
+
+          // handle a non-successful response
+          error: function (xhr, errmsg, err) {
+            self.ToastDanger("Gagal", xhr.responseText);
+          }
+        })
+      },
+      ReassignLoans() {
+        var self = this;
+        var formData = new FormData();
+        var csrf_token = self.csrftoken;
+        var agent = $('#list_agents').val();
+        var role = $('#list_buckets').val();
+
+        if (self.file == "" || self.file == undefined) {
+          self.ToastDanger("Gagal", 'Mohon lampirkan file');
+          return;
+        }
+
+        if (agent == null || role == null) {
+          self.ToastDanger("Gagal", 'Agent/Bucket tidak boleh kosong');
+          return;
+        }
+
+        formData.append('file', self.file);
+        formData.append('agent', agent);
+        formData.append('role', role);
+
+        $.ajax({
+          beforeSend: function (request) {
+            request.setRequestHeader("X-CSRFToken", csrf_token);
+          },
+          url: "{%url 'loan_status:ajax_loan_reassignment' %}/", // the endpoint
+          type: "POST", // http method
+          processData: false,
+          contentType: false,
+          data: formData,
+          // handle a successful response
+          success: function (json) {
+            if (json.status == "success") {
+              self.OpenNav(true);
+            }
+            else {
+              self.error_loans = json.error_loans.join("\n");
+              self.error_loans_count = json.error_loans_count;
+              $("#message_error_loans").val(self.error_loans);
+              self.OpenNav(false);
+            }
+          },
+
+          // handle a non-successful response
+          error: function (xhr, errmsg, err) {
+            self.ToastDanger("Gagal", xhr.responseText);
+          }
+        })
+      },
+      ToastSuccess: function (header_msg, body_message) {
+        $.toast({
+          heading: header_msg,
+          text: body_message,
+          position: 'top-right',
+          loaderBg: '#ff6849',
+          icon: 'success',
+          hideAfter: 1500,
+          stack: 6
+        });
+      },
+      ToastDanger: function (header_msg, body_message) {
+        $.toast({
+          heading: header_msg,
+          text: body_message,
+          position: 'top-right',
+          loaderBg: '#ff6849',
+          icon: 'error',
+          hideAfter: 2800
+        });
+      },
+      GetSelectedAgentData: function (event) {
+        var self = this;
+        var agent_type = $("#agent_types").val();
+        var bucket_type = $("#list_buckets").val();
+        self.list_selected_agents = self.list_agents[agent_type][bucket_type];
+      },
+      HandleFileUpload() {
+        this.file = this.$refs.file.files[0];
+      },
+      CloseNav: function (event) {
+        $("#myNav").hide();
+      },
+      OpenNav: function (is_success) {
+        $("#myNav").show();
+        if (is_success) {
+          $(".content-success").show();
+          $(".content-failed").hide();
+          $(".content-nodata").hide();
+        }
+        else {
+          if (this.error_loans_count > 0) {
+            $(".content-success").hide();
+            $(".content-failed").show();
+            $(".content-nodata").hide();
+          }
+          else {
+            $(".content-success").hide();
+            $(".content-failed").hide();
+            $(".content-nodata").show();
+          }
+        }
+      }
+    }
+  })
+
+  //Set up tooltip for copy to clipboard
+  var clipboard = new ClipboardJS('.btn-copy', {
+    text: function (trigger) {
+      return $("#message_error_loans").val();
+    }
+  });
+
+  clipboard.on('success', function (e) {
+    setTooltip('Copied!');
+    hideTooltip();
+  });
+
+  clipboard.on('error', function (e) {
+    setTooltip('Failed!');
+    hideTooltip();
+  });
+
+  $('.btn-copy').tooltip({
+    trigger: 'click',
+    placement: 'bottom'
+  });
+
+  function setTooltip(message) {
+    $('.btn-copy').tooltip('hide')
+      .attr('data-original-title', message)
+      .tooltip('show');
+  }
+
+  function hideTooltip() {
+    setTimeout(function () {
+      $('.btn-copy').tooltip('hide');
+    }, 1000);
+  }
+
+</script>
+{% endblock %}

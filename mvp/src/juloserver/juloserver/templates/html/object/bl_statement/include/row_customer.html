@@ -1,0 +1,65 @@
+{% load unit %}
+<tr class= "ca-none">
+  <td class="col-xs-8">
+      <div class="col-xs-6 no-left"><strong>Nama Lengkap</strong></div>
+      <div class="col-xs-6">: {{ customer_obj.fullname|default:"-"|safe }}</div>
+  </td>
+  
+</tr>
+<tr class= "ca-none">
+    <td class="col-xs-12">
+        <div class="col-xs-6 no-left"><strong>jenis Kelamin</strong></div>
+        <div class="col-xs-6">: {{ customer_obj.gender|default:"-"|safe}}</div>
+    </td>
+  
+  </tr>
+<tr class= "ca-none">
+  <td class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Email</strong></div>
+    <div class="col-xs-6">: {{ customer_obj.email|default:"-"|safe}}</div>
+  </td>
+  <td class="col-xs-4"></td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Phone</strong></div>
+    <div class="col-xs-6">: {{ customer_obj.phone|default:"-"|safe}}</div>
+  </td>
+  <td class="col-xs-4"></td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Country</strong></div>
+    <div class="col-xs-6">: {{ customer_obj.country|default:"-"|safe}}</div>
+  </td>
+  <td class="col-xs-4"></td>
+</tr>
+<tr class= "ca-none">
+    <td class="col-xs-12">
+      <div class="col-xs-6 no-left"><strong>Nik</strong></div>
+      <div class="col-xs-6">: {{ customer_obj.nik|default:"-"|safe}}</div>
+    </td>
+  <td class="col-xs-4"></td>
+  </tr>
+<tr class= "ca-none">
+  <td class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Customer xid</strong></div>
+    <div class="col-xs-6">: {{ customer_obj.customer_xid|default:"-"|safe}}</div>
+  </td>
+  <td class="col-xs-4"></td>
+</tr>
+<tr class= "ca-none">
+  <td class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Virtual Account Number</strong></div>
+    {% if not virtual_account %}
+      <div class="col-xs-6">: 
+        <!-- <button type="button" class="btn btn-success waves-effect waves-light" onclick="SendSmsAndGenerateVa()">Request</button> -->
+      </div>
+    {% else %}
+    <div class="col-xs-6">: {{ virtual_account|default:"-"|safe }}<span style="margin-left: 8px;">
+      <!-- <button type="button" onclick="SendSmsAndGenerateVa()"class="btn btn-primary waves-effect waves-light">Resend</button> -->
+    </div>
+    {% endif %}
+  </td>
+  <td class="col-xs-4"></td>
+</tr>

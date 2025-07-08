@@ -1,0 +1,122 @@
+<div class="alert alert-warning" id="payment_messages" style="display: none;">
+    <code id="offer_messages_body">
+            Silahkan field yang tersedia dengan inputan yang benar!
+    </code>
+</div>
+
+{% if messages %}
+    <div class="alert alert-warning">
+    {% for message in messages %}
+        <code>{{ message|escape }}</code><br/>
+    {% endfor %}
+    </div>
+{% endif %}
+
+
+<div class="row">
+  <div class="col-md-12 col-sm-12 form_event-group m-b-30">
+      <label class="col-md-12 col-sm-12"> Product Saat ini: </label>
+      <div class="col-md-12 col-sm-12">
+          {{ offer_obj.product.product_name|default:"-"|safe}}
+      </div>
+  </div>
+</div>
+<!-- end row -->
+
+<div class="row">
+  <div class="col-md-12 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> {{ form_offer.product.label }}: </label>
+      {% if form_offer.product.errors %}
+          <span class="help-block error_msg small">
+              {{ form_offer.product.errors.as_text }}
+          </span>
+      {% endif %}
+      <div class="col-md-12 col-sm-12">
+          {{ form_offer.product }}
+      </div>
+  </div>
+</div>
+<!-- end row -->
+
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> {{ form_offer.loan_amount_offer.label }}: </label>
+      {% if form_offer.loan_amount_offer.errors %}
+          <span class="help-block error_msg small">
+              {{ form_offer.loan_amount_offer.errors.as_text }}
+          </span>
+      {% endif %}
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group">
+              <span class="input-group-addon">Rp.</span>
+              {{ form_offer.loan_amount_offer }}
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> {{ form_offer.loan_duration_offer.label }}: </label>
+      {% if form_offer.loan_duration_offer.errors %}
+          <span class="help-block error_msg small">
+              {{ form_offer.loan_duration_offer.errors.as_text }}
+          </span>
+      {% endif %}
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group">
+              {{ form_offer.loan_duration_offer }}
+              <span class="input-group-addon">{{ object.application.determine_kind_of_installment }}</span>
+          </div>
+      </div>
+  </div>
+
+</div>
+<!-- end row -->
+
+
+<div class="row m-t-30">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> {{ form_offer.installment_amount_offer.label }}: </label>
+      {% if form_offer.installment_amount_offer.errors %}
+          <span class="help-block error_msg small">
+              {{ form_offer.installment_amount_offer.errors.as_text }}
+          </span>
+      {% endif %}
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group">
+              <span class="input-group-addon">Rp.</span>
+              {{ form_offer.installment_amount_offer }}
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <button type="button" class="btn btn-success m-t-20" id="id_compute_installment"><i class="fa fa-arrow-left fa-fw"></i> Compute Installment</button>
+  </div>
+
+</div>
+<!-- end row -->
+<!-- <span class="av" id="available_dates">{{ available_due_dates }}</span> -->
+
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+	  <label class="col-md-12 col-sm-12"> {{ form_offer.first_installment_amount.label }}: </label>
+
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group">
+              {{ form_offer.first_installment_amount }}
+              <span id="p_amount_init" class="hidden">{{ offer_obj.first_installment_amount }}</span>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> {{ form_offer.first_payment_date.label }}: </label>
+          <span class="help-block error_msg small">
+          </span>
+          {{ form_offer.first_payment_date }}
+          <span>
+              <label><input type="checkbox" id="only-first-payment" value="True" name="only-first-payment-date"> only first payment date</label>
+          </span>
+          <span id="p_date_init" class="hidden">{{ offer_obj.first_payment_date|date:"d-m-Y" }}</span>
+          <span id="product_line_code" class="hidden"> {{ offer_obj.application.product_line.product_line_code }}</span>
+          <input id="calculate_offer_0_id_value" type="text" hidden="true", value="{{offer_obj.id}}">
+  </div>
+
+</div>

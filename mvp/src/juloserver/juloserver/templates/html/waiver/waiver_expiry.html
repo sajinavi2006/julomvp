@@ -1,0 +1,439 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+    </style>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">Refinancing Expiry Feature</h3>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalExpiryConfirmation" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <h1 align="center">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #F9942D;"></span>
+                    </h1>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 200px">
+                    <p class="text-center" style="font-size: 20px;">
+                        <b>
+                            Apakah Anda yakin untuk melakukan perubahan refinancing status
+                            terhadap {{ input_mode }} - {{ search_id_value }} menjadi expired?
+                        </b>
+                        <b class="label_all_assignment"></b>
+                    </p>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-default text-center"
+                                data-dismiss="modal" id="btnCancel">Kembali
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btn_submit_expiry">Ubah
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalExpirySuccess" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <img src="https://statics.julo.co.id/juloserver/prod/static/images/collections/verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;">
+                </div>
+                <div class="modal-body" style="padding: 0;height: 150px">
+                    <p class="text-center" style="font-size: 20px;">
+                        <b>Success !</b>
+                    </p>
+                    <p class="text-center">Status telah berhasil diubah</p>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-primary text-center btnOk"
+                                data-dismiss="modal"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;">OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="form_search" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="col-md-4 col-xs-12 p-l-10 p-r-10">
+                <label class="col-md-12 col-sm-12">Input Type</label>
+                <select class="form-control" id="input_mode" name="input_mode">
+                    <option value="application_xid" {% if input_mode == 'application_xid' %}selected{% endif %}>Application XID</option>
+                    <option value="customer_id" {% if input_mode == 'customer_id' %}selected{% endif %}>Customer ID</option>
+                    <option value="account_id" {% if input_mode == 'account_id' %}selected{% endif %}>Account ID</option>
+                </select>
+            </div>
+                <div class="col-md-4 col-xs-12 p-l-10 p-r-10">
+                    <label class="col-md-12 col-sm-12">Search ID</label>
+                    <div class="input-group m-t-10 ">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input class="form-control" id="search_id_value"
+                           name="search_id_value" maxlength="100" type="text" value="{{ search_id_value }}"/>
+                    </div>
+                    <span class="help-block error_msg h5">
+                  </span>
+                </div>
+                <div class="col-md-3 col-xs-12 m-t-30 pre-show" style="">
+                    <button type="button" class="btn btn-info btn-rounded btn-block" id="btnSearch">
+                        <strong><i class="fa fa-search"></i> Cari</strong>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+<script>
+{% block script_bottom_inside %}
+    function ToastDanger(body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'error',
+            hideAfter: 2800
+        });
+    }
+    function validateSearch(){
+        if ($('#search_id_value').val().length == 0) {
+            ToastDanger('Mohon isi kolom search ID')
+            return false
+        }
+        return true
+    }
+    $('.btnSave').click(function (e) {
+        save_type = $(this).val()
+        $('#modalConfirmation').modal('show')
+    })
+    function negative_response_swal(msg) {
+        swal({
+          title: "Gagal!",
+          html:true,
+          text: msg,
+          type: "error",
+          showCancelButton: true,
+          showConfirmButton: false,
+          cancelButtonColor: "#ffffff",
+          cancelButtonText: "Kembali",
+          closeOnCancel: true
+        });
+    }
+    $('#btn_submit_expiry').click(function (e){
+        $.ajax({
+            url: `{%url 'waiver:submit_manual_waiver_expiry' %}`, // the endpoint
+            type: "POST", // http method
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                loan_refinancing_request_id: {{ loan_refinancing_request_id }},
+            },
+            beforeSend: function( xhr ) {
+                $('#btn_submit_expiry').text("Loading...").prop('disabled', 'disabled')
+            },
+            success: function (json) {
+                if (json.status == "success") {
+                    $('#modalExpiryConfirmation').modal('hide')
+                    $('#modalExpirySuccess').modal('show')
+                } else {
+                    negative_response_swal(json.messages);
+                }
+            },
+        }).done(function (data){
+            $("#btn_submit_expiry").text("Ubah").prop('disabled', false)
+        })
+    })
+    $('#btnSearch').click(function (e){
+        validate_status = validateSearch()
+        if (validate_status) {
+            $('#form_search').submit()
+        }
+    });
+    {% if loan_refinancing_request_id %}
+        $('#modalExpiryConfirmation').modal('show')
+    {% endif %}
+    {% if error_messages %}
+        negative_response_swal("{{error_messages}}");
+    {% endif %}
+{% endblock %}

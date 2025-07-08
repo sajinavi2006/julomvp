@@ -1,0 +1,107 @@
+{% extends "common/theme1/list/list_footable.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+
+{% block breadcrumb_title %}Data Aplikasi Baru {% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li class="active">Form or Document submitted</li>
+{% endblock %}
+ 
+{% block list_title %}Application - Form or Document submitted{% endblock %}
+{% block list_subtitle %}Silahkan masukan data pencarian{% endblock %}
+ 
+
+
+ {% block content-list %}
+
+  <table id="demo-foo-row-toggler" class="table toggle-circle table-hover">
+    <thead>
+      <tr>
+        <th data-toggle="true"> No </th>
+        <th> Email </th>
+        <th data-toggle="true"> Status </th>
+        <th data-hide="phone"> Identitas </th>
+        <th data-hide="all"> Detail </th>
+        <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">
+            Actions
+        </th>
+      </tr>
+    </thead>
+    <div class="form-inline padding-bottom-15">
+      <div class="row">
+        <div class="col-sm-6 col-xs-12 hidden-xs">
+          {% block search-form %}{% search_form q_value %}{% endblock %}
+        </div>
+      </div>
+    </div>
+    <tbody>
+      {% if object_list %}
+        {% for object in object_list %}
+          <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+            <td><a href="{% url 'loan_app:detail_img_verification' object.id %}">{{ object.customer.email|default:"-"|safe}}</a></td>
+            <td>
+              {{ object.application_status|default:"-"|safe}}
+              </td>
+            <td>
+                {% include "object/loan_app/include/td_identitas.html" %}
+            </td>
+            <td>
+              {% include "object/loan_app/include/app_td_detail.html" %}
+            </td>
+            
+            <td class='text-center'>
+                  <a href="{% url 'loan_app:detail_img_verification' object.id %}" title='verifikasi'>
+                      <button class="btn btn-outline  btn-success btn-rounded m-b-5"><i class="fa fa-pencil fa-fw"></i> Verifikasi </button>
+                  </a>
+                  <a href="{% url 'loan_app:app_multi_image_upload' object.id %}" title='Multi Upload'>
+                      <button class="btn btn-outline  btn-danger btn-rounded m-b-5"><i class="fa fa-image fa-fw"></i> Upload </button>
+                  </a>
+                 <!--  <div class="btn-group m-r-10">
+                    <button aria-expanded="false" data-toggle="dropdown" class="btn btn-outline btn-danger btn-rounded dropdown-toggle waves-effect waves-light" type="button"><i class="fa fa-image fa-fw"></i> Upload <span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu">
+                      <li><a href="{% url 'loan_app:app_image_upload' object.id %}" title='Single Upload'>Single Document</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{% url 'loan_app:app_multi_image_upload' object.id %}" title='Multi Upload'>Multi Document</a></li>
+                    </ul>
+                  </div> -->
+
+              </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+          <tr>
+              <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+          </tr>
+      {% endif %}
+      
+    </tbody>
+  </table>
+  <tfoot>
+    <tr>
+      <td colspan="5"><div class="text-right">
+          {% pagination2 is_paginated paginator page_obj q 4 %}
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+ 
+{% endblock %}
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      /*
+      $('#mnu_dashboard_li a:first').removeClass('active');
+      $('#{{nav_menu}}').addClass('active');
+      $('#{{nav_menu}} a:first').addClass('active');
+      $('#{{nav_submenu}}').addClass('active');
+      $('#{{nav_subsubmenu}}').addClass('active');
+      */
+  });
+{% endblock %}
+

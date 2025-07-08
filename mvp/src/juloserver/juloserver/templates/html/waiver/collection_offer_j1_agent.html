@@ -1,0 +1,2670 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+{% load currency %}
+{% load format_date %}
+{% load model %}
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        #loading-div {
+            display: none;
+            padding-left: 30px;
+            min-height: 800px;
+        }
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .mb10 {
+            margin-bottom: 10px;
+        }
+        .ml5 {
+            margin-left: 5px;
+        }
+        .w15{
+            width: 15px;
+        }
+        .w100 {
+            width: 100px;
+        }
+        .w150 {
+            width: 150px;
+        }
+        .w170 {
+            width: 170px;
+        }
+        .w200 {
+            width: 200px;
+        }
+        .grid {
+            display: grid;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .lb-result {
+            font-size: larger;
+        }
+        .center {
+            align-items: center;
+        }
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight:bold;
+            color: #67717F;
+        }
+        .dot-false {
+          height: 15px;
+          width: 15px;
+          background-color: #bbb;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        .dot-true {
+          height: 15px;
+          width: 15px;
+          background-color: #5AD3A6;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        .txt-align {
+            padding: 10px;
+        }
+        .txt-blue {
+            color: blue;
+        }
+        .error-msg {
+            border: 1px solid red;
+        }
+        .container {
+            width : 90% !important;
+        }
+        .border-grey {
+            border-right: 10px solid #cccccc
+        }
+        .border-blue {
+            border: 5px solid #33C4FF;
+        }
+        .left-div-bg {
+            height: 40px !important;
+            background-color: #cccccc !important;
+            font-size: 14px !important;
+            padding: 10px !important;
+            font-weight: bold !important;
+            line-height: 16px !important;
+            font-color: #000000 !important;
+        }
+        .text-left {
+            font-size: 12px !important;;
+            font-weight: bold !important;
+            padding-left: 15px !important;
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+            font-color: #000000 !important;
+            line-height: 14px !important;
+        }
+        .text-right {
+            font-size: 12px;
+            padding-left: 15px !important;
+            text-align: left;
+            font-color: #000000 !important;
+            line-height: 14px !important;
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+        }
+        .box-padding {
+            padding-bottom: 30px;
+        }
+        .box-row-ht {
+            height: 25px !important;
+        }
+        .small-text {
+            font-size: 8px !important;;
+        }
+        .right-div-bg-top, .right-div-bg-bottom{
+            height: 40px !important;
+            background-color: #AB8CE4 !important;
+            font-size: 14px !important;
+            padding: 10px !important;
+            font-weight: bold !important;
+            line-height: 16px !important;
+            color: white !important;
+            text-align: center;
+            display: flex;
+        }
+        .right-div-bg-bottom {
+            background-color: #AB8BE4 !important;
+            font-color: white !important;
+        }
+        .align-middle {
+            text-align: center !important;
+        }
+        .align-left {
+            text-align: left !important;
+        }
+        .align-right {
+            text-align: right !important;
+            padding-right: 10px !important;
+        }
+        .align-right_txt {
+            text-align: right !important;
+            padding-right: 2% !important;
+        }
+        .loading-div, .loading-div_simulasi {
+            background: gray none repeat scroll 0 0;
+            display: inline;
+            height: 500px;
+            left: 0;
+            opacity: 0.20;
+            position: absolute;
+            width: 100%;
+            z-index: 999;
+        }
+        #loading-div > img, #loading-div_simulasi > img{
+            left: 30%;
+            position: absolute;
+            top: 50px;
+        }
+
+        .existing_offer_modal{
+            width: 90%!important;
+        }
+        .btn-circle-portal {
+            background-color: #AB8CE4;
+            border: none;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 33px 2px;
+            border-radius: 8px;
+            width: 35%;
+        }
+        tfoot tr td {
+            font-weight: bold;
+        }
+        .multiple-ptp-payment-table tbody tr td, .multiple-ptp-payment-table tfoot tr td {
+            padding: 8px 40px;
+        }
+        .edit-link {
+            display: inline-block;
+            color: #337ab7;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .multiple-ptp-payment-message {
+            display: inline-block;
+            color: #E2574C;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+        .max_cap_rule_content {
+            display: flex;
+            flex-direction: column;
+            font-size: 1.2em;
+            grid-gap: .6em;
+        }
+        .refinancing-rule-icon {
+            margin-right: 1em;
+        }
+        .fa-check-circle {
+            color: green;
+        }
+        .refinancing-rule-message, .fa-times-circle-o {
+            color: red;
+        }
+        .table-layout-fixed {
+            table-layout: fixed;
+        }
+        .flex-table {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            align-items: stretch;
+            width: 100%;
+        }
+        .input-group {
+            margin: auto;
+        }
+        .percentage-text-form {
+            width: 120px;
+        }
+        .currency-text-form {
+            width: 200px;
+        }
+        .total-ptp {
+            color: #1E7461;
+            font-weight: bold;
+            text-align: center;
+        }
+        .input-group-addon {
+            background-color: #f5f5f5;
+        }
+        .bg-grey {
+            background-color: #e0e0e0;
+        }
+        .bg-lightgrey {
+            background-color: #f5f5f5;
+        }
+        .bg-white {
+            background-color: white;
+        }
+        .table > thead > tr > th, .table > tbody > tr > td, .table > tfoot > tr > td {
+            vertical-align: inherit;
+        }
+        #btn_reset {
+            font-size: smaller;
+            margin:0;
+            padding:2px;
+        }
+        .disabled {
+            color:gray;
+            pointer-events: none;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .amount-input-text {
+            width: 150px;
+        }
+        /* input[type="text"] {
+            text-align: center;
+        } */
+        .month-column {
+            width: 90px;
+        }
+        .span-button {
+            cursor: pointer;
+        }
+        input[type="checkbox"] {
+            width: 25px;
+            height: 25px;
+        }
+        .final_calculation {
+            color: #1E7461;
+            font-weight: bold;
+        }
+        .weight-normal {
+            font-weight: normal !important;
+        }
+        .weight-lighter {
+            font-weight: lighter !important;
+        }
+        .weight-bold {
+            font-weight: bold !important;
+        }
+        .flex-row {
+            flex: 1;
+            display: flex;
+        }
+        .w-50p {
+            width: 50%;
+        }
+        .border-red {
+            border-color: #db4d3d !important;
+        }
+        .actual-waiver-input > div {
+            display: flex;
+            flex-direction: column;
+        }
+        .font-red {
+            color: red !important;
+        }
+        .margin-0 {
+            margin: 0;
+        }
+        #searchResults {
+            display: none; /* Hide the select by default */
+            width: 100%;
+            top: 40px; /* Adjust based on input height */
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            background-color: #fff;
+            z-index: 1000;
+        }
+        #searchResults option {
+            padding: 10px;
+            cursor: pointer;
+        }
+        #searchResults option:hover {
+            background-color: #f0f0f0;
+        }
+        .glyphicon-refresh-animate {
+            -animation: spin .7s infinite linear;
+            -webkit-animation: spin2 .7s infinite linear;
+        }
+        #clearButton {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #ccc; /* Light gray color for the icon */
+        }
+
+        #clearButton:hover {
+            color: #333; /* Darker color on hover */
+        }
+        @-webkit-keyframes spin2 {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        @keyframes spin {
+            from {
+                transform: scale(1) rotate(0deg);
+            }
+            to {
+                transform: scale(1) rotate(360deg);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+{% endblock %}
+
+{% block list_title %}
+    <div style="border-bottom: 1px solid;">
+        <h3 class="box-title m-b-0">Collection Offer Recommendations for J1</h3>
+    </div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+    <div id="loading-div" >
+        <img src="{% static 'images/collections/ajax-loader.gif' %}" >
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="get" id="frm_search_account">
+                <div class="center flex">
+                    <label class="w150">Account ID:</label>
+                    <div class="w200">
+                        <input type="text" class="form-control" name="account_id" id="account_id"
+                               value="{{ account_id }}" maxlength="15"
+                               onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+                    </div>
+                    <div>
+                        &nbsp;&nbsp;<button type="button" class="btn btn-primary" id="btn_search_account">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% if show == True %}
+        <div class="col-md-5 refinancing_status_layout">
+            <table style="margin-bottom: 1%;">
+                <tr>
+                    <td><label id="refinancing_status">Status: {{ current_loan_refinancing_status }}</label></td>
+                    {% if offer_selected_label != '-' %}
+                    <td><label>Offer: {{ offer_selected_label }}</label></td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td colspan="2" id="tips">
+                        {{ tips }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-3 align-right refinancing_status_layout">
+            <button type="button" class="btn btn-primary" id="btn_offer_history">Offer History</button>
+        </div>
+        {% endif %}
+    </div>
+    {% if show == False and account_id_list %}
+        <div class="row" style="height: 400px;overflow-y: auto;overflow-x: hidden">
+            <div id="jstree" class="col-md-6">
+
+            <!-- in this example the tree is populated from inline HTML -->
+            {% for bucket, account_ids in account_id_list.items %}
+                <ul>
+                  <li id="{{bucket}}" data-jstree='{"icon":"glyphicon {% if account_ids %} glyphicon-plus-sign {% else %} glyphicon-remove {% endif %}"}'>{{bucket | waiver_bucket_name}}
+                    <ul>
+                        {% for account_id in account_ids %}
+                            <li data-jstree='{"icon":"glyphicon glyphicon-triangle-right"}' onclick="directLink({{ account_id }})">Account ID - {{ account_id }}</li>
+                        {% endfor %}
+                    </ul>
+                  </li>
+                </ul>
+            {% endfor %}
+          </div>
+        </div>
+    {% endif %}
+
+    <div class="row" id="contain_div" {% if show == False %} style="display: none;min-height:800px;"{% else %} style="min-height:800px;" {% endif %}>
+        <div class="col-md-3 border-grey">
+            <div id="div_account_info" class="row">
+                <div class="col-md-12">
+                    <div class="row left-div-bg">
+                        <div class="col-md-12">Account Info</div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Nama Customer:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <label class="w170">{{ customer_name }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Email:</label>
+                                <label class="w20">&nbsp;&nbsp;&nbsp;</label>
+                                <label class="w200" id="customer_email" style="word-wrap: break-word;">
+                                    {{ email_address }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="max_cap_rule_container">
+                        <div class="col-md-12 text-right">
+                            <div class="flex">
+                                <label class="w170">Refinancing Availability</label>
+                                <div class="max_cap_rule_content">
+                                    {% for k, v in loan_refinancing_result.items %}
+                                        {% if v.is_available %}
+                                            <span><i class="fa fa-check-circle refinancing-rule-icon"></i>{{k}}</span>
+                                        {% else %}
+                                            <span>
+                                                <i class="fa fa-times-circle-o refinancing-rule-icon"></i>{{k}} <span class="refinancing-rule-message">{{v.message}}</span>
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+                    <div class="row">
+                        <div class="col-md-12 box-padding">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row left-div-bg">
+                        <div class="col-md-12">Pilih Offer</div>
+                    </div>
+                    <div class="row" id="waiver_validity_date_div">
+                        <div class="col-md-12 text-right">
+                            <form autocomplete="off">
+                                {% csrf_token %}
+                                <div class="center flex">
+                                    <label class="w170">Waiver Validity Date:</label>
+                                    <div>
+                                        <input class="form-control datepicker"
+                                           id="waiver_validity_date" maxlength="None"
+                                           name="waiver_validity_date" placeholder="dd M yyyy"
+                                           type="text" value=""><input type="hidden" id="waiver_validity_date_db" value="" name="waiver_validity_date_db">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-12 text-right">
+                            <div class="center flex">
+                                <label class="w170">Pilih Offer:</label>
+                                <div>
+                                    <select class="form-control" id="pilihan_offer">
+                                        <option value="" selected disabled hidden>Pilih Offer</option>
+                                        {% if is_show_r4_only %}
+                                            <option value='R4|r4'>Pelunasan Dengan Diskon (R4)</option>
+                                        {% else %}
+                                            <option value='R4|r4'>Pelunasan Dengan Diskon (R4)</option>
+                                            <option value='R5|r5'>Penghapusan Denda (R5)</option>
+                                            <option value='R6|r6'>Penghapusan Denda Dan Bunga (R6)</option>
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="center flex" style="float:right; padding-top:15px;">
+                                <div style="width: 100px;padding-bottom:160px;">
+                                    <button type="button" class="btn btn-primary" id="btn_simulation" onclick="generate_offer()">Simulasi</button>&nbsp;
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            {%include "waiver/include/ongoing_account_table.html" %}
+            {%include "waiver/include/simulation.html" %}
+        </div>
+    </div>
+
+    {%include "waiver/include/agent_modals.html" %}
+{% endblock %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+<!-- Sweet-Alert  -->
+<script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script src="{% static 'default/js/j1-waiver.js' %}"></script>
+{% endblock %}
+
+{% block script_local_list %}
+<script type="text/javascript">
+    // initial data
+    var show = '{{ show }}';
+    var account_id = '{{ account_id }}';
+    var is_covid_risky = '{{ is_covid_risky }}';
+    var bucket = '{{ bucket }}';
+    var offer = '';
+    var predefined_message = '{{ predefined_message }}';
+    if ( predefined_message != '' ) {
+        ToastDanger('Failure', predefined_message);
+    } else if (account_id && show == 'False') {
+        ToastDanger('Failure', 'Invalid Account ID');
+    }
+    var waiver_recommendation = [];
+    var actual_waiver = [];
+    var waiver_product_type = {
+        principal: 'r4',
+        late_fee: 'r5',
+        interest: 'r6',
+        r4: 'principal',
+        r5: 'late_fee',
+        r6: ['interest', 'late_fee'],
+    };
+    var wording_waiver = {
+        header_table_waiver: {
+            r4: 'principal',
+            r5: 'late fee',
+            r6: 'interest',
+        },
+        min_ptp_amount: {
+            recommended : {
+                r4: 'Recommended Principal',
+                r5: 'Recommended Late Fee Waiver',
+                r6: 'Recommended Interest Waiver',
+            },
+            actual: {
+                r4: 'Actual Principal Waiver',
+                r5: 'Actual Late Fee Waiver',
+                r6: 'Actual Interest Waiver',
+            },
+            repayment: {
+                r4: 'Principal Waiver % utk pelunasan PTP amount',
+                r5: '100% Late Fee Waiver',
+                r6: '100% Interest Waiver'
+            }
+        },
+    }
+    var totalPaymentDue = '{{ total_due_installment }}';
+    var remainingPrincipal = '{{ total_remaining_principal }}';
+    var remainingInterest = '{{ total_remaining_interest }}';
+    var remainingLateFee = '{{ total_remaining_late_fee }}';
+    var outstandingPrincipal = '{{ total_remaining_principal }}';
+    var outstandingInterest = '{{ total_remaining_interest }}';
+    var outstandingLateFee = '{{ total_remaining_late_fee }}';
+    var account_payments = [];
+    {% for ongoing_account_payment in ongoing_account_payments %}
+    account_payments.push({
+        'due_status': '{{ ongoing_account_payment.due_status }}',
+        'outstanding': parseInt('{{ ongoing_account_payment.outstanding }}'),
+        'late_fee_amount': parseInt('{{ ongoing_account_payment.late_fee_amount }}'),
+        'interest_amount': parseInt('{{ ongoing_account_payment.interest_amount }}'),
+        'principal_amount': parseInt('{{ ongoing_account_payment.principal_amount }}'),
+        'remaining_principal': parseInt('{{ ongoing_account_payment.remaining_principal }}'),
+        'remaining_interest': parseInt('{{ ongoing_account_payment.remaining_interest }}'),
+        'remaining_late_fee': parseInt('{{ ongoing_account_payment.remaining_late_fee }}'),
+        'paid_amount': parseInt('{{ ongoing_account_payment.paid_amount }}'),
+        'due_date': '{{ ongoing_account_payment.due_date | format_month_year_to_locale_format_short }}',
+        'account_payment_id': '{{ ongoing_account_payment.account_payment_id }}',
+    });
+    {% endfor %}
+    var resultCalculation = null;
+    var selected_account_payments_waived = null;
+    var waiverTypes = ["principal", "interest", "late_fee"];
+    var current_status = '{{ current_loan_refinancing_status }}';
+    var selected_account_payments_waived_details = {outstanding: [], waiver: [], remaining: []};
+    var waiver_unpaid_principal_amount = 0;
+    var waiver_unpaid_interest_amount = 0;
+    var waiver_unpaid_late_fee_amount = 0;
+    var selected_principal_amount = 0;
+    var selected_interest_amount = 0;
+    var selected_late_fee_amount = 0;
+    var selected_outstanding_amount = 0;
+    var selected_remaining_amount_waived = 0;
+    var unpaid_payment_count_r4 = 0;
+    var unpaid_last_payment_number_r4 = 0
+    for (var i=0; i < account_payments.length; i++) {
+        if (account_payments[i].outstanding > 0) {
+            unpaid_payment_count_r4++;
+            unpaid_last_payment_number_r4 = account_payments[i].id;
+        }
+    }
+    var is_multiple_ptp_payment_input = false;
+    var number_of_multiple_ptp_payment = 0;
+    var multiple_payment_ptp = null;
+
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const searchSpinner = document.getElementById('searchSpinner');
+    const agentDetail = document.getElementById('agentDetail')
+    const agentGroups = document.getElementById('agentGroups');
+    const clearButton = document.getElementById('clearButton');
+
+    var agent_group = agentGroups.value || ''
+    var agent_detail = agentDetail.value || ''
+
+    $(document).ready(function(){
+        $('.datepicker, #waiver_validity_date').datepicker({
+            format: 'dd M yyyy',
+            buttonClasses: ['btn', 'btn-sm'],
+            applyClass: 'btn-danger',
+            cancelClass: 'btn-inverse',
+            dateLimit: { days: 6 },
+            autoclose: true,
+            startDate:'+0d',
+            endDate:'+90d',
+            todayHighlight: true,
+            todayBtn: "linked",
+        });
+        $('#waiver_validity_date').on('changeDate', function(e){
+            $('#waiver_validity_date_db').val(moment(e.date).format('YYYY-MM-DD'));
+            ptp_payment_message = $(".multiple-ptp-payment-message");
+            if (get_validity_date_diff() > 40) {
+                ptp_payment_message.show();
+                ptp_payment_message.attr("data-previous", "show");
+            } else {
+                ptp_payment_message.hide();
+                ptp_payment_message.attr("data-previous", "hide");
+            }
+        });
+
+        $('#jstree').jstree();
+        $('#jstree').on("changed.jstree", function (e, data) {});
+
+        {% if is_auto_populated %}
+        waiverValidityDate = "{{ waiver_validity_date }}".split('-');
+        if (waiverValidityDate.length == 3) {
+            $('#waiver_validity_date').datepicker("setDate", new Date(parseInt(waiverValidityDate[0]), parseInt(waiverValidityDate[1])-1, parseInt(waiverValidityDate[2])))
+            $('#waiver_validity_date_db').val(`${waiverValidityDate[0]}-${waiverValidityDate[1]}-${waiverValidityDate[2]}`);
+            $("#pilihan_offer option[value='{{ existing_program_name|upper }}|{{ existing_program_name }}']").prop("selected", true);
+            $("#pilihan_offer option[value='{{ existing_program_name|upper }}|{{ existing_program_name }}']").trigger("change");
+            generate_offer(true);
+
+            {% if is_multiple_ptp_payment %}
+            $("#is_multiple_ptp_payment").prop("checked", true).trigger("change");
+            $("select[name=jumlah_angsuran_ptp_payment]").val("{{ number_of_multiple_ptp_payment }}").trigger('change');
+            {% for payment_ptp in multiple_payment_ptp %}
+            multiplePaymentDate = "{{ payment_ptp.promised_payment_date }}".split('-');
+            $('#multiple_payment_date_{{ payment_ptp.sequence }}').datepicker("setDate", new Date(parseInt(multiplePaymentDate[0]), parseInt(multiplePaymentDate[1])-1, parseInt(multiplePaymentDate[2])));
+            $('#multiple_payment_date_{{ payment_ptp.sequence }}_db').val(`${multiplePaymentDate[0]}-${multiplePaymentDate[1]}-${multiplePaymentDate[2]}`);
+            $("input[name=multiple_ptp_amount_{{ payment_ptp.sequence }}]").val(addComma("{{ payment_ptp.promised_payment_amount }}")).trigger("change");
+            {% endfor %}
+            total_multiple_payment = $(".total-multiple-payment").html();
+            $("input[name=max_multiple_ptp_amount]").val(total_multiple_payment.replace("Rp. ", ""));
+            $("#multiple_ptp_amount_txt").html(total_multiple_payment.replace("Rp. ", ""));
+            $("#btn_multiple_ptp_payment_submit").trigger("click");
+            {% endif %}
+        }
+        {% endif %}
+
+        email_comms = $("input[name=comms_channel2][value=Email]");
+        {% if dpd > 90 %}
+        email_comms.attr("data-checked", true);
+        email_comms.prop("checked", true).trigger("change");
+        {% else %}
+        email_comms.attr("data-checked", false);
+        email_comms.prop("checked", false).trigger("change");
+        {% endif %}
+    })
+
+    // UI/UX function
+    function expandTable(tableName){
+        styles = document.getElementById(tableName).style;
+        styles.display = styles.display == "none" ? "block" : "none";
+        $("." + tableName + "-backward").toggle();
+        $("." + tableName + "-forward").toggle();
+    }
+
+    function collapseTable(tableName) {
+        styles = document.getElementById(tableName).style;
+        styles.display = styles.display == "none" ? "flex" : "none";
+        $(".original_amount_table-forward").toggleClass("disabled");
+        $(".original_amount_table-backward").toggleClass("disabled");
+        $("." + tableName + "-downward").toggle();
+        $("." + tableName + "-upward").toggle();
+    }
+
+    function negative_response_swal(msg) {
+        swal({
+            title: "Gagal!",
+            html:true,
+            text: msg,
+            type: "error",
+            showCancelButton: true,
+            showConfirmButton: false,
+            cancelButtonColor: "#ffffff",
+            cancelButtonText: "Kembali",
+            closeOnCancel: true
+        });
+    }
+
+    function positive_response_swal(msg) {
+        swal({
+            title: "Sukses!",
+            html: true,
+            text: msg,
+            type: "success",
+            showCancelButton: false,
+            confirmButtonColor: "#7cd1f9",
+            confirmButtonText: "OK",
+            closeOnConfirm: true,
+        });
+    }
+
+    function ToastDanger(header_msg, body_message, type='') {
+        $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'error',
+            hideAfter: type == 1 ? 6300 : 2800,
+        });
+    }
+
+    function ToastSuccess(header_msg, body_message, type='') {
+        if(type == 1)
+            hide_time = 6300
+        else
+            hide_time = 1500
+        $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'success',
+            hideAfter: hide_time,
+            stack: 6
+        });
+    }
+
+    function show_hide_divs_right(show_div) {
+        if (show_div) {
+            $("#div_simulasi_head").show();
+            $("#div_simulasi_details").show();
+            $("#div_waiver_request_submit").show();
+        } else {
+            $("#div_simulasi_head").hide();
+            $("#div_simulasi_details").hide();
+            $("#div_waiver_request_submit").hide();
+        }
+    }
+
+    function numberWithCommas(x, withSpace=true) {
+        num = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (num == '-'){
+            formatted_num = '-';
+        } else {
+            if (withSpace) {
+                formatted_num = 'Rp. ' + num;
+            } else {
+                formatted_num = 'Rp' + num;
+            }
+        }
+        return formatted_num;
+    }
+
+    function addComma(x) {
+        num = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return num
+    }
+
+    function addCurrency(amountStr) {
+        return "Rp" + amountStr
+    }
+
+    function change_date_to_month_year(date) {
+        date_split = date.split(" ");
+        return date_split[1] + " " + date_split[2];
+    }
+
+    function grayedOut(changeValue){
+        $("#btn_calculate_waiver").prop("disabled", false);
+        $("#btn_reset").prop("disabled", false);
+        $("#btn_show_note_modal").prop("disabled", true);
+        if (changeValue == 'ptp_amount'){
+            $("#remaining_installments_table td").html('-')
+            $("#remaining_installments_table td").css('background', 'lightgrey')
+            $("#outstanding_amount_table td").html('-')
+            $("#outstanding_amount_table td").css('background', 'lightgrey')
+        } else if (changeValue == 'actual_waiver'){
+            $("#ptp_amount").prop('disabled', true);
+            $('.waiver-amount').prop('disabled', true)
+            $("#remaining_installments_table td").html('-')
+            $("#remaining_installments_table td").css('background', 'lightgrey')
+            $("#outstanding_amount_table td").html('-')
+            $("#outstanding_amount_table td").css('background', 'lightgrey')
+            $("#selected_recommended_waiver").text('-')
+            $("#selected_recommended_waiver").css('background', 'lightgrey')
+            $("#selected_actual_waiver").text('-')
+            $("#selected_actual_waiver").css('background', 'lightgrey')
+            $("#selected_100_waiver").text('-')
+            $("#selected_100_waiver").css('background', 'lightgrey')
+            if (offer[1] == "r4") {
+                percentInput = $("#actual_principal_percentage");
+            } else if (offer[1] == "r5") {
+                percentInput = $("#actual_late_fee_percentage");
+            } else if (offer[1] == "r6") {
+                percentInput = $("#actual_interest_percentage");
+            }
+            percentInput.attr("data-actual", percentInput.val() / 100);
+        } else if (changeValue == 'cell_waiver_amount'){
+            $("#ptp_amount").prop('disabled', true);
+            $("#principal_waiver").css('background', 'lightgrey');
+            $("#principal_waiver").text('');
+            $("#selected_recommended_waiver").text('-')
+            $("#selected_recommended_waiver").css('background', 'lightgrey')
+            $("#selected_actual_waiver").text('-')
+            $("#selected_actual_waiver").css('background', 'lightgrey')
+            $("#selected_100_waiver").text('-')
+            $("#selected_100_waiver").css('background', 'lightgrey')
+            $("#remaining_installments_table td").html('-')
+            $("#remaining_installments_table td").css('background', 'lightgrey')
+            $("#outstanding_amount_table td").html('-')
+            $("#outstanding_amount_table td").css('background', 'lightgrey')
+        } else if(changeValue == 'waiver_checkbox') {
+            $('.waiver-amount').prop('disabled', true)
+            $("#remaining_installments_table td").html('-')
+            $("#remaining_installments_table td").css('background', 'lightgrey')
+            $("#outstanding_amount_table td").html('-')
+            $("#outstanding_amount_table td").css('background', 'lightgrey')
+            $("#selected_recommended_waiver").text('-')
+            $("#selected_recommended_waiver").css('background', 'lightgrey')
+            $("#selected_actual_waiver").text('-')
+            $("#selected_actual_waiver").css('background', 'lightgrey')
+            $("#selected_100_waiver").text('-')
+            $("#selected_100_waiver").css('background', 'lightgrey')
+        }
+        let force_replace_table = false
+        if (changeValue == 'waiver_checkbox') {
+            // refetch recommendation based on selected waiver
+            fetch_waiver_recommendation()
+            force_replace_table = true
+        }
+        trigger_calculate(force_replace_table)
+    }
+
+    function add_delay(func, time=500) {
+        setTimeout(func, time);
+    }
+    function check_comms() {
+        if($('input[id="comms_channel2_1"]').is(":not(:checked)") && $('input[id="comms_channel2_2"]').is(":not(:checked)") && $('input[id="comms_channel2_3"]').is(":not(:checked)")) {
+            $("#btn_waiver_request_submit").removeClass("btn-active").addClass("disabled btn-inactive");
+            $("#btn_waiver_request_submit").attr("disabled", true);
+            return false;
+        } else {
+            $("#btn_waiver_request_submit").removeClass("disabled btn-inactive").addClass("btn-active");
+            $("#btn_waiver_request_submit").attr("disabled", false);
+            return true;
+        }
+    }
+
+    function generate_comms_data() {
+        comms_channels = []
+        $.each($("input[name='comms_channel2']:checked"), function(){
+            comms_channels.push($(this).val());
+        });
+        return comms_channels.join();
+    }
+
+    function directLink(account_id) {
+        window.location.href = "/waiver/collection-offer-j1?portal_type=approver_portal&account_id="+account_id;
+    }
+
+    function set_validation_message(message) {
+        html = document.createElement("div");
+        html.style = "border-top: solid #E2574C; background-color: #FDEFEE; color: #E2574C";
+        p = document.createElement("p");
+        p.innerHTML = message;
+
+        html.append(p);
+        $('#multiple_ptp_payment_validation').append(html);
+        return false;
+    }
+
+    function get_validity_date_diff() {
+        today_date = new Date();
+        validity_date = $("#waiver_validity_date").datepicker('getDate');
+        return Math.floor((validity_date - today_date) / (1000 * 60 * 60 * 24)) + 1;
+    }
+
+    // validation
+    function validationWaiverPercentage(recommendedPercentage, actualPercentage){
+        if ( parseFloat(actualPercentage) > parseFloat(recommendedPercentage) ) {
+            let html = '<div style="border-top: solid #E2574C; background-color: #FDEFEE; color: #E2574C"><p>Waiver request anda diluar rekomendasi SOP dan akan bergantung pada approval atasan anda</p></div>';
+            $('#waiver_validation').html(html);
+            toggleWarning(true)
+        } else {
+            toggleWarning(false)
+        }
+    }
+
+    function toggleWarning(toggleOn=true) {
+        const tdSelector = $("td.actual-waiver-input")
+        if (!tdSelector.length) return
+        // warning red border
+        tdSelector.find('input').toggleClass('border-red', toggleOn)
+        tdSelector.find('span').toggleClass('border-red', toggleOn)
+        // add error message
+        if (toggleOn) {
+            tdSelector.find('div p').text('Melebihi batas maks.')
+        } else {
+            tdSelector.find('div p').text('')
+        }
+    }
+
+    function validationPTPAmountforR5andR6(ptpAmount, actualInterestWaiver) {
+        if (!selected_account_payments_waived.includes(account_payments[account_payments.length - 1].account_payment_id)) {
+            return false;
+        }
+        let result = false;
+        if (ptpAmount > actualInterestWaiver) {
+            let html = `<div style="border-top: solid #E2574C; background-color: #FDEFEE; color: #E2574C"><p>PTP Amount yang diisi harus LEBIH KECIL atau SAMA DENGAN ${numberWithCommas(actualInterestWaiver)}.` +
+                        ` </p></div>`;
+            $('#waiver_validation').html(html);
+            result = true;
+        }
+        return result;
+    }
+
+    function validationPtpAmount(ptpAmount, actualWaiver, minPaidOff, totalRemainingInstallments) {
+        let result = false;
+        if ( ptpAmount <  actualWaiver ) {
+            let html = `<div style="border-top: solid #E2574C; background-color: #FDEFEE; color: #E2574C"><p>Waiver tidak dapat di-submit karena masih ada sisa tagihan sebesar ${numberWithCommas(totalRemainingInstallments)}.` +
+                        ` Mohon naikkan PTP amount menjadi IDR ${actualWaiver} atau naikkan Actual Waiver percentage menjadi` +
+                        ` ${minPaidOff * 100}%</p></div>`;
+            $('#waiver_validation').html(html);
+            result = true;
+        }
+        return result;
+    }
+
+    function validateWaiverCheckbox() {
+        if (offer[1] == "r4") {
+            return false;
+        }
+        setSelectedAccountPaymentsWaived();
+        if (selected_account_payments_waived.length == 0) {
+            return true;
+        }
+        return_value = false;
+        first_elm = $("input[name='waiver_checkbox[]']").not("[disabled]").eq(0);
+        if (first_elm.length == 1) {
+            last_index = first_elm.attr("data-index") - 1;
+        } else {
+            last_index = -1;
+        }
+        $("input[name='waiver_checkbox[]']:checked").not("[disabled]").each(function(index, elm){
+            if (last_index >= 0 && (last_index + 1 != $(elm).attr("data-index"))) {
+                return_value = true;
+                return false; // return for exit loop
+            }
+            last_index = parseInt($(elm).attr("data-index"));
+        });
+        return return_value;
+    }
+
+    function validateMultiplePtpPaymentCheckbox() {
+        if (get_validity_date_diff() > 40 && is_multiple_ptp_payment_input == false) {
+            return true;
+        }
+    }
+
+    function validateMultiplePtpPayment() {
+        $('#multiple_ptp_payment_validation').empty();
+        message = "";
+        ptp_amount = parseInt($("input[name=max_multiple_ptp_amount]").val().replace(/,/g, ''));
+        total_multiple_ptp_amount = 0;
+
+        $('.multiple_ptp_amount').each(function(){
+            if ($(this).val() != "" && parseInt($(this).val().replace(/,/g, '')) > 0) {
+                total_multiple_ptp_amount += parseInt($(this).val().replace(/,/g, ''));
+            } else {
+                message = 'Tanggal bayar dan jumlah yang dibayar tidak boleh kosong';
+                return false;
+            }
+        });
+        if (message != "") { return set_validation_message(message); }
+
+        if (ptp_amount != total_multiple_ptp_amount) {
+            return set_validation_message(
+                'Total dari "Jumlah yang dibayar" didalam tabel harus sesuai dengan total PTP Amount yang telah diinput'
+            );
+        }
+
+        previous_date = null;
+        $(".multiple_payment_date").each(function(){
+            index = $(this).attr("data-index");
+            current_date = $("#multiple_payment_date_" + index).datepicker('getDate');
+            if (!current_date) {
+                message = 'Tanggal bayar dan jumlah yang dibayar tidak boleh kosong';
+                return false;
+            } else if (previous_date && (previous_date >= current_date)) {
+                message = "Tanggal bayar harus berurutan";
+                return false;
+            }
+            previous_date = current_date;
+        });
+        if (message != "") { return set_validation_message(message); }
+
+        if (current_date > $("#waiver_validity_date").datepicker('getDate')) {
+            return set_validation_message(
+                'Tanggal bayar terakhir harus jatuh sebelum atau saat tanggal Waiver Validity Date yang telah di input'
+            );
+        }
+        return true;
+    }
+
+    // main function
+    function repeated_offer_swal(existing_offers, show_button=false) {
+        if(existing_offers.length > 0){
+            msg = ''
+            for(var i = 0; i < existing_offers.length; i++) {
+                var existing_offer = existing_offers[i];
+                if(existing_offer.status == 'Activated'){
+                    status_class = 'success';
+                }else if(existing_offer.status == 'Expired'){
+                    status_class = 'danger';
+                }else{
+                    status_class = 'warning';
+                }
+                var number = i+1 ;
+                msg += '<tr>\
+                            <td class="align-middle"> '+ number.toString() +' </td>\
+                            <td class="align-middle"> '+ existing_offer.product_type +' </td>\
+                            <td class="align-middle"> '+ existing_offer.request_date +' </td>\
+                            <td class="align-middle"> '+ existing_offer.principal_discount +' </td>\
+                            <td class="align-middle"> '+ existing_offer.interest_discount +' </td>\
+                            <td class="align-middle"> '+ existing_offer.latefee_discount +' </td>\
+                            <td class="align-middle"> '+ existing_offer.extension +' </td>\
+                            <td class="align-middle '+ status_class +'"> '+ existing_offer.status +' </td>\
+                            <td class="align-middle"> '+ existing_offer.prerequisite_amount +' </td>\
+                            <td class="align-middle"> '+ existing_offer.status_date +' </td>\
+                            <td class="align-middle"> '+ existing_offer.requested_expire_date +' </td>\
+                            <td class="align-middle"> '+ existing_offer.expire_date +' </td>\
+                        </tr>';
+            }
+
+            $('#existing_offer_table_body').html(msg);
+            if(show_button){
+                button_html = '<button type="button" class="btn btn-primary waves-effect" onclick="generate_offer()">Generate Offer</button>\
+                <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete" data-dismiss="modal">Kembali</button>';
+                post_script_html = '<p>Customer sudah mendapatkan keringanan sebelumnya.</p>\
+                                    <p>Apakah ingin memberikan keringanan kembali? </p>'
+            }else{
+                button_html = '';
+                post_script_html = '';
+            }
+            $('#existing_offer_footer').html(button_html);
+            $('#existing_offer_ps').html(post_script_html);
+            $('#blank_existing_offer_content').hide();
+            $('#existing_offer_content').show();
+        }else{
+            $('#blank_existing_offer_content').show();
+            $('#existing_offer_content').hide();
+        };
+        $('#existing_offer_pop_up').modal('show');
+    }
+
+    function generate_offer(is_auto_populated=false) {
+        {% if not is_approver and dpd <= 0 %}
+            ToastDanger('Failure', 'Refinancing tidak bisa di buat, karena akun customer masih dalam masa sebelum/ baru jatuh tempo');
+            return false;
+        {% endif %}
+        if(!$('#waiver_validity_date').val()) {
+           ToastDanger('Failure', 'Please choose Waiver Validity Date');
+           return false;
+        } else if(!$('#pilihan_offer').val()) {
+            ToastDanger('Failure', 'Please choose Pilihan Offer');
+            return false;
+        } else if(bucket == '') {
+           ToastDanger('Failure', 'Bucket name is invalid');
+           return false;
+        }
+        $("#btn_simulation").prop("disabled", true);
+        setOffer();
+
+        $('#existing_offer_pop_up').modal('hide');
+
+        show_hide_divs_right(false);
+
+        $("#ptp_amount").prop('disabled', false);
+        $('.waiver-amount').prop('disabled', false);
+        $(".remove-when-reset").remove();
+        all_table_names = ['outstanding_amount_table', 'remaining_installments_table', 'waiver_amount_table'];
+        all_table_names.forEach(function(table_name) {
+            id = "#" + table_name;
+            $(id).children('tbody').html("");
+            $(id + " td").css('background', '');
+            $(id + " td").html('');
+        });
+        $("#principal_waiver").css('background', '');
+        $("#selected_recommended_waiver").css('background', '');
+        $("#selected_actual_waiver").css('background', '');
+        $("#selected_100_waiver").css('background', '');
+
+        $.ajax({
+            url: "{%url 'waiver:ajax_generate_j1_waiver_refinancing_offer' %}", // the endpoint
+            type: "POST", // http method
+            data: {
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                account_id: parseInt(account_id),
+                is_auto_populated: is_auto_populated,
+                selected_product: offer[0],
+            }, // data sent with the post request
+            // handle a successful response
+            success: function (json) {
+                if(json.status == 'success') {
+                    let data = json.data
+                    success_generate_offer(data);
+                    auto_populate_generate_offer(is_auto_populated, data);
+                    update_refinancing_tips(data.current_loan_refinancing_request_status);
+                    $("#btn_simulation").prop("disabled", is_auto_populated);
+                    setPtpWording()
+                } else {
+                    if (json.status == 'max cap rule validation') {
+                        swal({
+                            title: "",
+                            text: json.message,
+                            type: "warning"
+                        }, function() {
+                            $(location).attr('href', "/waiver/collection-offer-j1?account_id="+account_id);
+                        });
+                    } else {
+                        ToastDanger('Failure', json.message);
+                        show_hide_divs_right(false);
+                    }
+                };
+            },
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                ToastDanger('Failure', "Mohon maaf. Silakan coba lagi.");
+                // console.log(xhr.responseText);
+                show_hide_divs_right(false);
+            }
+        })
+    }
+
+    function update_refinancing_tips(refinancing) {
+        if (refinancing != null){
+            $('#refinancing_status').text('Status: '+refinancing.current_loan_refinancing_status);
+            $('#tips').text(refinancing.tips);
+        }
+    }
+
+    function success_generate_offer(data) {
+        show_hide_divs_right(true);
+        $.ajax({
+            url: "{%url 'waiver:ajax_j1_waiver_recommendation' %}",
+            type: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val(),
+            },
+            async: false,
+            data: JSON.stringify({
+                "account_id": parseInt(account_id),
+                "selected_offer_recommendation": offer[0],
+                "is_covid_risky": is_covid_risky == 'yes' ? true : false,
+                "bucket": bucket,
+                "account_payment_ids": selected_account_payments_waived,
+            }),
+            success: function (json){
+                if (json.status == 'success'){
+                    waiver_recommendation = json.waiver_recommendation;
+                    actual_waiver = json.actual_waiver;
+                } else {
+                    ToastDanger('Failure', 'rekomendasi waiver tidak ditemukan');
+                    $('#loading-div_simulasi').hide();
+                    return;
+                }
+            },
+            error: function (xhr, errmsg, err) {
+                ToastDanger('Failure', "Mohon maaf. Silakan coba lagi", 1);
+                // console.log(xhr.responseText);
+                $('#loading-div_simulasi').hide();
+                return;
+            }
+        })
+
+        $('#loading-div_simulasi').show();
+        if (!waiver_recommendation) {
+            $('#loading-div_simulasi').hide();
+            return;
+        }
+        if (!actual_waiver) {
+            $('#loading-div_simulasi').hide();
+            return;
+        }
+        if (offer[1] == 'r5' && remainingLateFee <= 0) {
+            ToastDanger('Failure', "Tagihan ini tidak mempunyai denda", 1);
+            $('#loading-div_simulasi').hide();
+            return;
+        }
+
+        resultCalculation = initialCalculationFormulas(
+            account_payments,
+            offer[1],
+            {
+                'principal_waiver' : waiver_recommendation.principal_waiver_percentage,
+                'interest_waiver' : waiver_recommendation.interest_waiver_percentage,
+                'late_fee_waiver': waiver_recommendation.late_fee_waiver_percentage
+            },
+            {
+                'principal_waiver' : actual_waiver.principal_waiver_percentage,
+                'interest_waiver' : actual_waiver.interest_waiver_percentage,
+                'late_fee_waiver': actual_waiver.late_fee_waiver_percentage
+            },
+            {
+                remaining_principal: remainingPrincipal,
+                remaining_interest: remainingInterest,
+                remaining_late_fee: remainingLateFee,
+            }
+        )
+
+        set_min_ptp_amount_table(resultCalculation);
+        set_percentage_table();
+        set_outstanding_amount_table(resultCalculation['outstanding_amount']);
+        set_remaining_amount_table(resultCalculation);
+        set_waiver_table(resultCalculation['waiver_amount']);
+
+        $("#div_simulasi_head").show();
+        $("#ptp_amount").maskMoney({thousands:',', decimal:'.', allowZero: true, suffix: '', precision:0});
+        $("#div_simulasi_details").show();
+        $('#loading-div_simulasi').hide();
+        selected_account_payments_waived = null;
+        setColumnWaiver();
+        checkWaiverPercentage();
+        thickApplyWaiver();
+        $('#div_waiver_request_submit').show();
+        setSelectedAccountPaymentsWaived()
+
+        if (offer[1] == 'r4') {
+            $(".hide-for-r4").hide();
+        } else {
+            $(".hide-for-r4").show();
+        }
+    }
+
+    function fetch_waiver_recommendation() {
+        setSelectedAccountPaymentsWaived()
+            $.ajax({
+                url: "{%url 'waiver:ajax_j1_waiver_recommendation' %}",
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val(),
+                },
+                async: false,
+                data: JSON.stringify({
+                    "account_id": parseInt(account_id),
+                    "selected_offer_recommendation": offer[0],
+                    "is_covid_risky": is_covid_risky == 'yes' ? true : false,
+                    "bucket": bucket,
+                    "account_payment_ids": selected_account_payments_waived,
+                }),
+                success: function (json){
+                    if (json.status == 'success'){
+                        waiver_recommendation = json.waiver_recommendation;
+                        actual_waiver = json.actual_waiver;
+                    } else {
+                        ToastDanger('Failure', 'rekomendasi waiver tidak ditemukan');
+                        $('#loading-div_simulasi').hide();
+                        return;
+                    }
+                },
+                error: function (xhr, errmsg, err) {
+                    ToastDanger('Failure', "Mohon maaf. Silakan coba lagi", 1);
+                    // console.log(xhr.responseText);
+                    $('#loading-div_simulasi').hide();
+                    return;
+                }
+            })
+    }
+
+    function auto_populate_generate_offer(is_auto_populated, data) {
+        if (is_auto_populated==true && data.selected_refinancing_offers != '') {
+            selected_refinancing_offer = JSON.parse(data.selected_refinancing_offers);
+            $('input[name="comms_channel2"][value="'+selected_refinancing_offer.loan_refinancing_request__comms_channel_1+'"]').prop('checked', true);
+            $('input[name="comms_channel2"][value="'+selected_refinancing_offer.loan_refinancing_request__comms_channel_2+'"]').prop('checked', true);
+            $('input[name="comms_channel2"][value="'+selected_refinancing_offer.loan_refinancing_request__comms_channel_3+'"]').prop('checked', true);
+            $('#is_customer_confirmed_waiver').prop('checked', true);
+
+            all_table_names = ['outstanding_amount_table', 'remaining_installments_table', 'waiver_amount_table'];
+            all_table_names.forEach(function(table_name) {
+                id = "#" + table_name;
+                $(id).children('tbody').html("");
+                $(id + " td").css('background', '');
+                $(id + " td").html('');
+            });
+
+            autoPopulateWaiver(data);
+            set_min_ptp_amount_table(resultCalculation);
+            set_percentage_table();
+            set_outstanding_amount_table(resultCalculation['outstanding_amount']);
+            set_remaining_amount_table(resultCalculation);
+            set_waiver_table(resultCalculation['waiver_amount']);
+
+            checkWaiverPercentage()
+            setColumnWaiver();
+            thickApplyWaiver();
+        };
+
+    }
+
+    function get_recommended_percentage_by_product() {
+        if (offer[1] == 'r5') {
+            return parseFloat(waiver_recommendation.late_fee_waiver_percentage) * 100
+        } else if (offer [1] == 'r6') {
+            return parseFloat(waiver_recommendation.interest_waiver_percentage) * 100
+        }
+        return parseFloat(waiver_recommendation.principal_waiver_percentage) * 100
+    }
+
+    function get_actual_percentage_by_product() {
+        percentage = parseFloat(actual_waiver.principal_waiver_percentage) * 100;
+        if (offer[1] == 'r5') {
+            percentage = parseFloat(actual_waiver.late_fee_waiver_percentage) * 100;
+        } else if (offer [1] == 'r6') {
+            percentage = parseFloat(actual_waiver.interest_waiver_percentage) * 100;
+        }
+
+        if (percentage.toFixed(2).split(".")[1] == "00") {
+            return parseInt(percentage);
+        }
+        return percentage.toFixed(2);
+    }
+
+    function set_min_ptp_amount_table(data) {
+        // min. ptp amount table
+        $("input[name=ptp_amount_waiver]").val(addComma(data.ptp_amount))
+        $("input[name=total_installment_waived]").val(data.total_installments_waived)
+
+        recommended_wording = wording_waiver.min_ptp_amount.recommended[offer[1]];
+        $("#recommended_min_waiver").html(numberWithCommas(data.min_recommended));
+        let selected_recommended_waiver = data.selected_recommended_waiver
+        if (offer[1] == 'r4') {
+            selected_recommended_waiver = data.min_recommended
+        }
+        $("#selected_recommended_waiver").text(numberWithCommas(selected_recommended_waiver));
+        actual_wording = wording_waiver.min_ptp_amount.actual[offer[1]];
+        $("#actual_principal_waiver").html(numberWithCommas(data.min_actual));
+        $("#selected_actual_waiver").text(numberWithCommas(data.selected_actual_waiver));
+        $("#outstanding_principal_waiver").html(numberWithCommas(data.selected_outstanding_total || 0, false));
+
+        if(offer[1] == 'r4') {
+            principal_waiver_str = (parseFloat(data.min_paid_off) * 100).toFixed(2) + "%";
+        } else {
+            principal_waiver_str = numberWithCommas(data.min_paid_off);
+        }
+        $("#principal_waiver").html(principal_waiver_str);
+        $("#selected_100_waiver").text(numberWithCommas(data.selected_100_waiver));
+    }
+
+    function set_percentage_table() {
+        // percentage
+        waiverTypes.forEach(function (waiverType) {
+            waiver_key = waiverType + "_waiver_percentage";
+            percentage_input = $('input#actual_' + waiverType + '_percentage');
+            if (percentage_input.length > 0) {
+                percentage_input.parents('td').attr("id", 'actual_' + waiverType + '_percentage');
+                percentage_input.parents('td').html("");
+            }
+            percentage_html = $('td#actual_' + waiverType + '_percentage');
+            percentage_html.prev().html(parseFloat(waiver_recommendation[waiver_key]) * 100 + "%");
+            percentage_html.html(parseFloat(actual_waiver[waiver_key]) * 100 + "%");
+        });
+    }
+
+    function set_outstanding_amount_table(data, force_replace_table=true) {
+        target_table = $("#outstanding_amount_table");
+        if (force_replace_table) {
+            // recreate body
+            target_table.children('tbody').html("");
+        }
+        // outstanding amount
+        waiverTypes.push('need_to_pay');
+        for (let i = 0; i < data['account_payments'].length ; i++){
+            account_payment = data['account_payments'][i];
+            let status_read = ''
+            if (account_payment.due_status) {
+                status_read =  account_payment.due_status == 'Y' ? 'Ya' : 'Belum'
+            }
+            row = '<tr style="height: 65px"><td class="align-middle">' + status_read + '</td>';
+            if(account_payment.outstanding <= 0) {
+                for (let newIndex = 0; newIndex < 5; newIndex++) {
+                    row += '<td class="align-middle">-</td>';
+                }
+            } else {
+                waiverTypes.forEach(function (waiverType) {
+                    amount = numberWithCommas(account_payment[waiverType], false);
+                    row += '<td class="align-middle">' + amount + '</td>';
+                });
+            }
+            row += '</tr>';
+            target_table.children('tbody').append(row);
+        }
+
+        tfootData = target_table.children('tfoot').children('tr').children('td');
+        waiverTypes.forEach(function (waiverType, waiverIndex) {
+            tfootData.eq(waiverIndex+1).html(numberWithCommas(data["total_" + waiverType], false));
+        });
+        waiverTypes.pop();
+    }
+
+    function set_waiver_table(data, force_replace_table=false) {
+        $(".remove-when-reset").remove();
+        target_table = $("#waiver_amount_table");
+        if (force_replace_table) {
+            // target_table.find('tbody').remove()
+            target_table.children('tbody').html("");
+        }
+        waiverTypes.push('total_waiver');
+        for (let i = 0; i < data['account_payments'].length ; i++){
+            account_payment = data['account_payments'][i];
+            date = account_payment.due_date;
+            row = '<tr style="height: 65px;"><td class="align-middle">' + date + '</td></tr>';
+            target_table.children('tbody').append(row);
+            tbodyLastRow = target_table.children('tbody').children('tr').last();
+            waiverTypes.forEach(function (waiverType) {
+                td = document.createElement('td');
+                td.className = 'align-middle waiver_' + waiverType + '_cell';
+
+                flex = document.createElement('div');
+                flex.className = 'center flex';
+
+                input_group = document.createElement('div');
+                input_group.className = 'input-group';
+
+                span = document.createElement('span');
+                span.className = 'input-group-addon';
+                span.innerHTML = 'Rp';
+
+                p = document.createElement('p');
+
+                input = document.createElement('input');
+                input.type = 'text';
+                input.className = "form-control mask waiver-amount " + waiverType + "-waiver";
+                input.maxlength = "15";
+                input.id = "waiver_" + waiverType + "_" + account_payment.account_payment_id;
+                input.name = "waiver-" + waiverType + "-" + account_payment.account_payment_id;
+                input.style = "width: 100px";
+                input.setAttribute('onkeyup', "grayedOut('cell_waiver_amount')");
+                input.value = '0';
+                if (account_payments[i].outstanding > 0) {
+                    input.value = addComma(account_payment[waiverType]);
+                }
+
+                if (account_payments[i].outstanding <= 0 || offer[1] != waiver_product_type[waiverType]) {
+                    td.classList.add("mask", "waiver-amount", `${waiverType}-waiver`, "bg-lightgrey") 
+                    td.id = "waiver_" + waiverType + "_" + account_payment.account_payment_id;
+                    td.name = "waiver-" + waiverType + "-" + account_payment.account_payment_id;
+                    td.innerText = "Rp0"
+                    if (account_payments[i].outstanding > 0) {
+                        td.innerText = numberWithCommas(account_payment[waiverType], false);
+                    }
+                } else {
+                    input_group.append(span);
+                    input_group.append(input);
+                    input_group.append(p);
+                    flex.append(input_group);
+                    td.append(flex);
+                }
+                tbodyLastRow.append(td);
+            });
+        }
+
+        tfootData = target_table.children('tfoot').children('tr').children('td');
+        waiverTypes.forEach(function (waiverType, waiverIndex) {
+            tfootData.eq(waiverIndex+1).html(numberWithCommas(data[waiverType + "_total"]));
+        });
+        waiverTypes.pop();
+
+        index_str = ".apply-" + offer[1];
+        elm = $('.month-header')
+        elm_index = elm.index();
+
+        th = document.createElement('th');
+        th.className = 'align-middle remove-when-reset';
+        th.innerHTML = "Apply?";
+        th.style = 'width: 90px;';
+        elm.after(th)
+
+        td = document.createElement('td');
+        td.className = 'align-middle remove-when-reset';
+        td.innerText = 'Total'
+        $('.month-footer').after(td)
+
+        tbodyRow = target_table.children('tbody').children('tr');
+        for (let i = 0; i < data['account_payments'].length ; i++){
+            account_payment = data['account_payments'][i];
+
+            td = document.createElement('td');
+            td.className = 'align-middle waiver_checkbox_cell remove-when-reset';
+
+            label = document.createElement('label');
+
+            input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = "waiver-checkbox";
+            input.maxlength = "15";
+            input.id = "waiver_check_" + account_payment.account_payment_id;
+            input.name = "waiver_checkbox[]";
+            input.setAttribute("data-index", i);
+            input.style = "width: 65px";
+            input.setAttribute('onchange', "grayedOut('waiver_checkbox')");
+            input.value = account_payment.account_payment_id;
+            if (account_payments[i].outstanding <= 0 || offer[1] == 'r4') {
+                input.disabled = true;
+            }
+
+            td.append(label);
+            td.append(input);
+            table_data = tbodyRow.eq(i).children('td');
+            $(table_data.eq(elm_index)).after(td);
+        }
+        $(".mask").maskMoney({thousands:',', decimal:'.', allowZero: true, suffix: '', precision:0});
+        setPtpWording();
+    }
+
+    function set_remaining_amount_table(data, force_replace_table=false) {
+        target_table = $("#remaining_installments_table");
+        if (target_table.is(':hidden')) {
+            target_table.show()
+        }
+        if (force_replace_table) {
+            // recreate body
+            target_table.children('tbody').html("");
+        }
+        // remaining installment
+        target_data = data['remaining_installments'];
+        acc_payments = data.outstanding_amount?.account_payments
+        waiverTypes.push('remaining_installment');
+        for (let i = 0; i < target_data.length ; i++){
+            if (target_data[i].paid_off_status == 'Y') {
+                continue
+            }
+            let row = '<tr style="height: 65px">';
+            let date = target_data[i].due_date;
+            row += '<td class="align-middle">' + date + '</td>';
+            waiverTypes.forEach(function (waiverType) {
+                amount = numberWithCommas(target_data[i][waiverType], false);
+                row += '<td class="align-middle">' + amount + '</td>';
+            });
+            row += '</tr>';
+            target_table.children('tbody').append(row);
+        }
+        waiverTypes.pop();
+
+        tfootData = target_table.children('tfoot').children('tr').children('td');
+
+        outstanding_amount = data.outstanding_amount
+
+        // jatuh tempo (blank)
+        tfootData.eq(0).text('Total')
+        // principal
+        tfootData.eq(1).text(numberWithCommas(outstanding_amount.total_principal, false))
+        // interest
+        tfootData.eq(2).text(numberWithCommas(outstanding_amount.total_interest, false))
+        // late fee
+        tfootData.eq(3).text(numberWithCommas(outstanding_amount.total_late_fee, false))
+        // total tagihan
+        tfootData.eq(4).text(numberWithCommas(outstanding_amount.total_need_to_pay, false))
+        if (target_table.children('tbody').is(':empty')) {
+            target_table.hide()
+        }
+    }
+
+    function setColumnWaiver() {
+        $('.principal-waiver').each(function(){
+            let valueCell = $(this).val()
+            if ( parseInt(valueCell) <= 0 || valueCell == '-') {
+                $(this).parent().parent().hide()
+                $(this).parent().parent().parent().append('-')
+            }
+        })
+        $('.interest-waiver').each(function(){
+            let valueCell = $(this).val()
+            if ( parseInt(valueCell) <= 0 || valueCell == '-') {
+                $(this).parent().parent().hide()
+                $(this).parent().parent().parent().append('-')
+            }
+        })
+        $('.late-fee-waiver').each(function(){
+            let valueCell = $(this).val()
+            if ( parseInt(valueCell) <= 0 || valueCell == '-') {
+                $(this).parent().parent().hide()
+                $(this).parent().parent().parent().append('-')
+            }
+        })
+    }
+
+    function checkWaiverPercentage(force_recreate=false) {
+        let id = ''
+        let value = 0
+        let percentage = 0
+        if (offer[1] == 'r4') {
+            id = "#actual_principal_percentage";
+            value = parseFloat(actual_waiver.principal_waiver_percentage)
+            percentage = value * 100;
+
+            const html = '<td class="align-middle actual-waiver-input">' +
+                            '<div class="center flex margin-0">' +
+                                    '<div class="input-group w150">' +
+                                        `<input type="text" class="form-control weight-bold actual-waiver-percentage" maxlength="15" id="actual_principal_percentage" name="actual_principal_percentage" value="" onkeyup="grayedOut('actual_waiver')" data-actual="${value}">` +
+                                            '<span class="input-group-addon">%</span>' +
+                                        '</div>' +
+                                        '<p class="font-red" style="margin:0;" style="margin:0;"></p>' +
+                            '</div>' +
+                        '</td>';
+            $("#waiver_recommendation_principal").addClass("bg-white");
+            if (!$(`input${id}`).length || force_recreate == true) {
+                $("#waiver_recommendation_principal :last-child").remove();
+                $("#waiver_recommendation_principal").append(html);
+            }
+        } else if (offer[1] == 'r6') {
+            id = "#actual_interest_percentage";
+            value = parseFloat(actual_waiver.interest_waiver_percentage)
+            percentage = value * 100;
+
+            const html = '<td class="align-middle actual-waiver-input">' +
+                            '<div class="center flex margin-0">' +
+                                    '<div class="input-group w150">' +
+                                        `<input type="text" class="form-control weight-bold actual-waiver-percentage" maxlength="15" id="actual_interest_percentage" name="actual_interest_percentage" value="" onkeyup="grayedOut('actual_waiver')" data-actual="${value}">` +
+                                            '<span class="input-group-addon">%</span>' +
+                                        '</div>' +
+                                        '<p class="font-red" style="margin:0;"></p>' +
+                            '</div>' +
+                        '</td>';
+            $("#waiver_recommendation_interest").addClass("bg-white");
+            if (!$(`input${id}`).length || force_recreate == true) {
+                $("#waiver_recommendation_interest :last-child").remove();
+                $("#waiver_recommendation_interest").append(html);
+            }
+        } else if (offer[1] == 'r5') {
+            id = "#actual_late_fee_percentage";
+            value = parseFloat(actual_waiver.late_fee_waiver_percentage)
+            percentage = value * 100;
+
+            const html = '<td class="align-middle actual-waiver-input">' +
+                            '<div class="center flex margin-0">' +
+                                    '<div class="input-group w150">' +
+                                        `<input type="text" class="form-control weight-bold actual-waiver-percentage" maxlength="15" id="actual_late_fee_percentage" name="actual_late_fee_percentage" value="" onkeyup="grayedOut('actual_waiver')" data-actual="${parseFloat(actual_waiver.late_fee_waiver_percentage)}">` +
+                                            '<span class="input-group-addon">%</span>' +
+                                        '</div>' +
+                                        '<p class="font-red" style="margin:0;"></p>' +
+                            '</div>' +
+                        '</td>';
+            $("#waiver_recommendation_late_fee").addClass("bg-white");
+            if (!$(`input${id}`).length || force_recreate == true) {
+                $("#waiver_recommendation_late_fee :last-child").remove();
+                $("#waiver_recommendation_late_fee").append(html);
+            }
+        }
+        percentage = percentage.toFixed(2)
+        percentage = percentage.split(".")[1] == "00" ? parseInt(percentage) : percentage;
+        $(id).val(percentage);
+        $(id).prop('data-actual', value)
+    }
+
+    function thickApplyWaiver(){
+        $(".waiver-checkbox").prop('checked', false);
+        force_payment = false;
+        already_checked = true;
+        if (offer[1] != 'r4') {
+            force_payment = true;
+            already_checked = false;
+            for (let idx in account_payments){
+                if (offer[1] == 'r5' && account_payments[idx].remaining_late_fee > 0 && account_payments[idx].due_status == "Y" ||
+                    offer[1] == 'r6' && account_payments[idx].remaining_late_fee > 0 && account_payments[idx].due_status == "Y" ||
+                    offer[1] == 'r6' && account_payments[idx].remaining_interest > 0 && account_payments[idx].due_status == "Y"){
+                    force_payment = false;
+                    already_checked = true;
+                }
+            }
+        }
+
+        for (let idx in account_payments){
+            key = "#waiver_check_" + account_payments[idx].account_payment_id;
+            if (selected_account_payments_waived){
+                if (selected_account_payments_waived.includes(account_payments[idx].account_payment_id)){
+                    $(key).prop('checked', true);
+                } else {
+                    $(key).prop('checked', false);
+                }
+            } else {
+                due_status = "Y";
+                if (force_payment) {
+                    if (!already_checked) {
+                        due_status = "N"
+                    }
+                }
+                if (account_payments[idx].outstanding > 0 && offer[1] == 'r4' ||
+                    offer[1] == 'r5' && account_payments[idx].remaining_late_fee > 0 && account_payments[idx].due_status == due_status ||
+                    offer[1] == 'r6' && account_payments[idx].remaining_late_fee > 0 && account_payments[idx].due_status == due_status ||
+                    offer[1] == 'r6' && account_payments[idx].remaining_interest > 0 && account_payments[idx].due_status == due_status){
+                    $(key).prop('checked', true);
+                    force_payment = false;
+                    already_checked = true;
+                } else {
+                    $(key).prop('checked', false);
+                }
+            }
+        }
+    }
+
+    function setActualWaiverPercentage() {
+        actual_waiver.principal_waiver_percentage = parseFloat($('#actual_principal_percentage').text()) / 100;
+        actual_waiver.interest_waiver_percentage = parseFloat($('#actual_late_fee_percentage').text()) / 100;
+        actual_waiver.late_fee_waiver_percentage = parseFloat($('#actual_interest_percentage').text()) / 100;
+        if (offer[1] == 'r4') {
+            actual_waiver.principal_waiver_percentage = parseFloat($('#actual_principal_percentage').val()) / 100;
+        } else if (offer[1] == 'r5') {
+            actual_waiver.late_fee_waiver_percentage = parseFloat($('#actual_late_fee_percentage').val()) / 100;
+        } else if (offer[1] == 'r6') {
+            actual_waiver.interest_waiver_percentage = parseFloat($('#actual_interest_percentage').val()) / 100;
+        }
+    }
+
+    function validateWaiverAmountNotGreaterThanPrevious(){
+        return_value = false;
+        previous = {"late_fee": 0, "interest": 0, "principal": 0};
+        for (let idx in resultCalculation.waiver_amount.account_payments) {
+            ["late_fee", "interest", "principal"].forEach(function(amount_type){
+                amount = resultCalculation.waiver_amount.account_payments[idx][amount_type];
+                if (idx > 0) {
+                    if (amount > 0 && previous[amount_type] > 0) {
+                        if (resultCalculation.outstanding_amount.account_payments[idx-1][amount_type] >= resultCalculation.outstanding_amount.account_payments[idx][amount_type]) {
+                            if (amount > 0 && amount > previous[amount_type] && amount < account_payments[idx]["remaining_" + amount_type]) {
+                                return_value = true;
+                            }
+                        }
+                    }
+                }
+                previous[amount_type] = amount;
+            });
+        }
+        return return_value;
+    }
+
+    function validateWaiverAmountNotGreaterThanOutstanding(){
+        for (let idx in resultCalculation.waiver_amount.account_payments) {
+            if (resultCalculation.waiver_amount.account_payments[idx].interest > account_payments[idx].remaining_interest) {
+                return true;
+            }
+            if (resultCalculation.waiver_amount.account_payments[idx].principal > account_payments[idx].remaining_principal) {
+                return true;
+            }
+            if (resultCalculation.waiver_amount.account_payments[idx].late_fee > account_payments[idx].remaining_late_fee) {
+                return true;
+            }
+        }
+        return false
+    }
+
+    function validateWaiverAmount(){
+        for (let idx in resultCalculation.waiver_amount.account_payments) {
+            if (selected_account_payments_waived.includes(resultCalculation.waiver_amount.account_payments[idx].account_payment_id)) {
+                if (offer[1] == 'r4') {
+                    if (parseInt(account_payments[idx].remaining_principal) > 0 && resultCalculation.waiver_amount.account_payments[idx].principal <= 0) {
+                        return true;
+                    }
+                } else if (offer[1] == 'r5') {
+                    if (parseInt(account_payments[idx].remaining_late_fee) > 0 && resultCalculation.waiver_amount.account_payments[idx].late_fee <= 0) {
+                        return true;
+                    }
+                } else if (offer[1] == 'r6') {
+                    waiverInterestAndLateFee = [
+                        parseInt(account_payments[idx].remaining_interest) > 0 && resultCalculation.waiver_amount.account_payments[idx].interest <= 0,
+                        parseInt(account_payments[idx].remaining_late_fee) > 0 && resultCalculation.waiver_amount.account_payments[idx].late_fee <= 0
+                    ]
+                    if ( waiverInterestAndLateFee.includes(true) ) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    function getSelectedPayments(){
+        selected_principal_amount = 0;
+        selected_interest_amount = 0;
+        selected_late_fee_amount = 0;
+        selected_outstanding_amount = 0;
+        waiver_unpaid_interest_amount = 0;
+        waiver_unpaid_principal_amount = 0;
+        waiver_unpaid_late_fee_amount = 0;
+        selected_remaining_amount_waived = 0;
+
+        selected_account_payments_waived_details = {outstanding: [], waiver: [], remaining: []};
+        for (let idx in resultCalculation.waiver_amount.account_payments){
+            if (selected_account_payments_waived.includes(resultCalculation.waiver_amount.account_payments[idx].account_payment_id)){
+                for (let key in selected_account_payments_waived) {
+                    if (selected_account_payments_waived[key] == resultCalculation.waiver_amount.account_payments[idx].account_payment_id) {
+                        selected_account_payments_waived_details.waiver.push(resultCalculation.waiver_amount.account_payments[idx]);
+                        selected_account_payments_waived_details.outstanding.push(resultCalculation.outstanding_amount.account_payments[idx]);
+                        selected_account_payments_waived_details.remaining.push(resultCalculation.remaining_installments[idx]);
+                        selected_principal_amount += resultCalculation.waiver_amount.account_payments[idx].principal;
+                        selected_interest_amount += resultCalculation.waiver_amount.account_payments[idx].interest;
+                        selected_late_fee_amount += resultCalculation.waiver_amount.account_payments[idx].late_fee;
+                        selected_outstanding_amount += parseInt(account_payments[idx].outstanding);
+                        waiver_unpaid_interest_amount += parseInt(account_payments[idx].remaining_interest);
+                        waiver_unpaid_principal_amount += parseInt(account_payments[idx].remaining_principal);
+                        waiver_unpaid_late_fee_amount += parseInt(account_payments[idx].remaining_late_fee);
+                        selected_remaining_amount_waived += resultCalculation.remaining_installments[idx].principal + resultCalculation.remaining_installments[idx].interest + resultCalculation.remaining_installments[idx].late_fee;
+                    }
+                }
+            }
+        }
+    }
+
+    function getCellByCellWaiverAmount() {
+        let cellWaiverAmounts = {
+            late_fee: {},
+            interest: {},
+            principal: {},
+            total_late_fee: 0,
+            total_interest: 0,
+            total_principal: 0,
+            waiver_amount_total: 0,
+        }
+        let selectedProgram = waiver_product_type[offer[1]];
+
+        for (let i = 0; i < selected_account_payments_waived.length ; i++){
+            waiverTypes.forEach(function (waiverType) {
+                amount_str = $(`#waiver_${waiverType}_${selected_account_payments_waived[i]}`).val() || $(`#waiver_${waiverType}_${selected_account_payments_waived[i]}`).text()
+                amount = amount_str.replace(/Rp|,/g, '');
+                cellWaiverAmounts[waiverType][`${selected_account_payments_waived[i]}`] = (parseInt(amount | 0));
+                cellWaiverAmounts['total_' + waiverType] += (parseInt(amount | 0));
+                cellWaiverAmounts.waiver_amount_total += (parseInt(amount | 0));
+            });
+        }
+        return cellWaiverAmounts
+    }
+
+    function setOffer() {
+        offer = $('#pilihan_offer').val().split("|");
+    }
+
+    function setPtpWording() {
+        wording_ptp_percentage = '0';
+        if (offer[1] == 'r4') {
+            wording_ptp_percentage = $('#actual_principal_percentage').val()
+        } else if (offer[1] == 'r5') {
+            wording_ptp_percentage = $('#actual_late_fee_percentage').val()
+        } else if (offer[1] == 'r6') {
+            wording_ptp_percentage = $('#actual_interest_percentage').val()
+        }
+        $("#wording_100_waiver").html(`Total PTP yang harus dibayar setelah waiver <b>${wording_ptp_percentage}%</b>`)
+    }
+
+    function setSelectedAccountPaymentsWaived() {
+        if (offer[1] == "r4") {
+            selected_account_payments_waived = $("input[name='waiver_checkbox[]']:checked").map(function () {
+                return this.value;
+            }).get();
+        } else {
+            selected_account_payments_waived = $("input[name='waiver_checkbox[]']:checked").not("[disabled]").map(function () {
+                return this.value;
+            }).get();
+        }
+    }
+
+    function autoPopulateWaiver(data){
+        resultCalculation.ptp_amount = data.ptp_amount;
+        resultCalculation.total_installments_waived = data.waived_account_payment_count;
+        resultCalculation.selected_actual_waiver = data.ptp_amount;
+        actual_waiver.late_fee_waiver_percentage = data.unrounded_requested_late_fee_waiver_percentage
+        actual_waiver.interest_waiver_percentage = data.unrounded_requested_interest_waiver_percentage
+        actual_waiver.principal_waiver_percentage = data.unrounded_requested_principal_waiver_percentage
+
+        waiverPaymentsRequest = data.waiver_payment_request
+        selected_account_payments_waived = [];
+        resultCalculation.waiver_amount.principal_total = 0
+        resultCalculation.waiver_amount.interest_total = 0
+        resultCalculation.waiver_amount.late_fee_total = 0
+        resultCalculation.outstanding_amount.interest_total = 0
+        resultCalculation.outstanding_amount.principal_total = 0
+        resultCalculation.outstanding_amount.late_fee_total = 0
+        resultCalculation.outstanding_amount.total_need_to_pay = 0
+
+        for(let idx in waiverPaymentsRequest){
+            if (waiverPaymentsRequest[idx] === null) {
+                continue;
+            }
+            selected_account_payments_waived.push(String(waiverPaymentsRequest[idx].account_payment_id))
+            resultCalculation.waiver_amount.account_payments[idx].interest = waiverPaymentsRequest[idx].requested_interest_waiver_amount
+            resultCalculation.waiver_amount.account_payments[idx].principal = waiverPaymentsRequest[idx].requested_principal_waiver_amount
+            resultCalculation.waiver_amount.account_payments[idx].late_fee = waiverPaymentsRequest[idx].requested_late_fee_waiver_amount
+            resultCalculation.waiver_amount.account_payments[idx].total_waiver = waiverPaymentsRequest[idx].total_requested_waiver_amount
+            resultCalculation.waiver_amount.principal_total += waiverPaymentsRequest[idx].requested_principal_waiver_amount
+            resultCalculation.waiver_amount.interest_total += waiverPaymentsRequest[idx].requested_interest_waiver_amount
+            resultCalculation.waiver_amount.late_fee_total += waiverPaymentsRequest[idx].requested_late_fee_waiver_amount
+
+            resultCalculation.outstanding_amount.account_payments[idx].interest = waiverPaymentsRequest[idx].outstanding_interest_amount
+            resultCalculation.outstanding_amount.account_payments[idx].principal = waiverPaymentsRequest[idx].outstanding_principal_amount
+            resultCalculation.outstanding_amount.account_payments[idx].late_fee = waiverPaymentsRequest[idx].outstanding_late_fee_amount
+            resultCalculation.outstanding_amount.account_payments[idx].need_to_pay = waiverPaymentsRequest[idx].outstanding_interest_amount + waiverPaymentsRequest[idx].outstanding_principal_amount + waiverPaymentsRequest[idx].outstanding_late_fee_amount
+            resultCalculation.outstanding_amount.interest_total += waiverPaymentsRequest[idx].outstanding_interest_amount
+            resultCalculation.outstanding_amount.principal_total += waiverPaymentsRequest[idx].outstanding_principal_amount
+            resultCalculation.outstanding_amount.late_fee_total += waiverPaymentsRequest[idx].outstanding_late_fee_amount
+            resultCalculation.outstanding_amount.total_need_to_pay += waiverPaymentsRequest[idx].outstanding_interest_amount + waiverPaymentsRequest[idx].outstanding_principal_amount + waiverPaymentsRequest[idx].outstanding_late_fee_amount
+
+            resultCalculation.remaining_installments[idx].interest = waiverPaymentsRequest[idx].remaining_interest_amount
+            resultCalculation.remaining_installments[idx].principal = waiverPaymentsRequest[idx].remaining_principal_amount
+            resultCalculation.remaining_installments[idx].late_fee = waiverPaymentsRequest[idx].remaining_late_fee_amount
+            resultCalculation.remaining_installments[idx].remaining_installment = waiverPaymentsRequest[idx].remaining_interest_amount + waiverPaymentsRequest[idx].remaining_principal_amount +waiverPaymentsRequest[idx].remaining_late_fee_amount
+        }
+    }
+
+    function setMultiplePtpPayments() {
+        is_multiple_ptp_payment_input = true;
+        max_sequence = parseInt($("select[name=jumlah_angsuran_ptp_payment]").val());
+        if (max_sequence < 1) {
+            number_of_multiple_ptp_payment = 0;
+            multiple_payment_ptp = null;
+            return;
+        }
+        number_of_multiple_ptp_payment = max_sequence;
+        multiple_payment_ptp = [];
+        for (let index = 0; index < max_sequence; index++) {
+            sequence = index + 1;
+            multiple_payment_ptp.push({
+                "sequence": sequence,
+                "promised_payment_amount": parseInt($("input[name=multiple_ptp_amount_" + sequence + "]").val().replace(/,/g, '')),
+                "promised_payment_date": $("input[name=multiple_payment_date_" + sequence + "_db]").val(),
+            })
+        }
+    }
+
+    $("#btn_search_account").on('click', function (e) {
+        account_id = $('#account_id').val();
+        if (!account_id) {
+            ToastDanger('Failure', 'Please enter Account ID');
+            e.preventDefault();
+            return false;
+        } else {
+            $('#loading-div').show();
+            {% if is_approver %}
+                showModalPortal(account_id);
+            {% else %}
+                $("#frm_search_account").submit();
+            {% endif %}
+        }
+    });
+
+    $("#pilihan_offer").on('change', function (e) {
+        setOffer();
+        show_hide_divs_right(false);
+        $(".remove-when-reset").remove();
+        $("#outstanding_amount_table").children('tbody').html("");
+        $("#remaining_installments_table").children('tbody').html("");
+        $("#waiver_amount_table").children('tbody').html("");
+    });
+
+    $("#btn_offer_history").on('click', function (e) {
+        $.ajax({
+            url: "{%url 'waiver:ajax_get_j1_exisiting_offers' %}",
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                account_id: parseInt(account_id)
+            },
+            success: function (json) {
+                if(json.status == 'success') {
+                    response = json.response
+                    repeated_offer_swal(response.existing_offers);
+                } else{
+                    ToastDanger('Failure', "Mohon maaf. Silakan coba lagi.");
+                    // show_hide_divs_right(false);
+                }
+            },
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                ToastDanger('Failure', "Mohon maaf. Silakan coba lagi.");
+                // console.log(xhr.responseText);
+                // show_hide_divs_right(false);
+            }
+        });
+    });
+
+    $('body').on('click', "#btn_reset", function() {
+        is_multiple_ptp_payment_input = false;
+        number_of_multiple_ptp_payment = 0;
+        multiple_payment_ptp = null;
+        selected_account_payments_waived = null
+        $("#is_multiple_ptp_payment").prop("checked", false).trigger("change");
+        $('#waiver_validation').empty();
+        if (current_status == "Offer Generated" || current_status == "-"){
+            generate_offer();
+        } else if (current_status == 'Offer Selected'){
+            generate_offer(true);
+        }
+    });
+
+    $("#btn_show_note_modal").click(function() {
+        let actualWaiverPercentage = null;
+        let recommendedWaiverPercentage = null;
+        if (offer[1] == 'r4') {
+            actualWaiverPercentage = parseFloat($('#actual_principal_percentage').val());
+            recommendedWaiverPercentage = parseFloat(waiver_recommendation.principal_waiver_percentage) * 100;
+        } else if (offer[1] == 'r5') {
+            actualWaiverPercentage = parseFloat($('#actual_late_fee_percentage').val());
+            recommendedWaiverPercentage = parseFloat(waiver_recommendation.late_fee_waiver_percentage) * 100;
+        } else if (offer[1] == 'r6') {
+            actualWaiverPercentage = parseFloat($('#actual_interest_percentage').val());
+            recommendedWaiverPercentage = parseFloat(waiver_recommendation.interest_waiver_percentage) * 100;
+        }
+        let textModal = 'Apakah anda yakin untuk submit waiver ini?'
+        if (actualWaiverPercentage > recommendedWaiverPercentage) {
+            textModal = 'Waiver request anda di luar rekomendasi SOP. Apakah anda yakin untuk submit waiver ini ?'
+        }
+        $("#text_agent_note").text(textModal)
+        $("#agent_notes_modal").modal('show')
+    });
+
+    $("#agent_note").keyup(function() {
+        $("#btn_waiver_request_submit").prop("disabled", (this.value == ''));
+    });
+
+    function trigger_calculate(force_replace_table=false) {
+        setOffer();
+        ptp_amount = parseInt($("#ptp_amount").val().replace(/,/g, ''));
+        if (validateWaiverCheckbox()) {
+            ToastDanger('Failure', 'Tagihan yang dipilih harus berurutan', 1);
+        } else if ($("#ptp_amount").val() == '') {
+            ToastDanger('Failure', 'PTP Amount tidak boleh diisi dengan 0');
+        } else if (!$("#pilihan_offer").val()) {
+            ToastDanger('Failure', 'Please choose Rekomendasi Offer or Pilihan Offer Lainnya');
+        }  else {
+            if ($("#ptp_amount").val() == 0) {
+                ToastDanger('Failure', 'Please enter PTP Amount (setelah waiver)');
+            }
+
+            $("#is_multiple_ptp_payment").prop("checked", false).trigger("change");
+            $('#error_pop_up').modal('hide');
+            $("#btn_calculate_waiver").prop("disabled", true);
+            $('#waiver_validation').empty()
+            setSelectedAccountPaymentsWaived();
+            $("#ptp_amount").prop('disabled', false);
+            $("#principal_waiver").css('background', 'white');
+            $("#btn_show_note_modal").prop("disabled", false);
+            $("#selected_recommended_waiver").text('')
+            $("#selected_recommended_waiver").css('background', 'white')
+            $("#selected_actual_waiver").text('')
+            $("#selected_actual_waiver").css('background', 'white')
+            $("#selected_100_waiver").text('')
+            $("#selected_100_waiver").css('background', 'white')
+
+            let waiver_actual_percentage = {
+                principal_waiver: parseFloat($("#actual_principal_percentage").text()) / 100,
+                interest_waiver: parseFloat($("#actual_interest_percentage").text()) / 100,
+                late_fee_waiver: parseFloat($("#actual_late_fee_percentage").text()) /100
+            }
+            let waiver_recommended_percentage = {
+                principal_waiver: parseFloat(waiver_recommendation.principal_waiver_percentage),
+                interest_waiver: parseFloat(waiver_recommendation.interest_waiver_percentage),
+                late_fee_waiver: parseFloat(waiver_recommendation.late_fee_waiver_percentage)
+            }
+
+            if (offer[1] == 'r4'){
+                waiver_actual_percentage.principal_waiver = parseFloat($("#actual_principal_percentage").attr("data-actual"));
+            } else if (offer[1] == 'r5'){
+                waiver_actual_percentage.late_fee_waiver = parseFloat($("#actual_late_fee_percentage").attr("data-actual"));
+            } else if (offer[1] == 'r6'){
+                if (force_replace_table) {
+                    waiver_actual_percentage.interest_waiver = waiver_recommended_percentage.interest_waiver
+                } else {
+                    waiver_actual_percentage.interest_waiver = parseFloat($("#actual_interest_percentage").attr("data-actual"));
+                }
+            }
+
+            let resultRecalculateWaiver = recalculateWaiver(
+                resultCalculation,
+                offer[1],
+                getCellByCellWaiverAmount(),
+                {
+                    remaining_principal: remainingPrincipal,
+                    remaining_interest: remainingInterest,
+                    remaining_late_fee: remainingLateFee,
+                },
+                parseInt($('#pay_net_due').attr('net_due_amt')),
+                selected_account_payments_waived,
+                ptp_amount,
+                waiver_actual_percentage,
+                account_payments,
+                waiver_recommended_percentage
+            )
+            resultCalculation = resultRecalculateWaiver.tab_waiver_calculation;
+
+            $("#ptp_amount").prop('disabled', false);
+            $('.waiver-amount').prop('disabled', false);
+            $(".remove-when-reset").remove();
+            all_table_names = ['outstanding_amount_table', 'remaining_installments_table', 'waiver_amount_table'];
+            all_table_names.forEach(function(table_name) {
+                id = "#" + table_name;
+                $(id).children('tbody').html("");
+                $(id + " td").css('background', '');
+                $(id + " td").html('');
+            });
+            $("#principal_waiver").css('background', '');
+            $("#selected_recommended_waiver").css('background', '');
+            $("#selected_actual_waiver").css('background', '');
+            $("#selected_100_waiver").css('background', '');
+
+            let actualPercentage = (resultRecalculateWaiver.waiver_actual_percentage * 100).toFixed(2).replace(".00", "");
+            let realActualPercentage = resultRecalculateWaiver.real_waiver_actual_percentage;
+            let recommendedPercentage = null;
+            if (offer[1] == 'r4') {
+                recommendedPercentage = waiver_recommended_percentage.principal_waiver;
+                $("#actual_principal_percentage").val(actualPercentage);
+                $("#actual_principal_percentage").attr("data-actual", realActualPercentage);
+                actual_waiver_principal_percentage = resultRecalculateWaiver.waiver_actual_percentage;
+                actualPercentage = resultRecalculateWaiver.waiver_actual_percentage;
+                actual_waiver.principal_waiver_percentage = actualPercentage;
+            } else if (offer[1] == 'r5') {
+                recommendedPercentage = waiver_recommended_percentage.late_fee_waiver;
+                $("#actual_late_fee_percentage").val(actualPercentage);
+                $("#actual_late_fee_percentage").attr("data-actual", realActualPercentage);
+                actual_waiver_late_fee_percentage = resultRecalculateWaiver.waiver_actual_percentage;
+                actualPercentage = resultRecalculateWaiver.waiver_actual_percentage;
+                actual_waiver.late_fee_waiver_percentage = actualPercentage;
+            } else if (offer[1] == 'r6') {
+                recommendedPercentage = waiver_recommended_percentage.interest_waiver;
+                $("#actual_interest_percentage").val(actualPercentage);
+                $("#actual_interest_percentage").attr("data-actual", realActualPercentage);
+                actual_waiver_interest_percentage = resultRecalculateWaiver.waiver_actual_percentage;
+                actualPercentage = resultRecalculateWaiver.waiver_actual_percentage;
+                actual_waiver.interest_waiver_percentage = actualPercentage;
+            }
+
+            set_min_ptp_amount_table(resultCalculation);
+            if (force_replace_table) {
+                set_percentage_table(false);
+            }
+            set_outstanding_amount_table(resultCalculation['outstanding_amount'], force_replace_table);
+            set_remaining_amount_table(resultCalculation, force_replace_table);
+            set_waiver_table(resultCalculation['waiver_amount'], force_replace_table);
+            
+            $("#div_simulasi_head").show();
+            $("#ptp_amount").maskMoney({thousands:',', decimal:'.', allowZero: true, suffix: '', precision:0});
+            $("#div_simulasi_details").show();
+            $('#loading-div_simulasi').hide();
+            checkWaiverPercentage();
+            setColumnWaiver();
+            thickApplyWaiver();
+            setPtpWording();
+            $('#div_waiver_request_submit').show();
+
+            let disableSubmitButton = false;
+            validationWaiverPercentage(recommendedPercentage, actualPercentage);
+            if (offer[1] == 'r4' && validationPtpAmount(resultCalculation.ptp_amount, resultCalculation.min_actual, resultCalculation.min_paid_off, resultCalculation.total_remaining_installment)){
+                disableSubmitButton = true;
+            } else if (offer[1] != 'r4' && validationPTPAmountforR5andR6(resultRecalculateWaiver.ptp_amount, resultCalculation.selected_actual_waiver)) {
+                disableSubmitButton = true;
+            }
+            $("#btn_show_note_modal").prop("disabled", disableSubmitButton);
+
+            if (offer[1] == 'r4') {
+                $(".hide-for-r4").hide();
+            } else {
+                $(".hide-for-r4").show();
+            }
+        }
+    }
+
+    $('body').on('click','#btn_calculate_waiver', trigger_calculate);
+
+    $("#btn_waiver_request_submit").click(function() {
+        agent_notes = $("#agent_note").val().trim();
+        if (agent_notes == "") {
+            ToastDanger('Failure', 'Agent note harus diisi');
+            return;
+        }
+        if (agent_group == 'Field Collector' && agent_detail == '') {
+            ToastDanger('Failure', 'Agent pemohon program harus diisi');
+            return;
+        }
+        setActualWaiverPercentage();
+        let actualsPercentage = parseFloat(get_actual_percentage_by_product());
+        let totalRemainingInstallments = parseInt($('#total_remaining_installments').text());
+        let actualWaiver = parseInt($('#actual_principal_waiver').text().replace(/[^\d]/g, ''));
+        ptp_amount = parseInt($('#ptp_amount').val().replace(/,/g, ''));
+
+        if (offer[1] == 'r4' && totalRemainingInstallments > 0) {
+            ToastDanger('Failure', `Waiver tidak dapat di-submit karena masih ada sisa tagihan sebesar ${totalRemainingInstallments}. Mohon naikkan PTP amount menjadi IDR ${ptp_amount - actualWaiver} atau naikkan Actual Principal Waiver percentage menjadi`, 1);
+        } else if(actualsPercentage <= 0 || actualsPercentage > 100) {
+            ToastDanger('Failure', `Waiver percentage harus LEBIH BESAR dari 0% dan TIDAK BOLEH LEBIH BESAR dari 100%`, 1);
+        } else if (validateWaiverAmount()) {
+            ToastDanger('Failure', 'Waiver Amount untuk payment ID yang di-tick harus lebih besar dari 0', 1);
+        } else if (validateWaiverAmountNotGreaterThanOutstanding()){
+            ToastDanger('Failure', `Waiver Amount Principal/Interest/Late Fee yang di-input harus kurang dari outstanding principal/interest/late fee untuk payment ID tersebut`, 1);
+        } else if (validateWaiverAmountNotGreaterThanPrevious()) {
+            ToastDanger('Failure', `Waiver Amount untuk payment sebelumnya harus >= dari payment setelahnya`, 1);
+        } else if (validateMultiplePtpPaymentCheckbox()) {
+            ToastDanger('Failure', 'Bagian "Customer akan membayarkan PTP dalam beberapa kali angsuran" harus di centang', 1);
+        } else if(check_comms()) {
+            is_automated = false;
+            // is_automated will be handled in BE
+            getSelectedPayments()
+            requested_late_fee_waiver_percentage = $('#actual_late_fee_percentage').text().replace(/%/g, '');
+            requested_interest_waiver_percentage = $('#actual_interest_percentage').text().replace(/%/g, '');
+            requested_principal_waiver_percentage = $('#actual_principal_percentage').text().replace(/%/g, '');
+
+            unrounded_requested_late_fee_waiver_percentage = parseInt(requested_late_fee_waiver_percentage) / 100;
+            unrounded_requested_interest_waiver_percentage = parseInt(requested_interest_waiver_percentage) / 100;
+            unrounded_requested_principal_waiver_percentage = parseInt(requested_principal_waiver_percentage) / 100;
+            if (offer[1] == 'r4') {
+                unpaid_payment_count = unpaid_payment_count_r4;
+                waiver_last_unpaid_payment_number = unpaid_last_payment_number_r4;
+                recommended_unpaid_waiver_percentage = parseFloat(waiver_recommendation.principal_waiver_percentage);
+                calculated_unpaid_waiver_percentage = parseFloat($('#actual_principal_percentage').val()) / 100;
+                requested_principal_waiver_percentage = $('#actual_principal_percentage').val();
+                unrounded_requested_principal_waiver_percentage = $('#actual_principal_percentage').attr("data-actual");
+            } else if (offer[1] == 'r5') {
+                unpaid_payment_count = 0;
+                waiver_last_unpaid_payment_number = '';
+                recommended_unpaid_waiver_percentage = parseFloat(waiver_recommendation.late_fee_waiver_percentage);
+                calculated_unpaid_waiver_percentage = parseFloat($('#actual_late_fee_percentage').val()) / 100;
+                requested_late_fee_waiver_percentage = $('#actual_late_fee_percentage').val();
+                unrounded_requested_late_fee_waiver_percentage = $('#actual_late_fee_percentage').attr("data-actual");
+            } else {
+                unpaid_payment_count = 0;
+                waiver_last_unpaid_payment_number = '';
+                recommended_unpaid_waiver_percentage = parseFloat(waiver_recommendation.interest_waiver_percentage);
+                calculated_unpaid_waiver_percentage = parseFloat($('#actual_interest_percentage').val()) / 100;
+                requested_interest_waiver_percentage = $('#actual_interest_percentage').val();
+                unrounded_requested_interest_waiver_percentage = $('#actual_interest_percentage').attr("data-actual");
+            }
+
+            $.ajax({
+                url: "{%url 'waiver:ajax_j1_covid_refinancing_submit_waiver_request' %}", // the endpoint
+                type: "POST", // http method
+                data: {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    account_id: parseInt(account_id),
+                    is_covid_risky: is_covid_risky == 'yes' ? 'True' : 'False',
+                    selected_program_name: offer[1],
+                    waiver_validity_date: $('#waiver_validity_date_db').val(),
+                    bucket_name: bucket,
+                    ptp_amount: ptp_amount,
+                    outstanding_amount: selected_outstanding_amount,
+                    unpaid_principal: waiver_unpaid_principal_amount,
+                    unpaid_interest: waiver_unpaid_interest_amount,
+                    unpaid_late_fee: waiver_unpaid_late_fee_amount,
+                    unpaid_payment_count: unpaid_payment_count,
+                    recommended_unpaid_waiver_percentage: recommended_unpaid_waiver_percentage,
+                    calculated_unpaid_waiver_percentage: calculated_unpaid_waiver_percentage,
+                    is_automated: is_automated,
+                    comms_channels: generate_comms_data(),
+                    is_customer_confirmed: $('#is_customer_confirmed_waiver').prop("checked"),
+                    partner_product: '{{partner_product}}',
+                    requested_late_fee_waiver_percentage: requested_late_fee_waiver_percentage,
+                    requested_interest_waiver_percentage: requested_interest_waiver_percentage,
+                    requested_principal_waiver_percentage: requested_principal_waiver_percentage,
+                    requested_late_fee_waiver_amount: selected_late_fee_amount,
+                    requested_interest_waiver_amount: selected_interest_amount,
+                    requested_principal_waiver_amount: selected_principal_amount,
+                    requested_waiver_amount: selected_principal_amount + selected_interest_amount + selected_late_fee_amount,
+                    remaining_amount_for_waived_payment: selected_remaining_amount_waived,
+                    waiver_recommendation_id: parseInt(waiver_recommendation.id),
+                    first_waived_account_payment: parseInt(selected_account_payments_waived[0]),
+                    last_waived_account_payment: selected_account_payments_waived.length > 1 ? parseInt(selected_account_payments_waived[selected_account_payments_waived.length - 1]) : parseInt(selected_account_payments_waived[0]),
+                    agent_notes: agent_notes,
+                    waived_account_payment_count: parseInt(selected_account_payments_waived.length),
+                    outstanding_principal_amount: outstandingPrincipal,
+                    outstanding_interest_amount: outstandingInterest,
+                    outstanding_late_fee_amount: outstandingLateFee,
+                    selected_account_payments_waived: JSON.stringify(selected_account_payments_waived_details),
+                    unrounded_requested_interest_waiver_percentage: unrounded_requested_interest_waiver_percentage,
+                    unrounded_requested_late_fee_waiver_percentage: unrounded_requested_late_fee_waiver_percentage,
+                    unrounded_requested_principal_waiver_percentage: unrounded_requested_principal_waiver_percentage,
+                    is_multiple_ptp_payment: is_multiple_ptp_payment_input,
+                    number_of_multiple_ptp_payment: number_of_multiple_ptp_payment,
+                    multiple_payment_ptp: JSON.stringify(multiple_payment_ptp),
+                    agent_group: agent_group,
+                    agent_detail: agent_detail,
+                }, // data sent with the post request
+                // handle a successful response
+                success: function (json) {
+                    msg = '<span style="line-height:24px">'+json.message+'</span>';
+                    if(json.status == 'success') {
+                        positive_response_swal(msg);
+                        $('#contain_div').hide();
+                        $('.refinancing_status_layout').hide();
+                    } else{
+                        negative_response_swal(msg);
+                    }
+                },
+                // handle a non-successful response
+                error: function (xhr, errmsg, err) {
+                    msg = '<span style="line-height:24px">Mohon maaf. Silakan coba lagi</span>';
+                    negative_response_swal(msg);
+                    // console.log(xhr.responseText);
+                }
+            })
+
+        } else {
+            ToastDanger('Failure', "Please select preferensi channel reminder");
+            // console.log(xhr.responseText);
+        }
+    });
+
+    $("input[name=is_multiple_ptp_payment]").on("change", function() {
+        email_comms = $("input[name=comms_channel2][value=Email]");
+        ptp_payment_message = $(".multiple-ptp-payment-message");
+        if (!$(this).prop("checked")) {
+            if (email_comms.attr("data-checked") == "true") {
+                email_comms.prop("checked", true).trigger("change");
+            } else {
+                email_comms.prop("checked", false).trigger("change");
+            }
+            if (ptp_payment_message.attr("data-previous") == "hide") {
+                ptp_payment_message.hide();
+            } else {
+                ptp_payment_message.show();
+            }
+            $(".edit-link").hide();
+            is_multiple_ptp_payment_input = false;
+            number_of_multiple_ptp_payment = 0;
+            multiple_payment_ptp = null;
+            return;
+        }
+        email_comms.prop("checked", true).trigger("change");
+        ptp_payment_message.hide();
+        $(".edit-link").show();
+        $(".multiple-ptp-payment-table").hide();
+        $(".multiple-ptp-payment-table tbody").empty();
+        $('#multiple_ptp_payment_validation').empty();
+        $("input[name=max_multiple_ptp_amount]").val($("#ptp_amount").val());
+        $("select[name=jumlah_angsuran_ptp_payment]").val("0").trigger("change");
+        $(".total-multiple-payment").html("Rp. 0");
+        $("#multiple_ptp_amount_txt").html($("#ptp_amount").val());
+        $("#multiple_validity_date_txt").html($("#waiver_validity_date").val());
+        $('#multiple_ptp_payment_modal').modal('show');
+    });
+
+    $("select[name=jumlah_angsuran_ptp_payment]").on("change", function() {
+        tbody = $(".multiple-ptp-payment-table tbody");
+        tbody.html("");
+        if (!$(this).val()) {
+            $("#btn_multiple_ptp_payment_submit").prop("disabled", true);
+            return;
+        }
+        $("#btn_multiple_ptp_payment_submit").prop("disabled", false);
+        $(".multiple-ptp-payment-table").show();
+        for (let index = 0; index < parseInt($(this).val()); index++) {
+            key = index + 1;
+            tr = document.createElement('tr');
+            calendartd = document.createElement('td');
+            calendarinputgroup = document.createElement('div');
+            calendarinputgroup.className = 'input-group';
+
+            addon = document.createElement('span');
+            addon.className = 'input-group-addon';
+
+            iconcalendar = document.createElement('span');
+            iconcalendar.className = 'glyphicon glyphicon-calendar';
+
+            dateinput = document.createElement('input');
+            dateinput.className = "form-control datepicker multiple_payment_date";
+            dateinput.id = "multiple_payment_date_" + key;
+            dateinput.name = "multiple_payment_date_" + key;
+            dateinput.type = 'text';
+            dateinput.setAttribute("data-index", key);
+
+            hiddeninput = document.createElement('input');
+            hiddeninput.id = "multiple_payment_date_" + key + "_db";
+            hiddeninput.name = "multiple_payment_date_" + key + "_db";
+            hiddeninput.type = 'hidden';
+
+            addon.append(iconcalendar);
+            calendarinputgroup.append(addon);
+            calendarinputgroup.append(dateinput);
+            calendarinputgroup.append(hiddeninput);
+            calendartd.append(calendarinputgroup);
+            tr.append(calendartd);
+
+            paymenttd = document.createElement('td');
+            paymentinputgroup = document.createElement('div');
+            paymentinputgroup.className = 'input-group';
+
+            rpaddon = document.createElement('span');
+            rpaddon.className = 'input-group-addon';
+            rpaddon.innerHTML = 'Rp.';
+
+            ptpinput = document.createElement('input');
+            ptpinput.className = "form-control multiple_ptp_amount";
+            ptpinput.name = "multiple_ptp_amount_" + key;
+            ptpinput.maxlength = "15";
+            ptpinput.type = 'text';
+
+            paymentinputgroup.append(rpaddon);
+            paymentinputgroup.append(ptpinput);
+            paymenttd.append(paymentinputgroup);
+            tr.append(paymenttd);
+            tbody.append(tr);
+        }
+        $(".multiple_ptp_amount").maskMoney({thousands:',', decimal:'.', allowZero: true, suffix: '', precision:0});
+        $(".multiple_payment_date").datepicker({
+            format: 'dd M yyyy',
+            buttonClasses: ['btn', 'btn-sm'],
+            applyClass: 'btn-danger',
+            cancelClass: 'btn-inverse',
+            autoclose: true,
+            startDate: '+0d',
+            endDate: $("#waiver_validity_date").datepicker('getDate'),
+            todayHighlight: true,
+        });
+    });
+
+    $("#btn_multiple_ptp_payment_cancel").on("click", function() {
+        $("#is_multiple_ptp_payment").prop("checked", false).trigger("change");
+    });
+
+    $('body').on('changeDate','.multiple_payment_date', function(e) {
+        $('#' + $(this).attr("id") + "_db").val(moment(e.date).format('YYYY-MM-DD'));
+    });
+
+    $('body').on('change keypress keyup keydown','.multiple_ptp_amount', function(e) {
+        total_multiple_ptp_amount = 0;
+        $('.multiple_ptp_amount').each(function(){
+            if ($(this).val() != "") {
+                total_multiple_ptp_amount += parseInt($(this).val().replace(/,/g, ''));
+            }
+        });
+
+        $(".total-multiple-payment").html(numberWithCommas(total_multiple_ptp_amount));
+    });
+
+    $("#btn_multiple_ptp_payment_submit").on("click", function(){
+        if (validateMultiplePtpPayment()) {
+            setMultiplePtpPayments();
+            $(".multiple-ptp-payment-message").hide();
+            $(".edit-link").show();
+            $('#multiple_ptp_payment_modal').modal('hide');
+        }
+    })
+
+    $('#multiple_ptp_payment_modal').on('hidden.bs.modal', function (event) {
+        if (!is_multiple_ptp_payment_input) {
+            $("#is_multiple_ptp_payment").prop("checked", false).trigger("change");
+        };
+    })
+
+    function InitializeFieldCollectorOption(){
+        agent_detail = ''
+        searchInput.disabled = false
+        searchInput.value = '';
+        searchResults.innerHTML = '';
+        searchResults.style.display = 'none';
+        clearButton.style.display = 'none';
+        agentDetail.style.display = 'block'
+    }
+
+    function InitializeDeskCollectorption(){
+        agent_detail = ''
+        searchInput.disabled = true
+        searchInput.value = '';
+        searchResults.innerHTML = '';
+        searchResults.style.display = 'none';
+        clearButton.style.display = 'none';
+        agentDetail.style.display = 'none'
+    }
+
+    agentGroups.onchange = function(){
+        agent_group = this.value
+        if (agent_group == 'Field Collector'){
+            InitializeFieldCollectorOption()
+        } else {
+            InitializeDeskCollectorption()
+        }
+    };
+
+    searchResults.onchange = function(){
+        agent_detail = this.value
+        searchInput.disabled = true
+        searchInput.value = this.options[this.selectedIndex].text;
+        searchResults.style.display = 'none';
+    };
+
+    function debounce(func, delay) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            searchResults.style.display = 'none';
+            searchSpinner.style.display = 'inline-block'
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    function fetchData(query, callback) {
+        $.ajax({
+            url: "{%url 'waiver:fc_agents_list' %}",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({ "fullname": query }),
+            headers: {
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function (data) {
+                if (data.status === "success") {
+                    callback(data, null);
+                } else {
+                    callback([], data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                callback([], "Error: " + status + " " + error);
+            }
+        });
+    }
+
+    // Update dropdown options
+    function updateDropdown(results, error) {
+        searchResults.innerHTML = '';
+        if (error){
+            const option = document.createElement('option');
+            option.textContent = error;
+            option.disabled = true;
+            option.selected = true;
+            searchResults.appendChild(option);
+            searchResults.style.display = 'block';
+        } else {
+            results.data.agents.forEach(item => {
+                const option = document.createElement('option');
+                option.value = JSON.stringify({'agent_id':item.agent_id, 'agent_name':item.agent_name});
+                option.textContent = item.agent_name + ' | '+ item.agent_id;
+                searchResults.appendChild(option);
+            });
+        }
+        searchResults.style.display = 'block';
+    }
+
+    // Handle input event with debouncing
+    searchInput.addEventListener('input', debounce((event) => {
+        const query = event.target.value.trim();
+        if (query.length > 1) {
+            fetchData(query, (results, error) => {
+                updateDropdown(results, error);
+            });
+        } else {
+            // Empty and hide results
+            searchResults.innerHTML = '';
+            searchResults.style.display = 'none';
+        }
+        searchSpinner.style.display = 'none'
+    }, 1000)); // 1000ms debounce delay
+
+    // Show the select dropdown when the input is focused
+    searchInput.addEventListener('focus', () => {
+        if (searchResults.length > 0) {
+            searchResults.style.display = 'block';
+        }
+    });
+
+    // Show/hide the clear button based on input value
+    searchInput.addEventListener('input', () => {
+        if (searchInput.value.trim() !== '') {
+            clearButton.style.display = 'block';
+        } else {
+            clearButton.style.display = 'none';
+        }
+    });
+
+    // Clear the input field and hide the clear button
+    clearButton.addEventListener('click', () => {
+        InitializeFieldCollectorOption()
+        searchInput.focus();
+    });
+
+    // Hide the select dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.searchable-select')) {
+            searchResults.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

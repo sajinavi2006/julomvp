@@ -1,0 +1,58 @@
+{% load checkusergroup from common %}
+
+<!-- Top Navigation -->
+  <nav class="navbar navbar-default navbar-static-top m-b-0">
+    <div class="navbar-header">
+
+      <!-- .Logo -->
+      <div class="top-left-part">
+      	<a class="logo" href="{% url 'welcome' %}">
+{% load static from staticfiles %}
+      		<!--This is logo icon-->
+      		<img src="{% static 'images/kurirmart/kurirmart-logo-only.png' %}" alt="beranda" class="light-logo" />
+      	</a>
+      </div>
+      
+      <ul class="nav navbar-top-links navbar-left hidden-xs">
+        <li><a href="{%url 'welcome' %}" class="logotext"><!--This is logo text-->
+        	<img src="{% static 'images/kurirmart/kurirmart-text.png' %}" alt="beranda" class="light-logo" /></a>
+        </li>
+      </ul>
+      <!-- /.Logo -->
+
+      <!-- top right panel -->
+      <ul class="nav navbar-top-links navbar-right pull-right">
+		
+		<!-- /.dropdown -->
+        <li class="dropdown m-r-20"> <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> 
+        	{{ nav_profile_logo|safe }}
+        	<b class="hidden-xs">{{ user.username }} </b></a>
+          <ul class="dropdown-menu dropdown-user animated flipInY">
+            <li><a href="{%url 'partner:profile' %}"><i class="ti-user"></i> Profil Perusahaan</a></li>
+            <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
+            
+            <li role="separator" class="divider"></li>
+            <li>
+        		<a href="{% url 'account:change_usrpwd_in' %}"><i class="fa fa-key"></i> Ubah Password</a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li>
+        		<a href="{% url 'logout' %}" class="visible-xs-* hidden-md hidden-lg hidden-sm"><i class="fa fa-power-off"></i> Logout</a>
+            	<a href="javascript:void(0)" alt="alert" class="img-responsive model_img hidden-xs" id="signout-warning"><i class="fa fa-power-off"></i> Logout</a>
+            </li>
+          </ul>
+          <!-- /.dropdown-user -->
+        </li>
+		
+		<li class="dropdown"> 
+          &nbsp;&nbsp;
+        </li>
+      </ul>
+      
+    </div>
+  </nav>
+  <!-- End Top Navigation -->
+  
+  
+  
+  

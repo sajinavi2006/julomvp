@@ -1,0 +1,1 @@
+Hi {{firstname}} lunasi angsuran ke-{{payment_number}} Anda sekarang & dapatkan potongan sebesar Rp {{discount}}! Berlaku s/d 8 Juni'18. S&K: {{applink}}

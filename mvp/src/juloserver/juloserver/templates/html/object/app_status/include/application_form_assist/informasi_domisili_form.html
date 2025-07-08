@@ -1,0 +1,24 @@
+<div class="form-group">
+  <label for="address_street_num">Alamat Tinggal Saat Ini</label>
+  <input type="text" class="form-control form-control-afs" id="address_street_num" onkeyup="validate_the_form('#address_street_num');" value="{{ app_obj.address_street_num|default:'' }}" placeholder="Masukkan alamat">
+</div>
+
+<div class="form-group">
+  <label for="address_provinsi">Provinsi</label>
+  <input type="text" class="form-control form-control-afs" id="address_provinsi" onkeyup="validate_the_form('#address_provinsi');" onchange="validate_the_form('#address_provinsi');" value="{{ app_obj.address_provinsi|default:'' }}" placeholder="Masukkan Provinsi">
+</div>
+
+<div class="form-group">
+  <label for="address_kabupaten">Kota/Kabupaten</label>
+  <input type="text" class="form-control form-control-afs" id="address_kabupaten" onkeyup="validate_the_form('#address_kabupaten');" onchange="validate_the_form('#address_kabupaten');" value="{{ app_obj.address_kabupaten|default:'' }}" placeholder="Masukkan Kabupaten">
+</div>
+
+<div class="form-group">
+  <label for="address_kecamatan">Kecamatan</label>
+  <input type="text" class="form-control form-control-afs" id="address_kecamatan" onkeyup="validate_the_form('#address_kecamatan');" onchange="validate_the_form('#address_kecamatan');" value="{{ app_obj.address_kecamatan|default:'' }}" placeholder="Masukkan Kecamatan">
+</div>
+
+<div class="form-group">
+  <label for="address_kelurahan">Kelurahan</label>
+  <input type="text" class="form-control form-control-afs" id="address_kelurahan" onkeyup="validate_the_form('#address_kelurahan');" onchange="validate_the_form('#address_kelurahan');" value="{{ app_obj.address_kelurahan|default:'' }}" placeholder="Masukkan Kelurahan">
+</div>

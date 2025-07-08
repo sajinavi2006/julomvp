@@ -1,0 +1,1 @@
+Yth {{name}}, hr ini {{ due_date }} adlh tgl pmbayaran yg Anda janjikan. Segera bayar {{due_amount}} ke {{ bank_name }} no VA {{ account_number }}. Trm ksh

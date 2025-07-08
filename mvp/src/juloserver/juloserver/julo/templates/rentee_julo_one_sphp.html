@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    body {
+      color : #5E5E5E;
+      font-family: Montserrat;
+    }
+    h4 {
+      color : #0598D0;
+      text-align: center;
+    }
+    tr {
+      align: center;
+    }
+    .installment {
+      width: 100%;
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+    #topBottomBorder {
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #topBorder {
+      border-top: 1px solid black;
+    }
+    #bottomBorder {
+      border-bottom: 1px solid black;
+    }
+    .hideExtra {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow:ellipsis;
+    }
+    .col{
+      list-style-position: inside;
+      padding-left: 0;
+    }​
+    .spaceSign {
+        height: 120px;
+    }
+    .divContent {
+        padding-top: 15px;
+    }
+    .dateText {
+        text-align: right;
+    }
+    .divLeft {
+        float: left;
+    }
+    .spaceSign {
+        height: 120px;
+    }
+
+    .spaceSignature {
+        height: 50px;
+    }
+
+    .enter {
+        margin-top: 13px;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    .divRight {
+        float: right;
+    }
+  </style>
+</head>
+<body>
+  <h4>SURAT PERJANJIAN HUTANG PIUTANG<br>
+      UNTUK PEMBELIAN BARANG<br>
+      NOMOR: {{ loan.loan_xid | safe }}</h4>
+  <br/>
+  <p>Surat Perjanjian Hutang Piutang Untuk Pembelian Barang (selanjutnya disebut "SPHP") ini dibuat dan disetujui pada hari ini, tanggal {{ date_today | safe }} oleh dan antara :</p>
+  <ol class="col">
+    <li>Pemberi Pinjaman yang diwakilkan PT JULO TEKNOLOGI FINANSIAL (selanjutnya disebut "JULO") sebagai Penyelenggara Layanan Pinjam Meminjam Uang Berbasis Teknologi Informasi, sesuai dengan Peraturan OJK No. 77/POJK.01/2016;</li><br>
+    <li>Penerima Pinjaman yang beridentitas sebagai berikut :
+      <table>
+        <tbody>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama:</th>
+                <td>{{ application.fullname | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">Tgl. Lahir:</th>
+                <td>{{ dob | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP:</th>
+                <td>{{ application.ktp | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. Telepon:</th>
+                <td>{{ application.mobile_phone_1 | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 100px;">Alamat:</th>
+                <td>{{ full_address | safe }}</td>
+            </tr>
+        </tbody>
+      </table>
+    </li><br>
+  </ol>
+  <p>Penerima Pinjaman menyatakan setuju untuk mengikatkan diri kepada JULO atas ketentuan-ketentuan sebagai berikut :</p>
+  <ol>
+    <li>Bahwa Penerima Pinjaman mengajukan permohonan dengan nomor SPHP {{loan.loan_xid | safe}} melalui Platform Rentee yang didukung oleh JULO (Powered by JULO), dan JULO telah menyetujui pinjaman uang tunai sebesar {{loan_amount | safe}} ("Pinjaman"), dengan suku bunga {{interest_rate}}</li><br>
+    <li>Bahwa pinjaman uang tunai sebagaimana yang disebutkan untuk tujuan pinjaman atas pembelian barang berupa smartphone ("barang") dengan merek {{device_name}}, yang akan dibayar secara berangsur setiap bulan sebelum tanggal jatuh tempo. Keterlambatan akan dikenakan biaya denda sebesar {{late_fee_amount}} per bulan, untuk setiap angsuran yang terlambat, dengan total kumulatif tidak melebihi {{max_total_late_fee_amount}}.</li><br>
+    <li>Bahwa Penerima Pinjaman akan melakukan pembayaran angsuran pinjaman untuk pembelian barang sebesar Rp. {{device_price}}.</li><br>
+    <li>
+      Bahwa untuk biaya lain-lainnya yang tidak termasuk pembayaran angsuran pinjaman seperti :
+      <ol type="a">
+        <li>Biaya Deposit sebesar {{deposit_amount}}</li>
+        <li>Biaya Proteksi {{protection_fee}}</li>
+        <li>Biaya admin sebesar {{admin_fee}} </li>
+      </ol>
+      Biaya-biaya lain ini hanya dikenakan sekali pada saat pengajuan pertama kali.
+    </li><br>
+    <li>Penerima Pinjaman wajib untuk mengunduh aplikasi JULO pada google playstore dan masuk ke akun JULO untuk melakukan pembayaran angsuran pinjaman setiap bulannya setelah melakukan pembukaan kemasan barang.</li><br>
+    <li>
+    Bahwa JULO berhak mendapatkan, mencatat, dan/atau menyimpan informasi atau data-data berkenaan dengan pinjaman atas pembelian barang {{device_name}} yang diajukan oleh Penerima Pinjaman, setelah diperoleh dari Petugas ERO di Toko ERAFONE yang melayani Penerima Pinjaman. Informasi dan data-data yang dimaksud termasuk namun tidak terbatas pada Kode IMEI dan informasi lain yang melekat pada {{device_name}}.
+    </li><br>
+
+    <li>Bahwa Penerima Pinjaman tidak dapat mengalihkan pembayaran angsuran pinjaman atas barang {{device_name}} kepada pihak lain tanpa sepengetahuan serta izin dari JULO dan juga Penerima Pinjaman tidak dapat menjual, menyewakan kembali, merusak, dan/atau menggunakan {{device_name}} untuk hal-hal yang melanggar hukum atau tidak dibenarkan secara hukum. Jika Penerima Pinjaman mengabaikan syarat dan ketentuan ini maka segala konsekuensi hukum akan ditanggung oleh Penerima Pinjaman dan JULO berhak mengambil tindakan tegas atas pelanggaran ini.</li><br>
+
+    <li>Tidak ada pengakhiran, dalam hal apa pun, yang mempengaruhi hak atau kewajiban yang timbul atau terjadi pada tanggal berlakunya pengakhiran atau yang timbul setelah itu sehubungan dengan tindakan atau kelalaian yang terjadi sebelum pengakhiran tersebut. Penerima Pinjaman tetap bertanggung jawab atas biaya yang harus dibayar  sebagaimana Pasal  3 dan 4 diatas.</li><br>
+
+    <li>Bahwa Penerima Pinjaman berjanji untuk melunasi pinjaman dengan melakukan pembayaran  sesuai masa angsuran pinjaman atas pembelian barang {{device_name}} ("Masa Angsuran Pinjaman"), yaitu sebagai berikut :
+      <table class="installment" style="margin-top:5px;">
+        <tr id ="topBottomBorder">
+          <th>Cicilan</th>
+          <th>Jumlah</th>
+          <th>Jatuh Tempo</th>
+        </tr>
+        {% for payment in payments %}
+          {% if forloop.last %}
+            <tr id="bottomBorder">
+          {% else %}
+            <tr>
+          {% endif %}
+              <td>
+                <div class="hideExtra">{{ payment.payment_number | safe }}</div>
+              </td>
+              <td>
+                <div class="hideExtra">{{ payment.due_amount | safe }}</div>
+              </td>
+              <td>
+                <div class="hideExtra">{{ payment.due_date | safe }}</div>
+              </td>
+            </tr>
+        {% endfor %}
+      </table>
+    </li><br>
+    <li>
+      Bahwa persentase perhitungan jumlah angsuran pinjaman selama 12 bulan dihitung sebesar 65% dari harga {{device_name}}, sehingga dari perhitungan tersebut diperoleh besaran angsuran setiap bulan yang diwajibkan kepada Penerima Pinjaman sebagaimana disebutkan pada Pasal 9 diatas .
+    </li><br>
+    <li>Bahwa sebelum Penerima Pinjaman memilih untuk menukar {{device_name}} dengan barang baru  sebagaimana yang diatur pada pasal 12 huruf b atau memilih untuk mengembalikan {{device_name}} sebagaimana yang diatur pada pasal 12 huruf c maka persyaratan yang harus dipenuhi adalah kondisi barang {{device_name}} yang ditukar atau dikembalikan tersebut, terlebih dahulu akan dilakukan penilaian dan pengecekan oleh Pihak Ketiga yang ditunjuk untuk menentukan kriteria Kelas yang akan diberikan kepada Penerima Pinjaman. Kriteria Kelas yang dimaksud antara lain :
+      <ol type="a">
+        <li>Apabila kondisi barang {{device_name}} masuk dalam kriteria Kelas platinum, maka Penerima Pinjaman tidak akan dikenakan pengurangan deposit.</li>
+        <li>Apabila kondisi barang {{device_name}} masuk dalam kriteria Kelas gold, maka Penerima Pinjaman  akan dikenakan pengurangan sebesar 5% dari deposit.</li>
+        <li>Apabila kondisi barang {{device_name}} masuk dalam kriteria Kelas silver, maka Penerima Pinjaman  akan dikenakan pengurangan deposit sebesar 10% dari deposit.</li>
+        <li>Apabila kondisi barang {{device_name}} masuk dalam kriteria Kelas bronze, maka Penerima Pinjaman akan dikenakan  pengurangan  sebesar 15% dari deposit.</li>
+      </ol>
+    </li><br>
+
+    <li>
+      Bahwa apabila Penerima Pinjaman telah membayar sebagaimana Masa Angsuran Pinjaman diatas hingga pada bulan ke – 12 atau akan berakhirnya perjanjian, maka Penerima Pinjaman WAJIB memilih salah satu antara lain :
+      <ol type="a">
+        <li>
+        Jika Penerima Pinjaman memilih untuk membeli {{device_name}} tersebut, maka Penerima Pinjaman wajib  membayar nilai sisa (residual value) atau melunasi pembelian sebesar 35% dari harga {{device_name}} yaitu sejumlah {{residual_amount}} pada awal bulan ke -13 atau paling lambat pada tanggal {{payment_13_due_date}} dan akan dikurangi secara otomatis sesuai dengan jumlah deposit, kemudian {{device_name}} yang telah dibayar lunas akan menjadi hak milik penuh Penerima Pinjaman;
+        </li><br>
+
+        <li>Jika Penerima Pinjaman memilih untuk menukar {{device_name}} dengan barang baru , maka {{device_name}} dengan Kode IMEI sebagaimana yang dimaksud pada pasal 6 diatas  wajib diserahkan terlebih dahulu oleh Penerima Pinjaman ke Toko ERAFONE dimana transaksi awal dilakukan, untuk ditukar dengan barang baru sesuai pilihan Penerima Pinjaman, dengan persetujuan JULO terlebih dahulu . Setelah [device name] diserahkan, nilai sisa (residual value) dari harga {{device_name}} dinyatakan lunas dan kemudian untuk barang baru akan berlaku SPHP dan nilai pinjaman yang baru pula.
+        </li><br>
+
+        <li>
+        Jika Penerima Pinjaman tidak ingin membeli {{device_name}} sesuai pasal 12 huruf a dan juga tidak berkeinginan untuk menukar {{device_name}} dengan barang baru sesuai pasal 12 huruf b maka Penerima Pinjaman wajib mengembalikan {{device_name}} dengan Kode IMEI sebagaimana yang dimaksud pada pasal 6 diatas ke Toko ERAFONE dimana transaksi awal dilakukan, dalam keadaan lengkap, utuh dan berfungsi dengan baik. Penerima Pinjaman akan dibebaskan dari pembayaran nilai sisa (residual value) dan JULO akan melakukan pengembalian deposit sebesar sesuai dengan kriteria Kelas yang diatur pada ketentuan pasal 11 diatas.
+        </li><br>
+      </ol>
+    </li><br>
+    <li>
+      Bahwa pembayaran setiap bulan akan dilakukan ke rekening Virtual Account (VA) yang akan disediakan oleh pihak JULO melalui aplikasi JULO app.
+    </li><br>
+    <li>Pemberian Kuasa<br>
+      Bahwa merujuk pada Surat Kuasa no. SK001, JULO sebagai penyelenggara Layanan Pinjam Meminjam Uang Berbasis Teknologi Informasi diberikan otoritas dan kuasa penuh oleh Pemberi Pinjaman untuk bertindak mewakili Pemberi Pinjaman dalam hal menerima dan menggunakan segala informasi Penerima Pinjaman terkait permohonan dan penagihan pinjaman, hingga kewajiban Penerima Pinjaman berakhir.
+    </li><br>
+    <li>
+      Pengalihan
+      <ol type="a">
+        <li>
+           Setiap Pemberi Pinjaman dapat, tanpa memberikan pemberitahuan sebelumnya kepada Penerima Pinjaman, mengalihkan hak dan kewajibannya kepada pihak lain, sesuai ketentuan pengalihan hak dan kewajiban dalam perjanjian kerjasama antara JULO dengan Pemberi Pinjaman no. 1.JTF.201707.
+        </li>
+        <li>Penerima Pinjaman menyetujui dan mengakui keabsahan pengalihan yang dilakukan setiap Pemberi Pinjaman berdasarkan Pasal 7 (a) di atas, dan tidak akan mengajukan keberatan atas pengalihan yang dilakukan demikian.
+        </li>
+        <li>
+          Penerima Pinjaman tidak diperkenankan mengalihkan atau mentransfer haknya atau kewajibannya kepada pihak lain.
+        </li>
+      </ol>
+    </li><br>
+
+    <li>
+      Pernyataan Persetujuan<br>
+      Penerima Pinjaman dan JULO mengerti atas hak dan kewajiban masing-masing pihak, sesuai dengan yang tertuang pada Syarat & Ketentuan dan akan senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan Perjanjian ini. Sengketa yang mungkin timbul dari penafsiran dan/atau pelaksanaan Perjanjian ini akan diselesaikan melalui musyawarah untuk mencapai mufakat antara kedua belah pihak dan/atau melalui jalur hukum yurisdiksi yang kompeten. Hal yang belum dituangkan dalam Perjanjian ini akan diatur di kemudian hari melalui Perubahan Perjanjian (Addendum), yang merupakan persetujuan lebih lanjut antara Pemberi Pinjaman dan Penerima Pinjaman, dan bagian yang tidak terpisahkan dari SPHP ini, serta tidak memerlukan tanda tangan ulang.
+    </li><br>
+
+    <li>
+      Keadaan Kahar<br>
+      Definisi Keadaan Kahar adalah suatu keadaan tanpa kesalahan ataupun kelalaian yang diakibatkan oleh salah satu Pihak yang terjadi di luar kendali Pihak tersebut, dimana Pihak tersebut secara wajar tidak mampu untuk mencegah atau mengatasinya, termasuk namun tidak terbatas pada bencana alam, wabah penyakit, perang (baik dideklarasikan maupun tidak), invasi, konflik bersenjata, kerusuhan, demonstrasi, revolusi atau kudeta, tindak terorisme, sabotase atau kerusakan akibat kriminalisme, ledakan nuklir, radioaktif atau kontaminasi kimia atau ionisasi radiasi, tekanan gelombang akibat pesawat terbang atau benda melayang lainnya yang berkecepatan suara atau diatas kecepatan suara, gangguan listrik, gangguan sistem atau jaringan pihak ketiga lainnya atau perubahan peraturan perundang-undangan atau kebijakan pemerintah yang dapat mempengaruhi kemampuan salah satu Pihak ataupun Para Pihak. Dalam keadaan kahar, Penerima Pinjaman tetap bertanggung jawab atas kewajibannya berdasarkan Perjanjian ini. 
+    </li><br>
+
+</ol>
+<p>
+Perjanjian ini dibuat oleh JULO secara elektronik dan secara sah, serta mengikat Para Pihak terhitung mulai dari hari dan tanggal tersebut diatas. Perjanjian ini memiliki kekuatan hukum yang sama dengan perjanjian yang dicetak, ditulis tangan dan ditandatangani secara sadar dan tanpa paksaan dari pihak manapun, serta dilindungi oleh UU.  No. 11/2008 tentang Informasi dan Transaksi Elektronik, dan Peraturan Pemerintah No.82/2012 beserta segala Amandemennya tentang Penyelenggaraan Sistem dan Transaksi Elektronik, dan Peraturan Pelaksananya. Segala penyalahgunaan atas dokumen perjanjian ini akan ditindak sesuai dengan hukum dan peraturan yang berlaku. 
+</p>
+</body>
+</html>

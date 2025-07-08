@@ -1,0 +1,10 @@
+<p>Selamat! Proses pengajuan pinjaman Anda telah selesai.</p>
+<p align="justify">
+Silahkan kunjungi Unit Kerja Bank BRI yang Anda pilih, bawa uang setoran awal dan KTP Asli Anda. Tunjukkan E-Form Voucher Anda kepada petugas bank untuk mencairkan dana pinjaman melalui rekening baru BANK BRI Anda.
+</p>
+E-Form Voucher:
+<font color='{{ color }}'><big><strong>{{ eform_voucher }}</strong></big></font><br>
+Status Voucher: <strong>{{ status }}</strong><br>
+Setoran Awal: <strong>Rp 100.000</strong><br>
+Unit Kerja: <br>
+<strong>{{ uker_name }}</strong>

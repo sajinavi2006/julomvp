@@ -1,0 +1,299 @@
+{% load default unit %}
+
+<div id="slim_history_note" @scroll="onScroll">
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+   <li class="active tab">
+    <a href="#app_status_history" data-toggle="tab" onClick="HideandShowDiv('app_status_history');"> <span class="visible-xs" title="Status History and Notes History">
+    <i class="fa fa-home"></i></span> <span class="hidden-xs">Status History and Notes History</span> </a>
+  </li>
+  <li class="tab"><a href="#email_sms_history" data-toggle="tab" title="EMAIL/SMS History" onClick="HideandShowDiv('email_sms_history');">
+    <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Email and SMS History</span> </a>
+  </li>
+  <li class="tab"><a href="#app_note_history" data-toggle="tab" title="Application Note History" onClick="HideandShowDiv('app_note_history');">
+    <span class="hidden-xs">Application Notes</span></a>
+  </li>
+  <li class="tab"><a href="#skip_trace_history" data-toggle="tab" title="Application Note History" onClick="HideandShowDiv('skip_trace_history');">
+    <span class="hidden-xs">Skiptrace History</span></a>
+  </li>
+  {% if is_ojk_audit_active %}
+    {% if user.groups.all|validate_group:'collection_supervisor' == True or user.groups.all|validate_group_prefix:'collection_' == False %}
+      <li class="tab"><a href="#wallet_note" data-toggle="tab" title="Cashback Note" onClick="HideandShowDiv('wallet_note');">
+        <span class="hidden-x s">Cashback Note</span></a>
+      </li>
+   {% endif %}
+  {% else %}
+      <li class="tab"><a href="#wallet_note" data-toggle="tab" title="Cashback Note" onClick="HideandShowDiv('wallet_note');">
+        <span class="hidden-x s">Cashback Note</span></a>
+      </li>
+  {% endif %}
+  <li class="tab"><a href="#cootek_history" data-toggle="tab" title="Cootek History" onClick="HideandShowDiv('cootek_history');">
+    <span class="hidden-x s">Cootek History</span></a>
+  </li>
+</ul>
+
+  <!-- .row -->
+  <div class="tab-content pmt_event">
+    <!-- Tab payment details -->
+      <div class="" id="history_and_cll_summary_div">
+       <table class="table">
+         <tr>
+           <td  width="50%">
+             <div class="tab-pane active" id="app_status_history">
+
+      <transition name="fade">
+        <div class="loading-status-history" v-show="loading">
+          <span class="fa fa-spinner fa-spin"></span> Loading
+        </div>
+      </transition>
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="15%">Waktu/Status</th>
+            <th width="70%">Content / Catatan</th>
+          </tr>
+        </thead>
+        <tbody class='status-histories' v-for='his_note_obj in statusHistories'>
+               <tr class="success" v-if="his_note_obj.type_data == 'Notes'">
+                <td>
+                  <label class="label label-warning">
+                    [[his_note_obj.cdate]]
+                    <!-- [[String(his_note_obj.cdate)]] -->
+                  </label><br/>
+                   <label class="label label-danger">
+                    [[his_note_obj.type_data]]
+                  </label>
+                </td>
+
+                <td>
+                  Agent: <code>
+                    [[his_note_obj.added_by_name||'-']]
+                  </code><br/>
+                  [[ his_note_obj.extra_data?.call_note?.contact_source]]
+                  /[[ his_note_obj.extra_data?.call_note?.phone_number ]]
+                  /[[ his_note_obj.extra_data?.call_note?.call_result ]]
+                  /[[ his_note_obj.extra_data?.call_note?.spoke_with ]]
+                  /[[ his_note_obj.extra_data?.call_note?.non_payment_reason ]]<br/>
+                  <strong>Catatan:</strong>
+                  <span v-html="his_note_obj.note_text_formatted ||'-'"></span>
+                </td>
+              </tr>
+               <tr class="success" v-else-if="his_note_obj.type_data == 'Account Assignment Change'">
+                <td>
+                  <label class="label label-warning">
+                    [[ his_note_obj.cdate ]]
+                  </label><br/>
+                  <label class="label label-danger">
+                    [[ his_note_obj.type_data ]]
+                  </label>
+                </td>
+
+                <td>
+                  <strong>Assignment Reason: </strong>
+                  [[ his_note_obj.assignment_reason ]]
+                   <br/>
+                  <strong>New Assignment: </strong>
+                  <span v-if="!his_note_obj.new_assignment">Inhouse</span>
+                  <span v-else-if="!his_note_obj.new_assignment">[[his_note_obj.new_assignment]]</span>
+                  <span v-else>[[his_note_obj.new_assignment]]</span>
+                    <br/>
+                    <strong>Old Assignment: </strong>
+                    <span v-if="!his_note_obj.old_assignment">Inhouse</span>
+                    <span v-else>[[his_note_obj.old_assignment]]</span>
+                        <br/>
+                </td>
+              </tr>
+                <tr v-else-if="his_note_obj.change_reason == 'system_triggered'"></tr>
+                <tr class="warning" v-else>
+                  <td>
+                    <label class="label label-success">
+                      [[ his_note_obj.cdate ]]
+                    </label><br/>
+                    <label class="label label-purple">
+                      [[ his_note_obj.type_data ]]
+                    </label>
+                  </td>
+                  <td>
+                    Agent: <code>[[ his_note_obj.changed_by_name||'-' ]]</code><br/>
+                    Status: <label class="label label-info">
+                      [[ his_note_obj.status_old ]]
+                    </label>
+                    &nbsp;&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                    <label class="label label-success">
+                      [[ his_note_obj.status_new ]]
+                    </label>
+                    <br/>
+                    <strong>Alasan :</strong>
+                    <span v-html="his_note_obj.change_reason_formatted ||'-'"></span>
+                  </td>
+                </tr>
+          </tbody>
+          <tbody v-if="!statusHistories.length">
+            <tr>
+              <td colspan="2">
+                <span> Tidak ada Data </span>
+              </td>
+            </tr>
+          </tbody>
+      </table>
+             </div>
+           </td>
+           <td width="50%">
+
+              <div class="tab-pane" id="call_summary_div">
+          <div class="list-group-wrapper">
+              <transition name="fade">
+                <div class="loading-call-history" v-show="call_loading">
+                    <span class="fa fa-spinner fa-spin"></span> Loading.
+                </div>
+            </transition>
+            <div id="call_summary_table" style="overflow-x: auto; overflow-y: auto;">
+              <table class="table" style="table-layout: fixed; width: 100%;">
+                <thead>
+                  <tr>
+
+                    <th style="width: 100px;min-width: 100px;overflow: hidden; text-overflow: ellipsis; white-space: nowrap">No. HP</th>
+
+                    <th style="width: 80px;min-width: 80px;overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                      Tanggal<i class="fa fa-sort" style="cursor:pointer" @click="toggleSortOrder"></i>
+                    </th>
+                    <th style="width: 100px;min-width: 100px;text-overflow: ellipsis; white-space: normal; word-wrap: break-word;" >Alasan</th>
+                    <th style="width: 50px;min-width: 50px;text-overflow: ellipsis; white-space: normal; word-wrap: break-word;" >&nbsp;&nbsp;&nbsp;
+                    </th>
+                  </tr>
+                </thead>
+                <tbody v-for="(item, index) in callSummary" :key="item.skiptrace_history_id" v-if="item.call_summary && Object.keys(item.call_summary).length > 0">
+                  <tr class="custom-class">
+
+                    <td style="width: 100px;min-width: 100px;text-overflow: ellipsis; white-space: normal; word-wrap: break-word;">[[item.phone_number]]</td>
+
+                    <td style="width: 80px;min-width: 80px;overflow: hidden; text-overflow: ellipsis; white-space: nowrap">[[item.cdate]]</td>
+                    <td style="width: 100px;min-width: 100px;text-overflow: ellipsis; white-space: normal; word-wrap: break-word;">[[item.skiptrace_history_non_payment_reason]]</td>
+                    <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                        <button v-if="item.call_summary && Object.keys(item.call_summary).length > 0"
+                                @click="toggleDetails(item.skiptrace_history_id)"
+                                class="btn btn-sm"
+                                :class="isDetailsVisible(item.skiptrace_history_id) ? 'btn-danger' : 'btn-success'">
+                          [[ isDetailsVisible(item.skiptrace_history_id) ? 'X&nbsp;' : '>>' ]]
+                        </button>
+                    </td>
+                  </tr>
+                  <tr v-if="item.skiptrace_history_id && item.call_summary && Object.keys(item.call_summary).length > 0 && isDetailsVisible(item.skiptrace_history_id)"
+                          :key="'details-' + item.skiptrace_history_id"
+                          class="custom-class"
+                          style="background-color: #f9f9f9;">
+                        <td colspan="4">
+                          <table width="100%">
+                            <tr>
+                              <td width="50%"><strong>Tipe:</strong></td>
+                              <td width="50%">[[item.contact_source]]</td>
+                            </tr>
+                            <tr>
+                              <td width="50%"><strong>Bicara Dengan:</strong></td>
+                              <td width="50%">[[item.spoke_with]]</td>
+                            </tr>
+                            <tr v-for="(value, key) in item.call_summary" :key="key">
+                              <td width="50%">
+                                <span v-if="formatKey(key)=='Bucket'"><strong>[[ formatKey(key) ]]:</strong></span>
+                                <span v-if="formatKey(key)=='Is Promise To Pay Given'"><strong>Janji bayar:</strong></span>
+                                <span v-if="formatKey(key)=='Promise To Pay Date'"><strong>Tanggal janji bayar:</strong> </span>
+                                <span v-if="formatKey(key)=='Non Payment Reason'"><strong>Alasan tidak bayar:</strong> </span>
+                              </td>
+                              <td width="50%">
+                                <span v-if="formatKey(key)=='Is Promise To Pay Given' && value==true">Ya</span>
+                                <span v-else-if="formatKey(key)=='Is Promise To Pay Given' && value==false">No</span>
+                                <span v-else>[[ value ]]</span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+           </td>
+         </tr>
+       </table>
+    </div>
+
+    <!-- Tab Payment SMS history -->
+    <div class="tab-pane" id="email_sms_history">
+      {% include "object/payment_status/include/tab_email_sms_history_account_payment.html" %}
+    </div>
+
+    <!-- Tab Payment App note history -->
+    <div class="tab-pane" id="app_note_history">
+         {% include "object/payment_status/include/app-history.html" %}
+    </div>
+
+    <!-- Tab skiptrace history -->
+    <div class="tab-pane" id="skip_trace_history">
+      <div class="list-group-wrapper">
+        <transition name="fade">
+          <div class="loading-skiptrace-history" v-show="loading">
+            <span class="fa fa-spinner fa-spin"></span> Loading
+          </div>
+        </transition>
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="15%">Waktu</th>
+              <th width="70%">Content / Catatan</th>
+            </tr>
+          </thead>
+          <tbody class='skiptrace-histories' v-for='history in histories'>
+              <tr class="success">
+                <td>
+                  <label class="label label-warning m-b-10">
+                    [[history.cdate]]
+                  </label><br>
+                  <label class="label label-danger m-b-10">
+                    Action
+                  </label>
+                </td>
+                <td>
+                  Agent : <code>[[history.agent_name]]</code><br/>
+                  <strong>[[history.call_result__name]]</strong><br/>
+                  <div v-if="history.call_result__name.includes('RPC - Call Back')">
+                    <div v-if="history.callback_time">
+                      Call Back Time : [[history.callback_time]]<br/>
+                    </div>
+                  </div>
+                  Phone : [[history.skiptrace__phone_number]]<br/>
+                  Source : [[history.skiptrace__contact_source]]<br/>
+                  Contact-Person : [[history.spoke_with]]<br/>
+                  App-Id : [[history.application_id]]<br/>
+                  <div v-if="history.account_payment_id">
+                    Acc-id: [[history.account_id]]<br/>
+                    Acc-pmt-id : [[history.account_payment_id]]<br/>
+                  </div>
+                  <div v-if="history.loan_id">
+                    Loan-Id : [[history.loan_id]]<br/>
+                    Payment-Id : [[history.payment_id]]<br/>
+                  </div>
+                  Start :[[history.start_ts]]<br/>
+                  End : [[history.end_ts]]<br/>
+                  <div v-if="history.non_payment_reason">
+                    Non Payment Reason : [[history.non_payment_reason]]<br/>
+                  </div>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab skiptrace history -->
+    <div class="tab-pane" id="wallet_note">
+      {% include "object/payment_status/include/wallet_history.html" %}
+    </div>
+
+    <!-- Tab cootek history -->
+    <div class="tab-pane" id="cootek_history">
+      {% include "object/payment_status/include/cootek_history.html" %}
+    </div>
+
+  </div>
+</div>

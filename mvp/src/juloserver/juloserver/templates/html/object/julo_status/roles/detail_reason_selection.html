@@ -1,0 +1,74 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+{% load unit %}
+
+{% block breadcrumb_title %}
+  
+{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'julo_status:status_selections' %}">Alasan Status</a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+ 
+{% block list_title %}
+        Detail Alasan Status 
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+
+<div class="tab-content">
+  <!-- Tab Personal -->
+  <div class="tab-pane active" id="status">
+
+    <div class="row">
+      <div class="col-md-12 col-xs-12 b-r"> <strong>Status Aplikasi</strong> <br>
+        <p class="text-muted">
+          {{ object.status_code|default:"-"|safe }} - {{ object.status|default:"-"|safe}}
+        </p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12 col-xs-12 b-r"> <strong>Alasan yang ada pada Status Aplikasi ini:</strong> <br>
+        <p class="text-muted">
+
+          {% for item in object.reason_status_to.all %}
+            {{ item|safe }}<br/>
+          {% empty %}
+            -- Tidak Ada data --
+          {% endfor %}
+        </p>
+      </div>
+    </div>
+    <hr>
+
+  <!-- End tab personal -->
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'julo_status:reason_selections_update' object.status_code %}">
+    <button id="back" type="button" class="btn btn-warning">
+      <i class="fa fa-pencil fa-fw"></i> Ubah Data
+    </button>
+  </a>
+  <a href="{% url 'julo_status:reason_selections' %}">
+    <button id="back" type="button" class="btn btn-info">
+      <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+    </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+  });
+{% endblock %}

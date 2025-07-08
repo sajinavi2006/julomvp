@@ -1,0 +1,26 @@
+{% load ifgroupselected from common %}
+
+{% ifgroupselected bo_data_verifier %}
+  {% include 'common/theme1/navbar/bo_verifier_top.html' %}
+  {% include 'common/theme1/navbar/bo_verifier_sidebar.html' %}
+{% endifgroupselected %}
+
+{% ifgroupselected julo_partners %}
+  {% include 'common/theme1/navbar/bo_verifier_top.html' %}
+  {% include 'common/theme1/navbar/bo_verifier_sidebar.html' %}
+{% endifgroupselected %}
+
+{% ifgroupselected document_verifier %}
+  {% include 'common/theme1/navbar/bo_verifier_top.html' %}
+  {% include 'common/theme1/navbar/bo_verifier_sidebar.html' %}
+{% endifgroupselected %}
+
+{% ifgroupselected bo_credit_analyst %}
+  {% include 'common/theme1/navbar/bo_ca_top.html' %}
+  {% include 'common/theme1/navbar/bo_ca_sidebar.html' %}
+{% endifgroupselected %}
+
+{% ifgroupselected admin_full %}
+  {% include 'common/theme1/navbar/admin_top.html' %}
+  {% include 'common/theme1/navbar/admin_sidebar.html' %}
+{% endifgroupselected %}

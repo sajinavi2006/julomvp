@@ -1,0 +1,236 @@
+{% load checkusergroup from common %}
+{% load unit %}
+
+<!-- Left navbar-header -->
+  <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+
+      <ul class="nav" id="side-menu">
+        <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+          <!-- input-group -->
+          <div class="input-group custom-search-form">
+            <input type="text" class="form-control" placeholder="Cari...">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+            </span> </div>
+          <!-- /input-group -->
+        </li>
+
+        <li id="mnu_dashboard_li"> <a href="{% url 'dashboard:default' %}" class="waves-effect">
+          <i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Dashboard </span>
+          </a>
+        </li>
+
+        {%if julo_roles|length > 1 %}
+          <li><a href="javascript:void(0)" class="waves-effect">
+            <i class="linea-icon linea-basic fa-fw text-danger" data-icon="7"></i> <span class="hide-menu">
+              Pindah Role<span class="fa arrow"></span>
+            </span></a>
+            <ul class="nav nav-second-level">
+            {% for role_item in julo_roles %}
+                <li><a href="{{ role_item.url }}" class="waves-effect">{{ role_item.role|display_safe }}
+                  </a>
+                </li>
+            {% empty %}
+                <li>Tidak ada</li>
+            {% endfor %}
+            </ul>
+          </li>
+        {% endif %}
+
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="&#xe001;" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Master Data<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{% url 'julo_status:status_selections' %}" >
+              <span class="hide-menu"> Set Pindah Status</span>
+              </a>
+            </li>
+
+            <li id="mnu_reason_selection_li"> <a href="{% url 'julo_status:reason_selections' %}" >
+              <span class="hide-menu">Set Alasan Status</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="&#xe006;" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu"> Collection HI Season <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{%url 'collection_hi_season:collection_hi_season_campaign_list' %}" >
+              <span class="hide-menu"> List </span>
+              </a>
+            </li>
+
+            <li id="mnu_reason_selection_li"> <a href="{%url 'collection_hi_season:collection_hi_season_campaign_form' %}" >
+              <span class="hide-menu"> Add New </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        {% include 'common/theme1/navbar/includes/account_deletion_history.html' %}
+        {% include 'common/theme1/navbar/includes/cs_admin_menu.html' %}
+
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="&#xe017;" class="linea-icon linea-basic"></i>
+          <span class="hide-menu">Aplikasi<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'loan_app:image_verification' %}" >
+              <span class="hide-menu"> Verifikasi Dokumen</span>
+              </a>
+            </li>
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'loan_app:verification_cek_list' %}" >
+              <span class="hide-menu"> Verifikasi Cek List</span>
+              </a>
+            </li>
+            <li id="mnu_partnernew_li"> <a href="{% url 'loan_app:sphp' %}" >
+              <span class="hide-menu">SPHP <span class="label label-rouded label-warning pull-right">Baru</span>
+              </a>
+            </li>
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'loan_app:status_changes' %}" >
+              <span class="hide-menu"> Ubah Status</span>
+              </a>
+            </li>
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'loan_app:list' %}" >
+              <span class="hide-menu"> Seluruh Data</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li id="mnu_payment_li"> <a href="#" class="waves-effect"><i data-icon="M" class="linea-icon linea-basic"></i>
+          <span class="hide-menu">Payment<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_payment_partial_li"> <a href="{% url 'payment:list_partial_payment' %}" >
+              <span class="hide-menu"> Payment Event</span>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="u" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Scraped Data<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'scraped_data:xls_list' %}" >
+              <span class="hide-menu"> Download XLS</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="p" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Product Profile<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'product_profile:list' %}" >
+              <span class="hide-menu">Product Profile List</span>
+              </a>
+            </li>
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'product_profile:add' %}" >
+              <span class="hide-menu"> Add New Product</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="f" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Lender<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'lender:registration' %}" >
+              <span class="hide-menu">Lender Registration List</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="r" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Lender Investment<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'lender:investment' %}" >
+              <span class="hide-menu">lender Investment Upload</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="C" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">AR Switching<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'channeling_loan_portal:ar_switching' %}" >
+              <span class="hide-menu">AR Switching Upload</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="U" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Loan Write Off<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'channeling_loan_portal:write_off' %}" >
+              <span class="hide-menu">Write Off Upload</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="D" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu"> Lender Withdraw / Repayment <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{%url 'channeling_loan_portal:lender_osp_transaction_list' %}" >
+              <span class="hide-menu"> Withdraw Batch List</span>
+              </a>
+            </li>
+            <li id="mnu_status_selection_li_2"> <a href="{%url 'channeling_loan_portal:lender_repayment_list' %}" >
+              <span class="hide-menu"> Repayment List</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="F" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Balance Lender <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{%url 'channeling_loan_portal:lender_osp_account_list' %}" >
+              <span class="hide-menu"> List </span>
+            </a>
+            </li>
+          </ul>
+        </li>
+
+        {% checkusergroup in ['product_manager'] %}
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="|" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Streamlined Communications<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li"> <a href="{% url 'streamlined:list' %}" >
+              <span class="hide-menu">Streamlined Communication List</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endcheckusergroup %}
+      {% checkusergroup in ['it_team'] %}
+        <li id="mnu_app_img_verify_li"> <a href="{% url 'minisquad:page_bulk_change_user_role' %}">
+            <i class="fa fa-user m-t-10"></i><span class="hide-menu m-l-10"> Bulk Pindah Role</span>
+          </a>
+        </li>
+      {% endcheckusergroup %}
+        <li>
+          <a href="{% url 'logout'%}" class="waves-effect hidden-md hidden-lg hidden-sm"><i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span></a>
+          <a href="javascript:void(0)" alt="alert" class="img-responsive model_img hidden-xs" id="signout-warning2">
+            <i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Left navbar-header end -->

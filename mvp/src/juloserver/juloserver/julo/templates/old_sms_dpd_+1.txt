@@ -1,0 +1,1 @@
+{{name}}, kami ingatkan angsuran JULO {{ payment_number }} Anda {{due_amount}} sdh TERLAMBAT. Mohon segera bayar: cek aplikasi. Abaikan jika sudah bayar.

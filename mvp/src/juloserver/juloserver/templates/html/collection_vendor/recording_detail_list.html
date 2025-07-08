@@ -1,0 +1,1521 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+    .div_loading {
+        margin-left: 30%;
+    }
+
+    .chart canvas {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .chart span {
+        color: #555;
+        display: block;
+        line-height: 220px;
+        text-align: center;
+        width: 220px;
+        font-family: sans-serif;
+        font-size: 40px;
+        font-weight: 100;
+        margin-left: 5px;
+    }
+
+    .chart input {
+        width: 200px;
+    }
+    .chart span {
+
+    }
+    .glyphicon-refresh-animate {
+        -animation: spin .7s infinite linear;
+        -webkit-animation: spin2 .7s infinite linear;
+    }
+
+    @-webkit-keyframes spin2 {
+        from { -webkit-transform: rotate(0deg);}
+        to { -webkit-transform: rotate(360deg);}
+    }
+
+    @keyframes spin {
+        from { transform: scale(1) rotate(0deg);}
+        to { transform: scale(1) rotate(360deg);}
+    }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">Recording Detail</h3><br/>
+            <h4 class="box-title m-b-0">Filter By:</h4><br/>
+
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalCallDateFilter" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 500px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Pilih Filter untuk call date
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">
+                    <div class="col-md-12">
+                        <label class="col-md-12 col-sm-12">Select</label>
+                        <select class="form-control" id="call_date_mode" name="call_date_mode">
+                            <option value="" selected>----</option>
+                            <option value="between">Between</option>
+                            <option value="after">After</option>
+                            <option value="before">Before</option>
+                            <option value="today">Today</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 m-b-30 filter_call_date_1_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <span class="input-group-addon btn_calendar" input_name="filter_call_date_1"><i class="fa fa-calendar"></i></span>
+                            <input class="form-control" id="filter_call_date_1"
+                               name="filter_call_date_1" type="text"/>
+                        </div>
+                    </div>
+                    <label class="col-md-12 col-sm-12 filter_call_date_2_div" style="display: none;">And</label>
+                    <div class="col-md-12 m-b-30 filter_call_date_2_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <span class="input-group-addon btn_calendar" input_name="filter_call_date_2" ><i class="fa fa-calendar"></i></span>
+                            <input class="form-control" id="filter_call_date_2"
+                               name="filter_call_date_2" type="text"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="button-container" align="center">
+                        <button type="button"
+                                class="btn btn-default text-center"
+                                id="btnCallDateClear">clear
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btnSubmitCallDate" data-dismiss="modal">select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalDurationFilter" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Pilih Filter untuk Duration
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">
+                    <div class="col-md-12">
+                        <label class="col-md-12 col-sm-12">select</label>
+                        <select class="form-control" id="duration_mode" name="duration_mode">
+                            <option value="" selected>----</option>
+                            <option value="between">Between</option>
+                            <option value="greater">Greater than</option>
+                            <option value="less">Less than</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 m-b-30 duration_filter_1_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                            <input class="form-control" id="duration_filter_1"
+                               name="duration_filter_1" maxlength="100" type="number"/>
+                        </div>
+                    </div>
+                    <label class="col-md-12 col-sm-12 duration_filter_2_div" style="display: none;">And</label>
+                    <div class="col-md-12 m-b-30 duration_filter_2_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                            <input class="form-control" id="duration_filter_2"
+                               name="duration_filter_2" maxlength="100" type="number"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-default text-center" id="btnDurationClear">clear
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btnSubmitDuration" data-dismiss="modal">select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalNegativeScoreFilter" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Pilih Filter untuk Negative Score
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">
+                    <div class="col-md-12">
+                        <label class="col-md-12 col-sm-12">select</label>
+                        <select class="form-control" id="negative_score_mode" name="negative_score_mode">
+                            <option value="" selected>----</option>
+                            <option value="between">Between</option>
+                            <option value="greater">Greater than</option>
+                            <option value="less">Less than</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 m-b-30 negative_score_filter_1_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <input class="form-control" id="negative_score_filter_1"
+                               name="negative_score_filter_1" maxlength="100" type="number"/>
+                        </div>
+                    </div>
+                    <label class="col-md-12 col-sm-12 negative_score_filter_2_div" style="display: none;">And</label>
+                    <div class="col-md-12 m-b-30 negative_score_filter_2_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <input class="form-control" id="negative_score_filter_2"
+                               name="negative_score_filter_2" maxlength="100" type="number"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-default text-center" id="btnNegativeScoreClear">clear
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btnSubmitNegativeScore" data-dismiss="modal">select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalSOPScoreFilter" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Pilih Filter untuk SOP Score
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 250px">
+                    <div class="col-md-12">
+                        <label class="col-md-12 col-sm-12">select</label>
+                        <select class="form-control" id="sop_score_mode" name="sop_score_mode">
+                            <option value="" selected>----</option>
+                            <option value="between">Between</option>
+                            <option value="greater">Greater than</option>
+                            <option value="less">Less than</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 m-b-30 sop_score_filter_1_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <input class="form-control" id="sop_score_filter_1"
+                               name="sop_score_filter_1" maxlength="100" type="number"/>
+                        </div>
+                    </div>
+                    <label class="col-md-12 col-sm-12 sop_score_filter_2_div" style="display: none;">And</label>
+                    <div class="col-md-12 m-b-30 sop_score_filter_2_div" style="display: none;">
+                        <div class="input-group m-t-10 ">
+                            <input class="form-control" id="sop_score_filter_2"
+                               name="sop_score_filter_2" maxlength="100" type="number"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-default text-center" id="btnSOPScoreClear">clear
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btnSubmitSOPScore" data-dismiss="modal">select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalBulkDownload" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 500px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom: none">
+                    <h3 align="center">
+                        Preparing
+                    </h3>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 300px">
+                    <div class="col-md-12">
+                        <div class="chart div_loading" id="graph" data-percent="1"></div>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 100px;">
+                        <div class='progress-wrapper' style="display: none;">
+                            <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+                        </div>
+                        <h4 id="progress-bar-message" class="text-primary text-center">
+                            Waiting for progress to start...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-b-5">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-danger btn-rounded btn-block"
+                    id="btn_call_date" data-toggle="modal" data-target="#modalCallDateFilter">
+                Call Date All <span id="call_date_desc"></span>
+            </button>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary btn-rounded btn-block"
+                    id="btn_duration_all" data-toggle="modal" data-target="#modalDurationFilter">
+                Duration All <span id="duration_desc"></span>
+            </button>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-success btn-rounded btn-block"
+                    id="btn_call_date" data-toggle="modal" data-target="#modalNegativeScoreFilter">
+                Negative Score <span id="negative_score_desc"></span>
+            </button>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-warning btn-rounded btn-block"
+                    id="btn_call_date" data-toggle="modal" data-target="#modalSOPScoreFilter">
+                SOP Score <span id="sop_score_desc"></span>
+            </button>
+        </div>
+        <div class="col-md-2 col-md-offset-2">
+            <input type="hidden" id="download_cache_id" value="">
+            <button type="button" class="btn btn-info btn-rounded btn-block" id="btn_download_all">
+                <span id="download_text">Download All</span>
+                <span id="download_spinner" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none;"></span>
+                <i id="download_icon" class="fa fa-download" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="col-md-2" style="border-right:1px solid;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Search By: </label>
+            <select class="form-control" id="search_by" name="search_by">
+                <option value="" selected>----</option>
+                <option value="call_start">Call Start</option>
+                <option value="call_end">Call End</option>
+                <option value="duration">Duration (s)</option>
+                <option value="account_id">Account ID</option>
+                <option value="account_payment_id">Acc-Pmt-ID</option>
+                <option value="agent">Agent</option>
+                <option value="bucket">Bucket</option>
+                <option value="call_to">Call To</option>
+                <option value="negative_score">Negative Score</option>
+                <option value="sop_score">SOP Score</option>
+                <option value="id">recording detail id</option>
+                <option value="source">Source</option>
+            </select>
+        </div>
+        <div class="col-md-2 search_value_call_start_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Call Start</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_call_start"
+                   name="search_value_call_start" type="text" scope="search_value_call_start_div"
+                       placeholder="YYYY-MM-DD H:m:s"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_call_end_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Call End</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_call_end"
+                   name="search_value_call_end" type="text" scope="search_value_call_end_div"
+                       placeholder="YYYY-MM-DD H:m:s"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_duration_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Duration</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_duration"
+                   name="search_value_duration" type="text" scope="search_value_duration_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_account_id_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Account Id</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_account_id"
+                   name="search_value_account_id" type="text" scope="search_value_account_id_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_account_payment_id_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Account Payment Id</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_account_payment_id"
+                   name="search_value_account_payment_id" type="text" scope="search_value_account_payment_id_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_agent_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Agent</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_agent"
+                   name="search_value_agent" type="text" scope="search_value_agent_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_bucket_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Bucket</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_bucket"
+                   name="search_value_bucket" type="text" scope="search_value_bucket_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_call_to_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Call to</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_call_to"
+                   name="search_value_call_to" type="text" scope="search_value_call_to_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_negative_score_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Negative Score</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_negative_score"
+                   name="search_value_negative_score" type="text" scope="search_value_negative_score_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_sop_score_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">SOP Score</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_sop_score"
+                   name="search_value_sop_score" type="text" scope="search_value_sop_score_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_id_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Recording Detail Id</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_id"
+                   name="search_value_id" type="text" scope="search_value_id_div"/>
+            </div>
+        </div>
+        <div class="col-md-2 search_value_source_div" style="display:none;margin-top: 20px;">
+            <label class="col-md-12 col-sm-12">Source</label>
+            <div class="input-group m-t-10 ">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input class="form-control multiple-filter" id="search_value_source"
+                   name="search_value_source" type="text" scope="search_value_source_div"/>
+            </div>
+        </div>
+        <div class="col-md-1 after_search" style="display:none;margin-top: 20px;padding-top: 30px">
+            <button type="button" class="btn btn-success btn-circle" id="btnRefreshSearch">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+        <div class="col-md-1 " style="margin-top: 20px;padding-top: 30px">
+            <button type="button" class="btn btn-info btn-rounded btn-block" id="btn_submit_search">
+                <i class="fa fa-search" aria-hidden="true"></i> Cari
+            </button>
+        </div>
+    </div>
+    <div id="table_content" class="header-content" style="margin-top:20px;display: flex;overflow-x: auto; height: 500px !important;overflow: scroll;">
+        <table class="table table-striped table-responsive text-nowrap">
+            <thead>
+                <tr>
+                    <th scope="col" align="center" class="text-center">ID</th>
+                    <th scope="col" align="center" class="text-center">Call Start</th>
+                    <th scope="col" align="center" class="text-center">Call End</th>
+                    <th scope="col" align="center" class="text-center">Duration (s)</th>
+                    <th scope="col" align="center" class="text-center">Account ID</th>
+                    <th scope="col" align="center" class="text-center">Acc-Pmt-ID</th>
+                    <th scope="col" align="center" class="text-center">Agent</th>
+                    <th scope="col" align="center" class="text-center">Bucket</th>
+                    <th scope="col" align="center" class="text-center">Call To</th>
+                    <th scope="col" align="center" class="text-center">Source</th>
+                    <th scope="col" align="center" class="text-center">Negative Score</th>
+                    <th scope="col" align="center" class="text-center">SOP Score</th>
+                    <th scope="col" align="center" class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recording_detail in recording_detail_lists %}
+                    <tr>
+                        <td align="center" class="text-center">{{ recording_detail.id }}</td>
+                       <td align="center" class="text-center">
+                           <input type="hidden" name="recording_detail_ids[]" value="{{ recording_detail.id }}">
+                           {{ recording_detail.call_start|date:"Y-m-d H:i:s"|safe }}
+                       </td>
+                       <td align="center" class="text-center">
+                           {{ recording_detail.call_end|date:"Y-m-d H:i:s"|safe }}
+                       </td>
+                        <td align="center" class="text-center">
+                           {{ recording_detail.duration }}
+                       </td>
+                       <td align="center" class="text-center">{{ recording_detail.account_payment.account_id|default:"-" }}</td>
+                       <td align="center" class="text-center">{{ recording_detail.account_payment_id|default:"-" }}</td>
+                       <td align="center" class="text-center">{{ recording_detail.agent.username }}</td>
+                       <td align="center" class="text-center">{{ recording_detail.bucket }}</td>
+                       <td align="center" class="text-center">{{ recording_detail.call_to }}</td>
+                       <td align="center" class="text-center">{{ recording_detail.skiptrace.contact_source|default:"-" }}</td>
+                       <td align="center" class="text-center">{{ recording_detail.negative_score }}</td>
+                       <td align="center" class="text-center">{{ recording_detail.sop_score }}</td>
+                       <td align="center" class="text-center">
+                           <a href="{%url 'collection_vendor:download_recording_detail_file' recording_detail.id %}" class="btn btn-small btn-info btn-rounded btn-block btn_download"
+                                   recording_detail_id="{{ recording_detail.id }}">
+                                        Download
+                            </a>
+                       </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="18" align="center">
+                            <div class="alert alert-info empty-info">
+                                <strong>Info!</strong> Tidak ada Data.
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+        {% if recording_detail_lists.has_previous %}
+            <li class="page-item">
+{#                <a class="page-link" href="?page_number={{ recording_detail_lists.previous_page_number }}">Previous</a>#}
+                <a class="page-link btnPage" href="#" page_number="{{ recording_detail_lists.previous_page_number }}">
+                    Previous
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+        {% endif %}
+
+        {% if recording_detail_lists.number|add:'-9' > 1 %}
+            <li class="page-item">
+{#                <a class="page-link" href="?page_number={{ recording_detail_lists.number|add:'-10' }}">&hellip;</a>#}
+                <a class="page-link btnPage" href="#" page_number="{{ recording_detail_lists.number|add:'-10' }}">&hellip;</a>
+            </li>
+        {% endif %}
+
+        {% for i in recording_detail_lists.paginator.page_range %}
+            {% if recording_detail_lists.number == i %}
+                <li class="page-item active" aria-current="page">
+              <span class="page-link">
+                {{ i }}
+                <span class="sr-only">(current)</span>
+              </span>
+            </li>
+            {% elif i > recording_detail_lists.number|add:'-10' and i < recording_detail_lists.number|add:'10' %}
+                 <li class="page-item">
+                     <a class="page-link btnPage" href="#" page_number="{{ i }}">{{ i }}</a>
+                 </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if recording_detail_lists.paginator.num_pages > recording_detail_lists.number|add:'9' %}
+           <li class="page-item"><a class="page-link btnPage" href="#" page_number="{{ recording_detail_lists.number|add:'10' }}">&hellip;</a></li>
+        {% endif %}
+
+        {% if recording_detail_lists.has_next %}
+            <li class="page-item">
+            <a class="page-link btnPage" href="#" page_number="{{ recording_detail_lists.next_page_number }}">Next</a>
+          </li>
+        {% else %}
+            <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+    <form method="POST" id="formGlobalSearch" style="display: none;">
+        {% csrf_token %}
+        <input type="text" name="search_call_date_mode" id="search_call_date_mode">
+        <input type="text" name="search_call_date_1" id="search_call_date_1">
+        <input type="text" name="search_call_date_2" id="search_call_date_2">
+        <input type="text" name="search_duration_mode" id="search_duration_mode">
+        <input type="text" name="search_duration_filter_1" id="search_duration_filter_1">
+        <input type="text" name="search_duration_filter_2" id="search_duration_filter_2">
+        <input type="text" name="global_search_value_call_start" id="global_search_value_call_start">
+        <input type="text" name="global_search_value_call_end" id="global_search_value_call_end">
+        <input type="text" name="global_search_value_duration" id="global_search_value_duration">
+        <input type="text" name="global_search_value_account_id" id="global_search_value_account_id">
+        <input type="text" name="global_search_value_account_payment_id" id="global_search_value_account_payment_id">
+        <input type="text" name="global_search_value_agent" id="global_search_value_agent">
+        <input type="text" name="global_search_value_bucket" id="global_search_value_bucket">
+        <input type="text" name="global_search_value_call_to" id="global_search_value_call_to">
+        <input type="text" name="global_search_value_negative_score" id="global_search_value_negative_score">
+        <input type="text" name="global_search_value_sop_score" id="global_search_value_sop_score">
+        <input type="text" name="global_search_value_id" id="global_search_value_id">
+        <input type="text" name="global_search_value_source" id="global_search_value_source">
+        <input type="text" name="page_number" id="global_page_number">
+        <input type="text" name="search_negative_score_mode" id="search_negative_score_mode">
+        <input type="text" name="search_negative_score_filter_1" id="search_negative_score_filter_1">
+        <input type="text" name="search_negative_score_filter_2" id="search_negative_score_filter_2">
+        <input type="text" name="search_sop_score_mode" id="search_sop_score_mode">
+        <input type="text" name="search_sop_score_filter_1" id="search_sop_score_filter_1">
+        <input type="text" name="search_sop_score_filter_2" id="search_sop_score_filter_2">
+    </form>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+{#    <script src="{% static 'plugins/js/celery_progress/celery_progress.js' %}"></script>#}
+{% endblock %}
+<script>
+{% block script_bottom_inside %}
+    function ToastDanger(body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'error',
+            hideAfter: 2800
+        });
+    }
+    function validateSearch(){
+        if ($('#call_date_mode').val().length > 0) {
+            if ($('#call_date_mode').val() == 'between' &&
+            ($('#filter_call_date_1').val().length == 0 || $('#filter_call_date_2').val().length == 0)){
+                ToastDanger('Mohon isi kedua tanggal filter call date')
+                return false
+            }
+            else if($('#call_date_mode').val() != 'today' && $('#filter_call_date_1').val().length == 0){
+                ToastDanger('Mohon isi tanggal filter call date')
+                return false
+            }
+        }
+        if ($('#duration_mode').val().length > 0) {
+            if ($('#duration_mode').val() == 'between' &&
+            ($('#duration_filter_1').val().length == 0 || $('#duration_filter_2').val().length == 0)){
+                ToastDanger('Mohon isi kedua durasi filter durasi')
+                return false
+            }
+            else if($('#duration_filter_1').val().length == 0){
+                ToastDanger('Mohon isi durasi filter durasi')
+                return false
+            }
+        }
+        if ($('#negative_score_mode').val().length > 0) {
+            if ($('#negative_score_mode').val() == 'between' &&
+            ($('#negative_score_filter_1').val().length == 0 || $('#negative_score_filter_2').val().length == 0)){
+                ToastDanger('Mohon isi kedua durasi filter durasi')
+                return false
+            }
+            else if($('#negative_score_filter_1').val().length == 0){
+                ToastDanger('Mohon isi durasi filter durasi')
+                return false
+            }
+        }
+        if ($('#sop_score_mode').val().length > 0) {
+            if ($('#sop_score_mode').val() == 'between' &&
+            ($('#sop_score_filter_1').val().length == 0 || $('#sop_score_filter_2').val().length == 0)){
+                ToastDanger('Mohon isi kedua durasi filter durasi')
+                return false
+            }
+            else if($('#sop_score_filter_1').val().length == 0){
+                ToastDanger('Mohon isi durasi filter durasi')
+                return false
+            }
+        }
+        if ($('#search_value_call_start').val().length > 0 &&
+            !/Invalid|NaN/.test(new Date($('#search_value_call_start').val()).toString()) == false){
+            ToastDanger('Format call start salah')
+            return false
+        }
+        if ($('#search_value_call_end').val().length > 0 &&
+            !/Invalid|NaN/.test(new Date($('#search_value_call_end').val()).toString()) == false){
+            ToastDanger('Format call end salah')
+            return false
+        }
+
+        re = /^(\d{4})\-(\d{1,2})\-(\d{1,2})\ (\d{1,2})\:(\d{1,2})\:(\d{1,2})$/;
+        if($('#search_value_call_start').val().length > 0 && !$('#search_value_call_start').val().match(re)) {
+          ToastDanger('Format call start salah mohon gunakan YYYY-mm-dd H:m:s')
+          return false;
+        }
+        if($('#search_value_call_end').val().length > 0 && !$('#search_value_call_end').val().match(re)) {
+          ToastDanger('Format call End salah mohon gunakan YYYY-mm-dd H:m:s')
+          return false;
+        }
+        if($('#filter_call_date_1').val().length > 0 && !$('#filter_call_date_1').val().match(re)) {
+          ToastDanger('Format call start salah mohon gunakan YYYY-mm-dd H:m:s')
+          return false;
+        }
+        if($('#filter_call_date_2').val().length > 0 && !$('#filter_call_date_2').val().match(re)) {
+          ToastDanger('Format call End salah mohon gunakan YYYY-mm-dd H:m:s')
+          return false;
+        }
+        return true
+    }
+
+
+    $('.btn_calendar').click(function (e) {
+        input_id = $(this).attr('input_name')
+        $('#'+input_id).datetimepicker('show');
+    })
+
+    function negative_response_swal(msg) {
+        swal({
+          title: "Gagal!",
+          html:true,
+          text: msg,
+          type: "error",
+          showCancelButton: true,
+          showConfirmButton: false,
+          cancelButtonColor: "#ffffff",
+          cancelButtonText: "Kembali",
+          closeOnCancel: true
+        });
+    }
+    function migrate_search_value(){
+        $('#global_search_value_call_start').val($('#search_value_call_start').val())
+        $('#global_search_value_call_end').val($('#search_value_call_end').val())
+        $('#global_search_value_duration').val($('#search_value_duration').val())
+        $('#global_search_value_account_id').val($('#search_value_account_id').val())
+        $('#global_search_value_account_payment_id').val($('#search_value_account_payment_id').val())
+        $('#global_search_value_agent').val($('#search_value_agent').val())
+        $('#global_search_value_bucket').val($('#search_value_bucket').val())
+        $('#global_search_value_call_to').val($('#search_value_call_to').val())
+        $('#global_search_value_negative_score').val($('#search_value_negative_score').val())
+        $('#global_search_value_sop_score').val($('#search_value_sop_score').val())
+        $('#global_search_value_id').val($('#search_value_id').val())
+        $('#global_search_value_source').val($('#search_value_source').val())
+    }
+    function show_search_by_value(){
+        $('.multiple-filter').each(function() {
+            if ($(this).val().length > 0){
+                $('.'+$(this).attr('scope')).show()
+                $('.after_search').show()
+            }
+        });
+    }
+    $('#filter_call_date_1').datetimepicker({
+      format:'Y-m-d H:i:00'
+    });
+    $('#filter_call_date_2').datetimepicker({
+      format:'Y-m-d H:i:00'
+    });
+    $('.btnOk').click(function (e) {
+        $('#form_search').submit()
+    })
+    $('.btnPage').click(function (e) {
+        number = $(this).attr('page_number')
+        $('#global_page_number').val(number)
+        $('#formGlobalSearch').submit()
+    })
+    $('#btn_download_all').click(function (e) {
+        recording_detail_ids = $('input[name^=recording_detail_ids]').map(function(idx, elem) {
+            return $(elem).val();
+        }).get();
+        if (recording_detail_ids.length < 1){
+            negative_response_swal("Tidak ada data");
+            return
+        }
+        if ($('#download_cache_id').val().length > 0){
+            $.ajax({
+                url: `{%url 'collection_vendor:do_bulk_download' %}`, // the endpoint
+                type: "POST", // http method
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    download_cache_id: $('#download_cache_id').val(),
+                },
+                success: function (json) {
+                    if (json.status == "success") {
+                        window.location.replace(json.zip_url);
+                    } else {
+                        $('#download_cache_id').val('')
+                        drawCircle('#efefef', options.lineWidth, 100 / 100);
+                        $('#download_text').text('Download All');
+                        $('.span_loading').text('0%')
+                        negative_response_swal(json.messages);
+                    }
+                },
+            })
+            return
+        }
+        if($('#download_text').text()==='Preparing..'){
+            $('#modalBulkDownload').modal('show');
+            return
+        }
+        $('#download_text').text('Preparing..')
+        $('#download_spinner').show(100)
+        $('#download_icon').hide(100)
+        $.ajax({
+                url: `{%url 'collection_vendor:process_bulk_download_trigger' %}`, // the endpoint
+                type: "POST", // http method
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    search_call_date_mode: $('#search_call_date_mode').val(),
+                    search_duration_mode: $('#search_duration_mode').val(),
+                    search_negative_score_mode: $('#search_negative_score_mode').val(),
+                    search_sop_score_mode: $('#search_sop_score_mode').val(),
+                    global_search_value_call_start: $('#global_search_value_call_start').val(),
+                    global_search_value_call_end: $('#global_search_value_call_end').val(),
+                    global_search_value_duration: $('#global_search_value_duration').val(),
+                    global_search_value_account_id: $('#global_search_value_account_id').val(),
+                    global_search_value_account_payment_id: $('#global_search_value_account_payment_id').val(),
+                    global_search_value_agent: $('#global_search_value_agent').val(),
+                    global_search_value_bucket: $('#global_search_value_bucket').val(),
+                    global_search_value_call_to: $('#global_search_value_call_to').val(),
+                    global_search_value_negative_score: $('#global_search_value_negative_score').val(),
+                    global_search_value_sop_score: $('#global_search_value_sop_score').val(),
+                    global_search_value_id: $('#global_search_value_id').val(),
+                    global_search_value_source: $('#global_search_value_source').val(),
+                    search_call_date_1: $('#search_call_date_1').val(),
+                    search_call_date_2: $('#search_call_date_2').val(),
+                    search_duration_filter_1: $('#search_duration_filter_1').val(),
+                    search_duration_filter_2: $('#search_duration_filter_2').val(),
+                    search_negative_score_filter_1: $('#search_negative_score_filter_1').val(),
+                    search_negative_score_filter_2: $('#search_negative_score_filter_2').val(),
+                    search_sop_score_filter_1: $('#search_sop_score_filter_1').val(),
+                    search_sop_score_filter_2: $('#search_sop_score_filter_2').val(),
+
+                },
+                success: function (json) {
+                    if (json.status == "success") {
+                        if (json.task_id){
+                            $('#modalBulkDownload').modal('show');
+                            //run progress tracking
+                            var progressUrl = "{% url 'collection_vendor:bulk_download_progress_status' 1 %}".replace(
+                                '1', json.task_id);
+                            CeleryProgressBar.initProgressBar(progressUrl)
+                        }else{
+                            $('#download_cache_id').val(json.download_cache_id)
+                            $('#download_text').text('Download Now')
+                            $('#download_spinner').hide(100)
+                            $('#download_icon').show(100)
+                        }
+                    } else {
+                        negative_response_swal(json.messages);
+                    }
+                },
+            })
+    })
+
+    $('#call_date_mode').change(function (e){
+        val = $(this).val()
+        if (val === '' || val === 'today'){
+            $('.filter_call_date_2_div').hide()
+            $('.filter_call_date_1_div').hide()
+            $('#filter_call_date_2').val('')
+            $('#filter_call_date_1').val('')
+        }
+        else if (val === 'between'){
+            $('.filter_call_date_1_div').show()
+            $('.filter_call_date_2_div').show()
+        }else{
+            $('.filter_call_date_1_div').show()
+            $('.filter_call_date_2_div').hide()
+            $('#filter_call_date_2').val('')
+        }
+    });
+    $('#duration_mode').change(function (e){
+        val = $(this).val()
+        if (val === ''){
+            $('.duration_filter_1_div').hide()
+            $('.duration_filter_2_div').hide()
+            $('#duration_filter_1').val('')
+            $('#duration_filter_2').val('')
+        }
+        else if (val === 'between'){
+            $('.duration_filter_1_div').show()
+            $('.duration_filter_2_div').show()
+        }else{
+            $('.duration_filter_1_div').show()
+            $('.duration_filter_2_div').hide()
+            $('#duration_filter_2').val('')
+        }
+    });
+    $('#negative_score_mode').change(function (e){
+        val = $(this).val()
+        if (val === ''){
+            $('.negative_score_filter_1_div').hide()
+            $('.negative_score_filter_2_div').hide()
+            $('#negative_score_filter_1').val('')
+            $('#negative_score_filter_2').val('')
+        }
+        else if (val === 'between'){
+            $('.negative_score_filter_1_div').show()
+            $('.negative_score_filter_2_div').show()
+        }else{
+            $('.negative_score_filter_1_div').show()
+            $('.negative_score_filter_2_div').hide()
+            $('#negative_score_filter_2').val('')
+        }
+    });
+    $('#sop_score_mode').change(function (e){
+        val = $(this).val()
+        if (val === ''){
+            $('.sop_score_filter_1_div').hide()
+            $('.sop_score_filter_2_div').hide()
+            $('#sop_score_filter_1').val('')
+            $('#sop_score_filter_2').val('')
+        }
+        else if (val === 'between'){
+            $('.sop_score_filter_1_div').show()
+            $('.sop_score_filter_2_div').show()
+        }else{
+            $('.sop_score_filter_1_div').show()
+            $('.sop_score_filter_2_div').hide()
+            $('#sop_score_filter_2').val('')
+        }
+    });
+    $('#btn_duration_all').change(function (e){
+        val = $(this).val()
+        if (val === ''){
+            $('.duration_filter_1_div').hide()
+            $('.duration_filter_2_div').hide()
+        }
+        else if (val === 'between'){
+            $('.duration_filter_1_div').show()
+            $('.duration_filter_2_div').show()
+        }else{
+            $('.duration_filter_1_div').show()
+            $('.duration_filter_2_div').hide()
+        }
+        $('#duration_filter_1').val('')
+        $('#duration_filter_2').val('')
+    });
+    $('#search_by').change(function (e){
+        val = $(this).val()
+        if (val !== ''){
+            $('.after_search').show()
+        }
+        $('.search_value_'+val+'_div').show()
+        $(this).val("")
+    });
+    $('#btn_submit_search').click(function (e){
+        migrate_search_value()
+        if (validateSearch()){
+            $('#formGlobalSearch').submit()
+        }
+    });
+    $('#btnRefreshSearch').click(function (e){
+        $('.search_value_call_start_div').hide()
+        $('.search_value_call_end_div').hide()
+        $('.search_value_duration_div').hide()
+        $('.search_value_account_id_div').hide()
+        $('.search_value_account_payment_id_div').hide()
+        $('.search_value_agent_div').hide()
+        $('.search_value_bucket_div').hide()
+        $('.search_value_call_to').hide()
+        $('.search_value_source_div').hide()
+        $('#global_search_value_call_start').val('')
+        $('#global_search_value_call_end').val('')
+        $('#global_search_value_duration').val('')
+        $('#global_search_value_account_id').val('')
+        $('#global_search_value_account_payment_id').val('')
+        $('#global_search_value_agent').val('')
+        $('#global_search_value_bucket').val('')
+        $('#global_search_value_call_to').val('')
+        $('#global_search_value_negative_score').val('')
+        $('#global_search_value_sop_score').val('')
+        $('#global_search_value_id').val('')
+        $('#global_search_value_source').val('')
+        $('#formGlobalSearch').submit()
+    });
+    $('#btnCallDateClear').click(function (e){
+        $('#call_date_mode').val('').trigger('change')
+        $('#search_call_date_mode').val()
+        $('#search_call_date_1').val()
+        $('#search_call_date_2').val()
+        $('#btnSubmitCallDate').trigger('click')
+        $('#download_cache_id').val('')
+    })
+    $('#btnDurationClear').click(function (e){
+        $('#search_duration_mode').val()
+        $('#search_duration_filter_1').val()
+        $('#search_duration_filter_2').val()
+        $('#duration_mode').val('').trigger('change')
+        $('#btnSubmitDuration').trigger('click')
+        $('#download_cache_id').val('')
+    })
+    $('#btnSubmitCallDate').click(function (e){
+        $('#search_call_date_mode').val($('#call_date_mode').val())
+        $('#search_call_date_1').val($('#filter_call_date_1').val())
+        $('#search_call_date_2').val($('#filter_call_date_2').val())
+        $('#call_date_desc').text($('#call_date_mode').val())
+    })
+    $('#btnSubmitDuration').click(function (e){
+        $('#search_duration_mode').val($('#duration_mode').val())
+        $('#search_duration_filter_1').val($('#duration_filter_1').val())
+        $('#search_duration_filter_2').val($('#duration_filter_2').val())
+        $('#duration_desc').text($('#duration_mode').val())
+        $('#btn_submit_search').show()
+    })
+    $('#btnNegativeScoreClear').click(function (e){
+        $('#search_negative_score_mode').val()
+        $('#search_negative_score_filter_1').val()
+        $('#search_negative_score_filter_2').val()
+        $('#negative_score_mode').val('').trigger('change')
+        $('#btnSubmitNegativeScore').trigger('click')
+        $('#download_cache_id').val('')
+    })
+    $('#btnSubmitNegativeScore').click(function (e){
+        $('#search_negative_score_mode').val($('#negative_score_mode').val())
+        $('#search_negative_score_filter_1').val($('#negative_score_filter_1').val())
+        $('#search_negative_score_filter_2').val($('#negative_score_filter_2').val())
+        $('#negative_score_desc').text($('#negative_score_mode').val())
+        $('#btn_submit_search').show()
+    })
+    $('#btnSOPScoreClear').click(function (e){
+        $('#search_sop_score_mode').val()
+        $('#search_sop_score_filter_1').val()
+        $('#search_sop_score_filter_2').val()
+        $('#sop_score_mode').val('').trigger('change')
+        $('#btnSubmitSOPScore').trigger('click')
+        $('#download_cache_id').val('')
+    })
+    $('#btnSubmitSOPScore').click(function (e){
+        $('#search_sop_score_mode').val($('#sop_score_mode').val())
+        $('#search_sop_score_filter_1').val($('#sop_score_filter_1').val())
+        $('#search_sop_score_filter_2').val($('#sop_score_filter_2').val())
+        $('#sop_score_desc').text($('#sop_score_mode').val())
+        $('#btn_submit_search').show()
+    })
+
+    {% if is_search_filled %}
+        $('#call_date_mode').val('{{ search_call_date_mode }}').trigger('change')
+        $('#filter_call_date_1').val('{{ search_call_date_start}}')
+        $('#filter_call_date_2').val('{{ search_call_date_end}}')
+        $('#btnSubmitCallDate').trigger('click')
+        $('#duration_mode').val('{{ search_duration_mode }}').trigger('change')
+        $('#duration_filter_1').val('{{ search_duration_start }}')
+        $('#duration_filter_2').val('{{ search_duration_end }}')
+        $('#btnSubmitDuration').trigger('click')
+        $('#search_value_call_start').val('{{ search_value_call_start }}')
+        $('#search_value_call_end').val('{{ search_value_call_end }}')
+        $('#search_value_duration').val('{{ search_value_duration }}')
+        $('#search_value_account_id').val('{{ search_value_account_id }}')
+        $('#search_value_account_payment_id').val('{{ search_value_account_payment_id }}')
+        $('#search_value_agent').val('{{ search_value_agent }}')
+        $('#search_value_bucket').val('{{ search_value_bucket }}')
+        $('#search_value_call_to').val('{{ search_value_call_to }}')
+        $('#search_value_source').val('{{ search_value_source }}')
+        $('#negative_score_mode').val('{{ search_negative_score_mode }}').trigger('change')
+        $('#negative_score_filter_1').val('{{ search_negative_score_start }}')
+        $('#negative_score_filter_2').val('{{ search_negative_score_end }}')
+        $('#sop_score_mode').val('{{ search_sop_score_mode }}').trigger('change')
+        $('#sop_score_filter_1').val('{{ search_sop_score_start }}')
+        $('#sop_score_filter_2').val('{{ search_sop_score_end }}')
+        $('#search_value_negative_score').val('{{ search_value_negative_score }}')
+        $('#search_value_sop_score').val('{{ search_value_sop_score }}')
+        $('#search_value_id').val('{{ search_value_id }}')
+        $('#btnSubmitNegativeScore').trigger('click')
+        $('#btnSubmitSOPScore').trigger('click')
+        show_search_by_value()
+        migrate_search_value()
+    {% endif %}
+    var el = document.getElementById('graph'); // get canvas
+
+    var options = {
+        percent: el.getAttribute('data-percent') || 25,
+        size: el.getAttribute('data-size') || 220,
+        lineWidth: el.getAttribute('data-line') || 15,
+        rotate: el.getAttribute('data-rotate') || 0
+    }
+
+    var canvas = document.createElement('canvas');
+    canvas.className = 'canvas_loading'
+    var span = document.createElement('span');
+    span.className = 'span_loading'
+    span.textContent = options.percent + '%';
+
+    if (typeof (G_vmlCanvasManager) !== 'undefined') {
+        G_vmlCanvasManager.initElement(canvas);
+    }
+
+    var ctx = canvas.getContext('2d');
+    canvas.width = canvas.height = options.size;
+
+    el.appendChild(span);
+    el.appendChild(canvas);
+
+    ctx.translate(options.size / 2, options.size / 2); // change center
+    ctx.rotate((-1 / 2 + options.rotate / 180) * Math.PI); // rotate -90 deg
+
+    //imd = ctx.getImageData(0, 0, 240, 240);
+    var radius = (options.size - options.lineWidth) / 2;
+
+    var drawCircle = function (color, lineWidth, percent) {
+        percent = Math.min(Math.max(0, percent || 1), 1);
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2 * percent, false);
+        ctx.strokeStyle = color;
+        ctx.lineCap = 'round'; // butt, round or square
+        ctx.lineWidth = lineWidth
+        ctx.stroke();
+    };
+
+    drawCircle('#efefef', options.lineWidth, 100 / 100);
+    drawCircle('#68a9ef', options.lineWidth, options.percent / 100);
+
+    class CeleryProgressBar {
+
+        constructor(progressUrl, options) {
+            this.progressUrl = progressUrl;
+            options = options || {};
+            let progressBarId = options.progressBarId || 'progress-bar';
+            let progressBarMessage = options.progressBarMessageId || 'progress-bar-message';
+            this.progressBarElement = options.progressBarElement || document.getElementById(progressBarId);
+            this.progressBarMessageElement = options.progressBarMessageElement || document.getElementById(progressBarMessage);
+            this.onProgress = options.onProgress || this.onProgressDefault;
+            this.onSuccess = options.onSuccess || this.onSuccessDefault;
+            this.onError = options.onError || this.onErrorDefault;
+            this.onTaskError = options.onTaskError || this.onTaskErrorDefault;
+            this.onDataError = options.onDataError || this.onError;
+            this.onRetry = options.onRetry || this.onRetryDefault;
+            this.onIgnored = options.onIgnored || this.onIgnoredDefault;
+            let resultElementId = options.resultElementId || 'celery-result';
+            this.resultElement = options.resultElement || document.getElementById(resultElementId);
+            this.onResult = options.onResult || this.onResultDefault;
+            // HTTP options
+            this.onNetworkError = options.onNetworkError || this.onError;
+            this.onHttpError = options.onHttpError || this.onError;
+            this.pollInterval = options.pollInterval || 500;
+            // Other options
+            let barColorsDefault = {
+                success: '#76ce60',
+                error: '#dc4f63',
+                progress: '#68a9ef',
+                ignored: '#7a7a7a'
+            }
+            this.barColors = Object.assign({}, barColorsDefault, options.barColors);
+        }
+
+        onSuccessDefault(progressBarElement, progressBarMessageElement, result) {
+            progressBarElement.style.backgroundColor = this.barColors.success;
+            progressBarMessageElement.textContent = "Success!";
+            $('#download_cache_id').val(result.download_cache_id)
+            $('#download_text').text('Download Now')
+            $('#download_spinner').hide(100)
+            $('#download_icon').show(100)
+            drawCircle('#76ce60', options.lineWidth, 1);
+            setTimeout(function(){
+                $('#modalBulkDownload').modal('hide');
+            }, 5000);
+        }
+
+        onResultDefault(resultElement, result) {
+            if (resultElement) {
+                resultElement.textContent = result;
+            }
+        }
+
+        /**
+         * Default handler for all errors.
+         * @param data - A Response object for HTTP errors, undefined for other errors
+         */
+        onErrorDefault(progressBarElement, progressBarMessageElement, excMessage, data) {
+            progressBarElement.style.backgroundColor = this.barColors.error;
+            excMessage = excMessage || '';
+            progressBarMessageElement.textContent = "Uh-Oh, something went wrong! " + excMessage;
+        }
+
+        onTaskErrorDefault(progressBarElement, progressBarMessageElement, excMessage) {
+            let message = this.getMessageDetails(excMessage);
+            this.onError(progressBarElement, progressBarMessageElement, message);
+        }
+
+        onRetryDefault(progressBarElement, progressBarMessageElement, excMessage, retryWhen) {
+            retryWhen = new Date(retryWhen);
+            let message = 'Retrying in ' + Math.round((retryWhen.getTime() - Date.now()) / 1000) + 's: ' + excMessage;
+            this.onError(progressBarElement, progressBarMessageElement, message);
+        }
+
+        onIgnoredDefault(progressBarElement, progressBarMessageElement, result) {
+            progressBarElement.style.backgroundColor = this.barColors.ignored;
+            progressBarMessageElement.textContent = result || 'Task result ignored!'
+        }
+
+        onProgressDefault(progressBarElement, progressBarMessageElement, progress) {
+            progressBarElement.style.backgroundColor = this.barColors.progress;
+            progressBarElement.style.width = progress.percent + "%";
+            if ((parseInt(progress.percent) / 100) > 0){
+                drawCircle('#68a9ef', options.lineWidth, parseInt(progress.percent) / 100);
+                console.log(parseInt(progress.percent) / 100)
+            }
+            $('.span_loading').text(parseInt(progress.percent) + "%")
+            var description = progress.description || "";
+            if (progress.current == 0) {
+                if (progress.pending === true) {
+                    progressBarMessageElement.textContent = 'Waiting for task to start...';
+                } else {
+                    progressBarMessageElement.textContent = 'Task started...';
+                }
+            } else {
+                if (parseInt(progress.percent) >= 95){
+                    progressBarMessageElement.textContent = 'Uploading to OSS';
+                }else{
+                    progressBarMessageElement.textContent = progress.current + ' of ' + (progress.total - 5) + ' processed. ' + description;
+                }
+
+            }
+        }
+
+        getMessageDetails(result) {
+            if (this.resultElement) {
+                return ''
+            } else {
+                return result || '';
+            }
+        }
+
+        /**
+         * Process update message data.
+         * @return true if the task is complete, false if it's not, undefined if `data` is invalid
+         */
+        onData(data) {
+            let done = false;
+            if (data.progress) {
+                this.onProgress(this.progressBarElement, this.progressBarMessageElement, data.progress);
+            }
+            if (data.complete === true) {
+                done = true;
+                if (data.success === true) {
+                    this.onSuccess(this.progressBarElement, this.progressBarMessageElement, data);
+                } else if (data.success === false) {
+                    if (data.state === 'RETRY') {
+                        this.onRetry(this.progressBarElement, this.progressBarMessageElement, data.result.message, data.result.when);
+                        done = false;
+                        delete data.result;
+                    } else {
+                        this.onTaskError(this.progressBarElement, this.progressBarMessageElement, data.result);
+                    }
+                } else {
+                    if (data.state === 'IGNORED') {
+                        this.onIgnored(this.progressBarElement, this.progressBarMessageElement, data.result);
+                        delete data.result;
+                    } else {
+                        done = undefined;
+                        this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Data Error");
+                    }
+                }
+                if (data.hasOwnProperty('result')) {
+                    this.onResult(this.resultElement, data.result);
+                }
+            } else if (data.complete === undefined) {
+                done = undefined;
+                this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Data Error");
+            }
+            return done;
+        }
+
+        async connect() {
+            let response;
+            try {
+                response = await fetch(this.progressUrl);
+            } catch (networkError) {
+                this.onNetworkError(this.progressBarElement, this.progressBarMessageElement, "Network Error");
+                throw networkError;
+            }
+
+            if (response.status === 200) {
+                let data;
+                try {
+                    data = await response.json();
+                } catch (parsingError) {
+                    this.onDataError(this.progressBarElement, this.progressBarMessageElement, "Parsing Error")
+                    throw parsingError;
+                }
+
+                const complete = this.onData(data);
+
+                if (complete === false) {
+                    setTimeout(this.connect.bind(this), this.pollInterval);
+                }
+            } else {
+                this.onHttpError(this.progressBarElement, this.progressBarMessageElement, "HTTP Code " + response.status, response);
+            }
+        }
+
+        static initProgressBar(progressUrl, options) {
+            const bar = new this(progressUrl, options);
+            bar.connect();
+        }
+    }
+
+{% endblock %}

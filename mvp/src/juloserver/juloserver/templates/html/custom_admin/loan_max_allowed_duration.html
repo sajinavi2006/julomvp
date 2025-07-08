@@ -1,0 +1,218 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block extrahead %}{{ block.super }}{{ media }}{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<style type="text/css">
+    .remove-button {
+        background: #c87979;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        height: 35px;
+        line-height: 15px;
+    }
+    .hide {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+&rsaquo; {% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<div id="content-main">
+    {% block object-tools %}
+    {% if change %}{% if not is_popup %}
+    <ul class="object-tools">
+        {% block object-tools-items %}
+        <li>
+            {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
+            <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
+        </li>
+        {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
+        {% endblock %}
+    </ul>
+    {% endif %}{% endif %}
+    {% endblock %}
+
+    <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+        <div>
+            {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
+            {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
+            {% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+            {% if errors %}
+                <p class="errornote">
+                {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+                </p>
+                {{ adminform.form.non_field_errors }}
+            {% endif %}
+
+            {% block field_sets %}
+            {% for fieldset in adminform %}
+            {% include "admin/includes/fieldset.html" %}
+            {% endfor %}
+            <div id="dynamic_range"></div>
+            <input name="last_index" type="hidden">
+            {% endblock %}
+
+            {% block after_field_sets %}{% endblock %}
+
+            {% block inline_field_sets %}
+            {% for inline_admin_formset in inline_admin_formsets %}
+                {% include inline_admin_formset.opts.template %}
+            {% endfor %}
+            {% endblock %}
+
+            {% block after_related_objects %}{% endblock %}
+
+            {% block submit_buttons_bottom %}
+                <div class="submit-row">
+                    <input type="button" value="Add new loan configuration" onclick="addFieldset()">
+                    <input type="submit" value="Save" class="default" name="_save">
+                    <input type="submit" value="Save and continue editing" name="_continue">
+                </div>
+            {% endblock %}
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var $ = django.jQuery;
+    var last_index = 0;
+    $(document).ready(function() {
+        params = JSON.parse($('#id_params').val());
+        $.each(params, function(index, param){
+            addLoanConfiguration(index, param);
+        });
+        $(".remove-button").attr("onclick", "removeFieldset(this.value)");
+    });
+
+    function addLoanConfiguration(index, param) {
+        fieldset = document.createElement("fieldset");
+        fieldset.className = "module aligned module_" + index;
+
+        legend = document.createElement("legend");
+        legend.innerHTML = "Loan Configuration";
+
+        fieldset.append(legend);
+        fieldset.append(createAmount(index, param));
+        fieldset.append(createDuration(index, param));
+        fieldset.append(createButton(index, param));
+        $("#dynamic_range").append(fieldset);
+        last_index = index;
+        $("input[name=last_index]").val(last_index);
+    }
+
+    function createAmount(index, param) {
+        parent_div = document.createElement("div");
+        parent_div.className = "form-row field-amount";
+
+        div = document.createElement("div");
+
+        prevspan = document.createElement("span");
+        if (index == 0) {
+            prevspan.innerHTML = ">= ";
+        } else {
+            prevspan.innerHTML = "> ";
+        }
+
+        label = document.createElement("label");
+        label.className = "required";
+        label.for = "min_amount_" + index;
+        label.innerHTML = "Loan Amount :";
+
+        nextspan = document.createElement("span");
+        nextspan.innerHTML = " and <= ";
+
+        minimum = document.createElement("input");
+        minimum.id = "min_amount_" + index;
+        minimum.className = "display-trigger";
+        minimum.name = "min_amount_" + index;
+        minimum.type = "text";
+        minimum.value = param.min_amount
+
+        maximum = document.createElement("input");
+        minimum.id = "max_amount_" + index;
+        minimum.className = "display-trigger";
+        maximum.name = "max_amount_" + index;
+        maximum.type = "text";
+        maximum.value = param.max_amount;
+
+        div.append(label);
+        div.append(prevspan);
+        div.append(minimum);
+        div.append(nextspan);
+        div.append(maximum);
+        parent_div.append(div);
+        return parent_div;
+    }
+
+    function createDuration(index, param) {
+        parent_div = document.createElement("div");
+        parent_div.className = "form-row field-duration";
+
+        div = document.createElement("div");
+        label = document.createElement("label");
+        label.className = "required";
+        label.for = "max_duration";
+        label.innerHTML = "Loan Duration :";
+
+        input = document.createElement("input");
+        input.id = "max_duration_" + index;
+        input.name = "max_duration_" + index;
+        input.type = "number";
+        input.placeholder = "Duration";
+        input.value = param.duration
+
+        div.append(label);
+        div.append(input);
+        parent_div.append(div);
+        return parent_div;
+    }
+
+    function createButton(index, param) {
+        parent_div = document.createElement("div");
+        parent_div.className = "form-row";
+
+        div = document.createElement("div");
+        button = document.createElement("button");
+        button.className = "remove-button";
+        button.value = index;
+        button.type = "button";
+        button.innerHTML = "Remove";
+
+        div.append(button);
+        parent_div.append(div);
+        return parent_div;
+    }
+
+    function removeFieldset(index) {
+        $(".module_" + index).remove();
+        $(".module").eq(1).find(".field-amount").children("div").children("span").eq(0).html(">=");
+    }
+
+    function addFieldset() {
+        last_index += 1;
+        addLoanConfiguration(last_index, {"duration": 0, "min_amount": 0, "max_amount": 0});
+        $("input[name=last_index]").val(last_index);
+    }
+</script>
+{% endblock %}

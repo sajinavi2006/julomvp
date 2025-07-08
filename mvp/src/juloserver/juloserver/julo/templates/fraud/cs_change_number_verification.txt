@@ -1,0 +1,1 @@
+Klik link berikut untuk melanjutkan proses verifikasi nomor telepon: {{ generated_magic_link }}

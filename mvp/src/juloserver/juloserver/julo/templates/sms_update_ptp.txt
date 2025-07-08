@@ -1,0 +1,3 @@
+Yth {{fullname}}, Terima kasih utk rencana janji
+bayar Anda tgl {{ptp_date}}. Sjmlh {{due_amount}}. Bayar
+ke {{bank_name}} no VA {{account_number}}

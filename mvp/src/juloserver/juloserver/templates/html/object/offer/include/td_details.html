@@ -1,0 +1,51 @@
+{% load model template default unit %}
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Application ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.application.id|default:"-"|safe}}</strong>
+    </td>
+   </tr>
+  <tr>
+    <td>
+      Nama Lengkap
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.application.fullname|default:"-"|safe}}</strong> 
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Offer Accepted TS:
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.offer_accepted_ts|date:"d M Y H:i:s"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Offer Expired Date:
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.offer_exp_date|date:"d M Y"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      UDate
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.udate|date:"d M Y H:i:s"|safe}}</strong>
+    </td>
+  </tr>
+</table>

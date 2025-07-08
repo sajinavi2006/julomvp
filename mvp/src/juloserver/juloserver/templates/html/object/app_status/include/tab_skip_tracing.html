@@ -1,0 +1,224 @@
+{% load unit utils%}
+<div class="row" id="option_add_action">
+    <div class="col-md-5 col-xs-12 p-l-20 p-r-10" >
+
+        {% if is_multiple_factors == True %}
+        <span onclick="ShowFormMultipleFactors()" class="btn btn-warning" style="border-radius:50rem;"><i class="fa fa-exclamation-triangle"></i> Multiple Factors</span>
+
+         {% else %}
+             {% if is_5_days_unreachable == True %}
+            <span class="btn btn-warning" style="border-radius:50rem;"><i class="fa fa-exclamation-triangle"></i> 5 days in a row not answered</span>
+
+            <a onclick="ShowFormWhatsappNoContact()" title="Message via Whatsapp">
+              <button type="button" class="btn btn btn-success btn-rounded m-l-10"><i class="fa fa-whatsapp"></i></button>
+            </a>
+            {% endif %}
+            {% if is_broken_ptp_plus_1 == True %}
+            <span class="btn btn-warning" style="border-radius:50rem;"><i class="fa fa-exclamation-triangle"></i> Broken ptp+1</span>
+
+            <a onclick="ShowFormWhatsappBrokenPtp()" title="Message via Whatsapp">
+              <button type="button" class="btn btn btn-success btn-rounded m-l-10"><i class="fa fa-whatsapp"></i></button>
+            </a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="col-md-5 col-xs-12 p-r-10" style="left: 24%; margin-bottom: 2%">
+
+          <button type="button" class="btn btn-success" id="add_contanct_btn" onclick="showTable('contact')" style="background-color: #03A9F3 !important; color: #ffffff !important;">Add Contact</button>
+          <button type="button" class="btn" id="add_address_btn" onclick="showTable('additional_address')" style="background-color: #707070 !important; color: #ffffff !important;">Add Address</button>
+    </div>
+</div>
+<div class="row" id="skip_trace" >
+  <div id="form_skip_trace" hidden>
+      <div class="col-md-3 col-xs-12 p-r-1" hidden>
+          <input class="form-control" id="id_skiptrace">
+      </div>
+      <div class="col-md-3 col-xs-12 p-r-1">
+        <input class="form-control" id="id_name" name="name" placeholder="Name">
+      </div>
+      <div class="col-md-3 col-xs-12 p-r-1">
+        <input class="form-control" id="id_source" name="source" placeholder="Source">
+      </div>
+      <div class="col-md-4 col-xs-12">
+        <div class="input-group">
+          <span class="input-group-addon">
+            +62
+          </span>
+          <input class="form-control" id="id_number_phone" name="phone" placeholder="Phone">
+        </div>
+      </div>
+      {% if 'account_payment_status'  in request.get_full_path %}
+      <div class="col-md-10 col-xs-12 p-r-1" style="padding-top: 1px;">
+        <input class="form-control" id="id_change_reason" name="change_reason" placeholder="Change Reason">
+      </div>
+      {% endif %}
+  </div>
+  <div id="btn_form_skip_trace" class="col-md-2 col-xs-12" hidden>
+    <button type="button" class="btn btn btn-success btn-rounded" id="id_btn_add_skip_trace">
+      <i class="fa fa-plus-circle"></i>
+    </button>
+    <button type="button" class="btn btn btn-info btn-rounded" id="id_btn_update_skip_trace">
+      <i class="fa fa-floppy-o"></i>
+    </button>
+    <button type="button" class="btn btn btn-danger btn-rounded" id="id_btn_cancel_skip_trace" onclick="HideFormSkipTrace();">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div id="id_add_skip_trace">
+    <div class="col-md-5 col-xs-12 p-l-20 p-r-10">
+      <select class="form-control" id="id_sort_by" onchange="SortSkipTrace()">
+        <option value="" selected="selected">Sort By ----</option>
+        <option value="eff">Effectiveness</option>
+        <option value="rec" >Recency</option>
+        <option value="freq">Frequency</option>
+      </select>
+    </div>
+    <div class="col-md-3 col-xs-12">
+      <button type="button" class="btn btn btn-success btn-block" onclick="ShowFormSkipTrace('Add',null);">
+        Add Number &nbsp;&nbsp;
+      </button>
+    </div>
+  </div>
+</div>
+<table id="skiptraceTable" class="display" cellspacing="0" width="100%" style="margin:0px;" >
+    <thead id="skiptraceTable_head" style="background-color:#ffffff">
+        <tr>
+            <th id="sort_by_name">Name</th>
+            <th class="no-sort">Source</th>
+            <th class="no-sort">Action</th>
+            <th id="sort_by_eff">Eff</th>
+            <th id="sort_by_rec" style="white-space: nowrap;">Rec</th>
+            <th id="sort_by_freq">Freq</th>
+            <th id="sort_by_id">Id</th>
+            <th>Phone Number</th>
+            <th class="no-sort">Operator</th>
+            <th>RPC Rate</th>
+            <th>Last RPC</th>
+            <th>Phone Number Age</th>
+        </tr>
+    </thead>
+    <tbody id="skiptraceTable_body">
+      {% if skiptrace_list %}
+        {% for object in skiptrace_list %}
+          {% if 'payment_status' in request.path %}
+            {% if is_iso_inactive != True %}
+              {% if object.contact_source in iso_st_source %}
+                <tr>
+                  <td>{{ object.contact_name|default:"-"|safe}}
+                      {% if object.is_guarantor %}
+                        <strong><i class="fa fa-check" aria-hidden="true"></i></strong>
+                      {% endif %}
+                  </td>
+                  <td>{{ object.contact_source|default:"-"|safe}}</td>
+                  <td><button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded">
+                      <i class="fa fa-chevron-circle-down"></i>
+                  </button></td>
+                  <td>{{ object.effectiveness|default:"-"|safe}}</td>
+                  <td style="white-space: nowrap;">{{ object.recency|date:"Y-m-d"|default:"-"|safe }}<br>{{ object.recency|date:"H:i:s"|safe }}</td>
+                  <td>{{ object.frequency|default:"-"|safe}}</td>
+                  <td>{{ object.id|default:"-"|safe}}</td>
+                  <td>{{ object.phone_number|default:"-"|safe}}</td>
+                  <td>{{ object.phone_operator|default:"-"|safe}}</td>
+                  <td>{{ object.skiptracestats.rpc_rate_string|default:"-"|safe}}</td>
+                  <td>{{ object.skiptracestats.last_rpc_string|default:"-"|safe}}</td>
+                  <td>{{ object.age_string|default:"-"|safe}}</td>
+                </tr>
+              {% endif %}
+            {% else %}
+              <tr>
+                <td>{{ object.contact_name|default:"-"|safe}}
+                    {% if object.is_guarantor %}
+                      <strong><i class="fa fa-check" aria-hidden="true"></i></strong>
+                    {% endif %}
+                </td>
+                <td>{{ object.contact_source|default:"-"|safe}}</td>
+                <td><button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded">
+                    <i class="fa fa-chevron-circle-down"></i>
+                </button></td>
+                <td>{{ object.effectiveness|default:"-"|safe}}</td>
+                <td style="white-space: nowrap;">{{ object.recency|date:"Y-m-d"|default:"-"|safe }}<br>{{ object.recency|date:"H:i:s"|safe }}</td>
+                <td>{{ object.frequency|default:"-"|safe}}</td>
+                <td >{{ object.id|default:"-"|safe}}</td>
+                <td >{{ object.phone_number|default:"-"|safe}}</td>
+                <td>{{ object.phone_operator|default:"-"|safe}}</td>
+                <td>{{ object.skiptracestats.rpc_rate_string|default:"-"|safe}}</td>
+                <td>{{ object.skiptracestats.last_rpc_string|default:"-"|safe}}</td>
+                <td>{{ object.age_string|default:"-"|safe}}</td>
+              </tr>
+            {% endif %}
+          {% else %}
+            <tr>
+              <td>{{ object.contact_name|default:"-"|safe}}
+                  {% if object.is_guarantor %}
+                    <strong><i class="fa fa-check" aria-hidden="true"></i></strong>
+                  {% endif %}
+              </td>
+              <td>{{ object.contact_source|default:"-"|safe}}</td>
+              <td><button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded">
+                  <i class="fa fa-chevron-circle-down"></i>
+              </button></td>
+              <td>{{ object.effectiveness|default:"-"|safe}}</td>
+              <td style="white-space: nowrap;">{{ object.recency|date:"Y-m-d"|default:"-"|safe }}<br>{{ object.recency|date:"H:i:s"|safe }}</td>
+              <td>{{ object.frequency|default:"-"|safe}}</td>
+              <td >{{ object.id|default:"-"|safe}}</td>
+              <td >{{ object.phone_number|default:"-"|safe}}</td>
+              <td>{{ object.phone_operator|default:"-"|safe}}</td>
+              <td>{{ object.skiptracestats.rpc_rate_string|default:"-"|safe}}</td>
+              <td>{{ object.skiptracestats.last_rpc_string|default:"-"|safe}}</td>
+              <td>{{ object.age_string|default:"-"|safe}}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </tbody>
+</table>
+
+{# additional address #}
+<div class="row" id="additional_address" style="display: none">
+  <div id="id_add_skip_trace">
+    <div class="col-md-3 col-xs-12">
+      <button type="button" class="btn btn-success" onclick="showModalAdditionalAddress()">
+        Add Additional Address
+      </button>
+    </div>
+  </div>
+</div>
+<div id="additionalAddressTable_wrapper" class="dataTables_wrapper no-footer" style="display: none">
+    <table id="additionalAddressTable" class="display dataTable no-footer" cellspacing="0" width="100%" style="margin:0px;" >
+        <thead id="additionalAddressTable_head" style="background-color:#ffffff">
+            <tr>
+                <th class="no-sort">#</th>
+                <th class="no-sort">Alamat Tempat Tinggal</th>
+                <th class="no-sort">Provinsi</th>
+                <th class="no-sort">Kabupaten/Kota</th>
+                <th class="no-sort">Kecamatan</th>
+                <th class="no-sort">Kelurahan</th>
+                <th class="no-sort">Kode Pos</th>
+                <th class="no-sort">Di Tempati Sejak</th>
+                <th class="no-sort">Status Domisili</th>
+                <th class="no-sort">Action</th>
+            </tr>
+        </thead>
+        <tbody id="additionalAddressTable_body">
+
+        </tbody>
+    </table>
+</div>
+
+{############### modal additional address ################}
+<div id="responsive-modal-additional-address" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Additional Addres</h4> </div>
+            <div class="modal-body">
+              {% include "object/account_payment_status/include/form_additional_address.html" %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="close_additional_address" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" id="save_additional_address" onclick="submitAdditionalAddress(null)">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>

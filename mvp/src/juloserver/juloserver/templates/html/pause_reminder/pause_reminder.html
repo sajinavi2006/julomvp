@@ -1,0 +1,560 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+{% load currency %}
+{% load format_date %}
+{% load model %}
+{% load static from staticfiles %}
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+        .w170 {
+            width: 170px;
+        }
+        .w15{
+            width: 20px;
+        }
+        .w200 {
+            width: 200px;
+        }
+        .w210 {
+            width: 210px;
+        }
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight:bold;
+            color: #67717F;
+        }
+        .dot-false {
+          height: 15px;
+          width: 15px;
+          background-color: #bbb;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        .dot-true {
+          height: 15px;
+          width: 15px;
+          background-color: #5AD3A6;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        .txt-align {
+            padding: 10px;
+        }
+        .txt-blue {
+            color: blue;
+        }
+        .error-msg {
+            border: 1px solid red;
+        }
+        .container {
+            width : 90% !important;
+        }
+        .border-grey {
+            border-right: 10px solid #cccccc
+        }
+        .border-blue {
+            border: 5px solid #33C4FF;
+        }
+        .left-div-bg {
+            height: 40px !important;
+            background-color: #AB8BE4 !important;
+            font-size: 14px !important;
+            padding: 10px !important;
+            font-weight: bold !important;
+            line-height: 16px !important;
+            font-color: white !important;
+        }
+        .text-left {
+            font-size: 12px !important;;
+            font-weight: bold !important;
+            padding-left: 15px !important;
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+            font-color: white !important;
+            line-height: 14px !important;
+        }
+        .text-right {
+            font-size: 12px;
+            padding-left: 15px !important;
+            text-align: left;
+            font-color: #000000 !important;
+            line-height: 14px !important;
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+        }
+        .box-padding {
+            padding-bottom: 30px;
+        }
+        .box-row-ht {
+            height: 25px !important;
+        }
+        .small-text {
+            font-size: 8px !important;;
+        }
+        .right-div-bg-top, .right-div-bg-bottom{
+            height: 40px !important;
+            background-color: #AB8CE4 !important;
+            font-size: 14px !important;
+            padding: 10px !important;
+            font-weight: bold !important;
+            line-height: 16px !important;
+            color: white !important;
+            text-align: center;
+        }
+        .right-div-bg-bottom {
+            background-color: #98FB98 !important;
+        }
+        .align-middle {
+            text-align: center !important;
+        }
+        .align-left {
+            text-align: left !important;
+        }
+        .align-right {
+            text-align: right !important;
+            padding-right: 10px !important;
+        }
+        .align-right_txt {
+            text-align: right !important;
+            padding-right: 2% !important;
+        }
+        .loading-div, .loading-div_simulasi {
+            background: gray none repeat scroll 0 0;
+            display: inline;
+            height: 500px;
+            left: 0;
+            opacity: 0.20;
+            position: absolute;
+            width: 100%;
+            z-index: 999;
+        }
+        #loading-div > img, #loading-div_simulasi > img{
+            left: 30%;
+            position: absolute;
+            top: 50px;
+        }
+        .btn-circle-portal {
+            background-color: #AB8CE4;
+            border: none;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 33px 2px;
+            border-radius: 8px;
+            width: 35%;
+        }
+
+        /* move to new style */
+        .table thead tr th, .table tbody tr td {
+            border: none;
+        }
+        .table-header {
+            background-color: #7454C4;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin: 0;
+        }
+        .table-header > .glyphicon {
+            float: left;
+        }
+        .web-portal-thead > tr > th{
+            height: 77px;
+        }
+        .web-portal-thead > tr > th:not(.exclude-min){
+            min-width: 120px !important;
+        }
+        .same-height > tbody > tr {
+            min-height: 75px;
+        }
+        .exclude-min {
+            width: 77px;
+        }
+        .exclude-min-60 {
+            width: 58.75px !important;
+        }
+        .payment-number {
+            width: 85px !important;
+        }
+        .extend-padding {
+            padding: 17px 10px !important;
+        }
+        .extend-padding-2x {
+            padding: 10px 10px !important;
+        }
+        .extend-padding-1l-2x {
+            padding: 20px 10px !important;
+        }
+        .input-padding {
+            padding: 8px 10px !important;
+        }
+        .min-20-line-data tbody > tr > td {
+        }
+        .font-weight-bold {
+            font-weight: bold;
+        }
+        .box-model {
+            background-color: #f2f2f2;
+            border: 2px solid #d9d9d9;
+            border-radius: 5px;
+            margin-right: 20%;
+            padding: 10px;
+        }
+        .astext {
+            background:none;
+            border:none;
+            padding:0;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #0BA5E5;
+            margin-left: 5%;
+        }
+        .submit-button {
+            background: #20a8f3;
+            color: white;
+            width: 150px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            padding: 10px;
+        }
+        .submit-button:disabled,
+        .submit-button[disabled]{
+          background: #cccccc;
+          color: #666666;
+        }
+        .disable_block {}
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div style="border-bottom: 1px solid;">
+        <h3 class="box-title m-b-0">PAUSE REMINDER</h3>
+    </div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+    <div class="loading-div" style="display:none;padding-left:30px;" id="loading-div" >
+        <img src="{% static 'images/collections/ajax-loader.gif' %}" >
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+            <form method="get" id="frm_search_account">
+                <div class="center flex">
+                    <label for="block_id" >Account Id/Loan Id&nbsp;&nbsp;</label>
+                    <div class="w200">
+                        <input type="text" class="form-control" name="block_id" id="block_id"
+                               value="{{ block_id }}" maxlength="15"
+                               onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+                    </div>
+                    <label for="block_type" style="margin-left: 10px">Type&nbsp;&nbsp; </label>
+                    <div class="w200">
+                        <select name="block_type" id="block_type" class="form-control">
+                            <option value="mtl" {% if block_type == 'mtl' %} selected {% endif %}>MTL</option>
+                            <!-- will handle JTURBO as well -->
+                            <option value="j1" {% if block_type == 'j1' %} selected {% endif %}>J1 & JTurbo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary" id="btn_search_block" style="margin-left: 20px">
+                            <i class="fa fa-search"></i> Cari
+                        </button>
+                    </div>
+                    {% if block_not_found == True %}
+                    <div>
+                        <p style="margin-left: 20px; margin-top: 10px; color: red">Account/Loan not found!</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if show == True %}
+        <div class="row" id="contain_div" {% if show == False %} style="display: none;min-height:800px;"{% else %} style="min-height:800px;" {% endif %}>
+        <table class="table table-borderless" style="width: 60%">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Bucket</th>
+                <th scope="col">DPD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <div class="box-model">
+                        {{ name }}
+                    </div>
+                </td>
+                <td>
+                    <div class="box-model">
+                        {{ bucket }}
+                    </div>
+                </td>
+                <td>
+                    <div class="box-model">
+                        {{ dpd }}
+                    </div>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+        {% if bucket != 'Current' %}
+            <div>
+                <p style="margin-left: 20px; margin-top: 10px; color: red">Account/Loan tidak dalam Current Bucket</p>
+            </div>
+        {% else %}
+            {% if is_comms_blocked_existed %}
+                <div id="edit_block" style="display: flex; align-items: center">
+                    <p style="margin-left: 20px; margin-top: 10px; color: red">
+                        Pause reminder pada akun tersebut ({% if block_type == 'mtl' %}loan {% else %}account {% endif %} id: {{block_id}}) sudah aktif</p>
+                    <button id="edit_block_btn" style="background: #fa9676; color: white; margin-left: 10px; border: none; border-radius: 5px; height: 30px">
+                        Edit</button>
+                </div>
+            {% endif %}
+            <hr style="display: block; margin-before: 0.5em; margin-after: 0.5em; margin-start: auto; margin-end: auto; overflow: hidden; border-style: inset; border-width: 1px;">
+            <table class="table table-borderless">
+                <thead>
+                  <tr>
+                    <th scope="col">Comms to block:</th>
+                    <th scope="col">Block until</th>
+                    <th scope="col">Block for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input class="disable_block" type="checkbox" id="email_comms_block"
+                                   name="email_comms_block" {{disabled_block}} {{comms_blocked.email}}>
+                            <label for="email_comms_block"> Email</label><br>
+                            <input class="disable_block" type="checkbox" id="sms_comms_block"
+                                   name="sms_comms_block" {{disabled_block}} {{comms_blocked.sms}}>
+                            <label for="sms_comms_block"> SMS</label><br>
+                            <input class="disable_block" type="checkbox" id="robocall_comms_block"
+                                   name="robocall_comms_block" {{disabled_block}} {{comms_blocked.robocall}}>
+                            <label for="robocall_comms_block"> Robocall</label><br>
+                            <input class="disable_block" type="checkbox" id="cootek_comms_block"
+                                   name="cootek_comms_block" {{disabled_block}} {{comms_blocked.cootek}}>
+                            <label for="cootek_comms_block"> Cootek</label><br>
+                            <input class="disable_block" type="checkbox" id="pn_comms_block"
+                                   name="pn_comms_block" {{disabled_block}} {{comms_blocked.pn}}>
+                            <label for="pn_comms_block"> PN</label><br>
+                        </td>
+                        <td>
+                            <input class="disable_block" type="radio" id="block_until_minus1"
+                                   name="block_until" style="border-radius: 50%" {{disabled_block}}
+                                   {% if block_until == -1 %} checked {% endif %}>
+                            <label for="block_until_minus1"> Due date -1</label><br>
+                            <input class="disable_block" type="radio" id="block_until_minus0"
+                                   name="block_until" style="border-radius: 50%" {{disabled_block}}
+                                   {% if block_until == 0 %} checked {% endif %}>
+                            <label for="block_until_minus0"> Due date </label><br>
+                        </td>
+                        {% if impacted_payments %}
+                            <td id="payments_block">
+                                <div>
+                                    {% for payment in impacted_payments %}
+                                        {% if forloop.first %}
+                                            <input class="disable_block" type="checkbox" id="{{ payment.id }}"
+                                                   name="block_until_due_minus1_comms_block" {{disabled_block}}
+                                                   {% if payment.is_blocked == True %} checked {% endif %}>
+                                            <label>
+                                                {% if block_type == 'mtl' %}
+                                                    Upcoming payment
+                                                {% else %}
+                                                    Upcoming account_payment
+                                                {% endif %}
+                                                {{payment.display_text}}
+                                            </label><br>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% if impacted_payments|length > 1 %}
+                                    <div>
+                                        <button class="astext" id="block_more_btn">Block more</button> <br>
+                                    </div>
+                                    <div style="display: none" id="more_payment_id">
+                                        {% for payment in impacted_payments %}
+                                            {% if not forloop.first %}
+                                                <input class="disable_block"type="checkbox" id="{{ payment.id }}"
+                                                       name="block_until_due_minus1_comms_block" style="margin-left: 10%" {{disabled_block}}
+                                                       {% if payment.is_blocked == True %} checked {% endif %}>
+                                                <label>{{payment.display_text}}</label><br>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+
+                </tbody>
+            </table>
+            <div style="width: 100%">
+                <button id="submit_comms_block" class="submit-button disable_block" {{disabled_block}}>Submit</button>
+            </div>
+        {% endif %}
+
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'default/js/j1-waiver.js' %}"></script>
+{% endblock %}
+
+{% block script_bottom_inside %}
+{#<script>#}
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+    $('#submit_comms_block').on('click', function submit_pause_reminder() {
+        var block_dpd = -1;
+        if ($('#block_until_minus0').is(':checked')) {
+            block_dpd = 0;
+        }
+        var block_id = $('#block_id').val();
+        var block_type = $('#block_type').val();
+        var comms_block = [];
+
+        if ($('#email_comms_block').is(':checked')) {
+            comms_block.push('email');
+        }
+        if ($('#pn_comms_block').is(':checked')) {
+            comms_block.push('pn');
+        }
+        if ($('#sms_comms_block').is(':checked')) {
+            comms_block.push('sms');
+        }
+        if ($('#cootek_comms_block').is(':checked')) {
+            comms_block.push('cootek');
+        }
+        if ($('#robocall_comms_block').is(':checked')) {
+            comms_block.push('robocall');
+        }
+        var payment_blocked_ids = [];
+        $("#payments_block :input").each(function(e){
+            if (this.checked) {
+                payment_blocked_ids.push(this.id);
+            }
+        });
+        function toast_success(header_msg, body_message){
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg:'#ff6849',
+                icon: 'success',
+                hideAfter: 2500,
+                stack: 6
+            });
+        }
+
+        function toast_danger(header_msg, body_message){
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg:'#ff6849',
+                icon: 'error',
+                hideAfter: 3800
+
+            });
+        }
+        $.ajax({
+            url :  "{% url 'streamlined:submit_pause_reminder' %}/", // the endpoint
+            type : "POST", // http method
+            data: {
+                block_id: block_id,
+                block_type: block_type,
+                comms_block: comms_block,
+                block_dpd: block_dpd,
+                block_ids: payment_blocked_ids
+            },
+            dataType: "json",
+            // handle a successful response
+            success : function(data) {
+                swal("Sukses!", "Pause reminder berhasil di submit", "success");
+            },
+
+            // handle a non-successful response
+            error : function(err) {
+                swal("Failed!", err.responseText, "error");
+            }
+        });
+    });
+    $('#edit_block_btn').on('click', function() {
+        var cells = document.getElementsByClassName("disable_block");
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].disabled = false;
+        }
+        $('#edit_block').hide();
+    });
+    var show_more_block = false;
+    $('#block_more_btn').on('click', function() {
+        if(show_more_block == false) {
+            $('#more_payment_id').show();
+            show_more_block = true;
+        } else {
+            $('#more_payment_id').hide();
+            show_more_block = false;
+        }
+    });
+{% endblock %}

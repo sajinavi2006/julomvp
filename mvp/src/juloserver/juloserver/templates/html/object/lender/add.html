@@ -1,0 +1,856 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+
+{% block additional_title %}New Product{% endblock %}
+ 
+{% block css_inside %}
+.scroll_app {
+    overflow-y: scroll;
+    height: 629;
+}
+{% endblock %}
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+ 
+{% block list_title %} 
+{% endblock %}
+{% block list_subtitle %}<h4> Add New Lender Product Criteria</h4>{% endblock %}
+
+{% block content-list %}
+<div class="row m-b-12 p-t-0" id="add-lender-product">
+    <br />
+    <div class="col-md-12 col-xs-12">
+        {% if isError %}
+            <span class="error-msg" style="color:red; text-align: center">{{ err_msg }}</span>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="partner">partner</label>
+                        <select
+                            class="form-control"
+                            name="partner"
+                            v-model="lender_product.partner">
+                            <option value='null'</option>
+                            {% for partner in partner_list %}
+                                <option value='{{partner.id}}'>{{ partner.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>&nbsp;</label>
+                        <input 
+                            type="button"
+                            class="form-control btn-danger"
+                            value="+"
+                            @click="addLender"
+                            style="max-width: 40px; color: white; font-weight: bold" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel col-md-6 col-xs-12 panel-default">
+            <div class="panel-heading">
+                <h5>Product Criteria</h5>
+            </div>
+            <div class="panel-body">
+                <div class="form-group row">
+                    <select
+                        class="form-control"
+                        v-model="lender_product.type"
+                        @change="onTypeChange"
+                    >
+                        {% for type in LENDER_PRODUCT_TYPE_CHOICES %}
+                            <option value='{{ type }}'>{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="product-definition" v-if="lender_product.type == 'Product Definition'">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">Min interest rate</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.min_interest_rate" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">Max interest rate</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                step="0.0000"
+                                v-model="lender_product.max_interest_rate" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">Min origination fee</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.min_origination_fee" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">Max origination fee</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.max_origination_fee" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">Min Amount</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_product.min_amount" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">Max Amount</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_product.max_amount" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">Min duration</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_product.min_duration" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">Max duration</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                v-model="lender_product.max_duration" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">min late fee</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.min_late_fee"
+                                required="true" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">max late fee</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.max_late_fee" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">min cashback initial</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.min_cashback_initial" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">max cashback initial</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.max_cashback_initial" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">min cashback payment</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.min_cashback_payment" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="code">max cashback payment</label>
+                            <input
+                                type="number"
+                                step="0.0000"
+                                class="form-control"
+                                v-model="lender_product.max_cashback_payment" />
+                        </div>
+                    </div>
+                </div>
+                <div id="product-list" v-else>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="code">product profile list</label>
+                            <select
+                                class="form-control"
+                                v-model="lender_product.product_profile_list"
+                                multiple="multiple">
+                                {% for product in product_list %}
+                                    <option value='{{product.id}}'>{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel col-sm-6 col-xs-12 panel-default">
+            <div class="panel-heading">
+                <h5>Customer Criteria</h5>
+            </div>
+            <div class="panel-body">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="code">min age</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            v-model="lender_customer.min_age" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="code">max age</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            v-model="lender_customer.max_age" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="code">min income</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            v-model="lender_customer.min_income" />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="code">max income</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            v-model="lender_customer.max_income" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="code">job type</label>
+                        <select class="form-control" v-model="lender_customer.job_type" multiple="multiple">
+                            {% for job_type in JOB_TYPE_CHOICES %}
+                                <option value='{{job_type}}'>{{ job_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="code">job industry</label>
+                        <select
+                            class="form-control"
+                            v-model="lender_customer.job_industry"
+                            multiple="multiple">
+                            {% for job_industry in JOB_INDUSTRY_CHOICES %}
+                                <option value='{{job_industry}}'>{{ job_industry }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="code">job description</label>
+                        <select
+                            class="form-control"
+                            v-model="lender_customer.job_description"
+                            multiple="multiple">
+                            {% for job_description in JOB_DESCRIPTION_CHOICES %}
+                                <option value='{{job_description}}'>{{ job_description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="code">credit score</label>
+                        <select
+                            class="form-control"
+                            v-model="lender_customer.credit_score"
+                            multiple="multiple">
+                            {% for credit_score in CREDIT_SCORE_CHOICES %}
+                                <option value='{{credit_score}}'>{{ credit_score }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <!-- Hide Location Field -->
+                <div class="form-group row">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-xs-12" style="text-align: center">
+        <button 
+            class="button btn-primary"
+            style="min-width: 60px"
+            v-on:click="saveLenderProduct">save
+        </button>
+    </div>
+    <!-- Modal Add Lender -->
+    <div
+        id="responsive-modal-add-lender"
+        class="modal fade"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog" style="width: 80%">
+          <div class="modal-content">
+            <div class="modal-header label-danger">
+              <h4 class="modal-title">Add New Lender</h4>
+            </div>
+            <div class="col-md-12 modal-body">
+                <!-- Account -->
+                <div class="col-md-7"
+                     style="border-right-style: dotted; border-right-width: 0.5px; padding-left: 20px">
+                        <label><h4>Account</h4></label>
+                        <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>username <small style="color: red;">(required)</small></label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.username"
+                                    name="username" />
+                            </div>
+                            <div class="form-group">
+                                <label>lender name <small style="color: red;">(required)</small></label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.name"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>type</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.type"
+                                    readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>password <small style="color: red;">(required)</small></label>
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    v-model="lender.password"
+                                    name="password" />
+                            </div>
+                            <div class="form-group">
+                                <label>email <small style="color: red;">(required)</small></label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.email"
+                                    name="lender.email" />
+                            </div>
+                            <div class="form-group">
+                                <br />
+                                <input 
+                                    type="checkbox"
+                                    name="lender__is_active"
+                                    @change="handleCheck"
+                                />
+                                &nbsp;&nbsp;
+                                <label for="code">is active</label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.company_name"
+                                    name="company_name" />
+                            </div>
+                            <div class="form-group">
+                                <label>NPWP</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.npwp"
+                                    name="npwp" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Business Type</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.business_type"
+                                    name="business_type" />
+                            </div>
+                            <div class="form-group">
+                                <label>Source of Fund</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.source_of_fund"
+                                    name="source_of_fund" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Company Address</label>
+                                <textarea
+                                    class="form-control"
+                                    v-model="lender.company_address"
+                                    name="company_address"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>POC Name</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.poc_name"
+                                    name="poc_name" />
+                            </div>
+                            <div class="form-group">
+                                <label>POC Email</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="lender.poc_email"
+                                    name="poc_email" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>POC Phone</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    v-model="lender.poc_phone"
+                                    name="poc_phone" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Balance & Service Rate -->
+                <div class="col-md-5" style="padding-left: 20px">
+                    <div class="row">
+                        <label><h4>Balance & Service Rate</h4></label>
+                        <br/><br/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Provision rate</label>
+                                <input
+                                    type="number"
+                                    step="0.000"
+                                    class="form-control"
+                                    v-model="lender_service_rate.provision_rate"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Principal rate</label>
+                                <input
+                                    type="number"
+                                    step="0.000"
+                                    class="form-control"
+                                    v-model="lender_service_rate.principal_rate"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Interest rate</label>
+                                <input
+                                    type="number"
+                                    step="0.000"
+                                    class="form-control"
+                                    v-model="lender_service_rate.interest_rate"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Late fee rate</label>
+                                <input
+                                    type="number"
+                                    step="0.000"
+                                    class="form-control"
+                                    v-model="lender_service_rate.late_fee_rate"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-left: 40%; padding-right: 45%">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-success waves-effect" v-on:click="saveLenderAccount">Save</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% load static from staticfiles %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<!-- vue js -->
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type="text/javascript">
+var AddLenderProduct = new Vue({
+    el: '#add-lender-product',
+    delimiters: ["<%", "%>"],
+    data: {
+        csrftoken:'{{csrf_token}}',
+        lender_product: {
+            type: 'Product List',
+            min_amount: null,
+            max_amount: null,
+            min_duration: null,
+            max_duration: null,
+            min_interest_rate: null,
+            max_interest_rate: null,
+            min_origination_fee: null,
+            max_origination_fee: null,
+            min_late_fee: null,
+            max_late_fee: null,
+            min_cashback_payment: null,
+            max_cashback_payment: null,
+            min_cashback_initial: null,
+            max_cashback_initial: null,
+            product_profile_list: [],
+            partner: null,
+        },
+        lender_customer: {
+            min_age: null,
+            max_age: null,
+            min_income: null,
+            max_income: null,
+            job_type: null,
+            job_industry: null,
+            job_description: null,
+            location: null,
+            credit_score: [],
+        },
+        lender: {
+            username: '',
+            password: '',
+            name: '',
+            type: 'lender',
+            email: '',
+            phone: '',
+            token: '',
+            systrace: '',
+            is_active: false,
+        },
+        lender_service_rate: {
+            provision_rate: '0.000',
+            principal_rate: '0.000',
+            interest_rate: '0.000',
+            late_fee_rate: '0.000'
+        }
+    },
+    beforeMount(){
+        console.log('ada')
+    },
+    methods: {
+        addLender: function() {
+            $('#responsive-modal-add-lender').modal('show');
+        },
+        saveLenderAccount: function() {
+            self = this
+            if (self.lender.username === '') {
+                self.ToastDanger('missing required field', 'username could not be empty!!')
+            }
+            if (self.lender.password === '') {
+                self.ToastDanger('missing required field', 'password could not be empty!!')
+            }
+            if (self.lender.email === '') {
+                self.ToastDanger('missing required field', 'email could not be empty!!')
+            }
+            if (self.lender.name === '') {
+                self.ToastDanger('missing required field', 'lender name could not be empty!!')
+            }
+            if (self.lender_service_rate.provision_rate === '') {
+                self.lender_service_rate.provision_rate = '0.000'
+            }
+            if (self.lender_service_rate.principal_rate === '') {
+                self.lender_service_rate.principal_rate = '0.000'
+            }
+            if (self.lender_service_rate.interest_rate === '') {
+                self.lender_service_rate.interest_rate = '0.000'
+            }
+            if (self.lender_service_rate.late_fee_rate === '') {
+                self.lender_service_rate.late_fee_rate = '0.000'
+            } 
+            else {
+                $.ajax({
+                    url :  "{%url 'lender:ajax_add_lender_account' %}", // the endpoint
+                    type : "POST", // http method
+                    data : {
+                        lender: JSON.stringify(self.lender),
+                        lender_service_rate: JSON.stringify(self.lender_service_rate),
+                        csrfmiddlewaretoken: self.csrftoken
+                    }, // data sent with the get request
+                      // handle a successful response
+                    success : function(json) {
+                        self.ToastSuccess(json.message)
+                        window.location.reload()
+                    },
+                      // handle a non-successful response
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr)
+                        self.ToastDanger('Failed save lender account', xhr.responseText)
+                    }
+                });
+            }
+        },
+        reAssignEmptyFields: function() {
+            self = this
+            if (self.lender_product.min_amount === '') {
+                self.lender_product.min_amount = null
+            }
+            if (self.lender_product.max_amount === '') {
+                self.lender_product.max_amount = null
+            }
+            if (self.lender_product.min_duration === '') {
+                self.lender_product.min_duration = null
+            }
+            if (self.lender_product.max_duration === '') {
+                self.lender_product.max_duration = null
+            }
+            if (self.lender_product.min_interest_rate === '') {
+                self.lender_product.min_interest_rate = null
+            }
+            if (self.lender_product.max_interest_rate === '') {
+                self.lender_product.max_interest_rate = null
+            }
+            if (self.lender_product.min_origination_fee === '') {
+                self.lender_product.min_origination_fee = null
+            }
+            if (self.lender_product.max_origination_fee === '') {
+                self.lender_product.max_origination_fee = null
+            }
+            if (self.lender_product.min_late_fee === '') {
+                self.lender_product.min_late_fee = null
+            }
+            if (self.lender_product.max_late_fee === '') {
+                self.lender_product.max_late_fee = null
+            }
+            if (self.lender_product.min_cashback_initial === '') {
+                self.lender_product.min_cashback_initial = null
+            }
+            if (self.lender_product.max_cashback_initial === '') {
+                self.lender_product.max_cashback_initial = null
+            }
+            if (self.lender_product.min_cashback_payment === '') {
+                self.lender_product.min_cashback_payment = null
+            }
+            if (self.lender_product.max_cashback_payment === '') {
+                self.lender_product.max_cashback_payment = null
+            }
+            // lender customer criteria
+            if (self.lender_customer.min_age === '') {
+                self.lender_customer.min_age = null
+            }
+            if (self.lender_customer.max_age === '') {
+                self.lender_customer.max_age = null
+            }
+            if (self.lender_customer.min_income === '') {
+                self.lender_customer.min_income = null
+            }
+            if (self.lender_customer.max_income === '') {
+                self.lender_customer.max_income = null
+            }
+        },
+        integerFieldValidation: function() {
+            self = this
+            if (self.lender_product.min_amount !== null) {
+                if (String(self.lender_product.min_amount).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'min amount could not be decimal value!!')
+                    return false
+                }
+            }
+            
+            if (self.lender_product.max_amount !== null) {
+                if (String(self.lender_product.max_amount).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'max amount could not be decimal value!!')
+                    return false
+                }
+            }
+
+            if (self.lender_product.min_duration !== null) {
+                if (String(self.lender_product.min_duration).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'min duration could not be decimal value!!')
+                    return false
+                }
+            }
+            
+            if (self.lender_product.max_duration !== null) {
+                if (String(self.lender_product.max_duration).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'max duration could not be decimal value!!')
+                    return false
+                }
+            }
+            
+            if (self.lender_customer.min_age !== null) {
+                if (String(self.lender_customer.min_age).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'min age could not be decimal value!!')
+                    return false
+                }
+            }
+            
+            if (self.lender_customer.max_age !== null) {
+                if (String(self.lender_customer.max_age).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'max age could not be decimal value!!')
+                    return false
+                }
+            }
+            
+            if (self.lender_customer.min_income !== null) {
+                if (String(self.lender_customer.min_income).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'min income could not be decimal value!!')
+                    return false
+                }
+            }
+            
+            if (self.lender_customer.max_income !== null) {
+                if (String(self.lender_customer.max_income).indexOf('.') !== -1) {
+                    self.ToastDanger('invalid value', 'max income could not be decimal value!!')
+                    return false
+                }
+            }
+
+            return true
+        },
+        requiredFieldsValidation: function() {
+            self = this
+            if (self.lender_product.partner === null || self.lender_product.partner === '') {
+                self.ToastDanger('missing required field', 'partner could not be empty!!')
+                return false
+            }
+            return true
+        },
+        saveLenderProduct: function() {
+            console.log(JSON.stringify(this.product))
+            self = this
+            self.reAssignEmptyFields();
+            if (self.requiredFieldsValidation() === true && self.integerFieldValidation() === true) {
+                $.ajax({
+                    url :  "{%url 'lender:ajax_add_lender_product' %}", // the endpoint
+                    type : "POST", // http method
+                    data : {
+                      lender_product: JSON.stringify(self.lender_product),
+                      lender_customer: JSON.stringify(self.lender_customer),
+                      csrfmiddlewaretoken: self.csrftoken
+                    }, // data sent with the get request
+                      // handle a successful response
+                    success : function(json) {
+                        console.log(json)
+                        self.ToastSuccess('success add lender product')
+                        window.location.href = json.url
+                    },
+                      // handle a non-successful response
+                    error : function(xhr,errmsg,err) {
+                        self.ToastDanger('failed add lender product',
+                                         xhr.responseText)
+                    }
+                });
+            }
+        },
+        onTypeChange: function(e) {
+            self = this
+            if (e.target.value === 'Product Definition') {
+                self.lender_product.product_profile_list = []
+            } else {
+                self.lender_product.min_amount = null
+                self.lender_product.max_amount = null
+                self.lender_product.min_duration = null
+                self.lender_product.max_duration = null
+                self.lender_product.min_interest_rate = null
+                self.lender_product.max_interest_rate = null
+                self.lender_product.min_origination_fee = null
+                self.lender_product.max_origination_fee = null
+                self.lender_product.payment_frequency = null
+                self.lender_product.min_late_fee = null
+                self.lender_product.max_late_fee = null
+                self.lender_product.min_cashback_payment = null
+                self.lender_product.max_cashback_payment = null
+                self.lender_product.min_cashback_initial = null
+                self.lender_product.max_cashback_initial = null
+            }
+        },
+        handleMultipleChange: function(e) {
+            self = this
+            val_arr = e.target.value.toLowerCase().replace(/, /g, ',').replace(/ ,/g, ',').split(',')
+            model_name = e.target.name.split('__')[0]
+            field_name = e.target.name.split('__')[1]
+            self[model_name][field_name] = val_arr
+        },
+        handleCheck: function(e) {
+            self = this
+            model_name = e.target.name.split('__')[0]
+            field_name = e.target.name.split('__')[1]
+            self[model_name][field_name] = !JSON.parse(self[model_name][field_name])
+        },
+        ToastSuccess: function(header_msg, body_message){
+         $.toast({
+           heading: header_msg,
+           text: body_message,
+           position: 'top-right',
+           loaderBg:'#ff6849',
+           icon: 'success',
+           hideAfter: 1500,
+           stack: 6
+         });
+        },
+        ToastDanger: function(header_msg, body_message){
+         $.toast({
+           heading: header_msg,
+           text: body_message,
+           position: 'top-right',
+           loaderBg:'#ff6849',
+           icon: 'error',
+           hideAfter: 2800
+         });
+        }
+    }
+});
+</script>
+{% endblock %}

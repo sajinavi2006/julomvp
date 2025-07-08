@@ -1,0 +1,24 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Permintaan Pinjaman</strong> <br>
+    <p class="text-muted">{{ object.loan_amount_request|f_rupiahs:"no"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Durasi Pinjaman</strong> <br>
+    <p class="text-muted">{{ object.loan_duration_request|default:"-"|safe}} {{ object.determine_kind_of_installment }}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Alasan Meminjam</strong> <br>
+    <p class="text-muted">{{ object.loan_purpose|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Diskripsi Alasan Meminjam</strong> <br>
+    <p class="text-muted">{{ object.loan_purpose_desc|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6">
+    <strong>Sumber Marketing</strong> <br>
+    <p class="text-muted">{{ object.marketing_source|default:"-"|safe}}</p>
+    <br/>
+    <strong>Kode Referral</strong> <br>
+    <p class="text-muted">{{ object.referral_code|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>

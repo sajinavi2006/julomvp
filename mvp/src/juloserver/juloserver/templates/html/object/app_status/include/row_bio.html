@@ -1,0 +1,507 @@
+{% load unit %}
+<tr class= "ca-none {{ app_data.fullname.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Lengkap</strong></div>
+    <div class="col-xs-6">
+    <div class="input-group input-group-sm {% if form_app.fullname.errors %} has-error {% endif %}">
+      {{form_app.fullname}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-fullname', '{{ object.fullname|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+    </div>
+  </td>
+  {% with object=app_data.fullname field_name='fullname'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.customer_id.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Customer ID</strong></div>
+    <div class="col-xs-6">: {{object.customer_id|default:"-"|safe}}</div>
+  </td>
+  {% with object=app_data.customer_id field_name='customer_id'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.email.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Email</strong></div>
+    <div class="col-xs-6">
+      {% if app_obj.application_status.status_code == digisign_failed %}
+      <div class="input-group input-group-sm {% if form_app.email.errors %} has-error {% endif %}">
+        {{form_app.email}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-email', '{{ object.email|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+      {% else %}
+      : {{object.email|default:"-"|safe}}
+      {% endif %}
+    </div>
+  </td>
+  {% with object=app_data.email field_name='email'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.dob.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tgl. Lahir</strong></div>
+    <div class="col-xs-6">
+    <div class="input-group input-group-sm
+                {% if form_app.dob.errors %} has-error {% endif %}">
+        <input class="form-control mydatepicker"
+                id="id_form2-dob" maxlength="None"
+                name="form2-dob" placeholder="dd-mm-yyyy "
+                type="text" value="{{ object.dob|date:'d-m-Y'|default:''|safe }}" onchange="setAge($('#id_form2-dob'), $('#id_age'))">
+        <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-grp-default"
+                id="id_btn-dob"
+                onclick="setDefaultValue('id_form2-dob',
+                          '{{ object.dob|date:'d-m-Y'|safe }}');">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+        </span>
+    </div>
+      Usia:
+      <span id="id_age">{{ object.dob|age|safe}}</span> Tahun
+    </div>
+  </td>
+  {% with object=app_data.dob field_name='dob'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.birth_place.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tempat Lahir</strong></div>
+    <div class="col-xs-6">
+    <div class="input-group input-group-sm {% if form_app.birth_place.errors %} has-error {% endif %}">
+      {{form_app.birth_place}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-birth_place', '{{ object.birth_place|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+    </div>
+  </td>
+  {% with object=app_data.birth_place field_name='birth_place'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.gender.statuses|ca_tr_class|default:''|safe}} coll coll_head">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Jenis Kelamin</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.gender.errors %} has-error {% endif %}">
+        {{form_app.gender}}
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-info btn-grp-default"
+                  onclick="setDefaultValue('id_form2-gender',
+                  '{{ object.gender|safe }}');">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.gender field_name='gender'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.ktp.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No. KTP</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm {% if form_app.ktp.errors %} has-error {% endif %}">
+        {{form_app.ktp}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-ktp', '{{ object.ktp|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.ktp field_name='ktp'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.dob_in_nik.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <strong>Dob check in NIK</strong>
+  </td>
+    {% with object=app_data.dob_in_nik field_name='dob_in_nik'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.area_in_nik.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <strong>Area Code check in NIK</strong>
+  </td>
+    {% with object=app_data.area_in_nik field_name='area_in_nik'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.address_street_num.statuses|ca_tr_class|default:''|safe}} coll_upper coll_upper1">
+  <td rowspan="2">
+    {% if is_address_suspicious %}
+    <label><strong style="color: red;">Alamat Tempat Tinggal</strong></label>
+    {% else %}
+    <label><strong>Alamat Tempat Tinggal</strong></label>
+    {% endif %}
+    <div class="input-group input-group-sm
+              {% if form_app.address_kabupaten.errors %} has-error {% endif %}">
+      {{form_app.address_kabupaten}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-address_kabupaten',
+                      '{{ object.address_kabupaten|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+    <div class="input-group input-group-sm
+                {% if form_app.address_street_num.errors %} has-error {% endif %}">
+      {{form_app.address_street_num}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-address_street_num',
+                    '{{ object.address_street_num|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+    <div class="input-group input-group-sm
+                {% if form_app.address_kecamatan.errors %} has-error {% endif %}">
+      {{form_app.address_kecamatan}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-address_kecamatan',
+                    '{{ object.address_kecamatan|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+    <div class="input-group input-group-sm
+              {% if form_app.address_kelurahan.errors %} has-error {% endif %}">
+      {{form_app.address_kelurahan}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-address_kelurahan',
+                    '{{ object.address_kelurahan|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+    <div class="input-group input-group-sm
+                {% if form_app.address_provinsi.errors %} has-error {% endif %}">
+      {{form_app.address_provinsi}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-address_provinsi',
+                    '{{ object.address_provinsi|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+    <div class="input-group input-group-sm
+              {% if form_app.address_kodepos.errors %} has-error {% endif %}">
+      {{form_app.address_kodepos}}
+      <span class="input-group-btn"
+            onclick="setDefaultValue('id_form2-address_kodepos',
+                    '{{ object.address_kodepos|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-history fa-fw"></i>
+        </button>
+      </span>
+    </div>
+  </td>
+    {% with object=app_data.address_street_num field_name='address_street_num'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.address_street_num.statuses|ca_tr_class|default:''|safe}} coll_upper coll_upper1">
+  <td colspan="6">
+    {% include "object/app_status/include/open_gmap.html" %}
+  </td>
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.occupied_since.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Ditempati Sejak</strong></div>
+    <div class="col-xs-6">: {{ object.occupied_since|date:"d M Y"|safe}} -
+    Lama: {{ object.occupied_since|age|safe}} Tahun</div>
+  </td>
+  {% with object=app_data.occupied_since field_name='occupied_since'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.home_status.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Status Domisili</strong></div>
+    <div class="col-xs-6">: {{ object.home_status|default:"-"|safe}}</div>
+  </td>
+  {% with object=app_data.home_status field_name='home_status'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+
+
+<tr class= "ca-none {{ app_data.last_education.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Pendidikan Terakhir</strong></div>
+    <div class="col-xs-6">: {{ object.last_education|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.last_education field_name='last_education'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.college.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Perguruan Tinggi</strong></div>
+    <div class="col-xs-6">: {{ object.college|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.college field_name='college'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.major.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Jurusan</strong></div>
+    <div class="col-xs-6">: {{ object.major|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.major field_name='major'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.graduation_year.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tahun Lulus</strong></div>
+    <div class="col-xs-6">: {{ object.graduation_year|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.graduation_year field_name='graduation_year'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.gpa.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>IPK</strong></div>
+    <div class="col-xs-6">: {{ object.gpa|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.gpa field_name='gpa'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.mobile_phone_1.statuses|ca_tr_class|default:''|safe}} coll">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No. HP1</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.mobile_phone_1.errors %} has-error {% endif %}">
+        {{form_app.mobile_phone_1}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-mobile_phone_1',
+                      '{{ object.mobile_phone_1|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    {% if is_grab %}
+        <div>
+            <button onclick="verifyGrabPhoneNumber()" id="id_btn_form2-mobile_phone_1"
+                    type="button" class="btn btn-info" disabled> Validasi </button>
+        </div>
+    {% endif %}
+    </div>
+  </td>
+  {% with object=app_data.mobile_phone_1 field_name='mobile_phone_1'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Ada WA1</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.has_whatsapp_1.errors %} has-error {% endif %}">
+        {{form_app.has_whatsapp_1}}
+      </div>
+    </div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.mobile_phone_2.statuses|ca_tr_class|default:''|safe}} coll">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No. HP2</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.mobile_phone_2.errors %} has-error {% endif %}">
+        {{form_app.mobile_phone_2}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-mobile_phone_2',
+                      '{{ object.mobile_phone_2|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.mobile_phone_2 field_name='mobile_phone_2'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Ada WA2</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm {% if form_app.has_whatsapp_2.errors %} has-error {% endif %}">
+        {{form_app.has_whatsapp_2}}
+      </div>
+    </div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr> {% endif %}
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.dialect|ca_tr_class|default:''|safe}} coll">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Bahasa Daerah</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                 {% if form_app.dialect.errors %} has-error {% endif %}">
+        {{ form_app.dialect }}
+         <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-dialect', '{{ object.dialect|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.dialect field_name='dialect'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.is_own_phone.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>HP Milik Sendiri</strong></div>
+    <div class="col-xs-6">: {{object.is_own_phone|yesno:"Ya, Tidak"|safe}}</div>
+  </td>
+  {% with object=app_data.is_own_phone field_name='is_own_phone'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.twitter_username.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Twitter Username</strong></div>
+    <div class="col-xs-6">: {{object.twitter_username|default:"-"|safe}}</div>
+  </td>
+  {% with object=app_data.twitter_username field_name='twitter_username'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.instagram_username.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Instagram Username</strong></div>
+    <div class="col-xs-6">: {{object.instagram_username|default:"-"|safe}}</div>
+  </td>
+  {% with object=app_data.instagram_username field_name='instagram_username'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Lengkap di FB</strong></div>
+    <div class="col-xs-6">: {{fb_obj.fullname|default:"-"|safe}}</div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Email di FB</strong></div>
+    <div class="col-xs-6">: {{fb_obj.email|default:"-"|safe}}</div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr>
+
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Gender di FB</strong></div>
+    <div class="col-xs-6">: {{fb_obj.gender|default:"-"|safe}}</div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr>
+
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tgl Lahir di FB</strong></div>
+    <div class="col-xs-6">: {{fb_obj.dob|date:"d M Y"|default:"-"|safe}} - Usia: {{fb_obj.dob|age|safe}} Tahun</div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr> {% endif %}
+
+<tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Friend Count</strong></div>
+    <div class="col-xs-6">: {{fb_obj.friend_count|default:"-"|safe}}</div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>FB ID</strong></div>
+    <div class="col-xs-6">: {{fb_obj.facebook_id|default:"-"|safe}}</div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr> {% endif %}
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Open Date</strong></div>
+    <div class="col-xs-6">:
+    {%if fb_obj.open_date %}
+      {{fb_obj.open_date|date:"d M Y"|safe}} - Lama: {{fb_obj.open_date|age|safe}} Tahun
+    {% else %}
+      -No Data-
+    {%endif%}</div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr> {% endif %}

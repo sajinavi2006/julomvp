@@ -1,0 +1,33 @@
+{% load default unit %}
+
+<div id="slim_history_note">
+  <ul class="nav nav-tabs customtab tabs">
+     <li class="active tab">
+      <a href="#balance_consolidation_status_history" data-toggle="tab"> <span class="visible-xs" title="Status History and Notes History">
+      <i class="fa fa-home"></i></span> <span class="hidden-xs">Status History and Notes History</span> </a>
+    </li>
+    <li class="tab"><a href="#balance_consolidation_detail_history" data-toggle="tab" title="Balance Consolidation Detail History">
+      <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Balance Consolidation Detail Update History</span> </a>
+    </li>
+    <li class="tab"><a href="#fdc_tab" data-toggle="tab" title="FDC Data">
+      <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">FDC Data</span> </a>
+    </li>
+  </ul>
+
+  <div class="tab-content pmt_event">
+    <!-- Tab status notes history -->
+    <div class="tab-pane active" id="balance_consolidation_status_history">
+      {% include "./include/tab_status_notes_history.html" %}
+    </div>
+
+    <!-- Tab update detail history -->
+    <div class="tab-pane" id="balance_consolidation_detail_history">
+      {% include "./include/tab_balance_consolidation_detail_history.html" %}
+    </div>
+
+    <!-- Tab FDC -->
+    <div class="tab-pane" id="fdc_tab">
+      {% include "./include/fdc_tab.html" %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+{% load unit tz %}
+<ul class="nav nav-tabs customtab tabs" id="detail_skiptrace_history_tab">
+   <li class="active tab">
+      <a href="#last_call_activity" data-toggle="tab">
+        <span class="hidden-xs">Last Call Activity</span>
+      </a>
+  </li>
+   <li class="tab">
+      <a href="#skiptrace_history" data-toggle="tab">
+        <span class="hidden-xs">Skiptrace History</span>
+      </a>
+  </li>
+</ul>
+
+
+<div class="tab-content" style="max-height:400px; overflow-y:auto; overflow-x:hidden">
+  <div id="last_call_activity" class="tab-pane active">
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Sales Ops</div>
+      <div class="col-xs-6">:
+        {% for agent_assignment in last_call_sales_ops %}
+          {% if agent_assignment.is_active %}
+            {{ agent_assignment.assignment_date | localtime | date:'d M Y H:i:s' }} (Calling)
+          {% else %}
+            {{ agent_assignment.completed_date | localtime | date:'d M Y H:i:s' }}
+            ({% if agent_assignment.is_rpc %}RPC{% else %}NON-RPC{% endif %})
+          {% endif %}
+          <br>
+        {% empty %}
+          -
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Collection CRM</div>
+      <div class="col-xs-6">:
+        {% for call in last_call_collection_crm %}
+          {{ call.end_ts | localtime | date:'d M Y H:i:s' }} ({{ call.call_result.name  }})
+          <br>
+        {% empty %}
+          -
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Collection Intelix</div>
+      <div class="col-xs-6">:
+        {% for call in last_call_collection_intelix %}
+          {{ call.end_ts | localtime | date:'d M Y H:i:s' }} ({{ call.call_result.name  }})
+          <br>
+        {% empty %}
+          -
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Collection Robo (Nexmo)</div>
+      <div class="col-xs-6">:
+        {% for call in last_call_collection_nexmo %}
+          {{ call.udate | localtime | date:'d M Y H:i:s' }} ({{ call.event_type }} - {{ call.status }})
+          <br>
+        {% empty %}
+          -
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Collection Robo (Cootek)</div>
+      <div class="col-xs-6">:
+        {% for call in last_call_collection_cootek %}
+          {{ call.udate | localtime | date:'d M Y H:i:s' }} ({{ call.task_status }} - {{ call.call_status }})
+          <br>
+        {% empty %}
+          -
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div id="skiptrace_history" class="tab-pane">
+    <table class="table">
+        <thead>
+          <th style='width:30%'>Skiptrace date</th>
+          <th>Content/Catatan</th>
+        </thead>
+        <tbody>
+          {% for skiptrace_history in skiptrace_histories %}
+            <tr class="success">
+              <td>
+                <label class="label label-warning m-b-5" style="display: inline-block">
+                  {{ skiptrace_history.cdate | date:'d M Y H:i:s' }}
+                </label> <br>
+                <label class="d-block label label-danger m-b-5" style="display: inline-block">
+                  Action
+                </label>
+              </td>
+              <td>
+                <div>Agent: <code>{{ skiptrace_history.agent_id }} {{ skiptrace_history.agent_name }}</code></div>
+                <div><strong style="font-size: 1.2em">{{ skiptrace_history.call_result.name }}</strong></div>
+                <div>Note: {{ skiptrace_history.notes | default:'-' }}</div>
+                <div>Source: {{ skiptrace_history.source | default:'-' }}</div>
+                <div>Phone: {{ skiptrace_history.skiptrace.phone_number | phone }}</div>
+                <div>Contact Source: {{ skiptrace_history.skiptrace.contact_source | default:'-' }}</div>
+                <div>App-id: {{ skiptrace_history.application_id | default:'-' }}</div>
+                <div>Acc-id: {{ skiptrace_history.account_id | default:'-' }}</div>
+                <div>Acc-pmt-id: {{ skiptrace_history.account_payment_id | default:'-' }}</div>
+                <div>Start: {{ skiptrace_history.start_ts | date:'d M Y H:i:s' | default:'-' }}</div>
+                <div>End: {{ skiptrace_history.start_ts | date:'d M Y H:i:s' | default:'-' }}</div>
+                <div>Non Payment Reason: {{ skiptrace_history.non_payment_reason | default:'-' | safe }}</div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td><i>- No skiptrace history -</i></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>

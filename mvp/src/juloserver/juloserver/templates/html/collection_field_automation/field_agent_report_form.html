@@ -1,0 +1,355 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+{% load unit %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">REPORT</h3><br/>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <form enctype="multipart/form-data" id="reportForm" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="field_assignment_id" value="{{ field_assignment_id }}">
+        <div id="table_content" class="header-content"
+        style="margin-top:20px;display: flex;overflow-x: auto; height: 500px !important;overflow: scroll;">
+            <table class="table table-striped table-responsive text-nowrap">
+                <tr>
+                    <td>
+                        ID Loan
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="loan_id" class="form-control" disabled value="{{ loan_id }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Area Visit
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="visit_area" class="form-control" disabled value="{{ visit_area }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Lokasi Visit <a style="color: red;">*</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="form-control" id="visitLocation" name="visit_location">
+                            {% for visit_name in visit_location_list %}
+                                <option value="{{ visit_name }}">{{ visit_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr class="lainnyaText" style="display: none;">
+                    <td>
+                        Tempat lainnya <a style="color: red;">*</a>
+                    </td>
+                </tr>
+                <tr class="lainnyaText" style="display: none;">
+                    <td>
+                        <textarea name="text_visit_other" id="textVisitOther" class="form-control"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Kode Mapping <a style="color: red;">*</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="form-control" name="result_mapping_code" id="mappingCode">
+                            {% for code_name in mapping_code %}
+                                <option value="{{ code_name }}">{{ code_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr id="ptpDate">
+                    <td>
+                        <input type="date" name="ptp_date" id="inputPtpDate" class="form-control">
+                    </td>
+                </tr>
+                <tr class="ptpAmount">
+                    <td>
+                        PTP Amount <a style="color: red;">*</a>
+                    </td>
+                </tr>
+                <tr class="ptpAmount">
+                    <input type="hidden" id="ptpAmountInt">
+                    <td>
+                        Rp. <input type="text" name="ptp_amount" id="inputPtpAmount" class="form-control">
+                    </td>
+                </tr>
+                <tr class="refusePayReasons" style="display: none;">
+                    <td>
+                        Alasan Menolak Bayar <a style="color: red;">*</a>
+                    </td>
+                </tr>
+                <tr class="refusePayReasons" style="display: none;">
+                    <td>
+                        <input type="text" name="refuse_reasons" id="inputRefusePayReasons" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Payment Channel
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="form-control" name="payment_channel" id="paymentChannel">
+                            {% for payment_channel in payment_channels %}
+                                <option data-channel="{{ payment_channel }}" value="{{ payment_channel.id }}">{{ payment_channel.payment_method_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Nomor Telepon Baru Nasabah<br>
+                        <a style="font-size: 8px;">Mohon diisi apabila nasabah memiliki nomor HP baru</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="new_phone_number" id="newPhoneNumber">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Alamat Baru Nasabah<br>
+                        <a style="font-size: 8px;">Wajib diisi apabila FC menemukan alamat baru nasabah baik rumah atau kantor</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="new_address" id="newAddress">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Keterangan Visit <a style="color: red;">*</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <textarea name="visit_description" class="form-control" id="visitNote"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Upload Foto <a style="color: red;">*</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="file" name="visit_proof_image" id="visit_proof_image">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="btnSubmit" class="btn btn-primary form-control" style="background-color: #23aaf3;color:white;">Submit</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <!-- Modal -->
+    <div class="modal fade" id="confirmation" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="top: 300px !important;">
+            <div class="modal-content">
+
+                <div class="modal-body confirm-modal">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+    <script>
+        {% block script_bottom_inside %}
+            // toast danger
+            function ToastDanger(body_message) {
+                $.toast({
+                    heading: 'Failure',
+                    text: body_message,
+                    position: 'top-right',
+                    loaderBg: '#ff6849',
+                    icon: 'error',
+                    hideAfter: 2800
+                });
+            }
+            // toast success
+            function ToastSuccess(header_msg, body_message) {
+                $.toast({
+                    heading: header_msg,
+                    text: body_message,
+                    position: 'top-right',
+                    loaderBg: '#ff6849',
+                    icon: 'success',
+                    hideAfter: 1500,
+                    stack: 6
+                });
+            }
+            {% if post_status == 'failure' %}
+                ToastDanger('{{ post_message }}')
+            {% elif post_status == 'success' %}
+                ToastSuccess('{{ post_message }}')
+                 setTimeout(function () {
+                            window.location.href = '/collection_field/agent_field_dashboard';
+                        }, 1000);
+            {% endif %}
+            // set ptp date minimum today
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementsByName('ptp_date')[0].setAttribute('min', today);
+            // visit location hide or show
+            $('#visitLocation').on('change', function () {
+                if (this.value === 'Lainnya') {
+                    $('.lainnyaText').show();
+                } else {
+                    $('.lainnyaText').hide();
+                }
+            });
+            // ptp hide or show, menolak bayar reasons hide or show
+            $('#mappingCode').on('change', function () {
+                if (this.value === 'PTP') {
+                    $('#ptpDate').show();
+                    $('.ptpAmount').show();
+                    $('.refusePayReasons').hide();
+                } else if (this.value === 'menolak bayar') {
+                    $('#ptpDate').hide();
+                    $('.ptpAmount').hide();
+                    $('.refusePayReasons').show();
+                }
+                else {
+                    $('#ptpDate').hide();
+                    $('.ptpAmount').hide();
+                    $('.refusePayReasons').hide();
+                }
+            });
+            // format currency for ptp amount
+            function formatCurrency(params){
+                return params.toLocaleString('IDR');
+            }
+            // handle ptp amount can't be other than integer
+            $('#inputPtpAmount').on('input', function() {
+                this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+                if (this.value.length > 0) {
+                    $('#ptpAmountInt').val(parseInt(this.value));
+                } else {
+                    $('#ptpAmountInt').val('');
+                    $('#inputPtpAmount').val('');
+                }
+            })
+            // format ptp amount with currency format
+            $('#inputPtpAmount').on('blur', function() {
+                if ($('#ptpAmountInt').val().length > 0) {
+                    let inputPtpAmount = parseInt($('#ptpAmountInt').val(), 10);
+                    $('#inputPtpAmount').val(formatCurrency(inputPtpAmount));
+                }
+            });
+            // submit form post ajax to view
+            function submitForm(){
+                $('#reportForm').submit()
+            }
+            // if user click yes button on submit report
+            $("#btnSubmit").on('click', function (e) {
+                e.preventDefault();
+                $(".warning-text").empty();
+                $(".confirm-modal").empty();
+                if ($('#visitLocation').val() === 'Lainnya') {
+                    if ($('#textVisitOther').val().length < 2) {
+                        ToastDanger('Tempat Lainnya harus diisi.');
+                        return;
+                    }
+                }
+                if ($('#mappingCode').val() === 'PTP') {
+                    if ($('#inputPtpDate').val().length < 1 || $('#inputPtpAmount').val().length < 1) {
+                        const message = 'ptp date dan ptp amount harus diisi.';
+                        ToastDanger(message);
+                        return;
+                    }
+                }
+                if ($('#mappingCode').val() === 'menolak bayar') {
+                    if ($('#inputRefusePayReasons').val().length < 2) {
+                        ToastDanger('alasan menolak bayar harus diisi!');
+                        return;
+                    }
+                }
+                if ($('#visitNote').val().length < 2) {
+                    ToastDanger('Keterangan Visit harus diisi!');
+                    return;
+                }
+                if( document.getElementById("visit_proof_image").files.length == 0 ){
+                    ToastDanger('Upload Foto harus diisi!');
+                    return;
+                }else {
+                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    if ($.inArray($("#visit_proof_image").val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                        ToastDanger("format untuk visit photo hanya boleh : "+fileExtension.join(', '));
+                        return;
+                    }
+                }
+                let inputPtpDate = $('#inputPtpDate').val();
+                if (inputPtpDate.length > 0) {
+                    inputPtpDate = moment(inputPtpDate, 'YYYY-MM-DD');
+                    const currentDate = moment(moment().format('YYYY-MM-DD'));
+                    console.log(inputPtpDate < currentDate);
+                    if (inputPtpDate < currentDate) {
+                        ToastDanger('Tanggal tidak bisa kurang dari hari ini!');
+                        return;
+                    }
+                }
+                const modalContents = `<p style="font-size: 15px; text-align: center"><strong>Apakah anda yakin ingin submit data ini?</strong></p>
+                <button type="button" class="btn setuju-btn form-control" style="background-color: #08ACF0; color: white; width:100%" onclick="submitForm()">Ya</button>
+                <button type="button" class="btn kembali-btn form-control" data-dismiss="modal" style="background-color: white; color: #08ACF0; border: solid #DCE3E6; margin-top: 9px width:100%">Kembali</button>`;
+
+                $(".confirm-modal").append(modalContents);
+                $('#confirmation').modal('show');
+            });
+        {% endblock %}
+    </script>
+{% endblock %}

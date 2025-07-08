@@ -1,0 +1,18 @@
+# Static files
+*/collected_static
+
+*/settings/local_personal.py
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# development files
+.vscode
+*.ipynb
+
+# testing result
+coverage.xml
+
+# flake8 env for upgradeing run_static_analysis
+flake8_venv

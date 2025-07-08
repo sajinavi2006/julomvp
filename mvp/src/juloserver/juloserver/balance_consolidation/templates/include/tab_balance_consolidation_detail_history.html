@@ -1,0 +1,38 @@
+{% load default unit %}
+
+<table class="table">
+    <thead>
+      <tr>
+        <th width="15%">Waktu</th>
+        <th width="70%">Perubahan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%  for balance_consolidation_detail_history in balance_consolidation_detail_history_list %}
+        <tr class="success">
+            <td>
+              <label class="label label-warning m-b-10">
+                {{ balance_consolidation_detail_history.cdate|date:"d M Y H:i:s" }}
+              </label><br/>
+            </td>
+            <td>
+              Agent: <code>{{ balance_consolidation_detail_history.agent|default:'-'|safe }}</code><br/>
+              <strong>Field name:</strong> {{ balance_consolidation_detail_history.field_name|safe }}<br/>
+              {% if balance_consolidation_detail_history.field_name == 'loan_outstanding_amount' or balance_consolidation_detail_history.field_name == 'loan_principal_amount' %}
+                <strong>Old value:</strong> {{ balance_consolidation_detail_history.old_value|f_rupiahs:"no"|safe}}<br/>
+                <strong>New value:</strong> {{ balance_consolidation_detail_history.new_value|f_rupiahs:"no"|safe}}<br/>
+              {% else %}
+                <strong>Old value:</strong> {{ balance_consolidation_detail_history.old_value|safe }}<br/>
+                <strong>New value:</strong> {{ balance_consolidation_detail_history.new_value|safe }}<br/>
+               {% endif %}
+            </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="2">
+            <span> Tidak ada Data </span>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>

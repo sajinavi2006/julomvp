@@ -1,0 +1,1 @@
+Yth {{ name }}, Kami blm trma pmbayaran Anda smp saat ini. Segera bayar {{due_amount}} sblm kami hub perusahaan & kerabat Anda. Trm ksh

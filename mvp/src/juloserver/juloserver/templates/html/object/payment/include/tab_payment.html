@@ -1,0 +1,108 @@
+{%load unit %}
+{% load default unit %}
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Payment ID</strong> <br>
+    <p class="text-muted">{{object.id}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Status</strong> <br>
+    <p class="text-muted">{{ object.payment_status|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Tgl. Buat / cdate</strong> <br>
+    <p class="text-muted">{{object.cdate|date:"d M Y H:i:s"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Tgl. Update/ udate</strong> <br>
+    <p class="text-muted">{{object.udate|date:"d M Y H:i:s"|safe}}</p>
+  </div>
+</div>
+<hr>
+
+
+<div class="row">
+  <div class="col-md-3 col-xs-6"> <strong>Due Amount</strong> <br>
+    <p class="text-muted">{{ object.due_amount|f_rupiahs:'no'|default:"-"|safe}}</p>
+  </div>
+
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Due Date</strong> <br>
+    <p class="text-muted">{{ object.due_date|date:"d M Y"|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Late Fee Amount</strong> <br>
+    <p class="text-muted">{{ object.late_fee_amount|f_rupiahs:'no'|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Cash Back Earned</strong> <br>
+    <p class="text-muted">{{ object.cashback_earned|f_rupiahs:'no'|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Payment Number</strong> <br>
+    <p class="text-muted">{{object.payment_number}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Paid Date</strong> <br>
+    <p class="text-muted">{{object.paid_date|date:"d M Y"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Paid Amount</strong> <br>
+    <p class="text-muted">{{ object.paid_amount|f_rupiahs:'no'|default:"-"|safe}}</p>
+  </div>
+</div>
+<!-- .row -->
+<div class="row">
+  <div class="col-lg-12">
+
+      <h3 class="box-title m-b-0">Payment Event And Notes </h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="5%">#</th>
+            <th width="15%">Date</th>
+            <th width="15%">Type</th>
+            <th width="70%">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event_note in event_note_list %}
+               <tr class="success">
+                <th scope="row">{% increment_counter_one forloop.counter0 1 1000 %}</th>
+                {% if event_note.type_data == 'Event' %}
+                <td>
+                  <label class="label label-warning">
+                    {{ event_note.cdate}}
+                  </label>
+                </td>
+                <td>
+                  <label class="label label-purple">
+                    {{ event_note.type_data}}
+                  </label>
+                </td>
+                <td>
+                    <label class="label label-danger">Paid Date {{ event_note.event_date }}</label>&nbsp; 
+                     <label class="label label-danger">Due Amount : {{ event_note.event_due_amount|f_rupiahs:'no'|default:"-"|safe }} </label> &nbsp;  
+                     <label class="label label-danger">Paid Amount : {{ event_note.event_payment|f_rupiahs:'no'|default:"-"|safe }} </label>&nbsp; 
+                </td>
+                {% else %}
+                <td>
+                  <label class="label label-warning">
+                    {{ event_note.cdate}}
+                  </label>
+                </td>
+                <td>
+                  <label class="label label-purple">
+                    {{ event_note.type_data}}
+                  </label>
+                </td>
+                <td>
+                   Agent : <code>{{ event_note.added_by|default:'-'|safe}}</code><br/>
+                   Catatan : <code>{{ event_note.note_text|default:'-'|linebreaks|escape}} </code>
+                </td>
+                {% endif %}
+              </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+  </div>
+</div>
+<!-- /.row -->
+
+
+<hr>

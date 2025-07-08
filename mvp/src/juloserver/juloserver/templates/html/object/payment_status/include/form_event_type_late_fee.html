@@ -1,0 +1,41 @@
+{% load unit %}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12">Catatan Form Late fee :</label>
+      <div class="col-md-12 col-sm-12">
+          <span class="help-block">
+            <small>- Tidak berlaku untuk payment berstatus 330, 331 dan 332.</small><br>
+            <small>- Setiap penambahan late fee, akan menambahkan late_fee_applied.</small><br>
+            <small>- Payment status akan diubah sesuai due date payment.</small>
+          </span>
+      </div>
+    </div>
+</div>
+
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12">Add Late Fee Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input class="form-control mask" id="EtlfaddLateFeeAmount" maxlength="11" required="" type="text">
+          </div>
+          <span class="help-block">
+            <small>Masukan besar pembayaran ...</small>
+          </span>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12">Event Date : </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+             <input class="form-control mydatepicker" id="EtlfEventDate" placeholder="dd-mm-yyyy" required="" type="text">
+             <span class="input-group-addon" id="EtlfSetEventDate" onclick="set_today('EtlfEventDate');"><i class="icon-calender"></i></span> 
+          </div>
+          <span class="help-block">
+            <small>Masukan event late fee  ...</small>
+          </span>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Angsuran PEDE Pinter {{payment_number}} Anda Rp.{{ due_amount }} jatuh tempo {{ due_date }}. Info: {{url}}.

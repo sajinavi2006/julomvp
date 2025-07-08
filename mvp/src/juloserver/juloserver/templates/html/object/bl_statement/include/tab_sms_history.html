@@ -1,0 +1,44 @@
+{% load default unit %}
+<table class="table">
+  <thead>
+    <tr>
+      
+      <th width="15%">Waktu</th>
+      
+      <th width="70%">Content / Catatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for obj in sms_history_list %}
+         <tr class="success">
+          <td>
+            <label class="label label-warning m-b-10">
+              {{ obj.cdate|date:"d M Y H:i:s" }}
+            </label><br>
+            <label class="label label-danger m-b-10">
+              Sms
+            </label>
+            <label class="label label-warning m-b-10">
+              {{ obj.to_mobile_phone|default:'-'|safe }}
+            </label><br>
+            <label class="label label-danger m-b-10">
+              {{ obj.phone_number_type|default:'-'|safe }}
+            </label>
+            <label class="label label-warning m-b-10">
+              {{ obj.status|default:'-'|safe }}
+            </label>
+          </td>
+          <td>
+            <strong>Message:</strong><br/>
+              {{ obj.message_content }}
+          </td>
+        </tr>
+    {% empty %}
+      <tr>
+        <td colspan="2">
+          <span> Tidak ada Data </span>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

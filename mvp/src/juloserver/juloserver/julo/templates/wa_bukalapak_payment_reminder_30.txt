@@ -1,0 +1,1 @@
+Yth {{fullname}}. Balance tagihan BayarNanti kamu sebesar {{due_amount}} telah jatuh tempo pada {{due_date}}. Segera lakukan pembayaran sebelum dikenakan denda. Informasi cara melakukan pembayaran tersedia pada Aplikasi Bukalapak. Whatsapp pertanyaan Anda ke {{collection_whatsapp}}.

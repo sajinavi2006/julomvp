@@ -1,0 +1,2 @@
+class JuloClientTimeout(Exception):
+    pass

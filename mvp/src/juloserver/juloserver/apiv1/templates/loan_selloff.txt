@@ -1,0 +1,5 @@
+Mohon maaf, hutang Anda telah Kami alihkan kepada {{vendor}}
+
+Dengan pengalihan hutang ini Kami telah mengalihkan hak tagih kepada {{vendor}}, maka untuk kedepannya penagihan akan dilakukan oleh{{vendor}}, dan JULO tidak lagi memiliki hak tagih atas utang anda
+
+Silahkan periksa email Anda untuk informasi lebih lanjut.

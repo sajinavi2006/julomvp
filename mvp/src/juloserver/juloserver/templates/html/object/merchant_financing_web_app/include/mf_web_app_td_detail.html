@@ -1,0 +1,195 @@
+{% load model template default unit %}
+
+
+<table>
+  {% if is_partner %}
+    <tr>
+      <td class='m-r-10'>
+        Application XID
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.application_xid|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Loan Amount Request
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.loan_amount_request|f_rupiahs:"no"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Loan Duration Request
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.loan_duration_request|default:"-"|safe}} {{ object.determine_kind_of_installment }}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Age
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{object.dob|age|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Job Type
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{object.job_type|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Job Industry
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{object.job_industry|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Job Description
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{object.job_description|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Income
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{object.monthly_income|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Score
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong>
+          {% if object.creditscore.score %}
+
+          {{object.creditscore.score|default:"-"|safe}}
+
+          {% else %}
+              -
+          {% endif %}
+          
+        </strong>
+      </td>
+    </tr>
+  {% else %}
+    <tr>
+      <td class='m-r-10'>
+        Application ID
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.id|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+     <tr>
+      <td class='m-r-10'>
+        Customer ID
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.customer_id|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Full Name
+      </td>
+      <td>
+         &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.fullname|default:"-"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        No. HP
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong>
+          {% if object.partnership_customer_data %}
+
+            {{ object.partnership_customer_data.phone_number|no_hp|default:"-"|safe}}
+
+          {% else %}
+              -
+          {% endif %}
+         </strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        No KTP
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong>
+          {% if object.partnership_customer_data %}
+
+            {{ object.partnership_customer_data.nik|no_hp|default:"-"|safe}}
+
+          {% else %}
+              -
+          {% endif %}
+        </strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Date Of Birth
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.dob|date:"d M Y"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Loan Amount Request
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.loan_amount_request|f_rupiahs:"no"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Loan Duration Request
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.loan_duration_request|default:"-"|safe}} {{ object.determine_kind_of_installment }}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        CDate
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+        <strong> {{ object.cdate|date:"d M Y H:i:s"|safe}}</strong>
+      </td>
+    </tr>
+  {% endif %}
+</table>

@@ -1,0 +1,36 @@
+{% extends "common/theme1/detail/detail_admin1.html" %}
+{% load model %}
+
+{% block breadcrumb_title %}Data SPHP{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li><a href="#">SPHP</a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+ 
+{% block list_title %}SPHP{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+    
+    {% include "object/loan_app/include/sphp.html" %}
+    
+{% endblock %}
+
+
+{% block button_part %}
+	<a href="{% url 'loan_app:sphp' %}">
+        <button id="back" type="button" class="btn btn-info">
+            <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian SPHP
+        </button>
+    </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+	$(document).ready(function() {
+
+	    // Executes when the HTML document is loaded and the DOM is ready
+	    //alert("Document is ready");
+	});
+{% endblock %}

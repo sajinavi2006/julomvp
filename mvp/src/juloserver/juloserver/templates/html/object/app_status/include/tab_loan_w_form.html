@@ -1,0 +1,94 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10"><strong>Jumlah Pinjaman</strong> </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    {{ object.loan_amount_request|f_rupiahs:"no"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Jangka Waktu</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    {{ object.loan_duration_request|default:"-"|safe}} {{ object.determine_kind_of_installment }}
+  </div>
+    <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Tujuan Pinjaman</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    <div class="input-group input-group-sm {% if form_app_select.loan_purpose.errors %} has-error {% endif %}">
+      {{ form_app_select.loan_purpose }}
+       <span class="input-group-btn" onclick="setDefaultValue('id_form2-loan_purpose', '{{ object.loan_purpose|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10"> <strong>Uraian Tujuan Pinjaman</strong> </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    <div class="input-group input-group-sm {% if form_app.loan_purpose_desc.errors %} has-error {% endif %}">
+        {{form_app.loan_purpose_desc}}
+        
+        <span class="input-group-btn" onclick="setDefaultValue('id_form2-loan_purpose_desc', '{{ object.loan_purpose_desc|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+        </span>
+    </div>
+  </div>
+    <div class="col-md-3 col-xs-6 p-b-10">
+      
+
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Sumber Marketing</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    {{ object.marketing_source|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Kode Referral</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    {{ object.referral_code|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10"> <strong>IMEI</strong> </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    {{ object.device|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10"> <strong>App Version</strong> </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r">
+    {{object.app_version|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>

@@ -1,0 +1,246 @@
+{% load unit utils %}
+{% load checkusergroup from common %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+  <li class="active tab">
+    <a href="#smt_info" data-toggle="tab">
+      <span class="visible-xs" title="Statement Info">
+        <i class="fa fa-home"></i>
+      </span>
+      <span class="hidden-xs">Statement Info</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#smt_transactions" data-toggle="tab" title="Transactions Info">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Transactions</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#smt_payment_history" data-toggle="tab" aria-expanded="true" title="Bank Info">
+      <span class="visible-xs">
+        <i class="fa fa-envelope-o"></i>
+      </span>
+      <span class="hidden-xs">Payment History</span>
+    </a>
+  </li>
+  <li class="tab">
+      <a href="#smt_payment_step_info" data-toggle="tab" aria-expanded="true" title="Bank Info">
+        <span class="visible-xs">
+          <i class="fa fa-envelope-o"></i>
+        </span>
+        <span class="hidden-xs">Payment Step Info</span>
+      </a>
+    </li>
+</ul>
+<div id="slim_smts">
+  <div class="tab-content smt_event">
+    <!-- Tab statement details -->
+    <div class="tab-pane active" id="smt_info">
+      {% with statement_obj as object %}
+      <div class="col-xs-8">
+        <table>
+          <tr>
+            <td class='m-r-10'>
+              Statement ID
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ object.id|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Status
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ object.statement_status|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <td class='m-r-10'>
+            Due Date
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ object.statement_due_date|date:"d M Y"|safe|safe}}</strong>
+          </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Due Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_due_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Interest Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_interest_amount|f_rupiahs:"no"|default:"-"|safe }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Principal Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_principal_amount|f_rupiahs:"no"|default:"-"|safe }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Transaction Fee Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_transaction_fee_amount|f_rupiahs:"no"|default:"-"|safe }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Late Fee Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_late_fee_amount|f_rupiahs:"no"|default:"-"|safe }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Late Fee Applied
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_late_fee_applied|f_rupiahs:"no"|default:"-"|safe }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_paid_amount|f_rupiahs:"no"|default:"-"|safe }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Date
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_paid_date|date:"d M Y"|safe|default:"-"|safe }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Interest
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_paid_interest|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Principal
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_paid_principal|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Late Fee
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_paid_late_fee|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Transaction Fee
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ object.statement_paid_transaction_fee|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          {% if statement_ptp %}
+            <tr>
+              <td class='m-r-10'>
+                PTP Date
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong>{{ statement_ptp.ptp_date|date:"d M Y"|safe|default:"-"|safe }}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class='m-r-10'>
+                PTP Amount
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong>{{ statement_ptp.ptp_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+              </td>
+            </tr>
+          {% endif %}
+        </table>
+      </div>
+      <div class="col-xs-12">
+        <div class="m-t-10">
+            {% if statement_events_details %}
+              <button class="btn btn-danger m-b-5"
+                      id="add_payment_event"
+                      title="add Event Statement"
+                      data-toggle="modal"
+                      data-target="#responsive-modal-statement-event"
+              >
+                <i class="fa fa-money fa-fw"></i> Add Statement Event
+              </button>
+            {% endif %}
+          {% if show_unlock_button %}
+            <button id="send_called_button" class="btn btn-success m-b-5" title="flag_as_called" data-toggle="modal"
+              data-target="#responsive-modal-set-called">
+              <i class="fa fa-envelope-o fa-fw"></i> set Called
+            </button>
+            <button class="btn btn-danger m-b-5" id="update_ptp_date" title="PTP Date" data-toggle="modal" onclick="onModalPTPShow();">
+              <i class="fa fa-credit-card fa-fw"></i> Update PTP
+            </button>
+          {% endif %}
+        </div>
+      </div>
+      {% endwith %}
+    </div>
+    <!-- Tab Payment event -->
+    <div class="tab-pane" id="smt_transactions">
+      {% with transactions_obj as object %}
+      {% include "object/bl_statement/include/tab_transaction.html" %}
+      {% endwith %}
+    </div>
+    <!-- Tab Payment History-->
+    <div class="tab-pane" id="">
+      {% with loan_obj as object %}
+      {% include "object/loan_status/include/tab_payment_list_for_bl.html" %}
+      {% endwith %}`
+    </div>
+    <!-- Tab Payment Step info-->
+    <div class="tab-pane" id="wallets">
+      {% with wallets as wallets %}
+      {% include "object/loan_status/include/tab_wallet_list.html" %}
+      {% endwith %}`
+    </div>
+  </div>
+</div>

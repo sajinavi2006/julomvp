@@ -1,0 +1,53 @@
+{% if is_paginated %}
+    <div class="dataTables_paginate paging_simple_numbers text-center">
+        <span class="current">
+            Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }} - Total {{ page_obj.paginator.count }}.
+        </span>
+    </div>
+    <div class="dataTables_paginate paging_simple_numbers text-center">
+        <ul class="pagination">
+          {% if has_previous %}
+              <li class="paginate_button previous" >
+                  <a href="?page={{ previous }}">&laquo; </a>
+              </li>
+          {% else %}
+              <li class="paginate_button previous disabled" >
+                  <a href="#">&laquo; </a>
+              </li>
+          {% endif %}
+          
+          {% if show_first %}
+            <li class="paginate_button"><a href="?page=1">1</a></li>
+              <li class="paginate_button"><a href="#">...</a></li>
+          {% endif %}
+          
+          {% for linkpage in page_numbers %}
+            {% ifequal linkpage page %}
+               <li class="paginate_button active">
+                  <a href="?page={{ page }}">{{ page }}</a>
+               </li>
+            {% else %}
+               <li class="paginate_button">
+                  <a href="?page={{ linkpage }}">{{ linkpage }}</a>
+              </li>
+            {% endifequal %}
+          {% endfor %}
+           
+          {% if show_last %}
+            <li class="paginate_button"><a href="#">...</a></li>
+            <li class="paginate_button"><a href="?page=last">{{ pages }}</a></li>
+          {% endif %}
+            
+          {% if has_next %}
+              <li class="paginate_button next" >
+                  <a href="?page={{ next }}">&raquo; </a>
+              </li>
+          {% else %}
+              <li class="paginate_button next disabled" >
+                  <a href="#">&raquo; </a>
+              </li>
+          {% endif %}
+        </ul>
+    </div>
+{% endif %}
+

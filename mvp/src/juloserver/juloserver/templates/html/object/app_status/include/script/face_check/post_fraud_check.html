@@ -1,0 +1,230 @@
+{% load static from staticfiles %}
+<script type="text/javascript">
+  $("#submit_matched_fraud").button().click(function(){
+      var csrftoken = getCookie('csrftoken');
+      var matched = JSON.stringify(face_matched);
+
+      $.ajax({
+          url :  "{%url 'face_recognition:submit_matched_images' %}/",
+          type : "POST",
+          async: false,
+          data : {
+                application_id: {{app_obj.id}},
+                matched_faces: matched,
+                data_context:$(this).attr("data-context")
+            },
+          // handle a successful response
+          success : function(json) {
+              //console.log(json);
+              if(json.status === 'success') {
+                var face_search_process = document.getElementById("face-search-process");
+                var icon = document.createElement("i");
+                icon.setAttribute("class", "fa fa-check-circle");
+                icon.setAttribute("style", "color: #00dd00;");
+                face_search_process.textContent='';
+                face_search_process.appendChild(icon);
+                window.location.reload(true);
+              }
+              else {
+                alert("Please re-submit Fraud Face Check.");
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+  });
+
+  function fraudsterFlagged(){
+    face_matched = [];
+    $.each($("input[name='fraud_recognition_checkbox']:checked"), function() {
+      var value = {
+        "is_match" : "",
+        "application" : "",
+        "apply_date" : "",
+        "image" : "",
+        "geolocation" : "",
+        "address" : "",
+        "provinsi" : "",
+        "kabupaten" : "",
+        "kecamatan" : "",
+        "kelurahan" : "",
+        "nik" : "",
+        "email" : "",
+        "full_name" : "",
+        "birth_place" : "",
+        "dob" : "",
+        "bank_name" : "",
+        "bank_account_name" : "",
+        "bank_account_number" : "",
+        "android_id" : "",
+        "device_name" : "",
+        "data_context": "",
+      };
+
+      value.is_match = true;
+      if($(this).val() !== 'null'){
+        value.application = $(this).val();
+      }
+      if($("#fraud_ca_div_hidden_value_apply_date_"+$(this).val()).val() !== 'null'){
+        value.apply_date = $("#fraud_ca_div_hidden_value_apply_date_"+$(this).val()).val();
+      }
+      if($("#fraud_ca_div_hidden_value_selfie_"+$(this).val()).val() !== 'null'){
+        value.image = $("#fraud_ca_div_hidden_value_selfie_"+$(this).val()).val();
+      }
+      if($("#fraud_ca_div_hidden_value_selfie_"+$(this).val()).get(0) == undefined){
+        value.image = 'null';
+      } 
+      if($("#fraud_ca_distance_value_geo_loc_"+$(this).val()).text() !== 'null'){
+        value.geolocation = $("#fraud_ca_distance_value_geo_loc_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_address_"+$(this).val()).text() !== 'null'){
+        value.address = $("#fraud_ca_div_value_address_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_provinsi_"+$(this).val()).text() !== 'null'){
+        value.provinsi = $("#fraud_ca_div_value_provinsi_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_kabupaten_"+$(this).val()).text() !== 'null'){
+        value.kabupaten = $("#fraud_ca_div_value_kabupaten_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_kecamatan_"+$(this).val()).text() !== 'null'){
+        value.kecamatan = $("#fraud_ca_div_value_kecamatan_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_kelurahan_"+$(this).val()).text() !== 'null'){
+        value.kelurahan = $("#fraud_ca_div_value_kelurahan_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_nik_"+$(this).val()).text() !== 'null'){
+        value.nik = $("#fraud_ca_div_value_nik_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_email_"+$(this).val()).text() !== 'null'){
+        value.email = $("#fraud_ca_div_value_email_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_full_name_"+$(this).val()).text() !== 'null'){
+        value.full_name = $("#fraud_ca_div_value_full_name_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_pob_"+$(this).val()).text() !== 'null'){
+        value.birth_place = $("#fraud_ca_div_value_pob_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_dob_"+$(this).val()).text() !== 'null'){
+        value.dob = $("#fraud_ca_div_value_dob_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_bank_name_"+$(this).val()).text() !== 'null'){
+        value.bank_name = $("#fraud_ca_div_value_bank_name_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_bank_account_name_"+$(this).val()).text() !== 'null'){
+        value.bank_account_name = $("#fraud_ca_div_value_bank_account_name_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_bank_account_number_"+$(this).val()).text() !== 'null'){
+        value.bank_account_number = $("#fraud_ca_div_value_bank_account_number_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_android_id_"+$(this).val()).text() !== 'null'){
+        value.android_id = $("#fraud_ca_div_value_android_id_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_device_name_"+$(this).val()).text() !== 'null'){
+        value.device_name = $("#fraud_ca_div_value_device_name_"+$(this).val()).text().replace(": ", "");
+      }
+      value.data_context = "fraud_face"
+      face_matched.push(value);
+    });
+    $.each($("input[name='fraud_recognition_checkbox']:not(:checked)"), function() {
+      var value = {
+        "is_match" : "",
+        "application" : "",
+        "apply_date" : "",
+        "image" : "",
+        "geolocation" : "",
+        "address" : "",
+        "provinsi" : "",
+        "kabupaten" : "",
+        "kecamatan" : "",
+        "kelurahan" : "",
+        "nik" : "",
+        "email" : "",
+        "full_name" : "",
+        "birth_place" : "",
+        "dob" : "",
+        "bank_name" : "",
+        "bank_account_name" : "",
+        "bank_account_number" : "",
+        "android_id" : "",
+        "device_name" : "",
+        "data_context": "",
+      };
+
+      value.is_match = false;
+      if($(this).val() !== 'null'){
+        value.application = $(this).val();
+      }
+      if($("#fraud_ca_div_hidden_value_apply_date_"+$(this).val()).val() !== 'null'){
+        value.apply_date = $("#fraud_ca_div_hidden_value_apply_date_"+$(this).val()).val();
+      }
+      if($("#fraud_ca_div_hidden_value_selfie_"+$(this).val()).val() !== 'null'){
+        value.image = $("#fraud_ca_div_hidden_value_selfie_"+$(this).val()).val();
+      }
+      if($("#fraud_ca_div_hidden_value_selfie_"+$(this).val()).get(0) == undefined){
+        value.image = 'null';
+      }
+      if($("#fraud_ca_distance_value_geo_loc_"+$(this).val()).text() !== 'null'){
+        value.geolocation = $("#fraud_ca_distance_value_geo_loc_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_address_"+$(this).val()).text() !== 'null'){
+        value.address = $("#fraud_ca_div_value_address_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_provinsi_"+$(this).val()).text() !== 'null'){
+        value.provinsi = $("#fraud_ca_div_value_provinsi_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_kabupaten_"+$(this).val()).text() !== 'null'){
+        value.kabupaten = $("#fraud_ca_div_value_kabupaten_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_kecamatan_"+$(this).val()).text() !== 'null'){
+        value.kecamatan = $("#fraud_ca_div_value_kecamatan_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_kelurahan_"+$(this).val()).text() !== 'null'){
+        value.kelurahan = $("#fraud_ca_div_value_kelurahan_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_nik_"+$(this).val()).text() !== 'null'){
+        value.nik = $("#fraud_ca_div_value_nik_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_email_"+$(this).val()).text() !== 'null'){
+        value.email = $("#fraud_ca_div_value_email_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_full_name_"+$(this).val()).text() !== 'null'){
+        value.full_name = $("#fraud_ca_div_value_full_name_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_pob_"+$(this).val()).text() !== 'null'){
+        value.birth_place = $("#fraud_ca_div_value_pob_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_dob_"+$(this).val()).text() !== 'null'){
+        value.dob = $("#fraud_ca_div_value_dob_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_bank_name_"+$(this).val()).text() !== 'null'){
+        value.bank_name = $("#fraud_ca_div_value_bank_name_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_bank_account_name_"+$(this).val()).text() !== 'null'){
+        value.bank_account_name = $("#fraud_ca_div_value_bank_account_name_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_bank_account_number_"+$(this).val()).text() !== 'null'){
+        value.bank_account_number = $("#fraud_ca_div_value_bank_account_number_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_android_id_"+$(this).val()).text() !== 'null'){
+        value.android_id = $("#fraud_ca_div_value_android_id_"+$(this).val()).text().replace(": ", "");
+      }
+      if($("#fraud_ca_div_value_device_name_"+$(this).val()).text() !== 'null'){
+        value.device_name = $("#fraud_ca_div_value_device_name_"+$(this).val()).text().replace(": ", "");
+      }
+      value.data_context = "fraud_face"
+      face_matched.push(value);
+    });
+    $("#modal-face-similarity-app").modal('hide');
+
+    if(Array.isArray(face_matched) && face_matched.length){
+      $("#modal_responsive_fraud_similarity").html("Apakah Anda yakin untuk mengirim hasil tersebut?");
+    } else {
+      $("#modal_responsive_fraud_similarity").html("Tidak ditemukan kemiripan, apakah Anda yakin untuk mengirim hasil tersebut?");
+    }
+
+    $("#responsive-modal-fraud-similarity-app").modal('show');
+  }
+
+</script>

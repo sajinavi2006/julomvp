@@ -1,0 +1,15 @@
+{% load model template default unit %}
+
+{% with object.product_line.product_line_type as p_pline %}
+  {% if p_pline == "MTL1" %}
+    <span class="label label-rouded label-info pull-center small">{{ p_pline|default:"-"|safe}}</span>
+  {% elif p_pline == 'MTL2' %}
+    <span class="label label-rouded label-warning pull-center small">{{ p_pline|default:"-"|safe}}</span>
+  {% elif p_pline == 'STL1' %}
+    <span class="label label-rouded label-primary pull-center small">{{ p_pline|default:"-"|safe}}</span>
+  {% elif p_pline == 'GRAB1' %}
+    <span class="label label-rouded label-success pull-center small">{{ p_pline|default:"-"|safe}}</span>
+  {% else %}
+    <span class="label label-rouded label-danger pull-center small">{{ p_pline|default:"-"|safe}}</span>
+  {% endif %}
+{% endwith %}

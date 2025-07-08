@@ -1,0 +1,18 @@
+[
+    {
+        "detail_loan": "statistic_loan_810069.json",
+        "member_name": "JULO",
+        "status_file": [
+            {
+                "total_error": "1 row",
+                "detail_error": "81006920241124V5-SIK01.zip.out",
+                "failed_filename": null,
+                "success_filename": "81006920241124V5-SIK01.zip",
+                "last_uploaded_sik": "2024-11-25 | 02:05",
+                "success_processed_sik": "2024-11-25 | 03:35"
+            }
+        ],
+        "generated_at": "2024-11-25 | 06:00",
+        "id_penyelenggara": "810069"
+    }
+]

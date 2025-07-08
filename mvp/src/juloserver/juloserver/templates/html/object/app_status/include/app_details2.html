@@ -1,0 +1,237 @@
+{% load checkusergroup from common %}
+{% load unit utils %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+  {% if not restrict_data_for_sales_ops_role %}
+  <li class="tab active"><a href="#doc_verify" data-toggle="tab" title="Document Verify">
+    <span class="visible-xs"><i class="fa fa-file-text-o"></i></span> <span class="hidden-xs">Document Verify</span> </a>
+  </li>
+  {% endif %}
+  {% if not restrict_data_for_sales_ops_role and app_obj.application_status.status_code >= 100 and app_obj.application_status.status_code <= 199 %}
+  <li class="tab" id="geohash6" onclick="patchID(this.id)"><a href="#selfie_in_geohash" data-toggle="tab" title="Selfie in Geohash">
+    <span class="visible-xs"><i class="fa fa-file-text-o"></i></span> <span class="hidden-xs">Selfie in Geohash</span> </a>
+  </li>
+  {% endif %}
+  {% checkusergroup notin ['bo_outbond_caller_3rd_party'] %}
+    {% if app_obj.application_status.status_code  in calculation_view_statuses %}
+      <li class="tab"><a href="#ca_calculation" data-toggle="tab" title="CA Calculation">
+        <span class="visible-xs"><i class="fa fa-calculator"></i></span> <span class="hidden-xs">CA Calculation</span> </a>
+      </li>
+    {% endif %}
+
+    <li class="tab">
+      <a href=" {% url 'loan_app:app_multi_image_upload' object.id %}" title='Upload'>
+          <button class="btn btn-outline  btn-danger btn-rounded">Upload Dokumen</button>
+      </a>
+    </li>
+
+    {% if app_obj.application_status.status_code == 121 %}
+    <li class="tab" style="display: flex; align-items: center;">
+      <p id="similar-face-tabs" title="Face Check" class="block relative px-8 pt-12 semi-bold" style="display: flex; align-items: center;">
+          <span class="font-neutrals-80">Face Check:&nbsp;&nbsp; </span>
+      </p>
+      <a href="#" class="p-0" id="face-check-link"><i class="fa fa-chevron-right font-primary-base font-10"></i></a>
+    </li>
+    {% endif %}
+
+    {% if app_obj.application_status.status_code >= 141 %}
+      <li class="tab">
+        {% if app_obj.is_julo_one and app_obj.application_status_id in julo_one_limit_info_status %}
+        <a  title='Limit info'>
+          <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#responsive-limit-info-modals">
+            Limit info
+          </button>
+          {% if app_obj.is_julo_one and app_obj.application_status_id == 141 or app_obj.application_status_id == 190 %}
+            <i class="fa fa-check-circle" style="color: #00dd00"></i>
+          {% else %}
+            <i class="fa fa-times-circle" style="color: red"></i>
+          {% endif %}
+        </a>
+        {% else %}
+        <a  title='SPHP'>
+          <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#responsive-sphp-modals">
+            SPHP
+          </button>
+        </a>
+        {% endif %}
+      </li>
+    {% endif %}
+    {% if app_obj.application_status.status_code >= 180 and not app_obj.is_courtesy_call %}
+      <li class="tab">
+        <a  title='CALL'>
+          <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#responsive-sphp-call-modals" >
+            Courtesy Call
+          </button>
+        </a>
+      </li>
+    {% endif %}
+  {% endcheckusergroup %}
+</ul>
+
+<div id="slim_apps2">
+  <div class="tab-content">
+    <!-- Document Verify -->
+    {% if not restrict_data_for_sales_ops_role %}
+    <div class="tab-pane active col-xs-12" id="doc_verify">
+      <div class="liveness-face-tabs" style="display:flex;justify-content: space-between;margin-right: 16px;align-items: center;">
+        <div id="is_assisted_selfie" class="col-xs-4 row">
+          <div class="mycroft-text">
+            Mycroft Score: {{ mycroft_score }}
+          </div>
+          <div class="mycroft-checkbox">
+            {% if app_obj.application_status.status_code == 121 %}
+              {% if app_obj.is_assisted_selfie %}
+                <input type="checkbox" id="id_form2-is_assisted_selfie" class="form-control2" name="form2-is_assisted_selfie" checked autocomplete="off"> Selfie Difotoin
+              {% else %}
+                <input type="checkbox" id="id_form2-is_assisted_selfie" class="form-control2" name="form2-is_assisted_selfie" autocomplete="off"> Selfie Difotoin
+              {% endif %}
+            {% else %}
+              {% if app_obj.is_assisted_selfie %}
+                <input type="checkbox" id="id_form2-is_assisted_selfie" name="is_assisted_selfie" checked disabled="disabled"> Selfie Difotoin
+              {% else %}
+                <input type="checkbox" id="id_form2-is_assisted_selfie" name="is_assisted_selfie" disabled="disabled"> Selfie Difotoin
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% if app_obj.application_status.status_code == 121 %}
+        <li class="tab ml-16" id="face-matching-wrapper" style="display: flex; align-items: start;flex-direction: column;">
+          <span class="font-neutrals-80 semi-bold">Pencocokan Wajah: </span><br >
+          <p id="liveness-face-tabs" class="block relative pt-8 semi-bold" style="display: flex; align-items: center;">
+            <a href="#" id="liveness_ktp_anchor" style="display: flex; align-items: center;">
+              <i id="liveness_ktp_icon"></i>
+              <span id="liveness_ktp_text"></span>
+            </a>
+            <a href="#" id="liveness_selfie_anchor" style="display: flex; align-items: center;">
+              <i id="liveness_selfie_icon"></i>
+              <span id="liveness_selfie_text"></span>
+            </a>
+            <a href="#" class="p-0 ml-4" id="face-check-link"><i class="fa fa-chevron-right font-primary-base font-10"></i></a>
+         </p>         
+        </li>
+        {% endif %}
+      </div>
+      <div class="col-xs-12">
+        {% include "object/app_status/include/detail_images.html" %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Tab Selfie in Geohash -->
+    {% if not restrict_data_for_sales_ops_role %}
+    <div class="tab-pane" id="selfie_in_geohash">
+      {% include "object/app_status/include/selfie_in_geohash.html" %}
+    </div>
+    {% endif %}
+
+    <!-- Tab CA Calculate -->
+    <div class="tab-pane" id="ca_calculation">
+      {% if app_obj.product_line.product_line_code not in product_line_LOC%}
+          {% include "object/app_status/include/tab_ca_calculation.html" %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+<!-- /.modal payment event-->
+<div id="responsive-edit-offer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="compute_modal_title">Ubah Offer - AppID: {{app_obj.id}}</h4> </div>
+            <div class="modal-body">
+              {% if app_obj.application_status.status_code  in calculation_view_statuses %}
+                  {% include "object/app_status/include/app_edit_offer.html" %}
+              {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">
+                  <i class="fa fa-times fa-fw"></i>Batal
+                </button>
+                <button class="btn btn-danger waves-effect waves-light" name="ubah_offer" disabled="true" id="id_simpan_offer" onclick="editOffer({{app_obj.id}})">
+                  <i class="fa fa-save fa-fw"></i>Setuju
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal sphp -->
+<div id="responsive-sphp-modals" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="width: 800px">
+        <div class="modal-content">
+            <div class="modal-header  label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Surat Perjanjian Hutang Piutang - AppID: {{app_obj.id}}</h4> </div>
+            <div class="modal-body">
+              {% if object.product_line_code in product_line_STL %}
+                {% include "object/loan_app/include/sphp_stl.html" %}
+              {% elif object.product_line_code in product_line_LOC %}
+                {% include "object/loan_app/include/sphp_loc.html" %}
+              {% elif object.product_line_code in product_line_GRABFOOD %}
+                {% include "object/loan_app/include/sphp_grabfood.html" %}
+              {% elif object.product_line_code in product_line_PEDESTL %}
+                {% include "object/loan_app/include/sphp_pedestl.html" %}
+              {% elif object.product_line_code in product_line_PEDEMTL %}
+                {% include "object/loan_app/include/sphp_pedemtl.html" %}
+              {% else %}
+                {% include "object/loan_app/include/sphp.html" %}
+              {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">
+                  <i class="fa fa-times fa-fw"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal sphp -->
+<div id="responsive-sphp-call-modals" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="width: 800px">
+        <div class="modal-content">
+            <div class="modal-header  label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Courtesy Call - AppID: {{app_obj.id}}</h4> </div>
+            <div class="modal-body">
+              {% include "object/app_status/include/courtesy_call.html" %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">
+                  Close
+                </button>
+                <button type="button" class="btn btn-danger waves-effect" onclick="emailCourtesy()">
+                  Send Email
+                </button>
+                <button type="button" class="btn btn-success waves-effect" onclick="updateCourtesy()">
+                  Call-Success
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="responsive-limit-info-modals" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="width: 800px">
+        <div class="modal-content">
+
+            <div class="modal-body">
+              {% if app_obj.application_status_id == 141 or app_obj.application_status_id == 190 %}
+                {% include "object/loan_app/include/limit_generated.html" %}
+              {% else %}
+                {% include "object/loan_app/include/limit_not_generated.html" %}
+              {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary waves-effect" data-dismiss="modal">
+                  <i class="fa fa-times fa-fw"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

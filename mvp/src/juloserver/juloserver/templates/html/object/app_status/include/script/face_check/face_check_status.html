@@ -1,0 +1,294 @@
+{% load static from staticfiles %}
+{% if app_obj.application_status.status_code == 121 %}
+<style>
+  .badges.found {
+    background: #F7D8D4;
+    border: 2px solid #E9948B;
+    border-radius: 25px !important;
+  }
+  .badges.not-found {
+    background: #F7D8D4;
+    border: 2px solid #E9948B;
+    border-radius: 25px !important;
+  }
+  .badges.not-found {
+    background: #C8F1E8;
+    border: 2px solid #61A697;
+    border-radius: 25px !important;
+  }
+  .badges.warning {
+    background: #FDE5CE;
+    border: 2px solid #FABF88;
+    border-radius: 25px !important;
+  }
+</style>
+{% endif %}
+<script type="text/javascript">
+  function get_face_similarity_check_status(){
+    var csrftoken = getCookie('csrftoken');
+
+    var ret_value;
+    var pop_up = document.createElement("a");
+    var pop_up_fraudster = document.createElement("a");
+    var icon = document.createElement("i");
+      $.ajax({
+          url :  "{%url 'face_recognition:face_search_process' %}/",
+          type : "POST",
+          async: false,
+          data : {
+                application_id : '{{app_obj.id}}'
+            },
+          // handle a successful response
+          success : function(json) {
+            ret_value = json;
+        },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+    var similar_status = ret_value.messages.face_search_status;
+    var fraud_status = ret_value.messages.fraud_face_match_status;
+    {% if app_obj.application_status.status_code == 121 %}
+    // Function to create and append a badge section
+    function createBadgeSection(text, onClickHandler, iconClass, textClass) {
+      // Create an 'a' element
+      var badgeLink = document.createElement("a");
+      badgeLink.href = "#";
+      badgeLink.setAttribute("class", "mr-8");
+      badgeLink.setAttribute("onclick", onClickHandler);
+
+      // defind face check link and set the attribute value for onclick action
+      var faceCheckLink = document.getElementById("face-check-link");
+      if (similar_status === 'found' || fraud_status === 'found') {
+        faceCheckLink.setAttribute("onclick", "show_similar_faces('{% url "face_recognition:get_similar_faces" app_obj.id %}', {{ app_obj.id }});");
+      } else {
+        faceCheckLink.setAttribute("onclick", "#");
+      }
+      // Create an 'i' element for the icon
+      var badgeIcon = document.createElement("i");
+      badgeIcon.setAttribute("class", iconClass);
+
+      // Create a 'span' element for the badge content
+      var badgeSpanText = document.createElement("span")
+      var badgeSpan = document.createElement("span");
+      badgeSpan.setAttribute("class", textClass);
+
+      // Set the text for the badge content
+      badgeSpanText.textContent = text;
+
+      // Append the icon to the badge content
+      badgeSpan.appendChild(badgeIcon);
+
+      // Append the badge content to the 'a' element
+      badgeSpan.appendChild(badgeSpanText);
+
+      // Append the badge content to the 'span' element
+      badgeLink.appendChild(badgeSpan);
+
+      // Return the 'a' element
+      return badgeLink;
+    }
+
+    // Check for Similar Face found
+    if (similar_status === 'found') {
+      // Create the Similar Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Similar Face",
+        `show_similar_faces('{% url "face_recognition:get_similar_faces" app_obj.id %}', {{ app_obj.id }}); `,
+        "fa fa-exclamation-circle font-error-30 pr-4",
+        "font-error-30 badges found"
+      );
+
+      // Append the Similar Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+
+    // Check for Similar Face not_found
+    if (similar_status === 'not_found') {
+      // Create the Similar Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Similar Face",
+        "#",
+        "fa fa-check-circle font-success-30 pr-4",
+        "font-success-30 badges not-found"
+      );
+
+      // Append the Similar Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+
+    // Check for Similar Face checked
+    if (similar_status === 'checked') {
+      // Create the Similar Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Similar Face",
+        "#",
+        "fa fa-check-circle font-success-30 pr-4",
+        "font-success-30 badges not-found"
+      );
+
+      // Append the Similar Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+    
+    // Check for Similar Face waiting
+    if (similar_status === 'waiting') {
+      // Create the Similar Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Similar Face",
+        "#",
+        "fa fa-clock-o font-warning-30 pr-4",
+        "font-warning-30 badges warning"
+      );
+
+      // Append the Similar Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+    
+    // Check for Similar Face skipped
+    if (similar_status === 'skipped') {
+      // Create the Similar Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Similar Face",
+        "#",
+        "fa fa-check-circle font-success-30 pr-4",
+        "font-success-30 badges not-found"
+      );
+
+      // Append the Similar Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+    
+    // Check for Similar Face pending
+    if (similar_status === 'pending') {
+      // Create the Similar Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Similar Face",
+        "#",
+        "fa fa-clock-o font-warning-30 pr-4",
+        "font-warning-30 badges warning"
+      );
+
+      // Append the Similar Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+
+    // Check for Fraud Face
+    if (fraud_status === 'found') {
+      // Create the Fraud Face badge section
+      var fraudFaceSection = createBadgeSection(
+        "Fraud Face",
+        `show_similar_faces('{% url "face_recognition:get_similar_faces" app_obj.id %}', {{ app_obj.id }}); `,
+        "fa fa-exclamation-circle font-error-30 pr-4",
+        "font-error-30 badges found"
+      );
+      // Append the Fraud Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(fraudFaceSection);
+    }
+
+    // Check for Fraud Face not_found
+    if (fraud_status === 'not_found') {
+      // Create the Fraud Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Fraud Face",
+        "#",
+        "fa fa-check-circle font-success-30 pr-4",
+        "font-success-30 badges not-found"
+      );
+
+      // Append the Fraud Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+
+    // Check for Fraud Face checked
+    if (fraud_status === 'checked') {
+      // Create the Fraud Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Fraud Face",
+        "#",
+        "fa fa-check-circle font-success-30 pr-4",
+        "font-success-30 badges not-found"
+      );
+
+      // Append the Fraud Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+    
+    // Check for Fraud Face waiting
+    if (fraud_status === 'waiting') {
+      // Create the Fraud Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Fraud Face",
+        "#",
+        "fa fa-clock-o font-warning-30 pr-4",
+        "font-warning-30 badges warning"
+      );
+
+      // Append the Fraud Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+    
+    // Check for Fraud Face skipped
+    if (fraud_status === 'skipped') {
+      // Create the Fraud Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Fraud Face",
+        "#",
+        "fa fa-check-circle font-success-30 pr-4",
+        "font-success-30 badges not-found"
+      );
+
+      // Append the Fraud Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+    
+    // Check for Fraud Face pending
+    if (fraud_status === 'pending') {
+      // Create the Fraud Face badge section
+      var similarFaceSection = createBadgeSection(
+        "Fraud Face",
+        "#",
+        "fa fa-clock-o font-warning-30 pr-4",
+        "font-warning-30 badges warning"
+      );
+
+      // Append the Similar Face section to the existing 'p' element
+      var pElement = document.getElementById("similar-face-tabs");
+      pElement.appendChild(similarFaceSection);
+    }
+    {% endif %}
+
+  }
+  
+  var tabFraud = document.getElementById('fraudster');
+  var tabAllUser = document.getElementById('all-user');
+  var buttonFraud = document.getElementById('button-fraud_recognition_data_row');
+  var buttonAllUser = document.getElementById('button-face_recognition_data_row');
+  var divFraud = document.getElementById('fraud_recognition_data_row');
+  var divFraudNoData = document.getElementById('fraud_recognition_data_not_found');
+  var divAllUser = document.getElementById('face_recognition_data_row');
+  tabAllUser.addEventListener('click', function(){
+      divFraud.classList.add('hide');
+      buttonFraud.classList.add('hide');
+      divAllUser.classList.remove('hide');
+      buttonAllUser.classList.remove('hide');
+  });
+  tabFraud.addEventListener('click', function(){
+      divAllUser.classList.add('hide');
+      buttonAllUser.classList.add('hide');
+      divFraud.classList.remove('hide');
+      buttonFraud.classList.remove('hide');
+  });
+</script>

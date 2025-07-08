@@ -1,0 +1,272 @@
+<html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: "Nunito";
+                font-style: normal;
+                color: #404040;
+            }
+            p {
+                margin: 0;
+            }
+            .left {
+                float: left;
+            }
+            .right {
+                float: right;
+            }
+            .container {
+                width: 595px;
+                margin: 0 auto;
+            }
+            .header {
+                padding: 24px;
+            }
+            .body {
+                padding: 0 24px;
+            }
+            .body > div {
+                padding: 24px 0;
+            }
+            .clearfix:before, .clearfix:after {
+                content: "";
+                display: table;
+            }
+            .clearfix:after {
+                clear: both;
+            }
+            .header .left {
+                width: 267px;
+            }
+            .right img {
+                margin-top: 8px;
+            }
+            .title {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 24px;
+                letter-spacing: 0px;
+            }
+            .header .content {
+                font-weight: 400;
+                font-size: 10px;
+                line-height: 15px;
+                letter-spacing: 0px;
+            }
+            .body-content {
+                padding: 0 24px;
+                border-top: 2px dashed #E0E0E0;
+                border-bottom: 2px dashed #E0E0E0;
+            }
+            .body-header .content {
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 17px;
+                letter-spacing: 0px;
+            }
+            .body-header .content span {
+                font-weight: 700;
+            }
+            .body-header .right p {
+                font-weight: 700;
+                font-size: 12px;
+                line-height: 17px;
+                text-align: center;
+            }
+            .body-header .right div {
+                padding: 4px 8px;
+                border: 1px solid #66CDF6;
+                background: #B2E6FA;
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 22px;
+                color: #008AC0;
+                width: 166px;
+                text-align: center;
+            }
+            .body-content p {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 24px;
+            }
+            .body-content table, .body-footer table {
+                border: none;
+                width: 100%;
+            }
+            .body-content td {
+                padding: 12px 16px;
+            }
+            .body-content tr:nth-child(odd) {
+                background: #EAF0FE;
+            }
+            .body-content td:nth-child(1) {
+                text-align: left;
+                color: #757575;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 24px;
+            }
+            .body-content td:nth-child(2), .body-footer td:nth-child(2) {
+                text-align: right;
+            }
+            .body-content td:nth-child(2) {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 24px;
+            }
+            .body-footer {
+                margin-top: 94px;
+            }
+            .body-footer td {
+                font-weight: 400;
+                font-size: 10px;
+                line-height: 15px;
+            }
+            .body-footer td a {
+                text-decoration-line: underline;
+                color: #404040;
+            }
+            .question {
+                padding: 16px;
+                background: #F5F5F5;
+                border-radius: 8px;
+                font-weight: 700;
+                font-size: 12px;
+                line-height: 17px;
+                float: right;
+            }
+            .question p {
+                display: inline-block;
+                padding-left: 8px;
+                position: relative;
+                top: -4px;
+            }
+            .question img {
+                width: 16px;
+                height: 16px;
+            }
+            .email img, .phone img {
+                width: 12px;
+                height: 12px;
+            }
+            .email p, .phone p {
+                display: inline-block;
+                position: relative;
+                top: -2px;
+            }
+            .logo {
+                width: 80px;
+                height: 35px;
+            }
+            .edu-logo {
+                float: left;
+                margin-right: 8px;
+                width: 32px;
+                height: 32px;
+            }
+            .edu-detail {
+                padding-left: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header clearfix">
+                <div class="left">
+                    <p class="title">Bukti Pembayaran</p>
+                    <p class="content">
+                        Bukti pembayaran ini adalah bukti pembayaran yang sah,
+                         dan diterbitkan atas nama pengguna
+                    </p>
+                </div>
+                <div class="right">
+                    <img src="https://statics.julo.co.id/education/Logo.png" class="logo" />
+                </div>
+            </div>
+            <div class="body">
+                <div class="body-header clearfix" style="border-top: 1px solid #E0E0E0;">
+                    <div class="left">
+                        <img src="{{ product_foreground_icon_url }}" class="edu-logo"/>
+                        <div class="edu-detail">
+                            <p class="title">{{ product_display_name }}</p>
+                            <p class="content"><span>Tanggal</span> {{ transaction_date }}</p>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <p>No Referensi Bank</p>
+                        <div>{{ bank_reference_number }}</div>
+                    </div>
+                </div>
+                <div class="body-content">
+                    <p>Detail Pembayaran</p>
+                    <table cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>Rumah Sakit</td>
+                            <td>{{ healthcare_platform_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Bank</td>
+                            <td>{{ bank_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>No. Rekening / Virtual Account</td>
+                            <td>{{ account_number }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nama Pasien</td>
+                            <td>{{ healthcare_user_fullname }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nominal</td>
+                            <td>Rp{{ amount }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="body-footer clearfix">
+                    <table cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>
+                                <img src="https://statics.julo.co.id/education/Logo.png" class="logo" />
+                            </td>
+                            <td>
+                                <div class="question">
+                                    <img src="https://statics.julo.co.id/education/question.png" />
+                                    <p>Ada pertanyaan? Hubungi kami</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="www.julo.co.id" style="text-decoration: none;">www.julo.co.id</a></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>Office 88@Kasablanka Tower A,</td>
+                            <td>
+                                <div class="phone">
+                                    <img src="https://statics.julo.co.id/education/phone-2.png" />
+                                    <p>021-50919034 atau 021-50919035.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Jl. Casablanca No.Kav 88, RT.2/RW.12,</td>
+                            <td>
+                                <div class="email">
+                                    <img src="https://statics.julo.co.id/education/mail-2.png" />
+                                    <p>cs@julo.co.id</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Menteng Dalam, Tebet, South Jakarta City, Jakarta 12870</td>
+                            <td>(Jam operasional Senin - Minggu 08.00-21.00 WIB)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

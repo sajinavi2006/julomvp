@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% load static from staticfiles %}
+{% block extrahead %}
+    {{block.super}}
+    <link href="{% static 'theme/plugins/bower_components/js-sequence-diagrams/dist/sequence-diagram-min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+    {{block.super}}
+    <h2>{{workflow_name}}</h2>
+        <div class="diagram">
+            {% for path in diagrams %}
+                {{path.text|safe}}<br/>
+            {% endfor %}
+        </div>
+    <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bower-webfontloader/webfont.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/snap.svg/dist/snap.svg-min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/underscore/underscore-min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/js-sequence-diagrams/dist/sequence-diagram-min.js' %}"></script>
+    <script>
+      //var d = Diagram.parse(dtext);
+      var options = {theme: 'simple'};
+      $(".diagram").sequenceDiagram(options);
+    </script>
+{% endblock %}

@@ -1,0 +1,892 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+
+
+{% block additional_title %}Julo App - status: {{ status_code_now }}{% endblock %}
+
+{% block meta %}
+    <!-- remarked if for production -->
+    <!-- <meta http-equiv="refresh" content="3" > -->
+{% endblock %}
+
+{% load static from staticfiles %}
+{% block css_common %}
+span.status-tag{
+  color: #c7254e; 
+  background-color: #f9f2f4;
+  padding: 2px 4px; 
+  font-size: 90%; 
+  border-radius: 4px;
+  width: 50px;
+  display: block;
+  text-align: center; 
+}
+span.status-tag.success{
+  background: #C8F1E8; color: #1E7461; 
+}
+{% endblock %}
+
+{% block breadcrumb_title %}Data Aplikasi {% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li class="active">{{ status_code_now }}</li>
+{% endblock %}
+
+{% block list_title %}Application - status code: <code>{{status_code_now}}</code> {% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+
+ {% block content-list %}
+
+  {% block search-form %}{% search_form_app form_search obj_search "with_status" err_msg %}{% endblock %}
+
+  <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size={{results_per_page}}>
+    <thead>
+      <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+        <th data-toggle="true" data-sort-ignore="true" class="julo-sort-number"> No </th>
+        <th colspan="2" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="id"> App-ID</th>
+        <th data-hide="phone" data-sort-ignore="true"> AplNum</th>
+        <th class="text-center" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="product_line__product_line_type"> PLine</th>
+        <th data-sort-ignore="true" class="julo-sort-header" data-julo-sort="partner">Partner</th>
+        <th data-sort-ignore="true" class="julo-sort-header" data-julo-sort="email"> Email</th>
+        <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="fullname"> Full Name</th>
+        <th data-toggle="phone" data-sort-ignore="true" class="julo-sort-wider julo-sort-header" data-julo-sort="application_status__status_code"> Status</th>
+
+        {% if status_code_now == '130' %}
+          <th data-toggle="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="noteUdate"> Note UDate</th>
+        {% endif %}
+
+        {% if status_code_now == '138' %}
+          <th data-toggle="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="noteUdate"> Note UDate</th>
+        {% else %}
+          <th data-toggle="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="udate"> UDate</th>
+        {% endif %}
+
+        {% if status_code_now in change_reasons_status %}
+          <th data-togle="phone" data-sort-ignore="true" class="julo-sort-wider"> Status Change Reason</th>
+          {% if status_code_now == "Courtesy Call - 180" %}
+            <th  data-sort-ignore="true" class="julo-sort-header" data-julo-sort="disbursementDate">Disbursement Date</th>
+          {% endif %}
+
+        {% else %}
+          <th data-hide="phone" data-sort-ignore="true"> Cust-ID</th>
+          <th data-toggle="phone" data-sort-ignore="true"> Bank Account Num </th>
+          {% if status_code_now == '121' %}
+              <th data-sort-ignore="true"> Priority </th>
+          {% else %}
+              <th data-toggle="phone" data-sort-ignore="true"> XID </th>
+          {% endif %}
+          {% if status_code_now == "Courtesy Call - 180" %}
+            <th  data-sort-ignore="true" class="julo-sort-header" data-julo-sort="disbursementDate">Disbursement Date</th>
+          {% endif %}
+          <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">Is Active</th>
+          <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">Is Deleted</th>
+          <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">Actions</th>
+        {% endif %}
+
+        <th data-hide="all"> Detail </th>
+      </tr>
+    </thead>
+    <div class="form-inline padding-bottom-15">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-xs-12 hidden-xs">
+
+        </div>
+      </div>
+
+    </div>
+    <tbody>
+      {% if object_list %}
+        {% for object in object_list %}
+          <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+
+            <!-- Start of Table Row -->
+            <td>
+                {%if object.application_status.status_code in app_lock_status %}
+                  <a href="#" class="appcheck" onclick="check_locked_data('{% url "app_status:change_status" object.id %}', {{ object.id }});">
+                    {{ object.id|default:"-"|safe}}
+                  </a>
+                  {% checkusergroup in ['crm_revamp_tester'] %}
+                    {% if object.crm_revamp_url and object.application_status_id == 124 %}
+                    -
+                    <a href="#" class="appcheck"
+                       onclick="check_locked_data('{{ object.crm_revamp_url  }}?csrftoken={{ csrf_token }}', {{ object.id }});"
+                    >
+                      NEW
+                    </a>
+                    {% endif %}
+                  {% endcheckusergroup %}
+                {%else %}
+                  <a href="{% url 'app_status:change_status' object.id %}" target="_blank">
+                    {{ object.id|default:"-"|safe}}
+                  </a>
+                  {% checkusergroup in ['crm_revamp_tester'] %}
+                    {% if object.crm_revamp_url and object.application_status_id == 124 %}
+                      -
+                      <a href="{{ object.crm_revamp_url }}?csrftoken={{ csrf_token }}" target="_blank">NEW</a>
+                    {% endif %}
+                  {% endcheckusergroup %}
+                {%endif %}
+            </td>
+
+            <!-- App-ID -->
+            <td class="text-center">
+              {%if object.application_status.status_code in app_lock_status %}
+                {%if object.id in app_id_locked %}
+                    <span class="label label-danger lbl-sm lbl-rounded pull-right"><i class="fa fa-lock"></i></span>
+                {%else %}
+                    <span class="label label-custom lbl-sm lbl-rounded pull-right"><i class="fa fa-unlock"></i></span>
+                {%endif%}
+              {%endif %}
+            </td>
+
+
+            <!-- AplNum -->
+            <td class="text-center">
+              {{ object.application_number|default:"-"|safe}}
+            </td>
+
+            <!-- Product Line -->
+            <td class="text-center">
+              {% include "object/app_status/include/td_prod_line.html" %}
+            </td>
+
+            <!-- Partner Name -->
+            <td class="text-center">
+                {%if object.partner_id %}
+                    {% if object.partner.type != "receiver" %}
+                      {{ object.partner.name }}
+                    {% else %}
+                        -
+                    {% endif %}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+
+            <!-- Email -->
+            <td>
+                {{ object.customer.email|default:"-"|safe}}
+            </td>
+
+            <!-- Full Name -->
+            <td>
+                {% include "object/app_status/include/td_fullname.html" %}
+            </td>
+
+            <!-- Status -->
+            <td>
+                <code>{{ object.application_status.status_code|default:"-"|safe}}</code>
+            </td>
+
+            <!-- APPLICANT_CALLS_SUCCESSFUL -->
+            {% if status_code_now == '130' %}
+              <td>
+                <strong>
+                  {{ object.max_cdate_application_note|date:"Y-m-d H:i:s"|safe }}
+                </strong>
+              </td>
+            {% endif %}
+
+            <!-- VERIFICATION_CALLS_ONGOING -->
+            <td>
+              {% if status_code_now == '138' %}
+                <strong>
+                  {{ object.max_cdate_application_note|date:"Y-m-d H:i:s"|safe }}
+                </strong>
+              {% else %}
+                <strong>
+                  {{ object.udate|date:"Y-m-d H:i:s"|safe }}
+                </strong>
+              {% endif %}
+            </td>
+
+            <!-- change_reasons_status -->
+            {% if status_code_now in change_reasons_status %}
+              <td style="width:30%">
+                {{ object.applicationhistory_set.last.change_reason }}
+              </td>
+            {% else %}
+
+              <td>
+                  {{ object.customer_id|default:"-"|safe}}
+              </td>
+
+              <!-- Bank Account Number -->
+              <td>
+                  {{ object.bank_account_number|default:"-"|safe}}
+              </td>
+
+              <td class="text-center">
+                  {% if status_code_now == '121' %}
+                      <button class="btn btn-info btn-block" onclick="check_priority({{ object.id }});">
+                          Cek Prioritas
+                      </button>
+                  {% else %}
+                      {{ object.application_xid|default:"-"|safe}}
+                  {% endif %}
+              </td>
+              <td class="text-center">
+                {%if object.customer.is_active %}
+                <span class="status-tag success">True</span>
+                {% else %}
+                <span class="status-tag">False</span>
+                {% endif %}
+              </td>
+  
+              <td class="text-center">
+                {%if object.is_deleted %}
+                <span class="status-tag success">True</span>
+                {% else %}
+                <span class="status-tag">False</span>
+                {% endif %}
+              </td>
+
+              {% if status_code_now == "Courtesy Call - 180" %}
+                <td class="text-center">
+                    {{ object.disbursement_date|date:"Y-m-d H:i:s"|default:"-"|safe }}
+                </td>
+              {% endif %}
+              <td class='text-center'>
+                    <div class="btn-group m-r-10">
+                    <button aria-expanded="false" data-toggle="dropdown" class="btn btn-primary btn-rounded dropdown-toggle waves-effect waves-light" type="button">
+                       --Pilih-- <span class="caret"></span>
+                    </button>
+                      <ul role="menu" class="dropdown-menu">
+                        <li>
+                          <a href="{% url 'app_status:verification_check' object.id %}" title='verifikasi cek' target="_blank">
+                              <button class="btn btn-success btn-block">V.CheckList </button>
+                          </a>
+                        </li>
+
+                        {% if object.application_status.status_code >= 130 %}
+                          <li>
+                            <a href="{% url 'offers:list' %}?search_q={{object.id}}" title='Offers'  target="_blank">
+                                <button class="btn btn-warning btn-block">Offers</button>
+                            </a>
+                          </li>
+                        {% endif %}
+
+                        {%if object.product_line.product_line_code in product_line_STL %}
+                          <li>
+                             <a href="{% url 'app_status:sphp_stl' object.id %}" title='sphp' target="_blank">
+                                <button class="btn btn-danger btn-block">SPHP-STL</button>
+                            </a>
+                          </li>
+                        {%elif object.product_line.product_line_code in product_line_GRAB %}
+                          <li>
+                             <a href="{% url 'app_status:sphp' object.id %}" title='sphp' target="_blank">
+                                <button class="btn btn-success btn-block">SPHP-GRAB</button>
+                            </a>
+                          </li>
+                        {% else %}
+                          <li>
+                             <a href="{% url 'app_status:sphp' object.id %}" title='sphp' target="_blank">
+                                <button class="btn btn-info btn-block">SPHP-MTL</button>
+                            </a>
+                          </li>
+                        {% endif %}
+
+                        {%if object.application_status.status_code in app_lock_status %}
+                          {%if object.id in app_id_locked %}
+                            <li>
+                              <a href="#" title='lock aplikasi ini' onclick="set_unlocked_app({{ object.id }});">
+                                  <button class="btn btn-danger btn-block">Unlock Aplikasi</button>
+                              </a>
+                            </li>
+                          {%else %}
+                            <li>
+                              <a href="#" title='lock aplikasi ini' onclick="set_locked_app({{ object.id }});">
+                                  <button class="btn btn-danger btn-block">Lock Aplikasi</button>
+                              </a>
+                            </li>
+                          {%endif%}
+                        {%endif %}
+                      </ul>
+                    </div>
+                </td>
+              {% endif %}
+              <td>
+                {% if status_code_now == '138' %}
+                {% include "object/app_status/include/td_notes_details.html" %}
+                {% else %}
+                {% include "object/app_status/include/td_details.html" %}
+                {% endif %}
+              </td>
+            </tr>
+        {% endfor %}
+      {% else %}
+          <tr>
+              <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+          </tr>
+      {% endif %}
+
+    </tbody>
+  </table>
+  <tfoot>
+    <tr>
+      <td colspan="5"><div class="text-right">
+          {% pagination2 is_paginated paginator page_obj q 4 %}
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+
+
+ <!-- /.modal payment event-->
+ <div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title" id="modal_title">Title</h4> </div>
+            <div class="modal-body" id="modal_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="close_btn()">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ <!-- /.modal payment event-->
+ <div id="responsive-modal-priority" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title" id="modal_priority_title">Title</h4> </div>
+            <div class="modal-body" id="modal_priority_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-success">
+                <h4 class="modal-title" id="modal-locked-app_title">Title</h4> </div>
+            <div class="modal-body" id="modal-locked-app_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning waves-effect" id="see_app" data-dismiss="modal" onclick="see_only_btn();">Lihat Aplikasi</button>
+                <button type="button" class="btn btn-custom waves-effect" id="lock_edit_app" data-dismiss="modal" onclick="go_locked_app();">Lock dan Edit Aplikasi</button>
+                <button type="button" class="btn btn-default waves-effect" id="cancel_app" data-dismiss="modal" onclick="close_btn();">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-see-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-success">
+                <h4 class="modal-title" id="modal_see_title">Title</h4> </div>
+            <div class="modal-body" id="modal_see_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning waves-effect" data-dismiss="modal" onclick="see_only_btn();">Lihat Aplikasi</button>
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+  // using jQuery
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      // console.log(cookieValue);
+      return cookieValue;
+  }
+
+  function clearSearchForm(){
+    $("#id_search_q").val('');
+    $("#id_sort_q").val('');
+    $("#id_sortby").val('');
+    $("#id_status_app").val([]);
+    $("#id_status_now_1").val([]);
+    $("#id_status_now_0").val([]);
+    check_bebas_selected();
+    try{
+        document.getElementById('id_err_msg').innerHTML='';
+    }
+    catch(err) {
+    }
+  }
+    function goBack() {
+        window.history.back();
+    }
+
+  function check_bebas_selected(){
+    //console.log("check_bebas_selected");
+    var status = $("#id_status_now_1").is(':checked');
+    if (status==true){
+        $("#id_toggle_tgl_entry").toggle(true);
+    }else{
+        $("#id_toggle_tgl_entry").toggle(false);
+    }
+  }
+  function check_priode_selected(){
+    //console.log("check_priode_selected");
+    var status_0 = $("#id_status_now_0").is(':checked');
+    var status_1 = $("#id_status_now_1").is(':checked');
+    if (status_0==true || status_1==true){
+      $("#id_pencarian_tgl").toggle();
+    }
+  }
+
+  window.onload = function() {
+      var ex1 = document.getElementById('id_status_now_0');
+      var ex2 = document.getElementById('id_status_now_1');
+      ex1.onclick = handler_0;
+      ex2.onclick = handler_1;
+
+      // disabled tgl start and end
+      check_bebas_selected();
+      check_priode_selected();
+  }
+  function handler_0() {
+      // console.log('clicked 0');
+      var status = $("#id_status_now_0").is(':checked');
+      if (status==true){
+        $("#id_toggle_tgl_entry").toggle(false);
+      }
+  }
+  function handler_1() {
+      //console.log('clicked 1');
+      check_bebas_selected();
+  }
+
+  // Daterange picker
+  $('.input-daterange-timepicker').daterangepicker({
+      timePicker: true,
+      format: 'DD/MM/YYYY H:mm',
+      timePickerIncrement: 5,
+      timePicker12Hour: true,
+      timePickerSeconds: false,
+      buttonClasses: ['btn', 'btn-sm'],
+      applyClass: 'btn-danger',
+      cancelClass: 'btn-inverse'
+  });
+
+  function check_localStorage(){
+    if (typeof(Storage) !== "undefined") {
+        console.log("Code for localStorage/sessionStorage.");
+        return 0;
+    } else {
+        console.log("Sorry! No Web Storage support..");
+        return -1;
+    }
+  }
+
+  function set_localStorage(key, value){
+    if(check_localStorage()){
+      localStorage.setItem(key, value);
+      return 0;
+    }
+    return -1;
+  }
+
+  function get_localStorage(key){
+     if(check_localStorage()){
+      return localStorage.getItem(key);
+    }
+    return "";
+  }
+
+  function remove_localStorage(key){
+    if(check_localStorage()){
+      localStorage.removeItem(key);
+      return 0;
+    }
+    return -1;
+
+  }
+
+  function close_btn(){
+    window.location.reload(true);
+  }
+
+  function open_new_tabs(url_selected){
+    // If the web browser type is Safari
+    //alert(navigator.userAgent);
+    if(navigator.userAgent.indexOf("Chrome")!=-1)
+    {
+      //console.log('hihihi');alert('hihihi');
+      window.location.reload(true);
+      var win = window.open(url_selected, '_blank');
+      win.focus();
+    }
+    else {
+      //console.log('hohoho');alert('hohoho');
+      window.location.href = url_selected;
+    }
+  }
+
+  function update_url_selected(url_selected){
+    var bucket_code = '{{ bucket_code }}';
+    if (['997', '998', '999'].includes(bucket_code)){
+      return url_selected + "?bucket_code="+bucket_code+"&tab=redeem_cashback";
+    }
+    if (bucket_code == '996'){
+      return url_selected + "?bucket_code="+bucket_code+"&tab=overpaid_cases";
+    }
+    return url_selected;
+  }
+
+  function see_only_btn(){
+    var app_id = localStorage.app_selected; //get_localStorage("app_selected");
+    var url_selected = sessionStorage.getItem('app_url_selected') || ("/app_status/change_status/"+app_id);
+    url_selected = update_url_selected(url_selected);
+    open_new_tabs(url_selected);
+    sessionStorage.removeItem('app_url_selected')
+  }
+
+  function check_priority(app_id){
+    //console.log("check_priority");
+    //check using ajax
+    event.preventDefault();
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'app_status:check_priority' %}/", // the endpoint
+        type : "GET", // http method
+        data : { application_id: app_id,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            //console.log(json); // log the returned json to the console
+
+            if (json.result == "PRIORITY_02"){
+              //redirect this page
+              //console.log("success");
+              $("#modal_priority_title").html("PRIORITAS 02");
+              $("#modal_priority_body").html(app_id +": "+ json.reason);
+              $('#responsive-modal-priority').modal('show');
+            }
+            else if (json.result == "PRIORITY_01"){
+              //redirect this page
+              //console.log("success");
+              $("#modal_priority_title").html("PRIORITAS 01");
+              $("#modal_priority_body").html(app_id +": "+ json.reason);
+              $('#responsive-modal-priority').modal('show');
+            }
+            else{
+              //show notification that app was locked
+              //console.log(json.reason);
+              $("#modal_priority_title").html("Cek GAGAL");
+              $("#modal_priority_body").html(app_id +": "+ json.reason);
+              $('#responsive-modal-priority').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            //console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_priority_title").html("!! Error !!");
+            $("#modal_priority_body").html("Error on getting data from server");
+            $('#responsive-modal-priority').modal('show');
+        }
+
+
+    }); // end of ajax
+  }
+
+  function go_locked_app(){
+    var app_id = localStorage.app_selected; //get_localStorage("app_selected");
+    set_locked_n_edit_app(app_id);
+  }
+
+  function check_locked_data(url_selected, application_id){
+    //console.log("hohoho check data dulu ya {{request.user.username}}");
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'app_status:check_app_locked' %}/", // the endpoint
+        type : "GET", // http method
+        data : { application_id: application_id,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            // set var into localstorage
+            localStorage.app_selected = application_id;
+            sessionStorage.setItem('app_url_selected', url_selected)
+            //console.log(json); // log the returned json to the console
+            if (json.code == "03"){
+              //show notification that app free to locked
+              //console.log(json.reason);
+              // set var into localstorage
+              //set_localStorage("app_selected", application_id);
+              $("#modal-locked-app_title").html("Aplikasi Masih Belum di-Lock!");
+              $("#modal-locked-app_body").html("Aplikasi masih belum diproses dan Belum di-lock oleh Agent, Silahkan Pilih tombol aksi dibawah ini!");
+              $('#modal-locked-app').modal('show');
+            }
+
+            else if (json.code == "02"){
+              //show notification that app was locked and not allowed edit status changes
+              //console.log(json.reason);
+              $("#modal_see_title").html("Application Sudah di-Lock");
+              $("#modal_see_body").html("Aplikasi telah di lock oleh " + (json.reason[1]) + " dengan TS: " + (json.reason[3]) + ", Apakah Ingin Lanjut?");
+              $('#modal-see-locked-app').modal('show');
+            }
+            else if (json.code == "09"){
+              //show notification that app was locked and not allowed edit status changes
+              //console.log(json.reason);
+              $("#modal_see_title").html("Perhatian!!!");
+              $("#modal_see_body").html(""+ json.reason);
+              $('#modal-see-locked-app').modal('show');
+            }
+            else {
+              //redirect this page
+              //console.log("buka url donk :" + json.reason);
+              see_only_btn();
+            }
+            // console.log("success"); // another sanity check
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_title").html("!! Error !!");
+            $("#modal_body").html("Error on getting data from server");
+            $('#responsive-modal-success').modal('show');
+        }
+    }); // end of ajax
+
+  } // endof function
+
+  function set_locked_n_edit_app(app_id){
+    //console.log("set_locked_n_edit_app dulu ya ");
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'app_status:set_app_locked' %}/", // the endpoint
+        type : "GET", // http method
+        data : { application_id: app_id,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+
+            if (json.result == "successful!"){
+              //redirect this page
+              //console.log("sukses");
+              see_only_btn();
+            }
+            else {
+              //show notification that app was locked
+              //console.log(json.reason);
+              $("#modal_title").html("Lock Gagal");
+              $("#modal_body").html(""+ json.reason);
+              $('#responsive-modal-success').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_title").html("!! Error !!");
+            $("#modal_body").html("Error on getting data from server");
+            $('#responsive-modal-success').modal('show');
+        }
+    }); // end of ajax
+
+  }//end of function
+
+  function set_locked_app(app_id){
+    //console.log("set_locked_app dulu ya ");
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'app_status:set_app_locked' %}/", // the endpoint
+        type : "GET", // http method
+        data : { application_id: app_id,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            //console.log(json); // log the returned json to the console
+
+            if (json.result == "successful!"){
+              //redirect this page
+              //console.log("sukses");
+              $("#modal_title").html("Lock Success");
+              $("#modal_body").html("Application <code>" + app_id + "</code> Locked Succesfully");
+              $('#responsive-modal-success').modal('show');
+            }
+            else {
+              //show notification that app was locked
+              //console.log(json.reason);
+              $("#modal_title").html("Lock Gagal");
+              $("#modal_body").html(""+ json.reason);
+              $('#responsive-modal-success').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            //console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_title").html("!! Error !!");
+            $("#modal_body").html("Error on getting data from server");
+            $('#responsive-modal-success').modal('show');
+        }
+    }); // end of ajax
+
+  }//end of function
+
+  function set_unlocked_app(app_id){
+    //console.log("set_locked_app dulu ya ");
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'app_status:set_app_unlocked' %}/", // the endpoint
+        type : "GET", // http method
+        data : { application_id: app_id,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            //console.log(json); // log the returned json to the console
+
+            if (json.result == "successful!"){
+              //redirect this page
+              //console.log("sukses");
+              $("#modal_title").html("Un-Lock Success");
+              $("#modal_body").html(""+ json.reason);
+              $('#responsive-modal-success').modal('show');
+            }
+            else {
+              //show notification that app was locked
+              //console.log(json.reason);
+              $("#modal_title").html("Un-Lock Gagal");
+              $("#modal_body").html(""+ json.reason);
+              $('#responsive-modal-success').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            //console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_title").html("!! Error !!");
+            $("#modal_body").html("Error on getting data from server");
+            $('#responsive-modal-success').modal('show');
+        }
+
+
+    }); // end of ajax
+
+  }//end of function
+
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+
+      var url = '{{request.path}}';
+      if(url.includes('app_status')){
+        $('#list_sort_loan_status').remove();
+        $('#list_sort_payment_status').remove();
+        $('#list_sort_agent').remove();
+      }else if(url.includes('loan_status')){
+        $('#list_sort_app_status').remove();
+        $('#list_sort_payment_status').remove();
+        $('#list_sort_agent').remove();
+      }else if(url.includes('payment_status')){
+        $('#list_sort_app_status').remove();
+        $('#list_sort_loan_status').remove();
+      }
+
+      var sort_value = $("#id_sort_q").val();
+      $("#id_sortby").val(sort_value);
+  });
+
+  function setSortBy(){
+    var result = $("#id_sortby").val();
+    $("#id_sort_q").val(result);
+  }
+{% endblock %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <!-- Footable -->
+    <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+    <!--FooTable init-->
+    <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+     <!--Style Switcher -->
+    <script src="{% static 'default/js/julo-sorting.js' %}"></script>
+
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "admin/change_form.html" %}
+{% load admin_static %}
+
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+  <link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+  <style type="text/css">
+      .form-row {
+          overflow: visible;
+      }
+      .selectize-control {
+          min-width: 300px;
+          width: 50%;
+          display: inline-grid;
+      }
+      .field-promo_page{
+        border: none;
+      }
+  </style>
+{% endblock %}
+
+
+{% block admin_change_form_document_ready %}
+  {{ block.super }}
+  <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+  <script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      function initHideSection() {
+        function showValueSection(benefit_type) {
+          const currentSection = $(`.section_${benefit_type}`);
+          const allSections = $('[class*=section_]')
+
+          allSections.hide()
+          allSections.find('input,select,textarea').attr('disabled', true)
+
+          currentSection.show()
+          currentSection.find('input,select,textarea').attr('disabled', false)
+        }
+
+        const typeDom = $('#id_type');
+        showValueSection(typeDom.val());
+
+        typeDom.change(function() {
+          showValueSection($(this).val());
+        });
+      }
+
+      $('.selectize-choice').selectize();
+      initHideSection()
+
+    });
+  </script>
+{% endblock %}

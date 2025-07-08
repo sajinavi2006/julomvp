@@ -1,0 +1,147 @@
+<center>
+    <div style="width:600px;/* border: 1px solid black; */padding: 48px;">
+      <!-- header -->
+      <div style="/* border-bottom: 1px solid black; */padding: 10px;width: 536px;/* border: 1px solid black; */height: 42px;/* align-items: center; */margin: 6px;">
+        <div style="min-width: 204px;float:left;font-size: 24px;font-weight: 700;text-align: left;color: #404040;padding-top: 5px;">
+          Bukti Pembayaran
+        </div>
+        <div style="width: 88px;float: right;text-align: right;">
+          <img src="{{ image_url }}julo-logo.png">
+        </div>
+      </div>
+      <!-- end header -->
+      <!-- body -->
+      <div style="width: 536px;min-height: 51px;padding: 10px;">
+        <div style="min-width: 169px;float: left;">
+          <div style="width: 32px; height: 32px; float: left;">
+            <img id="path7230" src="{{ image_url }}ic_train_ticket.png">
+          </div>
+          <div style="min-width: 169px;height: 45px;float: left;">
+            <div style="font-style: normal;font-weight: 700;font-size: 16px;text-align: left;color: #404040;">
+              E-Ticket (Kereta Pergi)
+            </div>
+            <div style="font-style: normal;font-weight: 400;font-size: 12px;text-align: left;color: #9E9E9E;">
+              No. Pesanan  {{ train_transaction.sepulsa_transaction.transaction_code }}
+            </div>
+          </div>
+        </div>
+        <div style="min-width: 166px;height: 51px;float: right;">
+          <div id="kodebooking" class="kodebooking" style="min-width: 78px;height: 17px;font-style: normal;font-weight: 700;font-size: 12px;color: #404040;">
+            Kode Booking
+          </div>
+          <div id="frame34499" class="frame34499" style="background-color: #B2E6FA;min-width: 166px;height: 30px;border-radius: 5px;">
+            <div id="abcdse" class="abcdse" style="color: #008AC0;float: left;padding-left: 46px;padding-top: 5px;padding-right: 8px;min-width: 58px;">
+              {{ train_transaction.booking_code }}
+            </div>
+            <div style="width: 20px;float: left;padding-top: 4px;margin-right: 4px;">
+              <img src="{{ image_url }}duplicate.png"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Train detail -->
+        <div style="padding: 24px 0px;width: 536px;height: 200px;border-top: 1px dashed #C2C2C2;border-bottom: 1px dashed #C2C2C2;">
+          <div style="width: 166px;height: 118px;float: left;">
+            <div style="color: #404040;min-width: 122px;height: 17px;text-align: left;font-style: normal;font-weight: 700;font-size: 12px;">
+              {{ train_transaction.train_name }}
+            </div>
+            <div style="color: #616161;text-align: left;font-style: normal;font-weight: 400;font-size: 12px;">
+              {{ train_transaction.train_class }}
+              (Subclass {{ train_transaction.train_subclass }})
+            </div>
+          </div>
+
+          <div style="float: right;min-width: 166px;height: 152px;">
+            <div style="font-style: normal;font-weight: 700;font-size: 12px;color: #404040;">
+              {{ schedule.date }}
+            </div>
+            <div>
+              <div style="float: left; text-align: left;min-width: 53px;height: 127px;">
+                <div style="min-width: 53px;height: 32px;padding: 5px 10px;">
+                  <div style="font-style: normal;font-weight: 700;font-size: 12px;padding: 2px;">
+                    {{ schedule.departure_time }}
+                  </div><div style="font-weight: 400;font-size: 10px;color: #9E9E9E;">
+                    {{ schedule.departure_date }}
+                  </div>
+                </div>
+                <div style="font-style: normal;font-weight: 400;font-size: 10px;padding: 22px 9px;color: #9E9E9E;">
+                  {{ train_duration }}
+                </div>
+                <div style="min-width: 53px;height: 32px;padding: 5px 10px;">
+                  <div style="font-style: normal;font-weight: 700;font-size: 12px;">
+                    {{ schedule.arrival_time }}
+                  </div>
+                  <div style="font-weight: 400;font-size: 10px;color: #9E9E9E;">
+                    {{ schedule.arrival_date }}
+                  </div>
+                </div>
+              </div>
+              <div id="frame66" class="frame66" style="float: right;min-width: 81px;height: 94px;padding: 17px 2px;text-align: left;height: 94px;/* border: 1px solid; *//* gap: 40px; */">
+                <div id="frame34493" class="frame34493">
+                  <div id="frame642" class="frame642" style="font-style: normal;font-weight: 700;font-size: 12px;color: #404040;padding: 5px 0px;">
+                    {{ depart_station.name }} ({{ depart_station.code }})
+                  </div>
+                  <div class="departure" style="font-style: normal;font-weight: 400;font-size: 10px;color: #404040;">
+                    {{ depart_station.city }}
+                  </div>
+                </div>
+                <div id="frame34494" class="frame34494" style="text-align: left;padding-top: 32px;">
+                  <div id="frame652" class="frame652" style="font-style: normal;font-weight: 700;font-size: 12px;color: #404040;padding: 5px 0px;">
+                    {{ destination_station.name }} ({{ destination_station.code }})
+                  </div>
+                  <div class="arrival" style="font-style: normal;font-weight: 400;font-size: 10px;color: #404040;">
+                    {{ destination_station.city }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- End train detail -->
+
+        <div style="width: 536px;min-height: 241px;">
+          <div style="font-style: normal;font-weight: 700;font-size: 16px;float: left;color: #404040;padding-bottom: 32px;padding-top: 32px;">
+            Detail Penumpang
+          </div>
+          <div id="table-order" class="table-order" style="width: 536px;/* height: 54px; */float: left;">
+            <div id="header-passenger" class="header-passenger" style="color: #FFFFFF;width: 536px;height: 54px;background: #00ACF0;border-radius: 4px 4px 0px 0px;float: left;font-style: normal;font-weight: 700;font-size: 14px;">
+              <div class="no3" style="float: left;min-width: 24px;text-align: left;padding-left: 10px;padding-top: 15px;">
+                No
+              </div>
+              <div class="namapenumpang" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 10px; */width: 164px;padding-left: 15px;padding-top: 15px;">
+                Nama Penumpang
+              </div>
+              <div class="jenis" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 10px; */padding-left: 15px;padding-top: 15px;width: 48px;">
+                Jenis
+              </div>
+              <div class="nomoridentitas" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 10px; */width: 133px;padding-left: 15px;padding-top: 15px;">
+                Nomor Indetitas
+              </div>
+              <div class="nomorkursi" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 11px; */width: 90px;padding-left: 15px;padding-top: 15px;">
+                Nomor Kursi
+              </div>
+            </div>
+            {% for passenger in passengers %}
+              <div class="detail-passenger2" style="font-style: normal;font-weight: 400;font-size: 12px;float: left; color: #404040;">
+                <div class="no3" style="float: left;min-width: 19px;text-align: left;padding-left: 15px;padding-top: 15px;/* float: left; */">
+                  {{ passenger.index }}
+                </div>
+                <div class="namapenumpang" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 10px; */width: 164px;padding-left: 15px;padding-top: 15px;">
+                  {{ passenger.name }}
+                </div>
+                <div class="jenis" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 10px; */padding-left: 15px;padding-top: 15px;width: 48px;">
+                  {{ passenger.type }}
+                </div>
+                <div class="nomoridentitas" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 10px; */width: 133px;padding-left: 15px;padding-top: 15px;">
+                  {{ passenger.identity_number }}
+                </div>
+                <div class="nomorkursi" style="float: left;float: left;width: 19px;text-align: left;/* padding: 15px 11px; */width: 90px;padding-left: 15px;padding-top: 15px;">
+                  {{ passenger.seat.wagon }} - {{ passenger.seat.column }}{{ passenger.seat.row }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </center>

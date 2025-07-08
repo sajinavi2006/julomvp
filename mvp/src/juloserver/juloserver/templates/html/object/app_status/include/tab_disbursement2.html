@@ -1,0 +1,26 @@
+{% if partner_banks %}
+  {% include "object/app_status/include/table_partner_name_bank_validation_readonly.html" %}
+{% elif object.loan.name_bank_validation_id %}
+  {% if object.application_status_id in julo_one_bank_name_status %}
+    {% include "object/app_status/include/table_name_bank_validation.html" %}
+    {% include "object/app_status/include/vendor_julo_balance_info.html" %}
+  {% else %}
+    {% include "object/app_status/include/table_name_bank_validation_readonly.html" %}
+  {% endif %}
+{% elif object.application_status_id == 163 %}
+  {% include "object/app_status/include/table_application_bank_info.html" %}
+  {% include "object/app_status/include/vendor_julo_balance_info.html" %}
+{% elif object.name_bank_validation_id and object.is_julo_one or is_grab or object.is_julo_one_ios %}
+  {% if object.application_status_id in julo_one_bank_name_status %}
+    {% include "object/app_status/include/table_name_bank_validation_julo_one.html" %}
+    {% include "object/app_status/include/vendor_julo_balance_info.html" %}
+  {% endif %}
+{% endif %}
+
+{% if object.application_status_id in disbursement_statuses %}
+  {% if partner_disbursement %}
+    {% include "object/app_status/include/table_partner_disbursement.html" %}
+  {% elif disbursement2 %}
+    {% include "object/app_status/include/table_disbursement.html" %}
+  {% endif %}
+{% endif %}

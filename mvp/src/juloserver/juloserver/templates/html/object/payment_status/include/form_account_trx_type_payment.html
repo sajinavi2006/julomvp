@@ -1,0 +1,106 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Payment Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input class="form-control mask" id="EtpPaymentAmount" maxlength="15" type="text">
+              <span class="input-group-addon" onclick="set_full_payment('EtpPaymentAmount');"><i class="icon-wallet" ></i></span>
+          </div>
+          <span class="help-block">
+            <small>Masukan besar pembayaran ...</small>
+          </span>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cashback Earned Monthly: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input maxlength="15" class="form-control" disabled="disabled" type="text" value="{{ max_cashback_earned|f_rupiahs:'no_currency'|safe}}">
+          </div>
+      </div>
+  </div>
+</div>
+<!-- end row -->
+
+<div class="row">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Available Credits: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input maxlength="15" class="form-control" disabled="disabled" type="text" value="{{ wallet_balance_available|f_rupiahs:'no_currency'|safe}}">
+          </div>
+          <span class="help-block">
+            <small>From previous loans ...</small>
+          </span>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Use Credits: </label>
+      <div class="col-md-12 col-sm-12">
+          <input id="EtpCredits" class="form-control" type="checkbox" style="width: 38px"><label for="cb_use_credits" style="visibility: hidden; display: block;">None</label>
+          <span class="help-block">
+            <small>Use all credits towards this payment ...</small>
+          </span>
+      </div>
+  </div>
+</div>
+<!-- end row -->
+
+<div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12">Paid Date: </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group">
+               <input class="form-control mydatepicker" id="EtpPaidDate" placeholder="dd-mm-yyyy" required="" type="text">
+               <span class="input-group-addon" id="EtpSetPaidDate" onclick="set_today('EtpPaidDate');"><i class="icon-calender"></i></span>
+            </div>
+            <span class="help-block">
+              <small>Masukan tanggal pembayaran  ...</small>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="LayoutPaymentMethod">
+  <div class="col-md-6 col-sm-12 form_event-group">
+    <label class="col-md-12 col-sm-12">Payment Method: </label>
+    <div class="col-md-12 col-sm-12">
+      <select class="form-control" id="EtpPaymentMethodId">
+        <option value="" selected="selected">-- Pilih --</option>
+        {% for payment_method in payment_methods %}
+          {% if payment_method.payment_method_code == '877332' %}
+            <option value="{{ payment_method.id }}">Permata Bank-Indirect</option>
+          {% elif payment_method.payment_method_code == '851598' %}
+            <option value="{{ payment_method.id }}">PERMATA Bank-Direct</option>
+          {% else %}
+            <option value="{{ payment_method.id }}">{{ payment_method.payment_method_new_name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+    <label class="col-md-12 col-sm-12">Payment Receipt: </label>
+    <div class="col-md-12 col-sm-12">
+      <input type="text" class="form-control" id="EtpPaymentMethodReceipt">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-12 col-sm-12">Catatan Payment by-Ops: </label>
+      <div class="col-md-12 col-sm-12">
+          <textarea class="form-control" cols="40" id="EtpNote" name="pmt_notes" placeholder="Masukan catatan pada payment ini" required="" rows="10"></textarea>
+          <span class="help-block">
+            <small>Silahkan inputkan catatan pada payment ini bila ada (free-text).</small>
+          </span>
+      </div>
+    </div>
+</div>
+

@@ -1,0 +1,1 @@
+{{name}}. 99% pelanggan kami sdh melakukan pembayaran angsuran per hari ini. Tanggung jawab di hal kecil akan membawa kepercayaan untuk hal besar. Bayar Angsuran {{ payment_number }} Anda {{due_amount}} segera. Cara bayar,  cek aplikasi.

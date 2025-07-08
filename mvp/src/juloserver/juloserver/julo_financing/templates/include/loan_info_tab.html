@@ -1,0 +1,58 @@
+{% load unit %}
+{% load static %}
+
+<table id="ca_table" class="ca_table table table-hover table-striped ">
+  <tbody>
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Tanggal pencairan dana</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+            : {{ object.loan.fund_transfer_ts |date:"d M Y"|default:"-" }}
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Tenor pinjaman</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+            : {{ object.loan.loan_duration }} bulan
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Tanggal jatuh tempo</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+           : {{ first_due_date |date:"d M Y"|default:"-" }}
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="col-xs-8">
+        <div class="col-xs-4 no-left">
+          <strong>Nomor SKRTP</strong>
+        </div>
+        <div class="col-xs-4">
+          <div class="input-group input-group-sm">
+           : {{ object.loan.loan_xid }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

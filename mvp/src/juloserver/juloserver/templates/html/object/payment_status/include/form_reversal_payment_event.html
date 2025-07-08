@@ -1,0 +1,96 @@
+{% load unit %}
+
+<div class="row">
+  <input id="frp_event_id" class="form-control" type="text" value="" style="display: none;">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Event Type: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <input id="frp_event_type" class="form-control" type="text" disabled="disabled" value="">
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Event Date: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <input id="frp_event_date" class="form-control" type="text" disabled="disabled" value="">
+          </div>
+      </div>
+  </div>
+</div>
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Event Payment: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input id="frp_event_payment" class="form-control" type="text" disabled="disabled" value="">
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Event Due Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input id="frp_event_due_amount" class="form-control" type="text" disabled="disabled" value="">
+          </div>
+      </div>
+  </div>
+</div>
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Payment Method: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <input id="frp_payment_method" class="form-control" type="text" disabled="disabled" value="">
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Payment Receipt: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <input id="frp_payment_receipt" class="form-control" type="text" disabled="disabled" value="">
+          </div>
+      </div>
+  </div>
+</div>
+<div class="row m-t-10">
+    <div class="col-md-6 col-sm-12 form_event-group" id="frp_reason_selectbox_container">
+        <label class="col-md-12 col-sm-12"> Reason: </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group m-t-10">
+                <select class="form-control" id="frp_reason" name="reason" onchange="ShowHIdeMoveToPaymentId()">
+                    {% for reason in payment_event_reversal_reason %}
+                        <option value="{{ reason }}">{{ reason }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div style="display: none;" class="col-md-6 col-sm-12 form_event-group m-5" id="frp_reason_container">
+        <label class="col-md-12 col-sm-12"> Move to Payment ID: </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group ">
+                <input id="frp_move_to_payment_id" class="form-control" type="text" disabled="disabled" value="">
+                <span class="input-group-addon btn-info" onclick="CheckPaymentDestination()">Check</span>
+            </div>
+        </div>
+    </div>
+  </div>
+<div class="row m-t-10">
+  <div style="display: none;" class="col-md-12 col-sm-12 p-10 form_event-group alert alert-danger" id="payment_dest_warning" role="alert"></div>
+</div>
+<div class="row m-t-10">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-12 col-sm-12">Catatan by-Ops: </label>
+      <div class="col-md-12 col-sm-12">
+          <textarea class="form-control" cols="40" id="RpeNote" name="pmt_notes" placeholder="catatan" required="" rows="10"></textarea>
+          <span class="help-block">
+            <small>Silahkan inputkan catatan bila ada (free-text).</small>
+          </span>
+      </div>
+    </div>
+</div>

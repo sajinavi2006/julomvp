@@ -1,0 +1,140 @@
+{% load unit utils %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-4 m-b-20">
+            <h4>SURAT PERJANJIAN HUTANG PIUTANG</h4>
+        </div>
+        <table>
+            <tbody>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;width: 150px;">Nama</th>
+                <td>:&nbsp;{{ object.fullname }}
+                </td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Customer ID</th>
+                <td>:&nbsp;{{ object.customer.id|default:"-no id-"|safe}}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir</th>
+                <td>:&nbsp;{{ object.dob|date:"d F Y" }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP</th>
+                <td>:&nbsp;{{ object.ktp|no_ktp|safe }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon #1</th>
+                <td>:&nbsp;+62 {{ object.mobile_phone_1|no_hp }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon #2</th>
+                <td>:&nbsp;+62 {{ object.mobile_phone_2|no_hp }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat</th>
+                <td>:&nbsp;
+                        {{ object.address_street_num }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kecamatan }} -
+                        {{ object.address_kelurahan }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kabupaten }} -
+                        {{ object.address_provinsi }}  <br/>&nbsp;&nbsp;
+                        {{ object.address_kodepos }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="row m-l-20 m-t-30">
+            <table>
+                <tbody>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">Pinjaman yang diminta </td>
+                    <td>: <b>{{ object.loan_amount_request|f_rupiahs:"no" }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Pinjaman yang disetujui </td>
+                    <td>: <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Cicilan yang disetujui </td>
+                    <td>: <b>{{ object.loan.installment_amount|f_rupiahs:"no" }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Bunga </td>
+                    <td>: <b>{{ object.loan.offer.product.interest_rate|percentage_100|safe }} %</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Tujuan Pinjaman </td>
+                    <td>: <b>{{ object.loan_purpose|default:"-"|safe }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top;">
+                    Uraian Tujuan Pinjaman </td>
+                    <td>: {{ object.loan_purpose_desc|default:"-"|safe }} </td>
+                </tr>
+                </tbody>
+            </table>
+        <p></p>
+        </div>
+
+        <br/>
+        <p>Selamat {{ object.fullname_with_title|safe }},</p>
+        <table>
+            <tbody>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">1.</td>
+                  <td>
+                      Atas rekomendasi Credit Analyst, pinjaman tunai JULO sebesar
+                      <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b> telah disetujui oleh JULO.
+                      Dana cair, nett setelah biaya admin adalah <b>{{ object.loan.loan_disbursement_amount|f_rupiahs:"no" }}</b>,
+                      akan di transfer ke rekening bank {{ object.fullname_with_title|safe }} tadi.
+                  </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">2.</td>
+                <td>
+                    {{ object.fullname_with_title|safe }} berjanji untuk melunasi pinjaman sebesar
+                    <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b> sebelum tanggal jatuh tempo ke rekening Virtual Account JULO
+                        di <b> {{ object.loan.julo_bank_name|safe }}</b>. No. VA & info selengkapnya dapat ditemukan di aplikasi JULO, menu “Aktivitas Pinjaman”.
+
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">3.</td>
+                <td>
+                  Kami menghimbau {{ object.fullname_with_title|safe }} untuk jangan sampai terlambat membayar.
+                    Jika bayar tepat waktu, pengajuan selanjutnya akan mudah di-ACC.
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        </br>
+        Setelah telepon ini,
+        <table>
+            <tbody>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">-</td>
+                <td>
+                  SPHP akan langsung terkirim via Aplikasi JULO.
+                    Mohon  tandatangani SPHP secara eletronik dan rekam suara {{ object.fullname_with_title|safe }}
+                    membacakan teks yang terdapat di dalam Aplikasi. SPHP ini sah sesuai Hukum Perdata.
+
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">-</td>
+                <td>
+                  Dana akan cair dalam 1 hari kerja.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <p>Semoga kita bisa bekerjasama dengan baik, {{ object.fullname_with_title|safe }}.
+            Selamat siang dan selamat beraktivitas kembali.</p>
+
+
+    </div>
+
+</div>

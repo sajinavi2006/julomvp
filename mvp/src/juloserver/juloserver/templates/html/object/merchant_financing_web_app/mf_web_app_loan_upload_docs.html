@@ -1,0 +1,139 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .mb10 {
+        margin-bottom: 10px;
+    }
+
+    .ml5 {
+        margin-left: 5px;
+    }
+
+    .w100 {
+        width: 100px;
+    }
+
+    .grid {
+        display: grid;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .lb-result {
+        font-size: larger;
+    }
+
+    .center {
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">Create New Loan</h3>
+</div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<p><b>Upload Supporting Documents</b></p>
+<form method="post" action="{% url 'bulk_upload:mf_webapp_csv_loan_upload_submit' %}" id="submitForm"
+    enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for data in datas %}
+        <input type="hidden" name="list_row_number" value="{{data.row_number}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.row_number}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.nik}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.distributor}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.funder}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.type}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.loan_request_date}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.interest_rate}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.provision_fee}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.financing_amount}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.financing_tenure}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.instalment_number}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.invoice_number}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.buyer_name}}">
+        <input type="hidden" name="{{data.row_number}}" value="{{data.buying_amount}}">
+    {% endfor %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>NIK</th>
+                <th>Loan Amount</th>
+                <th>Invoice File</th>
+                <th>Bilyet Giro</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ formset.management_form }}
+            {% for form in formset.forms %}
+            {% if forloop.counter < formset|length %} <tr>
+                {{ form.partner.as_hidden }}
+                {{ form.nik.as_hidden }}
+                {{ form.distributor.as_hidden }}
+                {{ form.funder.as_hidden }}
+                {{ form.type.as_hidden }}
+                {{ form.loan_request_date.as_hidden }}
+                {{ form.interest_rate.as_hidden }}
+                {{ form.provision_rate.as_hidden }}
+                {{ form.financing_amount.as_hidden }}
+                {{ form.financing_tenure.as_hidden }}   
+                {{ form.installment_number.as_hidden }}
+                {{ form.invoice_number.as_hidden }}
+                {{ form.buyer_name.as_hidden }}
+                {{ form.buying_amount.as_hidden }}
+
+                <td>{{ form.nik.value }}</td>
+                <td>{{ form.financing_amount.value }}</td>
+                <td>{{ form.invoice_file }}</td>
+                <td>{{ form.bilyet_file }}</td>
+                {% if form.errors %}
+                <td>{{ form.errors }}</td>
+                {% endif %}
+                </tr>
+                {% endif %}
+                {% endfor %}
+        </tbody>
+    </table>
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-6">
+            <a href="javascript:history.go(-1)">
+                <button type="button" class="btn btn-primary">
+                    <i class="fa fa-back"></i> Back
+                </button>
+            </a>
+        </div>
+        <div class="col-md-6 text-right">
+            <button class="btn btn-success" type="submit">Submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block script_common_list %}
+$('#submitForm').one('submit', function () {
+$(this).find('button[type="submit"]').attr('disabled', 'disabled');
+});
+{% endblock %}

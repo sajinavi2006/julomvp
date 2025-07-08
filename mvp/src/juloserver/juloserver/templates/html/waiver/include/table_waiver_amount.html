@@ -1,0 +1,213 @@
+{% load currency %}
+{% load format_date %}
+<div>
+    <p class="table-header">
+        <span class="glyphicon glyphicon-backward outstanding_amount-backward" aria-hidden="true" onclick="expandTable('outstanding_amount')"></span>
+        Waiver Amount
+    </p>
+    <table class="table table-bordered same-height">
+        <thead class="web-portal-thead">
+            <tr>
+                <th class="exclude-min payment-number align-middle">Bulan Tagihan</th>
+                {% if is_apply_waiver == True %}
+                    <th class="exclude-min align-middle">Apply waiver?</th>
+                {% endif %}
+                {% if original_program_name == "r4" and is_apply_waiver == False %}
+                    <th class="exclude-min align-middle">Apply principal waiver?</th>
+                {% endif %}
+                <th class="align-middle">Principal</th>
+                {% if original_program_name == "r6" and is_apply_waiver == False %}
+                    <th class="exclude-min align-middle">Apply interest waiver?</th>
+                {% endif %}
+                <th class="align-middle">Interest</th>
+                {% if original_program_name == "r5" and is_apply_waiver == False %}
+                    <th class="exclude-min align-middle">Apply late fee waiver?</th>
+                {% endif %}
+                <th class="align-middle">Late Fee</th>
+                <th class="align-middle">Total Waiver</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account_payment_request in account_payment_requests %}
+                <tr>
+                    <td class="align-middle extend-padding">
+                        {{ account_payment_request.due_date | format_month_year_to_locale_format }}
+                        <input type="hidden" name="account_payment_{{ account_payment_request.index }}" value="{{ account_payment_request.id }}" >
+                    </td>
+
+                    {% if account_payment_request.is_apply_waiver == True %}
+                        <td class="align-middle extend-padding">
+                            <input type="checkbox" value="{{ account_payment_request.index }}" checked {% if waiver_request_id %}disabled{% endif %} class="waiver_approval_account_payment_selector">
+                        </td>
+                        {% if account_payment_request.real_outstanding_principal_amount > 0 %}
+                            <td class="align-middle extend-padding input-padding">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input class="form-control mask" maxlength="15" type="text" style="width: 100px;" value="{{ account_payment_request.requested_principal_waiver_amount|add_separator }}" name="requested_principal_amount_{{ account_payment_request.index }}">
+                                </div>
+                            </td>
+                        {% else %}
+                            <td class="align-middle extend-padding">
+                                <span>-</span>
+                                <input type="hidden" value="0" name="requested_principal_amount_{{ account_payment_request.index }}">
+                            </td>
+                        {% endif %}
+                        {% if account_payment_request.real_outstanding_interest_amount > 0 %}
+                            <td class="align-middle extend-padding input-padding">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input class="form-control mask" maxlength="15" type="text" style="width: 100px;" value="{{ account_payment_request.requested_interest_waiver_amount|add_separator }}" name="requested_interest_amount_{{ account_payment_request.index }}">
+                                </div>
+                            </td>
+                        {% else %}
+                            <td class="align-middle extend-padding">
+                                <span>-</span>
+                                <input type="hidden" value="0" name="requested_interest_amount_{{ account_payment_request.index }}">
+                            </td>
+                        {% endif %}
+                        {% if account_payment_request.real_outstanding_late_fee_amount > 0 %}
+                            <td class="align-middle extend-padding input-padding">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Rp</span>
+                                    <input class="form-control mask" maxlength="15" type="text" style="width: 100px;" value="{{ account_payment_request.requested_late_fee_waiver_amount|add_separator }}" name="requested_late_fee_amount_{{ account_payment_request.index }}">
+                                </div>
+                            </td>
+                        {% else %}
+                            <td class="align-middle extend-padding">
+                                <span>-</span>
+                                <input type="hidden" value="0" name="requested_late_fee_amount_{{ account_payment_request.index }}">
+                            </td>
+                        {% endif %}
+                    {% else %}
+                        {% if is_apply_waiver == True and not waiver_request_id and account_payment_request.total_outstanding_amount > 0 %}
+                            <td class="align-middle extend-padding">
+                                <input type="checkbox" value="{{ account_payment_request.index }}" class="waiver_approval_account_payment_selector">
+                            </td>
+                        {% elif is_apply_waiver == True %}
+                            <td class="align-middle ext1end-padding">-</td>
+                        {% endif %}
+
+                        {% if original_program_name == "r4" and is_apply_waiver == False %}
+                            {% if account_payment_request.is_principal_waived == True and account_payment_request.requested_principal_waiver_amount >= 0 %}
+                                <td class="align-middle extend-padding">
+                                    <input type="checkbox" value="{{ account_payment_request.index }}" disabled checked class="waiver_approval_account_payment_selector">
+                                </td>
+                                {% if account_payment_request.requested_principal_waiver_amount > 0 %}
+                                    <td class="align-middle extend-padding input-padding">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Rp</span>
+                                            <input class="form-control mask" maxlength="15" type="text" style="width: 100px;" value="{{ account_payment_request.requested_principal_waiver_amount|add_separator }}" name="requested_principal_amount_{{ account_payment_request.index }}">
+                                        </div>
+                                    </td>
+                                {% else %}
+                                    <td class="align-middle extend-padding">
+                                        <span>-</span>
+                                        <input type="hidden" value="0" name="requested_principal_amount_{{ account_payment_request.index }}">
+                                    </td>
+                                {% endif %}
+                            {% else %}
+                                <td class="align-middle extend-padding">-</td>
+                                <td class="align-middle extend-padding">
+                                    <span>-</span>
+                                    <input type="hidden" value="0" name="requested_principal_amount_{{ account_payment_request.index }}">
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td class="align-middle extend-padding">
+                                <span>{{ account_payment_request.requested_principal_waiver_amount|add_rupiah_separator }}</span>
+                                <input type="hidden" value="{{ account_payment_request.requested_principal_waiver_amount|add_separator }}" name="requested_principal_amount_{{ account_payment_request.index }}">
+                            </td>
+                        {% endif %}
+
+                        {% if original_program_name == "r6" and is_apply_waiver == False %}
+                            {% if account_payment_request.is_interest_waived == True and account_payment_request.requested_interest_waiver_amount >= 0 %}
+                                <td class="align-middle extend-padding">
+                                    <input type="checkbox" value="{{ account_payment_request.index }}" disabled checked class="waiver_approval_account_payment_selector">
+                                </td>
+                                {% if account_payment_request.requested_interest_waiver_amount > 0 %}
+                                    <td class="align-middle extend-padding input-padding">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Rp</span>
+                                            <input class="form-control mask" maxlength="15" type="text" style="width: 100px;" value="{{ account_payment_request.requested_interest_waiver_amount|add_separator }}" name="requested_interest_amount_{{ account_payment_request.index }}">
+                                        </div>
+                                    </td>
+                                {% else %}
+                                    <td class="align-middle extend-padding">
+                                        <span>-</span>
+                                        <input type="hidden" value="0" name="requested_interest_amount_{{ account_payment_request.index }}">
+                                    </td>
+                                {% endif %}
+                            {% else %}
+                                <td class="align-middle extend-padding">-</td>
+                                <td class="align-middle extend-padding">
+                                    <span>-</span>
+                                    <input type="hidden" value="0" name="requested_interest_amount_{{ account_payment_request.index }}">
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td class="align-middle extend-padding">
+                                <span>{{ account_payment_request.requested_interest_waiver_amount|add_rupiah_separator }}</span>
+                                <input type="hidden" value="{{ account_payment_request.requested_interest_waiver_amount|add_separator }}" name="requested_interest_amount_{{ account_payment_request.index }}">
+                            </td>
+                        {% endif %}
+
+                        {% if original_program_name == "r5" and is_apply_waiver == False %}
+                            {% if account_payment_request.is_late_fee_waived == True and account_payment_request.requested_late_fee_waiver_amount >= 0 %}
+                                <td class="align-middle extend-padding">
+                                    <input type="checkbox" value="{{ account_payment_request.index }}" disabled checked class="waiver_approval_account_payment_selector">
+                                </td>
+                                {% if account_payment_request.requested_late_fee_waiver_amount > 0 %}
+                                    <td class="align-middle extend-padding input-padding">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Rp</span>
+                                            <input class="form-control mask" maxlength="15" type="text" style="width: 100px;" value="{{ account_payment_request.requested_late_fee_waiver_amount|add_separator }}" name="requested_late_fee_amount_{{ account_payment_request.index }}">
+                                        </div>
+                                    </td>
+                                {% else %}
+                                    <td class="align-middle extend-padding">
+                                        <span>-</span>
+                                        <input type="hidden" value="0" name="requested_late_fee_amount_{{ account_payment_request.index }}">
+                                    </td>
+                                {% endif %}
+                            {% else %}
+                                <td class="align-middle extend-padding">-</td>
+                                <td class="align-middle extend-padding">
+                                    <span>-</span>
+                                    <input type="hidden" value="0" name="requested_late_fee_amount_{{ account_payment_request.index }}">
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            <td class="align-middle extend-padding">
+                                <span>{{ account_payment_request.requested_late_fee_waiver_amount|add_rupiah_separator }}</span>
+                                <input type="hidden" value="{{ account_payment_request.requested_late_fee_waiver_amount|add_separator }}" name="requested_late_fee_amount_{{ account_payment_request.index }}">
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    <td class="align-middle extend-padding">
+                        <span>{{ account_payment_request.total_requested_waiver_amount|add_rupiah_separator }}</span>
+                        <input type="hidden" name="total_requested_amount_{{ account_payment_request.index }}" value="{{ account_payment_request.total_requested_waiver_amount }}">
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                {% if original_program_name == "r4" or is_apply_waiver == True %}
+                    <td class="align-middle" colspan="2">&nbsp;</td>
+                    <td class="align-middle extend-padding font-weight-bold" id="all_requested_principal_waiver_amount">{{ all_requested_principal_waiver_amount|add_rupiah_separator }}</td>
+                    <td class="align-middle extend-padding font-weight-bold" id="all_requested_interest_waiver_amount">{{ all_requested_interest_waiver_amount|add_rupiah_separator }}</td>
+                {% endif %}
+                {% if original_program_name == "r6" and is_apply_waiver == False %}
+                    <td class="align-middle" colspan="3">&nbsp;</td>
+                    <td class="align-middle extend-padding font-weight-bold" id="all_requested_interest_waiver_amount">{{ all_requested_interest_waiver_amount|add_rupiah_separator }}</td>
+                    {% endif %}
+                {% if original_program_name == "r5" and is_apply_waiver == False %}
+                    <td class="align-middle" colspan="4">&nbsp;</td>
+                {% endif %}
+                <td class="align-middle extend-padding font-weight-bold" id="all_requested_late_fee_waiver_amount">{{ all_requested_late_fee_waiver_amount|add_rupiah_separator }}</td>
+                <td class="align-middle extend-padding font-weight-bold" id="all_total_requested_waiver_amount">{{ all_total_requested_waiver_amount|add_rupiah_separator }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

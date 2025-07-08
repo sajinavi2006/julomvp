@@ -1,0 +1,208 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load model template default unit %}
+
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+    .ml5 {
+        margin-left: 5px;
+    }
+    .w100 {
+        width: 100px;
+    }
+    .w300 {
+        width: 300px;
+    }
+    .grid {
+        display: grid;
+    }
+    textarea {
+        resize: vertical;
+    }
+    .lb-result {
+        font-size: larger;
+    }
+    .center {
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">Balance Lender Edit</h3>
+</div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.lender_account_name.errors %} has-error {% endif %}">
+            <label class="w250">Lender Account Name:</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.lender_account_name }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.balance_amount.errors %} has-error {% endif %}">
+            <label class="w250">Balance Amount:</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.balance_amount }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.fund_by_lender.errors %} has-error {% endif %}">
+            <label class="w250">Fund by Lender:</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.fund_by_lender }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.fund_by_julo.errors %} has-error {% endif %}">
+            <label class="w250">Fund by Julo:</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.fund_by_julo }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.total_outstanding_principal.errors %} has-error {% endif %}">
+            <label class="w250">Total Outstanding Principal:</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.total_outstanding_principal }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-2 col-sm-4{% if form.priority.errors %} has-error {% endif %}">
+            <label class="w250">Priority:</label>
+            <div class="col-md-12 col-sm-12">
+                {{ form.priority }}
+            </div>
+        </div>
+    </div>
+
+    {% if disabled %}
+        <div class="row">
+            <label class="w250">Lender Loan Ledger List:</label>
+            <br>
+            <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" size={{page_obj.paginator.per_page}}>
+                <thead>
+                    <tr>
+                        <th>No. </th>
+                        <th>Application ID</th>
+                        <th>Loan ID</th>
+                        <th>OSP Amount</th>
+                        <th>Tag Type</th>
+                        <th>Fund By </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if object_list %}
+                    {% for object in object_list %}
+                        <tr>
+                            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+                            <td>
+                                <code>{{ object.application_id|default:"-"|safe }}</code>
+                            </td>
+                            <td>
+                                <code>{{ object.loan_id|default:"-"|safe }}</code>
+                            </td>
+                            <td>
+                                <code>{{ object.osp_amount|default:"-"|safe }}</code>
+                            </td>
+                            <td>
+                                <code>{{ object.tag_type|default:"-"|safe }}</code>
+                            </td>
+                            <td>
+                                <code>{{ object.notes|default:"-"|safe }}</code>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan=4 class='center'>Kosong - Tidak ada Data</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                      <td colspan="5">
+                          <div class="text-right">
+                              {% block pagination %}
+                                  {% pagination2 is_paginated paginator page_obj q 4 %}
+                              {% endblock %}
+                          </div>
+                      </td>
+                    </tr>
+                  </tfoot>
+            </table>
+        </div>
+        <br>
+    {% endif%}
+
+    <div class="row">
+        <div class="form-group">
+            <div class="col-xs-12">
+                <button class="mb10 btn btn-info" type="submit">Save</button>
+                <a href="{% url 'channeling_loan_portal:lender_osp_account_list' %}">
+                    <button id="back" type="button" class="mb10 btn btn-default">
+                        Kembali
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+{% if form.errors %}
+<div class="alert alert-danger">
+    {% for error in form.osp_amount.errors %}
+    <strong>{{ error|escape }}</strong>
+    {% endfor %}
+    {% for error in form.balance_amount.errors %}
+    <strong>{{ error|escape }}</strong>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+
+
+{% block script_additional %}
+<script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#id_osp_amount").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+        $("#id_balance_amount").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    })
+</script>
+{% endblock %}

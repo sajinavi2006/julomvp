@@ -1,0 +1,1 @@
+{{name}}, sy Rudolf dr JULO. Pinjaman Anda {{due_amount}} segera jatuh tempo pada {{due_date}}. Lakukan pembayaran melalui: {{url}}.

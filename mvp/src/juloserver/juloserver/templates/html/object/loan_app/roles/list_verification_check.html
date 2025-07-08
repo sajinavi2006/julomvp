@@ -1,0 +1,214 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+
+
+{% block meta %}
+    <!-- remarked if for production -->
+    <!-- <meta http-equiv="refresh" content="3" > -->
+{% endblock %}
+
+{% block breadcrumb_title %}Data Aplikasi {% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li class="active">Verifikasi Cek List</li>
+{% endblock %}
+ 
+{% block list_title %}DVC - Data Verifikasi Cek{% endblock %}
+{% block list_subtitle %}Silahkan masukan data pencarian{% endblock %}
+ 
+
+ {% block content-list %}
+
+  {% block search-form %}{% search_form_app form_search obj_search "Semua Data" err_msg %}{% endblock %}
+  
+  <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size="{{results_per_page}}">
+    <thead>
+      <tr>
+        <th data-toggle="true"> No </th>
+        <th> Email </th>
+        <th data-toggle="true"> Status </th>
+        <th data-hide="phone"> Identitas </th>
+        <th data-hide="all"> Detail </th>
+        <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">
+            Actions
+        </th>
+      </tr>
+    </thead>
+    <div class="form-inline padding-bottom-15">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-xs-12 hidden-xs">
+          
+        </div>
+      </div>
+
+    </div>
+    <tbody>
+      {% if object_list %}
+        {% for object in object_list %}
+          <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+            <td><a href="{% url 'loan_app:detail_verification_check' object.id %}">{{ object.customer.email|default:"-"|safe}}</a></td>
+            <td>
+                {{ object.application_status|default:"-"|safe}}
+            </td>
+            <td>
+                {% include "object/loan_app/include/td_identitas.html" %}
+            </td>
+            <td>
+              {% include "object/loan_app/include/app_td_detail.html" %}
+            </td>
+            
+            <td class='text-center'>
+                  <a href="{% url 'loan_app:update_verification_check' object.id %}" title='verifikasi cek'>
+                      <button class="btn btn-success btn-rounded m-b-5"><i class="fa fa-pencil fa-fw"></i> Verifikasi Cek </button>
+                  </a>
+              </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+          <tr>
+              <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+          </tr>
+      {% endif %}
+      
+    </tbody>
+  </table>
+  <tfoot>
+    <tr>
+      <td colspan="5"><div class="text-right">
+          {% pagination2 is_paginated paginator page_obj q 4 %}
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+ 
+{% endblock %}
+
+{% block script_bottom_inside %}
+  function clearSearchForm(){
+    $("#id_search_q").val('');
+    $("#id_status_app").val([]);
+    $("#id_status_now_1").val([]);
+    $("#id_status_now_0").val([]);
+    check_bebas_selected();
+    try{
+        document.getElementById('id_err_msg').innerHTML='';
+    }
+    catch(err) {
+    }
+  }
+    function goBack() {
+        window.history.back();
+    }       
+
+  function check_bebas_selected(){
+    //console.log("check_bebas_selected");
+    var status = $("#id_status_now_1").is(':checked');
+    if (status==true){
+        $("#id_toggle_tgl_entry").toggle(true);
+    }else{
+        $("#id_toggle_tgl_entry").toggle(false);
+    }
+  }
+  function check_priode_selected(){
+    //console.log("check_priode_selected");
+    var status_0 = $("#id_status_now_0").is(':checked');
+    var status_1 = $("#id_status_now_1").is(':checked');
+    if (status_0==true || status_1==true){
+      $("#id_pencarian_tgl").toggle();
+    }
+  }
+
+  window.onload = function() {
+      var ex1 = document.getElementById('id_status_now_0');
+      var ex2 = document.getElementById('id_status_now_1');
+      ex1.onclick = handler_0;
+      ex2.onclick = handler_1;
+      
+      // disabled tgl start and end
+      check_bebas_selected();
+      check_priode_selected();
+  }
+  function handler_0() {
+      // console.log('clicked 0');
+      var status = $("#id_status_now_0").is(':checked');
+      if (status==true){
+        $("#id_toggle_tgl_entry").toggle(false);
+      }
+  }
+  function handler_1() {
+      //console.log('clicked 1');
+      check_bebas_selected();
+  }  
+
+  // Daterange picker
+  $('.input-daterange-timepicker').daterangepicker({
+      timePicker: true,
+      format: 'DD/MM/YYYY H:mm',
+      timePickerIncrement: 5,
+      timePicker12Hour: true,
+      timePickerSeconds: false,
+      buttonClasses: ['btn', 'btn-sm'],
+      applyClass: 'btn-danger',
+      cancelClass: 'btn-inverse'
+  });
+      
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      /*
+      $('#mnu_dashboard_li a:first').removeClass('active');
+      $('#{{nav_menu}}').addClass('active');
+      $('#{{nav_menu}} a:first').addClass('active');
+      $('#{{nav_submenu}}').addClass('active');
+      $('#{{nav_subsubmenu}}').addClass('active');
+      */
+  });
+{% endblock %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+    
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <!-- Footable -->
+    <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+    
+    <!--FooTable init-->
+    <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+
+
+{% endblock %}

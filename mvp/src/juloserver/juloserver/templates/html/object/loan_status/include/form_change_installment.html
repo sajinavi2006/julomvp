@@ -1,0 +1,103 @@
+{% load unit %}
+
+<div class="alert alert-warning" id="payment_messages" style="display: none;">
+    <code id="cycleday_messages_body">
+            Silahkan field yang tersedia dengan inputan yang benar!
+    </code>
+</div>
+<strong> payment ke : {{ loan_obj.payment_set.not_paid.first.payment_number}} </strong>
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle day: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day|default:"-"|safe}}</strong>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle day Change Date: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day_change_date|date:"d M Y"|default:"-"|safe}}</strong>
+      </div>
+  </div>
+</div>
+
+<div class="row m-t-20">
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle Day Requested: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day_requested|default:"-"|safe}}</strong>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle Day Requested Date: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day_requested_date|default:"-"|safe}}</strong>
+      </div>
+  </div>
+</div>
+
+<div class="row m-t-20">
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> Installment Amount: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <input type="hidden" id="b_installment" value="{{ loan_obj.payment_set.not_paid.first.due_amount }}"/>
+          <strong>{{ loan_obj.payment_set.not_paid.first.due_amount|f_rupiahs:"no"|safe}}</strong>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> Payment Installment Date: </label>
+      <span class="hidden" id="id_due_date_initial">{{ loan_obj.payment_set.not_paid.first.due_date|date:"d-m-Y" }} </span>
+      <div class="col-md-12 col-sm-12 input-group">
+          <input class="form-control" id="id_old_due_date" name="id_old_due_date" placeholder="dd-mm-yyyy" size="None" type="text" required="true" value='' disabled="disabled">
+          <span class="input-group-addon"></span>
+      </div>
+  </div>
+</div>
+
+<div class="row m-10">
+  <hr>
+</div>
+<div class="row">
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> Payday: </label>
+      <span class="hidden" id="payday_initial">{{ loan_obj.application.payday|safe}}</span>
+      <div class="col-md-12 col-sm-12 input-group">
+          <input class="form-control" id="id_payday_initial" name="id_payday_initial" placeholder="dd" size="None" type="text" required="true" value="{{ loan_obj.application.payday|safe}}" disabled="disabled">
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> New Payday: </label>
+      <div class="col-md-12 col-sm-12 input-group">
+          <input class="form-control" id="id_payday_requested" name="id_payday_requested" placeholder="dd" size="None" type="text" required="true" value='{{ loan_obj.application.payday|safe}}'>
+          <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+      </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> New Payment Installment: </label>
+      <div class="col-md-12 col-sm-12 input-group">
+        <span class="input-group-addon">Rp. </span>
+        <span class="hidden" id="id_installment_initial">{{ loan_obj.payment_set.not_paid.first.due_amount|f_rupiahs:"no"|safe}}</span>
+        {{ installment_form.id_first_payment_installment }}
+        
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> New Payment Installment Date: </label>
+      <div class="col-md-12 col-sm-12 input-group">
+          <input class="form-control new_installement_date" id="id_cycle_date_requested" name="id_cycle_date_requested" placeholder="dd-mm-yyyy" size="None" type="text" required="true" value=''>
+          <span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
+      </div>
+  </div>
+ <span class="hidden" id="payment_number">{{ loan_obj.payment_set.not_paid.first.payment_number}}</span>
+</div>
+
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-6 m-t-10">
+    
+    <button type="button" class="btn btn-warning" onclick="set_initial_value();">Reset Value</button>
+  </div>
+</div>
+

@@ -1,0 +1,23 @@
+<div class="form-group">
+  <label for="kin_relationship">Hubungan <label class="badge badge-default badge-afs badge-afs-default"> Tidak wajib</label></label>
+  <select id="kin_relationship" class="form-control form-control-afs" onchange="validate_the_form('#kin_relationship', true);">
+    <option value="">Pilih</option>
+    <option value="Orang tua" {% if app_obj.kin_relationship == 'Orang tua' %} selected {% endif %}>Orang tua</option>
+    <option value="Saudara kandung" {% if app_obj.kin_relationship == 'Saudara kandung' %} selected {% endif %}>Saudara kandung</option>
+    <option value="Famili lainnya" {% if app_obj.kin_relationship == 'Famili lainnya' %} selected {% endif %}>Famili lainnya</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="kin_name">Nama Kontak Darurat <label class="badge badge-default badge-afs badge-afs-default"> Tidak wajib</label></label>
+  <input type="text" class="form-control form-control-afs" id="kin_name" onkeyup="validate_the_form('#kin_name', true);" value="{{ app_obj.kin_name|default:'' }}" placeholder="Masukkan nama kontak darurat">
+</div>
+
+<div class="form-group">
+ <label for="kin_mobile_phone">Nomor HP Kontak Darurat <label class="badge badge-default badge-afs badge-afs-default"> Tidak wajib</label></label>
+  <div class="input-group">
+    <div class="input-group-addon form-append-afs-addon"><b>+62</b></div>
+    <input type="number" class="form-control form-control-afs form-append-afs form-append-afs-border-none format-number-phone" onkeyup="validate_the_form('#kin_mobile_phone', true);" value="{{ app_obj.kin_mobile_phone|default:'' }}" id="kin_mobile_phone"
+           placeholder="Masukkan nomor HP kontak darurat">
+  </div>
+</div>

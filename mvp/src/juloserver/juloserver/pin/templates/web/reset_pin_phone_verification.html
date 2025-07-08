@@ -1,0 +1,316 @@
+<html lang="id" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+  style="color-scheme: light dark;">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings xmlns:o="urn:schemas-microsoft-com:office:office">
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <style>
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+  </style>
+  <![endif]-->
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    @media (max-width: 600px) {}
+
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    .phone-verify-form {
+      max-width: 350px;
+      margin: auto;
+      box-shadow: 0px 1px 16px 0px rgba(0, 0, 0, 0.12);
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+    .phone-verify-form p{
+      font-weight: bold; font-size: 16px; color:black;margin-top:0
+    }
+
+    .input-field {
+      margin-bottom: 8px;
+    }
+
+    .input-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .input-field input {
+      width: 100%;
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+      border-radius: 8px;
+      border: 1px solid #E0E0E0;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 12px;
+      margin-top: 4px;
+      min-height: 46px;
+      background-color: white;
+      color:black;
+    }
+
+    .input-field input:read-only {
+      background-color: #EDEDED;
+      color: #757575;
+    }
+
+    .information {
+      display: flex;
+      align-items: start;
+      width: 100%;
+      border: 1px solid #83A7FA;
+      border-radius: 8px;
+      padding: 8px 12px;
+      box-sizing: border-box;
+      margin: 16px 0px;
+      background-color: #EAF0FE;
+    }
+
+    .information li {
+      font-size: 12px;
+      color: #2656C6;
+    }
+
+    button {
+      font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background-color: #00ACF0;
+      width: 100%;
+      font-size: 16px;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border-color: transparent;
+      font-weight: bold;
+      cursor: pointer;
+      max-height: 48px;
+    }
+
+    button.disable {
+      pointer-events: none;
+      background-color: #EDEDED;
+    }
+
+    .eye {
+      cursor: pointer;
+      position: absolute;
+      top: 22px;
+      right: 2%;
+      width: 15px;
+    }
+
+    .eye.off {
+      top: 21px;
+    }
+
+    .error {
+      font-size: 10px;
+      color: #DB4D3D;
+      margin-top: 4px;
+    }
+
+    input.err {
+      border: 1px solid #DB4D3D;
+    }
+
+    textarea:focus,
+    input:focus {
+      outline: none;
+    }
+    
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    #headerbrand{
+      background: #00ACF0;
+    }
+    #headerbrand img {
+      width: 80px;
+      height: 40px;
+      margin-left: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin: 13px 20px;
+    }
+    .loader{
+      display:none;
+      animation: rotatespin 0.5s linear infinite;
+      width: 20px;
+      height: 20px;
+      margin: auto;
+    }
+    @keyframes rotatespin {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
+    }
+    
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+
+<body
+  style="font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; word-break: break-word; margin: 0; width: 100%; background-color: #f8fafc; padding: 0">
+  <div id="headerbrand"><img alt="julo" src="https://www.julo.co.id/sites/default/files/newsletter/ic-logo-julo.png" /></div>
+  <div style="margin-left:12px; margin-right:12px;">
+    <div class="phone-verify-form">
+      <p>
+        Yuk, masukkan nomor HP untuk lanjutkan proses ubah PIN
+      </p>
+      <div>
+        <form id="phone-verify" method="post" action="{{action}}">
+          {% csrf_token %}
+          <div class="">
+            <div class="input-field">
+              <label for="phone">Nomor HP</label>
+              <div class="new-pin" style="position:relative;">
+                <input type="number" class="validate" placeholder="Masukkan Nomor HP" name="phone" id="phone"
+                  autocomplete="off" inputmode="numeric" maxlength="14" size="14" value="">
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <button type="submit" class="disable">
+                <img class="loader" src="https://www.julo.co.id/sites/default/files/spinner.png">
+                <span>Verifikasi</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener("pageshow", () => {
+      var btn = $('button');
+      var phone = $('#phone');
+
+      phone.val('');
+      btn.addClass('disable');
+      btn.css('pointer-events','all');
+      btn.find('.loader').css('display','none');
+      btn.find('span').css('display','block');
+    });
+
+    function displayError(inputEl, msgId, text) {
+      inputEl.insertAdjacentHTML('afterend', '<div class="error" id="warning-' + msgId + '">' + text + '</div>');
+    }
+    
+    {% comment %} var errorMessage = 'error message'; {% endcomment %}
+    var errorMessage = {% if error_message %}'{{error_message}}'{% else %}null{% endif %};
+    if(errorMessage) {
+      phoneEl = document.querySelector('input#phone');
+      displayError(phoneEl, 'phone', errorMessage);
+      phoneEl.classList.add('err');
+    }
+
+    var validateCheck = true;
+    function validatePin(inputId) {
+
+      var phoneEl = document.querySelector('input#' + inputId);
+      var msgEl = document.getElementById('warning-' + inputId);
+
+      if (msgEl != null) {
+        msgEl.remove();
+        validateCheck = true;
+      }
+
+      if (phoneEl.value.length == 0) {  // validate not empty
+        displayError(phoneEl, inputId, 'Tidak boleh kosong.');
+        validateCheck = false;
+      } else {
+        if (phoneEl.value.length < 10) {  // validate < 10 digit
+          displayError(phoneEl, inputId, 'Pastikan informasi yang kamu masukkan benar');
+          validateCheck = false;
+        } else  {
+          if (/^([0-9])\1*$/.test(phoneEl.value.slice(2)) || !/^08/.test(phoneEl.value)) {  // check repeat or sequence
+            displayError(phoneEl, inputId, 'Pastikan informasi yang kamu masukkan benar');
+            validateCheck = false;
+          }
+        }
+      }
+
+      if (!validateCheck) { phoneEl.classList.add('err'); } else { phoneEl.classList.remove('err'); }
+
+      return validateCheck;
+    }
+
+    document.addEventListener('keypress', function (e) {
+      if (e.target && e.target.id == 'phone') {
+        var key = e.keyCode;
+        if ((e.keyCode < 48 || e.keyCode > 57)) {
+          e.preventDefault();
+        }
+      }
+    });
+
+    var button = document.querySelector('#phone-verify button');
+    var phone = document.querySelector('input#phone');
+
+    phone.addEventListener('input', function (e) {
+      if (phone.value.length <= phone.maxLength) {
+        var validate = validatePin('phone');
+
+        if (validate) {
+          button.classList.remove('disable');
+        } else {
+          button.classList.add('disable');
+        }
+      } else {
+        phone.value = phone.value.slice(0, phone.maxLength);
+      }
+    });
+
+    $('button').click(function(e){
+      var btn = $(this);
+      btn.css('pointer-events','none');
+      btn.find('.loader').css('display','block');
+      btn.find('span').css('display','none');
+    });
+      
+    $('#phone').on('copy cut paste drop', function() {
+      return false;
+    });
+  </script>
+</body>
+
+</html>

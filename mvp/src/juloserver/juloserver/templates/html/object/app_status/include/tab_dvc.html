@@ -1,0 +1,77 @@
+{% load unit %}
+{% load checkusergroup from common %}
+
+  <table id="ca_table" class="ca_table table table-hover table-striped " >
+    {% if status_current.status_code < 300 or status_current.status_code >= 400 %}
+    <thead>
+      <tr>
+        <th>
+          {% if skip_pv_dv %}
+            <span style="color:green">
+              <i class="fa fa-check-circle"></i>
+            </span>
+            Repeat : Bypass DV PV
+          {% endif %}
+        </th>
+        {% if 'payment_status' in request.path %}
+            {% if is_iso_inactive %}
+                {% checkusergroup notin 'bo_outbond_caller_3rd_party' %}
+                <th>
+                    <span class="label label-rouded pull-center small ca-sort tab-sd"
+                          onclick="sortCAby(this,'sd')">SD
+                    </span>
+                </th>
+                {% endcheckusergroup %}
+                {% checkusergroup in 'bo_outbond_caller_3rd_party' %}
+                <th><span class="label label-rouded pull-center small ca-sort tab-sd">SD</span></th>
+                {% endcheckusergroup %}
+                <th><span class="label label-rouded pull-center small ca-sort tab-dv" onclick="sortCAby(this,'dv')">DV</span></th>
+                <th><span class="label label-rouded pull-center small ca-sort tab-pv" onclick="sortCAby(this,'pv')">PV</span></th>
+                <th><span class="label label-rouded pull-center small ca-sort tab-ca" onclick="sortCAby(this,'ca')">CA</span></th>
+                {% checkusergroup notin 'bo_outbond_caller_3rd_party' %}
+                <th><span class="label label-rouded pull-center small ca-sort tab-fin" onclick="sortCAby(this,'fin')">FIN</span></th>
+                <th><span class="label label-rouded pull-center small ca-sort tab-coll" onclick="sortCAby(this,'coll')">COLL</span></th>
+                {% endcheckusergroup %}
+                {% checkusergroup in 'bo_outbond_caller_3rd_party' %}
+                <th><span class="label label-rouded pull-center small ca-sort tab-fin">FIN</span></th>
+                <th><span class="label label-rouded pull-center small ca-sort tab-coll">COLL</span></th>
+                {% endcheckusergroup %}
+            {% else %}
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><span class="label label-rouded pull-center small ca-sort"
+                          id="casort_coll_id">COLL</span></th>
+            {% endif %}
+        {% else %}
+            {% checkusergroup notin 'bo_outbond_caller_3rd_party' %}
+            <th><span class="label label-rouded pull-center small ca-sort tab-sd" onclick="sortCAby(this,'sd')">SD</span></th>
+            {% endcheckusergroup %}
+            {% checkusergroup in 'bo_outbond_caller_3rd_party' %}
+            <th><span class="label label-rouded pull-center small ca-sort tab-sd">SD</span></th>
+            {% endcheckusergroup %}
+            <th><span class="label label-rouded pull-center small ca-sort tab-dv" onclick="sortCAby(this,'dv')">DV</span></th>
+            <th><span class="label label-rouded pull-center small ca-sort tab-pv" onclick="sortCAby(this,'pv')">PVE</span></th>
+            <th><span class="label label-rouded pull-center small ca-sort" onclick="sortCAby(this,'ca')">PVA</span></th>
+            {% checkusergroup notin 'bo_outbond_caller_3rd_party' %}
+            <th><span class="label label-rouded pull-center small ca-sort tab-fin" onclick="sortCAby(this,'fin')">FIN</span></th>
+            <th><span class="label label-rouded pull-center small ca-sort" onclick="sortCAby(this,'coll')">COLL</span></th>
+            {% endcheckusergroup %}
+            {% checkusergroup in 'bo_outbond_caller_3rd_party' %}
+            <th><span class="label label-rouded pull-center small ca-sort tab-fin">FIN</span></th>
+            <th><span class="label label-rouded pull-center small ca-sort">COLL</span></th>
+            {% endcheckusergroup %}
+        {% endif %}
+      </tr>
+    </thead> {% endif %}
+    <tbody>
+    {% include "object/app_status/include/row_loan.html" %}
+    {% include "object/app_status/include/row_bio.html" %}
+    {% include "object/app_status/include/row_family.html" %}
+    {% include "object/app_status/include/row_working.html" %}
+    {% include "object/app_status/include/row_keuangan.html" %}
+    {% if status_current.status_code < 300 or status_current.status_code >= 400 %}{% include "object/app_status/include/row_other.html" %}{% endif %}
+    <tbody>
+  </table>

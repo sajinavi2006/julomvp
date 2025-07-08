@@ -1,0 +1,174 @@
+{% load default unit %}
+
+<div id="slim_history_note">
+  <!-- customtab -->
+  <ul class="nav nav-tabs customtab tabs">
+     <li class="active tab">
+      <a href="#app_status_history" data-toggle="tab"> <span class="visible-xs" title="Status History and Notes History">
+      <i class="fa fa-home"></i></span> <span class="hidden-xs">Status History and Notes History</span> </a>
+    </li>
+    <li class="tab"><a href="#email_sms_history" data-toggle="tab" title="EMAIL History">
+      <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Email and SMS History</span> </a>
+    </li>
+    {%if status_skiptrace %}
+      <li class="tab"><a href="#skip_trace_history" data-toggle="tab" title="Skiptrace History">
+        <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Skiptrace History</span> </a>
+      </li>
+    {% endif %}
+    <li class="tab"><a href="#customer_wallet_note" data-toggle="tab" title="Customer Wallet Note">
+      <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Cashback Note</span> </a>
+    </li>
+    <li class="tab"><a href="#app_detail_history" data-toggle="tab" title="Application Detail History">
+      <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Application Detail Update History</span> </a>
+    </li>
+  </ul>
+
+  <!-- .row -->
+  <div class="tab-content pmt_event">
+    <!-- Tab payment details -->
+    <div class="tab-pane active" id="app_status_history">
+
+      <!-- <h3 class="box-title m-b-0">Status History and Notes History </h3> -->
+      <!-- <p class="text-muted m-b-20"></p> -->
+      <table class="table">
+        <thead>
+          <tr>
+            <!-- <th width="5%">#</th> -->
+            <th width="15%">Waktu</th>
+            <!-- <th width="10%" class="text-right">Tipe</th> -->
+            <th width="70%">Content / Catatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%if history_note_list  or security_note_list%}
+            {%  for his_note_obj in history_note_list %}
+              {%if his_note_obj.type_data == 'Notes' or his_note_obj.account_id and his_note_obj.note_text%}
+                 <tr class="success">
+                  <!-- <th scope="row">{% increment_counter_one forloop.counter0 1 1000 %}</th> -->
+                  <td>
+                    <label class="label label-warning m-b-10">
+                      {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                    </label><br/>
+                    <label class="label label-danger">
+                      {% if his_note_obj.type_data %}
+                        {{ his_note_obj.type_data }}
+                      {% else %}
+                        Account Notes
+                      {% endif %}
+                    </label>
+                  </td>
+                  <td>
+                    Agent: <code>{{ his_note_obj.added_by|default:'-'|safe }}</code><br/>
+                    <strong>Catatan:</strong>
+                    {{ his_note_obj.note_text|default:'-'|linebreaks|escape }}
+                  </td>
+                </tr>
+              {% else %}
+                <tr class="warning">
+                  <!-- <th scope="row">{% increment_counter_one forloop.counter0 1 1000 %}</th> -->
+                  <td>
+                    <label class="label label-success m-b-10">
+                      {{ his_note_obj.cdate|date:"d M Y H:i:s" }}
+                    </label><br/>
+                    <label class="label label-purple">
+                      {{ his_note_obj.type_data }}
+                    </label>
+                  </td>
+                  <td>
+                    Agent: <code>{{ his_note_obj.changed_by|default:'-'|safe }}</code><br/>
+                    Status: <label class="label label-info">
+                      {{ his_note_obj.status_old|safe }}
+                    </label>
+                    &nbsp;&nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                    <label class="label label-success">
+                      {{ his_note_obj.status_new|safe }}
+                    </label>
+                    <br/>
+                    <strong>Alasan :</strong>
+                    {{ his_note_obj.change_reason|default:'-'|linebreaks|escape|safe }}
+                    {% if his_note_obj.status_new == 135 %}
+                      <strong>Catatan :</strong>
+                      <br/>
+                      {% if app_obj.customer.can_reapply == False and app_obj.customer.can_reapply_date %}
+                        Re-apply di {{ app_obj.customer.can_reapply_date|date:"d M Y H:i:s" }}
+                      {% elif app_obj.customer.can_reapply and not app_obj.customer.can_reapply_date %}
+                        Re-apply langsung
+                      {% endif %}
+                    {% endif %}
+
+                    {% if his_note_obj.status_new == 121 or his_note_obj.status_new == 135 %}
+                      {% if bank_statement %}
+                        <br/>
+                        <strong>Nama bank statement:</strong> {{ bank_statement.name_in_bank }}
+                        {% if bank_statement.report_url %}
+                        <br/>
+                        <strong>Dokumen Tambahan :</strong>
+                        <br/>
+                        <a id="download-lbs-report" style="color:#00ACF0;" href="{{bank_statement.report_url|safe}}" target="_blank">
+                          <label>
+                            <img id="download-icon" src="https://statics.julo.co.id/juloserver/prod/static/images/icons/ic-download.png" width="20" height="20"> Download Bank Statement
+                          </label>
+                        </a>
+                        {% endif %}
+
+                      {% endif %}
+                    {% endif %}
+                    
+                    {% if his_note_obj.fraudnote %}
+                      
+                      <strong>Catatan :</strong>
+                      <br/>
+                      {{ his_note_obj.fraudnote.note_text|default:'-'|linebreaks|escape|safe }}                      
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+            {%  for security_note_obj in security_note_list %}
+               <tr class="success">
+                <td>
+                  <label class="label label-primary m-b-10">
+                    {{ security_note_obj.cdate|date:"d M Y H:i:s" }}
+                  </label><br/>
+                  <label class="label label-success">
+                    Security Change
+                  </label>
+                </td>
+                <td>
+                  Agent: <code>{{ security_note_obj.added_by|default:'-'|safe }}</code><br/>
+                  <strong>Alasan:</strong>
+                  {{ security_note_obj.note_text|default:'-'|linebreaks|escape }}
+                </td>
+              </tr>
+            {% endfor %}
+         {% else %}
+            <span> Tidak ada Data </span>
+         {% endif %}
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Tab Payment SMS history -->
+    <div class="tab-pane" id="email_sms_history">
+      {% include "object/payment_status/include/tab_email_sms_history.html" %}
+    </div>
+    
+    <!-- Tab skiptrace history -->
+    <div class="tab-pane" id="skip_trace_history">
+      {% include "object/app_status/include/skiptrace_history.html" %}
+    </div>
+
+    <!-- Tab app update detail history -->
+    <div class="tab-pane" id="app_detail_history">
+      {% include "object/payment_status/include/tab_app_detail_history.html" %}
+    </div>
+
+    <!-- Tab app customer wallet note -->
+    <div class="tab-pane" id="customer_wallet_note">
+      {% include "object/payment_status/include/wallet_history.html" %}
+    </div>
+
+
+  </div>
+</div>
+

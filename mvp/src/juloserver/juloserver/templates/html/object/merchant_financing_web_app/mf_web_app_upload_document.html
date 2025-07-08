@@ -1,0 +1,276 @@
+{% extends "common/theme1/crup/create_update_2.html" %}
+{% load model %}
+{% load template default unit utils %}
+
+{% load static from staticfiles %}
+{% block custom_link %}
+    <!-- Dropzone css -->
+    <link rel="stylesheet" href="{% static 'theme/plugins/bower_components/dropify/dist/css/dropify.css' %}">
+    <link href="{% static 'theme/plugins/bower_components/dropzone-master/dist/dropzone.css' %}" rel="stylesheet" type="text/css" />
+
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-table/dist/bootstrap-table.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css' %}" rel="stylesheet" />
+
+{% endblock %}
+
+
+{% block css_inside %}
+
+{% endblock %}
+
+{% block content-body %}
+
+<style>
+    #container{
+        width:100%;
+        min-height:40vh;
+        overflow:hidden;
+    }
+    #slide{
+        width:100%;
+        height:100%;
+        transition: transform .3s;
+        text-align:center;
+    }
+    #slide img{
+        width:auto;
+        height:auto;
+        max-width:100%;
+        pointer-events: none;
+    }
+</style>
+
+
+<!-- /row -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="white-box">
+        <h3 class="box-title m-b-0">MF WEB APPLICATION - {{ app_obj.partner.name }}</h3>
+          <div class="row m-b-10 p-t-0">
+            <div class="col-md-10 col-xs-12 col-md-offset-1">
+
+              <h3 class="box-title m-t-10 m-b-0">Aplikasi ID: {{ app_obj.id }}</h3>
+              <p>
+                <strong>
+                  Nama:</strong> {{ app_obj.fullname }}
+              </p>              
+              <p>
+                <strong>
+                  Email:</strong> {{ app_obj.partnership_customer_data.email }}
+              </p>
+              <p>
+                <strong>
+                  KTP:</strong> {{ app_obj.partnership_customer_data.nik }}
+              </p>
+              <p>
+                <strong>
+                  Mobile Number:</strong> {{ app_obj.partnership_customer_data.phone_number }}
+              </p>
+              <p>
+                <strong>
+                  Status Saat ini:</strong>
+                <br/>
+                <span class="label label-danger">{{ app_obj.application_status }}</span> 
+              </p>
+            </div>
+          </div>
+          
+          <div class="row m-t-10 m-b-10">
+          </div>
+
+      <!-- white-box -->
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+
+<!-- /row -->
+  <div class="row">
+    <div class="col-lg-6">
+        <div class="white-box">
+
+            <div id="container">
+                <div class="overflow table-responsive">
+                    <table role="presentation" cellspacing="5" cellpadding="5" border="1" width="100%">
+                        <tr align="center">
+                            <td width="50%">Document name</td>
+                            <td width="25%">Document Type </td>
+                            <td align="center" width="25%">Link</td>
+                        </tr>                    
+                        <tbody>
+                            {% if list_document %}
+                                {% for item in list_document %}
+                                    <tr>
+                                        <td>{{ item.file_name }}</td>
+                                        <td align="center">{{ item.document_type }} </td>
+                                        <td align="center">
+                                            <a href="{{ item.url }}" target="_blank">
+                                                <button id="back" type="button" class="mb10 btn btn-primary">
+                                                    Download
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr> 
+                                {% endfor %}
+                            {% endif %}
+                        </tbody> 
+                    </table>
+                </div>
+              </div> 
+        </div>
+    </div>  
+    <div class="col-lg-6">
+      <div class="white-box">
+          <div class="row m-b-10 p-t-0">
+            <div class="col-md-10 col-xs-12 col-md-offset-1">
+
+                <form class="" id="img_upload_form" role="form" enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                     {% if messages %}
+                       <div class="alert alert-danger">
+                         {% for message in messages %}
+                             <strong>{{ message|escape }}</strong><br/>
+                         {% endfor %}
+                       </div>
+                     {% endif %}
+       
+                     <div class="dropify-wrapper " >
+                       <input id="id_attachment" class="col-lg-12 col-md-12" name="attachment" type="file" required>
+                       <div class="dropify-message">
+                         <span class="file-icon"></span> <p>Drag and drop a file here or click</p>
+                         {% if form.attachment.errors %}
+                           <span class="help-block h5">
+                               {{ form.attachment.errors.as_text }}
+                           </span>
+                         {% endif %}
+                       </div>
+                     </div>
+       
+                     <div class="form-group text-center m-t-0">
+                       <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Upload</button>
+                     </div>
+       
+                     <hr>
+                     <div class="row" id='previewImg1'></div>
+                     <div class="row" id='previewImg2'></div>
+                     <div class="row" id='previewImg3'></div>
+                     
+                   </form>
+              
+            </div>
+          </div>
+      <!-- white-box -->
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+
+    
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'bulk_upload:mf_web_app_list_documents_upload' %}">
+      <button id="back" type="button" class="btn btn-info">
+          <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Aplikasi
+      </button>
+  </a>
+{% endblock %}
+
+
+{% block script_additional %}
+  <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+
+  <script src="{% static 'theme/plugins/bower_components/datatables/jquery.dataTables.min.js' %}"></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="{% static 'theme/plugins/bower_components/bootstrap-table/dist/bootstrap-table.min.js' %}"></script>
+  <script src="{% static 'theme/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js' %}" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+{% load static from staticfiles %}
+  var select_item = "" +
+    "<select class='form-control' id='document_type' name='document_type' required>\n"
+  
+  var option_document_type = "" +
+    "<option value=''>-------</option>\n" +
+    "<option value='ktp'>KTP</option>\n" +
+    "<option value='kk'>KK</option>\n" +
+    "<option value='company_photo'>Company Photo</option>\n" +
+    "<option value='selfie'>Selfie</option>\n" +
+    "<option value='nib_document'>NIB</option>\n" +
+    "<option value='financial_document'>Financial Document</option>\n" +
+    "<option value='cashflow_report'>Cashflow Report</option>\n" +
+    "<option value='other_document'>Other document</option>\n" +
+    "<option value='credit_memo'>Credit Memo</option>\n" +
+    "<option value='slik'>SLIK</option>\n" +
+    "<option value='sales_report'>Sales report</option>\n" +
+    "</select>"
+
+  var input_file = $("#id_attachment");
+  input_file.change(function () {
+      // Clear details before showing any files
+      $("#previewImg1").html('');
+      $("#previewImg2").html('');
+      $("#previewImg3").html('');
+
+      for (var i=0, len = this.files.length; i < len; i++) {
+          (function (j, self) {
+
+            var url = self.files[j].name;
+            var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+
+            var id_select = select_item;
+
+            if (self.files[j] && (
+              ext == "png" || ext == "jpeg" || ext == "jpg" 
+              || ext == "pdf" || ext == "csv" || ext == "xls" || ext == "img"
+              || ext == "docx" || ext == "doc" || ext == "xlsx"
+              )) 
+             {
+              var reader = new FileReader()
+              reader.onload = function(e) {
+                   //$('#img_src_'+(i+1)).attr('src', e.target.result);
+                   var html = "" +
+                      "<div class='col-md-3'>\n" +
+                      "  <div class='row col-md-12 m-t-10 m-b-10  label-warning'><small>"+ url +"</small></div>\n" +
+                      "  <div class='row col-md-12 m-t-10 m-b-10'>"+ id_select + option_document_type+"</div>\n" +
+                      "  <div class='row col-md-12'>\n" +
+                      "    <a class='image-popup-vertical-fit' title='"+ url +"'>\n" +
+                      "      <img src='" + e.target.result + "' class='img-responsive' />\n" +
+                      "    </a>\n" +
+                      "    <br/>\n" +
+                      "  </div>\n" +
+                      "</div>";
+
+                   if (j<=3) $("#previewImg1").append(html);
+                   else if (j>=4 && j<=7) $("#previewImg2").append(html);
+                   else $("#previewImg3").append(html);
+                   
+                }
+              reader.readAsDataURL(self.files[j]);
+              
+            }else
+            {
+              alert('ekstensi file tidak diizinkan');
+            }
+
+          })(i, this);
+      }
+  });
+
+  $(document).ready(function() {
+     
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      $("#img_upload_form").submit(function() {
+          $("#wrapper").toggle();
+          $("#id_div_wheel").toggle();
+      });
+
+  });
+{% endblock %}

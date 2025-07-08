@@ -1,0 +1,1388 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{% block meta %}
+    <!-- <meta http-equiv="refresh" content="120"> -->
+{% endblock %}
+
+{% block custom_css %}
+  <!-- morris CSS -->
+  <!-- <link href="{% static 'theme/plugins/bower_components/morrisjs/morris.css' %}" rel="stylesheet"> -->
+  <!-- toast -->
+  <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/helper.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block css_inside %}
+  .status_font {
+    font-size: 24px;
+  }
+  .analytics-info {
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .panel{
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .container-fluid {
+    background-color: white;
+  }
+  hr{
+    margin-top: 0px !important;
+    margin-bottom: 10px !important;
+  }
+   .clearFix
+   {
+       clear:both;
+   }
+   .panel.panel-chat
+   {
+       position: fixed;
+       bottom:0;
+       right:10px;
+       max-width: 800px;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat.panel-chat-extend
+   {
+       position: fixed;
+       bottom:0;
+       right:60em;
+       max-width: 800px;
+       height:50em;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat .panel-heading
+   {
+       background: #4b67a8;
+       border: 1px solid #2e4588;
+       color:#FFF;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(1)
+   {
+       text-decoration: none;
+       width: 800px;
+       color:#FFF;
+       font-weight: bold;
+       float:left;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(2)
+   {
+       text-decoration: none;
+       max-width: 11px;
+       width: 11px;
+       color:#FFF;
+       float:right;
+   }
+   .panel.panel-chat .panel-body
+   {
+       display: block;
+       padding: 10px;
+       margin: 0;
+       max-height: 350px;
+       height: 350px;
+       border-left: 1px solid #b2b2b2;
+       border-right: 1px solid #b2b2b2;
+       background: white;
+       overflow: auto;
+   }
+   .panel.panel-chat .panel-body::-webkit-scrollbar {
+        display: none;
+    }
+    .panel.panel-chat .panel-body-extend
+    {
+        display: block;
+        padding: 10px;
+        margin: 0;
+        max-height: 40em;
+        height: 40em;
+        border-left: 1px solid #b2b2b2;
+        border-right: 1px solid #b2b2b2;
+        background: white;
+        overflow: auto;
+    }
+    .panel.panel-chat .panel-body-extend::-webkit-scrollbar {
+         display: none;
+     }
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .custom-button{
+      border: 2px solid #4CAF50;
+      background-color: white;
+      color: green;
+      padding: 5px 28px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .custom-button:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .status-box {
+      background: #ffffff;
+      margin-bottom: 15px;
+    }
+    .status-box-title {
+      padding: 20px 25px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+    .status-box-footer {
+      padding: 25px;
+      text-align: center;
+    }
+    .status-box-title-text{
+      font-weight: 600;
+      color: #2B2B2B
+    }
+    .fs-24{
+      font-size: 24px
+    }
+    .load-card-title{
+      padding: 25px 25px 0px 25px;
+      border-bottom: 1px solid #eee;
+    }
+    .load-card-body{
+      padding: 10px 25px 25px;
+    }
+    .p-0{
+      padding: 0px;
+    }
+    .card-tag{
+      position: absolute;
+      top: 5px;
+      right: 12px;
+      text-transform: uppercase;
+      background-color: white;
+      padding: 0px 5px;
+      border-radius: 10%;
+      color: #2B2B2B;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .dark-color{
+      color: "#2B2B2B"
+    }
+    .light-color{
+      color: "#fff"
+    }
+    .flex {
+      display: flex;
+    }
+{% endblock %}
+
+
+{% block script_head %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-19175540-9', 'auto');
+    ga('send', 'pageview');
+
+    window.onbeforeunload = function() {
+      return "Jangan refresh ketika auto chooser berlangsung, anda yakin?";
+    };
+  </script>
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+
+<!-- Page Content -->
+  <div id="page-wrapper">
+    <div id="app1" class="container-fluid">
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-col-xs-6">
+          <h4 class="page-title">
+            <!-- <a href="{% url 'dashboard:fraudops_geohash_list' %}" target="_blank">
+              <button class="btn btn-success btn-block">Aplikasi</button>
+            </a> -->
+          </h4>
+        </div>
+      </div>
+
+      <!-- .row start -->
+      <div class="row">
+        <div class="col-lg-1 col-sm-1 col-xs-6">
+          <label class="label label-info text-default">To-Do</label>
+        </div>
+        <div class="col-lg-11 col-sm-11 col-xs-6">
+
+          <div class="col-lg-2 col-sm-3 col-xs-12">
+          <a href="{% url 'dashboard:fraudops_geohash_list' %}" id="app_115" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.120.color }};color:{{ status_color.120.content_color }};">
+                {% if status_color.120.display_text %}
+                <span class="card-tag">Velocity Model Geohash Bucket</span>
+                {% endif %}
+                <% app_dashboard.label[0] %>
+              </div>
+              <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                  <span class="status_font text-success"><% app_dashboard.to_do['velocity_model_geohash'] %></span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-lg-2 col-sm-3 col-xs-12">
+          <a href="{% url 'fraud_security:app-bucket-list' bucket_type='selfie_in_geohash' %}" id="app_115" target="_blank">
+            <div class="panel panel-info">
+              <div class="panel-heading" style="background-color:{{ status_color.120.color }};color:{{ status_color.120.content_color }};">
+                {% if status_color.120.display_text %}
+                <span class="card-tag">Velocity Model Geohash Bucket</span>
+                {% endif %}
+                <% app_dashboard.label[1] %>
+              </div>
+              <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+                  <span class="status_font text-success"><% app_dashboard.to_do[Object.keys(app_dashboard.to_do)[1]] %></span>
+                </div>
+              </div>
+            </div>
+          </a>
+          </div>
+
+          <div class="col-lg-2 col-sm-3 col-xs-12">
+            <a href="{% url 'fraud_security:app-bucket-list' bucket_type='bank_name_velocity' %}" id="app_115" target="_blank">
+              <div class="panel panel-info">
+                <div class="panel-heading" style="background-color:{{ status_color.120.color }};color:{{ status_color.120.content_color }};">
+                  {% if status_color.120.display_text %}
+                  <span class="card-tag">Velocity Model Bank Name Bucket</span>
+                  {% endif %}
+                  <% app_dashboard.label[2] %>
+                </div>
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                  <div class="panel-body">
+                    <span class="status_font text-success"><% app_dashboard.to_do[Object.keys(app_dashboard.to_do)[2]] %></span>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+
+            <div class="col-lg-2 col-sm-3 col-xs-12">
+              <a href="{% url 'fraud_security:app-bucket-list' bucket_type='risky_phone_and_email' %}" id="app_115" target="_blank">
+                 <div class="panel panel-info">
+                    <div class="panel-heading" style="background-color:{{ status_color.120.color }};color:{{ status_color.120.content_color }};">
+                       {% if status_color.120.display_text %}
+                       <span class="card-tag">Risky Phone and Email</span>
+                       {% endif %}
+                       <% app_dashboard.label[3] %>
+                    </div>
+                    <div class="panel-wrapper collapse in" aria-expanded="true">
+                       <div class="panel-body">
+                          <span class="status_font text-success"><% app_dashboard.to_do[Object.keys(app_dashboard.to_do)[3]] %></span>
+                       </div>
+                    </div>
+                 </div>
+              </a>
+           </div>
+
+           <div class="col-lg-2 col-sm-3 col-xs-12">
+            <a href="{% url 'fraud_security:app-bucket-list' bucket_type='risky_location' %}" id="app_115" target="_blank">
+                <div class="panel panel-info">
+                  <div class="panel-heading" style="background-color:{{ status_color.120.color }};color:{{ status_color.120.content_color }};">
+                      {% if status_color.120.display_text %}
+                      <span class="card-tag">Risky Location</span>
+                      {% endif %}
+                      <% app_dashboard.label[4] %>
+                  </div>
+                  <div class="panel-wrapper collapse in" aria-expanded="true">
+                      <div class="panel-body">
+                        <span class="status_font text-success"><% app_dashboard.to_do[Object.keys(app_dashboard.to_do)[4]] %></span>
+                      </div>
+                  </div>
+                </div>
+            </a>
+          </div>
+           
+        </div>
+    </div>
+    <div class="row flex mt-32 pt-32" style="gap: 16px;">
+      <div class="col-lg-5 pl-0" style="margin-left: -16px;">
+        <div class="d-inline-block p-16 bg-neutrals-20 radius-8 mb-32 col-lg-12">
+            <div class="flex mb-0" style="justify-content: space-between;">
+                <div class="flex center mb-0" style="align-items: center;">
+                    <img src="https://statics.julo.co.id/juloserver/staging/static/images/icons/user.svg" width="24" height="24" class="pr-8">
+                    <h3 class="font-14 bold mb-8">Anti-Fraud Portal</h3>
+                </div>
+                <a class="btn radius-8 bg-primary-base py-12 px-32 font-white flex" href="https://new-crm.julo.co.id/dashboard/anti-fraud-portal/?csrftoken={{ csrf_token }}" target="_blank" style="width: 220px;font-weight: bold;align-items: center;justify-content: center;">Lihat <img src="https://statics.julo.co.id/juloserver/prod/static/images/icons/ic-chevron-right.svg" class="pl-8"></a>
+            </div>
+        </div>
+      </div>
+  </div>
+    <!--/.row -->
+
+    </div>
+  </div>
+  <!-- /#page-wrapper -->
+
+{% endblock %}
+
+{% block script_additional %}
+
+  <!--Morris JavaScript -->
+  <!-- <script src="{% static 'theme/plugins/bower_components/raphael/raphael-min.js' %}"></script> -->
+  <!-- <script src="{% static 'theme/plugins/bower_components/morrisjs/morris.js' %}"></script> -->
+
+  <!-- Custom Theme JavaScript -->
+  <!-- <script src="{% static 'theme/nav-inverse/js/dashboard4.js' %}"></script> -->
+  <script type="text/javascript">
+    $(function(){
+        $(".panel.panel-chat > .panel-heading > .chatMinimize").click(function(){
+            if($(this).parent().parent().hasClass('mini'))
+            {
+                $(this).parent().parent().removeClass('mini').addClass('normal');
+
+                $('.panel.panel-chat > .panel-body').animate({height: "350px"}, 500).show();
+
+            }
+            else
+            {
+                $(this).parent().parent().removeClass('normal').addClass('mini');
+
+                $('.panel.panel-chat > .panel-body').animate({height: "0"}, 500);
+
+                setTimeout(function() {
+                    $('.panel.panel-chat > .panel-body').hide();
+                    $('.panel.panel-chat > .panel-footer').hide();
+                }, 500);
+
+
+            }
+
+        });
+        $(".panel.panel-chat > .panel-heading > .chatClose").click(function(){
+            $(this).parent().parent().remove();
+        });
+    })
+    function copyToClipboard(text) {
+        if (window.clipboardData && window.clipboardData.setData) {
+            // IE specific code path to prevent textarea being shown while dialog is visible.
+            return clipboardData.setData("Text", text);
+
+        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+            var textarea = document.createElement("textarea");
+            textarea.textContent = text;
+            textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+            } catch (ex) {
+                console.warn("Copy to clipboard failed.", ex);
+                return false;
+            } finally {
+                document.body.removeChild(textarea);
+                $.toast({
+                  heading: 'success',
+                  text: 'success copy '+ text,
+                  position: 'top-right',
+                  loaderBg:'#ff6849',
+                  icon: 'success',
+                  hideAfter: 1500,
+                  stack: 6
+                });
+            }
+        }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+  <script type="text/javascript" src="{% static 'default/js/vue.js' %}"></script>
+  <script type="text/javascript">
+    var app1 = new Vue({
+      el: '#app1',
+      delimiters: ["<%", "%>"],
+      data: {
+        app_dashboard : {},
+        window_tab_status:true
+      },
+      beforeMount(){
+        this.get_bucket_count();
+      },
+      methods: {
+        get_bucket_count: function () {
+          if (!this.window_tab_status){return}
+          console.log('Get list')
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:get_fraudops_dashboard_bucket_count' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                csrfmiddlewaretoken: this.csrftoken
+                }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+                  if(json.status == "success"){
+                    self.app_dashboard = json.app_dashboard
+                  }
+
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  this.callProcess = 'we have an erorr while getting data'
+              }
+          }); // end of ajax
+        },
+        SetWindowTabStatus: function(status) {
+          this.window_tab_status = status
+        },
+      }
+    })
+  </script>
+  <script type="text/javascript">
+    var app2 = new Vue({
+      el: '#app2',
+      delimiters: ["<%", "%>"],
+      data: {
+        state:'STOP',
+        callProcess: '',
+        objName: '',
+        object_id: '',
+        object_type: '',
+        email: '',
+        callType: '',
+        callIndex: 0,
+        callLength: 0,
+        skiptrace: [],
+        urlobj:'',
+        start_ts:'',
+        tabs: '',
+        bank_name_status : 'Belum Tersedia',
+        stselected: 0,
+        button: {
+          change_status: true,
+          courtesy: true,
+          tag: true,
+          fu: true,
+          skiptrace: true
+        },
+        stopbtn: false,
+        options: 0,
+        counter: {
+          countdown: false,
+          count_sec: 0,
+          started: false
+        },
+        decision: {
+          is_failed: 0,
+          hashtag: 0
+        },
+        note: ''
+      },
+      methods: {
+        countdown : function() {
+          var self = this
+          this.counter.countdown = true
+          this.counter.started = true
+            function tick() {
+                if(!self.counter.started){
+                  setTimeout(tick, 1000);
+                }
+                else if( self.counter.count_sec > 0 ) {
+                  self.counter.count_sec--
+                  setTimeout(tick, 1000);
+                } else {
+                  self.autodialer_session({object_id: self.object_id, session_stop: 1, object_type: self.object_type})
+                  if(self.object_type == 'application'){
+                    self.unlocked_app(self.object_id);
+                  }else{
+                    self.unlocked_payment(self.object_id);
+                  }
+                  self.reset_app()
+                  self.play()
+                }
+            }
+            tick();
+        },
+        stopBtn : function() {
+          if(this.object_id != ''){
+            this.autodialer_history(this.object_id, 'Button Stop Clicked', this.object_type)
+          }
+          this.autodialer_agent_status('stop')
+          this.stop()
+        },
+        startBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Start Clicked', this.object_type)
+        },
+        playBtn: function() {
+          this.autodialer_agent_status('start')
+        },
+        pauseBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Paused Clicked', this.object_type)
+        },
+        rpcBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button RPC Clicked', object_type)
+          this.button.skiptrace = false
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            is_failed: this.decision.is_failed,
+            hashtag: this.decision.hashtag,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        wpcBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button WPC Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        rjtBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button Rejected Clicked', object_type)
+          this.stselected = result
+          console.log('rjtBtn')
+          console.log({object_id: object_id, call_result: result, object_type: this.object_type})
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        notconnectedBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button NotConnected Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        noAnswerBtn : function(object_id, result, object_type) {
+          console.log('noanswerbutton', this.callIndex, this.get_current_skiptrace_id())
+          this.autodialer_history(object_id, 'Button No Answer Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({
+            object_id: object_id,
+            call_result: result,
+            object_type: this.object_type,
+            phone_number: this.get_current_phone()
+          })
+          this.update_st_select(result)
+        },
+        nextBtn : function(object_id, result, object_type) {
+          this.autodialer_history(object_id, 'Button Next Clicked', object_type)
+          this.stselected = result
+          this.autodialer_session({object_id: object_id, call_result: result, object_type: this.object_type})
+          this.next_and_update()
+        },
+        copySTBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Copy ST Clicked', this.object_type)
+          this.copyclipboard(this.get_current_phone().replace('+62','0'))
+        },
+        goToGoogle : function () {
+          this.autodialer_history(this.object_id, 'Button Go To Google Search Clicked', this.object_type)
+          window.open(`http://google.com/search?q=${this.skiptrace[this.callIndex].contact_name}`, '_blank')
+        },
+        linkBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Link to App Clicked', this.object_type)
+        },
+        changestatusBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Change Status Clicked', this.object_type)
+          this.changeStatus(this.object_id)
+          this.button.change_status=false
+        },
+        tagBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Hashtag Clicked', this.object_type)
+          this.decision.is_failed = 1
+          this.decision.hashtag = 1
+          this.toastSuccess('has tag success')
+          this.button.tag = false
+        },
+        followUpBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Fu Success Clicked', this.object_type)
+          this.autodialer_session({object_id: this.object_id, is_fu: 1, object_type: this.object_type})
+          this.toastSuccess('Follow Up success')
+          this.button.fu = false
+        },
+        choiceBtn : function () {
+          this.autodialer_history(this.object_id, 'Button Choice App Clicked', this.object_type)
+        },
+        courtesyBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Courtesy Success Clicked', this.object_type)
+          this.autodialer_session({object_id: this.object_id, courtesy_result: 'CC Call', object_type: this.object_type})
+          this.successCourtesy()
+          this.button.courtesy=false
+        },
+        emailBtn : function() {
+          this.autodialer_history(this.object_id, 'Button Courtesy Email Clicked', this.object_type)
+          this.autodialer_session({object_id: this.object_id, courtesy_result: 'CC Email', object_type: this.object_type})
+          this.emailCourtesy()
+          // this.button.courtesy=false
+        },
+        callBtn : function () {
+          this.autodialer_history(this.object_id, 'Button Call Clicked', this.object_type)
+          this.click_to_call('call')
+        },
+        hangBtn : function () {
+          this.autodialer_history(this.object_id, 'Button Hangup Clicked', this.object_type)
+          this.click_to_call('hangup')
+        },
+        // methods core
+        calling_applicant : function(){
+          this.click_to_call('call')
+          this.copyclipboard(this.get_current_phone().replace('+62','0'))
+          this.start_ts = this.get_time()
+        },
+        btn_reload_bank_validation_status : function() {
+            this.autodialer_history(this.object_id, 'Button Reload Bank Validation Status Clicked', this.object_type)
+        },
+        stop : function(){
+          if (this.skiptrace.length >= 1) {
+            this.update_st(1)
+          }
+          if(this.object_id != ''){
+            this.autodialer_session({object_id: this.object_id, session_stop: 1, object_type: this.object_type})
+            if(this.object_type == 'application'){
+              this.unlocked_app(this.object_id)
+            }else{
+              this.unlocked_payment(this.object_id)
+            }
+          }
+          this.reset_app()
+          this.state = 'STOP'
+          this.stopbtn = false
+        },
+        play : function(){
+          this.state = 'WAITING'
+          this.getAppAndPhone()
+        },
+        can_skip : function(){
+          return this.decision.hashtag && this.decision.is_failed
+        },
+        skip : function(){
+          if (!this.can_skip()) {
+            this.toastDanger('Cannot skip app, Please click the hashtag button first.')
+            console.log('cannot skip app.')
+            return
+          }
+          console.log('skip');
+          data = { object_id: this.object_id,
+                   is_failed: this.decision.is_failed,
+                   hashtag: this.decision.hashtag,
+                   call_result: this.stselected,
+                   session_stop: 1,
+                   object_type: this.object_type,
+                   note: this.note
+                 }
+          console.log(data)
+          this.autodialer_session(data)
+        },
+        next : function(){
+          this.callIndex += 1
+        },
+        update_st_select : function(select){
+          if(select == '6'){
+            this.update_st(6)
+            this.countdown()
+          }else{
+            this.update_st(select)
+            this.not_happy_path_st()
+          }
+        },
+        not_happy_path_st : function(){
+          console.log('not_happy_path_st')
+          if (this.callLength-this.callIndex > 1) {
+            this.next()
+            this.calling_applicant()
+          }else{
+            this.callProcess = 'there is no contact available to call, next to other app'
+            this.skip()
+          }
+        },
+        next_and_update : function (select) {
+          this.update_st(6)
+          this.not_happy_path_st()
+        },
+        // methods ajax
+        getAppAndPhone : function(){
+          this.callProcess = 'getting phone number'
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:ajax_get_application_autodialer' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                  options: self.options
+                }, // data sent with the get request
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.status == "success"){
+                    self.callProcess = 'we get one app for you'
+                    self.skiptrace = json.telphone
+                    self.callLength = json.telphone.length
+                    self.object_id = json.object_id
+                    self.objName = json.object_name
+                    self.object_type = json.object_type
+                    self.email = json.email
+                    self.callType = json.subject
+                    self.counter.count_sec = json.session_delay
+                    self.logic_flag = json.logic_flag
+                    self.bank_name_status = json.bank_name_status
+                    if (json.object_type == "application"){
+                      self.lock_application(json.object_id)
+                    }else{
+                      self.lock_payment(json.object_id)
+                    }
+                    self.autodialer_session({object_id: json.object_id, session_start: 1, object_type: json.object_type})
+                  }
+                  else {
+                    // console.log(json.message);
+                    self.callProcess = 'tidak ada aplikasi yang tersedia, coba sesaat lagi'
+                    self.stopbtn = true
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  this.callProcess = 'we have an erorr while getting data'
+              }
+          }); // end of ajax
+        },
+        lock_application : function(app_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'app_status:set_app_locked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { application_id: app_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    self.callProcess = 'locking app successful'
+                    self.state = 'PLAYING'
+                    self.urlobj = "{%url 'app_status:change_status' 123456 %}".replace(/123456/, app_id)
+                    if (['ACTIVATION CALL','COURTESY CALL'].indexOf(self.callType) != -1){
+                      self.getScript(app_id)
+                    }else{
+                      self.tabs = window.open(self.urlobj, '_blank')
+                    }
+                    setTimeout(self.calling_applicant(), 3000)
+                  }
+                  else {
+                    self.callProcess = json.reason
+                    // setTimeout(self.getAppAndPhone(), 2000)
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                console.log(xhr, errmsg, err)
+                  this.callProcess = 'we got an error while lock the app'
+              }
+          }); // end of ajax
+        },
+        lock_payment : function(payment_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'payment_status:set_payment_locked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { payment_id: payment_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    self.callProcess = 'locking payment successful'
+                    self.state = 'PLAYING'
+                    self.urlobj = "{%url 'payment_status:change_status' 123456 %}".replace(/123456/, payment_id)
+                    self.tabs = window.open(self.urlobj, '_blank')
+                    setTimeout(self.calling_applicant(), 3000)
+                  }
+                  else {
+                    self.callProcess = json.reason
+                    // setTimeout(self.getAppAndPhone(), 2000)
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                console.log(xhr, errmsg, err)
+                  this.callProcess = 'we got an error while lock the payment'
+              }
+          }); // end of ajax
+        },
+        unlocked_app : function(app_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'app_status:set_app_unlocked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { application_id: app_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    console.log("app success to unlock");
+                  }
+                  else {
+                    self.callProcess = "app failed to unlock"
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        unlocked_payment : function(payment_id){
+          var self = this
+          $.ajax({
+              url :  "{%url 'payment_status:set_payment_unlocked' %}/", // the endpoint
+              type : "GET", // http method
+              data : { payment_id: payment_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.result == "successful!"){
+                    console.log("payment success to unlock");
+                  }
+                  else {
+                    self.callProcess = "payment failed to unlock"
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        getScript: function(app_id) {
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:get_script_for_agent' %}/", // the endpoint
+              type : "GET", // http method
+              data : { application_id: app_id,
+                       csrfmiddlewaretoken: this.csrftoken,
+                      }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.status == "failed"){
+                    self.script = json.message
+                  }
+                  else {
+                    var htmlString = json
+                        , parser = new DOMParser()
+                        , doc = parser.parseFromString(htmlString, "text/html");
+                    var element = doc.body.firstChild;
+                    $("#script").append(element)
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        emailCourtesy: function(){
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'app_status:ajax_courtesy_email' %}/",
+              type : "POST",
+              data : {
+                    application_id : self.object_id
+              },
+
+              // handle a successful response
+              success : function(json) {
+                if (json.status == "success"){
+                  self.toastSuccess('send email success')
+                  this.button.courtesy=false
+                } else if(json.status == "failed"){
+                  console.log(json);
+                  self.toastDanger('send email failed')
+                }
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        successCourtesy: function () {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'app_status:ajax_update_courtesy' %}/",
+              type : "POST",
+              data : {
+                    application_id : self.object_id
+              },
+              // handle a successful response
+              success : function(json) {
+                if (json.status == "success"){
+                  self.toastSuccess('courtesy success')
+                } else if(json.status == "failed"){
+                  console.log(json);
+                  self.toastDanger('courtesy failed')
+                }
+
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        changeStatus: function(){
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_change_status' %}/",
+              type : "POST",
+              data : {
+                    application_id : self.object_id,
+                    status_to : {{ activation_call_change_status }},
+                    reason : "activation call success",
+                    notes : "agent success activation call"
+              },
+              // handle a successful response
+              success : function(json) {
+                  if (json.status == "success"){
+                    self.toastSuccess('change status success')
+                  } else if(json.status == "failed"){
+                    console.log(json);
+                    self.toastDanger('change status failed')
+                  }
+
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        btn_reload_bank_validation_status: function(){
+          const self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'app_status:ajax_bank_validation' %}/",
+              type : "GET",
+              data : {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                  app_id: self.object_id,
+              },
+              // handle a successful response
+              success : function(json) {
+                    self.bank_name_status = json.data.validation_status != null ? json.data.validation_status : 'Belum Tersedia'
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        update_st : function(option){
+          var self = this
+          var end_ts = this.get_time()
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          if (!self.get_current_skiptrace_id()) {
+            console.log('update_st: no skiptrace id')
+            return
+          }
+          $.ajax({
+              url :  "{% url 'payment_status:skiptrace_history' %}/",
+              type : "POST",
+              data : {
+                    skiptrace : this.get_current_skiptrace_id(),
+                    application : self.object_id,
+                    start_ts : self.start_ts,
+                    end_ts : end_ts,
+                    call_result: option,
+                    from_autodialer:true
+                  },
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('berhasil update skiptrace');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log("success ",json);
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        autodialer_history : function(obj_id, action, obj_type) {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_autodialer_history_record' %}/",
+              type : "POST",
+              data : {
+                    object_id: obj_id,
+                    action: action,
+                    object_type: obj_type
+                  },
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('berhasil update history');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log("success ",json);
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        unlock_autodialer : function(status) {
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:ajax_unlock_autodialer_agent' %}/", // the endpoint
+              type : "GET", // http method
+              data : {csrfmiddlewaretoken: this.csrftoken}, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log(json); // log the returned json to the console
+
+                  if (json.status == "success"){
+                    swal("Unlocked!", json.messages, "success");
+                  }
+                  else {
+                    swal("Failed", json.messages, "error");
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          }); // end of ajax
+        },
+        autodialer_agent_status : function(status) {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_autodialer_agent_status' %}/",
+              type : "POST",
+              data : {
+                    agent_status : status
+                  },
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('agent available');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                  //console.log("success ",json);
+                  if(json.status == "success"){
+                    if(status == 'start'){
+                      self.play()
+                    }
+                  }else{
+                    if(json.message == "agent already started autodialer" ){
+                      swal({
+                          title: "Autodialer terkunci",
+                          text: "Pastikan autodialer tidak aktif di windows lain sebelum melakukan unlock autodialer",
+                          type: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#DD6B55",
+                          confirmButtonText: "Yes, Unlock Autodialer",
+                          cancelButtonText: "Cancel",
+                          closeOnConfirm: false,
+                          closeOnCancel: false
+                      }, function(isConfirm){
+                          if (isConfirm) {
+                              self.unlock_autodialer()
+                          } else {
+                              swal("Cancel", "okey di cancel :)", "error");
+                          }
+                      });
+                    }else if (json.message == "agent already stoped autodialer") {
+                      self.toastDanger("agent already stoped autodialer")
+                    }
+                  }
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        },
+        autodialer_session : function(data) {
+          var self = this
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+          });
+          var data = data
+          data['app_status'] = self.options
+          $.ajax({
+              url :  "{% url 'dashboard:ajax_autodialer_session_status' %}/",
+              type : "POST",
+              data : data,
+              statusCode: {
+                200: function(json) {
+                  if(json.data){
+                    console.log('session berhasil');
+                  }
+                },
+              },
+
+              // handle a successful response
+              success : function(json) {
+                if(json.status == 'success'){
+                  console.log('autodialer_session')
+                  return true
+                  console.log(json)
+                  if(self.state == 'WAITING'){
+                    self.autodialer_history(data.object_id, 'Button Play Clicked', self.object_type)
+                  }
+                  return ('success')
+                }
+                return('failed')
+                  //console.log("success ",json);
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                  console.log(xhr.status + ": " + xhr.responseText);
+                  return ('error')
+              }
+          }).done(function(res) {
+            console.log('done autodialer')
+            if (data.hashtag && data.is_failed) {
+              console.log('hashtag and failed');
+              if(self.object_type == 'application'){
+                self.unlocked_app(self.object_id)
+              }else{
+                self.unlocked_payment(self.object_id)
+              }
+              self.reset_app()
+              self.play()
+            }
+          });
+        },
+        click_to_call : function(call_type) {
+          var self = this
+          if (!this.get_current_skiptrace_id()) {
+            console.log('click_to_call: no skiptrace id')
+            return
+          }
+          $.ajax({
+              url :  "{%url 'app_status:trigger_autodial' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                        number_phone: self.get_current_phone().replace('+62','0'),
+                        skiptrace_id: self.get_current_skiptrace_id(),
+                        call_type: call_type
+                     },
+              // data sent with the get request
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+
+                  if (json.status == "success"){
+                    self.toastSuccess(json.message)
+                  }
+                  else {
+                    self.callProcess = json.reason
+                    self.toastDanger('trigger click_to_call failed')
+                  }
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                console.log(xhr, errmsg, err)
+                  this.callProcess = 'we got an error while click to call'
+              }
+          }); // end of ajax
+        },
+        // methods helper
+        reset_app : function(){
+          this.callProcess = ''
+          this.objName = ''
+          this.object_id = ''
+          this.callType = ''
+          this.callIndex = 0
+          this.callLength = 0
+          this.skiptrace = []
+          this.urlobj = ''
+          this.start_ts = ''
+          this.tabs = ''
+          this.bank_name_status = 'Belum Tersedia'
+          this.stselected = 0
+          this.stopbtn = false
+          this.counter.countdown = false
+          this.counter.count_sec = 0
+          this.counter.started = false
+          this.button.change_status = true
+          this.button.courtesy = true
+          this.button.tag = true
+          this.button.skiptrace = true
+          this.button.fu = true
+          this.decision.is_failed = 0
+          this.decision.hashtag = 0
+          this.note = ''
+        },
+        get_time : function(){
+          var date = moment().format().toString();
+          return date;
+        },
+        copyclipboard : function(text) {
+          copyToClipboard(text)
+        },
+        toastDanger : function(msg){
+          $.toast({
+            heading: 'Failed',
+            text: msg,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            bgColor: '#ff6849',
+            textColor: '#fff',
+            icon: 'error',
+            hideAfter: 5000,
+            stack: 6
+          });
+        },
+        toastSuccess : function(msg) {
+          $.toast({
+            heading: 'Success',
+            text: msg,
+            position: 'top-right',
+            icon: 'success',
+            hideAfter: 1500,
+            stack: 6
+          });
+        },
+        get_current_phone: function() {
+          let skiptrace_obj = this.skiptrace[this.callIndex]
+          if (skiptrace_obj) {
+            return skiptrace_obj.phone_number
+          }
+          return '-no-number-'
+        },
+        get_current_skiptrace_id: function() {
+          let skiptrace_obj = this.skiptrace[this.callIndex]
+          if (skiptrace_obj) {
+            return skiptrace_obj.skiptrace_id
+          }
+          return null
+        },
+      }
+    })
+  </script>
+  <script src="{% static 'theme/plugins/moment/moment.min.js' %}"></script>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      $('#mnu_dashboard_li').addClass('active');
+      $('#mnu_dashboard_li a:first').addClass('active');
+
+      setInterval(function () {
+        app1.get_bucket_count();
+      }, 30000)
+  });
+
+  // Active
+  window.addEventListener('focus', ActionActiveTab);
+
+  // Inactive
+  window.addEventListener('blur', ActionInactiveTab);
+
+  function ActionActiveTab(){
+    console.log('Active tab')
+    app1.SetWindowTabStatus(true);
+  }
+  function ActionInactiveTab(){
+    console.log('Inactive tab')
+    app1.SetWindowTabStatus(false);
+  }
+
+{% endblock %}

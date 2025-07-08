@@ -1,0 +1,158 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+
+
+{% block additional_title %}Merchant Financing Disbursement History{% endblock %}
+
+{% block meta %}
+    <!-- remarked if for production -->
+    <!-- <meta http-equiv="refresh" content="3" > -->
+{% endblock %}
+
+{% block breadcrumb_title %}Data Aplikasi {% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li class="active">Seluruhnya</li>
+{% endblock %}
+
+{% block list_title %}UPLOAD HISTORY {% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size="{{results_per_page}}">
+    <thead>
+        <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+            <th data-toggle="true" data-sort-ignore="true">No</th>
+            <th data-sort-ignore="true" data-julo-sort="id">Upload time</th>
+            <th data-sort-ignore="true">Upload type</th>
+            <th data-sort-ignore="true">Upload status</th>
+            <th data-sort-ignore="true">File name</th>
+            <th data-sort-ignore="true" data-julo-sort="cdate">Error detail</th>
+        </tr>
+    </thead>
+    <div class="form-inline padding-bottom-15">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12 hidden-xs"></div>
+        </div>
+    </div>
+    <tbody>
+        {% if object_list %} {% for object in object_list %}
+        <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+            <td>
+                {{ object.udate|date:"Y-m-d H:i:s"|safe }}
+            </td>
+            <td>
+                {{ object.task_type|safe }}
+            </td>
+            <td>
+                {{ object.task_status|safe}}
+            </td>
+            <td>
+                {{ object.remote_upload_name|safe}}
+            </td>
+            {%if object.task_status == 'completed' or object.task_status == 'partial_completed' %}
+            <td>
+                <a href="{{ object.download_url }}" download>{{object.error_detail}}</a>
+            </td>
+            {% endif %}
+
+            {%if object.task_status == 'failed' %}
+            <td>
+                <a href="#">{{object.error_detail}}</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %} {% else %}
+        <tr>
+            <td colspan="8" class="center">Kosong - Tidak ada Data</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+<tfoot>
+    <tr>
+        <td colspan="5">
+            <div class="text-right">
+                {% pagination2 is_paginated paginator page_obj q 4 %}
+            </div>
+        </td>
+    </tr>
+</tfoot>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+  // using jQuery
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      // console.log(cookieValue);
+      return cookieValue;
+  }
+
+  function close_btn(){
+    window.location.reload(true);
+  }
+
+
+{% endblock %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <!-- Footable -->
+    <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+    <!--FooTable init-->
+    <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+    <script src="{% static 'default/js/julo-sorting.js' %}"></script>
+
+
+{% endblock %}

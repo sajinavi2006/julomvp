@@ -1,0 +1,41 @@
+{% load unit %}
+
+<table>
+  <!-- URL Payment -->
+  {% if payment_detail_url %}
+  <tr>
+    <td class="m-r-10 m-t-10 m-b-10;">
+      Url Payment
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class="fa fa-arrow-circle-o-right fa-fw"></icon>
+    {% if payment_detail_url != '-' %}
+      <strong>
+        <a href="{{ payment_detail_url }}" style="text-decoration: none; color: #007BFF;">
+          {{ payment_detail_url }}
+        </a>
+      </strong>
+      &nbsp;<button type="button" class="btn-primary btn-rounded" onclick="copyToClipboard('{{ payment_detail_url }}')">
+        &nbsp;<i class="txt-warning fa fa-clipboard fa-fw"></i>
+      </button>
+    {% else %}
+      <strong>{{ payment_detail_url }}</strong>
+    {% endif %}
+    </td>
+  </tr>
+  {% endif %}
+
+  <!-- Payment Methods -->
+  {% for payment_method in payment_methods %}
+    <tr>
+      <td class="m-r-10 m-t-10 m-b-10">
+        Payment Method {{ forloop.counter }}
+      </td>
+      <td>
+        &nbsp;&nbsp;<icon class="fa fa-arrow-circle-o-right fa-fw"></icon>
+        <strong>{{ payment_method.payment_method_new_name }} - {{ payment_method.virtual_account|default:"-"|safe }}</strong>
+      </td>
+    </tr>
+  {% endfor %}
+
+  </table>

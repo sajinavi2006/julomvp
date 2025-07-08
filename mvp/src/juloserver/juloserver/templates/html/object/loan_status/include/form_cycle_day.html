@@ -1,0 +1,51 @@
+
+<div class="alert alert-warning" id="payment_messages" style="display: none;">
+    <code id="cycleday_messages_body">
+            Silahkan field yang tersedia dengan inputan yang benar!
+    </code>
+</div>
+
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle day: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day|default:"-"|safe}}</strong>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle day Change Date: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day_change_date|date:"d M Y"|default:"-"|safe}}</strong>
+      </div>
+  </div>
+</div>
+
+<div class="row m-t-20">
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle Day Requested: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day_requested|default:"-"|safe}}</strong>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-6 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle Day Requested Date: </label>
+      <div class="col-md-12 col-sm-12 m-l-20">
+          <strong>{{ loan_obj.cycle_day_requested_date|default:"-"|safe}}</strong>
+      </div>
+  </div>
+</div>
+
+<div class="row m-t-20">
+  <div class="col-md-8 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Cycle Day Change: </label>
+      {% if form_loan_cdr.cycle_day_requested.errors %}
+          <span class="help-block error_msg small">
+              {{ form_loan_cdr.cycle_day_requested.errors.as_text }}
+          </span>
+      {% endif %}
+      <div class="col-md-12 col-sm-12 input-group">
+          {{ form_loan_cdr.cycle_day_requested }}
+          <span class="input-group-addon">1 to 28</span>
+      </div>
+  </div>
+</div>

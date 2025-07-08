@@ -1,0 +1,121 @@
+{% extends "common/theme1/crup/crup_1_theme1.html" %}
+{% load model %}
+
+{% block breadcrumb_title %}Submit Customer App Action{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Customer</a></li>
+    <li><a href="#">App</a></li>
+    <li><a href="#">Action</a></li>
+    <li class="active">Form</li>
+{% endblock %}
+
+{% block list_title %}Customer App Action -
+    <label class="label label-info m-l-5">Input</label>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-body %}
+    <div class="row">
+      <div class="col-md-6 col-xs-12 col-md-offset-2">
+        Input customer ID (comma separated) and choose app action.
+        <hr>
+        <br>
+        <div style="padding-bottom: 5px;">
+        <select id="id_selector" onchange="setActionChoices(this);">
+            <option value="customer_id">Customer ID</option>
+            <option value="device_id">Device ID</option>
+        </select>
+        </div>
+      </div>
+      <div class="col-md-6 col-xs-12 col-md-offset-2">
+          <textarea id="id_customer_app_action" rows="14" cols="46" wrap="soft"></textarea>
+      </div>
+      <div class="col-md-6 col-xs-12 col-md-offset-2">
+          <select id="id_action">
+              <option value="force_logout">Force Logout</option>
+              <option class='customer_action_only' value="rescrape">Rescrape</option>
+              <option value="warning_upgrade">Flexible In-app Update</option>
+              <option value="force_upgrade">Immediate In-app Update</option>
+          </select>
+          <br>
+          <button onclick="submitCustomerAppAction();" id="btnSubmit" >Submit</button>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+
+  $(document).ready(function() {
+    $.ajaxSetup({
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+  });
+
+  function submitCustomerAppAction(){
+    document.getElementById("btnSubmit").disabled = true;
+    var csv_customer = $('#id_customer_app_action').val();
+    var action_chosen = $('#id_action').val();
+    var selector_chosen = $('#id_selector').val();
+    var url = undefined
+    if (selector_chosen == 'device_id'){
+        url = "{%url 'dashboard:ajax_device_app_action' %}/"
+        data = {
+            device_list: csv_customer,
+            action : action_chosen,
+        }
+    }
+    else{
+        url = "{%url 'dashboard:ajax_customer_app_action' %}/"
+        data = {
+            customer_list: csv_customer,
+            action : action_chosen,
+        }
+    }
+    if(csv_customer != ""){
+        $.ajax({
+            url :  url,
+            type : "POST", // http method
+            data : data,
+            // handle a successful response
+            success : function(json) {
+                if (json.status == "success"){
+                    if (json.messages == "Successfully created CustomerAppAction entry for all id")
+                        {alert("Successfully submitted Customer App Action!");}
+                    else
+                        {alert(json.messages)}
+                }
+                else {
+                    console.log(json);
+                    alert(json.messages);
+                }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        }); // end of ajax
+    }else{
+     alert("Customer input is empty.");
+    }
+    setTimeout(function() {
+        document.getElementById("btnSubmit").disabled = false;
+    }, 3000);
+  } // endof function
+
+  function setActionChoices(element){
+    actionChoices = document.getElementsByClassName("customer_action_only")
+    var i;
+    for (i = 0; i < actionChoices.length; i++) {
+        if (element.value == 'device_id'){
+            actionChoices[i].hidden = true;
+        }
+        else{
+            actionChoices[i].hidden = false;
+        }
+    }
+  }
+
+{% endblock %}
+

@@ -1,0 +1,2 @@
+class JuloDeviceScrapedException(Exception):
+    pass

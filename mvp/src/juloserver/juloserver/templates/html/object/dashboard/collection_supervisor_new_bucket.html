@@ -1,0 +1,1152 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{% block meta %}
+    <!-- <meta http-equiv="refresh" content="120"> -->
+{% endblock %}
+
+{% block custom_css %}
+  <!-- morris CSS -->
+  <!-- <link href="{% static 'theme/plugins/bower_components/morrisjs/morris.css' %}" rel="stylesheet"> -->
+  <!-- toast -->
+  <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block css_inside %}
+  .status_font {
+    font-size: 24px;
+  }
+  .analytics-info {
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .panel{
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .container-fluid {
+    background-color: white;
+  }
+  hr{
+    margin-top: 0px !important;
+    margin-bottom: 10px !important;
+  }
+   .clearFix
+   {
+       clear:both;
+   }
+   .panel.panel-chat
+   {
+       position: fixed;
+       bottom:0;
+       right:10px;
+       max-width: 800px;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat.panel-chat-extend
+   {
+       position: fixed;
+       bottom:0;
+       right:60em;
+       max-width: 800px;
+       height:50em;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat .panel-heading
+   {
+       background: #4b67a8;
+       border: 1px solid #2e4588;
+       color:#FFF;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(1)
+   {
+       text-decoration: none;
+       width: 800px;
+       color:#FFF;
+       font-weight: bold;
+       float:left;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(2)
+   {
+       text-decoration: none;
+       max-width: 11px;
+       width: 11px;
+       color:#FFF;
+       float:right;
+   }
+   .panel.panel-chat .panel-body
+   {
+       display: block;
+       padding: 10px;
+       margin: 0;
+       max-height: 350px;
+       height: 350px;
+       border-left: 1px solid #b2b2b2;
+       border-right: 1px solid #b2b2b2;
+       background: white;
+       overflow: auto;
+   }
+   .panel.panel-chat .panel-body::-webkit-scrollbar {
+        display: none;
+    }
+    .panel.panel-chat .panel-body-extend
+    {
+        display: block;
+        padding: 10px;
+        margin: 0;
+        max-height: 40em;
+        height: 40em;
+        border-left: 1px solid #b2b2b2;
+        border-right: 1px solid #b2b2b2;
+        background: white;
+        overflow: auto;
+    }
+    .panel.panel-chat .panel-body-extend::-webkit-scrollbar {
+         display: none;
+     }
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .custom-button{
+      border: 2px solid #4CAF50;
+      background-color: white;
+      color: green;
+      padding: 5px 28px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .custom-button:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+{% endblock %}
+
+
+{% block script_head %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-19175540-9', 'auto');
+    ga('send', 'pageview');
+
+    window.onbeforeunload = function() {
+      return "Jangan refresh ketika auto chooser berlangsung, anda yakin?";
+    };
+  </script>
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+
+<!-- Page Content -->
+  <div id="page-wrapper">
+    <div id="app1" class="container-fluid">
+
+      <div class="row m-t-10">
+        <div class="row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <h4 class="page-title">
+              <a href="{% url 'payment_status:list_v2' 'all' %}" target="_blank">
+                <button class="btn btn-primary btn-block">Payment & Collection</button>
+              </a>
+            </h4>
+          </div>
+        </div>
+        <div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+          <div class="col-lg-3 col-sm-2 col-xs-12">
+            <a href="{% url 'dashboard:collection_bucket_1_non_agent' role_name %}" target="_blank">
+              <div class="white-box analytics-info">
+                <h3 class="box-title-lowercase">Bucket 1: T-5 to T +10</h3><hr>
+                <ul class="list-inline two-part">
+                  <li>
+                    <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                  </li>
+                  <li class="text-right"><span class="counter text-info"><% payment_dashboard.bucket_1 %></span></li>
+                </ul>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-2 col-xs-12">
+            <a href="{% url 'dashboard:collection_bucket_2_non_agent' role_name %}" target="_blank">
+              <div class="white-box analytics-info">
+                <h3 class="box-title-lowercase">Bucket 2: T +11 to T +40</h3><hr>
+                <ul class="list-inline two-part">
+                  <li>
+                    <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                  </li>
+                  <li class="text-right"><span class="counter text-info"><% payment_dashboard.bucket_2 %></span></li>
+                </ul>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-2 col-xs-12">
+            <a href="{% url 'dashboard:collection_bucket_3_non_agent' role_name %}" target="_blank">
+              <div class="white-box analytics-info">
+                <h3 class="box-title-lowercase">Bucket 3: T +41 to T +70</h3><hr>
+                <ul class="list-inline two-part">
+                  <li>
+                    <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                  </li>
+                  <li class="text-right"><span class="counter text-info"><% payment_dashboard.bucket_3 %></span></li>
+                </ul>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-2 col-xs-12">
+            <a href="{% url 'dashboard:collection_bucket_4_non_agent' role_name %}" target="_blank">
+              <div class="white-box analytics-info">
+                <h3 class="box-title-lowercase">Bucket 4: T +71 to T +90</h3><hr>
+                <ul class="list-inline two-part">
+                  <li>
+                    <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                  </li>
+                  <li class="text-right"><span class="counter text-info"><% payment_dashboard.bucket_4 %></span></li>
+                </ul>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-sm-2 col-xs-12">
+            <a href="{% url 'payment_status:list_v2' 'collection_supervisor_plus101'%}" target="_blank">
+              <div class="white-box analytics-info">
+                <h3 class="box-title-lowercase">Bucket 5: T +91+</h3><hr>
+                <ul class="list-inline two-part">
+                  <li>
+                    <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                  </li>
+                  <li class="text-right"><span class="counter text-info"><% payment_dashboard.bucket_5 %></span></li>
+                </ul>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+          <div class="col-lg-4 col-sm-3 col-xs-12">
+            <a href="{% url 'payment_status:list_v2' 'collection_supervisor_ptp'%}" id="payment_ptp" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">PTP</h3><hr>
+              <ul class="list-inline two-part">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-info"><% payment_dashboard.PTP %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-3 col-xs-12">
+            <a href="{% url 'payment_status:list_v2' 'collection_supervisor_ignore_called'%}" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title">Ignore Called</h3><hr>
+              <ul class="list-inline two-part">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-info"><% payment_dashboard.IgnoreCalled %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-3 col-xs-12">
+            <a href="{% url 'payment_status:list_v2' 'collection_supervisor_whatsapp'%}" target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title-lowercase">WA</h3><hr>
+              <ul class="list-inline two-part">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-success"><% payment_dashboard.whatsapp_supervisor %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row m-t-10">
+        <div class="row">
+          <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
+            <h4 class="page-title">
+              <a href="{% url 'loc_collection:list' 'all' %}" target="_blank">
+                <button class="btn btn-success btn-block" v-bind:style="{'background-color': blBtnColor}">BL Statements
+                </button>
+              </a>
+            </h4>
+          </div>
+        </div>
+        <div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+          <div class="col-lg-3 col-sm-2 col-xs-12"
+            v-for="blBucket in bl_payment_bucket_list">
+              <a
+                :href="blBucket.url"
+                target="_blank">
+                <div class="white-box analytics-info">
+                  <h3 class="box-title-lowercase"><% blBucket.name %></h3><hr>
+                  <ul class="list-inline two-part">
+                    <li>
+                      <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                    </li>
+                    <li class="text-right"><span class="counter text-info"><% payment_dashboard[blBucket.key] %></span></li>
+                  </ul>
+                </div>
+              </a>
+          </div>
+        </div>
+      </div>
+      <div class="row m-t-10">
+        <div class="row">
+          <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12">
+            <h4 class="page-title">
+              <a href="{% url 'loc_collection:list' 'all' %}" target="_blank">
+                <button class="btn btn-success btn-block">LOC-Payment & Collection
+                </button>
+              </a>
+            </h4>
+          </div>
+        </div>
+        <div class="col-lg-11 col-sm-11 col-xs-12 col-lg-offset-1">
+          <div
+            class="col-lg-3 col-sm-2 col-xs-12"
+            v-for="locBucket in loc_payment_bucket_list">
+            <a
+              :href="locBucket.url" id="payment_t1"
+              target="_blank">
+            <div class="white-box analytics-info">
+              <h3 class="box-title-lowercase"><% locBucket.name %></h3><hr>
+              <ul class="list-inline two-part">
+                <li>
+                  <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                </li>
+                <li class="text-right"><span class="counter text-info"><% loc_payment_dashboard[locBucket.key] %></span></li>
+              </ul>
+            </div>
+            </a>
+          </div>
+        </div>
+
+      <!--/.row -->
+      <hr>
+      <div id="payment-list">
+        <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" :data-page-size="max_row_per_page">
+          <thead>
+            <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+              <th data-toggle="true" data-sort-ignore="true"> No </th>
+              <th colspan="2" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="id"> Pmt-ID </th>
+              <th class="text-center" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="loan__application__product_line__product_line_type"> PLine</th>
+              <th data-sort-ignore="true" class="julo-sort-header" data-julo-sort="loan__customer__email"> Email </th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="loan__application__fullname"> Full Name</th>
+              <th data-toggle="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="payment_status__status_code"> Status </th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="dpd_ptp"> dpd ptp</th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="dpd"> dpd</th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="reminder_call_date">reminder date</th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="payment_number"> Pmt#</th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort-double = "y" data-julo-sort="loan_and_status"> LoanID-Status</th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="loan__agent_2__username">Agent 2</th>
+              <th data-hide="phone" data-sort-ignore="true" class="julo-sort-header" data-julo-sort="loan__agent_3__username">Agent 3</th>
+              <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">Actions</th>
+            </tr>
+          </thead>
+          <div class="form-inline padding-bottom-15">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-xs-12 hidden-xs">
+              </div>
+            </div>
+          </div>
+          <tbody>
+            <template v-for="(payment, index) in payments">
+              <tr class="parent-row">
+                <td v-on:click="ShowToogle(payment.id)"><% start_index+index+1 %></td>
+                <td>
+                  <a v-if="GetDpd(payment.due_date) >= -5" v-on:click="CheckLockedData(payment.id)" target="_blank">
+                    <% payment.id %>
+                  </a>
+                  <a v-else :href="GetUrl(payment.id)" target="_blank">
+                    <% payment.id %>
+                  </a>
+                </td>
+                <td v-if="GetDpd(payment.due_date) >= -5" class="text-center" v-on:click="ShowToogle(payment.id)">
+                  <span v-if="payment_lock_list.indexOf(payment.id) != -1" class="label label-danger lbl-sm lbl-rounded pull-right"><i class="fa fa-lock"></i></span>
+                  <span v-else class="label label-custom lbl-sm lbl-rounded pull-right"><i class="fa fa-unlock"></i></span>
+                </td>
+                <td v-else v-on:click="ShowToogle(payment.id)"></td>
+                <td class="text-center" v-on:click="ShowToogle(payment.id)">
+                  <span v-if="payment.loan__application__product_line_id == 10" class="label label-rouded label-info pull-center small">MTL1</span>
+                  <span v-else-if="payment.loan__application__product_line_id == 11" class="label label-rouded label-warning pull-center small">MTL2</span>
+                  <span v-else-if="payment.loan__application__product_line_id == 20" class="label label-rouded label-primary pull-center small">STL1</span>
+                  <span v-else-if="payment.loan__application__product_line_id == 21" class="label label-rouded label-danger pull-center small">STL2</span>
+                  <span v-else-if="payment.loan__application__product_line_id == 40" class="label label-rouded label-danger pull-center small">BRI1</span>
+                  <span v-else-if="payment.loan__application__product_line_id == 41" class="label label-rouded label-danger pull-center small">BRI2</span>
+                  <span v-else-if="payment.loan__application__product_line_id == 50" class="label label-rouded label-success pull-center small">GRAB1</span>
+                  <span v-else-if="payment.loan__application__product_line_id == 51" class="label label-rouded label-danger pull-center small">GRAB2</span>
+                  <span v-else class="label label-rouded label-success pull-center small"><% payment.loan__application__product_line_id %></span>
+                </td>
+                <td v-on:click="ShowToogle(payment.id)"> <% payment.loan__application__email %> </td>
+                <td v-on:click="ShowToogle(payment.id)"> <% payment.loan__application__fullname %> </td>
+                <td v-on:click="ShowToogle(payment.id)"><code><% payment.payment_status_id %></code></td>
+                <td v-on:click="ShowToogle(payment.id)"><code><% GetDpd(payment.ptp_date) %></code></td>
+                <td v-on:click="ShowToogle(payment.id)"><code><% GetDpd(payment.due_date) %></code></td>
+                <td v-on:click="ShowToogle(payment.id)"><strong><% payment.reminder_call_date | formatDate %></strong></td>
+                <td v-on:click="ShowToogle(payment.id)">
+                  <span class="label label-success"><% payment.payment_number %></span>
+                </td>
+                <td v-on:click="ShowToogle(payment.id)">
+                  <% payment.loan_id %> <code><% payment.loan__loan_status_id %></code>
+                </td>
+                <td v-on:click="ShowToogle(payment.id)"><% payment.loan__agent_2__username %></td>
+                <td v-on:click="ShowToogle(payment.id)"><% payment.loan__agent_3__username %></td>
+                <td class='text-center'>
+                  <div class="btn-group m-r-10">
+                    <button aria-expanded="false" data-toggle="dropdown" class="btn btn-primary btn-rounded dropdown-toggle waves-effect waves-light" type="button">
+                      --Pilih-- <span class="caret"></span>
+                    </button>
+                    <ul role="menu" class="dropdown-menu">
+                      <li>
+                        <a :href="GetUrl(payment.id)" title='detail' target="_blank">
+                          <button class="btn btn-danger btn-block">Detail</button>
+                        </a>
+                      </li>
+                      <li v-if="GetDpd(payment.due_date) >= -5">
+                        <a href="#" v-if="payment_lock_list.indexOf(payment.id) != -1" title='lock payment ini' v-on:click="SetPaymentUnLocked(payment.id);">
+                          <button class="btn btn-danger btn-block">Unlock Payment</button>
+                        </a>
+                        <a href="#" v-else title='lock payment ini' v-on:click="SetPaymentLocked(payment.id);">
+                          <button class="btn btn-danger btn-block">Lock Payment</button>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="17" class="hiddenRow">
+                  <table class="collapse" :id="'collapse-'+payment.id">
+                    <tbody>
+                      <tr>
+                        <td class='m-r-10'> Application ID </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong> <% payment.loan__application_id %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='m-r-10'> Customer ID </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong> <% payment.loan__application__customer_id %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan=2><hr></td>
+                      </tr>
+                      <tr>
+                        <td> Due Date </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong> <% payment.due_date %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='m-r-10'> Due Amount </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong><% payment.due_amount %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='m-r-10'> Late Fee Amount </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong><% payment.late_fee_amount %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='m-r-10'> Case Back Earned </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong><% payment.cashback_earned %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan=2> <hr> </td>
+                      </tr>
+                      <tr>
+                        <td>Nama Lengkap</td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong> <% payment.loan__application__fullname %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='m-r-10'> No. HP </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong><% payment.loan__application__mobile_phone_1 %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='m-r-10'> No KTP </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong><% payment.loan__application__ktp %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class='m-r-10'> Tgl Lahir </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong><% payment.loan__application__dob %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> Loan Amount </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong> <% payment.loan__loan_amount %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> Loan Duration </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong> <% payment.loan__loan_duration %></strong>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td> CDate </td>
+                        <td>
+                          &nbsp;&nbsp;<i class='fa fa-arrow-circle-o-right fa-fw'></i>
+                          <strong> <% payment.cdate %></strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+        <tfoot>
+          <div v-if="payments.length < 1" class="text-center">
+            -- tidak ada data --
+          </div>
+          <tr>
+            <td>
+              <div class="text-center">
+                <ul class="pagination">
+                  <li v-for="(n, index) in count_page" v-bind:class="GetClassPagination(n)" v-on:click="ChoosePage(n, index)"><a href="#"><% n %></a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+        <!-- modal lock payment-->
+        <div id="modal-locked-payment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header label-success">
+                <h4 class="modal-title"><% title_payment_lock %></h4>
+              </div>
+              <div class="modal-body">
+                <% body_payment_lock %>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-warning waves-effect" data-dismiss="modal" v-on:click="OpenNewTab();">Lihat Payment</button>
+                <button type="button" class="btn btn-custom waves-effect" data-dismiss="modal" v-on:click="SetPaymentLocked(payment_id_selected);" v-if="status_lock_payment">Lock dan Edit Payment</button>
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- modal success-->
+        <div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header label-warning">
+                <h4 class="modal-title" id="modal_title">Title</h4> </div>
+              <div class="modal-body" id="modal_body">
+                Body
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="close_btn()">Tutup</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /#page-wrapper -->
+
+
+{% endblock %}
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+<link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+<link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type="text/javascript">
+  var app1 = new Vue({
+    el: '#app1',
+    delimiters: ["<%", "%>"],
+    data: {
+      app_dashboard : {},
+      payment_dashboard : {},
+      loc_payment_dashboard: {},
+      loc_payment_bucket_list: [
+        { 'name': 'T-1',
+          'key': 'Tmin1',
+          'url': '{% url "loc_collection:list" "Tmin1" %}'
+        },
+        { 'name': 'T0',
+          'key': 'T0',
+          'url': '{% url "loc_collection:list" "T0" %}'
+        },
+        { 'name': 'T +1 to T +29',
+          'key': 'T1to29',
+          'url': '{% url "loc_collection:list" "T1to29" %}'
+        },
+        { 'name': 'T > 29',
+          'key': 'Tplus30',
+          'url': '{% url "loc_collection:list" "Tplus30" %}'
+        },
+      ],
+      bl_payment_bucket_list: [
+          {
+            'name': 'T-0',
+            'key': 'bl_T0',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_duetoday" %}'
+          },
+          {
+            'name': 'T +1 to T +5',
+            'key': 'bl_T1toT5',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_1to5" %}'
+          },
+          {
+            'name': 'T +6 to T +14',
+            'key': 'bl_T6toT14',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_6to14" %}'
+          },
+          {
+            'name': 'T +15 to T +29',
+            'key': 'bl_T15toDpd29',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_15to29" %}'
+          },
+          {
+            'name': 'T +30 to T +44',
+            'key': 'bl_T30toT44',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_30to44" %}'
+          },
+          {
+            'name': 'T +45 to T +59',
+            'key': 'bl_T45toT59',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_45to59" %}'
+          },
+          {
+            'name': 'T +60 to T +89',
+            'key': 'bl_T60toT89',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_60to89" %}'
+          },
+          {
+            'name': 'T +90+',
+            'key': 'bl_T90plus',
+            'url': '{% url "bl_statement:list" "collection_supervisor_bl_90plus" %}'
+          }
+      ],
+      loan_dashboard : {},
+      payments: '',
+      filter_status: '{{status_app}}',
+      filter_status_q: '{{status_app}}',
+      sort: null,
+      search: null,
+      filter: null,
+      count_page: 0,
+      current_page: 0,
+      page_choose: 1,
+      start_index: 0,
+      max_row_per_page: 50,
+      payment_lock_list: [],
+      opened: [],
+      okay: false,
+      search_q:'{{search_q}}',
+      search:'{{search_q}}',
+      today_checked: false,
+      freeday_checked: false,
+      today_checked_q: false,
+      freeday_checked_q: false,
+      range_date:null,
+      sort_q:'',
+      form_agent_selected:'',
+      payment_id_agent:'',
+      payment_id_selected:null,
+      status_lock_payment:false,
+      title_payment_lock:'',
+      body_payment_lock:'',
+      window_tab_status:true,
+      blBtnColor: '#D71249 !important'
+    },
+    beforeMount(){
+      self = this
+      this.get_bucket_count()
+      this.get_loc_bucket_count()
+      document.addEventListener('DOMContentLoaded', function(){
+          var elements = document.getElementsByClassName("julo-sort-header");
+          for (var i = 0; i < elements.length; i++) {
+              self.AddToggles(elements[i]);
+          };
+          self.UpdateSortState(self.sort_q);
+      }, false);
+      this.GetPaymentList();
+    },
+    methods: {
+      get_bucket_count: function () {
+        var self = this
+        $.ajax({
+            url :  "{% url 'dashboard:get_collection_supervisor_new_bucket' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+              csrfmiddlewaretoken: this.csrftoken
+              }, // data sent with the get request
+
+            // handle a successful response
+            success : function(json) {
+                console.log(json); // log the returned json to the console
+                if(json.status == "success"){
+                  self.payment_dashboard = json.payment_dashboard
+                }
+
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                this.callProcess = 'we have an erorr while getting data'
+            }
+        }); // end of ajax
+      },
+      get_loc_bucket_count: function () {
+        var self = this
+        $.ajax({
+            url :  "{%url 'dashboard:get_loc_collection_agent_bucket' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+              csrfmiddlewaretoken: this.csrftoken
+              }, // data sent with the get request
+
+            // handle a successful response
+            success : function(json) {
+                console.log(json); // log the returned json to the console
+                if(json.status == "success"){
+                  self.loc_payment_dashboard = json.loc_payment_dashboard
+                }
+
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                this.callProcess = 'we have an erorr while getting data'
+            }
+        }); // end of ajax
+      },
+      GetPaymentList: function() {
+        if (!this.window_tab_status){return}
+        console.log('Get list')
+        var self = this
+        $.ajax({
+            url :  "{%url 'dashboard:ajax_payment_list_collection_supervisor_view' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                page: self.page_choose,
+                search_q: self.search_q,
+                today_checked: self.today_checked_q,
+                freeday_checked: self.freeday_checked_q,
+                range_date:self.range_date,
+                sort_q:self.sort_q,
+                max_per_page: self.max_row_per_page
+              }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                // console.log(json); // log the returned json to the console
+                if(json.status == 'success'){
+                  console.log(json);
+                  self.payments = json.data
+                  self.count_page = json.count_page
+                  self.current_page = json.current_page
+                  self.payment_lock_list = json.payment_lock_list
+                  if(self.sort_q){
+                    self.UpdateSortState(self.sort_q)
+                  }
+                }else{
+                  console.log(json.message);
+                  self.ToastDanger('Error','Update get payment list');
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              self.ToastDanger('Error','Update get payment list');
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              this.callProcess = 'we have an erorr while getting data'
+            }
+        }); // end of ajax
+      },
+      UpdateAgent: function(){
+        self = this
+        $.ajax({
+           url :  "{% url 'payment_status:ajax_update_agent' %}/",
+           type : "POST",
+           data : {
+             payment_id : self.payment_id_agent,
+             agent_id : self.form_agent_selected,
+             csrfmiddlewaretoken: self.csrftoken
+           },
+           // handle a successful response
+           success : function(json) {
+               if (json.status == "success"){
+                 $("#responsive-modal-edit-agent").modal('hide');
+                 self.ToastSuccess('Success','Update Agent');
+                 self.GetPaymentList()
+               } else if(json.status == "failed"){
+                 console.log(json);
+                 self.ToastDanger('Failed','Update Agent');
+               }
+           },
+           // handle a non-successful response
+           error : function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            self.ToastDanger('Failed',err);
+           }
+        });
+      },
+      UpdateRobocall: function(payment_id){
+       self = this
+        $.ajax({
+          url :  "{% url 'payment_status:update_robocall' %}/",
+          type : "GET",
+          data : {
+            payment_id : payment_id,
+            csrfmiddlewaretoken: self.csrftoken
+          },
+          // handle a successful response
+          success : function(json) {
+            if (json.status == "success"){
+             self.ToastSuccess('Robocall Update',json.message);
+             self.GetPaymentList()
+            } else if(json.status == "failed"){
+             self.ToastDanger('Robocall Update',json.message);
+            }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+            self.ToastDanger('Robocall Update Failed!', err);
+          }
+        })
+      },
+      CheckLockedData: function(payment_id){
+        self = this
+        $.ajax({
+            url :  "{%url 'payment_status:check_payment_locked' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+              payment_id: payment_id,
+              csrfmiddlewaretoken: self.csrftoken
+            }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                self.payment_id_selected = payment_id;
+                if (json.code == "03"){
+                  //show notification that payment free to locked
+                  self.status_lock_payment = true;
+                  self.title_payment_lock = "Payment Masih Belum di-Lock!";
+                  self.body_payment_lock = "Payment masih blum diproses dan di-lock oleh Agent, Silahkan Pilih tombol aksi dibawah ini!";
+                  $('#modal-locked-payment').modal('show');
+                }
+                else if (json.code == "02"){
+                  //show notification that payment was locked and not allowed edit status changes
+                  self.title_payment_lock = "Payment Sudah di-Lock";
+                  self.body_payment_lock = "Payment telah di lock oleh " + (json.reason[1]) + " dengan TS: " + (json.reason[3]) + ", Apakah Ingin Lanjut?";
+                  $('#modal-locked-payment').modal('show');
+                }
+                else if (json.code == "09"){
+                  //show notification that payment was locked and not allowed edit status changes
+                  self.title_payment_lock = "Perhatian!!!";
+                  self.body_payment_lock = json.reason;
+                  $('#modal-locked-payment').modal('show');
+                }else if(json.code == "01"){
+                  self.OpenNewTab()
+                }else {
+                  self.ToastDanger('Check Lock Failed!', json.reason);
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              self.ToastDanger('Check Lock Failed!', err);
+            }
+        }); // end of ajax
+      },
+      SetPaymentLocked: function(payment_id){
+        self = this
+        $.ajax({
+            url :  "{%url 'payment_status:set_payment_locked' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+              payment_id: payment_id,
+              csrfmiddlewaretoken: self.csrftoken,
+            }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+                if (json.result == "successful!"){
+                  self.payment_id_selected = payment_id
+                  self.OpenNewTab();
+                }
+                else {
+                  console.log(json.reason);
+                  self.ToastDanger('Check Lock Failed!', 'err');
+                }
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              self.ToastDanger('Check Lock Failed!', err);
+            }
+        }); // end of ajax
+      },
+      SetPaymentUnLocked: function(payment_id){
+        self = this
+        $.ajax({
+            url :  "{%url 'payment_status:set_payment_unlocked' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+              payment_id: payment_id,
+              csrfmiddlewaretoken: self.csrftoken,
+            }, // data sent with the get request
+            // handle a successful response
+            success : function(json) {
+              if (json.result == "successful!"){
+                //redirect this page
+                self.ToastSuccess('Un-Lock Success',json.reason);
+                self.GetPaymentList();
+              }
+              else {
+                //show notification that payment was locked
+                console.log(json.reason);
+                self.ToastDanger('Un-Lock Gagal', json.reason);
+              }
+            },
+            // handle a non-successful response
+            error : function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                self.ToastDanger('Un-Lock Gagal', err);
+            }
+        }); // end of ajax
+      },
+      GetClassPagination: function(index) {
+        return{
+          'active': this.current_page == index
+        }
+      },
+      ChoosePage: function(page, index) {
+        this.page_choose = page
+        this.start_index = index * this.max_row_per_page
+        this.GetPaymentList()
+      },
+      GetDpd: function(due_date) {
+        if (!due_date){
+          return "-"
+        }
+        var now = moment();
+        var dt1 = new Date(due_date);
+        var dt2 = new Date(now);
+        return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
+      },
+      toggle: function(id) {
+      	const index = this.opened.indexOf(id);
+        if (index > -1) {
+        	this.opened.splice(index, 1)
+        } else {
+        	this.opened.push(id)
+        }
+      },
+      GetUrl: function(payment_id){
+        var url = "{% url 'payment_status:change_status' 123456 %}".replace(/123456/, payment_id)
+        return url
+      },
+      UpdateSortState: function(sort_value){
+        if (sort_value != ""){
+            var id;
+            if (sort_value.includes("_desc")){id = sort_value.replace("_desc", "") + "-sort-toggle";}
+            else if (sort_value.includes("_asc")){id = sort_value.replace("_asc", "") + "-sort-toggle";}
+            else{id = sort_value.replace("-", "") + "-sort-toggle";};
+            var toggle_element = document.getElementById(id);
+            this.ResetState(toggle_element);
+            toggle_element.setAttribute( "data-julo-sort",  sort_value);
+            if (sort_value.includes("-") || sort_value.includes("_desc") ){
+                toggle_element.classList.remove( "julo-sort-indicator-default");
+                toggle_element.classList.remove( "julo-sort-indicator-asc");
+                toggle_element.classList.add("julo-sort-indicator-desc");
+            }else{
+                toggle_element.classList.remove( "julo-sort-indicator-default");
+                toggle_element.classList.remove( "julo-sort-indicator-desc");
+                toggle_element.classList.add("julo-sort-indicator-asc");
+            }
+        }
+      },
+      ResetState: function(element){
+        $(".julo-sort-indicator-asc").attr('class', 'julo-sort-indicator julo-sort-indicator-default');
+        $(".julo-sort-indicator-desc").attr('class', 'julo-sort-indicator julo-sort-indicator-default');
+        $(".julo-sort-indicator-asc").removeAttr('data-julo-sort');
+        $(".julo-sort-indicator-desc").removeAttr('data-julo-sort');
+      },
+      AddToggles: function(item) {
+          var sortVar = item.getAttribute("data-julo-sort");
+          var node = document.createElement("span");
+          var is_double = item.getAttribute("data-julo-sort-double");
+          if(is_double){
+            node.setAttribute("data-julo-sort-double", "y");
+          };
+          node.setAttribute("id", sortVar+"-sort-toggle");
+          node.setAttribute("class", "julo-sort-indicator julo-sort-indicator-default");
+          node.setAttribute("data-julo-sort", "");
+          node.setAttribute("onclick", "SortBySubmit('"+sortVar+"-sort-toggle');");
+          item.appendChild(node);
+      },
+      SortingAction: function(query){
+        if (this.sort_q != '' && this.sort_q == query){
+          var toggle_element = document.getElementById(this.sort_q+'-sort-toggle');
+          toggle_element.classList.add( "julo-sort-indicator-default");
+          toggle_element.classList.remove( "julo-sort-indicator-desc");
+          toggle_element.classList.remove("julo-sort-indicator-asc");
+        }
+        this.sort_q = query
+        this.GetPaymentList()
+      },
+      OpenNewTab: function(){
+        var url_selected = "/payment_status/change_status/"+this.payment_id_selected;
+        var win = window.open(url_selected, '_blank');
+        win.focus();
+      },
+      ShowToogle(payment_id){
+        $("#collapse-"+payment_id).toggle();
+      },
+      SetWindowTabStatus(status){
+        this.window_tab_status = status
+      },
+      ToastSuccess: function(header_msg, body_message){
+       $.toast({
+         heading: header_msg,
+         text: body_message,
+         position: 'top-right',
+         loaderBg:'#ff6849',
+         icon: 'success',
+         hideAfter: 1500,
+         stack: 6
+       });
+      },
+      ToastDanger: function(header_msg, body_message){
+       $.toast({
+         heading: header_msg,
+         text: body_message,
+         position: 'top-right',
+         loaderBg:'#ff6849',
+         icon: 'error',
+         hideAfter: 2800
+       });
+      }
+    }
+  })
+
+  $(document).ready(function(){
+    setInterval(function () {
+      app1.GetPaymentList();
+    }, 120000)
+  });
+
+  // Active
+   window.addEventListener('focus', ActionActiveTab);
+
+   // Inactive
+   window.addEventListener('blur', ActionInactiveTab);
+
+  function ActionActiveTab(){
+    console.log('Active tab')
+    app1.SetWindowTabStatus(true);
+  }
+  function ActionInactiveTab(){
+    console.log('Inactive tab')
+    app1.SetWindowTabStatus(false);
+  }
+
+  function SortBySubmit(id){
+      var toggle_element = document.getElementById(id);
+      var is_double = toggle_element.getAttribute("data-julo-sort-double");
+      var sort_data = toggle_element.getAttribute("data-julo-sort");
+      var form = document.getElementById("julo-sort-form")
+      var form_id = form.getAttribute("data-julo-sort-form");
+      var form_field_id = form.getAttribute("data-julo-sort-query-field");
+      var form_element = document.getElementById(form_id);
+      var field_element = document.getElementById(form_field_id);
+      if(sort_data == ""){
+          if (is_double){
+              query_data =  id.replace("-sort-toggle", "")+ "_asc";
+          }else{
+              query_data =  id.replace("-sort-toggle", "");
+          };
+      }else{
+          if (is_double){
+              if(sort_data.includes('_desc')){
+                  query_data = sort_data.replace("_desc", "_asc");
+              }else{
+                  query_data = sort_data.replace("_asc", "_desc");
+              };
+          }else{
+              if(sort_data.includes('-')){
+                  query_data = sort_data.replace("-", "");
+              }else{
+                  query_data = "-"+sort_data;
+              };
+          };
+      };
+      app1.SortingAction(query_data);
+  }
+</script>
+{% endblock %}

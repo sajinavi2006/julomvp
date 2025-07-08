@@ -1,0 +1,75 @@
+{% extends "common/layout_master.html" %}
+
+{% block meta %}{% endblock %}
+
+{% block master_css %}
+{% load static from staticfiles %}
+	<!-- Bootstrap Core CSS -->
+	<link href="{% static 'theme/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+	
+	<!-- animation CSS -->
+	<link href="{% static 'theme/nav-full/css/animate.css' %}" rel="stylesheet">
+	
+	<!-- Custom CSS -->
+	<link href="{% static 'theme/nav-full/css/style.css' %}" rel="stylesheet">
+	
+	<!-- color CSS you can use different color css from css/colors folder -->
+	<link href="{% static 'theme/nav-full/css/colors/blue.css' %}" id="theme"  rel="stylesheet">
+{% endblock %}
+
+{% block custom_css %}
+{% endblock %}
+
+{% block custom_link %}{% endblock %}
+
+{% block master_script %}
+	<script src="{% static 'theme/plugins/w3schools/w3data.js' %}"></script>
+{% endblock %}
+
+{% block script_head %}{% endblock %}
+
+{% block css_inside %}{% endblock %}
+
+{% block body_class %} class="fix-header"{% endblock %}
+
+{% block body %}
+	<!-- Preloader -->
+	<div class="preloader">
+	  <div class="cssload-speeding-wheel"></div>
+	</div>
+	
+	<section id="wrapper" class="error-page">
+	  <div class="error-box">
+		{% block inside_body %}{% endblock %}
+	
+		{% block footer %}
+			{% include 'common/footer.html' %} 
+		{% endblock %}
+	  </div>
+	</section>
+
+	<div id="wrapper">
+
+	
+	</div>
+{% endblock %}
+
+
+{% block custom_script %}
+	<!-- jQuery -->
+	<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+	
+	<!-- Bootstrap Core JavaScript -->
+	<script src="{% static 'theme/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+	
+	<!-- Custom Theme JavaScript -->
+	<script src="{% static 'theme/nav-full/js/custom.min.js' %}"></script>
+	
+{% endblock %}
+
+
+{% block script_bottom %}
+	<script type="text/javascript">    
+	</script>
+{% endblock %}
+

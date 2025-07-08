@@ -1,0 +1,42 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls admin_static %}
+
+{% block extrahead %}{{ block.super }}
+<style type="text/css">
+    .form-row {
+        overflow: visible !important;
+    }
+    .selectize-control {
+        width: 300px;
+        display: inline-grid;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+</style>
+{% endblock %}
+{% block admin_change_form_document_ready %}
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ($('.expiration_option:checked').val() === 'forever'){
+            $('input[name="many_days"]').val(0).prop('readonly', 'readonly')
+        }
+        $('.expiration_option').change(function (){
+            var current_value = $('.expiration_option:checked').val()
+            if (current_value === 'forever'){
+                $('input[name="many_days"]').val(0).prop('readonly', 'readonly')
+            }else{
+                $('input[name="many_days"]').val(1).prop('readonly', false)
+            }
+        })
+
+    })
+</script>
+{% endblock %}

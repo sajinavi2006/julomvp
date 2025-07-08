@@ -1,0 +1,185 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+from django.db import migrations
+from django.db import connection
+
+
+def update_ownership(apps, schema_editor):
+	cursor = connection.cursor()
+	cursor.execute("ALTER TABLE ops.fdc_data_as_view_v2 OWNER TO ops_server;")
+
+def update_query(apps, schema_editor):
+	cursor = connection.cursor()
+	cursor.execute("CREATE OR REPLACE VIEW ops.fdc_data_as_view_v2 \
+		AS SELECT row_number() OVER () AS fdc_data_as_view_id \
+		    ,810069 AS id_penyelenggara \
+		    ,0 AS pendanaan_syariah \
+		    ,2 AS tipe_pinjaman \
+		    ,20 AS sub_tipe_pinjaman \
+		    ,0 AS penyelesaian_w_oleh \
+		    ,NULL::text AS reference \
+		    ,c.customer_id AS id_borrower \
+		    ,1 AS jenis_pengguna \
+		    ,a.fullname AS nama_borrower \
+		    ,a.ktp AS no_identitas \
+		    ,NULL::text AS no_npwp \
+		    ,a.application_xid AS id_pinjaman \
+		    ,to_char(COALESCE(sphp_ready.time, l.fund_transfer_ts), 'YYYYMMDD'::text) AS tgl_perjanjian_borrower \
+		    ,    CASE \
+		            WHEN l.fund_transfer_ts::date > ph.last_due_date THEN to_char((timezone('Asia/Jakarta'::text, sphp_ready.time)::date + 1)::timestamp with time zone, 'YYYYMMDD'::text) \
+		            ELSE to_char(l.fund_transfer_ts, 'YYYYMMDD'::text) \
+		        END AS tgl_penyaluran_dana \
+		    ,l.loan_amount AS nilai_pendanaan \
+		    ,to_char((timezone('Asia/Jakarta'::text, now())::date - 1)::timestamp with time zone, 'YYYYMMDD'::text) AS tgl_pelaporan_data \
+		    ,l.loan_amount::numeric - COALESCE(ph.paid_principal, 0::numeric) AS sisa_pinjaman_berjalan \
+		    ,to_char(timezone('Asia/Jakarta'::text, ph.last_due_date::timestamp with time zone)::date::timestamp with time zone, 'YYYYMMDD'::text) AS tgl_jatuh_tempo_pinjaman \
+		    ,    CASE \
+		            WHEN (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) < 30 THEN 1 \
+		            WHEN (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) >= 30 AND (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) <= 90 THEN 2 \
+		            WHEN (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) > 90 THEN 3 \
+		            ELSE NULL::integer \
+		        END AS id_kualitas_pinjaman \
+		    ,timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date) AS status_pinjaman_dpd \
+		    ,timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.oldest_due_date, timezone('Asia/Jakarta'::text, now())::date) AS status_pinjaman_max_dpd \
+		    ,    CASE \
+		            WHEN l.loan_status_code = ANY (ARRAY[220, 230, 231, 232, 233, 234, 235, 236, 240]) THEN 'O'::text \
+		            WHEN l.loan_status_code = 250 THEN 'L'::text \
+		            WHEN l.loan_status_code = ANY (ARRAY[237, 260]) THEN 'W'::text \
+		            WHEN l.loan_status_code = 210 THEN 'D'::text \
+		            ELSE NULL::text \
+		        END AS status_pinjaman \
+		   FROM ops.customer c \
+		     JOIN ops.application a ON a.customer_id = c.customer_id \
+		     						AND a.application_status_code = 180 \
+		     						AND lower(a.email::text) !~~ '%julofinance%'::text \
+		     JOIN ops.loan l ON l.application_id = a.application_id \
+		     				AND l.loan_status_code <> 210 \
+		     LEFT JOIN (SELECT application_history.application_id \
+		            		,max(application_history.cdate) AS time \
+		           		FROM ops.application_history \
+		          		WHERE application_history.status_new = ANY (ARRAY[165, 170, 177]) \
+		          		GROUP BY application_history.application_id \
+		          		) sphp_ready ON sphp_ready.application_id = a.application_id \
+		     LEFT JOIN (SELECT payment.loan_id \
+		            		,sum(CASE WHEN payment.paid_amount >= payment.installment_principal THEN payment.installment_principal \
+		                    		WHEN payment.paid_amount < payment.installment_principal THEN payment.paid_amount \
+		                    		ELSE NULL::bigint \
+		                			END) AS paid_principal \
+		            		,max(payment.due_date) AS last_due_date \
+		           		FROM ops.payment \
+		           		WHERE payment.is_restructured = false \
+		          		GROUP BY payment.loan_id \
+		          		) ph ON ph.loan_id = l.loan_id \
+		     LEFT JOIN (SELECT payment.loan_id \
+		            		,min(CASE WHEN payment.payment_status_code >= 320 THEN payment.due_date \
+		                    		ELSE NULL::date \
+		                			END) AS oldest_due_date \
+		            		,max(CASE WHEN payment.payment_status_code >= 320 THEN payment.due_date \
+		                    		ELSE NULL::date \
+		                			END) AS earliest_due_date \
+		           		FROM ops.payment \
+		          		WHERE payment.payment_status_code < 330  \
+		          		AND payment.is_restructured = false \
+		          		GROUP BY payment.loan_id \
+		          		) p ON p.loan_id = l.loan_id \
+		     LEFT JOIN (SELECT DISTINCT payment_history.loan_id \
+		           		FROM ops.payment_history \
+		          		WHERE payment_history.cdate > (timezone('Asia/Jakarta'::text, now())::date - 1)  \
+		          		AND payment_history.cdate < timezone('Asia/Jakarta'::text, now())::date \
+		          		) lc ON lc.loan_id = l.loan_id \
+		UNION all \
+		 SELECT row_number() OVER () AS fdc_data_as_view_id \
+		    ,810069 AS id_penyelenggara \
+		    ,0 AS pendanaan_syariah \
+		    ,2 AS tipe_pinjaman \
+		    ,20 AS sub_tipe_pinjaman \
+		    ,0 AS penyelesaian_w_oleh \
+		    ,NULL::text AS reference \
+		    ,c.customer_id AS id_borrower \
+		    ,1 AS jenis_pengguna \
+		    ,a.fullname AS nama_borrower \
+		    ,a.ktp AS no_identitas \
+		    ,NULL::text AS no_npwp \
+		    ,l.loan_xid AS id_pinjaman \
+		    ,to_char(x.\"212_time\", 'YYYYMMDD'::text) AS tgl_perjanjian_borrower \
+		    ,    CASE WHEN l.fund_transfer_ts > ph.last_due_date THEN to_char((timezone('Asia/Jakarta'::text, x.\"212_time\")::date + 1)::timestamp with time zone, 'YYYYMMDD'::text) \
+		            WHEN l.fund_transfer_ts IS NULL AND x.\"220_time\" IS NOT NULL THEN to_char((timezone('Asia/Jakarta'::text, x.\"220_time\")::date + 1)::timestamp with time zone, 'YYYYMMDD'::text) \
+		            ELSE to_char(l.fund_transfer_ts, 'YYYYMMDD'::text) \
+		        	END AS tgl_penyaluran_dana \
+		    ,l.loan_amount AS nilai_pendanaan \
+		    ,to_char((timezone('Asia/Jakarta'::text, now())::date - 1)::timestamp with time zone, 'YYYYMMDD'::text) AS tgl_pelaporan_data \
+		    ,l.loan_amount::numeric - COALESCE(ph.paid_principal, 0::numeric) AS sisa_pinjaman_berjalan \
+		    ,to_char(timezone('Asia/Jakarta'::text, ph.last_due_date::timestamp with time zone)::date::timestamp with time zone, 'YYYYMMDD'::text) AS tgl_jatuh_tempo_pinjaman \
+		    ,    CASE WHEN (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) < 30 THEN 1 \
+		            WHEN (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) >= 30 AND (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) <= 90 THEN 2 \
+		            WHEN (timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date)) > 90 THEN 3 \
+		            ELSE NULL::integer \
+		        	END AS id_kualitas_pinjaman \
+		    ,timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.earliest_due_date, timezone('Asia/Jakarta'::text, now())::date) AS status_pinjaman_dpd \
+		    ,timezone('Asia/Jakarta'::text, now())::date - COALESCE(p.oldest_due_date, timezone('Asia/Jakarta'::text, now())::date) AS status_pinjaman_max_dpd \
+		    ,    CASE WHEN l.loan_status_code = ANY (ARRAY[220, 230, 231, 232, 233, 234, 235, 236, 240, 241]) THEN 'O'::text \
+		            WHEN l.loan_status_code = 250 THEN 'L'::text \
+		            WHEN l.loan_status_code = ANY (ARRAY[237, 260]) THEN 'W'::text \
+		            WHEN l.loan_status_code = ANY (ARRAY[210, 214, 215, 216, 217, 219]) THEN 'D'::text \
+		            ELSE NULL::text \
+		        	END AS status_pinjaman \
+		   FROM ops.customer c \
+		     JOIN ops.loan l ON l.customer_id = c.customer_id \
+		     				AND l.loan_status_code <> 210 \
+		     JOIN ops.application a ON a.application_id = l.application_id2  \
+		     						AND a.application_status_code = 190 \
+		     						AND lower(a.email::text) !~~ '%julofinance%'::text \
+		     join (	select lh4.loan_id \
+						,max(lh4.cdate) as \"212_time\" \
+						,lh4.\"220_time\" as \"220_time\" \
+					from (	select lh2.loan_id \
+								,min(lh2.cdate) as \"220_time\" \
+								,lh3.cdate \
+							from ops.loan_history lh2  \
+								join (	select lh1.loan_id  \
+											,lh1.cdate \
+										from ops.loan_history lh1 \
+										where lh1.status_new = 212 \
+									) lh3 on lh3.loan_id = lh2.loan_id \
+							where lh2.status_new = 220 \
+							group by 1,3 \
+							) lh4 \
+					where lh4.cdate <= lh4.\"220_time\" \
+					group by lh4.loan_id, lh4.\"220_time\" \
+					) x on x.loan_id = l.loan_id  \
+		     JOIN ( SELECT payment.loan_id \
+		            	,sum(CASE WHEN payment.paid_amount >= payment.installment_principal THEN payment.installment_principal \
+		                    	WHEN payment.paid_amount < payment.installment_principal THEN payment.paid_amount \
+		                    	ELSE NULL::bigint \
+		                		END) AS paid_principal \
+		            	,max(payment.due_date) AS last_due_date \
+		           	FROM ops.payment \
+		           	WHERE is_restructured = false \
+		          	GROUP BY payment.loan_id \
+		          	) ph ON ph.loan_id = l.loan_id \
+		     LEFT JOIN (SELECT payment.loan_id \
+		            		,min(CASE WHEN payment.payment_status_code >= 320 THEN payment.due_date \
+		                    		ELSE NULL::date \
+		                			END) AS oldest_due_date \
+		            		,max(CASE WHEN payment.payment_status_code >= 320 THEN payment.due_date \
+		                    		ELSE NULL::date \
+		                			END) AS earliest_due_date \
+		           		FROM ops.payment \
+		          		WHERE payment.payment_status_code < 330  \
+		          		AND payment.is_restructured = false \
+		          		GROUP BY payment.loan_id \
+		          		) p ON p.loan_id = l.loan_id \
+		     LEFT JOIN (SELECT DISTINCT payment_history.loan_id \
+		           		FROM ops.payment_history \
+		          		WHERE payment_history.cdate > (timezone('Asia/Jakarta'::text, now())::date - 1)  \
+		          		AND payment_history.cdate < timezone('Asia/Jakarta'::text, now())::date \
+		          		) lc ON lc.loan_id = l.loan_id;")
+
+class Migration(migrations.Migration):
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.RunPython(update_query, migrations.RunPython.noop),
+        migrations.RunPython(update_ownership, migrations.RunPython.noop),
+    ]

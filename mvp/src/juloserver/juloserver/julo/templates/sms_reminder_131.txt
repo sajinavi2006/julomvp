@@ -1,0 +1,1 @@
+Yth {{fullname}}, mohon unggah kekurangan dokumen {{applink}}. Pengajuan Anda kadaluarsa hari {{day}} jam {{time}}. CS JULO cs@julo.co.id

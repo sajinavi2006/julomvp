@@ -1,0 +1,12 @@
+{
+  "application_id" : {{application_id}},{% if disbursed_show %}
+  "disbursement_date" : "{{disbursement_date}}",{% endif %}{% if rejected_show %}
+  "reject_reason" : "{{reject_reason}}",
+  "rejected_date" : "{{rejected_date}}",{% endif %}{% if approve_show %}
+  "approved_amount": {{loan.loan_amount}},
+  "approved_duration": {{loan.loan_duration}},
+  "approval_date" : "{{approval_date}}",
+  "interest_rate": {{interest_rate}}, 
+  "other_fees": {{other_fees}},{% endif %}
+  "status" : "{{status}}"
+}

@@ -1,0 +1,30 @@
+{% load unit %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-6 col-xs-12 col-md-offset-3">
+    <form class="form-horizontal form-material" id="img_upload_form" role="form" enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      <h3 class="box-title m-t-10 m-b-0">Pastikan format file adalah CSV</h3>
+      <small>file csv harus sesuai dengan template yg ditentukan</small>
+
+      <p class="m-t-20">
+     
+        Upload CSV File :
+        <input type="file" id="id_csv_file" name="csv_file" class="dropify" />
+        <span class="help-block h5 text-white bg-danger">
+            {% if error_message %}
+                {{ error_message }}
+            {% endif %}
+          </span>
+        <div class="form-group text-center m-t-20">
+          <div class="col-xs-12">
+            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Upload</button>
+          </div>
+        </div>
+       </p>
+    </form>
+  </div>
+</div>
+  
+<div class="row m-t-10 m-b-10">
+</div>

@@ -1,0 +1,58 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+{% load static from staticfiles %}
+
+{% block custom_css %}
+    <!-- Watermark CSS -->
+    <link href="{% static 'theme/plugins/watermark/watermark.css' %}" rel="stylesheet" />
+
+    <!-- Popup CSS -->
+    <link href="{% static 'theme/plugins/bower_components/Magnific-Popup-master/dist/magnific-popup.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block breadcrumb_title %}
+
+{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li><a href="#">Verifikasi Dokumen</a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+
+{% block list_title %}
+        Verifikasi Dokumen
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+    {% include "object/loan_app/include/image_verification.html" %}
+    {% include "object/loan_app/include/detail_image.html" %}
+
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'loan_app:roles_image_verification' %}">
+    <button id="back" type="button" class="btn btn-info">
+      <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+    </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+  });
+
+  // Identify Watermark Text
+  var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+{% endblock %}
+
+{% block script_end %}
+    <!-- Watermark JS -->
+    <script type="text/javascript" charset="utf8"  src="{% static 'theme/plugins/watermark/watermark.js' %}"></script>
+{% endblock %}

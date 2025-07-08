@@ -1,0 +1,908 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+{% block css_inside %}
+label.error {
+    color: red;
+    padding-top: 8px;
+}
+input.error {
+    border-color: red !important;
+}
+{% endblock %}
+
+{% block custom_link %}
+<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" rel="stylesheet"
+      xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/Jako/jq.multiInput/dist/css/jq.multiinput.min.css" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'theme/nav-mini/css/campaign_automation_custom.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block list_title %}{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+<!--########################### Campaign First Form ###########################-->
+<div id="cohort_campaign_automation">
+    {% checkusergroup in ['cohort_campaign_editor'] %}
+    <div class="actions-wrapper row" style="z-index: 5;">
+        <div class="col-md-12 mx-auto">
+            <form method="post" class="form-draft-approval">
+                <input type="hidden" name="save_type" value="add" id="save_type" />
+                <div class="btn-wrapper">
+                    <button 
+                        class="btn btn-success rounded-sm btn-block blue-primary"
+                        value="save"
+                        type="button"
+                        v-on:click="PreviewEmail()"
+                    >
+                        <strong> Preview Campaign </strong>
+                    </button>
+                </div>
+                <div class="btn-wrapper">
+                    <button
+                        class="btn btn-action rounded-sm btn-block" id="btnSave"
+                        value="save"
+                        type="button"
+                        v-on:click="SubmitCohortCampaignForm()"
+                        v-bind:class="{ 'active': is_eligible_submit }">
+                        <strong> Submit </strong>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endcheckusergroup %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <a class="btn btn-back" href="{% url 'cohort_campaign_automation:cohort_campaign_automation_list' %}" role="button">
+                <span class="fa fa-arrow-left"></span><strong>  Buat Campaign</strong>
+            </a>
+        </div>
+    </div>
+    <div class="row grey-box m-b-0 p-b-0">
+        <form method="post" id="campaign_automation_form" name="campaign_automation_form" class="panel" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="panel-body col-xs-12 panel-default p-0">
+                <div class="form-card">
+                    <div class="title">Detail Campaign</div>
+                    <div class="form-fields">
+                        <div class="row form-group">
+                            <div class="col-sm-12 txt-align">
+                                <label for="description">Nama Campaign</label>
+                                <input 
+                                    id="campaign_name"
+                                    name="campaign_name"
+                                    class="form-control mainForm"
+                                    maxlength="100"
+                                    type="text"
+                                    value=""
+                                    placeholder="Isi nama campaign"
+                                    autocomplete="off"
+                                    v-model="objectForm.campaign_name"
+                                    @input="FormatInput('campaign_name')"
+                                />
+                                <!-- Temporary Placement -->
+                                <input type="hidden" id="campaign_name" name="campaign_name"/>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12 col-md-4 txt-align">
+                                <label for="description">Tanggal Mulai Campaign</label>
+                                <input 
+                                    id="campaign_start_period"
+                                    name="campaign_start_period"
+                                    class="form-control mainForm datepicker"
+                                    data-zdp_readonly_element="false"
+                                    maxlength="None" placeholder="Pilih tanggal mulai campaign"
+                                    type="text"
+                                    value=""
+                                    autocomplete="off"
+                                    v-model="objectForm.campaign_start_period"
+                                />
+                                <input type="hidden" id="campaign_start_period_hide" value="" name="campaign_start_period_hide" />
+                            </div>
+                            <div class="col-sm-12 col-md-4 txt-align">
+                                <label for="description">Tanggal Berakhir Campaign</label>
+                                <input 
+                                    id="campaign_end_period"
+                                    name="campaign_end_period"
+                                    class="form-control mainForm datepicker"
+                                    data-zdp_readonly_element="false"
+                                    maxlength="None"
+                                    placeholder="Pilih tanggal berakhir campaign"
+                                    type="text"
+                                    value=""
+                                    autocomplete="off"
+                                    v-model="objectForm.campaign_end_period"
+                                />
+                                <input type="hidden" id="campaign_end_period_hide" value="" name="campaign_end_period_hide" />
+                            </div>
+                            <div class="col-sm-12 col-md-4 txt-align">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-card">
+                    <div class="title">Upload CSV</div>
+                    <div class="form-fields">
+                        <div class="row form-group">
+                            <div class="col-sm-12 txt-align" style="font-size: 16px;">
+                                Upload salah satu CSV di sini
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12 txt-align">
+                                <div class="file-dragdrop" style="background: #F0FAFE; padding: 8px;min-height: 80px;margin-bottom: 4px;border-radius: 8px; border: 1px dashed black;">
+                                    <label for="file" style="color: #00ACF0;"><b>+ </b>
+                                        Drag & drop or <span><b>browse</b></span></label>
+                                    <input type="file" accept=".csv" id="upload_csv_file" class="btn btn-default btn-file csv form-control editField" name="upload_csv_file" @change="UploadCSVFile()" ref="btn-file-csv">
+                                    <div v-if="objectForm.csv_file != null">
+                                        <div class="file-thumbnail uploaded">
+                                            <div style="display:flex; align-items:center;margin-top: 12px;">
+                                                <div class="imgName"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACqSURBVHgBjZLhDcIgEIXvSP/LCF3FDXQDGcEJuoITgBvoBrqCG7CBTAA+kh5pkdC+hHDHfXl3Adg5p4noRP96G2O8JAzQpZQuDdAz81FghTVSWyMMXvAZBeypwFugwLc9IGHWwzDHAckZu2+4PXIw1IUq1xIIqPPQ1FFxBHhVSoVlMcaoMdK0BAOgOy53BeZXg8FUt/5aa1ftcFZiheRD2/I8t8ifQnfA5w+PAkkTRnA2UQAAAABJRU5ErkJggg=="><span><% objectForm.csv_name %></span></div>
+                                                <div class="imgBtn" v-on:click="ChangeFileUploaded('btn-file-csv')">Ubah File</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12 txt-align">
+                                <div style="background:#EDEDED; border-radius:8px; border:1px solid; padding:16px;color:#000000;">
+                                <span style="font-weight: bold;" class="fa fa-exclamation-circle"> Status yang tidak berlaku dalam campaign</span><br>
+                                <ul>
+                                    <li>Akun yang sudah pernah menggunakan program ini 1 tahun terakhir</li>
+                                    <li>Akun yang sedang menggunakan program refinancing</li>
+                                    <li>Akun yang sedang menggunakan PTP</li>
+                                    <li>Akun yang terindikasi fraud</li>
+                                    <li>Akun yang sudah dijual ke pihak ketiga (loan sell off)</li>
+                                </ul>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <div class="title">Pengaturan Email Campaign</div>
+                    <div class="form-fields">
+                        <div class="row form-group">
+                            <div class="col-sm-12 txt-align">
+                                <div class="tab-content tab-content-1" index="1">
+                                    <div class="campaign-configuration content-configuration active"  style="background: #F5F5F5;border-radius: 8px;padding:24px 16px;">
+                                        <div class="content-configuration__section">
+                                            <div class="content-configuration__section__label">
+                                                <strong>Penjadwalan Email</strong>
+                                            </div>
+                                            <div class="content-configuration__fields">
+                                                <div id="schedule-container">
+                                                    <div class="row form-group">
+                                                        <div class="col-sm-12 col-md-3 txt-align">
+                                                            <label for="description">Tanggal Pengiriman Email</label>
+                                                            <input 
+                                                                id="email_blast_date"
+                                                                name="email_blast_date"
+                                                                class="form-control mainForm datepicker"
+                                                                data-zdp_readonly_element="false"
+                                                                maxlength="None" placeholder="Pilih tanggal mulai"
+                                                                type="text"
+                                                                value=""
+                                                                autocomplete="off"
+                                                                v-model="objectForm.email_blast_date"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div v-for="(schedule, index) in objectForm.emailSchedules" :key="schedule.id" class="schedule-row row form-group">
+                                                        <div class="col-sm-12 col-md-3 txt-align">
+                                                          <label :for="schedule.id">Tanggal Pengiriman Email</label>
+                                                          <input
+                                                            :id="schedule.id"
+                                                            name="email_blast_date[]"
+                                                            class="form-control mainForm datepicker"
+                                                            data-zdp_readonly_element="false"
+                                                            maxlength="None" placeholder="Pilih tanggal mulai"
+                                                            type="text"
+                                                            value=""
+                                                            autocomplete="off"
+                                                            v-model="schedule.date"
+                                                          />
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-4">
+                                                          <button type="button" class="btn btn-danger mt-4" @click="removeSchedule(index)">❌</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" @click="addSchedule" class="btn btn-primary mt-2">+ Tambah tanggal pengiriman</button>
+                                        </div>
+                                        <div class="content-configuration__section">
+                                            <div class="content-configuration__section__label">
+                                                <strong>Subject & Banner</strong>
+                                            </div>
+                                            <div class="content-configuration__fields">
+                                                <label for="description">Email Domain</label>
+                                                <textarea class="textarea" placeholder="Enter text ..." style="width: 100%; height: 200px; font-size: 14px; line-height: 18px;"></textarea>
+                                                <input 
+                                                    id="email_domain"
+                                                    name="email_domain"
+                                                    class="form-control mainForm"
+                                                    placeholder="Pilih email domain"
+                                                    maxlength="100"
+                                                    type="text"
+                                                    value=""
+                                                    autocomplete="off"
+                                                    v-model="objectForm.email_domain"
+                                                    @input="CheckIsApprovalValidity"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="content-configuration__section">
+                                            <div class="content-configuration__fields">
+                                                <label for="description">Subject</label>
+                                                <input 
+                                                    id="subject_email"
+                                                    name="subject_email"
+                                                    class="form-control mainForm"
+                                                    placeholder="Masukkan subject email"
+                                                    maxlength="100"
+                                                    type="text"
+                                                    value=""
+                                                    autocomplete="off"
+                                                    v-model="objectForm.subject_email"
+                                                    @input="CheckIsApprovalValidity"
+                                                />
+                                            </div>
+                                            <div class="content-configuration__fields banner">
+                                                <label for="description">Banner <button>Tidak wajib</button></label>
+                                                <div class="file-dragdrop" style="background: #F0FAFE; padding: 8px;min-height: 80px;margin-bottom: 4px;border-radius: 8px; border: 1px dashed #66CDF6;">
+                                                    <label for="file" style="color: #00ACF0;"><b>+ </b>
+                                                        Drag & drop or <span><b>browse</b></span></label>
+                                                    <input accept="image/*" type='file' id="imgInp" style="z-index: 0;" class="btn btn-default btn-file form-control editField" @change="UploadImageEmail()" ref="btn-file-email">
+                                                    <div v-if="objectForm.banner_email != null">
+                                                        <div class="file-thumbnail uploaded">
+                                                            <div style="display:flex; align-items:center">
+                                                                <img style="margin-left:15px;margin-right:10px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJlSURBVHgBtZbBbtNAEIZnNjkgUUjyAATzBFg9phK4tx5z5dQ0PEBbqZHgFOeCQolEX4DiNyA8Ac4lyq3mCYjDCziAKkBkhxknhDax4zh1fymx1zuebz07O7sICTLsWnFymbMQ6CkSGEBU/NdHCj0C7H09fddN8oOrAPqHOmR3R9wsJngZ8p+rcro1bDvDKJNcJKTx/FD/BhnlHv/uQLJkICYRVu/vbI+/9S+8RFD5pN4koPaagCUgh6haqGzDuH/RiwUJhENlw81lLcLmoAeNeo0n/Ayyk8DGDBtII0wG40XN0BP8BJJV2SpQW/RoaDuBkpaeqOYtQESSuZK1gMZRrUh5/EJJKRwjRPBQU4tjY2jAtxEm4VflJzlZjHpzyF3aldBIu3xyYPJlf8GsCJdgKYZYsIEWIeEzgMdRtpqQQRjdOfPmKKBjDFf+aki5UX/P4Tcj/fD85yGOAeD6b84P5J6zsguclcQvxEG4BtZW+CooWENSvzBHu4jYTQuZwx426h+IqBrTbY865624l9eGcHQUafLjTcielqXNIaEXhM+KQLkJZkuwNBCRQnJTLFi0FaieRr2fBgKzBRvWOh6xzSNvwm2Il8iIszfMOvVHnzExgIwl6092XbkPt4lg4P0sVcxfvP/vQYbiuTkenjruHBTC+t6gUDH5w9CCTEQtv+PM97drO+y477nZwKg16jj21SdLZwaBlXZMnwMsdStVVZ/OM71kSHuxL/IUxGH0Sk/Mj6SxxC8bkHBQmQFeqy145r+azkmEzWrJ+Q6+g6UVWnyA/F/pEQM+LflKkwv3wL1a/6L0F5mZEG0woXSYAAAAAElFTkSuQmCC">
+                                                                <img id="imgThumb" class="imgThumb" :src="objectForm.url_banner_email" alt="your image" style="width:115px; height:60px" />
+                                                                <div class="imgName"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAOCAYAAAAWo42rAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACqSURBVHgBjZLhDcIgEIXvSP/LCF3FDXQDGcEJuoITgBvoBrqCG7CBTAA+kh5pkdC+hHDHfXl3Adg5p4noRP96G2O8JAzQpZQuDdAz81FghTVSWyMMXvAZBeypwFugwLc9IGHWwzDHAckZu2+4PXIw1IUq1xIIqPPQ1FFxBHhVSoVlMcaoMdK0BAOgOy53BeZXg8FUt/5aa1ftcFZiheRD2/I8t8ifQnfA5w+PAkkTRnA2UQAAAABJRU5ErkJggg=="><span><% objectForm.name_banner_email %></span></div>
+                                                                <div class="imgBtn" v-on:click="ChangeFileUploaded('btn-file-email')">Ubah Gambar</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                Maks. ukuran 1MB, format file JPEG, JPG, atau PNG
+                                            </div>
+                                        </div>
+                                        <div class="content-configuration__section">
+                                            <div class="content-configuration__section__label">
+                                                <strong>Email Editor</strong>
+                                            </div>
+                                            <span style="font-size:12px; font-family: 'Poppins';margin-bottom:5px;display: block;"><strong>Template Preview</strong></span>
+                                            <div class="email-preview">
+                                                <div class="email-preview-field">
+                                                    <strong>Halo <span>{First Name}</span></strong>
+                                                </div>
+                                                <div class="content-configuration__fields wysiwyg">
+                                                    <textarea 
+                                                        id="emailwysiwyg1"
+                                                        name="body_top_email"
+                                                        class="body-email" 
+                                                        autocomplete="off"
+                                                        rows="4"
+                                                        v-model="objectForm.body_top_email"
+                                                    >
+                                                    </textarea>
+                                                </div>
+                                                <div class="form-draft-approval" v-show="isVisiblePotonganEditorCloseDiv">
+                                                    <div class="btn-wrapper" style="text-align:left!important; max-width: 1728px;">
+                                                       <strong>Potongan Tagihan</strong>
+                                                    </div>
+                                                    <div class="btn-wrapper" style="text-align:right!important">
+                                                        <button
+                                                            class="btn btn-success1 blue-primary"
+                                                            type="button"
+                                                            v-on:click="HidePotonganTagihanDiv()"
+                                                        >
+                                                            <span class="glyphicon glyphicon-circle">
+                                                              <span class="glyphicon glyphicon-plus-sign"></span>
+                                                            </span>
+                                                            <strong>Hapus</strong>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="content-configuration__fields wysiwyg" v-show="isVisiblePotonganEditorDiv">
+                                                    <textarea
+                                                        id="emailwysiwyg2"
+                                                        name="body_mid_email"
+                                                        class="body-email"
+                                                        autocomplete="off"
+                                                        rows="4"
+                                                        v-model="objectForm.body_mid_email"
+                                                    >
+                                                    </textarea>
+                                                </div>
+
+                                                <div class="form-draft-approval" v-show="isVisibleFooterEditorCloseDiv">
+                                                    <div class="btn-wrapper" style="text-align:left!important; max-width: 1728px;">
+                                                       <strong>Footer</strong>
+                                                    </div>
+                                                    <div class="btn-wrapper" style="text-align:right!important">
+                                                        <button
+                                                            class="btn btn-success1 blue-primary"
+                                                            type="button"
+                                                            v-on:click="HideFooterDiv()"
+                                                        >
+                                                            <span class="glyphicon glyphicon-circle">
+                                                              <span class="glyphicon glyphicon-plus-sign"></span>
+                                                            </span>
+                                                            <strong>Hapus</strong>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="content-configuration__fields wysiwyg" v-show="isVisibleFooterEditorDiv">
+                                                    <textarea
+                                                        id="emailwysiwyg3"
+                                                        name="body_footer_email"
+                                                        class="body-email"
+                                                        autocomplete="off"
+                                                        rows="4"
+                                                        v-model="objectForm.body_footer_email"
+                                                    >
+                                                    </textarea>
+                                                </div>
+
+                                                <div class="form-draft-approval" style="justify-content: flex-start;">
+                                                    <div class="btn-wrapper1" v-show="isVisiblePotonganButtonDiv">
+                                                        <button
+                                                            class="btn btn-success rounded-sm btn-block blue-primary"
+                                                            value="save"
+                                                            type="button"
+                                                            v-on:click="ShowPotonganEditorDiv()"
+                                                        >
+                                                            <span class="glyphicon glyphicon-circle">
+                                                              <span class="glyphicon glyphicon-plus-sign"></span>
+                                                            </span>
+                                                            <strong> Tambah Potongan Tagihan </strong>
+                                                        </button><br/>
+                                                    </div>
+                                                    <div class="btn-wrapper1" v-show="isVisibleFooterButtonDiv">
+                                                        <button
+                                                           class="btn btn-success rounded-sm btn-block blue-primary"
+                                                            value="save"
+                                                            type="button"
+                                                            v-on:click="ShowFooterEditorDiv()"
+                                                        >
+                                                           <span class="glyphicon glyphicon-circle">
+                                                              <span class="glyphicon glyphicon-plus-sign"></span>
+                                                            </span>
+                                                            <strong> Tambah Footer </strong>
+                                                        </button><br/>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-sm-12 txt-align">
+                                                        <div style="background:#EDEDED; border-radius:8px; border:1px solid; padding:16px;color:#000000;font-size:12px;">
+                                                        <span  class="fa fa-exclamation-circle">
+                                                            erikut adalah value yang bisa ditambahkan ke dalam editor.
+                                                            Value akan terisi otomatis apabila data tersedia di csv yang di-upload.
+                                                            Jika tidak, value harus diisi manual. Jangan sampai salah ketik,
+                                                            masukkan sesuai dengan cara penulisan di bawah ini:
+
+                                                        </span>
+                                                        <ul>
+                                                            <li>&#123;&#123; fullname_with_title &#125;&#125;</li>
+                                                            <li>&#123;&#123; total_payments &#125;&#125;</li>
+                                                            <li>&#123;&#123; prequisite_amount &#125;&#125;</li>
+                                                            <li>&#123;&#123; expiry_at &#125;&#125;</li>
+                                                        </ul>
+                                                        <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-6"></div>
+    </div>
+</div>
+<!--########################### End Campaign First Form ###########################-->
+
+<!--########################### modal content preview ###############################################-->
+<div id="content-preview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" style="width: 80%; max-width: 900px; margin: auto;">
+        <div class="modal-content modal-preview">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Content HTML Preview</h4>
+            </div>
+            <div class="modal-body" style="overflow: scroll;">
+                <div class="row" id="preview_div">
+                    <!-- Content goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_additional %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="//code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+    <script src="{% static 'default/js/jquery.serializejson.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <!-- Time Picker -->
+    <script src="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/zebra_datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/zebra_datepicker@latest/dist/css/bootstrap/zebra_datepicker.min.css">
+    <script src="{% static 'ckeditor/ckeditor.js' %}"></script>
+    <!-- vue js -->
+    <script src="{% static 'default/js/vue.js' %}"></script>
+    <script src="{% static 'default/js/filter.js' %}"></script>
+<script src="http://waxolunist.github.io/bootstrap3-wysihtml5-bower/components/wysihtml5x/dist/wysihtml5x-toolbar.min.js"></script>
+   <script src="http://waxolunist.github.io/bootstrap3-wysihtml5-bower/components/handlebars/handlebars.runtime.min.js"></script>
+<script src="http://waxolunist.github.io/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.min.js"></script>
+    <script type>"text/javascript"
+    var body_mid_email_content = '<div><span style="text-align:center!important;">Berikut adalah jumlah yang perlu Anda bayarkan '
+    + 'setelah mendapat potongan, yakni: <div style="text-align:center!important;">'
+    + '&#123;&#123; total_payments &#125;&#125;<br/>&#123;&#123; prerequisite_amount &#125;&#125;</div></span></div>'
+    var body_footer_email_content = '<div><span style="text-align:center!important;">Untuk mendapatkan penawaran ini dan '
+    + 'informasi mengenai pembayaran bertahap, silahkan hubungi Klien Kami melalui:<br/>'
+    + 'Layanan Telepon: <strong>021-5091-9036, 021-5091-9037, atau 021-3043-3660</strong><br/><br/>'
+    + 'Jika kami tidak menerima tanggapan Anda hingga tanggal <strong>&#123;&#123; expiry_at &#125;&#125;</strong>, '
+    + 'kami akan menempuh langkah-langkah hukum untuk menagih jumlah yang terutang.<br/><br/>'
+    + 'Demikian pemberitahuan ini kami sampaikan. Atas perhatiannya, kami ucapkan terima kasih.<br/><br/>'
+    + 'Salam.<br/>KALD Law Office'
+    + '</span></div>'
+    var CohortCampaignAutomation = new Vue({
+        el: '#cohort_campaign_automation',
+        delimiters: ["<%", "%>"],
+        data: {
+            csrftoken: '{{csrf_token}}',
+            is_edit: false,
+            is_eligible_submit: false,
+            base_html_code: '{{base_html_code}}',
+            isVisiblePotonganEditorDiv: false,
+            isVisiblePotonganEditorCloseDiv: false,
+            isVisiblePotonganButtonDiv: true,
+            isVisibleFooterEditorDiv: false,
+            isVisibleFooterEditorCloseDiv: false,
+            isVisibleFooterButtonDiv: true,
+            objectForm: {
+                campaign_id: null,
+                campaign_name: '',
+                campaign_start_period: '',
+                campaign_end_period: '',
+                csv_file: null,
+                csv_url: '',
+                csv_name: '',
+                email_blast_date: '',
+                email_domain: '',
+                subject_email: '',
+                banner_email: null,
+                url_banner_email: '',
+                name_banner_email: '',
+                body_top_email: '',
+                body_mid_email: body_mid_email_content,
+                body_footer_email: body_footer_email_content,
+                emailSchedules: []
+            }
+        },
+        beforeMount() {
+            if (localStorage.length > 0 ) {
+                localStorage.clear();
+            }
+        },
+        mounted() {
+            const thisReplica = this;
+            $('#campaign_start_period').Zebra_DatePicker({
+                format: 'Y-m-d',
+                direction: 1,
+                strict: false,
+                show_clear_date: false,
+                onSelect: function(formattedDate, date) {
+                    thisReplica.UpdateCampaignDate('campaign_start_period')
+                },
+                onChange: function() {
+                    thisReplica.UpdateCampaignDate('campaign_start_period')
+                },
+                pair: $('#campaign_end_period')
+            });
+            $('#campaign_end_period').Zebra_DatePicker({
+                format: 'Y-m-d',
+                direction: 1,
+                show_clear_date: false,
+                onSelect: function(formattedDate, date) {
+                    thisReplica.UpdateCampaignDate('campaign_end_period')
+                },
+                onChange: function() {
+                    thisReplica.UpdateCampaignDate('campaign_end_period')
+                },
+            });
+            $('#email_blast_date').Zebra_DatePicker({
+                format: 'Y-m-d H:i',
+                direction: 1,
+                strict: false,
+                show_clear_date: false,
+                onSelect: function(formattedDate, date) {
+                    thisReplica.UpdateCampaignDate('email_blast_date')
+                },
+                onChange: function() {
+                    thisReplica.UpdateCampaignDate('email_blast_date')
+                },
+            });
+            this.InitiateWysiwyg('#emailwysiwyg1', 'body_top_email');
+            this.InitiateWysiwyg('#emailwysiwyg2', 'body_mid_email');
+            this.InitiateWysiwyg('#emailwysiwyg3', 'body_footer_email');
+        },
+        methods: {
+            FormatInput: function(field_name) {
+                this.objectForm[field_name] = this.objectForm[field_name].toUpperCase().replace(/\s+/g, '_');
+                this.CheckIsApprovalValidity();
+            },
+            UpdateCampaignDate: function(field_name) {
+                var date_value = document.getElementById(field_name).value;
+                if (date_value) {
+                    var date_formatted = new Date(date_value);
+                    if (field_name == 'email_blast_date') {
+                        this.objectForm[field_name] = date_formatted.toLocaleString('sv-SE');
+                    } else {
+                        this.objectForm[field_name] = date_value.split(' ')[0]
+                    }
+                } else {
+                    this.objectForm[field_name] = ""
+                }
+                this.CheckIsApprovalValidity();
+            },
+            UpdateCampaignDates: function(field_name, inputId) {
+                var schedule = this.objectForm[field_name].find(s => s.id === inputId);
+                if (schedule) {
+                    var date_value = document.getElementById(inputId).value;
+                    if (date_value) {
+                        var date_formatted = new Date(date_value);
+                        schedule.date = date_formatted.toLocaleString('sv-SE'); // Ensure individual dates are saved
+                    } else {
+                        schedule.date = ""
+                    }
+                }
+                this.CheckIsApprovalValidity();
+            },
+            IsValidUrl: function(url) {
+                try {
+                    new URL(url)
+                    return true;
+                } catch {
+                    return false;
+                }
+            },
+            InitiateWysiwyg: function(el, field_name){
+                ClassicEditor
+                    .create( document.querySelector(el), {
+                        toolbar: [ 'heading', '|', 'bold', 'italic', 'alignment:left', 'bulletedList', 'numberedList', 'blockQuote' ],
+                    })
+                    .then(editor => {
+                        editor.model.document.on('change:data', () => {
+                            this.objectForm[field_name] = editor.getData();
+                            this.CheckIsApprovalValidity();
+                        });
+                        this.objectForm[field_name] = this.objectForm[field_name].replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+                        editor.setData(this.objectForm[field_name], {
+                            callback: function() {
+                                console.log( 'Editor content has been set.' );
+                            }
+                        });
+                    })
+                    .catch( error => {
+                        console.log( error );
+                    });
+            },
+            UploadImageEmail: function() {
+                const file = event.target.files[0];
+                const thisReplica = this;
+                var objForm = this.objectForm
+                const validExtensions = ['image/jpeg', 'image/png'];
+                if (file) {
+                    const img = new Image();
+                    img.src = URL.createObjectURL(file);
+                    img.onload = function() {
+                        if ((file.size / 1024000) > 1) {
+                            SwalWarning("", "Maksimal ukuran file banner email 1 Mb");
+                        } else if (!validExtensions.includes(file.type)) {
+                            SwalWarning("", "Hanya file JPG, JPEG, atau PNG yang diperbolehkan.");
+                        } else {
+                            objForm.banner_email = file;
+                            objForm.url_banner_email = URL.createObjectURL(file);
+                            objForm.name_banner_email = file.name;
+                            thisReplica.CheckIsApprovalValidity();
+                        }
+                    }
+                }
+            },
+            UploadCSVFile: function() {
+                const file = event.target.files[0];
+                const thisReplica = this;
+                var objForm = this.objectForm
+                if (file) {
+                    objForm.csv_file = file;
+                    objForm.csv_name = file.name
+                    thisReplica.CheckIsApprovalValidity();
+                }
+            },
+            ChangeFileUploaded: function(refName) {
+                this.$refs[refName].click();
+            },
+            CheckIsApprovalValidity: function() {
+                const obj = this.objectForm
+                const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                this.is_eligible_submit = 
+                    obj.campaign_name && obj.campaign_start_period &&
+                    obj.campaign_end_period && obj.email_blast_date &&
+                    obj.subject_email && obj.body_top_email && regex.test(obj.email_domain)
+                    obj.csv_file && (obj.emailSchedules.length == 0 || 
+                    obj.emailSchedules.some(item => item.date));
+            },
+            SubmitCohortCampaignForm: function() {
+                const thisReplica = this;
+                var campaign_name = this.objectForm.campaign_name;
+                if (
+                    (this.objectForm.campaign_start_period && this.objectForm.campaign_end_period) &&
+                    this.objectForm.campaign_end_period <= this.objectForm.campaign_start_period
+                ) {
+                    this.SwalWarning("", "Tanggal mulai campaign tidak boleh melebihi atau sama dengan tanggal selesai campaign");
+                    return;
+                } else if (this.objectForm.email_blast_date && 
+                    this.objectForm.email_blast_date < this.objectForm.campaign_start_period
+                ) {
+                    this.SwalWarning("", "Tanggal email blast date kurang dari tanggal mulai campaign");
+                    return;
+                } else if (this.objectForm.email_blast_date && 
+                    this.objectForm.email_blast_date > this.objectForm.campaign_end_period
+                ) {
+                    this.SwalWarning("", "Tanggal email blast date lebih dari tanggal selesai campaign");
+                    return;
+                } else {
+                    const formData = new FormData();
+                    formData.append("campaign_name", this.objectForm.campaign_name);
+                    formData.append("campaign_start_period", this.objectForm.campaign_start_period);
+                    formData.append("campaign_end_period", this.objectForm.campaign_end_period);
+                    formData.append("email_blast_date", this.objectForm.email_blast_date);
+                    formData.append("email_domain", this.objectForm.email_domain);
+                    formData.append("subject_email", this.objectForm.subject_email);
+                    formData.append("body_top_email", this.objectForm.body_top_email);
+                    formData.append("body_mid_email", this.objectForm.body_mid_email);
+                    formData.append("body_footer_email", this.objectForm.body_footer_email);
+                    formData.append("email_schedules", this.objectForm.emailSchedules);
+                    const isInvalid = this.objectForm.emailSchedules.some((schedule, index) => {
+                        if (schedule.date && 
+                            schedule.date < this.objectForm.campaign_start_period
+                        ) {
+                            this.SwalWarning("", `Tanggal email blast date tambahan ${index + 1} kurang dari tanggal mulai campaign`);
+                            return true;
+                        } else if (schedule.date && 
+                            schedule.date > this.objectForm.campaign_end_period
+                        ) {
+                            this.SwalWarning("", `Tanggal email blast date tambahan ${index + 1} lebih dari tanggal selesai campaign`);
+                            return true;
+                        }
+                        formData.append(`email_schedules[${index}]`, schedule.date);
+                    });
+                    if (isInvalid) return;
+                    if (this.objectForm.banner_email instanceof Blob) {
+                        formData.append("banner_email", this.objectForm.banner_email);
+                    }
+                    if (this.objectForm.csv_file instanceof Blob) {
+                        formData.append("csv_file", this.objectForm.csv_file);
+                    }
+                    if (this.is_edit) {
+                        formData.append("is_edit", true);
+                        formData.append("campaign_id", this.objectForm.campaign_id);
+                    }
+                    $.ajax({
+                        url: "{%url 'cohort_campaign_automation:submit_cohort_campaign_automation' %}",
+                        type: "POST",
+                        headers:{'X-CSRFToken': this.csrftoken},
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        statusCode: {
+                            400: function(json) {
+                                thisReplica.SwalWarning("Campaign Gagal Dibuat", json['responseJSON'].message);
+                            },
+                        },
+                        success: function(json) {
+                            if(json.status == 'success') {
+                                swal({
+                                    title: "",
+                                    text: json.message,
+                                    type: "success"
+                                }, function() {
+                                    $(location).attr('href', "{% url 'cohort_campaign_automation:cohort_campaign_automation_list' %}" );
+                                });
+                            }
+                        },
+                        error: function(xhr, errmsg, err) {
+                            thisReplica.SwalError("Campaign Gagal Dibuat", err);
+                        }
+                    });
+                }
+            },
+            PreviewEmail: function() {
+                var image = '{'+ '{ banner_src }' + '}'
+                var body_top_email = '{'+ '{ body_top_email }' + '}'
+                var body_mid_email = '{'+ '{ body_mid_email }' + '}'
+                var body_footer_email = '{'+ '{ body_footer_email }' + '}'
+                $('#preview_div').html(
+                    this.base_html_code.split(image).join(this.objectForm.url_banner_email)
+                    .split(body_top_email).join(this.objectForm.body_top_email)
+                    .split(body_mid_email).join(this.objectForm.body_mid_email)
+                    .split(body_footer_email).join(this.objectForm.body_footer_email)
+                )
+                $('#content-preview').modal('show');
+            },
+            SwalSuccess: function(title, message) {
+                swal({
+                    title: title,
+                    text: message,
+                    type: "success"
+                });
+            },
+            SwalWarning: function(title, message) {
+                swal({
+                    title: title,
+                    text: message,
+                    type: "warning"
+                });
+            },
+            SwalError: function(title, message) {
+                swal({
+                    title: title,
+                    text: message,
+                    type: "error"
+                });
+            },
+            ShowPotonganEditorDiv() {
+                this.isVisiblePotonganEditorDiv = true;
+                this.isVisiblePotonganEditorCloseDiv = true;
+                this.isVisiblePotonganButtonDiv = false;
+            },
+            HidePotonganTagihanDiv() {
+                this.isVisiblePotonganEditorDiv = false;
+                this.isVisiblePotonganEditorCloseDiv = false;
+                this.isVisiblePotonganButtonDiv = true;
+            },
+            ShowFooterEditorDiv() {
+                this.isVisibleFooterEditorDiv = true;
+                this.isVisibleFooterEditorCloseDiv = true;
+                this.isVisibleFooterButtonDiv = false;
+            },
+            HideFooterDiv() {
+                this.isVisibleFooterEditorDiv = false;
+                this.isVisibleFooterEditorCloseDiv = false;
+                this.isVisibleFooterButtonDiv = true;
+            },
+            addSchedule() {
+                scheduleID=`email_blast_date_${Date.now()}`
+                this.objectForm.emailSchedules.push({
+                    id: scheduleID, // Generate a unique ID for the input
+                    date: "",
+                });
+                this.$nextTick(() => {
+                    // Reinitialize Zebra DatePicker for the new input after DOM update
+                    this.initializeZebraDatetimePicker(scheduleID);
+                });
+                this.CheckIsApprovalValidity()
+            },
+            // Remove a schedule row
+            removeSchedule(index) {
+                this.objectForm.emailSchedules.splice(index, 1);
+            },
+            // Initialize Zebra DatePicker
+            initializeZebraDatetimePicker(inputId) {
+                const thisReplica = this;
+                $(`#${inputId}`).Zebra_DatePicker({
+                    format: "Y-m-d H:i",
+                    direction: 1,
+                    strict: false,
+                    show_clear_date: false,
+                    onSelect: () => {
+                        thisReplica.UpdateCampaignDates("emailSchedules", inputId)
+                    },
+                    onChange: function () {
+                        thisReplica.UpdateCampaignDates("emailSchedules", inputId)
+                    },
+                });
+            },
+        }
+    })
+    {% if cohort_campaign %}
+        CohortCampaignAutomation.objectForm = {
+            campaign_id:  '{{ cohort_campaign.id }}',
+            campaign_name: '{{ cohort_campaign.campaign_name }}',
+            campaign_start_period: '{{ cohort_campaign.start_date }}',
+            campaign_end_period: '{{ cohort_campaign.end_date }}',
+            csv_file: null,
+            csv_name: '',
+            csv_url: '{{ cohort_campaign.csv_url }}',
+            url_banner_email: '{{ email_template.banner_url }}',
+            name_banner_email: '',
+            email_blast_date: '{{ email_template.email_blast_date }}',
+            email_domain: '{{ email_template.email_domain }}',
+            subject_email: '{{ email_template.subject }}',
+            banner_email: null,
+            url_banner_email: '{{ email_template.banner_url }}',
+            name_banner_email: '',
+            body_top_email: '{{ email_template.content_top }}',
+            body_mid_email: '{{ email_template.content_middle }}',
+            body_footer_email: '{{ email_template.content_footer }}',
+            emailSchedules: JSON.parse('{{ email_template.additional_email_blast_dates|escapejs }}'),
+        }
+        CohortCampaignAutomation.is_edit = true;
+        const objectForm = CohortCampaignAutomation.objectForm;
+        if (objectForm.url_banner_email != 'None') {
+            var url = '{{ email_template.banner_url }}';
+            var filename = url.split("/").pop();
+            objectForm.banner_email = true;
+            objectForm.name_banner_email = filename;
+        }
+        if (objectForm.csv_url != 'None') {
+            var url = '{{ cohort_campaign.csv_url }}';
+            var filename = url.split("/").pop();
+            objectForm.csv_file = true;
+            objectForm.csv_name = filename;
+        }
+    {% endif %}
+    </script>
+<script>
+    var customTemplates = {
+  textalign: function(locale, options) {
+    var size = options && options.size ? ' btn-' + options.size : '';
+    return "<li>" +
+           "<div class='btn-group'>" +
+           "<a class='btn btn-default" + size + "' data-wysihtml5-command='justifyLeft' tabindex='-1'><span class='glyphicon glyphicon-align-left'></span></a>" +
+           "<a class='btn btn-default" + size + "' data-wysihtml5-command='justifyCenter' tabindex='-1'><span class='glyphicon glyphicon-align-center'></span></a>" +
+           "<a class='btn btn-default" + size + "' data-wysihtml5-command='justifyRight' tabindex='-1'><span class='glyphicon glyphicon-align-right'></span></a>" +
+           "<a class='btn btn-default" + size + "' data-wysihtml5-command='justifyFull' tabindex='-1'><span class='glyphicon glyphicon-align-justify'></span></a>" +
+           "</div>" +
+           "</li>";
+  }
+};
+  /*$('.textarea').wysihtml5({
+    toolbar: {
+      fa: true,
+                      "image": false,
+                       "html": true,
+                           "customTemplates": customTemplates
+    }
+
+  });*/
+      $('.textarea').wysihtml5({
+    customTemplates: customTemplates
+  });
+</script>
+{% endblock %}

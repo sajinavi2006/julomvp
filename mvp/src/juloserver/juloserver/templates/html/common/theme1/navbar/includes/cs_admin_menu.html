@@ -1,0 +1,28 @@
+{% load checkusergroup from common %}
+{% checkusergroup in ['cs_admin'] %}
+<li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="&#xe006;" class="linea-icon linea-basic fa-fw"></i>
+  <span class="hide-menu"> CS Admin <span class="fa arrow"></span></span>
+  </a>
+  <ul class="nav nav-second-level">
+    <li id="mnu_status_selection_li"> <a href="{%url 'customer_module:manual-deletion' %}" >
+      <span class="hide-menu"> Manual </span>
+      </a>
+    </li>
+
+    <li id="mnu_reason_selection_li"> <a href="{%url 'customer_module:deletion-request-inapp' %}" >
+      <span class="hide-menu"> JULO App </span>
+      </a>
+    </li>
+
+    <li id="mnu_reason_selection_li"> <a href="{%url 'customer_module:customer_data.dashboard' %}" >
+      <span class="hide-menu"> Ubah Data Diri </span>
+      </a>
+    </li>
+
+    <li id="mnu_reason_selection_li"> <a href="{%url 'customer_module:consent_withdrawal' %}" >
+      <span class="hide-menu"> Penarikan Persetujuan </span>
+      </a>
+    </li>
+  </ul>
+</li>
+{% endcheckusergroup %}

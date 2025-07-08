@@ -1,0 +1,622 @@
+{% load static %}
+<style>
+    #swift_limit_drainer_user_appeal {
+        display: block;
+        margin-left: 8px;
+    }
+
+    #swift_limit_drainer_user_appeal p {
+        text-align: left;
+        font-size: 14px;
+        margin: 16px 0 8px;
+        color: #000;
+    }
+
+    #swift_limit_drainer_user_appeal .box_wrapper {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    #swift_limit_drainer_user_appeal .box_appeal {
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #F5F5F5;
+    }
+
+    #swift_limit_drainer_user_appeal .box_appeal_title {
+        font-weight: bold;
+        font-size: 14px;
+        color: #404040;
+        border-bottom: 1px solid #EDEDED;
+        padding-bottom: 8px;
+    }
+
+    #swift_limit_drainer_user_appeal .box_appeal_checkbox_wrapper {
+        margin-top: 8px;
+        display: flex;
+        gap: 16px;
+    }
+
+    #swift_limit_drainer_user_appeal .box_appeal_checkbox {
+        cursor: pointer;
+        font-size: 12px;
+        padding: 10px;
+        border: 1px solid #D3D3D3;
+        border-radius: 5px;
+        background-color: #FFF;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #swift_limit_drainer_user_appeal .box_appeal_checkbox input {
+        margin: 0;
+    }
+
+    #swift_limit_drainer_user_appeal button {
+        width: calc(100% - 16px);
+        margin-bottom: 40px;
+        border: 1px solid #F2C544;
+        background: #F2C544;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        padding: 8px;
+    }
+
+    #loading-state-swift_limit_drainer_user_appeal {
+        animation: shimmer 3s;
+        animation-iteration-count: infinite;
+        background: linear-gradient(to right, #e6e6e6 5%, #cccccc 25%, #e6e6e6 35%);
+        background-size: 1000px 100%;
+        padding: 0;
+        width: 100%;
+        height: 215px;
+        margin: 6px auto 0;
+        z-index: 1;
+        position: relative;
+        content: '';
+        border-radius: 1rem 1rem 0 0;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -1000px 0;
+        }
+
+        100% {
+            background-position: 1000px 0;
+        }
+    }
+
+    #modal-swift_limit_drainer_user_appeal .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    #modal-swift_limit_drainer_user_appeal .modal-header {
+        background: #F69539;
+        color: white;
+        font-size: 16px;
+        font-weight: 400;
+        padding: 26px 32px;
+    }
+
+    #modal-swift_limit_drainer_user_appeal .modal-body {
+        padding: 16px 32px;
+    }
+
+    #modal-loading-swift_limit_drainer_user_appeal .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    #modal-error-swift_limit_drainer_user_appeal .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    #modal-confirm-swift_limit_drainer_user_appeal .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    #modal-confirm-swift_limit_drainer_user_appeal .modal-header {
+        background: #1EC193;
+        color: white;
+        font-size: 16px;
+        font-weight: 400;
+        padding: 26px 32px;
+    }
+
+    #modal-confirm-swift_limit_drainer_user_appeal .modal-body {
+        padding: 16px 32px;
+    }
+
+    #modal-confirm-swift_limit_drainer_user_appeal .btn-save {
+        padding: 7px;
+        background: #00ACF0;
+        width: 139px;
+        color: white;
+        font-weight: bold;
+    }
+
+    #modal-swift_limit_drainer_user_appeal .btn-dismis {
+        background: white;
+        color: #00ACF0;
+        padding: 12px 16px;
+    }
+
+    #modal-swift_limit_drainer_user_appeal .btn-save {
+        background: #00ACF0;
+        padding: 12px 16px;
+        color: white;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const csrfToken = '{{ csrf_token }}';
+        const appealRadios = document.querySelectorAll('#swift_limit_drainer_user_appeal input[name="contact_agent"]');
+        const fraudRadios = document.querySelectorAll('#swift_limit_drainer_user_appeal input[name="is_fraud"]');
+        const fraudSection = document.getElementById('fraud_section');
+        const submitButton = document.querySelector('#swift_limit_drainer_user_appeal button[type="button"]');
+        const postButton = document.querySelector("#button_save_swift_limit_drainer_user_appeal")
+        const allInputs = document.querySelectorAll("#swift_limit_drainer_user_appeal input");
+        const wrapperBox = document.getElementById('swift_limit_drainer_user_appeal');
+        const applicationId = window.location.pathname.split('/').pop();
+        let accountId = extractAccountIdFromPath();
+
+        function extractAccountIdFromPath() {
+            if (document.location.pathname.includes('loan_status')) {
+                return "{{loan_obj.account_id}}";
+            } else if (document.location.pathname.includes('app_status')) {
+                return "{{app_obj.account_id}}";
+            } else if (document.location.pathname.includes('account_payment_status') || document.location.pathname.includes('payment_status')) {
+                return "{{application.account_id}}";
+            }
+            return null;
+        }
+
+        function getUserAppeal() {
+            $.ajax({
+                url: '/fraud_security/fraud-block-account',
+                type: 'GET',
+                data: { account_id: accountId },
+                headers: { 'X-CSRFToken': csrfToken },
+                loading: function () {
+                    document.getElementById("loading-state-swift_limit_drainer_user_appeal").style.display = "block";
+                },
+                success: function (response) {
+                    document.getElementById("loading-state-swift_limit_drainer_user_appeal").style.display = "none";
+                    if (response.success) {
+                        updateFormFromStoredData(response);
+                    } else {
+                        updateFormFromStoredData(response);
+                    }
+                },
+                error: function () {
+                    document.getElementById("loading-state-swift_limit_drainer_user_appeal").style.display = "none";
+                    document.getElementById("swift_limit_drainer_user_appeal").style.display = "none";
+                }
+            });
+        }
+
+        function updateButtonState() {
+            const appealChecked = document.querySelector('input[name="contact_agent"]:checked');
+            const fraudChecked = document.querySelector('input[name="is_fraud"]:checked');
+            document.querySelectorAll('.box_appeal_checkbox input').forEach(input => {
+                if (input.checked) {
+                    input.parentElement.style.backgroundColor = '#B2E6FA';
+                    input.parentElement.style.border = '1px solid #66CDF6';
+                    input.parentElement.style.color = '#006790';
+                    input.parentElement.style.fontWeight = 'bold';
+                } else {
+                    input.parentElement.style.backgroundColor = '';
+                    input.parentElement.style.border = '';
+                    input.parentElement.style.color = '';
+                    input.parentElement.style.fontWeight = '';
+                }
+            });
+        }
+
+        let listenersApplied = false;
+
+        function applyClickListeners() {
+            if (listenersApplied) return;
+
+            const fraudDiv = document.querySelector('div#is_fraud');
+            const notFraudDiv = document.querySelector('div#is_not_fraud');
+            const appealDiv = document.querySelector('div#is_appeal');
+            const fraudInput = document.querySelector('input#is_fraud');
+            const notFraudInput = document.querySelector('input#is_not_fraud');
+            const appealInput = document.querySelector('input#is_appeal');
+            const notAppealDiv = document.querySelector('div#is_not_appeal');
+            const notAppealInput = document.querySelector('input#is_not_appeal');
+
+            if (fraudDiv) {
+                fraudDiv.addEventListener('click', function () {
+                    fraudInput.checked = true;
+                    submitButton.disabled = false;
+                    submitButton.style.cssText = `
+                        background-color: #F2C544;
+                        border: 1px solid #E0E0E0;
+                        color: white;`
+                    updateButtonState();
+                });
+            }
+
+            if (notFraudDiv) {
+                notFraudDiv.addEventListener('click', function () {
+                    notFraudInput.checked = true;
+                    submitButton.disabled = false;
+                    submitButton.style.cssText = `
+                        background-color: #F2C544;
+                        border: 1px solid #E0E0E0;
+                        color: white;`
+                    updateButtonState();
+                });
+            }
+
+            if (fraudInput) {
+                fraudInput.addEventListener('click', function () {
+                    submitButton.disabled = false;
+                    submitButton.style.cssText = `
+                        background-color: #F2C544;
+                        border: 1px solid #E0E0E0;
+                        color: white;`
+                    updateButtonState();
+                });
+            }
+
+            if (notFraudInput) {
+                notFraudInput.addEventListener('click', function () {
+                    submitButton.disabled = false;
+                    submitButton.style.cssText = `
+                        background-color: #F2C544;
+                        border: 1px solid #E0E0E0;
+                        color: white;`
+                    updateButtonState();
+                });
+            }
+
+            if (appealDiv) {
+                appealDiv.addEventListener('click', function () {
+                    appealInput.checked = true;
+                    fraudSection.style.display = 'block';
+                    submitButton.disabled = true;
+                    submitButton.style.cssText = `
+                        background-color: #EDEDED;
+                        border: 1px solid #C2C2C2;
+                        color: #9E9E9E;`
+                    updateButtonState();
+                });
+            }
+
+            if (appealInput) {
+                appealInput.addEventListener('click', function () {
+                    fraudSection.style.display = 'block';
+                    submitButton.disabled = true;
+                    submitButton.style.cssText = `
+                        background-color: #EDEDED;
+                        border: 1px solid #C2C2C2;
+                        color: #9E9E9E;`
+                    updateButtonState();
+                });
+            }
+
+            if (notAppealDiv) {
+                notAppealDiv.addEventListener('click', function () {
+                    notAppealInput.checked = true;
+                    fraudSection.style.display = 'none';
+                    submitButton.disabled = false;
+                    fraudInput.checked = false;
+                    notFraudInput.checked = false;
+                    submitButton.style.cssText = `
+                        background-color: #F2C544;
+                        border: 1px solid #E0E0E0;
+                        color: white;`
+                    updateButtonState();
+                });
+            }
+
+            listenersApplied = true;
+        }
+
+        function updateFormFromStoredData(data) {
+            const isVerifiedbyAgent = data.data.is_verified_by_agent;
+            if (!data.data || (Array.isArray(data.data) && data.data.length === 0)) {
+                wrapperBox.style.display = 'none';
+                return;
+            }
+
+            wrapperBox.style.display = 'block';
+
+            if (data.data.is_appeal) {
+                const isAppealElement = document.querySelector('input#is_appeal');
+                isAppealElement.checked = true;
+                fraudSection.style.display = 'block';
+                if (!isVerifiedbyAgent) {
+                    applyStyles(isAppealElement);
+                }
+                if (data.data.is_confirmed_fraud) {
+                    const isFraudElement = document.querySelector('input#is_fraud');
+                    if (!isVerifiedbyAgent) {
+                        applyStyles(isFraudElement);
+                    }
+                    isFraudElement.checked = true;
+                } else {
+                    const isNotFraudElement = document.querySelector('input#is_not_fraud');
+                    if (!isVerifiedbyAgent) {
+                        applyStyles(isNotFraudElement);
+                    }
+                    isNotFraudElement.checked = true;
+                }
+            } else {
+                const isAppealNotElement = document.querySelector('input#is_not_appeal');
+                if (!isVerifiedbyAgent) {
+                    applyStyles(isAppealNotElement);
+                }
+                isAppealNotElement.checked = true;
+                fraudSection.style.display = 'none';
+            }
+
+            if (isVerifiedbyAgent) {
+                disableForm(true);
+            } else {
+                disableForm(false);
+                applyClickListeners();
+            }
+        }
+
+        function applyStyles(element, delay = 10) {
+            if (element && element.parentElement) {
+                setTimeout(() => {
+                    element.parentElement.style.cssText = `
+                        background-color: #B2E6FA;
+                        border: 1px solid #66CDF6;
+                        color: #006790;
+                        font-weight: bold;
+                    `;
+                }, delay);
+            }
+        }
+
+        function disableForm(disable) {
+            allInputs.forEach(input => {
+                input.disabled = disable;
+                input.parentElement.style.backgroundColor = disable ? '#EDEDED' : '';
+                input.parentElement.style.border = disable ? '1px solid #C2C2C2' : '';
+                input.parentElement.style.color = disable ? '#404040' : '';
+                input.parentElement.style.fontWeight = disable ? 'bold' : '';
+            });
+
+            submitButton.disabled = disable;
+            submitButton.style.cssText = disable ? `
+                background-color: #EDEDED;
+                border: 1px solid #C2C2C2;
+                color: #9E9E9E;
+            ` : `
+                background-color: #F2C544;
+                border: 1px solid #E0E0E0;
+                color: white;
+            `;
+        }
+
+        function addEventListeners() {
+            appealRadios.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    fraudSection.style.display = this.value === 'yes' ? 'block' : 'none';
+                    fraudRadios.forEach(fraudRadio => { fraudRadio.checked = false; });
+                    updateButtonState();
+                });
+            });
+
+            fraudRadios.forEach(radio => {
+                radio.addEventListener('change', updateButtonState);
+            });
+
+            postButton.addEventListener('click', function () {
+                const isAppealChecked = document.querySelector('input[name="contact_agent"]:checked')?.value === 'yes';
+                const isFraudChecked = document.querySelector('input[name="is_fraud"]:checked')?.value === 'yes';
+
+                if (typeof isAppealChecked !== 'undefined' && typeof isFraudChecked !== 'undefined') {
+                    const formData = {
+                        is_appeal: isAppealChecked,
+                        is_confirmed_fraud: isFraudChecked,
+                        account_id: parseInt(accountId),
+                        application_id: parseInt(applicationId)
+                    };
+
+                    $.ajax({
+                        url: '/fraud_security/fraud-block-account',
+                        type: 'POST',
+                        data: JSON.stringify(formData),
+                        contentType: 'application/json',
+                        headers: { 'X-CSRFToken': csrfToken },
+                        loading: function () {
+                            open_loading_modal_swift_limit_drainer_user_appeal();
+                        },
+                        success: function (response) {
+                            $('#modal-loading-swift_limit_drainer_user_appeal').modal('hide');
+                            if (response.success) {
+                                open_success_modal_swift_limit_drainer_user_appeal();
+                            } else {
+                                open_error_modal_swift_limit_drainer_user_appeal();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $('#modal-loading-swift_limit_drainer_user_appeal').modal('hide');
+                            open_error_modal_swift_limit_drainer_user_appeal();
+                        }
+                    });
+                } else {
+                    console.error('Radio inputs not selected properly!');
+                }
+            });
+        }
+
+        function init() {
+            accountId = parseInt(accountId);
+            getUserAppeal();
+            addEventListeners();
+            updateButtonState();
+        }
+        init();
+    });
+
+    function open_success_modal_swift_limit_drainer_user_appeal() {
+        $('#modal-confirm-swift_limit_drainer_user_appeal').modal({
+            backdrop: 'static',
+            keyboard: false
+        }).modal('show');
+    }
+
+    function open_confirm_modal_swift_limit_drainer_user_appeal() {
+        $('#modal-swift_limit_drainer_user_appeal').modal({
+            backdrop: 'static',
+            keyboard: false
+        }).modal('show');
+    }
+
+    function open_loading_modal_swift_limit_drainer_user_appeal() {
+        $('#modal-loading-swift_limit_drainer_user_appeal').modal({
+            backdrop: 'static',
+            keyboard: false
+        }).modal('show');
+    }
+
+    function open_error_modal_swift_limit_drainer_user_appeal() {
+        $('#modal-error-swift_limit_drainer_user_appeal').modal({
+            backdrop: 'static',
+            keyboard: false
+        }).modal('show');
+    }
+</script>
+
+<div id="swift_limit_drainer_user_appeal">
+    <p>Pengecekan Pengurasan Limit Pengguna</p>
+    <div class="box_wrapper">
+        <div class="box_appeal">
+            <div class="box_appeal_title">Apakah pengguna menghubungi agent?</div>
+            <div class="box_appeal_checkbox_wrapper">
+                <div class="box_appeal_checkbox" id="is_appeal">
+                    <input type="radio" id="is_appeal" name="contact_agent" value="yes"> Menghubungi
+                </div>
+                <div class="box_appeal_checkbox" id="is_not_appeal">
+                    <input type="radio" id="is_not_appeal" name="contact_agent" value="no"> Tidak menghubungi
+                </div>
+            </div>
+        </div>
+        <div class="box_appeal" id="fraud_section" style="display: none;">
+            <div class="box_appeal_title">Apakah pengguna penipu?</div>
+            <div class="box_appeal_checkbox_wrapper">
+                <div class="box_appeal_checkbox" id="is_fraud">
+                    <input type="radio" id="is_fraud" name="is_fraud" value="yes"> Ya
+                </div>
+                <div class="box_appeal_checkbox" id="is_not_fraud">
+                    <input type="radio" id="is_not_fraud" name="is_fraud" value="no"> Tidak
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="btn_simpan_swift_limit_drainer_user_appeal"
+        onclick="open_confirm_modal_swift_limit_drainer_user_appeal()">Simpan</button>
+</div>
+
+<div id="loading-state-swift_limit_drainer_user_appeal" style="display: none;">
+</div>
+
+<div id="modal-swift_limit_drainer_user_appeal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                Simpan Data Pengecekan Pengurasan Limit Pengguna?
+            </div>
+            <div class="modal-body">Pastikan data dengan customer ID
+                <strong>{{object.customer_id|default:"-"|safe}}</strong> sudah
+                benar. Kamu tidak dapat mengubah lagi setelah data tersimpan.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dismis waves-effect radius-8 px-16" data-dismiss="modal"
+                    onclick="$('#modal-swift_limit_drainer_user_appeal').modal('hide');">
+                    Batal
+                </button>
+                <button type="button" class="btn btn-save waves-effect radius-8 px-16"
+                    onclick="$('#modal-swift_limit_drainer_user_appeal').modal('hide');$('#modal-loading-swift_limit_drainer_user_appeal').modal('show');"
+                    id="button_save_swift_limit_drainer_user_appeal">
+                    Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-loading-swift_limit_drainer_user_appeal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                Proses Simpan Data
+            </div>
+            <div class="modal-body">
+                Data untuk customer ID
+                <strong>{{object.customer_id|default:"-"|safe}}</strong>
+                sedang diproses.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-confirm-swift_limit_drainer_user_appeal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                Pengecekan Pengurasan Limit Pengguna Berhasil
+            </div>
+            <div class="modal-body"><img src="{% static 'images/icons/check-circle.svg' %}" style="margin-right: 8px;">
+                Data untuk customer ID
+                <strong>{{object.customer_id|default:"-"|safe}}</strong>
+                berhasil tersimpan.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-save waves-effect radius-8 px-16"
+                    onclick="$('#modal-confirm-swift_limit_drainer_user_appeal').modal('hide');window.location.reload()">
+                    Oke
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-error-swift_limit_drainer_user_appeal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-danger">
+                Proses Simpan Data Gagal
+            </div>
+            <div class="modal-body">
+                Data untuk customer ID
+                <strong>{{object.customer_id|default:"-"|safe}}</strong>
+                tidak dapat diproses.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-save waves-effect radius-8 px-16"
+                    onclick="$('#modal-error-swift_limit_drainer_user_appeal').modal('hide');window.location.reload()">
+                    Reload Page
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

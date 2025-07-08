@@ -1,0 +1,60 @@
+<div class="alert alert-warning" id="email_error_div" style="display: none;">
+Error mengirim Email:<p id="email_error_message"></p>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <div class="col-md-2 col-sm-2">
+        <label>To Email :</label>
+      </div>
+      <div class="col-md-10 col-sm-10">
+        <input type="text" id="to_email" class="form_control" value="{{ app_email }}"/>
+      </div>
+    </div>
+    <br><br><br>
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <div class="col-md-2 col-sm-2">
+        <label>Kategori :</label>
+      </div>
+      <div class="col-md-10 col-sm-10">
+        {{ form_send_email.template_code }}
+      </div>
+    </div><br><br><br>
+     <div class="col-md-12 col-sm-12 form_event-group ">
+      <div class="col-md-2 col-sm-2">
+        <label>Subject :</label>
+      </div>
+      <div class="col-md-10 col-sm-10">
+        {{ form_send_email.email_subject }}
+      </div>
+    </div><br><br><br>
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <div class="col-md-2 col-sm-2">
+        <label>Pre Header :</label>
+      </div>
+      <div class="col-md-10 col-sm-10">
+        {{ form_send_email.pre_header }}
+      </div>
+      {% if available_parameters %}
+          <br><br><br>
+          <div class="col-md-12 col-sm-12 form_event-group ">
+            <div class="col-md-2 col-sm-2">
+              <label> Available Parameters :</label>
+            </div>
+            <div class="col-md-10 col-sm-10">
+                <button id="avaialable_param_wl_url_email" type="button" class="btn btn-default waves-effect"  onclick="add_available_parameter_to_email_content('nonj1_wl_url');">Latest Warning Letter</button>
+            </div>
+          </div>
+      {% endif %}
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-6 col-xs-6">Email Content</label>
+    </div>
+    <div class="col-md-12 col-sm-12">
+      {{ form_send_email.email_content }}
+      <input type="hidden" id="content_value"/>
+    </div>
+</div>
+

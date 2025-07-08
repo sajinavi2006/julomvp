@@ -1,0 +1,1 @@
+{{name}}, sy Rudolf dr JULO. Cashback {{cashback_multiplier}} x {{ payment_cashback_amount }} dgn byr cicilan Anda {{due_amount}} hari ini ke {{ bank_name }}: {{ virtual_account_number }}. Cara bayar: {{url}}

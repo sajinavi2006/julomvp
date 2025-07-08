@@ -1,0 +1,504 @@
+{% load unit utils %}
+{% load checkusergroup from common %}
+{% load static %}
+<div id="slim_pmts" @scroll="onScroll">
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+  <li class="active tab">
+    <a href="#payment" data-toggle="tab">
+      <span class="visible-xs" title="Payment Detail Info">
+        <i class="fa fa-home"></i>
+      </span>
+      <span class="hidden-xs">
+          {% if new_j1_enhancement %}
+            Detail Pengguna
+          {% else %}
+            Account Payment Details
+          {% endif %}
+      </span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#pmt_event" data-toggle="tab" title="Payment Event Info">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Account Payment Events</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#waiver_temp" data-toggle="tab" title="Waiver">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Waiver</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#bank_detail" data-toggle="tab" aria-expanded="true" title="Bank Info">
+      <span class="visible-xs">
+        <i class="fa fa-envelope-o"></i>
+      </span>
+      <span class="hidden-xs">VA Info</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#pmt_list" data-toggle="tab">
+      <span class="hidden-xs">Account Payment List</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#wallets" data-toggle="tab">
+      <span class="hidden-xs">Wallet List</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#loans" data-toggle="tab">
+      <span class="hidden-xs">Loan Details</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#ptp_details" data-toggle="tab">
+      <span class="hidden-xs">PTP Details</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#fdc_details" data-toggle="tab">
+      <span class="hidden-xs">FDC Details</span>
+    </a>
+  </li>
+</ul>
+
+  <div class="tab-content pmt_event">
+    <!-- Tab payment details -->
+    <div class="tab-pane active" id="payment">
+    {% if new_j1_enhancement %}
+        {% include "object/account_status/include/tab_customer_info.html" %}
+    {% else %}
+      <div class="col-xs-6">
+        <table>
+          <tr>
+            <td class='m-r-10'>
+              Account ID
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ payment_obj.account_id|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          {% if experiment %}
+            <tr>
+              <td class='m-r-10'>
+                Experiment
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong>{{ experiment }}</strong>
+              </td>
+            </tr>
+          {% endif %}
+          <tr>
+            <td class='m-r-10'>
+              Memenuhi Syarat Refinancing
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ is_can_refinancing }}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              FDC Risky Customer
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              {% if fdc_risky == True %}
+                <span class="label label-red">Yes</span> <span>{{ fdc_risky_udate }}</span>
+              {% elif fdc_risky == False %}
+                <span class="label label-success">No</span> <span>{{ fdc_risky_udate }}</span>
+              {% else %}
+                <strong>-</strong>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Uninstall Indicator
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ uninstall_indicator|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Partner
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ application.partner_name|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Account Payment Status
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ status_current|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+
+          <tr>
+            <td class='m-r-10'>
+              dpd
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ payment_obj.dpd|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Customer Bucket Type
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                {% if customer_bucket_type == 'Stabilized' %}
+                    <span class="label label-red">Stabilized</span>
+                {% else %}
+                    <span class="label label-success">{{ customer_bucket_type }}</span>
+                {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Due Date
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.due_date|date:"d M Y"|safe|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Due Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.due_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Late Fee Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.late_fee_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Potensi Cashback
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ potential_cashback|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Cashback Diperoleh
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ sum_of_cashback_earned|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Total Seluruh Perolehan Cashback
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ total_cashback_earned|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Date
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.paid_date|date:"d M Y"|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              Paid Amount
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong>{{ payment_obj.paid_amount|f_rupiahs:"no"|default:"-"|safe}}</strong>
+            </td>
+
+          </tr>
+
+          <tr>
+            <td class='m-r-10'>
+                Autodebet
+              </td>
+            <td>
+                <div style="display: flex;">
+                    <div style="display: flex;align-items: center; margin-left: 8px;">
+                        <icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                    </div>
+                    <div class="col-md-6" style="padding-left: 0 !important;">
+                        {% if autodebet_bank_name %}
+                            <span class="label label-info">Aktif ({{ autodebet_bank_name }})</span>
+                        {% else %}
+                            <span class="label label-red">Tidak Aktif</span>
+                        {% endif %}
+                    </div>
+                </div>
+              </td>
+            </tr>
+        </table>
+      </div>
+    {% endif %}
+      <!-- <div class="col-xs-6">
+        <table>
+          <tr>
+            <td class='m-r-10'>
+              T1-10, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_1.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              T11-40, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_2.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              T41-70, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_3.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              T71-90, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_4.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+          <tr>
+            <td class='m-r-10'>
+              91+++, Handle By
+            </td>
+            <td>
+              &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+              <strong> {{ agent_details.collection_bucket_5.username|default:"-"|safe}}</strong>
+            </td>
+          </tr>
+        </table>
+      </div> -->
+
+
+      <div class="col-xs-12">
+        <div class="m-t-10">
+          {% if is_iso_inactive %}
+            {% if payment_event_detail.status_event %}
+              {% checkusergroup in ['bo_finance','admin_full']  %}
+                  <button class="btn btn-danger m-b-5"
+                      id="add_payment_event"
+                      title="add Event Payment"
+                      data-toggle="modal"
+                      data-target="#responsive-modal"
+                      onclick="add_pmt_onclick();">
+                    <i class="fa fa-money fa-fw"></i> Add Account Payment Event
+                  </button>
+              {% endcheckusergroup %}
+            {% endif %}
+          {% endif %}
+          {% checkusergroup in ['bo_sd_verifier','admin_full'] %}
+            {% if wallet_balance_available > 0 %}
+              <button class="btn btn-danger m-b-5"
+                      id="add_cashback_cash"
+                      title="Cashback Event"
+                      data-toggle="modal"
+                      data-target="#responsive-modal-cashback-cash">
+                <i class="fa fa-credit-card fa-fw"></i> Cashback-Event
+              </button>
+            {% endif %}
+          {% endcheckusergroup %}
+          {% checkusergroup in ['collection_supervisor','bo_finance']  %}
+            {% if loan_obj.application.partner.name == "doku" %}
+              <button id="id_btn_autodebet"
+                      class="btn btn-danger m-b-5"
+                      title="auto debet"
+                      data-toggle="modal"
+                      onclick="showModalDoku();"
+                      data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing">
+                <i class="fa fa-money fa-fw"></i> DOKU
+              </button>
+            {% endif %}
+          {% endcheckusergroup %}
+          <!-- Due Dates and Cycle Day Send SMS, Email, Whatsapp Buttons -->
+          {% if is_iso_inactive %}
+            {% checkusergroup in ['collection_supervisor','bo_finance','collection_agent_2','collection_agent_3','collection_agent_4','collection_agent_5']  %}
+              {% if change_due_date_active %}
+                <button class="btn btn-danger m-b-5"
+                        id="id_btn_change_due_date"
+                        title="Change Due Date"
+                        data-toggle="modal"
+                        onclick="showChangeDueDate();">
+                  <i class="fa fa-calendar fa-fw"></i> Due Dates
+                </button>
+              {% endif %}
+           {% endcheckusergroup %}
+          {% checkusergroup in ['collection_supervisor','bo_finance']  %}
+              {% if first_installment_btn_active %}
+              <button
+                  class="btn btn-success m-b-5"
+                  title="edit cycle day and first installment amount"
+                  data-account-payment-id={{payment_obj.id}}
+                  onclick="isLenderEligibleChangePaydate(this, '#modal-first-settlement')">
+                  <i class="fa fa-clock-o fa-fw"></i> Cycle Day and First Installment New
+              </button>
+              {% endif %}
+            {% endcheckusergroup %}
+              {% if is_sms_email_button_unlocked %}
+                <button id="send_sms_button"
+                        class="btn btn-danger m-b-5"
+                        title="send_sms"
+                        data-toggle="modal"
+                        data-target="#responsive-modal-sms"
+                        onclick="send_account_payment_sms_onclick();">
+                  <i class="fa fa-envelope-o fa-fw" ></i> Kirim SMS
+                </button>
+                <button id="send_email_button"
+                        class="btn btn-danger m-b-5"
+                        title="send_email"
+                        data-toggle="modal"
+                        data-target="#responsive-modal-email"
+                        onclick="send_email_account_payment_onclick();">
+                  <i class="fa fa-envelope-o fa-fw"></i> Kirim Email
+                </button>
+              {% endif %}
+            {% if user.groups.all|validate_group:'collection_supervisor' == False and user.groups.all|validate_group_prefix:'collection_' == False %}
+                {% if payment_obj.is_whatsapp %}
+                  <button id="send_whatsapp"
+                          class="btn btn-success m-b-5"
+                          title="flag_as_whatsapp"
+                          onclick="ShowFormWhatsapp();">
+                    <i class="fa fa-whatsapp"></i> send Whatsapp
+                  </button>
+                {% else %}
+                  <button id="set_whatsapp"
+                          class="btn btn-success m-b-5"
+                          title="flag_as_whatsapp"
+                          onclick="ActionSetWhatsapp();">
+                    <i class="fa fa-whatsapp"></i> set Whatsapp
+                  </button>
+                {% endif %}
+            {% endif %}
+          {% endif %}
+          {% if user.groups.all|validate_group:'collection_supervisor' == False and user.groups.all|validate_group_prefix:'collection_' == False %}
+              <button id="send_called_button"
+                      class="btn btn-success m-b-5"
+                      title="flag_as_called"
+                      data-toggle="modal"
+                      data-target="#responsive-modal-set-called">
+                <i class="fa fa-envelope-o fa-fw"></i> set Called
+              </button>
+              <button id="send_reminder_button"
+                      class="btn btn-success m-b-5"
+                      title="flag_as_reminder"
+                      onclick="set_reminder();">
+                <i class="fa fa-bell fa-fw"></i> set Reminder
+              </button>
+          {% endif %}
+        </div>
+        {% checkusergroup in ['collection_supervisor']  %}
+          {% if loan_obj.is_ignore_calls %}
+            <button id="send_ignore_calls"
+                    class="btn btn-success m-b-5"
+                    title="flag_ignore_calls"
+                    onclick="set_ignore_calls('false');">
+              <i class="fa fa-phone-square fa-fw"></i> set Ignore Calls
+            </button>
+          {% endif %}
+        {% endcheckusergroup %}
+        {% checkusergroup in ['collection_supervisor']  %}
+          {% if not loan_obj.is_ignore_calls %}
+            <button id="send_ignore_calls"
+                    class="btn btn-warning m-b-5"
+                    title="flag_ignore_calls"
+                    onclick="set_ignore_calls('true');">
+              <i class="fa fa-phone-square fa-fw"></i> set Ignore Calls
+            </button>
+        {% endif %}
+        {% endcheckusergroup %}
+      </div>
+    {% if new_j1_enhancement %}
+        <div class="col-xs-12"><div class="m-t-10">&nbsp;&nbsp;&nbsp;&nbsp;</div></div>
+    {% endif %}
+    </div>
+      <!-- Tab Payment event -->
+    <div class="tab-pane" id="pmt_event">
+      {% with payment_event_detail.payment_events as object %}
+        {% include "object/payment_status/include/tab_account_payment_event.html" %}
+      {% endwith %}
+    </div>
+    <!-- Tab Payment event -->
+    <div class="tab-pane" id="waiver_temp">
+      {% with waiver_temps as object %}
+        {% include "object/payment_status/include/tab_waiver_temp_account_payment.html" %}
+      {% endwith %}
+    </div>
+    <!-- bank_detail -->
+    <div class="tab-pane" id="bank_detail">
+      {% with loan_obj as object %}
+        {% include "object/payment_status/include/tab_loan_bank_info.html" %}
+      {% endwith %}
+    </div>
+    <!-- Tab Payment list-->
+    <div class="tab-pane" id="pmt_list">
+      {% with all_account_payments as payment_list %}
+        {% include "object/loan_status/include/tab_account_payment_list.html" %}
+      {% endwith %}
+    </div>
+    <div class="tab-pane" id="wallets">
+      {% with wallets as wallets %}
+        {% include "object/loan_status/include/tab_wallet_account_payment.html" %}
+      {% endwith %}`
+    </div>
+    <div class="tab-pane" id="loans">
+      {% with payments as payment_list %}
+        {% include "object/loan_status/include/tab_loan_list.html" %}
+      {% endwith %}`
+    </div>
+    <div class="tab-pane" id="ptp_details">
+      {% with payments as payment_list %}
+        {% include "object/loan_status/include/tab_ptp_details_list.html" %}
+      {% endwith %}`
+    </div>
+    <div class="tab-pane" id="fdc_details">
+      {% include "object/loan_status/include/tab_fdc_details_list.html" %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+from __future__ import unicode_literals
+from django.db import migrations
+from django.utils import timezone
+from dateutil import relativedelta
+
+
+def add_referral_data(apps, schema_editor):
+    ReferralSystem = apps.get_model("julo", "ReferralSystem")
+    ReferralSystem.objects.get_or_create(product_code=[10,11,20,21],
+        creditscore=["A-","B+","B-"],
+        partners=["tokopedia","julo"],
+        caskback_amount="150",
+        is_active=True,
+        name="PromoReferral")
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('julo', '0511_add_coulmn_referral_system'),
+    ]
+
+    operations = [
+        migrations.RunPython(add_referral_data,
+            migrations.RunPython.noop)
+    ]

@@ -1,0 +1,1614 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+{% block additional_title %}Julo-{{ app_obj.id }} {% endblock %}
+
+{% block custom_link %}
+<!-- Watermark CSS -->
+<link href="{% static 'theme/plugins/watermark/watermark.css' %}" rel="stylesheet" />
+<script type="text/javascript" charset="utf8"  src="{% static 'theme/plugins/bower_components/sweetalert2/sweetalert2.min.js' %}"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
+{% block css_inside %}
+  .label-isdeleted {
+    background: #98CB72 !important;
+  }
+  .label-isrequestdeletion {
+    background: #FFC1CC !important;
+  }
+  .label-isdeleted code {
+    margin-left: 5px;
+  }
+  code.success {
+    background: #C8F1E8; color: #1E7461;
+  }
+  .registration-method {
+    border-radius: 60px;
+    background-color: #EAF0FE;
+    padding: 5px;
+    color: #306CF7;
+    border: 1px solid #306CF7;
+    font-weight: 500;
+    font-size: 75%;
+  }
+
+  .registration-method-danger {
+    border-radius: 60px;
+    background-color: #EAF0FE;
+    padding: 5px;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    font-weight: 500;
+    font-size: 75%;
+  }
+
+  .registration-method-warning {
+    border-radius: 60px;
+    background-color: #fde5ce;
+    padding: 5px;
+    color: #306CF7;
+    border: 1px solid ##f79e4a;
+    font-weight: 500;
+    font-size: 75%;
+  }
+
+  .nunito-afs {
+    font-family: "Nunito", sans-serif!important;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+  }
+
+  .font-bold-afs {
+    font-weight: bold;
+    opacity:72%;
+  }
+
+  .label-top-afs {
+    padding: 2px 16px;
+    font-weight: bold;
+    font-size: 10pt;
+    display: inline-block;
+  }
+
+  .label-top-afs-background-red {
+    background-color: #FFECE9!important;
+    color: #DB4D3D!important;
+  }
+
+  .label-top-afs-background-blue {
+    background-color: #B2E6FA;
+  }
+
+  .background-afs-form {
+    background-color: #fff;
+    padding: 10px;
+    margin-top:1%;
+  }
+
+  .form-control-afs {
+    border-radius: 8px!important;
+    padding:10px!important;
+    height: 46px!important;
+  }
+
+  .form-afs-root {
+    margin-top:2%;
+  }
+
+  .badge-afs {
+    text-transform:none;
+  }
+
+  .badge-afs-default {
+    background:#ededed;
+    color: #404040;
+    border-radius:10px;
+    border:#999 solid 1px;
+  }
+
+    .form-afs-root > .form-group > label {
+        font-weight:bold!important;
+    }
+
+  .form-append-afs {
+    border-top-left-radius: 0px!important;
+    border-bottom-left-radius: 0px!important;
+  }
+
+  .form-append-afs-addon {
+    background: none;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  .form-append-afs-border-none {
+    border-left: none;
+  }
+
+  .btn-afs-send-form {
+    background-color: #AB8CE4;
+    padding: 10px 23px;
+    border-radius: 8px;
+    border: none;
+    color: #fff!important;
+  }
+
+  .btn-afs-send-form:hover {
+    color: #fff;
+  }
+
+  .btn-afs-double-check {
+    background: none!important;
+    color:#00ACF0!important;
+    padding:10px 40px;
+    border-radius:8px;
+    border:#00ACF0 solid 1px;
+  }
+
+  .swal2-html-container{
+    font-family: "Nunito", sans-serif!important;
+    font-size:11pt!important;
+  }
+
+    .is-invalid-afs{
+        border: #FF0000 solid 1px!important;
+    }
+
+    .is-valid-afs{
+        border: #399918 solid 1px!important;
+    }
+
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        font-family: "Nunito", sans-serif!important;
+        font-weight:400;
+    }
+
+  .text-label{
+      vertical-align: middle;
+  }
+
+  .text-flag{
+      vertical-align: middle;
+      text-align: center;
+  }
+
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+
+  .checkbox label::before{
+    border: 1px solid;
+  }
+
+  .btn-grp-default {
+    width:30px !important;
+    padding-left:8px !important;
+  }
+
+  .select { overflow: hidden; }
+  .select::-webkit-scrollbar { width: 0 !important }
+  .select { -ms-overflow-style: none; }
+  .select { overflow: -moz-scrollbars-none; }
+  .select:active { pointer-events: none; }
+  .select_cls {
+      width: 232px;
+      height: 36px;
+      border: solid 1px #d5d6d6;
+      background-color: #ffffff;
+  }
+  td.day{
+    position:relative;
+  }
+  .enabled a{
+    color:black !important;
+    background:green !important;
+  }
+    td.day{
+    position:relative;
+  }
+
+  td.day.disabled:hover:before {
+      content: 'This date is disabled';
+      color: white;
+      background-color: grey;
+      top: 28px;
+      position: absolute;
+      width: 136px;
+      left: -34px;
+      z-index: 1000;
+      text-align: center;
+      padding: 2px;
+  }
+
+  td.disabled-date {
+      background-color: red !important;
+      color: white !important;
+  }
+
+  .red{color: red;}
+  .green{color: green;}
+  .no-left{padding-left:0px;}
+
+  .modal-content {
+    width: 120%;
+  }
+
+  .row-scroll {
+    white-space: nowrap;
+    display: flex;
+    justify-content;
+    flex: 1 1 100%;
+  }
+
+  .image-boxed-size-selfie {
+    height: 300px;
+    object-fit: contain;
+  }
+
+  .image-boxed-size-ktp {
+    height: 200px;
+    object-fit: contain;
+  }
+
+  .image-boxed-size-checkbox {
+    height: 25px;
+    object-fit: contain;
+  }
+
+  .padding-setup td {
+    padding: 15px!important;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+
+  .sweet-alert .sa-confirm-button-container button {
+    background-color: #03a9f3 !important;
+    border: 1px solid #03a9f3 !important;
+  }
+  .sweet-alert button.cancel {
+    background-color: #fff !important;
+    color: #333 !important;
+    border-color: #efefef !important;
+    border: 1px solid !important;
+  }
+  .sweet-alert p {
+    color: #333 !important;
+    font-family: "Poppins", sans-serif !important;
+    font-weight: normal !important;
+    font-size: 15px !important;
+  }
+  .sweet-alert button {
+   margin: 30px 5px 10px 5px !important;
+
+ .differenceTable {
+   width: 100%;
+   border-collapse: collapse;
+ }
+
+ .differenceTable th, .differenceTable td {
+   border: 1px solid #dddddd;
+   text-align: left;
+   padding: 8px;
+ }
+
+ .differenceTable th {
+   background-color: #f2f2f2;
+ }
+
+ .differenceTable th, .differenceTable td {
+   width: 20%;
+ }
+
+  .btn.btn-success:disabled{
+    background-color: #E5E5E5;
+  }
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'loan_app:status_changes' %}">Status Aplikasi</a></li>
+    <li class="active">Ubah/Update</li>
+{% endblock %}
+
+{% block list_title %}{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<!-- header breadcrumb-->
+<div class="row">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+      <p class="label-top-afs label-top-afs-background-red">App ID: {{ app_obj.id|safe }}</p>
+      <p class="label-top-afs label-top-afs-background-blue">Nama: {{ app_obj.fullname|default:"-" }}</p>
+      <p class="label-top-afs label-top-afs-background-blue">No HP: {{ app_obj.mobile_phone_1|no_hp|safe }}</p>
+  </div>
+</div>
+
+<!-- title form-->
+<div class="row">
+  <div class="col-md-12 cold-xs-12">
+    <h3 class="nunito-afs font-bold-afs">Lengkapi Form Pengguna</h3>
+  </div>
+</div>
+
+<!-- start content form #DataPribadi -->
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs">Data Pribadi</h3>
+
+    <!-- root section form -->
+    <div class="form-afs-root">
+        {% with app_obj as object %}
+            {% include "object/app_status/include/application_form_assist/data_pribadi_form.html" %}
+        {% endwith %}
+    </div>
+
+  </div>
+</div>
+
+<!-- start content form #Informasi Domisili-->
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs">Informasi Domisili</h3>
+
+    <!-- root section form -->
+    <div class="form-afs-root">
+        {% with app_obj as object %}
+            {% include "object/app_status/include/application_form_assist/informasi_domisili_form.html" %}
+        {% endwith %}
+    </div>
+
+  </div>
+</div>
+
+<!-- start content form #Informasi Kontak Pribadi-->
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs">Informasi Kontak Pribadi</h3>
+    <!-- root section form -->
+    <div class="form-afs-root">
+      <div class="form-group">
+        <label for="mobile_phone_2">Nomor HP Lainnya <label class="badge badge-default badge-afs badge-afs-default"> Tidak wajib</label></label>
+        <input type="number" class="form-control form-control-afs" id="mobile_phone_2" onkeyup="validate_the_form('#mobile_phone_2');" placeholder="Masukkan nomor HP lainnya">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- start content form #Informasi Kontak OrangTua / Pasangan-->
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs" id="title_relation_close_kin_or_spouse">Informasi Kontak Orang Tua</h3>
+    <!-- root section form -->
+    <div class="form-afs-root">
+        <div class="form-group" id="view_relation_close_kin_or_spouse">
+          <label for="">Hubungan</label>
+          <select id="relation_close_kin_or_spouse" class="form-control form-control-afs" disabled>
+            <option value="Orang tua">Orang tua</option>
+          </select>
+        </div>
+        <div class="form-group">
+            <label for="close_kin_or_spouse_name" id="close_kin_or_spouse_name_label">Nama Kontak</label>
+            <input type="text" class="form-control form-control-afs" id="close_kin_or_spouse_name" onkeyup="validate_the_form('#close_kin_or_spouse_name');" placeholder="Masukkan nama kontak">
+        </div>
+        <div class="form-group">
+            <label for="close_kin_or_spouse_mobile_phone" id="close_kin_or_spouse_mobile_phone_label">No HP Kontak</label>
+            <div class="input-group">
+            <div class="input-group-addon form-append-afs-addon"><b>+62</b></div>
+            <input type="number" class="form-control form-control-afs form-append-afs form-append-afs-border-none format-number-phone" onkeyup="validate_the_form('#close_kin_or_spouse_mobile_phone');" id="close_kin_or_spouse_mobile_phone" placeholder="Masukkan nomor HP kontak">
+        </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- start content form #Informasi Kontak Darurat -->
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs">Informasi Kontak Darurat</h3>
+    <!-- root section form -->
+    <div class="form-afs-root">
+        {% with app_obj as object %}
+            {% include "object/app_status/include/application_form_assist/informasi_kontak_darurat_form.html" %}
+        {% endwith %}
+    </div>
+  </div>
+</div>
+
+<!-- start content form #Informasi Pekerjaan -->
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs"></h3>
+    <!-- root section form -->
+    <div class="form-afs-root">
+        {% with app_obj as object %}
+            {% include "object/app_status/include/application_form_assist/informasi_pekerjaan_form.html" %}
+        {% endwith %}
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs">Penghasilan & Pengeluaran</h3>
+    <!-- root section form -->
+    <div class="form-afs-root">
+       {% with app_obj as object %}
+            {% include "object/app_status/include/application_form_assist/penghasilan_pengeluaran_form.html" %}
+        {% endwith %}
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs">Informasi Rekening Bank</h3>
+    <!-- root section form -->
+    <div class="form-afs-root">
+
+      <div class="form-group">
+        <label>Pilih Bank</label>
+        <input type="text" class="form-control form-control-afs" id="bank_name" placeholder="Pilih bank"  value="{{ app_obj.bank_name|default:'' }}" onkeyup="validate_the_form('#bank_name');" onchange="validate_the_form('#bank_name');">
+      </div>
+
+      <div class="form-group">
+        <label>Nomor Rekening</label>
+        <input type="number" class="form-control form-control-afs" id="bank_account_number" onkeyup="validate_the_form('#bank_account_number');" value="{{ app_obj.bank_account_number|default:'' }}" placeholder="Masukkan nomor rekening">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <!-- root section form -->
+    <div class="form-afs-root">
+
+      <div class="form-group">
+        <label>Tujuan Pinjaman</label>
+        <select id="loan_purpose" class="form-control form-control-afs" onchange="validate_the_form('#loan_purpose');">
+            <option value="">Pilih tujuan pinjaman</option>
+            {% for item in loan_purpose %}
+            <option value="{{ item }}" {% if app_obj.loan_purpose == item %} selected {% endif %}>{{ item }}</option>
+            {% endfor %}
+        </select>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6 col-md-offset-3 background-afs-form">
+  <div class="col-md-12 col-xs-12 nunito-afs">
+    <h3 class="nunito-afs font-bold-afs">Punya Kode Referral?</h3>
+    <!-- root section form -->
+    <div class="form-afs-root">
+      <div class="form-group">
+        <label>Kode Referral <label class="badge badge-default badge-afs badge-afs-default"> Tidak wajib</label></label>
+        <input type="text" class="form-control form-control-afs" id="referral_code" maxlength="15" placeholder="Masukkan kode referral">
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="col-md-12 background-afs-form" style="">
+<div style="text-align:right;padding-right: 3%;">
+    <button class="btn btn-afs-send-form" type="button" style="background:#fff;border: 1px solid #00ACF0;color:#00ACF0!important;" onclick="show_modal_batalkan();">Batalkan</button>
+    <button class="btn btn-afs-send-form" type="button" id="btn_open_confirmation" onclick="show_confirmation_popup();">Kirim</button>
+</div>
+</div>
+
+<div id="confirmation_form" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmation_form_label">
+    <div class="modal-dialog">
+        <div class="modal-content" style="padding:25px 10px 10px 10px; border-radius:8px;">
+            <div class="modal-header" style="border-bottom:none;padding-bottom:0px;">
+                <img src="{% static 'images/julo/data-secured.png' %}" width="64" height="64"/>
+                <h4 class="modal-title nunito-afs" id="confirmation_form_title"><b>Kirim Data Sekarang?</b></h4> </div>
+            <div class="modal-body nunito-afs" id="confirmation_form_body">
+                <p>Pastikan data pengguna yang kamu isi benar, ya! Karena data tidak diubah lagi setelahnya.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-afs-double-check" data-dismiss="modal">Periksa Lagi</button>
+                <button type="button" class="btn" style="background: #00ACF0;color:#fff;padding:10px 40px;border-radius:8px;" onclick="submit_form_assist();">Kirim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="batalkan_confirm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmation_form_label" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="padding:25px 10px 10px 10px; border-radius:8px;">
+            <div class="modal-header" style="border-bottom:none;padding-bottom:0px;">
+                <h4 class="modal-title nunito-afs text-center" style="color:#00ACF0;font-weight:bold;">Batalkan isi form?</h4> </div>
+            <div class="modal-body nunito-afs text-center">
+                <p>Kamu perlu mengulang dari awal prosesnya jika ingin batalkan sekarang</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-afs-double-check" style="padding:10px 7px;" onclick="javascript:window.location=('{% url 'app_status:list_w_status' '100_j1_assisted_agent' %}');">Batalkan Isi Form</button>
+                <button type="button" class="btn" style="background: #00ACF0;color:#fff;padding:10px 7px;border-radius:8px;" data-dismiss="modal">Lanjutkan Isi Form</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block button_part %}
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+
+    $('#dob').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        endDate: new Date(),
+    });
+
+    $('#job_start').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        endDate: new Date(),
+    });
+
+    $(document).ready(function(){
+        //do_disabled_button();
+        condition_for_pasangan_orangtua();
+
+        sessionStorage.removeItem('address_provinsi');
+        sessionStorage.removeItem('address_kabupaten');
+        sessionStorage.removeItem('address_kecamatan');
+        sessionStorage.removeItem('address_kelurahan');
+
+        // verify if address data not empty
+        verify_address_data_existing();
+
+    });
+
+    function show_confirmation_popup() {
+        $('#confirmation_form').modal('show');
+    }
+
+    function do_disabled_button(id_button='#btn_open_confirmation') {
+        $(id_button).attr('disabled', 'disabled');
+    }
+
+    function do_enabled_button(id_button='#btn_open_confirmation') {
+        $(id_button).removeAttr('disabled', 'disabled');
+    }
+
+    function show_modal_batalkan(){
+        $('#batalkan_confirm').modal('show');
+    }
+
+    function submit_form_assist() {
+
+        $('.preloader').show();
+
+        // collect data
+        var list_of_field = [
+        "fullname",
+        "dob",
+        "gender",
+        "marital_status",
+        "mother_maiden_name",
+        "address_street_num",
+        "address_provinsi",
+        "address_kabupaten",
+        "address_kecamatan",
+        "address_kelurahan",
+        "kin_relationship",
+        "close_kin_or_spouse_name",
+        "close_kin_or_spouse_mobile_phone",
+        "kin_name",
+        "kin_mobile_phone",
+        "job_type",
+        "job_industry",
+        "job_description",
+        "payday",
+        "monthly_income",
+        "monthly_expenses",
+        "total_current_debt",
+        "loan_purpose",
+        "bank_name",
+        "bank_account_number",
+        "company_phone_number",
+        "company_name",
+        "job_start",
+        "birth_place",
+        "mobile_phone_2",
+        "last_education",
+        "referral_code"]
+
+        var data_payload = {};
+        var is_passed = true;
+        for (let index in list_of_field){
+
+            var param_id = list_of_field[index];
+
+            if (param_id == 'gender'){
+                var value = $('input[name="gender"]:checked').val();
+            }else{
+                var value = $('#'+param_id).val();
+            }
+
+            if (param_id == 'monthly_income' || param_id == 'monthly_expenses' || param_id == 'total_current_debt'){
+                value = value.replace(/\,/g, "");
+            }
+
+            // condition if field not shown in the form
+            if (param_id == 'job_industry' || param_id == 'job_description' || param_id == 'company_name' || param_id == 'company_phone_number' || param_id == 'job_start' || param_id == 'payday'){
+
+                // case if job_type is tidak bekerja, will not shown the display form
+                if ($('#section_for_job_only').is(':hidden')){
+                    result = true;
+                    value = null;
+                }else{
+                    if ($('#section_job_industry').is(":hidden") && param_id == 'job_industry'){
+                        result = true;
+                        value = null;
+                    }
+
+                    if ($('#section_job_description').is(":hidden") && param_id == 'job_description'){
+                        result = true;
+                        value = null;
+                    }
+                }
+
+            }else if(param_id == 'referral_code' || param_id == 'mobile_phone_2'){
+                result = true;
+                if (param_id == 'mobile_phone_2' && value != ''){
+                    result = validate_the_form('#'+param_id);
+                }
+            }else if(param_id == 'kin_name' || param_id == 'kin_mobile_phone' || param_id == 'kin_relationship'){
+
+                // set as optional field is true
+                result = validate_the_form('#'+param_id, true);
+            }else{
+                result = validate_the_form('#'+param_id);
+            }
+
+            if (result == false){
+                console.log(param_id, ' ', result);
+            }
+
+            // must be in final condition
+            if (result == false || result == undefined){
+                is_passed = false;
+            }
+
+            data_payload[param_id] = value;
+        }
+
+        if (is_passed == false){
+            $('#confirmation_form').modal('hide');
+            $('.preloader').hide();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Pengisian Form Belum Sesuai!',
+                text: 'Mohon cek kembali, terdapat data isian yang tidak valid.',
+            });
+            goto_error_field();
+            return false;
+        }
+
+        // logic for marital status
+        data_payload = customize_data_for_marital_status(data_payload);
+
+        // logic for reformat_phone_number
+        data_payload = reformat_phone_number(data_payload);
+
+        // verify job is correct
+        data_payload = double_validation_for_job_rule(data_payload);
+
+        // add application_number
+        data_payload['application_number'] = {{ application_number }};
+
+        // let's to send data to our BE
+        $.ajax({
+            url: "/api/application-form/v1/application/{{ app_obj.id }}/assisted-submission",
+            type: "PATCH",
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", 'token {{ token }}');
+            },
+            contentType: "application/json",
+            data: JSON.stringify(data_payload),
+            dataType: 'json',
+            success: function(response, xhr) {
+
+                $('#confirmation_form').modal('hide');
+                $('.preloader').hide();
+
+                if (response.success == true){
+                    Swal.fire({
+                      icon: "success",
+                      title: "<h4>Berhasil terkirim!</h4>",
+                      text: "Data aplikasi berhasil terkirim",
+                    }).then(function() {
+                        window.location = "{%url 'app_status:change_status' app_obj.id %}";
+                    });
+                }else{
+                     Swal.fire({
+                      icon: "error",
+                      title: "<h4>Gagal dalam pengiriman data</h4>",
+                      text: "+json_response.errors[0]+",
+                    });
+                }
+            },
+            error: function(xhr,errmsg,err) {
+                $('#confirmation_form').modal('hide');
+                $('.preloader').hide();
+
+                if (xhr.status == 404 || xhr.status == 500){
+                    text_message = 'Terjadi kesalahan server'
+                }else if (xhr.status == 400){
+                    text_message = JSON.parse(xhr.responseText).errors
+                }
+
+                Swal.fire({
+                  icon: "error",
+                  title: "<h4>Gagal dalam pengiriman data</h4>",
+                  text: text_message,
+                });
+            }
+        });
+    }
+
+    function validate_standard_form(param_id, is_optional_field=false) {
+
+        var default_error_message = 'Data tidak boleh kosong atau minimal lebih dari 3 karakter';
+        var error_message_invalid_character = 'Mohon isi data tanpa special character';
+        var error_message_payday = 'Mohon isi tanggal hanya 1-31';
+        var error_message = null;
+        var additional_validation = true;
+        var error_message_address = 'Data tidak valid, isi sesuai list lokasi yang telah tersedia';
+        var error_message_gender = 'Isian tidak boleh kosong, pilih salah satu';
+        var error_message_list = 'Data tidak valid, isi sesuai list telah tersedia';
+        var error_message_optional = 'Isian form menjadi wajib, jika salah satu isian kontak darurat terisi';
+
+        if (param_id == '#gender'){
+            var value = $('input[name="gender"]:checked').val();
+        }else{
+            var value = $(param_id).val();
+        }
+
+        var element_message = param_id.replace('#','') + '_message';
+        var min_length = 3;
+
+        if (param_id != '#bank_name'){
+            var is_invalid_result_input = is_have_invalid_character(param_id);
+        }else{
+            var is_invalid_result_input = false;
+        }
+
+        if (is_invalid_result_input == true){
+            error_message = error_message_invalid_character;
+        }else{
+            error_message = default_error_message;
+
+            if (is_optional_field == true){
+                error_message = error_message_optional;
+            }
+        }
+
+        if (param_id == '#payday'){
+            min_length = 0;
+            additional_validation = payday_validation(value);
+            if (additional_validation == false){
+                error_message = error_message_payday;
+            }
+        }
+
+        if (param_id == '#last_education'){
+            min_length = 2;
+        }
+
+        if (param_id == '#mobile_phone_2' || param_id == '#close_kin_or_spouse_mobile_phone' || param_id == '#kin_mobile_phone'){
+            additional_validation = mobile_phone_validation_with_other_phone();
+            if (additional_validation == false){
+                error_message = 'Nomor HP tidak boleh ada yang sama';
+            }
+        }
+
+        if (param_id == '#address_provinsi' || param_id == '#address_kabupaten' || param_id == '#address_kecamatan' || param_id == '#address_kelurahan'){
+            var data_param_address = param_id.replace('#', '');
+            additional_validation = is_change_from_source(data_param_address, value);
+            if (additional_validation == false){
+                error_message = error_message_address;
+            }
+        }
+
+        if (param_id == '#bank_name'){
+            var data_param_bank = param_id.replace('#', '');
+            additional_validation = is_change_from_source(data_param_bank, value);
+            if (additional_validation == false){
+                error_message = error_message_list;
+            }
+        }
+
+        if (param_id == '#gender'){
+            error_message = error_message_gender;
+        }
+
+        if (is_pass_validation_for_submit(value, min_length) == true && is_invalid_result_input == false && additional_validation == true){
+            remove_message(element_message);
+            is_invalid_form(param_id, remove_class=true);
+            return true;
+        }
+
+        if (is_optional_field == true && is_invalid_result_input == false){
+
+            var arr_fields_group_optional = ["kin_name", "kin_mobile_phone", "kin_relationship"]
+            var is_passed_group_fields = is_pass_for_fields_group_optional(arr_fields_group_optional, min_length)
+
+            if (is_passed_group_fields == true){
+                remove_message(element_message);
+                is_invalid_form(param_id, remove_class=true);
+                return true;
+            }
+        }
+
+        show_message_form(param_id, element_message, error_message);
+        is_invalid_form(param_id, remove_class=false);
+        return false;
+    }
+
+    function remove_message(element_message){
+        $('#'+element_message).remove();
+    }
+
+    function show_message_form(param_id, element_message, message_html){
+
+        if (param_id == '#gender'){
+            param_id = '#section_message_err_gender';
+        }
+
+        if (document.getElementById(element_message) == null){
+            $(param_id).after('<p id="'+element_message+'" style="color:#ff0000;" class="nunito-afs">'+message_html+'</p>');
+        }else{
+            $('#'+element_message).html(message_html);
+        }
+    }
+
+    function is_invalid_form(param_id, remove_class=false){
+        if (remove_class == true){
+            $(param_id).removeClass('is-invalid-afs');
+        }else{
+            $(param_id).addClass('is-invalid-afs');
+        }
+    }
+
+    function is_valid_form(param_id, remove_class=false){
+        if (remove_class == true){
+            $(param_id).removeClass('is-valid-afs');
+        }else{
+            $(param_id).addClass('is-valid-afs');
+        }
+    }
+
+    function validate_the_form(param_id, is_optional_field=false){
+        var param_value = $(param_id).val();
+
+        //do_disabled_button();
+        if (validate_standard_form(param_id, is_optional_field) == true) {
+            //do_enabled_button();
+            return true;
+        }
+
+        return false;
+    }
+
+    function is_pass_validation_for_submit(value, min_length){
+
+        if (value != '' && value != null && value.length >= min_length && value != 'Pilih'){
+            return true;
+        }
+
+        return false;
+    }
+
+    function is_pass_for_fields_group_optional(arr_fields, min_length){
+
+        var total_param = arr_fields.length;
+        var invalid_param = 0;
+        var invalid_param_empty = 0;
+        for (let index in arr_fields){
+
+            var param_id = arr_fields[index];
+            var value = $('#'+param_id).val();
+
+            if (value == ''){
+                invalid_param_empty++;
+            }else if (is_pass_validation_for_submit(value, min_length) == false){
+                invalid_param++;
+            }
+        }
+
+        if (invalid_param_empty == total_param){
+            return true;
+        }else if (total_param != invalid_param){
+            return false;
+        }
+
+        return true;
+    }
+
+    $(document).ready(function(){
+        $('.preloader').show();
+
+        $.ajax({
+            url: "{%url 'app_status:ajax_get_dropdown_data_form' %}",
+            type: "GET",
+            data: {},
+            success: function(json) {
+
+                job_type = json.data.list_job_type;
+                $.each(job_type, function(index, data){
+                    $('#job_type').append('<option value="'+data+'">'+data+'</option>');
+                });
+
+                kota_kabupaten_list = json.data.list_kota_kabupaten;
+                kota_kabupaten_arr = [];
+                $.each(kota_kabupaten_list, function(index, data){
+                    if (data != null){
+                        kota_kabupaten_arr.push(data);
+                    }
+                });
+
+                $( "#birth_place" ).autocomplete({
+                    source: kota_kabupaten_arr,
+                    minLength: 0,
+                }).focus(function () {
+                    $('#birth_place').autocomplete('search', '');
+                });
+
+                $('.preloader').hide();
+            },
+            error: function(xhr,errmsg,err) {
+                $('.preloader').hide();
+                alert('Failed to load data Dropdown (JobType)');
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+
+        $.ajax({
+            url: "/api/v3/address/provinces",
+            type: "GET",
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", 'token {{ token }}');
+            },
+            data: {},
+            success: function(json) {
+                list_province = json.data;
+                province_arr = [];
+                $.each(list_province, function(index, data){
+                    if (data != null){
+                        province_arr.push(data);
+                    }
+                });
+
+                $("#address_provinsi" ).autocomplete({
+                    source: province_arr,
+                    minLength: 0,
+                    select: function(event, ui){
+                        var value = ui.item.value;
+                        sessionStorage.setItem('address_provinsi', value);
+                        $(this).val(value);
+                        validate_standard_form('#address_provinsi');
+
+                        // set default value for child
+                        set_default_value_for_provinsi();
+                    }
+                }).focus(function () {
+                    $('#address_provinsi').autocomplete('search', '');
+                });
+            },
+            error: function(xhr, error_message, error) {
+                console.log(xhr.status);
+            }
+        });
+
+        // init data for bank
+        sessionStorage.removeItem('bank_name');
+        $.ajax({
+            url: "/api/v3/product-line/10/dropdown_bank_data/",
+            type: "GET",
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", 'token {{ token }}');
+            },
+            data: {},
+            success: function(json) {
+                available_banks = [];
+                $.each(json, function(index, data){
+                    if (data.bank_name != null){
+                        available_banks.push(data.bank_name);
+                    }
+                });
+                $( "#bank_name" ).autocomplete({
+                    source: available_banks,
+                    minLength: 0,
+                    select: function(event, ui){
+                        var value = ui.item.value;
+                        sessionStorage.setItem('bank_name', value);
+                        $(this).val(value);
+                        validate_standard_form('#bank_name');
+                    }
+                }).focus(function () {
+                    $('#bank_name').autocomplete('search', '');
+                });
+
+                // for bank name condition is not empty
+                var bank_name_init = $('#bank_name').val();
+                if (bank_name_init != '' && available_banks.length != 0){
+                    for (let item in available_banks){
+                        if (available_banks[item].toLowerCase() == bank_name_init.toLowerCase()){
+                            sessionStorage.setItem('bank_name', bank_name_init);
+                        }
+                    }
+                }
+
+            },
+            error: function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    $('#job_type').on('change', function(){
+
+        $('#job_industry').attr('disabled','disabled');
+        var value = $('#job_type').val();
+
+        $('#section_for_job_only').show();
+        var value_job_type = value.toLowerCase();
+        if (value_job_type == 'tidak bekerja' || value_job_type == 'ibu rumah tangga' || value_job_type == 'mahasiswa'){
+            $('#section_for_job_only').hide();
+            return;
+        }
+
+        $.ajax({
+            url: "/app_status/ajax_get_dropdown_data_form_job/"+value.toLowerCase()+"/0",
+            type: "GET",
+            data: {},
+            success: function(json) {
+
+                list_data = json.data.list_job_industry;
+                if (list_data[0] == ''){
+                    $('#section_job_industry').hide();
+                    $('#section_job_description').hide();
+                }else{
+                    $('#section_job_industry').show();
+                    $('#section_job_description').show();
+                    $('#job_industry').removeAttr('disabled','disabled');
+                    $('#job_industry option').remove();
+
+                    if (document.getElementById('#job_industry option') == null){
+                        $('#job_industry').append('<option value="">Pilih</option>');
+                    }
+
+                    $.each(list_data, function(index, data){
+                        $('#job_industry').append('<option value="'+data+'">'+data+'</option>');
+                    });
+                }
+            },
+            error: function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    $('#job_industry').on('change', function(){
+
+        $('#job_description').attr('disabled','disabled');
+        var job_type = $('#job_type').val();
+        var value = $('#job_industry').val();
+        var clear_value = value.replace('/', '').replace('/', '');
+
+        $.ajax({
+            url: "/app_status/ajax_get_dropdown_data_form_job/"+job_type.toLowerCase()+"/"+clear_value.toLowerCase(),
+            type: "GET",
+            data: {},
+            success: function(json) {
+
+                list_data = json.data.list_job_description;
+                if (list_data[0] == ''){
+                    $('#section_job_description').hide();
+                }else{
+                    $('#section_job_description').show();
+                    $('#job_description').removeAttr('disabled','disabled');
+                    $('#job_description option').remove();
+
+                    if (document.getElementById('#job_description option') == null){
+                        $('#job_description').append('<option value="">Pilih</option>');
+                    }
+
+                    $.each(list_data, function(index, data){
+                        $('#job_description').append('<option value="'+data+'">'+data+'</option>');
+                    });
+                }
+            },
+            error: function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    var kota_kabupaten_arr = [];
+    $('#address_provinsi').on('blur', function(){
+        var provinsi = $('#address_provinsi').val();
+
+        if (provinsi == null || provinsi == ''){
+            return;
+        }
+
+        $.ajax({
+            url: "/api/v3/address/cities",
+            type: "POST",
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", 'token {{ token }}');
+            },
+            data: JSON.stringify({
+                "province": provinsi,
+            }),
+            contentType: "application/json",
+            success: function(json) {
+                var kota_kabupaten_arr = [];
+                var list_data = json.data;
+                $.each(list_data, function(index, data){
+                    if (data != null){
+                        kota_kabupaten_arr.push(data);
+                    }
+                });
+
+                 $( "#address_kabupaten" ).autocomplete({
+                    source: kota_kabupaten_arr,
+                    minLength: 0,
+                    select: function(event, ui){
+                        var value = ui.item.value;
+                        sessionStorage.setItem('address_kabupaten', value);
+                        $(this).val(value);
+                        validate_standard_form('#address_kabupaten');
+                        set_default_value_for_kabupaten();
+                    }
+                });
+            },
+            error: function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+
+    $('#address_kabupaten').on('blur', function(){
+        var provinsi = $('#address_provinsi').val();
+        var kota_kabupaten = $('#address_kabupaten').val();
+        $.ajax({
+            url: "/api/v3/address/districts",
+            type: "POST",
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", 'token {{ token }}');
+            },
+            contentType: "application/json",
+            data: JSON.stringify({
+                "province": provinsi,
+                "city": kota_kabupaten,
+            }),
+            success: function(json) {
+                var list_data = json.data;
+                var kecamatan_arr = [];
+                $.each(list_data, function(index, data){
+                    if (data != null){
+                        kecamatan_arr.push(data);
+                    }
+                });
+                $( "#address_kecamatan" ).autocomplete({
+                    source: kecamatan_arr,
+                    minLength: 0,
+                    select: function(event, ui){
+                        var value = ui.item.value;
+                        sessionStorage.setItem('address_kecamatan', value);
+                        $(this).val(value);
+                        validate_standard_form('#address_kecamatan');
+                        set_default_value_for_kecamatan();
+                    }
+                });
+            },
+            error: function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    $('#address_kecamatan').on('blur', function(){
+        var provinsi = $('#address_provinsi').val();
+        var kota_kabupaten = $('#address_kabupaten').val();
+        var kecamatan = $('#address_kecamatan').val();
+        $.ajax({
+            url: "/api/v3/address/subdistricts",
+            type: "POST",
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", 'token {{ token }}');
+            },
+            contentType: "application/json",
+            data: JSON.stringify({
+                "province": provinsi,
+                "city": kota_kabupaten,
+                "district": kecamatan,
+            }),
+            success: function(json) {
+                var list_data = json.data;
+                var kelurahan_arr = [];
+                $.each(list_data, function(index, data){
+                    if (data.subDistrict != null){
+                        kelurahan_arr.push(data.subDistrict);
+                    }
+                });
+                $("#address_kelurahan").autocomplete({
+                    source: kelurahan_arr,
+                    minLength: 0,
+                    select: function(event, ui){
+                        var value = ui.item.value;
+                        sessionStorage.setItem('address_kelurahan', value);
+                        $(this).val(value);
+                        validate_standard_form('#address_kelurahan');
+                    }
+                });
+            },
+            error: function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    $(".numeric-format").on("keyup", function (event) {
+
+        var extra = 0;
+        if ($.inArray(event.keyCode, [38, 40, 37, 39]) !== -1) {
+          if (event.keyCode == 38) {
+            extra = 1000;
+          } else if (event.keyCode == 40) {
+            extra = -1000;
+          } else {
+            return;
+          }
+        }
+
+        var $this = $(this);
+        var input = $this.val();
+
+        var input = input.replace(/[\D\s\._\-]+/g, "");
+        input = input ? parseInt(input, 10) : 0;
+        input += extra;
+        extra = 0;
+        $this.val(function() {
+          return (input === 0) ? "" : input.toLocaleString("en-US");
+        });
+    });
+
+    function is_have_invalid_character(param_id) {
+        var value = $(param_id).val();
+
+        if (param_id == '#loan_purpose' || param_id == '#marital_status' || param_id == '#address_street_num' || param_id == '#address_kecamatan' || param_id == '#address_kelurahan' || param_id == '#address_kabupaten'){
+            return /[^\w\s.,'-/]/.test(value);
+        }
+
+        return /[^\w\s.,'-]/.test(value);
+    }
+
+    $('#marital_status').on('change', function(){
+        condition_for_pasangan_orangtua();
+    });
+
+    function condition_for_pasangan_orangtua(){
+        var marital_status = $('#marital_status').val();
+        var view_relation_close_kin_or_spouse = '#view_relation_close_kin_or_spouse';
+        var title_relation_close_kin_or_spouse = 'Informasi Kontak Orang Tua';
+
+        $('#title_relation_close_kin_or_spouse').html(title_relation_close_kin_or_spouse);
+        if (marital_status == 'Menikah'){
+            $('#title_relation_close_kin_or_spouse').html('Informasi Kontak Pasangan');
+            $(view_relation_close_kin_or_spouse).hide();
+
+            $('#close_kin_or_spouse_name_label').html('Nama Pasangan');
+            $('#close_kin_or_spouse_name').attr('placeholder', 'Masukkan nama pasangan');
+
+            $('#close_kin_or_spouse_mobile_phone_label').html('No HP Kontak Pasangan');
+            $('#close_kin_or_spouse_mobile_phone').attr('placeholder', 'Masukkan nomor HP pasangan');
+
+        }else{
+            $(view_relation_close_kin_or_spouse).show();
+            $('#relation_close_kin_or_spouse').val('Orang tua');
+
+            $('#close_kin_or_spouse_name_label').html('Nama Orang Tua');
+            $('#close_kin_or_spouse_name').attr('placeholder', 'Masukkan nama orang tua');
+
+            $('#close_kin_or_spouse_mobile_phone_label').html('No HP Orang Tua');
+            $('#close_kin_or_spouse_mobile_phone').attr('placeholder', 'Masukkan nomor HP orang tua');
+
+        }
+    }
+
+    function customize_data_for_marital_status(data_payload){
+        if (data_payload['marital_status'] == 'Menikah'){
+            data_payload['spouse_name'] = data_payload['close_kin_or_spouse_name'];
+            data_payload['spouse_mobile_phone'] = data_payload['close_kin_or_spouse_mobile_phone'];
+
+            data_payload['close_kin_name'] = null;
+            data_payload['close_kin_mobile_phone'] = null;
+        }else{
+            // if lajang marital status, and etc
+            data_payload['spouse_name'] = null;
+            data_payload['spouse_mobile_phone'] = null;
+
+            data_payload['close_kin_name'] = data_payload['close_kin_or_spouse_name'];
+            data_payload['close_kin_mobile_phone'] = data_payload['close_kin_or_spouse_mobile_phone'];
+        }
+
+        delete data_payload['close_kin_or_spouse_name'];
+        delete data_payload['close_kin_or_spouse_mobile_phone'];
+
+        return data_payload;
+    }
+
+    function payday_validation(value){
+        if (value >= 1 && value <= 31){
+            return true;
+        }
+
+        return false;
+    }
+
+    function is_maximum_limit_for_input(value, limit){
+
+        if (value.length > limit){
+            return false;
+        }
+
+        return true;
+    }
+
+    function mobile_phone_validation_with_other_phone(){
+        var mobile_phone_1 = '{{app_obj.mobile_phone_1}}';
+        var list_of_param = ['mobile_phone_1', 'mobile_phone_2', 'close_kin_or_spouse_mobile_phone', 'kin_mobile_phone'];
+        var list_phone_number = [];
+
+        for (let index in list_of_param){
+            var param_id = list_of_param[index];
+            var element_message = param_id+'_message';
+
+            if (param_id == 'mobile_phone_1'){
+                var value = mobile_phone_1;
+            }else{
+                var value = $('#'+param_id).val();
+            }
+
+            if (value == '' || value == undefined){
+                continue;
+            }
+
+            new_value = sync_phone_number_format(value);
+            if (list_phone_number.indexOf(new_value) > -1){
+                // have duplicate
+                return false;
+            }else{
+                list_phone_number.push(new_value);
+                remove_message(element_message);
+                is_invalid_form('#'+param_id, remove_class=true);
+            }
+        }
+
+        return true;
+    }
+
+    function is_unique(value, index, array) {
+        return array.indexOf(value) === array.lastIndexOf(value);
+    }
+
+    function is_change_from_source(param_id, value){
+        session_data = sessionStorage.getItem(param_id);
+        if (session_data == null || session_data == undefined){
+            return false;
+        }
+
+        if (session_data != null){
+            if (value != session_data){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    $( "#company_name" ).autocomplete({
+      minLength: 2,
+      source: function( request, response ) {
+        $.ajax({
+            url: "{% url 'app_status:ajax_get_dropdown_data_company' %}",
+            dataType: "json",
+            data: {
+                term: request.term
+            },
+            success: function(response_json) {
+                response(response_json.data);
+            },
+        });
+      }
+    });
+
+    $('.format-number-phone').on('keypress', function(e){
+        var value = $(this).val();
+
+        if (value.length >= 13){
+            e.preventDefault();
+            return false;
+        }
+        $(this).val(value.replace(/^0+/, ''));
+    });
+
+    function goto_error_field(){
+        $('html, body').animate({
+            scrollTop: $(".is-invalid-afs").offset().top
+        }, 1000);
+    }
+
+    function reformat_phone_number(data_payload){
+
+        var list_for_reformat_id = ['kin_mobile_phone', 'spouse_mobile_phone', 'close_kin_mobile_phone'];
+
+        for (let index in list_for_reformat_id){
+            var value = data_payload[list_for_reformat_id[index]];
+
+            value = sync_phone_number_format(value);
+            data_payload[list_for_reformat_id[index]] = value;
+        }
+
+        return data_payload;
+    }
+
+    function sync_phone_number_format(value){
+
+        if (value != '' && value != undefined){
+            var value_arr = value.split('');
+            if (value_arr[0] != '0'){
+                return '0'+value;
+            }
+        }
+        return value;
+    }
+
+    function double_validation_for_job_rule(data_payload){
+
+        var list_for_checking = ['job_industry', 'job_description', 'company_name', 'company_phone_number', 'job_start', 'payday'];
+        var job_type_value = data_payload['job_type'].toLowerCase();
+
+        if (job_type_value == 'tidak bekerja' || job_type_value == 'mahasiswa' || job_type_value == 'ibu rumah tangga'){
+            for (let index in list_for_checking){
+                var value = data_payload[list_for_checking[index]];
+                if (value != '' || value == undefined){
+                    data_payload[list_for_checking[index]] = null;
+                }
+            }
+        }
+
+        return data_payload;
+    }
+
+    function set_default_value_for_provinsi(){
+        $('#address_kabupaten').val('');
+        $('#address_kecamatan').val('');
+        $('#address_kelurahan').val('');
+        sessionStorage.removeItem('address_kabupaten');
+        sessionStorage.removeItem('address_kecamatan');
+        sessionStorage.removeItem('address_kelurahan');
+    }
+
+    function set_default_value_for_kabupaten(){
+        $('#address_kecamatan').val('');
+        $('#address_kelurahan').val('');
+        sessionStorage.removeItem('address_kecamatan');
+        sessionStorage.removeItem('address_kelurahan');
+    }
+
+    function set_default_value_for_kecamatan(){
+        $('#address_kelurahan').val('');
+        sessionStorage.removeItem('address_kelurahan');
+    }
+
+    $('#address_provinsi').on('change', function(){
+        // set empty for other child
+        set_default_value_for_provinsi();
+    });
+
+    $('#address_kabupaten').on('change', function(){
+        // set empty for other child
+       set_default_value_for_kabupaten();
+    });
+
+    $('#address_kecamatan').on('change', function(){
+        // set empty for other child
+        set_default_value_for_kecamatan();
+    });
+
+    function verify_address_data_existing(){
+
+        var provinsi = $('#address_provinsi').val();
+        var kota_kabupaten = $('#address_kabupaten').val();
+        var kecamatan = $('#address_kecamatan').val();
+        var kelurahan = $('#address_kelurahan').val();
+
+        if (provinsi == '' || kota_kabupaten == '' || kecamatan == '' || kelurahan == ''){
+            return false;
+        }
+
+        $.ajax({
+            url: "/api/v3/address/subdistricts",
+            type: "POST",
+            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", 'token {{ token }}');
+            },
+            contentType: "application/json",
+            data: JSON.stringify({
+                "province": provinsi,
+                "city": kota_kabupaten,
+                "district": kecamatan,
+            }),
+            success: function(json) {
+                var list_data = json.data;
+                var kelurahan_arr = [];
+                $.each(list_data, function(index, data){
+                    if (data.subDistrict != null){
+                        if (data.subDistrict.toLowerCase() == kelurahan.toLowerCase()){
+
+                            sessionStorage.setItem('address_provinsi', provinsi);
+                            sessionStorage.setItem('address_kabupaten', kota_kabupaten);
+                            sessionStorage.setItem('address_kecamatan', kecamatan);
+                            sessionStorage.setItem('address_kelurahan', kelurahan);
+
+                            return true;
+                        }
+                    }
+                });
+
+                return false;
+            },
+            error: function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    }
+
+
+{% endblock %}
+
+{% block script_end %}
+{% load static from staticfiles %}
+{% endblock %}

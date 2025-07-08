@@ -1,0 +1,49 @@
+{% load model template default unit %}
+
+<table>
+  <tr>
+    <td>
+      Nama Narahubung
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.poc_name|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Posisi Narahubung
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{object.poc_position|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Email Narahubung
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{object.poc_email|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Nomor Telepon Narahubung
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{object.poc_phone|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Sumber Dana
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.source_of_fund|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+</table>

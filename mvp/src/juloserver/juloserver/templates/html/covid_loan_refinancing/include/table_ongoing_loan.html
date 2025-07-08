@@ -1,0 +1,144 @@
+{% load format_date %}
+{% load currency %}
+
+<div class="row" id="ongoing_loan_table"
+     style="width: 100%;display: inline-flex;overflow-x: auto; overflow-y: hidden">
+    {% if ongoing_loan_data %}
+        <div style="width: 100%">
+            <table class="table table-bordered" id="ongoing_payment">
+                <thead>
+                <tr style="height: 77px">
+                    <th class="align-middle"> Payment#</th>
+                    <th class="align-middle"> Telah jatuh tempo?</th>
+                    <th class="align-middle"> Tgl jatuh tempo</th>
+                    <th class="align-middle"> Status</th>
+                    <th class="align-middle"> Total Angsuran</th>
+                    <th class="align-middle"> Sisa Principal</th>
+                    <th class="align-middle"> Sisa Interest</th>
+                    <th class="align-middle"> Sisa Late Fee</th>
+                    <th class="align-middle"> Sisa Angsuran</th>
+                    <th class="align-middle"> Terbayar</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ongoing_loan_data_payment in ongoing_loan_data %}
+                    <tr style="height: 78px;{% if ongoing_loan_data_payment.outstanding == 0 %} background:#DCDCDC;{% endif %}">
+                        <td class="align-middle">
+                            {{ ongoing_loan_data_payment.payment_number }}
+                            <input type="hidden" name="ongoing_remaining_payment_number_{{ ongoing_loan_data_payment.key }}" value="{{ ongoing_loan_data_payment.payment_number }}" >
+                        </td>
+                        <td class="align-middle">{{ ongoing_loan_data_payment.due_status }}</td>
+                        <td class="align-middle">{{ ongoing_loan_data_payment.due_date  | format_date_to_locale_format }}</td>
+                        <td class="align-middle">{{ ongoing_loan_data_payment.paid_status }}</td>
+                        <td class="align-middle">{{ ongoing_loan_data_payment.total_installment | add_rupiah_separator }}</td>
+                        <td class="align-middle">
+                            {{ ongoing_loan_data_payment.remaining_principal | add_rupiah_separator }}
+                            <input type="hidden" name="ongoing_remaining_principal_amount_{{ ongoing_loan_data_payment.key }}" value="{{ ongoing_loan_data_payment.remaining_principal }}" >
+                        </td>
+                        <td class="align-middle">
+                            {{ ongoing_loan_data_payment.remaining_interest | add_rupiah_separator }}
+                            <input type="hidden" name="ongoing_remaining_interest_amount_{{ ongoing_loan_data_payment.key }}" value="{{ ongoing_loan_data_payment.remaining_interest }}" >
+                        </td>
+                        <td class="align-middle">
+                            {% if ongoing_loan_data_payment.remaining_late_fee > 0 %}
+                                {{ ongoing_loan_data_payment.remaining_late_fee | add_rupiah_separator }}
+                            {% else %}
+                                -
+                            {% endif %}
+                            <input type="hidden" name="ongoing_remaining_late_fee_amount_{{ ongoing_loan_data_payment.key }}" value="{{ ongoing_loan_data_payment.remaining_late_fee }}" >
+                        </td>
+                        <td class="align-middle">
+                            {% if ongoing_loan_data_payment.outstanding > 0 %}
+                                {{ ongoing_loan_data_payment.outstanding | add_rupiah_separator }}
+                            {% else %}
+                                -
+                            {% endif %}
+                            <input type="hidden" name="ongoing_remaining_outstanding_amount_{{ ongoing_loan_data_payment.key }}" value="{{ ongoing_loan_data_payment.outstanding }}" >
+                        </td>
+                        <td class="align-middle">
+                            {% if ongoing_loan_data_payment.paid_amount > 0 %}
+                                {{ ongoing_loan_data_payment.paid_amount | add_rupiah_separator }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4" class="align-middle"></td>
+                    <td class="align-middle">
+                        <b>{{ total_installment_amount_loan | add_rupiah_separator }}</b>
+                    </td>
+                    <td class="align-middle">
+                        <b>{{ total_remaining_principal | add_rupiah_separator }}</b></td>
+                    <td class="align-middle">
+                        <b>{{ total_remaining_interest | add_rupiah_separator }}</b></td>
+                    <td class="align-middle">
+                        <b>{{ total_remaining_late_fee | add_rupiah_separator }}</b></td>
+                    <td class="align-middle" id="pay_net_due"
+                        net_due_amt="{{ total_installment_outstanding_loan }}">
+                        <b>{{ total_installment_outstanding_loan | add_rupiah_separator }}</b>
+                    </td>
+                    <td class="align-middle">
+                        <b>{{ total_installment_paid_loan | add_rupiah_separator }}</b></td>
+
+                </tr>
+                </tfoot>
+
+            </table>
+        </div>
+        <div>
+            <table class="table table-bordered" id="original_amount_table" style="display: none">
+                <thead>
+                <tr style="height: 77px">
+                    <th class="align-middle"> Original Principal</th>
+                    <th class="align-middle"> Original Interest</th>
+                    <th class="align-middle"> Original Late Fee</th>
+                    <th class="align-middle"> Tanggal Bayar</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ongoing_loan_data_payment in ongoing_loan_data %}
+                    <tr style="height: 78px;{% if ongoing_loan_data_payment.outstanding == 0 %} background:#DCDCDC"
+                    {% endif %}">
+                    <td class="align-middle">{{ ongoing_loan_data_payment.remaining_principal | add_rupiah_separator }}</td>
+                    <td class="align-middle">{{ ongoing_loan_data_payment.remaining_interest | add_rupiah_separator }}</td>
+                    <td class="align-middle">
+                        {% if ongoing_loan_data_payment.remaining_late_fee > 0 %}
+                            {{ ongoing_loan_data_payment.remaining_late_fee | add_rupiah_separator }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td class="align-middle">
+                        {% if ongoing_loan_data_payment.paid_date %}
+                            {{ ongoing_loan_data_payment.paid_date  | format_date_to_locale_format }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="align-middle"><b>{{ total_principal_loan | add_rupiah_separator }}</b>
+                    </td>
+                    <td class="align-middle"><b>{{ total_interest_loan | add_rupiah_separator }}</b>
+                    </td>
+                    <td class="align-middle"><b>{{ total_late_fee_loan | add_rupiah_separator }}</b>
+                    </td>
+                    <td></td>
+                </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    {% else %}
+        <div class="col-md-12" style="text-align:center; padding-top:10px;">
+            No data found...
+        </div>
+    {% endif %}
+</div>

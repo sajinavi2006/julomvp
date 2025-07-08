@@ -1,0 +1,1 @@
+Yth {{ name }}, nikmati cashback {{ cashback_amount }} saat melunasi tagihan JULO Anda paling lambat {{ cashback_due_date }}. {{ url }}.

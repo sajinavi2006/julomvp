@@ -1,0 +1,75 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-4 col-xs-6"> <strong>Nama Lengkap di FB</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-r b-l"> 
+    {{fb_obj.fullname|default:"-"|safe}}
+  </div>
+  <div class="col-md-2 col-xs-6">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6"> <strong>Email di FB</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-r b-l"> 
+    {{fb_obj.email|default:"-"|safe}}
+  </div>
+  <div class="col-md-2 col-xs-6">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6"> <strong>Gender di FB</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-r b-l"> 
+    {{fb_obj.gender|default:"-"|safe}}
+  </div>
+  <div class="col-md-2 col-xs-6">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6"> <strong>Tgl Lahir di FB</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-r b-l"> 
+      {{fb_obj.dob|date:"d M Y"|default:"-"|safe}} - Usia: {{fb_obj.dob|age|safe}} Tahun
+  </div>
+  <div class="col-md-2 col-xs-6">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6"> <strong>Friend Count</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-r b-l"> 
+    {{fb_obj.friend_count|default:"-"|safe}}
+  </div>
+  <div class="col-md-2 col-xs-6">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6"> <strong>FB ID</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-r b-l"> 
+    {{fb_obj.facebook_id|default:"-"|safe}}
+  </div>
+  <div class="col-md-2 col-xs-6">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6"> <strong>Open Date</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-r b-l"> 
+    {%if fb_obj.open_date %}
+      {{fb_obj.open_date|date:"d M Y"|safe}} - Lama: {{fb_obj.open_date|age|safe}} Tahun
+    {% else %}
+      -No Data-
+    {%endif%}
+  </div>
+  <div class="col-md-2 col-xs-6">
+  </div>
+</div>

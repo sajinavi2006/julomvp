@@ -1,0 +1,1 @@
+{{name}}, sy Friska dr JULO. Angsuran {{ payment_number }} {{due_amount}} jatuh tempo hari ini. Kesempatan terakhir dpt cashback Sebesar {{ payment_cashback_amount }}. Cara bayar: {{url}} dan cek aplikasi anda.

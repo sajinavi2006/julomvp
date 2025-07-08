@@ -1,0 +1,100 @@
+{% load currency %}
+{% load format_date %}
+
+<div class="row right-div-bg-top">
+    <div class="col-md-12">
+        <span style="margin-left:100px;">Tagihan yang sedang berjalan</span>
+        <span class="glyphicon glyphicon-triangle-bottom span-button ongoing_account_table-downward" aria-hidden="true" style="float: right; margin-left:10px;" onclick="collapseTable('ongoing_account_table')"></span>
+        <span class="glyphicon glyphicon-triangle-top span-button ongoing_account_table-upward" aria-hidden="true" style="float: right; ; margin-left:10px; display: none;" onclick="collapseTable('ongoing_account_table')"></span>
+        <span class="glyphicon glyphicon-forward span-button original_amount_table-forward disabled" aria-hidden="true" style="float: right;" onclick="expandTable('original_amount_table')"></span>
+        <span class="glyphicon glyphicon-backward span-button original_amount_table-backward disabled" aria-hidden="true" style="float: right; display: none;" onclick="expandTable('original_amount_table')"></span>
+    </div>
+</div>
+<div class="row" id="ongoing_account_table" style="width: 100%; display: none; overflow-x: auto; overflow-y: hidden">
+    {% if ongoing_account_payments %}
+        <div style="width: 100%;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr style="height: 77px">
+                        <th class="align-middle"> Bulan Tagihan </th>
+                        <th class="align-middle"> Jatuh Tempo </th>
+                        <th class="align-middle"> Tanggal Jatuh Tempo </th>
+                        <th class="align-middle"> Status </th>
+                        <th class="align-middle"> Total Tagihan </th>
+                        <th class="align-middle"> Sisa Principal </th>
+                        <th class="align-middle"> Sisa Interest </th>
+                        <th class="align-middle"> Sisa Late Fee </th>
+                        <th class="align-middle"> Total Sisa Tagihan </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ongoing_account_payment in ongoing_account_payments %}
+                    <tr style="height: 78px;{% if ongoing_account_payment.outstanding == 0 %} background:#DCDCDC;{% endif %}">
+                        <td class="align-middle">{{ ongoing_account_payment.due_date | format_month_year_to_locale_format }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.due_status }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.due_date | format_date_to_locale_format }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.paid_status }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.total_installment | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.remaining_principal | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.remaining_interest | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.remaining_late_fee | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.outstanding | add_rupiah_separator }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle"></td>
+                        <td class="align-middle">{{ total_installment_amount_account | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ total_remaining_principal | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ total_remaining_interest | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ total_remaining_late_fee | add_rupiah_separator }}</td>
+                        <td class="align-middle" id="pay_net_due" net_due_amt="{{ total_installment_outstanding_account }}">{{ total_installment_outstanding_account | add_rupiah_separator }}</td>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+        <div>
+            <table class="table table-bordered" id="original_amount_table" style="display: none">
+                <thead>
+                    <tr style="height: 77px">
+                        <th class="align-middle"> Terbayar </th>
+                        <th class="align-middle"> Original Principal </th>
+                        <th class="align-middle"> Original Interest </th>
+                        <th class="align-middle"> Original Late Fee </th>
+                        <th class="align-middle"> Tanggal dibayar </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ongoing_account_payment in ongoing_account_payments %}
+                    <tr style="height: 78px;{% if ongoing_account_payment.outstanding == 0 %} background:#DCDCDC {% endif %}">
+                        <td class="align-middle">{{ ongoing_account_payment.paid_amount | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.principal_amount | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.interest_amount | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.late_fee_amount | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ ongoing_account_payment.paid_date | format_date_to_locale_format }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="align-middle">{{ total_installment_paid_account | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ total_principal_account | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ total_interest_account | add_rupiah_separator }}</td>
+                        <td class="align-middle">{{ total_late_fee_account | add_rupiah_separator }}</td>
+                        <td class="align-middle"></td>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+    {% else %}
+        <div class="col-md-12" style="text-align:center; padding-top:10px;">
+            No data found...
+        </div>
+    {% endif %}
+</div>

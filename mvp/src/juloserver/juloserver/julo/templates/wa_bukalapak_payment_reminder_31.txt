@@ -1,0 +1,4 @@
+Yth {{fullname}}. 
+Tagihan BayarNanti Anda sebesar {{due_amount}} telah jatuh tempo pada {{due_date}}.
+Segera lakukan pembayaran untuk menghindari denda. Informasi dan cara melakukan pembayaran tersedia pada Aplikasi Bukalapak (bl.id/BayarNanti).
+Anda juga bisa Whatsapp pertanyaan ke 087886904744

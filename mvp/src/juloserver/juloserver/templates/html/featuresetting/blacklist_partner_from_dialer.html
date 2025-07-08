@@ -1,0 +1,82 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls admin_static %}
+
+{% block extrahead %}{{ block.super }}
+<style type="text/css">
+    .form-row {
+        overflow: visible !important;
+    }
+    .selectize-control {
+        width: 300px;
+        display: inline-grid;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+</style>
+{% endblock %}
+{% block admin_change_form_document_ready %}
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+<script type="text/javascript">
+var selected_partner_ids = []
+
+var current_config = ''
+if ($('#id_configs').val()){
+    current_config = JSON.parse($('#id_configs').val())
+}
+var is_instance = true
+var eventHandler = function() {
+    return function() {
+        var new_partner_ids = []
+        $('#id_partner_ids option').each(function (value, object){
+            partner_name = object.text
+            partner_id = parseInt(object.value)
+            new_partner_ids.push(partner_id)
+            if(jQuery.inArray(partner_id, selected_partner_ids) == -1){
+                 $('fieldset').append(
+                        '<div class="form-row field-partner-'+partner_id+'"><div><label>'+partner_name+':</label>' +
+                            '<input type="text" name="dpd_configuration_for_'+partner_id+'" id="dpd_configuration_for_'+partner_id+'"><p class="help">use <b style="color:red;">:</b> for creating configuration until eg = 1:5 means dpd 1-5. use <b style="color:red;">;</b> for creating multiple dpd config eg=1:5;20:30. and use <b style="color:red;">end</b> for exclude all of dpd</p></div></div>')
+                    selected_partner_ids.push(partner_id)
+            }
+        })
+        if (new_partner_ids.length < selected_partner_ids.length){
+             var diff = $(selected_partner_ids).not(new_partner_ids).get();
+             for (var i=0;i<diff.length;i++){
+                 del_partner_id = diff[i]
+                 $('fieldset .field-partner-'+del_partner_id).remove()
+                 selected_partner_ids = jQuery.grep(selected_partner_ids, function(value) {
+                  return value != del_partner_id;
+                });
+             }
+        }
+        initiate_value()
+    };
+};
+var $select = $('.partner-ids-control').selectize({
+    create          : true,
+    onChange        : eventHandler(),
+    onInitialize: function() {
+        this.trigger('change', this.getValue(), true)
+    },
+
+});
+var selectizeControl = $select[0].selectize
+function initiate_value(){
+    if (is_instance == false){
+        return
+    }
+    $.each(selected_partner_ids, function(index, value){
+        $('fieldset #dpd_configuration_for_'+value).val(current_config[value])
+    })
+    is_instance = false
+}
+</script>
+{% endblock %}

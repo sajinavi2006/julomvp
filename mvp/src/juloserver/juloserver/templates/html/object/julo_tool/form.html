@@ -1,0 +1,122 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+    .ml5 {
+        margin-left: 5px;
+    }
+    .w100 {
+        width: 100px;
+    }
+    .grid {
+        display: grid;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .lb-result {
+        font-size: larger;
+    }
+    .center {
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">{{ action_type }}</h3>
+</div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+    <div class="form-group">
+      <label class="w100">Lender:</label>
+      <select class="form-control" id="lender_id">
+        <option value="-">Choose</option>
+        {% for lender in lenders %}
+            <option value="{{ lender.id }}">{{ lender.lender_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+        <label class="w100">Transaction ID:</label>
+        <input class="form-control" maxlength="50" id="transaction_id" type="text">
+    </div>
+
+    <div class="form-group">
+        <label class="w100">VA Number:</label>
+        <input class="form-control" maxlength="50" id="va_number_id" type="text">
+    </div>
+
+    <div class="form-group">
+        <label class="w100">Amount:</label>
+        <input class="form-control" maxlength="50" id="amount_id" type="text">
+    </div>
+
+    <button class="btn-warning btn" style="height: 38px;border-radius:4px;" onclick="formSubmit()">Submit</button>
+{% endblock %}
+
+{% block script_bottom_inside %}
+    function formSubmit() {
+        var lender = $("#lender_id").val();
+        if (lender == "-") {
+            alert('Lender tidak boleh kosong');
+            return;
+        }
+
+        var amount = $("#amount_id").val();
+        if (!amount) {
+            alert('Amount tidak boleh kosong');
+            return;
+        }
+
+        var actionType = $("#action_type_id").val();
+        var csrftoken = "{{csrf_token}}";
+
+        $.ajax({
+            url :  "{%url 'julo_tool:ajax_form_topup' %}/", // the endpoint
+            type : "POST", // http method
+            data : {
+                  csrfmiddlewaretoken: csrftoken,
+                  lender: lender,
+                  amount: amount,
+                  actionType: actionType
+            },
+            // handle a successful response
+            success : function(json) {
+                if (json.status == "success"){
+                    alert("sukses");
+                } else {
+                    alert(json.error_message);
+                }
+                window.location.reload();
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        })
+    }
+{% endblock %}

@@ -1,0 +1,398 @@
+{% load unit %}
+<tr class= "ca-none {{ app_data.job_type.statuses|ca_tr_class|default:''|safe}} dv before_pv12">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tipe Pekerjaan</strong></div>
+    <div class="col-xs-6">: {{ object.job_type|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.job_type field_name='job_type'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.job_industry.statuses|ca_tr_class|default:''|safe}} dv pv12">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Bidang Pekerjaan</strong></div>
+    <div class="col-xs-6">: {{ object.job_industry|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.job_industry field_name='job_industry'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.job_description.statuses|ca_tr_class|default:''|safe}} dv">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Pekerjaan</strong></div>
+    <div class="col-xs-6">: {{ object.job_description|default:"-"|safe}}</div>
+  </td>
+    {% with object=app_data.job_description field_name='job_description'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.company_name.statuses|ca_tr_class|default:''|safe}} coll pv1 before_pv2">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Perusahaan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.company_name.errors %} has-error {% endif %}">
+        {{form_app.company_name}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-company_name',
+                      '{{ object.company_name|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.company_name field_name='company_name'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.company_phone_number.statuses|ca_tr_class|default:''|safe}} coll pv2">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No Telp Perusahaan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.company_phone_number.errors %} has-error {% endif %}">
+        {{form_app.company_phone_number}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-company_phone_number',
+                      '{{ object.company_phone_number|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.company_phone_number field_name='company_phone_number'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.work_kodepos.statuses|ca_tr_class|default:''|safe}} before_pv3">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Kode Pos Kantor</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.work_kodepos.errors %} has-error {% endif %}">
+        {{form_app.work_kodepos}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-work_kodepos',
+                      '{{ object.work_kodepos|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.work_kodepos field_name='work_kodepos'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>{% endif %}
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.hrd_name.statuses|ca_tr_class|default:''|safe}} pv3 before_pv11 ca">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama hrd/Atasan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.hrd_name.errors %} has-error {% endif %}">
+        {{form_app.hrd_name}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-hrd_name',
+                      '{{ object.hrd_name|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.hrd_name field_name='hrd_name'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.company_address.statuses|ca_tr_class|default:''|safe}} coll pv11 before_pv13">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Alamat Kantor/Penempatan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.company_address.errors %} has-error {% endif %}">
+        {{form_app.company_address}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-company_address',
+                      '{{ object.company_address|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.company_address field_name='company_address'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.number_of_employees.statuses|ca_tr_class|default:''|safe}} pv13 before_pv4">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Jumlah Karyawan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.number_of_employees.errors %} has-error {% endif %}">
+        {{form_app.number_of_employees}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-number_of_employees',
+                      '{{ object.number_of_employees|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.number_of_employees field_name='number_of_employees'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.position_employees.statuses|ca_tr_class|default:''|safe}} coll pv4 before_pv6">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Posisi Karyawan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.position_employees.errors %} has-error {% endif %}">
+        {{form_app.position_employees}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-position_employees',
+                      '{{ object.position_employees|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.position_employees field_name='position_employees'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.employment_status.statuses|ca_tr_class|default:''|safe}} pv6 before_pv14 ca">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Status Kepegawaian</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.employment_status.errors %} has-error {% endif %}">
+        {{form_app.employment_status}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-employment_status',
+                      '{{ object.employment_status|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.employment_status field_name='employment_status'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.billing_office.statuses|ca_tr_class|default:''|safe}} pv14 before_pv7 ca">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Penagihan/Tunggakan dikantor</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.billing_office.errors %} has-error {% endif %}">
+        {{form_app.billing_office}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-billing_office',
+                      '{{ object.billing_office|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.billing_office field_name='billing_office'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.mutation.statuses|ca_tr_class|default:''|safe}} pv7 before_pv5">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Mutasi/Resign</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.mutation.errors %} has-error {% endif %}">
+        {{form_app.mutation}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-mutation',
+                      '{{ object.mutation|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.mutation field_name='mutation'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.job_start.statuses|ca_tr_class|default:''|safe}} pv5 before_pv9">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tanggal Mulai Bekerja</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.job_start.errors %} has-error {% endif %}">
+          <input class="form-control mydatepicker"
+                 id="id_form2-job_start" maxlength="None"
+                 name="form2-job_start" placeholder="dd-mm-yyyy "
+                 type="text" value="{{ object.job_start|date:'d-m-Y'|default:''|safe }}" onchange="setWorkTenure()">
+         <span class="input-group-btn">
+          <button type="button" class="btn btn-info btn-grp-default"
+                  id="id_btn-job_start"
+                  onclick="setDefaultValue('id_form2-job_start',
+                            '{{ object.job_start|date:'d-m-Y'|safe }}');">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+         </span>
+      </div>
+      Lama:
+      <span id="id_work_tenure">{{ object.job_start|age|safe}}</span> Tahun
+    </div>
+  </td>
+    {% with object=app_data.job_start field_name='job_start'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.payday.statuses|ca_tr_class|default:''|safe}} coll_upper coll_upper2 pv9 before_pv8">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tanggal Gajian</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm {% if form_app.payday.errors %} has-error {% endif %}">
+        <span class="input-group-addon">1 to 31</span>
+        {{form_app.payday}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-payday', '{{ object.payday|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.payday field_name='payday'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+{% if status_current.status_code >= 300 and status_current.status_code < 400 %} <tr class= "ca-none {{ app_data.hrd_name.statuses|ca_tr_class|default:''|safe}} pv3 before_pv11 ca">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama hrd/Atasan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.hrd_name.errors %} has-error {% endif %}">
+        {{form_app.hrd_name}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-hrd_name',
+                      '{{ object.hrd_name|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.hrd_name field_name='hrd_name'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.monthly_income.statuses|ca_tr_class|default:''|safe}} pv8">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Penghasilan Bersih Per Bulan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                {% if form_app.monthly_income.errors %} has-error {% endif %}">
+        <span class="input-group-addon">
+          Rp.
+        </span>
+        {{form_app.monthly_income}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-monthly_income',
+                      '{{ object.monthly_income|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+    {% with object=app_data.monthly_income field_name='monthly_income'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none pv8">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Penghasilan di dokumen</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                {% if form_hsfbp.verified_income.errors %} has-error {% endif %}">
+        <span class="input-group-addon">
+          Rp.
+        </span>
+        <input class="form-control mask" id="id_verified_income" maxlength="None" name="verified_income" placeholder="verified_income" size="None" type="text" value="{{ hsfbp_verified_income|default:''|safe }}">
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_verified_income',
+                      '{{ hsfbp_verified_income|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.income_1.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Penghasilan T-1</strong></div>
+    <div class="col-xs-6">: {{ object.income_1|f_rupiahs:"no"|safe}}</div>
+  </td>
+    {% with object=app_data.income_1 field_name='income_1'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.income_2.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Penghasilan T-2</strong></div>
+    <div class="col-xs-6">: {{ object.income_2|f_rupiahs:"no"|safe}}</div>
+  </td>
+    {% with object=app_data.income_2 field_name='income_2'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.income_3.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Penghasilan T-3</strong></div>
+    <div class="col-xs-6">: {{ object.income_3|f_rupiahs:"no"|safe}}</div>
+  </td>
+    {% with object=app_data.income_3 field_name='income_3'%}
+      {% include "object/app_status/include/ca_ceklist.html" %}
+    {% endwith %}
+</tr> {% endif %}

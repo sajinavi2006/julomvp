@@ -1,0 +1,78 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+    .ml5 {
+        margin-left: 5px;
+    }
+    .w100 {
+        width: 100px;
+    }
+    .grid {
+        display: grid;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .lb-result {
+        font-size: larger;
+    }
+    .center {
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">GRAB PROMO CODE UPLOAD</h3>
+</div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<form method="post" enctype="multipart/form-data" id="uploadForm">
+    {% csrf_token %}
+
+    <div class="flex">
+        <label class="w100">File Upload:</label>
+        {{form.file_field}}
+    </div>
+    <div class="flex">
+        <label class="w100"><a href="{% static 'excel/grab_promo_code/grab_prom_code.csv' %}">&nbsp;&nbsp;<u>...template</u></a></label>
+    </div>
+    <button class="mb10 btn btn-info" type="submit">Upload</button>
+</form>
+{% if logs %}
+<div class="grid">
+    <div class="mb10">
+        <b class="lb-result">Success: {{ok}} / Failure: {{nok}}</b>
+    </div>
+    <textarea disabled="True" rows="10" cols="50">{{logs|escape}}</textarea>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block script_common_list %}
+    $('#uploadForm').one('submit', function () {
+        $(this).find('button[type="submit"]').attr('disabled', 'disabled');
+    });
+{% endblock %}

@@ -1,0 +1,3 @@
+
+class QAAirudderException(Exception):
+    pass

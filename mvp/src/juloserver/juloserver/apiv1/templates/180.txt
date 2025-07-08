@@ -1,0 +1,3 @@
+Selamat!! Dana pinjaman sebesar {{loan_amount}} {{loan_amount_text}}.<br>
+<br>
+Pinjaman Anda telah aktif pada tanggal {{loan_active_date}}. Silahkan cek aktivitas pinjaman di halaman <a href=\"http://www.julofinance.com/android/goto/loan_activity\">Aktivitas Pinjaman</a>.

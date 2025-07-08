@@ -1,0 +1,38 @@
+{% load static %}
+{% load unit %}
+{% load checkusergroup from common %}
+
+<style>
+.rever-button {
+  font-size: 1em;
+  padding: 5px;
+  color: rgb(0, 0, 0);
+  border: 1px solid #747474;
+  border-radius: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.rever-button:hover {
+  background: #06D85F;
+  color: white;
+  border: 2px solid #ffffff;
+}
+
+</style>
+
+  {% csrf_token %}
+  <table class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td class="col-xs-12">
+              <div class="col-xs-4 no-left">
+                <b>Reverify User :</b>
+              </div>
+              <div class="col-xs-6">
+                <button class='rever-button' onclick="reverifyAccount()">Confirm</button>
+              </div>
+            </td>
+          </tr>
+    </tbody>
+  </table>

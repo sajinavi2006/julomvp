@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+    style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0 auto; padding: 0; height: 100%; width: 100%;">
+
+<head>
+    <meta charset="utf-8">
+    <!-- utf-8 works for most cases -->
+    <meta name="viewport" content="width=device-width">
+    <!-- Forcing initial-scale shouldn't be necessary -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Use the latest (edge) version of IE rendering engine -->
+    <meta name="x-apple-disable-message-reformatting">
+    <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <title></title>
+    <!-- The title tag shows in email notifications, like Android 4.4. -->
+
+    <!-- Web Font / @font-face : BEGIN -->
+    <!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely removed. -->
+
+    <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
+    <!--[if mso]>
+        <style>
+            * {
+                font-family: sans-serif !important;
+            }
+        </style>
+    <![endif]-->
+
+
+    <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+    <!--[if !mso]-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <!--[endif]-->
+
+    <!-- Web Font / @font-face : END -->
+
+    <!-- CSS Reset : BEGIN -->
+    <style>
+        @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+            .email-container {
+                min-width: 375px !important;
+            }
+        }
+    </style>
+    <!-- CSS Reset : END -->
+
+    <!-- Progressive Enhancements : BEGIN -->
+    <style>
+        @media screen and (max-width: 480px) {
+            .fluid {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            .stack-column,
+            .stack-column-center {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+            }
+
+            .stack-column-center {
+                text-align: center !important;
+            }
+
+            .center-on-narrow {
+                text-align: center !important;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                float: none !important;
+            }
+
+            .margin-on-narrow {
+                text-align: left !important;
+                display: block !important;
+                margin-left: 30px !important;
+                margin-right: auto !important;
+                float: none !important;
+            }
+
+            table.center-on-narrow {
+                display: inline-block !important;
+            }
+
+            .email-container p {
+                font-size: 14px !important;
+            }
+        }
+
+            .julo-color {
+              background-color: #1597DE !important;
+            }
+    </style>
+    <!-- Progressive Enhancements : END -->
+
+    <!-- What it does: Makes background images in 72ppi Outlook render at correct size. -->
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+
+</head>
+
+<body width="100%" bgcolor="#cccccc" style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; mso-line-height-rule: exactly; margin: 0 auto; padding: 0; height: 100%; width: 100%;">
+    <center style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; width: 100%; background: #cccccc; text-align: left;">
+
+        <!-- Visually Hidden Preheader Text : BEGIN -->
+        <div style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+            <p>Berikut adalah nama pemenang yang beruntung memenangkan undian 20 juta dari JULO</p>
+        </div>
+        <!-- Visually Hidden Preheader Text : END -->
+
+        <!--
+            Set the email width. Defined in two places:
+            1. max-width for all clients except Desktop Windows Outlook, allowing the email to squish on narrow but never go wider than 680px.
+            2. MSO tags for Desktop Windows Outlook enforce a 680px width.
+            Note: The Fluid and Responsive templates have a different width (600px). The hybrid grid is more "fragile", and I've found that 680px is a good width. Change with caution.
+        -->
+        <div style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; max-width: 680px; margin: auto;"
+            class="email-container">
+            <!--[if mso]>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="680" align="center">
+            <tr>
+            <td>
+            <![endif]-->
+
+            <!-- Email Body : BEGIN -->
+            
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; max-width: 680px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0; border-collapse: collapse; table-layout: fixed; margin: 0 auto;"
+                class="email-container">
+                <!-- Email Body : BEGIN -->
+                <tr style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                    <!-- Bulletproof Background Images c/o https://backgrounds.cm -->
+                    <td bgcolor="#ffffff" valign="middle" style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; text-align: center; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"
+                        align="center">
+                        <!--[if gte mso 9]>
+                        <v:image xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="border: 0; display: inline-block; width: 1080px; height: 900px;" src="Assets/Background.jpg" />
+                        <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="border: 0; display: inline-block; position: absolute; width: 1080px; height: 900px;">
+                        <v:fill opacity="0%" color="#303030" />
+                        <![endif]-->
+                        <div style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                            <!--[if mso]>
+                            <table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="500">
+                            <tr>
+                            <td align="center" valign="top" width="500">
+                            <![endif]-->
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; max-width: 500px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0; border-collapse: collapse; table-layout: fixed; margin: 0 auto;">
+                                <tr style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                                    <td valign="top" style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; padding: 0px 0px 0px 0px; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                        <div style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; text-align: left; font-size: 12px; font-weigth: bold;line-height: 200%; color: #5e5e5e; padding: 40px 10px 0px 10px;">
+                                            <img src="https://julocampaign.julo.co.id/lebaran_2021/Promo_Spesial_Lebaran_-_Coll_Campaign_2000x1000.png" alt="banner-leberan-2021" style="width: 100%; margin-bottom: 15px;">
+                                            <!-- <img src="{{ banner_url }}" alt="banner-leberan-2021" style="width:100% margin-bottom: 15px"/> -->
+                                            <p style="...">Hi, JULOvers!</p>
+                                            <p>
+                                                JULO mempunyai penawaran menarik untuk Anda dalam rangka menyambut bulan suci Ramadan. Sambut Lebaran Bersama JULO, bayar angsuran tanpa beban!
+                                                <br>Dapatkan diskon jika Anda melakukan pembayaran dengan kondisi seperti berikut:
+                                            </p>
+                                            <ol style="">
+                                                <li>Bayar angsuran Anda yang tertunggak Rp {{overdue_amount}}, dapatkan <b>diskon denda keterlambatan sebesar 100% & biaya bunga 50%</b></li>
+                                                <li>Bayar <b>seluruh</b> angsuran Anda Rp {{total_due_amount}}, dapatkan <b>diskon denda & bunga sebesar 100%</b> untuk pinjaman yang tertunggak.</li>
+                                            </ol>
+                                            <p>
+                                                Periode promosi hanya berlangsung dari 22 April hingga 10 Mei 2021. <br> Agar penawaran tersebut berlaku, silahkan lakukan konfirmasi dengan menghubungi contact center JULO collection pada:
+                                            </p>
+                                            <table style="margin-bottom: 15px;">
+                                                <tr>
+                                                    <td>Email </td>
+                                                    <td> : <a href="collections@julo.co.id">collections@julo.co.id</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Layanan Telepon </td>
+                                                    <td> : 021 5091 9036 atau 021 5091 9037</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>WhatsApp </td>
+                                                    <td> : 0813 1778 2070 & 0819 3411 1830</td>
+                                                </tr>
+                                            </table>
+
+                                            <p>Penawaran terbatas, <span style="color: #0000FF; font-weight: bold;">siapa cepat dia dapat!</span> 😆</p>
+
+                                            <p>Salam,<br>JULO</p>
+                                        </div>
+                                        <br style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                                        <br style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                                        <div style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;text-align: left; font-size: 14px; line-height: 200%; color: #5E5E5E;">
+                                        </div>
+                                        <br style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                                        <div style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; text-align: left; font-size: 16px; line-height: 200%; color: #404040;">
+                                        </div>
+                                        <br style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+                                        <br style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--[if mso]>
+                            </td>
+                            </tr>
+                            </table>
+                            <![endif]-->
+                        </div>
+                        <!--[if gte mso 9]>
+                        </v:fill>
+                        </v:rect>
+                        </v:image>
+                        <![endif]-->
+                    </td>
+                </tr>
+            </table>
+            <!-- Email Body : END -->
+
+            <!-- Email Footer : BEGIN -->
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="font-family: 'Montserrat', sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; max-width: 680px; color: #ffffff; font-size: 12px; line-height: 140%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0; border-collapse: collapse; table-layout: fixed; margin: 0 auto; background: #222222;text-align: center;">
+                <tr>
+                    <td style="padding-top: 30px;">Pinjaman Cerdas dari Smartphone Anda</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#playstore-link">
+                            <img src="https://julocampaign.julo.co.id/lebaran_2021/btn-playstore.png" style="width: 160px; margin: 15px;">
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="display: flex; justify-content: center;     font-size: 16px;">
+                            <div style="margin: 4px 6px;">
+                              <a href="https://www.instagram.com/juloindonesia/" target="_blank" style="color: #fff;">
+                                <i class="fab fa-instagram"></i>
+                              </a>
+                            </div>
+                            <div style="margin: 4px 6px;">
+                              <a href="https://www.facebook.com/juloindonesia/" target="_blank" style="color: #fff;">
+                                <i class="fab fa-facebook-square"></i>
+                              </a>
+                            </div>
+                            <div style="margin: 4px 6px;">
+                              <a href="https://twitter.com/juloindonesia" target="_blank" style="color: #fff;">
+                                <i class="fab fa-twitter"></i>
+                              </a>
+                            </div>
+                            <div style="margin: 4px 6px;">
+                              <a href="https://www.youtube.com/channel/UCA9WsBMIg3IHxwVA-RvSctA" target="_blank" style="color: #fff;">
+                                <i class="fab fa-youtube"></i>
+                              </a>
+                            </div>
+                          </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 15px 0 30px;">&copy; 2021 JULO | All right reserved</td>
+                </tr>
+            </table>
+            <!-- Email Footer : END -->
+        </div>
+    </center>
+</body>
+</html>

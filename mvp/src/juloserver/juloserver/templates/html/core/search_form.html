@@ -1,0 +1,37 @@
+{% load name %}
+{% if search_params %}
+
+<form class="form-inline" role="form" id='search-form' method='get'>
+    <div class="form-group">
+        <div class="input-group input-group-sm">
+        
+            <div class="input-group">
+              <div class="input-group-addon" onclick="clear_search_q();"><i class="fa fa-search" ></i></div>
+              
+                {% for param in search_params %}
+                    {% if param.name and param.name != 'q' %}
+                        {% if param.name == 'break' %}
+                            <br><br>
+                        {% else %}
+                            {{ param.verbose_name }}:
+                            <input type="text" class="form-control" placeholder="Pencarian" name='{{ param.name }}' 
+                                value='{% if param.value %}{{ param.value }}{% endif %}'
+                                {% if param.size %} size={{ param.size }}{% endif %} 
+                                {% if param.name %} id='id_{{ param.name }}'{% endif %} />&nbsp;&nbsp;
+                        {% endif %}
+                    {% else %}
+                        <input type="text" class="form-control" placeholder="Pencarian" name='{{ param.name }}' 
+                            value='{% if param.value %}{{ param.value }}{% endif %}'
+                            size='40' 
+                            {% if param.name %} id='id_{{ param.name }}'{% endif %} />
+                    {% endif %}
+                {% endfor %}
+
+            <div class="input-group-addon">
+            	<button type="submit"> Cari
+            	</button>
+            </div>
+        </div>
+    </div>
+</form>     
+{% endif %}

@@ -1,0 +1,99 @@
+{% load unit %}
+
+<ul class="nav nav-tabs customtab tabs">
+   <li class="active tab">
+      <a href="#transaction_history" data-toggle="tab">
+        <span class="hidden-xs">Transaction History</span>
+      </a>
+  </li>
+</ul>
+
+<div style="max-height:400px; overflow-y:auto; overflow-x:hidden">
+  <div id="transaction_history" class="tab-pane active">
+    <table class="table">
+      <thead>
+        <th style='width:30%'>Disbursement date</th>
+        <th>Content/Catatan</th>
+      </thead>
+      <tbody>
+        {% for loan in loan_history %}
+          <tr class="success">
+            <td>
+              <label class="label label-primary m-b-5" style="display: inline-block">
+                {{ loan.fund_transfer_ts | date:'d M Y H:i:s' }}
+              </label> <br>
+              <label class="d-block label label-danger m-b-5" style="display: inline-block">
+                Transaction: {{ loan_history|length|subtract:forloop.counter0 }}
+              </label>
+            </td>
+            <td>
+              <div class="row m-b-5">
+                <div class="col-xs-6 col-md-4">
+                  Type of Disbursement
+                </div>
+                <div class="col-xs-6 col-md-8">
+                  : <strong>{{ loan.transaction_method.fe_display_name | default:'-' }}</strong>
+                </div>
+              </div>
+              <div class="row m-b-5">
+                <div class="col-xs-6 col-md-4">
+                  Loan Amount
+                </div>
+                <div class="col-xs-6 col-md-8">
+                  : <strong>{{ loan.loan_amount | f_rupiahs:'no' }}</strong>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td><i>- No Transaction history -</i></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div id="latest_written_memo" class="tab-pane hidden">
+  <table class="table">
+    <thead>
+      <th style='width:30%'>Skiptrace date</th>
+      <th>Content/Catatan</th>
+    </thead>
+    <tbody>
+      {% if not skiptrace_histories.last %}
+        <tr><td><i>- No Skiptrace history -</i></td></tr>
+      {% else %}
+        {% with latest_st=skiptrace_histories.first %}
+          <tr class="success">
+            <td>
+              <label class="label label-warning m-b-5" style="display: inline-block">
+                {{ latest_st.cdate | date:'d M Y H:i:s' }}
+              </label> <br>
+              <label class="d-block label label-danger m-b-5" style="display: inline-block">
+                Action
+              </label>
+            </td>
+            <td>
+              <div>Agent: <code>{{ latest_st.agent_id }} {{ latest_st.agent_name }}</code></div>
+              <div><strong style="font-size: 1.2em">{{ latest_st.call_result.name }}</strong></div>
+              <div>Note: {{ latest_st.notes | default:'-' }}</div>
+              <div>Source: {{ latest_st.source | default:'-' }}</div>
+              <div>Phone: {{ latest_st.skiptrace.phone_number | phone }}</div>
+              <div>Contact Source: {{ latest_st.skiptrace.contact_source | default:'-' }}</div>
+              <div>App-id: {{ latest_st.application_id | default:'-' }}</div>
+              <div>Acc-id: {{ latest_st.account_id | default:'-' }}</div>
+              <div>Acc-pmt-id: {{ latest_st.account_payment_id | default:'-' }}</div>
+              <div>Start: {{ latest_st.start_ts | date:'d M Y H:i:s' | default:'-' }}</div>
+              <div>End: {{ latest_st.start_ts | date:'d M Y H:i:s' | default:'-' }}</div>
+              <div>Non Payment Reason: {{ latest_st.non_payment_reason | default:'-' | safe }}</div>
+            </td>
+          </tr>
+        {% endwith %}
+      {% endif %}
+    </tbody>
+  </table>
+  <div class="col text-center">
+    <a href="{% url 'sales_ops.crm:detail' object.id %}?tab=skiptrace_history" target="_blank" style="color:white">
+      <button class="btn btn-info" style="width: 100%">See More</button>
+    </a>
+  </div>
+</div>

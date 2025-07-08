@@ -1,0 +1,922 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+{% block additional_title %}Julo - {{ object.id }} {% endblock %}
+
+{% block custom_link %}
+{% endblock %}
+
+{% block css_inside %}
+  {{ block.super }}
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+
+  .checkbox label::before{
+    border: 1px solid;
+  }
+
+  .btn-grp-default {
+    width:30px !important;
+    padding-left:8px !important;
+  }
+
+  .select { overflow: hidden; }
+  .select::-webkit-scrollbar { width: 0 !important }
+  .select { -ms-overflow-style: none; }
+  .select { overflow: -moz-scrollbars-none; }
+  .select:active { pointer-events: none; }
+  .select_cls {
+      width: 232px;
+      height: 36px;
+      border: solid 1px #d5d6d6;
+      background-color: #ffffff;
+  }
+
+  td.day{
+    position:relative;
+  }
+
+  td.td-padding {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+
+  .enabled a{
+    color:black !important;
+    background:green !important;
+  }
+
+  td.day.disabled:hover:before {
+    content: 'This date is disabled';
+    color: white;
+    background-color: grey;
+    top: 28px;
+    position: absolute;
+    width: 136px;
+    left: -34px;
+    z-index: 1000;
+    text-align: center;
+    padding: 2px;
+  }
+
+  td.disabled-date {
+    background-color: red !important;
+    color: white !important;
+  }
+
+  .red{color: red;}
+  .green{color: green;}
+  .no-left{padding-left:0px;}
+
+  .modal-content {
+    width: 120%;
+  }
+
+  .row-scroll {
+    white-space: nowrap;
+    display: flex;
+    justify-content;
+    flex: 1 1 100%;
+  }
+
+  .image-boxed-size-selfie {
+    height: 300px;
+    object-fit: contain;
+  }
+
+  .image-boxed-size-ktp {
+    height: 200px;
+    object-fit: contain;
+  }
+
+  .image-boxed-size-checkbox {
+    height: 25px;
+    object-fit: contain;
+  }
+
+  .modal-header-similarity {
+    border-bottom:1px solid #eee;
+    background-color: #f0ad4e;
+    -webkit-border-top-left-radius: 15px;
+    -webkit-border-top-right-radius: 15px;
+    -moz-border-radius-topleft: 15px;
+    -moz-border-radius-topright: 15px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    display: flex;
+  }
+
+  .table-similarity {
+    padding:25px;
+    white-space: normal;
+  }
+
+  .modal-content-similarity  {
+      position: relative;
+      background-color: #fff;
+      -webkit-background-clip: padding-box;
+              background-clip: padding-box;
+      border: 1px solid #999;
+      border: 1px solid rgba(0, 0, 0, .2);
+      border-radius: 15px;
+      outline: 0;
+      -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+              box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+  }
+
+  .modal-x-button {
+    margin: auto;
+    margin-right: 0px;
+  }
+
+  .modal-similarity {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .modal-body-padding {
+    padding: 0px;
+  }
+
+  .table-similarity-word-wrap > div {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .face-check-rounded-images {
+    padding:15px;
+    max-width: 70%;
+    border-radius: 10%;
+    display:block;
+    margin:auto;
+  }
+
+  a.right {
+    margin-left:auto;
+    margin-right:20;
+    float:right;
+    color:#f2a3b3;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  .sweet-alert .sa-confirm-button-container button {
+    background-color: #03a9f3 !important;
+    border: 1px solid #03a9f3 !important;
+  }
+  .sweet-alert button.cancel {
+    background-color: #fff !important;
+    color: #333 !important;
+    border-color: #efefef !important;
+    border: 1px solid !important;
+  }
+  .sweet-alert p {
+    color: #333 !important;
+    font-family: "Poppins", sans-serif !important;
+    font-weight: normal !important;
+    font-size: 15px !important;
+  }
+  .sweet-alert button {
+   margin: 30px 5px 10px 5px !important;
+  }
+  .btn.btn-success:disabled{
+    background-color: #E5E5E5;
+  }
+  .upload-document-button {
+    border-radius: 10px !important;
+    border: 1px !important;
+    border-style: solid !important;
+    color: #fb9678 !important;
+    box-shadow: none !important;
+  }
+  .upload-document-button:hover {
+    background-color: #fb9678 !important;
+    color: white !important;
+  }
+
+  #balance_consolidation_fdc_table th,
+  #balance_consolidation_fdc_table thead td {
+    font-weight: bold;
+    border-collapse: collapse;
+    padding: 4px;
+  }
+  #balance_consolidation_fdc_table tbody td {
+    padding: 4px;
+    vertical-align: top;
+  }
+  #balance_consolidation_fdc_table .header {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+    background-repeat: no-repeat;
+    background-position: center right;
+    padding: 4px 18px 4px 4px;
+    white-space: normal;
+    cursor: pointer;
+  }
+  #balance_consolidation_fdc_table .headerSortUp {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+  }
+  #balance_consolidation_fdc_table .headerSortDown {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+  }
+  #balance_consolidation_fdc_table thead .sorter-false {
+    background-image: none;
+    cursor: default;
+    padding: 4px;
+  }
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+
+{% block list_title %}
+  <div class="row m-b-10">
+    <div class="col-md-3 col-xs-12 label-danger  p-t-10 p-b-10">
+      <small>app-id</small>: {{ app_info.application_xid|default:"-"|safe  }}&ensp;
+      <code>BALANCE CONSOLIDATION</code>
+    </div>
+    <div class="col-md-1 col-xs-12 label-primary text-center p-t-10 p-b-10">
+      <small>STATUS</small>:<code>{{ app_info.status|default:"-"|safe }}</code>
+    </div>
+    <div class="col-md-1 col-xs-12 label-info text-center p-t-10 p-b-10">
+      <small>ACC</small>:<code>{{ app_info.account_status|default:"-"|safe }}</code>
+    </div>
+    <div class="col-md-3 col-xs-12 label-success p-t-10 p-b-10">
+      <small>email</small>: {{ app_info.email|default:"-"|safe  }}
+    </div>
+    <div class="col-md-2 col-xs-12 label-danger p-t-10 p-b-10">
+      <small>name</small>: {{ app_info.fullname|default:"-"|safe  }}
+    </div>
+    <div class="col-md-2 col-xs-12 label-warning p-t-10 p-b-10">
+      <small>phone</small>: {{ app_info.mobile_phone_1|no_hp|default:"-"|safe}}
+    </div>
+  </div>
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-12 col-xs-12">
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        {% include "include/tab_details.html" %}
+      </div>
+
+      <!-- DOCUMENT -->
+      <div class="col-md-6 col-xs-12">
+        <div class="col-md-12 col-xs-12">
+          {% include "include/loan_agreement_doc.html" %}
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xs-12">
+        {% with app_obj as object %}
+           {% include "./include/balance_consolidation_history.html" %}
+        {% endwith %}
+      </div>
+
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end col-md-12 -->
+</div>
+<!-- end root row -->
+{% endblock %}
+
+{% block script_bottom_inside %}
+  $(document).ready(function () {
+    let currentStatus = '{{object.validation_status}}';
+    let currentNote = `{{object.note|default:""|safe}}`
+    $('#submit-verify').on('click', function() {
+      var arr_reason = [];
+      $("#id_reason :selected").map(function(i, el) {
+         arr_reason.push($(el).val());
+      });
+      var reason_selected = arr_reason.join(', ');
+      $("#id_reason_str").val(reason_selected);
+      let data = {
+        status: $('#id_status_to').find(":selected").val(),
+        note: $('#id_notes').val(),
+        change_reason: reason_selected,
+      };
+      let token = '{{csrf_token}}';
+
+      $.ajax({
+        url: `{% url 'balance_consolidation_crm:balance_consolidation_verification_update' object.id %}`,
+        type: "PUT",
+        headers: {
+          "X-CSRFToken": token,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(data),
+        success: function(data, status, xhr) {
+          currentStatus = $("#verification-status").val();
+          currentNote = $('#note').val();
+          if (data && data.msg) {
+            toast_success(data.msg);
+            return;
+          }
+          toast_success('Updated!');
+          $('#balance_consolidation_document #reupload_document').remove();
+          $('#confirmStatusUpdateModal').modal('hide')
+          location.reload();
+        },
+        error: function (response, status, error) {
+          if (response.responseJSON && response.responseJSON.error) {
+            toast_danger('Error', response.responseJSON.error);
+          }
+          else {
+            toast_danger('Error', response.status);
+          }
+        }
+      })
+    });
+    $('#id-submit-simpan-note').on('click', function() {
+      let data = {
+        note: $('#id_notes_only').val(),
+        is_update_note_only: 1,
+      };
+      let token = '{{csrf_token}}';
+
+      $.ajax({
+        url: `{% url 'balance_consolidation_crm:balance_consolidation_verification_update' object.id %}`,
+        type: "PUT",
+        headers: {
+          "X-CSRFToken": token,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(data),
+        success: function(data, status, xhr) {
+          currentNote = $('#note').val();
+          if (data && data.msg) {
+            toast_success(data.msg);
+            return;
+          }
+          toast_success('Updated!');
+          $('#balance_consolidation_document #reupload_document').remove();
+          location.reload();
+        },
+        error: function (response, status, error) {
+          if (response.responseJSON && response.responseJSON.error) {
+            toast_danger('Error', response.responseJSON.error);
+          }
+          else {
+            toast_danger('Error', response.status);
+          }
+        }
+      })
+    });
+
+    $('#submit-unlock-balance-cons').on('click', function() {
+      unlock_consolidation_verification({{ object.id }});
+    });
+    function unlock_consolidation_verification(id) {
+      return $.ajax({
+        url: '{% url 'balance_consolidation_crm:consolidation_verification.unlock' object.id %}',
+        data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        type: 'POST',
+        statusCode: {
+          200: function(response) {
+            window.close()
+          }
+        },
+        error: function(){
+          alert('Terjadi kesalahan pada server saat unlocking.')
+        }
+      });
+    }
+    if ({{lock_status}}) {
+      $('div.block_form').block({
+        message: "You Are Not Allowed to Change Status, status has been locked by: {{object.locked_by_info|default:" - "|safe}}",
+        overlayCSS: {
+            backgroundColor: '#000'
+        },
+        css: {
+            border: '1px solid #fff'
+        }
+      });
+    };
+    if ({{lock_status}} || {{lock_edit}}) {
+      $("#btn_update_balance_cons_data").addClass("disabled");
+      $("#btn_update_balance_cons_data").attr("disabled", true);
+    };
+
+    $('#cancel-btn').on('click', function() {
+      if (['approved', 'rejected'].includes(currentStatus)) {
+        $("#verification-status").val(currentStatus);
+      } else {
+        $("#verification-status").val('defaultStatus');
+      }
+      $('#note').val(currentNote);
+    });
+
+    $('textarea').each(function() {
+      $(this).val($(this).val().trim());
+    });
+  })
+
+  $("#id_status_to :selected").map(function(i, el) {
+     if($(el).val()!=''){
+      set_reason_list($(el).val());
+     }
+  });
+  $('#id_status_to').on('change', function() {
+    //alert(this.value);
+    if(this.value != ''){
+      set_reason_list(this.value);
+    }
+  });
+  function formValidationStatus(oEvent) {
+    if($('#id_status_to').val() != "" && $('#id_reason').val() != ""){
+        document.getElementById("verification-status").disabled = false;
+        $("#verification-status").removeClass("btn-default");
+        $("#verification-status").addClass("btn-danger");
+    }
+    else {
+        document.getElementById("verification-status").disabled = true;
+        $("#verification-status").addClass("btn-default");
+        $("#verification-status").removeClass("btn-danger");
+    }
+  }
+  function formValidationNote(oEvent) {
+    //oEvent = oEvent || window.event;
+    //var txtField = oEvent.target || oEvent.srcElement;
+    //alert("validation");
+    if(document.getElementById("id_notes_only").value.length > 0 )
+    {
+      document.getElementById("id-submit-simpan-note").disabled = false;
+      $("#id-submit-simpan-note").removeClass("btn-default");
+      $("#id-submit-simpan-note").addClass("btn-info");
+    }else {
+      document.getElementById("id-submit-simpan-note").disabled = true;
+      $("#id-submit-simpan-note").addClass("btn-default");
+      $("#id-submit-simpan-note").removeClass("btn-info");
+    }
+  }
+  function formValidationSecurityNote(oEvent) {
+    if(document.getElementById("id_security_note").value.length > 0 )
+    {
+        document.getElementById("id-submit-security-note").disabled = false;
+        $("#id-submit-security-note").removeClass("btn-default");
+        $("#id-submit-security-note").addClass("btn-primary");
+    }else
+    {
+        document.getElementById("id-submit-security-note").disabled = true;
+        $("#id-submit-security-note").addClass("btn-default");
+        $("#id-submit-security-note").removeClass("btn-primary");
+    }
+  }
+  var note_only = document.getElementById("id_notes_only");
+  var status_change = document.getElementById("id_status_to");
+  var reason_change = document.getElementById("id_reason");
+  note_only.onkeyup = formValidationNote;
+  if(document.getElementById("id_security_note")) {
+      var security_note = document.getElementById("id_security_note");
+      security_note.onkeyup = formValidationSecurityNote;
+  }
+  if(document.getElementById("id_new_email")) {
+      var new_email = document.getElementById("id_new_email");
+      new_email.onkeyup = validateEmail;
+  }
+  status_change.onchange = formValidationStatus;
+  reason_change.onchange = formValidationStatus;
+
+  function set_reason_list(status_to) {
+    $('#id_reason').empty().append('<option selected="selected" value>-- Pilih --</option>');
+    let status_map_change_reason = {{status_map_change_reason|safe}};
+    if (status_to in status_map_change_reason){
+     $.each(status_map_change_reason[status_to], function(index, change_reason) {
+        var $option = $("<option/>", {
+          value: change_reason,
+          text: change_reason
+        });
+        $('#id_reason').append($option);
+      });
+    };
+  };
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    //console.log(cookieValue);
+    return cookieValue;
+  }
+
+  function toast_success(header_msg, body_message){
+    $.toast(
+      {
+        heading: header_msg,
+        text: body_message,
+        position: 'top-right',
+        loaderBg:'#ff6849',
+        icon: 'success',
+        hideAfter: 2500,
+        stack: 6
+      });
+  }
+
+  function toast_danger(header_msg, body_message){
+    $.toast(
+    {
+      heading: header_msg,
+      text: body_message,
+      position: 'top-right',
+      loaderBg:'#ff6849',
+      icon: 'error',
+      hideAfter: 3800
+
+    });
+  }
+  $(function(){
+      $("#id_disbursement_bank_name").prop('required',true);
+      $("#id_account_number").prop('required',true);
+      $("#validation_name_in_bank_id").prop('required',true);
+  });
+
+  function reload_name_bank_validation(name_bank_validation_data) {
+    var bank_name_val = 'None';
+    if (name_bank_validation_data.bank_name != null) {
+        bank_name_val = name_bank_validation_data.bank_name
+    }
+    $("#id_disbursement_bank_name").val(bank_name_val);
+    var bank_account_number_val = 'None';
+    if (name_bank_validation_data.bank_account_number != null) {
+        bank_account_number_val = name_bank_validation_data.bank_account_number
+    }
+    $("#id_account_number").val(bank_account_number_val);
+    var name_in_bank_val = 'None';
+    if (name_bank_validation_data.name_in_bank != null) {
+        name_in_bank_val = name_bank_validation_data.name_in_bank
+    }
+    $("#validation_name_in_bank_id").val(name_in_bank_val);
+    var validated_name_val = 'None';
+    if (name_bank_validation_data.validated_name != null) {
+        validated_name_val = name_bank_validation_data.validated_name
+    }
+    $("#id_validated_name").val(validated_name_val);
+    var method_val = '-';
+    if (name_bank_validation_data.method != null) {
+        method_val = name_bank_validation_data.method
+    }
+    $("#name_bank_validation_method_id").val(method_val);
+    var validation_id_val = '-';
+    if (name_bank_validation_data.validation_id != null) {
+        validation_id_val = name_bank_validation_data.validation_id
+    }
+    $("#id_validation_id").text(validation_id_val);
+    var validation_status_val = '-';
+    if (name_bank_validation_data.validation_status != null) {
+        validation_status_val = name_bank_validation_data.validation_status
+    }
+    $("#id_validation_status").text(validation_status_val);
+    var reason_val = '-';
+    if (name_bank_validation_data.reason != null) {
+        reason_val = name_bank_validation_data.reason
+    }
+    $("#id_bank_validate_reason > p > code").text(reason_val);
+  };
+  $("#btn_reload_bank_validation_status").click(function(){
+    $.ajax({
+        url :  "{%url 'balance_consolidation_crm:ajax_bank_validation' %}",
+        type : "GET",
+        async: false,
+        data : {
+          csrfmiddlewaretoken: '{{csrf_token}}',
+          consolidation_verification_id: '{{object.id}}',
+        },
+        // handle a successful response
+        success : function(json) {
+            if (json.status == 'success') {
+                reload_name_bank_validation(json.data);
+                toast_success('Success', json.messages)
+            } else {
+                toast_danger('Wrong params!', json.messages)
+            }
+        },
+        // handle a non-successful response
+        error : function(xhr,errmsg,ercr) {
+          toast_danger('Error!', xhr.responseJSON.messages)
+          console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+  });
+  $("#btn_validate_bank").click(function(){
+    $('#name_bank_vaidation_table').hide();
+    $('#preloader_name_bank_validation').show();
+    $.ajax({
+        url :  "{%url 'balance_consolidation_crm:ajax_bank_validation' %}",
+        type : "POST",
+        beforeSend: function (xhr){
+          xhr.setRequestHeader('X-CSRFToken', '{{csrf_token}}');
+        },
+        data : {
+          consolidation_verification_id: '{{object.id}}',
+          bank_name: $("#id_disbursement_bank_name").val(),
+          account_number: $("#id_account_number").val(),
+          name_in_bank: $("#validation_name_in_bank_id").val(),
+          validation_method: $("#name_bank_validation_method_id").val(),
+        },
+
+        // handle a successful response
+        success : function(json) {
+            $('#preloader_name_bank_validation').hide();
+            $('#name_bank_vaidation_table').show();
+            if (json.status == 'success') {
+                reload_name_bank_validation(json.data);
+                toast_success('Success', json.messages)
+            } else {
+                toast_danger('Wrong params!', json.messages)
+            }
+        },
+        // handle a non-successful response
+        error : function(xhr, errmsg, err) {
+            $('#preloader_name_bank_validation').hide();
+            $('#name_bank_vaidation_table').show();
+            messages = xhr.responseJSON.messages
+            errors = ""
+            for (var message in messages) {
+              errors += messages[message][0] + '</br>'
+            }
+            toast_danger('Wrong params!', errors)
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+  });
+
+  jQuery('.mydatepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    buttonClasses: ['btn', 'btn-sm'],
+    applyClass: 'btn-danger',
+    cancelClass: 'btn-inverse',
+    dateLimit: {
+      days: 6
+    },
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: "linked",
+  });
+
+  function setDefaultValue(id_obj, def_value) {
+    $("#"+id_obj).val(def_value);
+  }
+
+  function html_unescape(s) {
+    var div = document.createElement("div");
+    div.innerHTML = s;
+    return div.textContent || div.innerText;
+  }
+
+  $("#btn_update_balance_cons_data").click(function() {
+    //validate
+    var ret_validate = validate_update_balance_cons();
+    if(ret_validate != 'OK') {
+      failed_validation_display(ret_validate);
+      return;
+    }
+
+    // Show changes
+    var field_change_tbl = show_fields_latest_change();
+    var init_title = "Aplikasi <b>{{object.id|safe}}</b> akan di update, apakah anda yakin?";
+
+    if (field_change_tbl == 0){
+      $("#modal-default-title").html("" + "Update Aplikasi !");
+      $("#modal-default-body").html("" + "Tidak ada perubahan data !!!");
+      $("#modal-success-default").modal("show");
+    } else {
+      $("#modal-update-balance-cons-title").html("" + "Update Aplikasi !");
+      $("#modal-update-balance-cons-body").html("\n" + field_change_tbl +"\n <div>" + init_title +"</div>");
+      $("#modal-update-balance-cons").modal("show");
+    }
+  });
+
+  function validate_update_balance_cons() {
+    var ret_err = "";
+
+    ret_err = validate_update_balance_cons_fintech(ret_err);
+    ret_err = validate_update_balance_cons_loan_amount(ret_err);
+    ret_err = validate_update_balance_cons_date(ret_err);
+
+    if (!ret_err) {
+      return 'OK';
+    }
+    else {
+      return ret_err;
+    }
+  }
+
+  function validate_update_balance_cons_fintech(ret_err) {
+    var fintech_val = $("#id_fintech :selected").val();
+
+    if (!fintech_val) {
+      ret_err += "<br/>Pindahkan Dana dari Aplikasi harus diisi";
+    }
+    return ret_err;
+  }
+
+  function validate_update_balance_cons_loan_amount(ret_err) {
+    var loan_principal_amount_val = parseInt($("#id_loan_principal_amount").val());
+    var loan_outstanding_amount_val = parseInt($("#id_loan_outstanding_amount").val());
+
+    if (!loan_principal_amount_val) {
+      ret_err += "<br/>Total Pinjaman di 1 Transaksi harus diisi";
+    } else if (!loan_outstanding_amount_val) {
+      ret_err += "<br/>Sisa Tagihan Berjalan di 1 Transaksi harus diisi";
+    } else if (loan_principal_amount_val > 20000000) {
+      ret_err += "<br/>Maksimum 20 Juta";
+    } else if (loan_principal_amount_val < 300000) {
+      ret_err += "<br/>Minimum 300,000";
+    } else if (loan_outstanding_amount_val > 20000000) {
+      ret_err += "<br/>Maksimum 20 Juta";
+    } else if (loan_outstanding_amount_val < 300000) {
+      ret_err += "<br/>Minimum 300,000";
+    }
+    return ret_err;
+  }
+
+  function validate_update_balance_cons_date(ret_err) {
+    var disbursement_date_val = $("#id_disbursement_date").val();
+    var due_date_val = $("#id_due_date").val();
+    var disbursement_date_num = disbursement_date_val.replace(/-/g, '');
+    var due_date_num = due_date_val.replace(/-/g, '');
+    var default_disbursement_date_val = '{{ object.balance_consolidation.disbursement_date|date:'Y-m-d'|default:'' }}';
+    var default_due_date_val = '{{ object.balance_consolidation.due_date|date:'Y-m-d'|default:'' }}';
+
+    var current_date = new Date().toJSON().slice(0, 10);
+    var current_date_num = current_date.replace(/-/g, '');
+
+    if (!disbursement_date_val) {
+      ret_err += "<br/>Tanggal Pemakaian Dana harus diisi";
+    } else if (!due_date_val) {
+      ret_err += "<br/>Tanggal Jatuh Tempo Tagihan harus diisi";
+    } else if (parseInt(disbursement_date_num) > parseInt(current_date_num)) {
+      ret_err += "<br/>Tanggal tidak bisa lebih dari tanggal hari ini";
+    } else if (parseInt(due_date_num) < parseInt(disbursement_date_num)) {
+      if (default_disbursement_date_val != disbursement_date_val) {
+        ret_err += "<br/>Tanggal pemakaian dana harus sebelum tanggal jatuh tempo tagihan";
+      }
+      else if (default_due_date_val != due_date_val) {
+        ret_err += "<br/>Tanggal jatuh tempo tagihan harus setelah tanggal pemakaian dana";
+      }
+    }
+    return ret_err;
+  }
+
+  function failed_validation_display(ret_validate) {
+    $("#modal-default-title").html("" + "Update Aplikasi Gagal !");
+    $("#modal-default-body").html(""+ ret_validate + " !!!");
+    $("#modal-success-default").modal("show");
+  }
+
+  $("#update-balance-cons").click(function() {
+    update_balance_cons_selected_field();
+  });
+
+  function update_balance_cons_selected_field() {
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+      url: "{%url 'balance_consolidation_crm:ajax_balance_consolidation' object.id %}",
+      type: "POST",
+      beforeSend: function (xhr){
+        xhr.setRequestHeader('X-CSRFToken', '{{csrf_token}}');
+      },
+      data: {
+        fintech: $("#id_fintech :selected").val(),
+        loan_principal_amount: $("#id_loan_principal_amount").val(),
+        loan_outstanding_amount: $("#id_loan_outstanding_amount").val(),
+        disbursement_date: $("#id_disbursement_date").val(),
+        due_date: $("#id_due_date").val(),
+        loan_agreement_number: $("#id_loan_agreement_number").val()
+      },
+
+      // handle a successful response
+      success: function(data, status, xhr) {
+        toast_success("Updated Balance Consolidation");
+        setTimeout(reload_btn(), 1200);
+      },
+
+      // handle a non-successful response
+      error: function (response, status, error) {
+        if (response.responseJSON && response.responseJSON.error) {
+          toast_danger('Error', response.responseJSON.error);
+        }
+        else {
+          toast_danger('Error', response.status);
+        }
+      }
+    });
+  }
+
+  function reload_btn(){
+    window.location.reload(true);
+  }
+
+  function add_row_table(field_title, field_default, field_change, field_name){
+    if (field_name == 'fintech') {
+      field_default = '{{ object.balance_consolidation.fintech.name|default:'' }}'
+      field_change = $("#id_fintech :selected").html()
+    }
+    var header_table = "<tr>\n" +
+      "<td style='width: 30%;overflow: hidden;word-break: break-all;'>" + field_title + "</td>\n" +
+      "<td style='width: 40%;overflow: hidden;word-break: break-all;'>" + field_default + "</td>\n" +
+      "<td style='width: 40%;overflow: hidden;word-break: break-all;'>" + field_change + "</td>\n" +
+      "</tr>\n";
+    return header_table;
+  }
+
+  function show_fields_latest_change(){
+    var field_changes_html = "<table class='table' id='id_tbl_app_update' style='width:100%;'>" +
+        "<thead><tr>\n" +
+        "<th>Field</th>\n" +
+        "<th>From</th>\n" +
+        "<th>Update</th>\n" +
+        "</tr>\n</thead>\n<tbody>";
+
+    {% autoescape on %}
+
+    var fields_list = [
+      ['Fintech', '{{ object.balance_consolidation.fintech|default:'' }}', $("#id_fintech :selected").val(), 'fintech'],
+      ['Loan Principal Amount', '{{ object.balance_consolidation.loan_principal_amount|default:'' }}', $("#id_loan_principal_amount").val(), 'loan_principal_amount'],
+      ['Loan Outstanding Amount', '{{ object.balance_consolidation.loan_outstanding_amount|default:'' }}', $("#id_loan_outstanding_amount").val(), 'loan_outstanding_amount'],
+      ['Disbursement Date', '{{ object.balance_consolidation.disbursement_date|date:'Y-m-d'|default:'' }}', $("#id_disbursement_date").val(), 'disbursement_date'],
+      ['Due Date', '{{ object.balance_consolidation.due_date|date:'Y-m-d'|default:'' }}', $("#id_due_date").val(), 'due_date'],
+    ];
+    {% endautoescape %}
+
+    var rows_data = "";
+    var index_change = 0;
+
+    // fields_list
+    $.each(fields_list, function(id, obj_item) {
+      var obj0 = obj_item[0];
+      var obj1 = html_unescape(obj_item[1]);
+      var obj2 = obj_item[2];
+      var obj3 = obj_item[3];
+
+      if (obj2 != undefined) {
+        if ((obj1 != obj2) && !(obj1 === '' && obj2 === '0')) {
+          rows_data += add_row_table(obj0, obj1, obj2, obj3);
+          index_change++;
+        }
+      }
+    });
+
+    // closing table tag
+    field_changes_html += rows_data + "\n</tbody>\n</table>";
+
+    if (index_change == 0){
+      return index_change
+    } else {
+      return field_changes_html;
+    }
+  };
+
+{% endblock %}
+{% block script_end %}
+<script src="{% static 'default/js/balance_consolidation/balance-consolidation-verification-detail.js' %}"></script>
+<script type="text/javascript" src="{% static 'default/theme/js/jquery.tablesorter.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function() 
+    { 
+      $("#balance_consolidation_fdc_table").tablesorter();
+    } 
+  );
+</script>
+{% load static from staticfiles %}
+{% endblock %}

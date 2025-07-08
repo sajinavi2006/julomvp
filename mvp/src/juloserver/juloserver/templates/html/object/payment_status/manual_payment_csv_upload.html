@@ -1,0 +1,90 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link rel="stylesheet" href="{% static 'theme/plugins/bower_components/dropify/dist/css/dropify.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block list_title %}Upload CSV{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+    {% include "object/payment_status/include/upload_csv.html" %}
+
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'loan_app:roles_image_verification' %}">
+      <button id="back" type="button" class="btn btn-info">
+          <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+      </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+      // Basic
+      $('.dropify').dropify();
+
+      // Translated
+      $('.dropify-fr').dropify({
+          messages: {
+              default: 'Glissez-déposez un fichier ici ou cliquez',
+              replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+              remove:  'Supprimer',
+              error:   'Désolé, le fichier trop volumineux'
+          }
+      });
+
+      // Used events
+      var drEvent = $('#input-file-events').dropify();
+
+      drEvent.on('dropify.beforeClear', function(event, element){
+          return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+      });
+
+      drEvent.on('dropify.afterClear', function(event, element){
+          alert('File deleted');
+      });
+
+      drEvent.on('dropify.errors', function(event, element){
+          console.log('Has Errors');
+      });
+
+      var drDestroy = $('#input-file-to-destroy').dropify();
+      drDestroy = drDestroy.data('dropify')
+      $('#toggleDropify').on('click', function(e){
+          e.preventDefault();
+          if (drDestroy.isDropified()) {
+              drDestroy.destroy();
+          } else {
+              drDestroy.init();
+          }
+      })
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+  });
+{% endblock %}
+
+
+{% block script_additional %}
+    <script src="{% static 'theme/nav-full/js/mask.js' %}"></script>
+    <!-- jQuery file upload -->
+    <script src="{% static 'theme/plugins/bower_components/dropify/dist/js/dropify.min.js' %}"></script>
+{% endblock %}
+
+
+
+
+
+

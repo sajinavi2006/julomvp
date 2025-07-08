@@ -1,0 +1,860 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Pinyon Script" rel="stylesheet">
+    <style>
+        body {
+            color : #5E5E5E;
+            font-family: Montserrat;
+            text-align: justify;
+        }
+        h4 {
+            text-align: center;
+        }
+        .installment {
+            width: 100%;
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+        #topBottomBorder {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+        #bottomBorder {
+            border-bottom: 1px solid black;
+        }
+        .hideExtra {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow:ellipsis;
+        }
+        .divContent {
+            padding-top: 15px;
+            page-break-before: always;
+        }
+        .spaceSign {
+            height: 120px;
+        }
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+        .col {
+            flex: 1;
+            text-align: center;
+        }
+        .box-left {
+            float: left;
+            min-width: 100px;
+            text-align: left;
+        }
+        .box-right {
+            float: right;
+            min-width: 100px;
+            text-align: left;
+        }
+        .sig:after {
+            content: ".";
+            visibility: hidden;
+        }
+        ol.list-counter {
+            counter-reset: item
+        }
+        ol.list-counter > li {
+            display: block;
+            margin-top: 10px;
+        }
+        ol.list-counter > li:before {
+            content: counters(item, ".") ". ";
+            counter-increment: item
+        }
+        ol.custom-list {
+            counter-reset: list;
+        }
+        ol.custom-list > li {
+            list-style: none;
+        }
+        ol.custom-list > li:before {
+            content: "(" counter(list, decimal) ")";
+            counter-increment: list;
+            margin-left: -22px;
+        }
+        .inline-list {
+            margin: 0 0 0 30px;
+        }
+        .inline-list-40 {
+            margin: 0 0 0 40px;
+        }
+        .signature-font {
+            font-family: Pinyon Script;
+            font-size: 22px;
+            padding-top: 47px;
+        }
+        .sig:after {
+            content: ".";
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="divContent">
+        <div>
+            <p>
+                Dibuat sejak tanggal : 12 April 2023<br/>
+                Diperbaharui sejak tanggal : 22 Mei 2023
+            </p>
+        </div>
+        <div>
+            <h4>
+                PERJANJIAN PEMBERIAN FASILITAS PENDANAAN<br>
+                No. Perjanjian : {{ loan.loan_xid | safe }}
+            </h4>
+        </div>
+        <br/>
+        <p>
+            Sebagai persyaratan awal sebelum Anda menandatangani Perjanjian Pemberian Fasilitas Pendanaan ini (selanjutnya disebut <b>"Perjanjian Fasilitas"</b>), Anda wajib membaca, memeriksa, memahami Perjanjian Fasilitas ini dengan memindahkan bilah gulir (<i>scroll bar</i>) yang tersedia dari bagian awal hingga akhir dari Perjanjian Fasilitas ini, dengan penuh cermat dan kehati-hatian. <b>Tidak ada tuntutan/gugatan apa pun oleh Anda kepada Pemberi Dana dan/atau JULO dari segala tanggung jawab terhadap kerugian yang terjadi disebabkan dari kealpaan atau kelalaian Anda dengan tidak membaca, memeriksa atau memahami isi seluruh Perjanjian fasilitas ini.</b>
+        </p>
+        <p>
+            Perjanjian Fasilitas ini disepakati dan ditandatangani pada tanggal {{ date_today | safe }} (selanjutnya disebut <b>"Tanggal Penandatanganan"</b>), oleh dan antara :
+        </p>
+        <ol>
+            <li>
+                <b>Pemberi Dana</b> yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai berikut:
+                <table>
+                    <tr>
+                        <td style="vertical-align: top; min-width: 153px;">a. Nama/Perusahaan</td>
+                        <td style="vertical-align: top; max-width: 5px;"> : </td>
+                        <td style="vertical-align: top;">{{ company_name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;">b. Nama Perwakilan Perusahaan</td>
+                        <td style="vertical-align: top; max-width: 5px;"> : </td>
+                        <td style="vertical-align: top;">{{ poc_name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;">c. Nomor Izin Perusahaan Terkait</td>
+                        <td style="vertical-align: top; max-width: 5px;"> : </td>
+                        <td style="vertical-align: top;">{{ license_number }}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;">d. Alamat Terdaftar</td>
+                        <td style="vertical-align: top; max-width: 5px;"> : </td>
+                        <td style="vertical-align: top;">{{ lender_address }}</td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                <b>Penerima Dana</b>, yang memiliki identitas sebagai berikut:
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">a. Nama</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ application.fullname | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">b. Tgl. lahir</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ dob | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">c. No. KTP</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ application.ktp | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">d. No. Telpon</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ application.mobile_phone_1 | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 100px;">e. Alamat</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ application.full_address | safe }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ol>
+        <p>
+            Untuk selanjutnya, Penerima Dana dan Pemberi Dana secara bersama-sama disebut juga <b>"Para Pihak"</b> dan masing-masing disebut <b>"Pihak"</b>.
+        </p>
+        <p>
+            Anda juga diwajibkan membaca <b>lampiran 1. Syarat dan Ketentuan Umum</b> yang disediakan oleh JULO sebagaimana tautan situs web berikut https://www.julo.co.id/terms-and-conditions. Dengan Anda menekan fitur persetujuan (<i>consent</i>) yang akan muncul pada halaman Aplikasi Anda pada saat pengajuan Fasilitas Pendanaan, maka berarti Anda juga telah menyetujui Syarat dan Ketentuan Umum sebagaimana laman situs web di atas. Syarat dan Ketentuan Umum ini merupakan bagian yang tidak terpisahkan dengan Perjanjian Fasilitas serta Syarat dan Ketentuan Umum ini dapat berubah dari waktu ke waktu sesuai kebijakan JULO dan tanpa memerlukan persetujuan Para Pihak.
+        </p>
+        <ol class="list-counter">
+            <li>
+                <b>KETENTUAN UMUM</b>
+                <ol class="list-counter">
+                    <li>
+                        <b>Definisi</b>
+                        <ol type="a">
+                            <li>
+                                <b>Akun</b> adalah rekening fasilitas pendanaan yang terdaftar yang berisi data tentang Anda dan dapat diakses melalui Aplikasi JULO yang Anda unduh serta ditujukan untuk membantu Anda dalam mengakses kredit secara digital, melalui Aplikasi JULO.
+                            </li>
+                            <li>
+                                <b>Aplikasi</b> atau <b>Aplikasi JULO</b> adalah perangkat lunak yang Sistem Elektroniknya dimiliki oleh PT Julo Teknologi Finansial, dengan mengunduhnya melalui akun playstore pada masing-masing gawai (gadget/device) yang Anda miliki.
+                            </li>
+                            <li>
+                                <b>Batas Kredit</b> adalah bentuk Fasilitas Pendanaan yang diberikan dengan batasan jumlah maksimum tertentu yang dapat dimanfaatkan/digunakan oleh Penerima Dana, berdasarkan persetujuan Pemberi Dana.
+                            </li>
+                            <li>
+                                <b>Dokumen-Dokumen Elektronik</b> adalah setiap Informasi elektronik yang dibuat, diteruskan, dikirimkan, diterima, atau disimpan, dapat dilihat, ditampilkan, dan/atau didengar melalui Sistem Elektronik JULO termasuk antara lain Perjanjian Fasilitas beserta segala Lampiran-Lampirannya, syarat dan ketentuan JULO lainnya, kebijakan-kebijakan JULO lainnya, formulir-formulir di dalam Aplikasi, dan/atau informasi elektronik lainnya yang tidak tertuang dalam Perjanjian Fasilitas ini tetapi masuk dalam Sistem Elektronik yang dimiliki oleh JULO.
+                            </li>
+                            <li>
+                                <b>Fasilitas Pendanaan</b> adalah sebagaimana didefinisikan dalam pasal 1 ayat 4 butir a, Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                <b>Fitur JULO</b> adalah sebagaimana yang didefinisikan dalam pasal 9 ayat 3., Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                <b>JULO</b> adalah platform dengan merek dagang resmi yang terdaftar dan Sistem Elektronik yang dimiliki oleh PT Julo Teknologi Finansial sebagai Pihak Penyelenggara yang terdaftar dan berizin di Otoritas Jasa Keuangan sebagai Penyelenggara Layanan Pendanaan Bersama Teknologi Informasi (LPBBTI), yang dalam Perjanjian ini dipilih oleh Pemberi Dana sebagai mitra penyedia Aplikasi yang menyediakan LPBBTI.
+                            </li>
+                            <li>
+                                <b>Kode PIN</b> adalah sejumlah kode atau nomor digit tertentu yang digunakan Penerima Dana sebagai sarana verifikasi dan autentikasi dalam upaya peningkatan keamanan Transaksi Pendanaan Kartu Non-Tunai.
+                            </li>
+                            <li>
+                                <b>Layanan JULO</b> adalah LPBBTI, yang pada pokoknya mempertemukan Pemberi Dana dengan Penerima Dana dalam melakukan pendanaan konvensional secara langsung melalui Sistem Elektronik yang dimiliki dan dikelola secara mutlak oleh JULO.
+                            </li>
+                            <li>
+                                <b>Merchant</b> adalah pihak ketiga yang bekerja sama dengan JULO sebagai penjual barang dan/atau jasa yang memiliki bentuk usaha toko fisik maupun toko daring.
+                            </li>
+                            <li>
+                                <b>Mitra Bisnis</b> adalah pihak ketiga yang bekerja sama dengan JULO dengan pola partnership/ kemitraan untuk menunjang bisnis JULO.
+                            </li>
+                            <li>
+                                <b>OJK</b> adalah Otoritas Jasa Keuangan, yang merupakan Lembaga yang mengatur serta mengawasi perusahaan penyelenggaraan LPBBTI.
+                            </li>
+                            <li>
+                                <b>Penerima Dana atau Anda</b> adalah perorangan atau badan hukum yang menerima Fasilitas Pendanaan  melalui Layanan JULO.
+                            </li>
+                            <li>
+                                <b>Pemberi Dana</b> adalah perorangan atau badan hukum yang memberikan Fasilitas Pendanaan melalui Layanan JULO.
+                            </li>
+                            <li>
+                                <b>Permohonan Pengajuan Fasilitas Pendanaan</b> adalah permohonan yang dilakukan oleh Penerima Dana untuk mendapatkan persetujuan dari Pemberi Dana atas Fasilitas Pendanaan sebesar maksimum Batas Kredit yang tersedia bagi Penerima Dana.
+                            </li>
+                            <li>
+                                <b>Permohonan Penggunaan Fasilitas Pendanaan</b> adalah permohonan yang dilakukan oleh Penerima Dana untuk menggunakan/mencairkan Batas Kredit sebesar nilai transaksi tertentu.
+                            </li>
+                            <li>
+                                <b>Pokok Pendanaan</b> adalah sejumlah pendanaan yang diperoleh dari Fasilitas Pendanaan yang diperoleh Penerima Dana, yang besarannya sama setiap angsuran per bulannya.
+                            </li>
+                            <li>
+                                <b>Sistem Elektronik</b> adalah serangkaian perangkat dan prosedur elektronik yang berfungsi untuk mempersiapkan, mengumpulkan, mengolah, menganalisis, menyimpan, menampilkan, mengumumkan, mengirimkan, dan/atau menyebarkan Informasi Elektronik.
+                            </li>
+                            <li>
+                                <b>Surat Kuasa</b> adalah surat yang berisi tentang pernyataan pemberian kuasa, yang diberikan oleh Pemberi Dana kepada JULO sebagai penerima kuasa untuk penandatanganan Perjanjian Fasilitas ini. Tidak ada interpretasi lain dalam Surat Kuasa selain hanya sebagai penerima kuasa untuk menandatangani Perjanjian Fasilitas.
+                            </li>
+                            <li>
+                                <b>Surat Keterangan Lunas</b> adalah surat yang diberikan oleh setiap Pemberi Dana kepada Penerima Dana melalui JULO yang menyatakan bahwa Penerima Dana tidak lagi memiliki kewajiban pembayaran yang tertunggak berdasarkan Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                <b>Tanda Tangan Elektronik</b> adalah sebagaimana yang didefinisikan di dalam pasal 9 ayat 4 butir a, Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                <b>Transaksi Pendanaan</b> adalah setiap transaksi yang dilakukan oleh Penerima Dana melalui Aplikasi atau semua transaksi kecuali Transaksi Pendanaan Kartu Non-Tunai.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Penerbitan dan Penggunaan Akun atau Layanan JULO</b>
+                        <ol type="a">
+                            <li>
+                                Penerima Dana adalah pemegang Akun. Pemegang Akun tidak boleh mengizinkan orang lain untuk menggunakan Akunnya dan harus selalu menjaga Akun dan nomor identifikasi pemilik Akun yang diterbitkan, dan menjaga kerahasiaan data lain termasuk namun tidak terbatas pada surel dan kata sandi milik pemegang Akun.
+                            </li>
+                            <li>
+                                Penerima Dana bertanggung jawab atas Fasilitas Pendanaan yang diberikan oleh Pemberi Dana sehubungan dengan Akun dan untuk semua biaya terkait yang timbul dari Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                Penerima Dana juga wajib mematuhi seluruh ketentuan penggunaan Akun sebagaimana diatur dalam <b>lampiran 1</b>, serta segala risiko yang timbul akibat penggunaan Akun.
+                            </li>
+                            <li>
+                                Penerima Dana harus memberitahukan kepada JULO sesegera mungkin atas setiap perubahan data dalam Akun termasuk namun tidak terbatas pada pekerjaan, alamat kantor, alamat rumah, nomor telepon Penerima Dana, dan juga dapat menyampaikan keluhan atau pengaduan terkait tentang Fasilitas Pendanaan dengan mengirimkan surel ke cs@julo.co.id atau dapat menggunakan Live Chat pada Aplikasi atau cara lain yang dapat dilihat di Aplikasi atau laman situs web JULO.
+                            </li>
+                            <li>
+                                Untuk mengaktifkan Akun JULO yang Anda miliki, Anda wajib mengisi informasi berupa termasuk namun tidak terbatas data diri Anda untuk serangkaian proses uji tuntas nasabah (customer due diligence) seperti proses identifikasi, verifikasi, dan pemantauan yang dilakukan oleh JULO. Setelah itu, Permohonan Pengajuan Fasilitas Pendanaan Anda akan diproses dan dinilai terlebih dahulu oleh JULO sebelum disetujui oleh Pemberi Dana. Untuk mengaktifkan layanan, Anda dapat melakukan transaksi melalui Aplikasi dan akan menandatangani serta mendapatkan salinan Perjanjian yang telah ditandatangani yang berfungsi sebagai bukti untuk setiap Permohonan Penggunaan Fasilitas Pendanaan terhadap Batas Kredit yang Anda miliki.
+                            </li>
+                            <li>
+                                Persetujuan atas Permohonan Penggunaan Fasilitas Pendanaan dan pencairan dana akan dinyatakan berhasil ditandai dengan berhasilnya pemrosesan pembayaran transaksi Anda.
+                            </li>
+                            <li>
+                                Untuk setiap Permohonan Penggunaan Fasilitas Pendanaan yang dinyatakan berhasil sebagaimana yang dijelaskan dalam pasal 1 ayat 4 butir b, dengan ini Anda memberi instruksi dan kuasa yang tidak dapat ditarik kembali kepada JULO untuk melakukan pemotongan Batas Kredit secara otomatis atas saldo Akun JULO Anda.
+                            </li>
+                            <li>
+                                Setiap penggunaan layanan yang tertuang dalam Perjanjian Fasilitas ini pada pokoknya tidak akan melebihi Batas Kredit, sehingga dalam jumlah berapa pun yang Anda gunakan dan dinyatakan berhasil menunjukkan bahwa Anda telah sepakat, membaca dan memahami seluruh ketentuan dalam Perjanjian Fasilitas ini maupun setiap Perjanjian Fasilitas yang Anda terima, dengan teliti, penuh kesadaran dan tanpa pengaruh dari pihak mana pun.
+                            </li>
+                            <li>
+                                Anda wajib melakukan tindakan otentikasi tertentu terhadap Perjanjian Fasilitas yang telah Anda setujui dengan mengklik fitur persetujuan yang akan muncul di dalam Aplikasi Anda ataupun cara lain sesuai kesepakatan Para Pihak.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Sumber Fasilitas Pendanaan</b>
+                        <p class="inline-list">
+                            Sumber Fasilitas Pendanaan yang disalurkan kepada Anda untuk melakukan transaksi dengan menggunakan Batas Kredit adalah sepenuhnya berasal dari dan dimiliki oleh Pemberi Dana yang terdaftar pada dan bekerja sama dengan JULO. JULO hanya memfasilitasi penyaluran dana dari Pemberi Dana dengan cara meneruskan dana Fasilitas Pendanaan tersebut kepada Anda. Oleh karena itu, segala risiko yang timbul dari Fasilitas Pendanaan sepenuhnya ditanggung oleh Anda dan Pemberi Dana.
+                        </p>
+                    </li>
+                    <li>
+                        <b>Fasilitas Pendanaan</b>
+                        <ol type="a">
+                            <li>
+                                Setiap jenis transaksi yang Anda lakukan (baik transaksi pertama atau transaksi setelahnya) akan dianggap sebagai dan merupakan Permohonan Penggunaan Fasilitas Pendanaan atas Batas Kredit, dan dalam hal ini disetujui berdasarkan penilaian oleh JULO berdasarkan kriteria yang diberikan oleh Pemberi Dana (selanjutnya disebut <b>"Fasilitas Pendanaan"</b>).
+                            </li>
+                            <li>
+                                Jenis transaksi yang dapat dilakukan termasuk namun tidak terbatas pada penarikan atau transfer tunai, pembelian barang dan jasa melalui Merchant yang berkerja sama dengan JULO (jika ada) dan transaksi lain yang dibenarkan Undang-Undang sesuai dengan izin yang dimiliki JULO, melalui berbagai cara atau metode penggunaan yaitu antara lain melalui Transaksi Pendanaan Kartu Non-Tunai, Transaksi Pendanaan, ataupun cara lain yang akan difasilitasi oleh JULO kepada Penerima Dana.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Keberlakuan Perjanjian Fasilitas</b>
+                        <ol type="a">
+                            <li>
+                                Perjanjian Fasilitas ini merupakan perjanjian yang sah dan mengikat bagi Anda dan berlaku juga sebagai perjanjian antara Anda dengan Pemberi Dana.
+                            </li>
+                            <li>
+                                Dokumen-Dokumen Elektronik merupakan satu kesatuan dan bagian yang tidak terpisahkan satu sama lain, termasuk namun tidak terbatas pada Perjanjian Fasilitas ini beserta segala adendumnya.
+                            </li>
+                            <li>
+                                Jika terdapat perbedaan makna atau penafsiran tentang segala ketentuan yang berkaitan dengan pemberian Fasilitas Pendanaan yang terdapat pada Perjanjian Fasilitas, Syarat dan Ketentuan Umum, Syarat dan Ketentuan Penggunaan Kartu Non-Tunai, dan kebijakan privasi, maka yang berlaku adalah Perjanjian Fasilitas.
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>KETENTUAN POKOK</b>
+                <ol class="list-counter">
+                    <li>
+                        <b>Perincian Fasilitas Pendanaan</b>
+                        <p class="inline-list">
+                            Fasilitas Pendanaan yang disetujui Pemberi Dana adalah dengan Batas Kredit sebesar {{ available_limit | safe }} yang dapat berubah dari waktu ke waktu berdasarkan penilaian JULO dan atas persetujuan Penerima Dana yang ditandai dengan cara menerima dan menggunakan Batas Kredit.<br />
+                            Jika Anda setuju untuk menggunakan Fasilitas Pendanaan tersebut dengan memilih, menerima, mengaktifkan, dan/atau menggunakan Batas Kredit sebagai bentuk Fasilitas Pendanaan yang muncul pada Aplikasi, maka Anda wajib mengetahui dan terikat atas ketentuan perincian fasilitas pendanaan sebagai berikut:
+                        </p>
+                        <ol class="list-counter">
+                            <li>
+                                <b>Batas Kredit</b>
+                                <ol type="a">
+                                    <li>
+                                        Adalah total plafon yang Anda terima atas Fasilitas Pendanaan yang disetujui.
+                                    </li>
+                                    <li>
+                                        Setiap persetujuan Fasilitas Pendanaan, Pemberi Dana memiliki wewenang menetapkan Batas Kredit yang akan disalurkan oleh Pemberi Dana kepada Anda, berdasarkan penilaian kelayakan kredit oleh JULO.
+                                    </li>
+                                    <li>
+                                        Tanpa mengurangi ketentuan tersebut di atas dari pasal ini dan pasal lain terkait yang diatur dalam Perjanjian Fasilitas ini, Pemberi Dana, atas kebijakannya sendiri dan dari waktu ke waktu, dapat menaikkan atau mengurangi Batas Kredit yang ditetapkan, sebagai hasil dari penilaian yang wajar oleh JULO atas Akun dan/atau informasi mengenai Penerima Dana yang relevan yang tersedia bagi JULO. Kenaikan atau pengurangan Batas Kredit tersebut akan diberitahukan oleh JULO kepada Penerima Dana dari waktu ke waktu.
+                                    </li>
+                                    <li>
+                                        Anda dapat mengetahui nilai Batas Kredit yang terkini melalui Aplikasi Anda.
+                                    </li>
+                                    <li>
+                                        Apabila Batas Kredit tidak mencukupi maka persetujuan yang dimaksud pada Pasal 1 ayat 2 butir e secara otomatis tidak akan berlaku dan transaksi penggunaan Fasilitas Pendanaan tidak dapat dilakukan.
+                                    </li>
+                                    <li>
+                                        Batas Kredit dapat digunakan jika setiap pembayaran kembali telah dilakukan oleh Penerima Dana atau saldo pada Batas Kredit tersedia kembali/mencukupi untuk digunakan dalam bertransaksi.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Pokok Pendanaan</b>
+                                <ol type="a">
+                                    <li>
+                                        Adalah sejumlah dana yang awalnya diajukan Penerima Dana sebagai pinjaman, diluar manfaat ekonomi pendanaan.
+                                    </li>
+                                    <li>
+                                        Untuk keperluan transaksi ini, besaran Pokok Pendanaan Anda sebesar {{ loan_amount | safe }}.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Tujuan Pendanaan</b>
+                                <ol type="a">
+                                    <li>
+                                        Adalah pernyataan spesifik Penerima Dana terkait penggunaan Fasilitas Pendanaan yang diajukan kepada Pemberi Dana.
+                                    </li>
+                                    <li>
+                                        Untuk keperluan transaksi ini, Anda setuju menggunakan Fasilitas Pendanaan yang diterima untuk keperluan dalam bentuk {{ loan_type | safe }}.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Manfaat Ekonomi Pendanaan</b>
+                                <p class="inline-list-40">
+                                    Manfaat ekonomi pendanaan dalam Fasilitas Pendanaan ini dibagi menjadi 2, yaitu :
+                                </p>
+                                <ol type="a">
+                                    <li>
+                                        <b>Biaya Provisi.</b>
+                                        <ol class="custom-list">
+                                            <li>
+                                                Atas penggunaan Fasilitas Pendanaan, Anda akan dikenakan biaya provisi yang  merupakan biaya layanan yang ditetapkan JULO setiap kali Anda menggunakan Layanan JULO atau melakukan Permohonan Penggunaan Fasilitas Pendanaan sebagaimana tercantum pada halaman Akun Anda.
+                                            </li>
+                                            <li>
+                                                Untuk keperluan transaksi ini, Anda setuju akan dikenakan biaya provisi sebesar {{ provision_fee_amount | safe }}.
+                                            </li>
+                                            <li>
+                                                Biaya Provisi dapat dilakukan beberapa metode pemotongan sesuai jenis layanan yang disediakan oleh JULO, oleh karenanya pasal 2 ayat 1 butir 2.1.4.(a) angka (1), tidak berlaku untuk seluruh layanan yang disediakan oleh JULO namun hanya layanan tertentu.
+                                            </li>
+                                            <li>
+                                                Pada beberapa layanan, JULO tidak memotong biaya provisi.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <b>Bunga Pendanaan.</b>
+                                        <ol class="custom-list">
+                                            <li>
+                                                Atas penggunaan Fasilitas Pendanaan, Anda akan dikenakan bunga pendanaan oleh Pemberi Dana sesuai bunga pendanaan yang tercantum pada halaman Akun Anda Anda.
+                                            </li>
+                                            <li>
+                                                Untuk keperluan transaksi ini, maka Bunga Pendanaan akan dikenakan sebesar {{ interest_fee_monthly | safe }} per bulan.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <b>Biaya Pencairan.</b>
+                                        <ol class="custom-list">
+                                            <li>
+                                                Atas penggunaan Fasilitas Pendanaan, Anda dapat dikenakan Biaya Pencairan yang besarannya sesuai dengan syarat dan  ketentuan yang berlaku.
+                                            </li>
+                                            <li>
+                                                Untuk keperluan transaksi ini, maka Biaya Pencairan akan dikenakan sebesar {{ disbursement_fee | safe }}.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Denda Keterlambatan</b>
+                                <ol type="a">
+                                    <li>
+                                        Anda dapat dikenakan Denda Keterlambatan oleh JULO, apabila Anda lalai membayar jumlah Tagihan yang telah jatuh tempo pada Tanggal Jatuh Tempo pembayaran. Denda Keterlambatan tersebut dimulai setelah lewat Masa Tenggang dan akan diakumulasikan untuk masing-masing penggunaan Fasilitas Pendanaan sesuai dengan Denda yang akan tercantum (jika ada) pada halaman transaksi di Aplikasi Anda.
+                                    </li>
+                                    <li>
+                                        Untuk keperluan transaksi ini, Denda Keterlambatan akan dikenakan biaya Denda Keterlambatan sebesar Rp {{ late_fee_amount | safe }} per bulan, untuk setiap angsuran yang terlambat, dengan total kumulatif tidak melebihi Rp {{ max_total_late_fee_amount | safe }}.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Jumlah Angsuran dan Jangka Waktu Pembayaran Angsuran</b>
+                                <ol type="a">
+                                    <li>
+                                        Jumlah angsuran sebagaimana tabel angsuran dibawah, berarti besarnya nilai angsuran yang ditentukan berdasarkan :
+                                        <ol class="custom-list">
+                                            <li>
+                                                Pokok Pendanaan yang didanai;
+                                            </li>
+                                            <li>
+                                                Jangka waktu pembayaran angsuran yang Anda pilih;
+                                            </li>
+                                            <li>
+                                                Bunga Pendanaan yang berlaku sesuai dengan jangka waktu angsuran yang Anda pilih;
+                                            </li>
+                                            <li>
+                                                Jumlah Angsuran yang Anda bayarkan untuk setiap jangka waktu pembayaran angsuran tercantum pada Perjanjian Fasilitas ini;
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        Jangka waktu pembayaran angsuran dapat merujuk pada tabel angsuran dibawah.<br />
+                                        <table class="installment" style="margin-top:5px;">
+                                            <tr id ="topBottomBorder">
+                                                <th>Cicilan</th>
+                                                <th>Jumlah</th>
+                                                <th>Jatuh Tempo</th>
+                                            </tr>
+                                            {% for payment in payments %}
+                                            {% if forloop.last %}
+                                                <tr id="bottomBorder">
+                                            {% else %}
+                                                <tr>
+                                                    {% endif %}
+                                                    <td>
+                                                        <div class="hideExtra">{{ payment.payment_number | safe }}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="hideExtra">{{ payment.due_amount | safe }}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="hideExtra">{{ payment.due_date | safe }}</div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                        Berdasarkan Tabel Angsuran diatas, maka jangka waktu adalah {{ loan.loan_duration | safe }} bulan.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Riwayat Transaksi (<i>History Transaction</i>)</b>
+                                <p class="inline-list-40">
+                                    Anda dapat mengetahui seluruh riwayat transaksi penggunaan Batas Kredit yang Anda miliki dengan mengakses Aplikasi Anda.
+                                </p>
+                            </li>
+                            <li>
+                                <b>Masa Tenggang</b>
+                                <p class="inline-list-40">
+                                    Masa tenggang adalah 4 (empat) hari kalender dari tanggal jatuh tempo pembayaran bulan pertama atau tanggal jatuh tempo bulan berikutnya atau sesuai kebijakan  JULO sebagaimana diberitahukan kepada Anda dari waktu ke waktu.
+                                </p>
+                            </li>
+                            <li>
+                                <b>Pembayaran Kembali</b>
+                                <p class="inline-list-40">
+                                    Setiap penggunaan Batas Kredit dari Permohonan Penggunaan Fasilitas Pendanaan Anda beserta manfaat ekonomi sebagaimana Pasal 2 ayat 1 butir 2.1.2, denda keterlambatan (jika ada) atau  setiap Angsuran Anda akan ditagihkan kepada Anda dan Anda wajib melakukan pembayaran kembali pada sebelum atau pada tanggal jatuh tempo sebagaimana yang dirincikan pada setiap Perjanjian Fasilitas. Anda wajib melakukan pembayaran kembali melalui rekening virtual account (VA) sebagai berikut :
+                                </p>
+                                <p class="inline-list-40">{{ payment_method_name }}</p>
+                                <p class="inline-list-40">Kode Bank  : {{ julo_bank_code }}</p>
+                                <p class="inline-list-40">Nomor VA   : {{ julo_bank_account_number }}</p>
+                            </li>
+                            <li>
+                                <b>Pembayaran Dipercepat</b>
+                                <p class="inline-list-40">
+                                    Untuk pembayaran kembali, Anda dapat melakukan pembayaran kembali lebih cepat dari tanggal jatuh tempo sebagaimana yang dirincikan pada setiap Perjanjian Fasilitas yang Anda, tanpa dikenakan biaya tambahan apa pun oleh JULO (kecuali ditentukan sebaliknya oleh JULO di kemudian hari dengan pemberitahuan kepada Anda).
+                                </p>
+                            </li>
+                            <li>
+                                <b>Kelebihan atas Pencairan Dana dan/atau Pembayaran Kembali</b>
+                                <ol type="1">
+                                    <li>
+                                        <b><u>Kelebihan atas Pencairan Dana oleh Pemberi Dana</u></b>
+                                        <ol type="a">
+                                            <li>
+                                                Apabila Anda menerima dana yang dicairkan oleh Pemberi Dana melebihi dari jumlah yang diajukan atau melebih dari Pokok Pendanaan pada  Permohonan Penggunaan Fasilitas Pendanaan, maka Anda bersedia untuk mengembalikan kelebihan pencairan dana tersebut dalam jangka waktu ... .
+                                            </li>
+                                            <li>
+                                                Anda dapat melakukan pembayaran atas kelebihan dana yang diterima oleh Anda, melalui rekening virtual account (VA) sebagaimana Pasal 2 ayat 1 butir 2.1.9., Perjanjian Fasilitas ini.
+                                            </li>
+                                            <li>
+                                                Apabila Anda tidak dapat melakukan pengembalian dana tersebut atau diketahui adanya indikasi tidak kooperatif untuk mengembalikan dana, dengan pemberitahuan terlebih dahulu oleh Pemberi Dana melalui JULO dalam jangka waktu sebagaimana Pasal 2 ayat 1 butir 2.1.11 (b) ini, maka Penerima Dana akan menanggung resiko hukum yang menjadi hak Pemberi Dana.
+                                            </li>
+                                            <li>
+                                                Tanpa mengurangi hak &  kewajiban dari Para Pihak dalam Perjanjian Pemberian Fasiltas Dana ini, Para Pihak beritikad baik dan melakukan upaya sebaik-baiknya untuk  dapat melakukan pengembalian kelebihan pencairan dana sebagaimana yang dimaksud dalam pasal ini.
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <b><u>Kelebihan atas Pembayaran Kembali oleh Penerima Dana</u></b>
+                                        <ol type="a">
+                                            <li>
+                                                Apabila Anda melakukan pembayaran kembali melebihi nominal jumlah angsuran yang disebabkan termasuk namun tidak terbatas atas kelalaian yang Anda lakukan baik sengaja maupun tidak sengaja atau keadaan lain yang menyebabkan kelebihan Pembayaran Kembali,, maka Anda dapat menghubungi JULO untuk meminta pengembalian dana, kepada JULO sebagaimana Pasal 1 ayat 2 butir d, dalam jangka waktu …. sesuai tata cara pengembalian dana yang berlaku di JULO.
+                                            </li>
+                                            <li>
+                                                Dalam hal Penerima Dana tidak menghubungi atau tidak menyampaikan pengaduan kepada JULO, maka Pemberi Dana melalui JULO akan tetap mengembalikan  hak Penerima Dana atas kelebihan Pembayaran Kembali tersebut.
+                                            </li>
+                                            <li>
+                                                Atas kebijakannya terhadap bentuk Pembayaran Kembali sebagaimana yang tercantum dalam point c pada pasal ini,Pemberi Dana melalui JULO dapat menawarkan penyelesaian kelebihan Pembayaran Kembali ini dengan berbagai cara termasuk namun tidak terbatas melakukan transfer dana kembali ke rekening Penerima Dana, atau dalam bentuk cashback ataupun pengurangan jumlah angsuran untuk angsuran berikutnya (jika ada).
+                                            </li>
+                                            <li>
+                                                Tanpa mengurangi hak & kewajiban dari Para Pihak dalam Perjanjian Pemberian Fasiltas Dana ini, Para Pihak beritikad baik dan melakukan upaya sebaik-baiknya untuk  dapat melakukan pengembalian kelebihan pembayaran kembali sebagaimana yang dimaksud dalam pasal ini.
+                                            </li>
+                                        </ol>
+                                    </li>
+
+                                </ol>
+                            </li>
+                            <li>
+                                <b>Jaminan</b>
+                                <p class="inline-list-40">
+                                    Untuk menjamin kepastian pembayaran kembali dengan tertib dan tepat waktu, Penerima Dana dan/atau pihak ketiga yang ditunjuk oleh Penerima Dana dapat diminta untuk memberikan jaminan, selama dalam pelaksanaan pendanaan ini dipersyaratkan suatu jaminan yang ditentukan oleh Pemberi Dana yang dalam hal ini juga menjadi pihak penerima jaminan,oleh karenanyaPenerima Dana setuju bahwa Pemberi Dana dan/atau pihak ketiga yang ditunjuk oleh Pemberi Dana dapat melakukan eksekusi atas jaminan sebagaimana yang diperlukan berdasarkan perjanjian ini apabila ada. Penjaminan disini  termasuk namun tidak terbatas pada penanggungan yang dilakukan baik dari perorangan maupun badan hukum dan/atau jaminan kebendaan yang diatur berdasarkan peraturan perundang-undangan meliputi gadai, fidusia, hak tanggungan, hipotek kapal dan resi gudang. Satu atau lebih dari jenis jaminan tersebut dapat menjadikan Perjanjian Fasilitas menjadi dasar penjaminan dan eksekusi jaminan, atau sebaliknya jika diperlukan ketentuan lebih lanjut Para Pihak dapat mengaturnya melalui perjanjian jaminan yang terpisah dari Perjanjian Fasilitas ini.
+                                </p>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>HAK DAN KEWAJIBAN</b>
+                <ol class="list-counter">
+                    <li>
+                        <b>Hak dan Kewajiban Pemberi Dana</b><br />
+                        <p class="inline-list">
+                            Selain hak-hak dan kewajiban-kewajiban lain yang diatur dalam bagian lain Perjanjian Fasilitas ini, hak dan kewajiban Pemberi Dana adalah sebagai berikut:
+                        </p>
+                        <ol type="a">
+                            <li>
+                                Wajib menyediakan Fasilitas Pendanaan dan mencairkan pendanaan kepada Anda sesuai Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                Wajib melaksanakan seluruh ketentuan-ketentuan dalam Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                Berhak untuk menolak atau memberikan persetujuan pemberian Fasilitas Pendanaan dan/atau Pokok Pendanaan berdasarkan penilaiannya dan/atau penilaian skor kredit yang disediakan oleh JULO.
+                            </li>
+                            <li>
+                                Berhak untuk menerima pembayaran secara penuh atas seluruh kewajiban pembayaran tagihan Anda termasuk namun tidak terbatas pada, pembayaran kembali Pokok Pendanaan, bunga pendanaan, serta biaya-biaya lain yang relevan berdasarkan Perjanjian Fasilitas ini (jika ada).
+                            </li>
+                            <li>
+                                Berhak untuk melaksanakan segala proses penagihan atas seluruh kewajiban pembayaran Anda termasuk namun tidak terbatas pada penagihan melalui JULO atau dengan menunjuk pihak ketiga lainnya yang ditunjuk oleh JULO atau Pemberi Dana, serta memberikan peringatan secara tertulis dalam hal Penerima Dana terlambat dalam melakukan  pembayaran. Penerima Dana setuju bahwa proses penagihan dapat dilakukan melalui tata cara sebagai berikut:
+                                <ol type="i">
+                                    <li>
+                                        <i>Desk Collection</i>, yaitu penagihan melalui sarana komunikasi elektronik, seperti telepon, SMS, surat elektronik, dan/atau media komunikasi elektronik lainnya ke nomor telepon atau surel yang terdaftar pada Aplikasi JULO;
+                                    </li>
+                                    <li>
+                                        <i>Field Collection</i>, yaitu penagihan melalui kunjungan lapangan ke alamat Penerima Dana yang terdaftar pada Aplikasi JULO;
+                                    </li>
+                                    <li>
+                                        Tata cara lain yang disyaratkan dan diperbolehkan oleh asosiasi, OJK, atau lembaga pemerintah yang berwenang lainnya.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li>
+                                Berhak untuk memindahkan dan mengalihkan pendanaan dan tagihan sesuai dengan Perjanjian Fasilitas ini.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Hak dan Kewajiban Penerima Dana</b>
+                        <p class="inline-list-40">
+                            Selain hak-hak dan kewajiban-kewajiban lain yang diatur dalam bagian lain Perjanjian Fasilitas ini, hak dan kewajiban Anda sebagai Penerima Dana adalah sebagai berikut:
+                        </p>
+                        <ol type="a">
+                            <li>
+                                Wajib membayar secara penuh kewajiban pembayaran atas Fasilitas Pendanaan yang diberikan pada tanggal jatuh tempo pembayaran, termasuk namun tidak terbatas untuk membayar bunga pendanaan dan denda keterlambatan (jika ada) dan biaya-biaya lain yang relevan berdasarkan Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                Wajib memberitahukan Pemberi Dana dan/atau JULO atas terjadinya setiap perubahan data atau informasi dari Penerima Dana.
+                            </li>
+                            <li>
+                                Wajib melaksanakan seluruh ketentuan-ketentuan dalam Perjanjian Fasilitas ini dan hukum yang berlaku dengan iktikad baik dan penuh tanggung jawab.
+                            </li>
+                            <li>
+                                Berhak untuk menerima Fasilitas Pendanaan dan menerima pencairan dana berdasarkan Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                Berhak untuk melakukan percepatan pembayaran.
+                            </li>
+                            <li>
+                                Berhak untuk mendapatkan informasi atau akses informasi mengenai status pendanaan yang diterima dengan benar, akurat dan tidak menyesatkan.
+                            </li>
+                            <li>
+                                Berhak untuk mengajukan permohonan untuk mendapatkan bukti atas seluruh kewajiban pembayaran yang telah dilakukan oleh Penerima Dana secara penuh kepada Pemberi Dana. Bukti pembayaran ini akan diberikan dalam bentuk Surat Keterangan Lunas yang akan disampaikan secara elektronik melalui Aplikasi JULO dan sesuai dengan standar operasional pemberian Surat Keterangan Lunas dari JULO.
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PENGALIHAN</b>
+                <ol class="list-counter">
+                    <li>
+                        Pengalihan yang dimaksud dalam pasal ini adalah pengalihan pihak Pemberi Dana tanpa mengurangi atau merubah keseluruhan manfaat ekonomi, hak dan kewajiban yang akan tetap berlaku sama. Pengalihan ini dilakukan jika dianggap perlu oleh Pemberi Dana tanpa ada biaya lain yang didapatkan oleh Pemberi Dana.
+                    </li>
+                    <li>
+                        Tanpa Persetujuan Penerima Dana, Pemberi Dana dapat memindahkan atau mengalihkan setiap kewajiban pembayaran Anda kepada Pemberi Dana berdasarkan Perjanjian Fasilitas yang masih terutang termasuk namun tidak terbatas pada bank, lembaga keuangan bukan bank atau institusi keuangan lainnya dengan tunduk pada hukum yang berlaku.
+                    </li>
+                    <li>
+                        Setiap pengalihan sebagaimana yang dimaksud diatas, akan diberitahukan kepada Anda melalui Aplikasi atau melalui media komunikasi  atau sarana lainnya sebagaimana yang ditentukan oleh JULO dari waktu ke waktu.
+                    </li>
+                    <li>
+                        Penerima Dana tidak dapat mengalihkan, baik sebagian maupun seluruh hak dan kewajiban yang timbul dari atau terkait dengan Perjanjian Fasilitas ini kepada pihak mana pun, tanpa persetujuan tertulis dari Pemberi Dana atau JULO (untuk dan atas nama Pemberi Dana).
+                    </li>
+                    <li>
+                        Penerima Dana menyetujui dan mengakui keabsahan setiap pengalihan yang dilakukan setiap Pemberi Dana berdasarkan ayat 4.2 pada pasal ini, dan tidak akan mengajukan keberatan atas pengalihan tersebut.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PAJAK, BEA METERAI DAN BIAYA-BIAYA LAIN</b>
+                <ol class="list-counter">
+                    <li>
+                        Para Pihak setuju bahwa segala kewajiban perpajakan, biaya bea meterai dan/atau biaya-biaya lain (jika ada) yang dikenakan pemerintah saat ini atau yang akan datang dalam bentuk apa pun yang dikenakan, dipungut atau dipungut oleh atau atas nama otoritas pemerintah, yang timbul berdasarkan Perjanjian Fasilitas ini akan menjadi beban masing-masing Pihak sesuai dengan ketentuan perpajakan yang berlaku di Republik Indonesia dan/atau kesepakatan Para Pihak.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PENGGUNAAN DATA PRIBADI</b>
+                <ol class="list-counter">
+                    <li>
+                        Dengan menyetujui Perjanjian Fasilitas ini, Anda menyatakan bahwa Anda telah membaca dan menyetujui Kebijakan Privasi JULO, yang dapat diakses pada situs web kami atau sebagaimana yang tercantum dalam <b>lampiran 2. Kebijakan Privasi</b> berupa akses tautan ini: https://www.julo.co.id/privacy-policy. Oleh karenanya, Anda wajib membaca, memahami, dan mengerti Kebijakan Privasi JULO. Kebijakan Privasi ini merupakan bagian yang tidak terpisahkan dari Perjanjian Fasilitas dan Kebijakan Privasi JULO ini dapat berubah dari waktu ke waktu tanpa memerlukan persetujuan Para Pihak.
+                    </li>
+                    <li>
+                        Dengan Anda menekan fitur persetujuan (consent) yang akan muncul pada halaman Aplikasi Anda pada saat pengajuan Fasilitas Pendanaan, maka Anda juga telah menyetujui Kebijakan Privasi JULO pada  laman situs web di atas.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>MEKANISME PENYELESAIAN SENGKETA</b>
+                <ol class="list-counter">
+                    <li>
+                        Penafsiran dan pelaksanaan Perjanjian Fasilitas ini dan segala akibatnya diatur dan ditafsirkan menurut hukum Republik Indonesia.
+                    </li>
+                    <li>
+                        Apabila terjadi perselisihan atau sengketa antara Para Pihak yang timbul berdasarkan Perjanjian Fasilitas ini, Para Pihak sepakat untuk menyelesaikannya terlebih dahulu dengan cara musyawarah untuk mencapai mufakat. Apabila sengketa tersebut tidak dapat diselesaikan dengan cara musyawarah, Para Pihak sepakat untuk menyerahkan kepada dan diselesaikan di tingkat akhir arbitrase di Indonesia yang diselenggarakan oleh Lembaga Alternatif Penyelesaian Sengketa Sektor Jasa Keuangan (<b>"LAPS SJK"</b>), sesuai ketentuan LAPS SJK yang berlaku pada saat itu. Arbitrase akan dilangsungkan dengan 1 (satu) orang arbiter dan bahasa yang digunakan dalam arbitrase adalah bahasa Indonesia.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>PERNYATAAN DAN JAMINAN</b>
+                <ol class="list-counter">
+                    <li>
+                        Penerima Dana dengan ini menyatakan dan menjamin Pemberi Dana bahwa :
+                        <ol type="a">
+                            <li>
+                                Penerima Dana adalah Warga Negara Indonesia dan tunduk secara sah pada hukum Republik Indonesia, yang merupakan orang perseorangan yang cakap hukum untuk mengadakan dan melaksanakan Perjanjian Fasilitas ini, dan telah mendapatkan seluruh persetujuan dan perizinan yang dibutuhkan (termasuk namun tidak terbatas kepada persetujuan pasangan) untuk menandatangani Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                Penerima Dana telah membaca, memahami dan telah mendapatkan saran yang diperlukan mengenai isi keberlakuan dari Perjanjian Fasilitas ini.
+                            </li>
+                            <li>
+                                Seluruh fakta, data, informasi, dokumen dan keterangan yang Anda berikan untuk mendapatkan Fasilitas Pendanaan adalah benar, jelas, jujur, terbaru, akurat dan lengkap.
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>LAIN-LAIN</b>
+                <ol class="list-counter">
+                    <li>
+                        Setiap komunikasi dan pemberitahuan yang diisyaratkan atau diperbolehkan untuk diberikan kepada Para Pihak dibuat secara tertulis melalui pengumuman, surat elektronik, surat tercatat, Aplikasi, platform Penyelenggara, nomor telepon resmi JULO, atau melalui media komunikasi lainnya.
+                    </li>
+                    <li>
+                        Apabila satu atau lebih ketentuan dalam Perjanjian Fasilitas ini menjadi tidak berlaku, tidak sah atau tidak dapat dilaksanakan dalam cara apa pun menurut hukum yang berlaku, hal tersebut tidak memengaruhi keabsahan, keberlakuan dan dapat dilaksanakannya ketentuan-ketentuan lain dalam Perjanjian Fasilitas ini.
+                    </li>
+                    <li>
+                        <b>Fitur JULO, </b>sebagaimana dijelaskan di bawah ini:
+                        <ol type="a">
+                            <li>
+                                ialah fungsi/karakteristik dalam hal teknologi, yang dimiliki dan/atau disediakan pada Aplikasi JULO dengan tujuan memudahkan Penerima Dana dalam melakukan transaksi dengan Aplikasi JULO.
+                            </li>
+                            <li>
+                                Setiap fitur yang disediakan oleh JULO kepada Anda termasuk namun tidak terbatas pada Fitur Kartu Non-Tunai dan fitur lainnya yang dimiliki oleh JULO dan/atau fitur yang diperoleh dari kerja sama dengan Mitra Bisnis, yang akan terus diperbaharui, ditambahkan, dihapus, diganti, dan/atau dirilis ulang,  merupakan kebijakan dan kewenangan JULO sepenuhnya.
+                            </li>
+                            <li>
+                                Tanpa mengurangi maksud ayat 4 Pasal ini, sehubungan dengan setiap penggunaan fitur JULO oleh Anda sebagaimana yang diperlukan dalam Dokumen-Dokumen Elektronik, JULO berhak untuk meminta tindakan persetujuan tertentu di luar Perjanjian Fasilitas ini yang menginstruksikan dan/atau mengizinkan JULO untuk mengakses dan memproses data-data yang Anda berikan untuk tujuan penggunaan fitur tersebut, termasuk namun tidak terbatas pada pernyataan dan persetujuan Anda, yang diperoleh secara elektronik pada Aplikasi JULO dan cara lain yang akan disepakati Para Pihak. Persetujuan tersebut merupakan bagian dari pernyataan tambahan yang merupakan satu kesatuan yang tidak terpisahkan dan sebagai bentuk pelaksanaan dari Perjanjian Fasilitas ini, yang mengikat dan sah secara hukum.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Tanda Tangan Elektronik.</b>
+                        <ol type="a">
+                            <li>
+                                Tanda Tangan Elektronik adalah tanda tangan yang berupa informasi elektronik yang dilekatkan, terasosiasi, atau terkait informasi elektroniknya yang digunakan sebagai alat verifikasi dan autentikasi.
+                            </li>
+                            <li>
+                                Penggunaan Tanda Tangan Elektronik oleh Penerima Dana pada Dokumen-Dokumen Elektronik,mana merupakan satu kesatuan daripadanya adalah sah, benar, dan mengikat secara hukum yang sama kuatnya dengan tanda tangan fisik.
+                            </li>
+                            <li>
+                                Para Pihak dapat menggunakan Tanda Tangan Elektronik untuk satu atau beberapa dokumen dari Dokumen-Dokumen Elektronik baik dengan, maupun tanpa menggunakan sertifikat elektronik yang dibuat oleh penyelenggara sertifikat elektronik Indonesia yang terdaftar di instansi terkait, sepanjang memenuhi persyaratan yang diatur dalam Undang-Undang mengenai informasi dan transaksi elektronik atau sejenisnya. Pengklasifikasian tersebut diatur sesuai standar operasional prosedur yang berlaku di JULO.
+                            </li>
+                            <li>
+                                Dalam hal proses autentikasi tambahan, jika diperlukan, Penerima Dana dengan ini memberikan kuasa kepada Pemberi Dana untuk menyematkan tanda tangan elektronik pada setiap Perjanjian Fasilitas dan/atau Dokumen-Dokumen Elektronik lainnya, dengan tata cara yang diinstruksikan oleh JULO sesuai peraturan yang berlaku terkait tanda tangan elektronik, termasuk namun tidak terbatas dengan cara menekan fitur persetujuan (<i>consent</i>) yang akan muncul pada setiap Perjanjian Fasilitas dan/atau Dokumen-Dokumen Elektronik lainnya, atau memasukan Kode PIN yang Anda miliki  ataupun cara lain yang sah sesuai kesepakatan Para Pihak.
+                            </li>
+                            <li>
+                                Para Pihak mengetahui dan sepakat bahwa Tanda Tangan Elektronik yang disematkan sebagaimana huruf d ayat ini adalah Tanda Tangan elektronik yang keabsahannya diatur dan distandarisasi oleh standar operasional prosedur yang berlaku di JULO.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        Pemberi Dana dan/atau JULO telah menyusun Perjanjian Fasilitas ini dengan maksud untuk menyeragamkan atau menstandarisasikan isi dan bentuk Perjanjian Fasilitas ini secara elektronik, terkait bentuk kegiatan, skema, dan/atau model pendanaan yang dilakukan antara Pemberi Dana dan Penerima Dana.
+                    </li>
+                    <li>
+                        Pemberi Dana dan/atau JULO memberikan akses kepada Penerima Dana untuk dapat mencetak Perjanjian Fasilitas ini. Oleh karena  Perjanjian Fasilitas bersifat elektronik, Penerima Dana dimungkinkan untuk tidak mencetak keseluruhan lampiran berupa tautan.
+                    </li>
+                    <li>
+                        Perjanjian Fasilitas ini telah disesuaikan dengan ketentuan peraturan perundang-undangan termasuk ketentuan Peraturan OJK.
+                    </li>
+                    <li>
+                        Terlepas dari  hal-hal apa pun yang bertentangan dalam Perjanjian Fasilitas, ketentuan-ketentuan Perjanjian Fasilitas ini dapat sewaktu-waktu  diubah secara tertulis dengan persetujuan bersama Para Pihak dan tidak ada modifikasi atau tambahan pada bagian mana pun dari Perjanjian Fasilitas yang berlaku apabila tidak dibuat dengan adendum/amendemen tertulis yang ditandatangani oleh perwakilan resmi Para Pihak.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>MEKANISME PENYELESAIAN HAK DAN KEWAJIBAN SESUAI JIKA JULO TIDAK DAPAT MELANJUTKAN KEGIATAN OPERASIONALNYA.</b>
+                <ol class="list-counter">
+                    <li>
+                        Pemberi Dana melalui JULO akan menginformasikan kepada Penerima Dana mengenai rencana penghentian Layanan JULO dalam jangka waktu tertentu yang akan diinformasikan beserta alasan dan rencana penyelesaian hak dan kewajiban baik antara JULO dengan Penerima Dana maupun dengan Pemberi Dana melalui Sistem Elektronik milik JULO dan/atau media lain yang relevan, sebelum rencana tersebut dilakukan.
+                    </li>
+                    <li>
+                        Penyelesaian hak dan kewajiban JULO kepada  Penerima Dana maupun Pemberi Dana dapat dilakukan melalui:
+                        <ol type="a">
+                            <li>
+                                pengalihan posisi akhir porfolio pendanaan yang tertunggak dari Penerima Dana;
+                            </li>
+                            <li>
+                                tata cara atau mekanisme lain yang akan disepakati Para Pihak dalam Perjanjian Fasilitas ini.
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        Tanpa mengurangi maksud Pasal 10 ayat 1 dan 2 Perjanjian Fasilitas ini, penyelesaian hak dan kewajiban wajib diselesaikan sejak disetujuinya penghentian kegiatan operasional  yang disampaikan oleh OJK kepada JULO.
+                    </li>
+                    <li>
+                        Mekanisme dan jangka waktu penyelesaian seluruh kewajiban yang timbul dalam penyelenggaraan LPBBTI ditetapkan oleh OJK dengan memperhatikan rencana tindak lanjut yang disampaikan oleh JULO.
+                    </li>
+                    <li>
+                        Pemberi Dana dapat melakukan mekanisme apa pun yang disebutkan pada Pasal 10 ayat 2 Perjanjian Fasilitas ini, dengan kesepakatan terlebih dahulu dengan Penerima Dana.
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <b>KEADAAN KAHAR</b>
+                <ol class="list-counter">
+                    <li>
+                        Pengertian Keadaan Kahar adalah suatu keadaan tanpa kesalahan atau kelalaian yang disebabkan oleh salah satu Pihak yang terjadi di luar kendali Pihak tersebut, dimana Pihak tersebut secara wajar tidak dapat mencegah atau mengatasinya, termasuk namun tidak terbatas pada bencana alam, wabah penyakit, perang (dinyatakan atau tidak), invasi, konflik bersenjata, kerusuhan, demonstrasi, revolusi atau kudeta, tindakan terorisme, sabotase atau kerusakan karena kriminalisme, ledakan nuklir, kontaminasi radioaktif atau kimia atau radiasi ionisasi, gelombang tekanan yang disebabkan oleh pesawat terbang atau lainnya benda terbang yang melaju dengan kecepatan suara atau di atas kecepatan suara, gangguan listrik, gangguan sistem atau jaringan pihak ketiga lainnya atau perubahan peraturan perundang-undangan atau kebijakan pemerintah yang dapat memengaruhi kemampuan salah satu Pihak atau Para Pihak. Dalam peristiwa Keadaan Kahar, Penerima Dana tetap bertanggung jawab atas kewajibannya berdasarkan Perjanjian Fasilitas ini.
+                    </li>
+                    <li>
+                        JULO atas permintaan Pemberi Dana atau berdasarkan kuasa Pemberi Dana, dapat menghentikan layanan Fasilitas Pendanaan kepada Anda atau mengambil tindakan atau langkah-langkah yang dipandang perlu oleh JULO, setiap saat jika terjadi Keadaan Kahar sebagaimana yang disebutkan pada ayat 1 Pasal ini.
+                    </li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+    <div class="divContent">
+        <p>
+            <b>DEMIKIAN</b>, Perjanjian Fasilitas ini disetujui atau ditandatangani secara elektronik (termasuk menggunakan Tanda Tangan Elektronik) sesuai dengan ketentuan dalam Undang-Undang Republik Indonesia No. 11 Tahun 2008 tanggal 21 April 2008 tentang informasi dan Transaksi Elektronik berikut dengan segala amendemennya dan peraturan pelaksananya beserta segala amendemennya, dari waktu ke waktu oleh Para Pihak atau perwakilannya yang sah dan mempunyai kekuatan yang sama dengan perjanjian yang dibuat dan ditandatangani secara fisik.
+        </p>
+        <div class="row">
+            <div class="col">
+                <div class="box-left">
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"><b>Penerima Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign"> {% if signature %} <img height="auto" src="{{signature|safe}}" style="border:0;display:block;outline:none;text-decoration:none;height:auto"/> {% endif %} </div>
+                    </div>
+                    <div class="row">
+                        <div class="sig">{{ application.fullname }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="box-right">
+                    <div class="row">
+                        <div>Jakarta, {{ date_today }}</div>
+                    </div>
+                    <div class="row">
+                        <div><b>Pemberi Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign">
+                            {% if loan.loan_status_id >= 212 %}
+                                <div class="signature-font">{{ poc_name }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>{{ company_name }}</div>
+                    </div>
+                    <div class="row">
+                        <div>{{ poc_name }}</div>
+                    </div>
+                    <div class="row">
+                        <div>Direktur</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

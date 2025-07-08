@@ -1,0 +1,72 @@
+
+
+{% for hidden in form_event.hidden_fields %}
+          {{ hidden }}
+      {% endfor %}
+
+      {% if form_event.errors %}
+        {% for error in form_event.non_field_errors %}
+          <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+          </div>
+        {% endfor %}
+      {% endif %}
+     
+      <div class="row">
+
+        <div class="col-md-6 col-sm-12 form_event-group">
+            <label class="col-md-12 col-sm-12"> Payment Amount: </label>
+            <div class="col-md-12 col-sm-12">
+                <span class="help-block error_msg h5">
+                    {% if form_event.partial_payment.errors %}
+                        {{ form_event.partial_payment.errors.as_text }}
+                    {% endif %}
+                </span>
+                <div class="input-group m-t-10 {% if form_event.partial_payment.errors %} has-error {% endif %}"> 
+                    <span class="input-group-addon">Rp.</span>
+                    {{ form_event.partial_payment }}
+                </div>
+                <span class="help-block">
+                  <small>Masukan besar pembayaran parsial ...</small>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+    <div class="row">
+
+        <div class="col-md-6 col-sm-12 form_event-group">
+            <label class="col-md-12 col-sm-12">Paid Date: </label>
+            <div class="col-md-12 col-sm-12">
+                <span class="help-block error_msg h5">
+                    {% if form_event.paid_date.errors %}
+                        {{ form_event.paid_date.errors.as_text }}
+                    {% endif %}
+                </span>
+                <div class="input-group">
+                   {{ form_event.paid_date }}
+                   <span class="input-group-addon"><i class="icon-calender"></i></span> </div>
+                <span class="help-block">
+                  <small>Masukan tanggal pembayaran  ...</small>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 form_event-group {% if form_event.notes.errors %} has-error {% endif %}">
+          <label class="col-md-12 col-sm-12">Catatan Payment by-Ops: </label>
+          <div class="col-md-12 col-sm-12">
+              <span class="help-block error_msg h5">
+                  {% if form_event.notes.errors %}
+                      {{ form_event.notes.errors.as_text }}
+                  {% endif %}
+              </span>
+              {{ form_event.notes }}
+              <span class="help-block">
+                <small>Silahkan inputkan catatan pada payment ini bila ada (free-text).</small>
+              </span>
+          </div>
+        </div>
+    </div>

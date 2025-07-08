@@ -1,0 +1,4535 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+{% block additional_title %}Account Payment: {{ payment_obj.id }} {% endblock %}
+
+{% block custom_link %}
+{% endblock %}
+
+{% block custom_css %}
+  {{ block.super }}
+  <!-- Watermark CSS -->
+  <link href="{% static 'theme/plugins/watermark/watermark.css' %}" rel="stylesheet" />
+
+  <!-- Popup CSS -->
+  <link href="{% static 'theme/plugins/bower_components/Magnific-Popup-master/dist/magnific-popup.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block css_inside %}
+  .modal-custom-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+  .pmt_event {
+    margin-top:10px !important;
+  }
+  td.day{
+    position:relative;
+  }
+  .enabled a{
+    color:black !important;
+    background:green !important;
+  }
+    td.day{
+    position:relative;
+  }
+
+  td.day.disabled:hover:before {
+      content: 'This date is disabled';
+      color: white;
+      background-color: grey;
+      top: 28px;
+      position: absolute;
+      width: 136px;
+      left: -34px;
+      z-index: 1000;
+      text-align: center;
+      padding: 2px;
+  }
+
+  td.disabled-date {
+      background-color: red !important;
+      color: white !important;
+  }
+
+  .modal-content {
+    width: 120%;
+  }
+  .select_cls {
+      width: 232px;
+      height: 36px;
+      border: solid 1px #d5d6d6;
+      background-color: #ffffff;
+  }
+  .red{color: red;}
+  .green{color: green;}
+  .no-left{padding-left:0px;}
+  .m-l-30 { margin-left: 30px; }
+  .abs-t-10 { position: absolute; top: 10px; }
+  .m-l-18 { margin-left: 18px; }
+  .l-50 { left: 50px; }
+
+  .loading-skiptrace-history, .loading-status-history, .loading-email-sms-history, .loading-call-history  {
+    text-align: center;
+    position: absolute;
+    color: #fff;
+    z-index: 9;
+    background: #f7c132;
+    padding: 8px 50px;
+    border-radius: 5px;
+    left: calc(50% - 100px);
+    top: calc(50% + 70px);
+    font-weight: 500;
+    font-size: 12pt;
+  }
+  .list-group-wrapper {
+    position: relative;
+  }
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'loan_app:status_changes' %}">Status Payment</a></li>
+    <li class="active">Ubah/Update</li>
+{% endblock %}
+
+{% block list_title %}
+
+    {% with payment_obj as object %}
+      <div class="row m-b-10">
+        <div class="col-md-2 col-xs-6 label-danger p-t-10">
+          <small>act-pmt-id</small>: {{ payment_obj.id|default:"-"|safe  }}
+        </div>
+        <div class="col-md-1 col-xs-6 label-primary text-center p-t-10">
+          <code>{{ status_current.status_code|default:"-"|safe }}</code>
+        </div>
+        <div class="col-md-3 col-xs-6 label-success p-t-10">
+          <small>email</small>: {{ application.email|default:"-"|safe  }}
+        </div>
+        <div class="col-md-3 col-xs-6 label-danger p-t-10">
+          <small>name</small>: {{ application.fullname|default:"-"|safe  }}
+        </div>
+       <div class="col-md-3 col-xs-12 label-warning p-t-10">
+          <small>Acc-ID</small>: {{payment_obj.account.id}} <code>{{ payment_obj.account.status.status_code|default:"-"|safe }}</code>
+        </div>
+      </div>
+    {% endwith %}
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-12 col-xs-12">
+
+    <div class="row">
+      <!-- Application detail -->
+      <div class="col-md-6 col-xs-12">
+        {% if loan_refinancing_status %}
+        <div style="display: inline;border-radius: 15px;float: right;
+        background-color:{% if loan_refinancing_status == 'Restructured' %} #AB8CE4 {% else %} #FB9678 {% endif %};
+        font-size: 10px;color: white;padding: 3px 10px;">
+            <span><i class="fa fa-exclamation fa-fw"></i>{{ loan_refinancing_status}}</span>
+        </div>
+        {% endif %}
+          {% with application as object %}
+            {% include "object/app_status/include/app_details.html" %}
+          {% endwith %}
+      </div>
+
+      <!-- Payment detail -->
+      <div class="col-md-6 col-xs-12">
+       <div class="row">
+          <div class="col-md-4 col-xs-6 label-warning text-center">
+            <small>Total Loan Amount</small><br/>
+            <strong>{{ sum_of_all_loan_amounts|f_rupiahs:"no"|safe}}</strong>
+          </div>
+          <!-- <div class="col-md-6 col-xs-6 label-success text-center"> -->
+            <!-- <small>Total Installment Amount</small><br/> -->
+            <!-- <strong>{{ sum_of_all_installment_amounts|default:"-"|safe}} {{ application.determine_kind_of_installment }}</strong> -->
+          <!-- </div> -->
+          <div class="col-md-4 col-xs-6 label-success text-center">
+            <small>Total Installment Amount</small><br/>
+            <strong>{{ sum_of_all_installment_amounts|f_rupiahs:"no"|default:"-"|safe  }}</strong>
+          </div>
+          <div class="col-md-4 col-xs-12 label-default text-center">
+            <small>Available Cashback</small><br/>
+            <strong>{{ wallet_balance_available|f_rupiahs:"no"|default:"-"|safe  }}</strong>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 col-xs-12">
+            {% include "object/payment_status/include/account_payment_details.html" %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- end of row -->
+
+    <!-- form start -->
+    <div class="row">
+      <hr>
+      <div class="col-md-6 col-xs-12 block_form" style="height:300px;">
+        <form class="form-horizontal" id="status_form" role="form" method="POST">
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+          {% endfor %}
+
+          {% if form.errors %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-xs-12 m-t-30" id="id_form_selection">
+                {% checkusergroup in ['collection_agent_2','collection_agent_3','collection_agent_4','collection_agent_5'] %}
+                    <button class="btn disabled btn-inactive btn-block text-uppercase waves-light" type="button">
+                        <i class="fa fa-pencil fa-fw"></i> Ubah Status
+                    </button>
+                {% else %}
+                    <button id="id_btn_ubah_status" class="btn btn-info btn-block text-uppercase waves-effect waves-light" type="button">
+                        <i class="fa fa-pencil fa-fw"></i> Ubah Status
+                    </button>
+                {% endcheckusergroup %}
+
+              <button id="id_btn_simpan_note" class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="button">
+                <i class="fa fa-sticky-note fa-fw"></i> Tambah Note
+              </button>
+
+              {%if button_lock >= 1 %}
+                  <button id="id_btn_unlock_app" class="btn btn-success btn-block text-uppercase waves-effect waves-light" type="button">
+                    <i class="fa fa-unlock fa-fw"></i> Unlock Payment
+                  </button>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 col-xs-12" id="id_form_selection">
+                <div class="row collapse" id="id_form_ubah_status" aria-expanded="false" style="height: 0px;">
+                  {% if message_out_ubah_status %}
+                      <div class="alert alert-warning" id="id_error_div_2">
+                          <code>{{ message_out_ubah_status|escape }}</code><br/>
+                      </div>
+                  {% endif %}
+
+                  <div class="row">
+                      <div class="col-md-2 col-xs-12 m-t-10">
+                        <small>From: </small> <code>{{ status_current.status_code|default:"-"|safe }}</code>
+                      </div>
+                      <div class="col-md-1 col-xs-4 m-t-10">
+                        <small>To: </small>
+                      </div>
+                      <div class="col-md-8 col-xs-8{% if form.status_to.errors %} has-error {% endif %}">
+                          {{ form.status_to }}
+                      </div>
+                  </div>
+
+                  <div class="row m-t-10">
+                    <div class="col-md-6 col-sm-12 form-group {% if form.reason.errors %} has-error {% endif %} m-r-10">
+                      {{ form.reason }}
+                    </div>
+                    <div class="col-md-6 col-sm-6 form-group {% if form.notes.errors %} has-error {% endif %}">
+                      {{ form.notes }}
+                    </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                        <button id="id_batal_ubah_status" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button">Batal</button>
+                      </div>
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                          <button class="btn btn-default btn-block text-uppercase waves-effect waves-light" disabled="true" type="submit" name="ubah_status" id="submit_status">Simpan</button>
+                      </div>
+                  </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row collapse" id="id_form_simpan_note" aria-expanded="false" style="height: 0px;">
+                  {% if message_out_simpan_note %}
+                      <div class="alert alert-warning" id="id_error_div_2">
+                          <code>{{ message_out_simpan_note|escape }}</code><br/>
+                      </div>
+                  {% endif %}
+                  <div class="row m-t-10">
+                    <div class="col-md-12 col-sm-12 form-group {% if form.notes_only.errors %} has-error {% endif %} m-r-10">
+                      {{ form.notes_only }}
+                    </div>
+                  </div>
+                  <!-- end row -->
+
+                  <div class="row">
+                    <div class="col-md-12 col-sm-12 form-group m-r-10">
+                      <select class="form-control" name="simpan_note_to">
+                        <option value="payment" selected="selected">Note Account Payment</option>
+                        <option value="application">Note Application</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row m-t-10">
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                        <button id="id_batal_simpan_note" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button">Batal</button>
+                      </div>
+                      <div class="form-group col-md-6 col-sm-4 col-xs-6">
+                        <button id="id-submit-simpan-note" class="form-control btn btn-default btn-block text-uppercase waves-effect waves-light" name="simpan_note" type="submit" disabled="true">Simpan Note</button>
+                      </div>
+                  </div>
+
+                </div>
+            </div>
+            <!-- end col-md-12 -->
+          </div>
+          <!-- end row -->
+      </div>
+
+      </form>
+
+      <div class="col-md-6 col-xs-12">
+        <!-- <div id="slim_history_note"> -->
+         {% with payment_obj as object %}
+             {% include "object/payment_status/include/account_payment_history.html" %}
+         {% endwith %}
+      </div>
+
+<div class="row m-t-10 m-b-10">
+</div>
+
+<!-- #############################Send Email Modal Form#########################-->
+<div id="responsive-modal-email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Send custom Email</h4> </div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_send_email_account_payment.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light"
+                        onclick="sendAccountPaymentEmail({{ payment_obj.id }});">
+                    Kirim
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #############################Send Sms Modal Form#########################-->
+<div id="responsive-modal-sms" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Send custom SMS</h4> </div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_send_sms_account_payment.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light"
+                        onclick="sendAccountPaymentSms({{ payment_obj.id }});">
+                    Kirim
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--########################### modal payment event ###############################################-->
+<div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Account Transaction</h4> </div>
+            <div class="modal-body">
+              <div class="row" id="LayoutPaymentEventForms">
+                <div class="col-md-12 col-sm-12 form_event-group">
+                    <label class="col-md-12 col-sm-12"> Pilih Form: </label>
+                    <div class="col-md-12 col-sm-12">
+                      <select class="form-control" id="PaymentEventForms" onchange="ChooseFormPaymentEvent()">
+                        <option value="" selected="selected">-- Pilih --</option>
+                        {% for dropdown in payment_event_detail.dropdown_event %}
+                          <option value="{{dropdown.value}}">{{dropdown.desc}}</option>
+                        {% endfor %}
+                      </select>
+                      <span class="help-block">
+                        <small>Pilih Form Payment Event ...</small>
+                      </span>
+                    </div>
+                </div>
+              </div>
+              <div id="FormEventTypePayment">
+                {% with object=payment_obj payment_method=payment_methods max_cashback_earned=max_cashback_earned %}
+                  {% include "object/payment_status/include/form_account_trx_type_payment.html" %}
+                {% endwith %}
+              </div>
+              <div id="FormEventTypeLateFee">
+                {% with payment_obj as object %}
+                  {% include "object/payment_status/include/form_event_type_late_fee.html" %}
+                {% endwith %}
+              </div>
+              <div id="FormEventTypeCustomerWallet">
+                {% with payment_obj as object %}
+                  {% include "object/payment_status/include/form_event_type_customer_wallet.html" %}
+                {% endwith %}
+              </div>
+              <div id="FormEventTypeWaiveLateFee">
+                {% with payment_obj as object %}
+                  {% include "object/payment_status/include/form_event_type_waive_late_fee.html" %}
+                {% endwith %}
+              </div>
+              <div id="FormEventTypeWaiveInterest">
+                {% with payment_obj as object %}
+                  {% include "object/payment_status/include/form_event_type_waive_interest.html" %}
+                {% endwith %}
+              </div>
+              <div id="FormEventTypeWaivePrincipal">
+                {% with payment_obj as object %}
+                  {% include "object/payment_status/include/form_event_type_waive_principal.html" %}
+                {% endwith %}
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="back_payment_event" onclick="BackFormPaymentEvent();">Kembali</button>
+                <button type="button" class="btn btn-default waves-effect" id="close_payment_event" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" id="save_payment_event" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing" onclick="ActionAddPaymentEvent({{payment_obj.id}});">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--########################### modal change due date #############################################-->
+<div id="responsive-modal-change-due-date" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Change Due Date</h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_change_due_date.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_use_change_due_date" class="btn btn-danger waves-effect waves-light" onclick="changeDueDateConfirm();">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--########################### modal confirm change due date #################################-->
+<div id="responsive-modal-confirm-duedate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Konfirmasi Perubahan Jatuh Tempo </h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_change_due_date_confirm.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_confirm_change_due_date" class="btn btn-danger waves-effect waves-light" onclick="ChangeDueDateAction();">Setuju</button>
+            </div>
+        </div>
+    </div>
+</div>
+{%if first_installment_btn_active %}
+<!-- /.modal modal-first-settlement-->
+<div id="modal-first-settlement" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header  label-warning">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h4 class="modal-title">Ubah Cycle Day and Installment Amount</h4> </div>
+          <div class="modal-body">
+            {% with loan_obj as object %}
+              {% include "object/account_payment_status/include/form_change_installment.html" %}
+            {% endwith %}
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default waves-effect" id="reset" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-danger waves-effect waves-light" id="ubah_first_installment" name="ubah_first_installment" onclick="saveChangeInstallment()" >Proses</button>
+          </div>
+      </div>
+  </div>
+</div>
+{%endif%}
+<!--########################### modal cashback cash ###############################################-->
+<div id="responsive-modal-cashback-cash" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Cashback Event</h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_cashback_event.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" id="btn_use_cash_back"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing" onclick="UseCashBack();">Use Cashback</button>
+              </div>
+        </div>
+    </div>
+</div>
+<div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-success">
+                <h4 class="modal-title">Add Account Transaction Sukses</h4> </div>
+            <div class="modal-body">
+              Data Account Transaction Sukses Tersimpan
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="close_payment_event_success" data-dismiss="modal" onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--########################### Modal Loan Account Detail #############################################-->
+<div id="modal-loan-account-detail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div style="width: 90%; max-width: 800px; margin: auto; transform: translateY(75%);" class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Unpaid Loan Account Detail</h4>
+            </div>
+            <div class="modal-body" id="unpaid_loan_account_details_list_section">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--############################# Modal Success Send SMS ##########################################-->
+<!-- Modal Success SMs -->
+<div id="responsive-modal-success-sms" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Pesan telah berhasil dikirim dan tersimpan di sms history
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- sms failed modal febby -->
+<div id="responsive-modal-failed-sms" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Pesan gagal dikirim silahakan coba lagi
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--############################# Modal Success Send Email ######################################-->
+<!-- Modal Success Email -->
+<div id="responsive-modal-success-email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Email telah berhasil dikirim dan tersimpan di email history
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Failed Email -->
+<div id="responsive-modal-failed-email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Email gagal dikirim silahakan coba lagi
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal DOKU -->
+<div id="modalDoku" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title">DOKU</h4> </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6 col-sm-12 form_event-group">
+                    <div class="col-md-12 col-sm-12">
+                      <div class="m-t-10">
+                        <label> <b>Name</b> : <span>{{ application.fullname|default:"-"|safe  }}</span></label>
+                      </div>
+                      <div class="m-t-10">
+                        <label> <b>DOKU ID</b> : <span id="id_account_id"></span></label>
+                      </div>
+                      <div class="m-t-10">
+                        <label> DOKU Balance : </label>
+                        <div>
+                          <div class="input-group m-t-10">
+                              <span class="input-group-addon">Rp.</span>
+                              <input id="id_doku_balance" maxlength="15" class="form-control" disabled="disabled" type="text" >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <hr class="col-xs-12">
+                <div class="col-md-6 col-sm-12 form_event-group">
+                  <div class="col-md-12 col-sm-12">
+                    <label class="col-md-12 col-sm-12"> Due Amount : </label>
+                    <div class="input-group">
+                      <span class="input-group-addon">Rp.</span>
+                      <input id="id_due_amount" maxlength="15" class="form-control" disabled="disabled" type="text">
+                    </div>
+                    <br>
+                    <label class="col-md-12 col-sm-12"> Payment Amount : </label>
+                    <div class="input-group">
+                        <span class="input-group-addon">Rp.</span>
+                        <input class="form-control mask" id="id_partial_payment_doku" maxlength="15" class="form-control" disabled="disabled" type="text">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" id="id_auto_debet" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing" onclick="actionAutoDebet();">Auto Debet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal for generic-->
+ <div id="modal-success-default" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title" id="modal_default_title">Title</h4> </div>
+            <div class="modal-body" id="modal_default_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="responsive-modal-unlock-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-danger">
+                <h4 class="modal-title">Unlock Payment</h4> </div>
+            <div class="modal-body">
+              Payment {{ payment_obj.id|safe }} akan di unlock, apakah anda yakin?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-success waves-effect" data-dismiss="modal" id="id_unlock_payment">Ya, Unlock Payment</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="responsive-modal-reverse-event" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-danger">
+                <h4 class="modal-title">Reverse Event</h4> </div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_reversal_account_payment_event.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button id="btn_reverse_event" type="button" class="btn btn-success waves-effect" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing" onclick="ActionReverseAccountTransactionEvent(true,'','','','','','','')">Reverse</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="responsive-modal-whatsapp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-success">
+                <h4 class="modal-title">Send Whatsapp</h4></div>
+            <div class="modal-body">
+              <div class="row">
+                  {% for phone in list_whatsapp_phone %}
+                    <div class="col-md-12 col-sm-12 form_event-group">
+                      <div class="col-md-12 col-sm-12">
+                        <button id='btn_wa_{{phone.id}}' type="button" class="btn-whatsapp btn btn-default m-b-10" onclick="ActionWaChoice('{{phone.id}}','{{phone.contact_source}}');">
+                          <i id='icon_wa_{{phone.id}}' class="icon-whatsapp fa fa-square fa-2x"></i>
+                        </button>
+                        <button class="btn btn-success m-b-10 m-l-15" onclick="ActionWaChat('{{phone.phone_number}}');">
+                           {{phone.contact_source}}
+                        </button>
+                      </div>
+                    </div>
+                  {% endfor %}
+                  <div class="col-md-12 col-sm-12 form_event-group">
+                    <div class="col-md-12 col-sm-12">
+                      <button id='btn_wa_none' type="button" class="btn-whatsapp btn btn-default m-b-10" onclick="ActionWaChoice('none','Not Available');">
+                        <i id='icon_wa_none' class="icon-whatsapp fa fa-square fa-2x"></i>
+                      </button>
+                      <button class="btn btn-warning m-b-10 m-l-15" disabled>
+                         WA Not Available
+                      </button>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <input id="result_wa" type="text" hidden>
+                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                <button id="btn_save_wa" type="button" class="btn btn-success" onclick="ActionWaSave()" style="display: none;">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL SET CALLED + NOTES -->
+<div id="responsive-modal-set-called"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Note Set Called</h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_set_payment_called.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button"
+                        id="btn_save_set_called"
+                        class="btn btn-danger waves-effect waves-light"
+                        onclick="set_called_onclick()">Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------ Modal PTP Update --------------------------------------------->
+<!-- /.modal PTP event-->
+<div id="responsive-modal-ptp-date"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Update PTP Date</h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/loan_status/include/form_update_ptp_date.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_use_uptdate_ptp_date"
+                        class="btn btn-danger waves-effect waves-light"
+                        data-toggle="modal"
+                        onclick="updatePTPDateConfirm()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal Confirm PTP event-->
+<div id="responsive-modal-confirm-ptpdate"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Konfirmasi Update PTP Date </h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/loan_status/include/form_update_ptp_date_confirm.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_confirm_update_ptp_date" class="btn btn-danger waves-effect waves-light" onclick="updatePTPDateAction();">Setuju</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <div id="responsive-modal-whatsapp-no-contact" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title">5 days in a row not answered - Easy Whatsapp</h4></div>
+            <div class="modal-body">
+              <div class="row">
+
+                    <div class="col-md-12 col-sm-12 form_event-group">
+                      <div class="col-md-12 col-sm-12">
+                          <label class="col-md-12 col-sm-12"> Mobile Phone: </label>
+                             <select class="form-control"
+                          id="wa_no_contact_mobile_select"
+                          name="wa_no_contact_mobile_phone_select"
+                          placeholder=""
+                          required="true"
+                          style="width:329px;">
+                              {% for wa_mobile in wa_contact_mobile_list %}
+                                <option value="{{ wa_mobile.phone_number}}">
+                                  {{ wa_mobile.contact_source }} - {{ wa_mobile.phone_number }}
+                                </option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+
+
+              </div>
+            </div>
+            <div class="modal-footer">
+                <input id="result_wa" type="text" hidden>
+                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                <button id="btn_no-contact_wa" type="button" class="btn btn-success" onclick="ActionWaChatNoContact()" >Whatsapp</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="responsive-modal-whatsapp-broken-ptp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title">Broken ptp+1- Easy Whatsapp</h4></div>
+            <div class="modal-body">
+              <div class="row">
+
+                    <div class="col-md-12 col-sm-12 form_event-group">
+                      <div class="col-md-12 col-sm-12">
+                          <label class="col-md-12 col-sm-12"> Mobile Phone: </label>
+                             <select class="form-control"
+                          id="wa_contact_mobile_select"
+                          name="wa_contact_mobile_phone_select"
+                          placeholder=""
+                          required="true"
+                          style="width:329px;">
+                              {% for wa_mobile in wa_contact_mobile_list %}
+                                <option value="{{ wa_mobile.phone_number}}">
+                                  {{ wa_mobile.contact_source }} - {{ wa_mobile.phone_number }}
+                                </option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+
+
+              </div>
+            </div>
+            <div class="modal-footer">
+                <input id="result_wa" type="text" hidden>
+                <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Batal</button>
+                <button id="btn_proken_ptp_wa" type="button" class="btn btn-success" onclick="ActionWaChatBrokenPtp()" >Whatsapp</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="responsive-modal-multiple-factors" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title">Multiple Factors</h4></div>
+            <div class="modal-body">
+              <div class="row">
+
+                    <div class="col-md-12 col-sm-12 form_event-group">
+                      <div class="col-md-12 col-sm-12 " onclick="ProcessFormMultiplFfactorEasyWatsapp('is_5_days_unreachable')">
+                            <i class="fa fa-exclamation-triangle"></i> 5 days in a row not answered
+                              <button type="button" class="btn btn btn-success btn-rounded m-l-10"><i class="fa fa-whatsapp"></i></button>
+
+                      </div>
+                        <div class="col-md-12 col-sm-12" onclick="ProcessFormMultiplFfactorEasyWatsapp('is_broken_ptp_plus_1')">
+                            <i class="fa fa-exclamation-triangle"></i> Broken ptp+1
+                              <button type="button" class="btn btn btn-success btn-rounded m-l-10"><i class="fa fa-whatsapp"></i></button>
+
+                      </div>
+                    </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------------------ END Modal PTP Update --------------------------------------------->
+{% endblock %}
+
+
+{% block button_part %}
+{% endblock %}
+
+{% block script_bottom_inside %}
+  // skiptrace
+  new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#skip_trace_history',
+    data() {
+      return {
+        page: 1,
+        loading: true,
+        histories: [],
+        isLastPage: false,
+      }
+    },
+    methods: {
+      async fetchSkiptraceHistory() {
+        const resp = await axios({
+          method: 'get',
+          url: `{% url 'account_payment_status:ajax_get_skiptrace_history' application_id %}?index=${this.page}`,
+          xstfCookieName: 'csrftoken',
+          xsrfHeaderName: 'X-CSRFToken',
+          headers: {
+            'X-CSRFToken': 'csrftoken',
+          },
+        });
+
+        this.page += 1;
+        this.histories = resp.data.data;
+        this.isLastPage = resp.data.data.length === 0 ? true : false;
+        this.loading = false;
+      },
+      async fetchNextSkiptraceHistory() {
+        if(this.loading || this.isLastPage) return;
+
+        this.loading = true;
+
+        const resp = await axios({
+          method: 'get',
+          url: `{% url 'account_payment_status:ajax_get_skiptrace_history' application_id %}?index=${this.page}`,
+          xstfCookieName: 'csrftoken',
+          xsrfHeaderName: 'X-CSRFToken',
+          headers: {
+            'X-CSRFToken': 'csrftoken',
+          },
+        });
+
+        console.log(`page ${this.page}`);
+
+        this.page += 1;
+        const newData = resp.data.data
+        if(newData.length === 0) {
+          this.isLastPage = true;
+        } else {
+          this.histories = [...this.histories, ...resp.data.data];
+          this.isLastPage = false;
+        }
+        this.loading = false;
+
+        console.log(`histories with length ${this.histories.length}`);
+      },
+    },
+    mounted() {
+      this.fetchSkiptraceHistory();
+
+      const container = document.querySelector("#slim_history_note");
+      const tab = container.querySelector(".customtab");
+
+      container.addEventListener('scroll', () => {
+        const foundSkiptraceTabAsActive = tab.querySelector('.active.tab a[href="#skip_trace_history"]')
+        const { scrollTop, scrollHeight, clientHeight } = container;
+         if(!this.isLastPage && foundSkiptraceTabAsActive && (scrollTop + clientHeight + tab.clientHeight >= scrollHeight / 2)) {
+          this.fetchNextSkiptraceHistory()
+        }
+      })
+
+    }
+  });
+  // status history
+  new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#app_status_history',
+    data() {
+      return {
+        page: 1,
+        loading: true,
+        statusHistories: [],
+        isLastPage: false,
+      }
+    },
+    methods: {
+      async fetchStatusHistory() {
+        const resp = await axios({
+          method: 'get',
+          url: `{% url 'account_payment_status:ajax_get_status_history' payment_id %}?index=${this.page}`,
+          xstfCookieName: 'csrftoken',
+          xsrfHeaderName: 'X-CSRFToken',
+          headers: {
+            'X-CSRFToken': 'csrftoken',
+          },
+        });
+
+        this.page += 1;
+        if(resp.data.result == 'success') {
+            this.statusHistories = resp.data.data;
+            this.isLastPage = resp.data.data.length === 0 ? true : false;
+        }
+        this.loading = false;
+      },
+      async fetchNextStatusHistory() {
+        if(this.loading || this.isLastPage) return;
+
+        this.loading = true;
+
+        const resp = await axios({
+          method: 'get',
+          url: `{% url 'account_payment_status:ajax_get_status_history' payment_id %}?index=${this.page}`,
+          xstfCookieName: 'csrftoken',
+          xsrfHeaderName: 'X-CSRFToken',
+          headers: {
+            'X-CSRFToken': 'csrftoken',
+          },
+        });
+
+        console.log(`page ${this.page}`);
+
+        this.page += 1;
+         if(resp.data.result == 'success') {
+            const newData = resp.data.data
+            if(newData.length === 0) {
+              this.isLastPage = true;
+            } else {
+              this.statusHistories = [...this.statusHistories, ...resp.data.data];
+              this.isLastPage = false;
+            }
+        }
+        this.loading = false;
+
+        console.log(`statusHistories with length ${this.statusHistories.length}`);
+      },
+
+    },
+    mounted() {
+      this.fetchStatusHistory();
+
+      const container = document.querySelector("#slim_history_note");
+      const tab = container.querySelector(".customtab");
+
+      container.addEventListener('scroll', () => {
+        const foundStatusTabAsActive = tab.querySelector('.active.tab a[href="#app_status_history"]')
+        const { scrollTop, scrollHeight, clientHeight } = container;
+        if(!this.isLastPage && foundStatusTabAsActive && (scrollTop + clientHeight + tab.clientHeight >= scrollHeight / 2)) {
+          this.fetchNextStatusHistory();
+        }
+      })
+
+    }
+  });
+
+
+  // email sms history
+  new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#email_sms_history',
+    data() {
+      return {
+        page: 1,
+        loading: true,
+        emailSmsHistories: [],
+        isLastPage: false,
+      }
+    },
+    methods: {
+      async fetchEmailSmsHistory() {
+        const resp = await axios({
+          method: 'get',
+          url: `{% url 'account_payment_status:ajax_get_email_sms_history' payment_id %}?index=${this.page}`,
+          xstfCookieName: 'csrftoken',
+          xsrfHeaderName: 'X-CSRFToken',
+          headers: {
+            'X-CSRFToken': 'csrftoken',
+          },
+        });
+
+        this.page += 1;
+        this.emailSmsHistories = resp.data.data;
+        this.isLastPage = resp.data.data.length === 0 ? true : false;
+        this.loading = false;
+      },
+      async fetchNextEmailSmsHistory() {
+        if(this.loading || this.isLastPage) return;
+
+        this.loading = true;
+
+        const resp = await axios({
+          method: 'get',
+          url: `{% url 'account_payment_status:ajax_get_email_sms_history' payment_id %}?index=${this.page}`,
+          xstfCookieName: 'csrftoken',
+          xsrfHeaderName: 'X-CSRFToken',
+          headers: {
+            'X-CSRFToken': 'csrftoken',
+          },
+        });
+
+        console.log(`page ${this.page}`);
+
+        this.page += 1;
+        const newData = resp.data.data
+        if(newData.length === 0) {
+          this.isLastPage = true;
+        } else {
+          this.emailSmsHistories = [...this.emailSmsHistories, ...resp.data.data];
+          this.isLastPage = false;
+        }
+        this.loading = false;
+
+        console.log(`emailSmsHistories with length ${this.emailSmsHistories.length}`);
+      },
+      computeEmailId(index) {
+        return "email_content_" + (index + 1);
+      },
+      computeContentId(index) {
+        return index + 1;
+      },
+      handleEmailPreview(e) {
+        const content_id = e.currentTarget.getAttribute('content-id');
+        const email_content = $('#email_content_'+content_id).val();
+        $('#preview_div').html(email_content);
+        $('#content-preview').modal('show');
+      },
+
+    },
+    async mounted() {
+      await this.fetchEmailSmsHistory();
+
+      const container = document.querySelector("#slim_history_note");
+      const tab = container.querySelector(".customtab");
+
+      container.addEventListener('scroll', () => {
+        const foundEmailTabAsActive = tab.querySelector('.active.tab a[href="#email_sms_history"]')
+        const { scrollTop, scrollHeight, clientHeight } = container;
+        if(!this.isLastPage && foundEmailTabAsActive && (scrollTop + clientHeight + tab.clientHeight >= scrollHeight / 2)) {
+          this.fetchNextEmailSmsHistory();
+        }
+      })
+
+    }
+  });
+
+    new Vue({
+      delimiters: ['[[', ']]'],
+      el: '#call_summary_div',
+      data() {
+        return {
+          lastId: null,
+          call_loading: true,
+          callSummary: [],
+          isCallLastPage: false,
+          expandedRows: [],
+          showAllDetails: false,
+          sortOrder: 'desc',
+          call_summary_len_counter: 0,
+          total_call_summary_data: 0
+        }
+      },
+      methods: {
+        async fetchCallSummary() {
+          this.callSummary = []; // Clear existing data
+          this.lastId = null; // Reset lastId for new fetch
+          this.isCallLastPage = false; // Reset pagination flag
+          this.call_loading = true;
+          const resp = await axios({
+            method: 'get',
+            url: `{% url 'account_payment_status:ajax_get_mjolnir_call_summary' application_id %}?last_skiptrace_history_id=${this.lastId}&sortOrder=${this.sortOrder}`,
+            xstfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFToken',
+            headers: {
+              'X-CSRFToken': 'csrftoken',
+            },
+          });
+
+          this.lastId = resp.data.data.last_id;
+            if (Array.isArray(resp.data.data.call_summary_data)) {
+                call_summary_data = resp.data.data.call_summary_data
+                if (this.lastId && call_summary_data.length> 0) {
+                    this.call_summary_len_counter  = 0
+                    for (var i=0; i < call_summary_data.length; i++) {
+                        call_summary_len = Object.keys(call_summary_data[i].call_summary).length
+                        if (call_summary_len == 0) {
+                            this.call_summary_len_counter = this.call_summary_len_counter + 1
+                        } else {
+                            this.callSummary.push(call_summary_data[i]);
+                            this.total_call_summary_data = this.total_call_summary_data + 1
+                        }
+                    }
+
+                    if (this.call_summary_len_counter > 0) {
+                        this.call_loading = false;
+                        this.fetchNextCallSummary();
+                    }
+                }
+           }
+
+          this.call_loading = false;
+        },
+        async fetchNextCallSummary() {
+          if (this.call_loading || this.isCallLastPage) return;
+          this.call_loading = true;
+          const resp = await axios({
+            method: 'get',
+            url: `{% url 'account_payment_status:ajax_get_mjolnir_call_summary' application_id %}?last_skiptrace_history_id=${this.lastId}&sortOrder=${this.sortOrder}`,
+            xstfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFToken',
+            headers: {
+              'X-CSRFToken': 'csrftoken',
+            },
+          });
+
+          this.lastId = resp.data.data.last_id;
+          const newData = resp.data.data.call_summary_data;
+          if (this.lastId && newData.length> 0) {
+                for (var i=0; i < newData.length; i++) {
+                    call_summary_len = Object.keys(newData[i].call_summary).length
+                    if (call_summary_len == 0) {
+                        this.call_loading = false;
+                    } else {
+                        this.callSummary.push(newData[i]);
+                        this.isCallLastPage = false;
+                        this.total_call_summary_data = this.total_call_summary_data + 1
+                    }
+                }
+                if (this.total_call_summary_data < 10) {
+                    this.call_loading = false;
+                    this.fetchNextCallSummary()
+                }
+          } else {
+                this.isCallLastPage = true;
+          }
+          this.call_loading = false;
+        },
+        toggleDetails(id) {
+          const pos = this.expandedRows.indexOf(id);
+          if (pos === -1) {
+            this.expandedRows.push(id); // Expand row if not already expanded
+          } else {
+            this.expandedRows.splice(pos, 1); // Collapse row if already expanded
+          }
+        },
+        isDetailsVisible(id) {
+          // Check if expandedRows includes the index
+          return Array.isArray(this.expandedRows) && this.expandedRows.includes(id);
+        },
+        formatKey(key) {
+          // Convert key to a more readable format (optional)
+          return key.replace(/_/g, ' ').replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+        },
+        toggleShowAllDetails() {
+          this.showAllDetails = !this.showAllDetails;
+          // Optionally expand or collapse all rows based on showAllDetails
+          this.callSummary.forEach(item => {
+            const pos = this.expandedRows.indexOf(item.skiptrace_history_id);
+            if (this.showAllDetails && pos === -1) {
+              this.expandedRows.push(item.skiptrace_history_id);
+            } else if (!this.showAllDetails && pos !== -1) {
+              this.expandedRows.splice(pos, 1);
+            }
+          });
+        },
+        toggleSortOrder() {
+          this.sortOrder = this.sortOrder === 'desc' ? 'asc' : 'desc';
+          this.lastId = null
+          this.total_call_summary_data = 0
+          this.call_summary_len_counter = 0
+          this.call_loading = false;
+          this.callSummary = []
+          this.isCallLastPage = false;
+          this.fetchCallSummary(); // Re-fetch data with the new sort order
+        },
+        shouldShowDetails(id) {
+          return this.showAllDetails || this.isDetailsVisible(id);
+        },
+      },
+      mounted() {
+        this.fetchCallSummary();
+         // Ensure you correctly select the container that has the scrollable content
+          const container = document.querySelector("#slim_history_note");
+          const tab = container.querySelector(".customtab");
+          if (container) {
+            container.addEventListener('scroll', () => {
+              const foundStatusTabAsActive = tab.querySelector('.active.tab a[href="#app_status_history"]')
+              const { scrollTop, scrollHeight, clientHeight } = container;
+              if (!this.isCallLastPage && foundStatusTabAsActive && (scrollTop + clientHeight + tab.clientHeight >= scrollHeight / 2)) {
+                this.fetchNextCallSummary();
+              }
+            });
+          }
+      }
+});
+
+   $('.previewshow').click(function (e) {
+                var content_id = $(this).attr('content-id');
+                var email_content = $('#email_content_'+content_id).val()
+                $('#preview_div').html(email_content)
+                $('#content-preview').modal('show');
+   });
+
+  $('#slim_images').slimScroll({
+      // position: 'left',
+      height: '42vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  $('#slim_apps').slimScroll({
+      // position: 'left',
+      height: '42vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+
+  $('#slim_pmts').slimScroll({
+      // position: 'left',
+      height: '38vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  $('#slim_history_note').slimScroll({
+      // position: 'left',
+      height: '450px',
+      railVisible: true,
+      alwaysVisible: true
+  });
+  //febby
+  $("#phone_selects").change(function(){
+    value = $("#phone_selects").val();
+    $("#number").val(value);
+    if (value == 0){
+      $('#number').val('');
+      $("#number").removeAttr('disabled');
+    }
+  });
+
+
+  $("#id_btn_ubah_status").button().click(function(){
+    $("#id_form_selection").hide();
+    $("#id_form_ubah_status").show();
+    localStorage.app_status_btn_selected = 'ubah_status';
+  });
+
+
+  $("#id_batal_ubah_status").button().click(function(){
+      $("#id_form_selection").show();
+      $("#id_form_ubah_status").hide();
+
+      localStorage.app_status_btn_selected = 'ubah_status_batal';
+  });
+
+  $("#id_btn_simpan_note").button().click(function(){
+      $("#id_form_selection").hide();
+      $("#id_form_simpan_note").show();
+
+      localStorage.app_status_btn_selected = 'simpan_note';
+  });
+
+  $("#id_batal_simpan_note").button().click(function(){
+      $("#id_form_selection").show();
+      $("#id_form_simpan_note").hide();
+      localStorage.app_status_btn_selected = 'simpan_note_batal';
+  });
+
+  $("input[name$='validity_period_type']").change(function(){
+    input_parent = $(this).parents('.input-group.input-group-sm');
+    input_date = input_parent.find("input[name$='validity_period_date']");
+    input_date.val('');
+    if ( $(this).val() == "specify_date" ) {
+      input_date.prop('disabled', false);
+    } else {
+      input_date.prop('disabled', true);
+    }
+  });
+
+  $('#principal_validity_period_date, #interest_validity_period_date, #late_fee_validity_period_date').parent('.input-group').datepicker({
+    format: 'dd-mm-yyyy',
+    startDate: new Date(),
+    endDate: '+39d',
+  }).on('keypress paste', function (e) {
+    e.preventDefault();
+    return false;
+  });
+
+  function btn_selection_show(){
+      $("#id_form_selection").show();
+      $("#id_form_simpan_note").hide();
+      $("#id_form_ubah_status").hide();
+  }
+
+  function check_active_form(){
+    var active_form = localStorage.app_status_btn_selected;
+    if(active_form=='ubah_status'){
+      if({{ubah_status_active}}){
+        $("#id_form_selection").hide();
+        $("#id_form_ubah_status").show();
+      } else {
+        btn_selection_show()
+      }
+
+    }
+    else if(active_form=='simpan_note'){
+      if({{simpan_note_active}}){
+        $("#id_form_selection").hide();
+        $("#id_form_simpan_note").show();
+      }else{
+        btn_selection_show();
+      }
+    }
+    else {
+      btn_selection_show();
+    }
+  }
+
+  //febby
+  $('#sms_message').keyup(function(){
+      total_length = this.value.length
+      if (total_length > 320){
+        this.value = this.value.substr(0, len);
+      }
+
+      remain_char = 160 - total_length
+      if (total_length > 160){
+        remain_char = 320 - total_length
+      }
+      count = (total_length/160)
+      $('#divcharlength').text( 'remaining ' + remain_char + '/'+ Math.ceil(160) +' karakter');
+  });
+
+  jQuery.fn.delay = function(time,func){
+      this.each(function(){
+          setTimeout(func,time);
+      });
+
+      return this;
+  };
+
+  /*
+  function initMap() {
+    // Create a map object and specify the DOM element for display.
+    var map = new google.maps.Map(document.getElementById('overlayermap'), {
+      center: {lat: -34.397, lng: 150.644},
+      scrollwheel: false,
+      zoom: 8
+    });
+  }
+  */
+
+  // triggered after each item is loaded
+  function onProgress( imgLoad, image ) {
+    // change class if the image is loaded or broken
+    var $item = $( image.img ).parent();
+    $item.removeClass('is-loading');
+    if ( !image.isLoaded ) {
+      $item.addClass('is-broken');
+    }
+  }
+
+  // hide status when done
+  function onAlways() {
+    // unblock div area
+    $('div.block_image').unblock();
+  }
+
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      // console.log(cookieValue);
+      return cookieValue;
+  }
+  var is_ojk_audit_active = '{{ is_ojk_audit_active }}';
+  var is_show_document = false;
+  {% if julo_current_role|display_safe == 'Collection Supervisor' %}
+    var is_show_document = true;
+  {% endif %}
+
+  jQuery(document).ready(function() {
+    $("#id_btn_update_app").hide();
+    $("#id_form_selection").children().first().hide()
+    $(".waiver-unpaid-items").hide();
+    $(".waiver-paid-items").hide();
+    var is_iso_inactive = '{{ is_iso_inactive }}'
+    if (is_iso_inactive == 'False') {
+      sortCAby($("#casort_coll_id"),'coll');
+    }
+    //SkipTrace document ready for load table
+    $('#dvc').removeClass('active');
+    $('#st').addClass('active');
+    console.log(typeof '{{ is_iso_inactive }}')
+    GLOBAL_TABLE = $('#skiptraceTable').DataTable( {
+        "paging": false,
+        "searching": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "order": [[ 3, 'desc' ], [ 6, 'asc' ]],
+        "columnDefs": [
+          {
+            "targets"  : "no-sort",
+            "orderable": false,
+          },
+          {
+            "targets": [0,1,2,3,4,5,8,9,10, 11],
+            "orderSequence": ["desc"]
+          },
+          {
+            "targets": [6,7],
+            "visible": false
+          },
+          {"targets": [0], "data": "NAME"},
+          {"targets": [1], "data": "SOURCE"},
+          {"targets": [2], "data": "ACTION"},
+          {"targets": [3], "data": "EFF"},
+          {"targets": [4], "data": "REC"},
+          {"targets": [5], "data": "FREQ"},
+          {"targets": [6], "data": "ID"},
+          {"targets": [7], "data": "NUMBER_PHONE"},
+          {"targets": [8], "data": "OPERATOR"},
+          {"targets": [9], "data": "RPC_RATE"},
+          {"targets": [10], "data": "LAST_RPC"},
+          {"targets": [11], "data": "NUMBER_AGE"},
+        ]
+    } );
+
+    $('#skiptraceTable tbody').on('click', 'td #id_call_skip_trace', function () {
+        var tr = $(this).closest('tr');
+        var row = GLOBAL_TABLE.row( tr );
+        var row_data = GLOBAL_TABLE.row( tr ).data();
+        var is_iso_inactive = '{{ is_iso_inactive }}'
+        if ( row.child.isShown() ) {
+            //ActionCall(1,row_data.ID, '', '', '');
+            if(GLOBAL_HOLD_ACTION){
+              $(this).find('i').attr( 'class', 'fa fa-chevron-circle-down' );
+              $(this).attr( 'class', 'btn btn btn-success btn-rounded' );
+              row.child.hide();
+              tr.removeClass('shown');
+            }
+        }
+        else {
+            GLOBAL_OBJ_START_TS.id = row_data.ID;
+            GLOBAL_OBJ_START_TS.time = GetTime();
+            GLOBAL_ARR_START_TS.push(GLOBAL_OBJ_START_TS);
+            GLOBAL_OBJ_START_TS = {};
+            $(this).find('i').attr( 'class', 'fa fa-times' );
+            $(this).attr( 'class', 'btn btn btn-danger btn-rounded' );
+            row.child( format(row.data(), '', is_iso_inactive) ).show();
+            $( '.mydatepicker' ).datepicker({
+              format: 'dd-mm-yyyy'
+            });
+            $('.input-daterange-timepicker').datetimepicker({
+            });
+            $(".masknum").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+            tr.addClass('shown');
+        }
+      } );
+
+    $('#id_btn_add_skip_trace').on( 'click', function () {
+      SaveSkipTrace();
+    } );
+
+    $('#id_btn_update_skip_trace').on( 'click', function () {
+      UpdateSkipTrace();
+    } );
+
+    $.ajaxSetup({
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
+    $('#id_form2_reminder_call_date').datetimepicker({
+      format:'d-m-Y H:i'
+    });
+
+    //load_call_result example
+    $.ajax({
+          url :  "{% url 'payment_status:load_call_result' %}/", // the endpoint
+          type : "GET", // http method
+
+          // handle a successful response
+          success : function(json) {
+              GLOBAL_ARR_BTN_CALL = json.data;
+              GLOBAL_ARR_BTN_CALL.shift();
+          },
+
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+      });
+
+    //customer detail list
+    function load_crm_customer_detail_list(){
+       $.ajax({
+            url: "{% url 'account_payment:v2:ajax_crm_customer_detail_list' payment_obj.id %}", // the endpoint,
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function() {
+                $('#customer_detail_list_section').append('<h3 style="margin-left: 10px;">Loading</h3>');
+            },
+            success: function (jsonData) {
+                $('#customer_detail_list_section').html('');
+                // Handle the response data
+                $.each(jsonData.data, function(index, dataEntry) {
+                    var html = '<div class="col-md-6 col-xs-6" style="margin-right: 0px">';
+                    html += '<h3 style="color: #008ac0"><b>' + dataEntry.header_title + '</b></h3>';
+                    html += '<table class="table table-hover table-striped table-responsive" style="border-right: 2px #c2c2c2 solid;">';
+
+                    // Iterate over attributes of the current data entry
+                    $.each(dataEntry.attributes, function(i, attribute) {
+                      html += '<tr>';
+                      html += '<td style="width: 45%;">' + attribute.title + '</td>';
+                      html += '<td style="white-space: nowrap; overflow: hidden;text-overflow: ellipsis;width: 5%;"><i class="fa fa-arrow-circle-o-right fa-fw"></i></td>';
+                      result = attribute.result
+                      if (result != "") {
+                        substr = '#modal-loan-account-detail';
+                        if (result.indexOf(substr) !== -1) {
+                          result = result.replace("button", "button onClick='loadUnpaidLoanAccountDetails();'");
+                        }
+                      }
+                      html += '<td style="width: 50%;">' + result + '</td>';
+                      html += '</tr>';
+                    });
+
+                    html += '</table>';
+                    html += '</div>';
+
+                    // Append the generated HTML to the customer_detail_list_section
+                    $('#customer_detail_list_section').append(html);
+                  });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle errors
+                console.error('Error:', textStatus, errorThrown);
+            }
+        });
+    }
+    {% if new_j1_enhancement %}
+        load_crm_customer_detail_list()
+    {% endif %}
+    // alert("Document is ready");
+    $('#id_status_to').on('change', function() {
+      // alert( this.value );
+      if(this.value != ''){
+        set_reason_list(this.value);
+      }
+    });
+
+    window.scroll(0,80);
+
+    $(".mask").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    jQuery('.mydatepicker, #datepicker').datepicker({
+               format: 'dd-mm-yyyy',
+               buttonClasses: ['btn', 'btn-sm'],
+               applyClass: 'btn-danger',
+               cancelClass: 'btn-inverse',
+               dateLimit: {
+                   days: 6
+               },
+               autoclose: true,
+               todayHighlight: true,
+               todayBtn: "linked",
+           });
+     jQuery('.cashbackdatepicker').datepicker({
+                format: 'dd-mm-yyyy',
+                buttonClasses: ['btn', 'btn-sm'],
+                applyClass: 'btn-danger',
+                cancelClass: 'btn-inverse',
+                dateLimit: {
+                    days: 6
+                },
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+            });
+    $('#id_reason')
+        .empty()
+        .append('<option selected="selected" value>-- Pilih Alasan --</option>');
+
+    if($("#mymce").length > 0){
+      tinymce.init({
+        selector: "textarea#mymce",
+        theme: "modern",
+        height:250,
+        plugins: [
+        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking","save table contextmenu directionality emoticons template paste textcolor"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
+      });
+    }
+
+    function set_reason_list(status_to) {
+      var csrftoken = getCookie('csrftoken');
+      if(status_to==''){
+        // set empty reason list
+        $('#id_reason')
+            .empty()
+            .append('<option selected="selected" value>-- Pilih Alasan--</option>')
+        ;
+        return -1;
+      }
+
+      $.ajax({
+          url :  "{%url 'payment_status:populate_reason' %}/", // the endpoint
+          type : "GET", // http method
+          data : { status_code   : status_to,
+               csrfmiddlewaretoken: csrftoken,
+            }, // data sent with the get request
+
+          // handle a successful response
+          success : function(json) {
+              // console.log(json); // log the returned json to the console
+              // console.log(json.reason_list);
+              // console.log(json.result);
+
+              if (json.result == "successful!"){
+                // set empty reason list
+                $('#id_reason')
+                    .empty()
+                    .append('<option selected="selected" value>-- Pilih Alasan--</option>')
+                ;
+                $.each(json.reason_list, function(i, value) {
+                    $('#id_reason').append($('<option>').text(value[1]).attr('value', value[0]));
+                    <!-- console.log('hihihi: ', value); -->
+                });
+              }
+              // console.log("success"); // another sanity check
+          },
+
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+      });
+
+    } // end function set_reason_list
+
+    //check form active
+    check_active_form();
+
+    //check if status_id has value
+    $("#id_status_to :selected").map(function(i, el) {
+       if($(el).val()!=''){
+        set_reason_list($(el).val());
+       }
+    });
+       /**/
+
+     tinymce.init({
+       selector: "textarea#email_content",
+       theme: "modern",
+       height:250,
+       fontsize_formats: '12pt 14pt 18pt 24pt 36pt',
+       plugins: [
+       "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+       "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+       "save table contextmenu directionality emoticons template paste textcolor"
+       ],
+       toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | fontsizeselect",
+
+    });
+
+    var $container = $('#image_row');
+
+    $.each({{ json_image_list|safe }}, function(i, obj) {
+      //console.log(obj, i);
+      var href_id = $("#href_"+obj.pk);
+      var src_id = $("#img_"+obj.pk);
+      var but_href_id = $("#button_href_"+obj.pk)
+      $.each(obj, function(i, obj_item) {
+        // console.log(obj_item);
+
+        if(obj_item.image_ext == '.pdf'){
+          src_id.attr('src', '{% static 'images/collections/image-pdf.png' %}');
+          but_href_id.attr('href', obj_item.image_url)
+        }
+        else {
+          src_id.attr('src', obj_item.image_url);
+        }
+        href_id.attr('href', obj_item.image_url);
+      });
+
+    });
+
+     $.each({{ json_image_list_1|safe }}, function(i, obj) {
+      //console.log(obj, i);
+      var href_id = $("#href_"+obj.pk);
+      var src_id = $("#img_"+obj.pk);
+      var but_href_id = $("#button_href_"+obj.pk)
+      $.each(obj, function(i, obj_item) {
+        //console.log(obj_item);
+
+        if(obj_item.image_ext == '.pdf'){
+          src_id.attr('src', '{% static 'images/collections/image-pdf.png' %}');
+          but_href_id.attr('href', obj_item.image_url);
+        }
+        else {
+          src_id.attr('src', obj_item.image_url);
+        }
+        href_id.attr('href', obj_item.image_url);
+      });
+
+    });
+
+    //for voice image
+    $.each({{ json_voice_list|safe }}, function(i, obj) {
+      var img_voice_id = $('#img_voice_'+obj.pk);
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+    });
+    $.each({{ json_voice_list_1|safe }}, function(i, obj) {
+      var img_voice_id = $('#img_voice_'+obj.pk);
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+    });
+
+     $container.imagesLoaded()
+        .progress( onProgress )
+        .always( onAlways );
+      // reset progress counter
+      imageCount = $container.find('img').length;
+      //console.log(imageCount);
+
+      $("#id_btn_unlock_app").button().click(function(){
+        $('#responsive-modal-unlock-app').modal('show');
+      });
+
+    //button click
+    $("#id_unlock_payment").button().click(function(){
+        set_unlocked_payment("{{payment_obj.id}}");
+    });
+    //set blocked div
+    if({{lock_status}}){
+        $('div.block_form').block({
+            message: "You Are Not Allowed to Change Status, status has been locked by: {{lock_by|default:"-"|safe}}"
+            , overlayCSS: {
+                backgroundColor: '#000'
+            }
+            , css: {
+                border: '1px solid #fff'
+            }
+        });
+        //
+        $("#id_btn-ptp_date").addClass("disabled");
+        $("#id_btn-ptp_date").attr("disabled", true);
+
+        $("#send_email_button").addClass("disabled");
+        $("#send_email_button").attr("disabled", true);
+
+        $("#send_sms_button").addClass("disabled");
+        $("#send_sms_button").attr("disabled", true);
+
+        $("#id_btn_update_app").addClass("disabled");
+        $("#id_btn_update_app").attr("disabled", true);
+
+        $("#send_called_button").addClass("disabled");
+        $("#send_called_button").attr("disabled", true);
+
+        // hide upload document
+        $("#id_upload_doc").hide();
+
+        //block disbursement
+        $("#id_cek_saldo_doku").addClass("disabled");
+        $("#id_cek_saldo_doku").attr("disabled", true);
+    };
+
+    if({{is_payment_called}}){
+        $("#send_called_button").addClass("disabled");
+        $("#send_called_button").attr("disabled", true);
+    };
+
+    var bank_name_list = {{ bank_name_list|safe }};
+    $( "#id_cashback_bank_name" ).autocomplete({
+       source: bank_name_list
+    }).autocomplete("option", "appendTo", "#responsive-modal-cashback-cash");
+
+    $('.pymt-info').each(function() { // Notice the .each() loop, discussed below
+      $(this).qtip({
+        content: {
+          text:$(this).children('.pymt-body'),
+          button:'Close'
+        },
+        style: {
+          classes: 'qtip-light qtip-shadow'
+        },
+        position:{
+          my: 'bottom right',
+          at: 'top left'
+        },
+        show: 'click',
+        hide: 'click'
+      })
+    });
+    load_unavailable_due_dates();
+  }); //end document ready
+
+  function saveChangeInstallment(){
+    $('#ubah_first_installment').hide()
+    var new_due_date = $('#id_cycle_date_requested').val();
+    var payday = $('#id_payday_requested').val();
+    if (new_due_date == '' ) {
+      toast_danger('Alert!!','Isi New Payment Installment Date');
+    }else if (payday == '' ) {
+      toast_danger('Alert!!','Isi New PayDay');
+    }else{
+      $.ajax({
+          url :  "{% url 'account_payment_status:ajax_change_first_settlement' %}/",
+          type : "POST",
+          data : {
+                new_date : new_due_date,
+                payday : payday,
+                account_payment_id : {{payment_obj.id}}
+          },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                $('#modal-first-settlement').hide()
+                toast_success('Sukses!!',json.message);
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.message);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+              toast_danger('Failed Update',xhr.responseText);
+              $('#btn_confirm_change_due_date').hide()
+          }
+      });
+    }
+    $('#ubah_first_installment').show()
+  }
+
+  function update_due_datepicker(){
+    var payday = $('#id_payday_requested').val()
+    jQuery("#id_cycle_date_requested").datepicker("remove");
+    const is_number = /^\d+$/.test(payday)
+    if ( !is_number || parseInt(payday) > 31 || parseInt(payday) < 1){
+        toast_danger('Input payday harus angka dan tidak lebih dari 31');
+        return;
+    }
+    load_unavailable_due_dates(payday, false);
+  }
+
+  function load_unavailable_due_dates(payday=null, initial_data=true){
+    var disabledDates = [];
+    var due_date_init = $("#id_due_date_initial").html();
+    if (!initial_data){
+        due_date_init = ''
+    }
+    {% if loan_obj %}
+    $.ajax({
+      url :  "{%url 'loan_status:ajax_unavailable_due_dates' %}/", // the endpoint
+      type : "GET", // http method
+      data : { loan_id: {{ loan_obj.id }},
+               csrfmiddlewaretoken: getCookie('csrftoken'),
+               payday:payday,
+              }, // data sent with the get request
+
+      // handle a successful response
+      success : function(json) {
+          // console.log(json); // log the returned json to the console
+          if (json.result == "successful!"){
+            // console.log("sukses");
+            for (var i in json.output){
+              disabledDates.push(json.output[i]);
+              //console.log(disabledDates);
+            }
+            return disabledDates;
+              //return '28-7-2017';
+          }
+          else {
+            //failed
+            console.log(json.reason, 'disableDay');
+          }
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+          console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+    })
+    .then(function(value) {
+      disabledDates = value.output;
+        let paid_account_payment_date = '{{ paid_account_payment_date }}'
+        if (paid_account_payment_date.length > 0) {
+            var date = new Date(value.formatted_start);
+            var end_date = new Date(paid_account_payment_date);
+            if (date <= end_date) {
+                var month = end_date.getMonth();
+                var year = end_date.getFullYear();
+                date.setDate(1);
+                var all_days = [];
+                while (date.getMonth() <= month && date.getFullYear() <= year) {
+                    var disable_date = date.getDate().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getFullYear();
+                    if (!disabledDates.includes(disable_date)){
+                        disabledDates.push(disable_date);
+                    }
+                    date.setDate(date.getDate() + 1);
+                }
+            }
+        }
+      jQuery('#id_cycle_date_requested').datepicker({
+                 datesDisabled: disabledDates,
+                 startDate: value.start,
+                 endDate: value.end,
+                 setDate: due_date_init,
+                 format: 'dd-mm-yyyy',
+                 buttonClasses: ['btn', 'btn-sm'],
+                 applyClass: 'btn-danger',
+                 cancelClass: 'btn-inverse',
+                 dateLimit: {
+                     days: 30
+                 },
+                 autoclose: true,
+                 todayHighlight: true,
+                 todayBtn: "linked",
+      });
+      $("#id_cycle_date_requested").val(due_date_init);
+      $("#id_old_due_date").val(due_date_init);
+      $("#id_first_payment_installment").val($("#id_installment_initial").text());
+    });
+      {% endif %}
+    }
+
+  function simulate_adjusted_payment_auto(oEvent) {
+    if($('#id_cycle_date_requested').val() != "" ){
+      {% if loan_obj %}
+        simulate_adjusted_payment({{ loan_obj.id }});
+      {% endif %}
+      console.log("No loan to simulate adjusted payment")
+    } else {
+        toast_danger('Tanggal installment baru tidak dapat kosong');
+        set_initial_value()
+    }
+  }
+
+  function set_initial_value(){
+    var payday = $("#payday_initial").html()
+    $("#id_payday_requested").val(payday);
+    load_unavailable_due_dates(payday)
+  }
+
+  function simulate_adjusted_payment(loan_id){
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+    //$("#id_cycle_date_requested").val()
+
+    $.ajax({
+        url :  "{%url 'account_payment_status:simulate_adjusted_installment' %}/", // the endpoint
+        type : "GET", // http method
+        data : { account_payment_id: {{payment_obj.id}},
+                 new_due_date: $("#id_cycle_date_requested").val(),
+                 b_installment: $('#b_installment').val(),
+                 old_due_date: $("#id_old_due_date").val(),
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            // console.log(json); // log the returned json to the console
+            if (json.result == "successful!"){
+              // console.log("sukses");
+              $("#id_first_payment_installment").val(json.output);
+            }
+            else {
+              //failed
+              console.log(json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    }); // end of ajax
+  }//end of function
+
+
+  function close_btn(){
+    window.location.reload(true);
+  }
+
+  function set_called_onclick(){
+    console.log("set_locked_payment");
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+    var note_text = $("#set-called-note-id").val();
+    $.ajax({
+        url :  "{%url 'payment_status:set_payment_called' %}/", // the endpoint
+        type : "GET", // http method
+        data : { payment_id: {{payment_obj.id}},
+                 note_text: note_text,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+
+            if (json.result == "success"){
+              //redirect this page
+              console.log("sukses");
+              $('#responsive-modal-set-called').modal('hide');
+              toast_success("Set Payment Called Success", ""+ json.reason);
+              window.location.reload(true);
+            }
+            else {
+              //show notification that payment was locked
+              console.log(json.reason);
+              toast_success("Un-Lock Failed", ""+ json.reason);
+              $('#responsive-modal-success').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_title").html("!! Error !!");
+            $("#modal_body").html("Error on getting data from server");
+            $('#responsive-modal-success').modal('show');
+        }
+
+
+    }); // end of ajax
+
+  }//end of function
+
+  function set_unlocked_payment(payment_id){
+    console.log("set_locked_payment");
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'payment_status:set_payment_unlocked' %}/", // the endpoint
+        type : "GET", // http method
+        data : { payment_id: payment_id,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+
+            if (json.result == "successful!"){
+              //redirect this page
+              console.log("sukses");
+              toast_success("Un-Lock Success", ""+ json.reason);
+              setTimeout(window.top.close(), 1000);
+            }
+            else {
+              //show notification that payment was locked
+              console.log(json.reason);
+              $("#modal-title").html("Un-Lock Gagal");
+              $("#modal-body").html(""+ json.reason);
+              $('#responsive-modal-success').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $("#modal_title").html("!! Error !!");
+            $("#modal_body").html("Error on getting data from server");
+            $('#responsive-modal-success').modal('show');
+        }
+
+
+    }); // end of ajax
+
+  }//end of function
+
+  function add_pmt_onclick(){
+    $('#payment_messages').hide();
+    $('#cashback_messages').hide();
+    //open this when waive interest and waive principal feature released
+    //refresh_remaining_late_fee_amount({{payment_obj.id}});
+  }
+
+  function refresh_remaining_late_fee_amount(payment_id){
+    $.ajax({
+        url :  "{%url 'payment_status:get_remaining_late_fee_amount' %}/",
+        type : "GET",
+        data : { payment_id: payment_id,
+                 csrfmiddlewaretoken: getCookie('csrftoken'),
+                },
+
+        success : function(json) {
+            if (json.success){
+              $('#EtwlfMaxLateFeeAmount').val(json.remaining_late_fee_amount)
+            }
+        }
+    });
+  }
+
+
+  function set_today(id_selected){
+    $("#"+id_selected).datepicker({ dateFormat: "dd-mm-yyyy"}).datepicker("setDate", "0");
+  }
+
+  function set_full_payment(id_selected){
+    $("#"+id_selected).val("{{payment_obj.due_amount|f_rupiahs:"no_currency"|safe }}");
+  }
+
+  function show_error_on_cashback(){
+    //call error window
+    $('#payment_messages').hide();
+    $("#cashback_messages").show();
+  }
+
+  function add_available_parameter_to_email_content(parameter_text){
+    var email_content = tinymce.get('email_content').getContent();
+    if(email_content.includes(parameter_text)){
+          return false;
+    }
+    email_content = email_content+" {"+parameter_text+"} ";
+    tinymce.get('email_content').setContent(email_content);
+    $("#content_value").val(email_content);
+  }
+  function send_email_account_payment_onclick(){
+    $('#email_error_message').hide();
+  }
+
+  function sendAccountPaymentEmail(account_payment_id){
+    var csrftoken = getCookie('csrftoken');
+    var to_email = $('#to_email').val();
+    if (to_email == ''){
+      $("#email_error_message").text("email tujuan tidak boleh kosong")
+      $("#email_error_message").css("display", "block");
+      $("#email_error_div").show();
+      return true
+    }
+    var template_code = $("#email_category_selects option:selected" ).val();
+    var category = $("#email_category_selects option:selected" ).text();
+    if (template_code == ''){
+      $("#email_error_message").text("Mohon pilih Kategori")
+      $("#email_error_message").css("display", "block");
+      $("#email_error_div").show();
+      return true
+    }
+    var pre_header = $('#email_pre_header').val();
+    var email_subject = $('#email_subject').val();
+    var email_content = tinymce.get('email_content').getContent();
+    $("#content_value").val(email_content);
+
+    var content = $("#content_value").val();
+    if (content == ''){
+      $("#email_error_message").text("content email tidak boleh kosong")
+      $("#email_error_message").css("display", "block");
+      $("#email_error_div").show();
+      return true
+    }
+
+    $.ajax({
+          url :  "{% url 'account_payment_status:send_email' %}/",
+          type : "GET",
+          data : {
+                account_payment_id: account_payment_id,
+                content: content,
+                to_email: to_email,
+                subject: email_subject,
+                pre_header: pre_header,
+                template_code: template_code,
+                category: category,
+                csrfmiddlewaretoken: csrftoken,
+          },
+           // handle a successful response
+          success : function(json) {
+
+              if (json.result == "successful!"){
+                $('#responsive-modal-email').modal('hide');
+                $('#responsive-modal-success-email').modal('show');
+              } else if(json.result == "nok"){
+                $("#email_error_message").text(json.error_message)
+                $("#email_error_message").css("display", "block");
+                $("#email_error_div").show();
+              }
+          },
+
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+    }); // end of ajax
+  } // end of function send_email
+
+  function add_available_parameter_to_sms_content(parameter_text){
+        var sms_message_text = $("#sms_message").val();
+        if(sms_message_text.includes(parameter_text)){
+              return false;
+        }
+        $("#sms_message").val(sms_message_text+" {"+parameter_text+"} ");
+
+  }
+
+  function send_account_payment_sms_onclick(){
+    $('#sms_error_message').hide();
+  }
+
+  function sendAccountPaymentSms(account_payment_id){
+      //checker : ensure user select phone number Febby
+      var index_phone = $("#phone_selects option:selected" ).val();
+      if (index_phone == ''){
+        $("#sms_error_message").html("Mohon pilih Nomor Handphone");
+        $("#sms_error_div").show();
+        $("#sms_error_message").css("display", "block");
+        return true
+      }
+      var template_code = $("#sms_category_selects option:selected" ).val();
+      var category = $("#sms_category_selects option:selected" ).text();
+      if (template_code == ''){
+        $("#sms_error_message").html("Mohon pilih Kategori");
+        $("#sms_error_div").show();
+        $("#sms_error_message").css("display", "block");
+        return true
+      }
+      //febby
+      var phone_type = $("#phone_selects option:selected" ).text();
+      var number_phone = $("#number").val();
+      if (number_phone == ''){
+        $("#sms_error_message").html("Mohon pilih Nomor Handphone");
+        $("#sms_error_div").show();
+        $("#sms_error_message").css("display", "block");
+        return true
+      }
+
+      var csrftoken = getCookie('csrftoken');
+      var sms_message = $("#sms_message").val();
+      $.ajax({
+          url :  "{% url 'account_payment_status:send_sms' %}/",
+          type : "GET",
+          data : {
+                account_payment_id : account_payment_id,
+                to_number : number_phone,
+                phone_type : phone_type,
+                sms_message : sms_message,
+                template_code : template_code,
+                category: category,
+                csrfmiddlewaretoken: csrftoken,
+          },
+
+          // handle a successful response
+          success : function(json) {
+
+              if (json.result == "successful!"){
+                $('#responsive-modal-sms').modal('hide');
+                $('#responsive-modal-success-sms').modal('show');
+              } else if(json.result == "nok"){
+                $("#sms_error_message").text(json.error_message)
+                $("#sms_error_message").css("display", "block");
+                $("#sms_error_div").show();
+              }
+          },
+
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+
+      });
+  }
+
+  function formValidationNote(oEvent) {
+      //oEvent = oEvent || window.event;
+      //var txtField = oEvent.target || oEvent.srcElement;
+      //alert("validation");
+      if(document.getElementById("id_notes_only").value.length > 0 )
+      {
+        document.getElementById("id-submit-simpan-note").disabled = false;
+        $("#id-submit-simpan-note").removeClass("btn-default");
+        $("#id-submit-simpan-note").addClass("btn-info");
+      }else {
+        document.getElementById("id-submit-simpan-note").disabled = true;
+        $("#id-submit-simpan-note").addClass("btn-default");
+        $("#id-submit-simpan-note").removeClass("btn-info");
+      }
+    }
+
+  function formValidationStatus(oEvent) {
+    //alert("validation status");
+    if($('#id_status_to').val() != "" && $('#id_reason').val() != ""){
+      document.getElementById("submit_status").disabled = false;
+      $("#submit_status").removeClass("btn-default");
+      $("#submit_status").addClass("btn-danger");
+    } else {
+      document.getElementById("submit_status").disabled = true;
+      $("#submit_status").addClass("btn-default");
+      $("#submit_status").removeClass("btn-danger");
+    }
+
+  }
+
+  function resetForm(){
+    document.getElementById("id_notes_only").disabled = true;
+    document.getElementById("id_notes_status").disabled = true;
+  }
+
+  $("#id_btn_update_app").click(function(){
+    //validate
+    var ret_validate = validation_update_app();
+    if(ret_validate!='OK'){
+        failed_validation_display(ret_validate);
+        return;
+    }
+
+    // and show changes
+    var field_change_tbl = show_fields_latest_change();
+    var init_title = "Aplikasi <b>{{application_id|safe}}</b> akan di update, apakah anda yakin?";
+
+    if (field_change_tbl == 0){
+      $("#modal_default_title").html(""+ "Update Aplikasi !");
+      $("#modal_default_body").html(""+ "Tidak ada perubahan data !!!");
+      $('#modal-success-default').modal('show');
+    }else{
+      $("#modal_update_app_body").html("\n" + field_change_tbl +"\n <div>" + init_title +"</div>");
+      $('#modal-update-app').modal('show');
+      update_app_selected_field();
+    }
+  });
+
+  function call_update_payment_note(){
+      var csrftoken = getCookie('csrftoken');
+      var ret_value;
+    $.ajax({
+        url :  "{%url 'payment_status:update_payment_note_for_collection' %}/",
+        type : "POST",
+        async: false,
+        data : {
+              account_payment_id   : {{payment_obj.id}},
+          },
+        // handle a successful response
+        success : function(json) {
+            ret_value = json;
+        },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+    return ret_value;
+  };
+
+  function check_if_ktp_exists(){
+    var csrftoken = getCookie('csrftoken');
+    var ret_value;
+    $.ajax({
+        url :  "{%url 'app_status:ajax_check_ktp' %}/",
+        type : "POST",
+        async: false,
+        data : {
+              customer_id   : '{{application.customer_id}}',
+              application_id : '{{application_id}}',
+              ktp: $("#id_form2-ktp").val()
+          },
+        // handle a successful response
+        success : function(json) {
+            ret_value = json;
+        },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+    return ret_value;
+  }
+
+  function validation_update_app(){
+    ret_err = "";
+    var app_status = '{{ application.application_status_id|default:"-"|safe }}';
+    var exclude_status = ['100', '106'];
+
+    for (i = 1; i <= GLOBAL_LENGTH_EXPENSE; i++) {
+      var id_desc= '#undisclosed_expense_desc_'+i;
+      var id_amount= '#undisclosed_expense_amount_'+i;
+      var id_stat = '#undisclosed_expense_stat_'+i;
+      var desc = $(id_desc).val();
+      var amount = $(id_amount).val();
+      var stat = $(id_stat).val();
+      if(stat != 'deleted'){
+        if(desc == '' || amount == '' ){
+          validate_expense = false;
+        }
+      }
+    }
+
+    if (ret_err == ""){
+        return 'OK';
+    }
+    else {
+      return ret_err;
+    }
+  }
+
+  function add_row_table(field_name, field_default, field_change){
+    var header_table = "<tr>\n" +
+      "<td  style='width: 30%;overflow: hidden;word-break: break-all;'>" + field_name + "</td>\n" +
+      "<td  style='width: 40%;overflow: hidden;word-break: break-all;'>" + field_default + "</td>\n" +
+      "<td  style='width: 40%;overflow: hidden;word-break: break-all;'>" + field_change + "</td>\n" +
+      "</tr>\n";
+    return header_table;
+  }
+
+  function show_fields_latest_change(){
+    console.log(GLOBAL_CHECKLIST_CA)
+    global_note_update_app = "Perubahan Data Aplikasi:";
+    var field_changes_html = "<table class='table' id='id_tbl_app_update' style='width:100%;'>" +
+        "<thead><tr>\n" +
+        "<th> Field </th>\n" +
+        "<th> From </th>\n" +
+        "<th> Update</th>\n" +
+        "</tr>\n</thead>\n<tbody>";
+
+    {% autoescape on %}
+    // looping for the changes
+    var fields_list = [
+      ['Nama Jalan','{{application.address_street_num|default:''|escapejs}}',$("#id_form2-address_street_num").val(),'address_street_num'],
+      ['Kecamatan','{{application.address_kecamatan|default:''}}',$("#id_form2-address_kecamatan").val(),'address_kecamatan'],
+      ['Kelurahan','{{application.address_kelurahan|default:''}}',$("#id_form2-address_kelurahan").val(),'address_kelurahan'],
+      ['Kabupaten','{{application.address_kabupaten|default:''}}',$("#id_form2-address_kabupaten").val(),'address_kabupaten'],
+      ['Propinsi','{{application.address_provinsi|default:''}}',$("#id_form2-address_provinsi").val(),'address_provinsi'],
+      ['Kodepos','{{application.address_kodepos|default:''}}',$("#id_form2-address_kodepos").val(),'address_kodepos'],
+    ]
+    {% endautoescape %}
+
+    //add checklist
+
+    for (i = 0; i < GLOBAL_CHECKLIST_CA.length; i++) {
+      var id = GLOBAL_CHECKLIST_CA[i][3];
+      var str_value = GLOBAL_CHECKLIST_CA[i][1];
+      GLOBAL_CHECKLIST_CA[i][2] = $(id).val();
+      GLOBAL_CHECKLIST_CA[i][1] = str_value.replace(/&lt;br&gt;/g, '\n');
+      fields_list.push(GLOBAL_CHECKLIST_CA[i]);
+    }
+
+    //add expense
+    GLOBAL_RESULT_EXPENSE[2] = '';
+    for (i = 1; i <= GLOBAL_LENGTH_EXPENSE; i++) {
+      var id_desc = '#undisclosed_expense_desc_'+i;
+      var id_amount = '#undisclosed_expense_amount_'+i;
+      var id_stat = '#undisclosed_expense_stat_'+i;
+      var desc = $(id_desc).val();
+      var amount = $(id_amount).val();
+      var stat = $(id_stat).val();
+      if(stat != 'deleted'){
+        GLOBAL_RESULT_EXPENSE[2] = GLOBAL_RESULT_EXPENSE[2] +'('+ desc + ' - ' + amount.toString() + ')';
+      }
+    }
+    fields_list.push(GLOBAL_RESULT_EXPENSE);
+
+    var rows_data = "";
+    var index_change = 0;
+
+    //fields_list
+    GLOBAL_SAVE_CHECKLIST=[];
+    $.each(fields_list, function(id, obj_item) {
+      var obj0 = obj_item[0];
+      var obj1 = html_unescape(obj_item[1]);
+      var obj2 = obj_item[2];
+      var obj3 = obj_item[3];
+
+      if (obj0 == 'Tgl Lahir Pasangan'){
+        if('{{app_obj.marital_status|default:''|safe}}' != 'Menikah'){
+          obj1 = '';
+          obj2 = '';
+        }
+      }
+
+      if (obj0 == 'Penghasilan Bersih Per Bulan' || obj0 == 'Besar Penghasilan' || obj0 == 'Biaya Sewa/Cicilan Rumah per Bulan' || obj0 == 'Pengeluaran Rutin per Bulan'|| obj0 == 'Total Cicilan Hutang per Bulan'){
+        //console.log(obj0);
+        //console.log('obj2-1: ' + obj2);
+        obj2 = obj2.replace('.', '').replace('.', '').replace('.', '').replace('.', '');
+        //console.log('obj2-2: ' + obj2);
+      }
+
+      if (obj2 != undefined) {
+          if ((obj1 != obj2) && !(obj1 === '' && obj2 === '0')){
+            rows_data += add_row_table(obj0, obj1, obj2);
+            global_note_update_app += " \r\n* " + obj0 + ": " + obj1 + " >> " + obj2;
+            index_change++;
+
+            var obj = { "field_name" : "",
+                        "group" : "-",
+                        "agent" : "",
+                        "type" : "",
+                        "undisclosed_expense" : [],
+                        "value" : ""
+                      };
+
+            if(obj0.includes('checklist')){
+              obj.field_name = obj_item[4];
+              obj.group = obj_item[5];
+              obj.type = "checklist";
+              obj.value =  formatChecklist(obj2);
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+              if(obj_item[4] == "address_street_num" && formatChecklist(obj2) == true){
+                call_update_payment_note()
+                }
+            }else if(obj0.includes('comment')){
+              obj.field_name = obj_item[4];
+              obj.group = obj_item[5];
+              obj.type = "comment";
+              obj.value =  obj2;
+              obj.agent =  '{{ user.id }}';
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+            }else if(obj0 == 'Undisclosed Expense'){
+              var arr_undisclosed_expense = [] ;
+              var total = 0 ;
+              var group = '';
+              {% checkusergroup in ['bo_sd_verifier'] %}
+                group = 'sd';
+              {% endcheckusergroup %}
+              {% checkusergroup in ['bo_credit_analyst'] %}
+                group = 'ca';
+              {% endcheckusergroup %}
+              for (i = 1; i <= GLOBAL_LENGTH_EXPENSE; i++) {
+                var id_expense = '<tr id="undisclose"></tr>d_expense_id_'+i;
+                var id_desc = '#undisclosed_expense_desc_'+i;
+                var id_amount = '#undisclosed_expense_amount_'+i;
+                var id_stat = '#undisclosed_expense_stat_'+i;
+                var desc = $(id_desc).val();
+                var amount = $(id_amount).val();
+                var stat = $(id_stat).val();
+                var id = $(id_expense).val();
+
+                if(stat == 'activate'){
+                  var temp_obj = {"id" : "","desc" : "","amount" : ""};
+                  temp_obj.id = id;
+                  temp_obj.desc = desc;
+                  temp_obj.amount = Number(amount);
+                  arr_undisclosed_expense.push(temp_obj);
+                  total += Number(amount);
+                }else if(stat == 'added'){
+                  var temp_obj = {"desc" : "","amount" : ""};
+                  temp_obj.desc = desc;
+                  temp_obj.amount = Number(amount);
+                  arr_undisclosed_expense.push(temp_obj);
+                  total += Number(amount);
+                }
+              }
+
+              obj.field_name = 'total_current_debt';
+              obj.type = "undisclosed_expense";
+              obj.group = group;
+              obj.value =  total;
+              obj.undisclosed_expense = arr_undisclosed_expense;
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+            }else{
+              obj.field_name = obj3;
+              obj.type = "field";
+              obj.value =  obj2;
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+            }
+          }
+      }
+    });
+
+    // closing table tag
+    field_changes_html += rows_data + "\n</tbody>\n</table>";
+    //console.log(field_changes_html);
+    if (index_change==0){
+      return index_change
+    }else {
+      return field_changes_html;
+    }
+  }
+
+  function reload_btn(){
+    window.location.reload(true);
+  }
+
+  function html_unescape(s) {
+    var div = document.createElement("div");
+    div.innerHTML = s;
+    return div.textContent || div.innerText;
+  }
+
+  function update_app_selected_field(){
+    var csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url :  "{%url 'app_status:update_checklist' %}/", // the endpoint
+        type : "POST", // http method
+        data : {
+              application_id   : '{{application_id}}',
+              data: JSON.stringify(GLOBAL_SAVE_CHECKLIST)
+          },
+        // handle a successful response
+        success : function(json) {
+            if (json.status == "success"){
+              toast_success("Update Aplikasi Success", ""+ json.messages);
+              setTimeout(reload_btn(), 1200);
+            }
+            else {
+              $("#modal_default_title").html(""+ json.status);
+              $("#modal_default_body").html(""+ json.messages);
+              $('#modal-success-default').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+  }
+
+
+
+  window.onload = function () {
+    {%  for key, value in app_data.items %}
+      {% if key not in deprecated_list %}
+        {%  for obj in value.groups %}
+            var temp_checklist=[];
+            var temp_comment=[];
+            temp_checklist.push('{{key}}-{{obj.group_name}}-checklist');
+            temp_comment.push('{{key}}-{{obj.group_name}}-comment');
+            temp_checklist.push('{{obj.checklist_value}}');
+            temp_comment.push('{{obj.comments.0.comment|breakjs}}');
+            temp_checklist.push('');
+            temp_comment.push('');
+            temp_checklist.push('#ca_checklist_value_{{key}}_{{obj.group_name}}');
+            temp_comment.push('#ca_comment_value_temp_{{key}}_{{obj.group_name}}');
+            temp_checklist.push('{{key}}');
+            temp_comment.push('{{key}}');
+            temp_checklist.push('{{obj.group_name}}');
+            temp_comment.push('{{obj.group_name}}');
+            GLOBAL_CHECKLIST_CA.push(temp_checklist);
+            GLOBAL_CHECKLIST_CA.push(temp_comment);
+        {% endfor %}
+      {% endif %}
+    {% endfor %};
+    var note_only = document.getElementById("id_notes_only");
+    var status_change = document.getElementById("id_status_to");
+    var reason_change = document.getElementById("id_reason");
+
+    note_only.onkeyup = formValidationNote;
+    status_change.onchange = formValidationStatus;
+    reason_change.onchange = formValidationStatus;
+
+    //DOM Manipulation For Skip Tracing
+    $('#st').removeClass('active');
+    $('#dvc').addClass('active');
+    $('#skiptraceTable').find('th').css( 'background', 'none' );
+    $('#skiptraceTable').find('th').css( 'pointer-events', 'none' );
+
+    //DragScroll for Skrip Trace
+    $(function(){
+      var curDown = false,
+          curYPos = 0,
+          curXPos = 0;
+      $('#st').mousemove(function(m){
+        if(curDown === true){
+         $('#st').scrollTop($('#st').scrollTop() + (curYPos - m.pageY));
+         $('#st').scrollLeft($('#st').scrollLeft() + (curXPos - m.pageX));
+        }
+      });
+
+      $('#st').mousedown(function(m){
+        $(this).css( 'cursor', 'move' );
+        $(this).css('user-select', 'none');
+        curDown = true;
+        curYPos = m.pageY;
+        curXPos = m.pageX;
+      });
+
+      $('#st').mouseup(function(){
+        $(this).css( 'cursor', 'default' );
+        $(this).css('user-select', 'auto');
+        curDown = false;
+      });
+    })
+
+    {% if loan_obj.account and application%}
+
+    GLOBAL_TEMPLATE_WHATSAPP=encodeURI(`{{ whatsapp_text|safe }}`);
+
+    {% endif %}
+
+    if ('{{first_installment_btn_active}}'=='True'){
+      var old_due_date = document.getElementById("id_old_due_date");
+      var new_due_date = document.getElementById("id_cycle_date_requested");
+      var button_cancel = document.getElementById("reset");
+      var payday_requested = document.getElementById("id_payday_requested");
+
+      new_due_date.onchange = simulate_adjusted_payment_auto;
+      payday_requested.onfocusout = update_due_datepicker;
+      button_cancel.onclick = set_initial_value;
+    }
+     GLOBAL_TEMPLATE_WHATSAPP_NO_CONTACT=encodeURI(`{{ no_contact_whatsapp_text|safe }}`);
+     GLOBAL_TEMPLATE_WHATSAPP_BROKEN_PTP_PLUS_1=encodeURI(`{{ broken_ptp_whatsapp_text|safe }}`);
+    ResetFormPaymentEvent()
+  }
+
+  function SaveSkipTrace(){
+    var obj_skiptrace = GetFormSkipTrace();
+    var result = ValidateFormSkipTrace(obj_skiptrace);
+    //console.log(obj_skiptrace);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'payment_status:add_skiptrace' %}/",
+          type : "POST",
+          data : {
+                application : {{application_id}},
+                contact_name : obj_skiptrace.name,
+                contact_source : obj_skiptrace.source,
+                phone_number: obj_skiptrace.number_phone,
+                change_reason: obj_skiptrace.change_reason,
+                account_payment_id: {{payment_obj.id}},
+          },
+
+          statusCode: {
+            404: function(json) {
+              toast_warning('Warning 404!',json['responseText']);
+            },
+            400: function(json) {
+              toast_warning('Warning 400!',json['responseText']);
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            200: function(json) {
+              toast_success('Success','Add skiptrace '+json.data.contact_name);
+              GLOBAL_TABLE.row.add( {
+                "NAME": json.data.contact_name,
+                "SOURCE": json.data.contact_source,
+                "OPERATOR": formating(json.data.phone_operator),
+                "EFF": formating(json.data.effectiveness),
+                "REC": formatingDate(json.data.recency),
+                "FREQ": formating(json.data.frequency),
+                "ID": json.data.id,
+                "NUMBER_PHONE": json.data.phone_number,
+                "RPC_RATE": "-",
+                "LAST_RPC": "-",
+                "NUMBER_AGE": "-",
+                "ACTION": '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>'
+              } ).order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+              ResetFormSkipTrace();
+              HideFormSkipTrace();
+              window.location.reload(true);
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success add: "+json.data);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_warning('Warning',result.reason);
+    }
+  }
+  function loadUnpaidLoanAccountDetails() {
+    $.ajax({
+        url: "{% url 'account_payment:v2:ajax_crm_unpaid_loan_account_details_list' payment_obj.id %}", // the endpoint,
+        type: 'GET',
+        dataType: 'json',
+        beforeSend: function() {
+            $('#unpaid_loan_account_details_list_section').append('<h3 style="margin-left: 10px;">Loading</h3>');
+        },
+        success: function (jsonData) {
+            $('#unpaid_loan_account_details_list_section').html('');
+            var html = '<table style="width: 100%; border-spacing: 0; background: transparent; border-collapse: collapse;">';
+            html += '<tbody>'
+            is_data = false
+            // Handle the response data
+            $.each(jsonData.data, function(index, dataEntry) {
+                // Iterate over attributes of the current data entry
+                $.each(dataEntry.attributes, function(i, attribute) {
+                    is_data = true
+                    if (i == 0) {
+                        html += '<tr>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">No</small></div>';
+                        html += '</td>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">Transaction Method</small></div>';
+                        html += '</td>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">Transaction Date</small></div>';
+                        html += '</td>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">Due Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small></div>';
+                        html += '</td>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">Installment Count</small></div>';
+                        html += '</td>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">Loan Amount</small></div>';
+                        html += '</td>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">Overdue unpaid Amount</small></div>';
+                        html += '</td>';
+                        html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;">';
+                        html += '<div><small style="font-weight: bold;">Total Outstanding Loan Amount</small></div>';
+                        html += '</td>';
+                        html += '</tr>';
+                    }
+                    html += '<tr>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small>' + attribute.count + '</small></div></td>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small><code>' + attribute.transaction_method + '</code></small></div></td>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small>' + attribute.transaction_date + '</small></div></td>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small>' + attribute.due_date + '</small></div></td>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small>' + attribute.installment_count + '</small></div></td>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small>' + attribute.loan_amount + '</small></div></td>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small>' + attribute.calculated_overdue_unpaid_amount + '</small></div></td>';
+                    html += '<td style="padding: 8px; text-align: left; vertical-align: bottom;"><div><small>' + attribute.calculated_total_due_amount + '</small></div></td>';
+                    html += '</tr>';
+                    html += '<tr style="height: 16px;"><td colspan="7"></td></tr>';
+                });
+
+            });
+            if (is_data == false){
+                html += '<tr style="height: 16px;"><td colspan="7" align="center"><div><small style="font-weight: bold;">No data found</small></div></td></tr>';
+            }
+            html += '</tbody>';
+            html += '</table>';
+            // Append the generated HTML to the unpaid_loan_account_details_list_section
+            $('#unpaid_loan_account_details_list_section').append(html);
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Handle errors
+            console.error('Error:', textStatus, errorThrown);
+            $('#unpaid_loan_account_details_list_section').html('<h3 style="margin-left: 10px;">Something went wrong!!</h3>');
+        }
+    });
+  }
+  function UpdateSkipTrace(){
+    var obj_skiptrace = GetFormSkipTrace();
+    var result = ValidateFormSkipTrace(obj_skiptrace);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'payment_status:update_skiptrace' %}/",
+          type : "POST",
+          data : {
+                skiptrace_id: obj_skiptrace.id,
+                application : {{application_id}},
+                contact_name : obj_skiptrace.name,
+                contact_source : obj_skiptrace.source,
+                phone_number: obj_skiptrace.number_phone,
+                change_reason: obj_skiptrace.change_reason,
+                account_payment_id: {{payment_obj.id}}
+          },
+
+          statusCode: {
+            404: function(json) {
+              toast_warning('Warning 404!',json['responseText']);
+            },
+            400: function(json) {
+              toast_warning('Warning 400!',json['responseText']);
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            403: function(json) {
+              toast_warning('Warning 403!',json['responseJSON'].messages);
+            },
+            200: function(json) {
+              toast_success('Success','Update skiptrace '+json.data.contact_name);
+              var tr = $(obj_skiptrace.row_table).parents('tr').prev();
+              var data = GLOBAL_TABLE.row( tr ).data();
+              var row = GLOBAL_TABLE.row( tr );
+              row.child.hide();
+              tr.removeClass('shown');
+              data.NAME =  json.data.contact_name;
+              data.SOURCE = json.data.contact_source;
+              data.OPERATOR = formating(json.data.phone_operator);
+              data.EFF = formating(json.data.effectiveness);
+              data.REC = formatingDate(json.data.recency);
+              data.FREQ = formating(json.data.frequency);
+              data.ID = json.data.id;
+              data.NUMBER_PHONE = json.data.phone_number;
+              data.ACTION = '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>';
+              GLOBAL_TABLE.row(tr)
+                    .data(data)
+                    .order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+              ResetFormSkipTrace();
+              HideFormSkipTrace();
+              window.location.reload(true);
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success update: "+json.data);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_warning('Warning',result.reason);
+    }
+  }
+
+  function ActionCall(id,skiptrace_id, level1='', level2='', level3='', skip_ptp_amount='', skip_ptp_date='', skip_note = '', skip_time ='', non_payment_reason='', contact_person='', self){
+    var obj = {};
+    var obj_time = GetTS(skiptrace_id);
+    obj.id = id ;
+    obj.skiptrace_id = skiptrace_id;
+    obj.application_id = {{application_id}};
+    obj.payment_id = {{payment_obj.id}};
+    obj.start_ts = obj_time.start;
+    obj.end_ts = obj_time.end;
+    var result = ValidateActionCall(obj);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'account_payment_status:skiptrace_history' %}/",
+          type : "POST",
+          data : {
+                skiptrace : obj.skiptrace_id,
+                application : obj.application_id,
+                start_ts : obj.start_ts,
+                end_ts : obj.end_ts,
+                call_result: obj.id,
+                account_payment: obj.payment_id,
+                level1: level1,
+                level2: level2,
+                level3: level3,
+                skip_ptp_amount: skip_ptp_amount,
+                skip_ptp_date: skip_ptp_date,
+                skip_note: skip_note,
+                skip_time: skip_time,
+                non_payment_reason: non_payment_reason,
+                spoke_with: contact_person,
+                source: 'CRM',
+                {% if loan_obj %}
+                loan_id: {{loan_obj.id}}
+                {% endif %}
+          },
+          statusCode: {
+            404: function(json) {
+              if (json['responseText'].includes('login') ||
+                    json['responseText'].includes('Page Not Found !')){
+                window.location.reload(true);
+              } else {
+                toast_warning('Warning 404!',json['responseText']);
+              }
+            },
+            400: function(json) {
+              if (json['responseJSON'].message == 'on going ptp') {
+                swal({
+                  title: "",
+                  html:true,
+                  text: "PTP sudah terbuat, Silahkan kembali dan cek history",
+                  type: "warning",
+                  showCancelButton: false,
+                  showConfirmButton: true,
+                  confirmButtonColor: '#03A9F3',
+                  confirmButtonText: "Tutup",
+                  closeOnConfirm: true
+                });
+              } else {
+                toast_warning('Warning 400!',json['responseText']);
+              }
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            200: function(json) {
+              if(json.data){
+                var tr = $(self).parents('tr').prev();
+                var data = GLOBAL_TABLE.row( tr ).data();
+                var row = GLOBAL_TABLE.row( tr );
+                row.child.hide();
+                tr.removeClass('shown');
+                data.NAME =  json.data.contact_name;
+                data.SOURCE = json.data.contact_source;
+                data.OPERATOR = formating(json.data.phone_operator);
+                data.EFF = formating(json.data.effectiveness);
+                data.REC = formatingDate(json.data.recency);
+                data.FREQ = formating(json.data.frequency);
+                data.ID = json.data.id;
+                data.NUMBER_PHONE = json.data.phone_number;
+                data.ACTION = '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>';
+                GLOBAL_TABLE.row(tr)
+                      .data(data)
+                      .order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+                ResetFormSkipTrace();
+                HideFormSkipTrace();
+                toast_success('Success',json.messages);
+              }
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success ",json);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log({{payment_obj.id}})
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_danger('Failed!!',result.reason);
+    }
+  }
+
+  function autodialcall(number_phone){
+    $.ajax({
+        url :  "{% url 'app_status:trigger_autodial' %}/",
+        type : "GET",
+        data : {
+              number_phone : number_phone,
+              user_extension : GLOBAL_USER_EXTENSION
+        },
+
+        // handle a successful response
+        success : function(json) {
+
+            if (json.status == "success"){
+              toast_success('Click2Call',json.messages);
+            } else if(json.status == "failed"){
+              toast_danger('Click2Call',json.messages);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr, errmsg, err) {
+            toast_danger('Click2Call Failed!', err);
+              }
+      })
+  }
+
+  function showModalDoku(){
+    $('#id_btn_autodebet').button('loading');
+    $.ajax({
+        url :  "{% url 'payment_status:get_doku_customer_balance' %}/",
+        type : "GET",
+        data : {
+              payment_id: {{payment_obj.id}},
+        },
+         // handle a successful response
+        success : function(json) {
+
+            if (json.status == "success"){
+              //console.log(json.data.doku_balance, json.data.doku_id)
+              $('#modalDoku').modal('show');
+              $('#id_doku_balance').val(formatCurrency(json.data.doku_balance));
+              $('#id_due_amount').val(formatCurrency({{payment_obj.due_amount}}));
+              $('#id_account_id').text(json.data.doku_id);
+              calculateDoku(json.data.doku_balance,{{payment_obj.due_amount}});
+              $('#id_btn_autodebet').button('reset');
+            } else if(json.status == "failed"){
+              $('#id_btn_autodebet').button('reset');
+              toast_danger('Error!!',json.message);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            $('#id_btn_autodebet').button('reset');
+            toast_danger('Error!!',err);
+        }
+    }); // end of ajax
+  }
+
+  function calculateDoku(doku_balance,due_amount){
+    if(doku_balance >= due_amount){
+      $('#id_partial_payment_doku').val(formatCurrency(due_amount));
+    }else{
+      $('#id_partial_payment_doku').val(formatCurrency(doku_balance));
+    }
+  }
+
+  function actionAutoDebet(){
+    $('#id_auto_debet').button('loading');
+    $.ajax({
+        url :  "{% url 'payment_status:autodebit_payment_from_doku' %}/",
+        type : "GET",
+        data : {
+              payment_id: {{payment_obj.id}},
+        },
+         // handle a successful response
+        success : function(json) {
+
+            if (json.status == "success"){
+              $('#id_auto_debet').button('reset');
+              $('#modalDoku').modal('hide');
+              toast_success('Sukses!!','Autodebit Doku Berhasil.');
+              window.location.reload(true);
+            } else if(json.status == "failed"){
+              $('#id_auto_debet').button('reset');
+              $('#modalDoku').modal('hide');
+              toast_danger('Failed!!',json.message);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            $('#id_auto_debet').button('reset');
+            $('#modalDoku').modal('hide');
+            toast_danger('Failed!!',err);
+        }
+    }); // end of ajax
+  }
+
+  function formatCurrency(params){
+    return params.toLocaleString('IDR');
+  }
+
+  function reverseDate(params) {
+    var result = params.split("-").reverse().join("-");
+    return result;
+  }
+
+  function update_robocall(paymentid){
+        var id = '#btn-robo-'+paymentid;
+        var className = $(id).attr('class');
+        $.ajax({
+            url :  "{% url 'payment_status:julo_one_update_robocall' %}/",
+            type : "GET",
+            data : {payment_id : paymentid
+                  },
+
+            // handle a successful response
+            success : function(json) {
+
+                if (json.status == "success"){
+                  if(className.includes('btn-default')){
+                      $(id).removeClass('btn-default');
+                      $(id).addClass('btn-success');
+                  }else if(className.includes('btn-success')){
+                      $(id).removeClass('btn-success');
+                      $(id).addClass('btn-danger');
+                  }else if(className.includes('btn-danger')){
+                      $(id).removeClass('btn-danger');
+                      $(id).addClass('btn-success');
+                  }
+                  toast_success('Robocall Update',json.message);
+                } else if(json.status == "failed"){
+                  toast_danger('Robocall Update',json.message);
+                }
+            },
+
+            // handle a non-successful response
+            error : function(xhr, errmsg, err) {
+                toast_danger('Robocall Update Failed!', err);
+                  }
+          })
+  }
+  //Show modal voice
+  function ShowModalVoice(voice_id){
+    var csrftoken = getCookie('csrftoken');
+    $.each({{ json_voice_list|safe }}, function(i, obj) {
+       var src_id = $("#myVoice");
+      $.each(obj, function(i, obj_item) {
+        if(voice_id == obj.pk){
+          src_id.attr('src', obj_item.presigned_url);
+        }
+      });
+    });
+    $.each({{ json_voice_list_1|safe }}, function(i, obj) {
+       var src_id = $("#myVoice");
+      $.each(obj, function(i, obj_item) {
+        if(voice_id == obj.pk){
+          src_id.attr('src', obj_item.presigned_url);
+        }
+      });
+    });
+    $('#modal-see-voice').modal('show');
+    $('#modal_voice_title').html('Check Voice Agreement '+voice_id);
+    {% if loan_obj %}
+    $.ajax({
+        url :  "{%url 'app_status:voice_records_script' %}/", // the endpoint
+        type : "GET", // http method
+        data : {
+                application_id : '{{ loan_obj.application.id|default:"-"|safe  }}',
+                 csrfmiddlewaretoken : csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            if (json.result == "successful!"){
+              //console.log(json.reason);
+              $('#text_agreement').html(json.reason);
+            }
+            else {
+              toast_danger("Error", json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            toast_danger("Error", xhr,errmsg,err);
+        }
+    }); // end of ajax
+    {% endif %}
+  }
+
+  //Event Modal
+  $("#id_btn_close_voice").click(function(){
+    var x = document.getElementById("myVoice");
+    x.pause();
+  });
+
+  function UseCashBack (){
+    $('#btn_use_cash_back').button('loading');
+    var cashback_amount = $('#id_cashback_cash_amount').val();
+    cashback_amount = cashback_amount.replace(/[.]/g,'')
+    var available_cashback = $('#id_available_cashback_cash_amount').val();
+    available_cashback = available_cashback.replace(/[.]/g,'')
+    var bank_name = $('#id_cashback_bank_name').val();
+    var name_in_bank = $('#id_cashback_name_in_bank').val();
+    var bank_account_number = $('#id_cashback_bank_account_no').val();
+    var cashback_event_date = $('#id_cashback_event_date').val();
+    if (bank_name == '' ) {
+      toast_danger('Alert!!','Isi nama bank');
+      $('#btn_use_cash_back').button('reset');
+    }else if (name_in_bank == '' ) {
+      toast_danger('Alert!!','Isi nama dalam bank');
+      $('#btn_use_cash_back').button('reset');
+    }else if (bank_account_number == '' ) {
+      toast_danger('Alert!!','Isi nomor rekening bank');
+      $('#btn_use_cash_back').button('reset');
+    }else if (cashback_amount == '0' || cashback_amount == '') {
+      toast_danger('Alert!!','Isi cashback amount');
+      $('#btn_use_cash_back').button('reset');
+    }else if(available_cashback == '-'){
+      toast_danger('Alert!!','Cashback not available');
+      $('#btn_use_cash_back').button('reset');
+    }else if (Number(cashback_amount) > Number(available_cashback) ) {
+      toast_danger('Alert!!','Cashback Insufficient');
+      $('#btn_use_cash_back').button('reset');
+    }else if (cashback_event_date == ''){
+      toast_danger('Alert!!','Isi event date');
+      $('#btn_use_cash_back').button('reset');
+    }else{
+      $.ajax({
+          url :  "{% url 'payment_status:ajax_cashback_event' %}/",
+          type : "POST",
+          data : {
+                payment_id : {{payment_obj.id}},
+                cashback_amount : cashback_amount,
+                bank_name : bank_name,
+                name_in_bank : name_in_bank,
+                bank_account_number : bank_account_number,
+                cashback_event_date : cashback_event_date
+          },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                $('#responsive-modal-cashback-cash').hide()
+                toast_success('Sukses!!',json.messages);
+                $('#btn_use_cash_back').button('reset');
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.messages);
+                $('#btn_use_cash_back').button('reset');
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+              toast_danger('Failed Update',xhr.responseText);
+              $('#btn_use_cash_back').button('reset');
+          }
+      });
+    }
+  }
+
+  function updateReminderCall (){
+    var reminder_call_date = $('#id_form2_reminder_call_date').val();
+    if (reminder_call_date == '' ) {
+      toast_danger('Alert!!','Isi reminder date');
+    }else{
+      $.ajax({
+          url :  "{% url 'payment_status:ajax_update_reminder_call_date' %}/",
+          type : "POST",
+          data : {
+                payment_id : {{payment_obj.id}},
+                reminder_call_date : reminder_call_date
+          },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                toast_success('Sukses!!',json.messages);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.messages);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+              toast_danger('Failed Update',xhr.responseText);
+          }
+      });
+    }
+  }
+  function showChangeDueDate(){
+    $('#responsive-modal-change-due-date').modal('show');
+    changeDueDateInit()
+  }
+
+  function changeDueDateInit(){
+    $.ajax({
+        url :  "{%url 'payment_status:ajax_change_due_date_init' %}/",
+        type : "GET",
+        data : {
+                  payment_id: {{payment_obj.id}},
+                },
+        success : function(json) {
+            if (json.result == "successful!"){
+              console.log(json);
+            }
+            else {
+              toast_danger('Failed get Data',json.reason);
+            }
+        },
+        error : function(xhr,errmsg,err) {
+          toast_danger('Failed get Date',xhr.responseText);
+          console.log(xhr.status + ": " + xhr.responseText);
+        }
+      })
+      .then(function(value) {
+        var realDate = value.set.replace(/-/g , '/');
+        jQuery('.odatepicker, #id_new_due_date').datepicker({
+           startDate: value.start,
+           endDate: value.end,
+           format: 'dd-mm-yyyy',
+           buttonClasses: ['btn', 'btn-sm'],
+           applyClass: 'btn-danger',
+           cancelClass: 'btn-inverse',
+           dateLimit: {
+               days: 60
+           },
+           autoclose: true,
+           setDate:value.set,
+        });
+        $('#id_new_due_date').datepicker("setDate", realDate);
+        $('#id_new_change_due_date_interest').val(value.change_due_date_interest)
+      });
+  }
+
+  function changeDueDateConfirm(){
+    var new_due_date = $('#id_new_due_date').val();
+    var note = $('#id_note_change_due_date').val();
+    var new_change_due_date_interest = $('#id_new_change_due_date_interest').val()
+    //validation begin
+    if (new_due_date == '' ) {
+      toast_danger('Alert!!','Isi Jangka Waktu');
+    }else if (note == '' ) {
+      toast_danger('Alert!!','Isi Catatan');
+    }else if (new_change_due_date_interest == '') {
+      toast_danger('Alert!!','Isi Fee Perubahan Tanggal Jatuh Tempo');
+    }else{
+      $("#responsive-modal-change-due-date").modal("hide");
+      $("#responsive-modal-confirm-duedate").modal("show");
+      $("#id_new_due_date_text").text(new_due_date);
+      $("#id_change_due_date_interest_text").text(new_change_due_date_interest);
+      $("#id_new_change_reason_text").text(note);
+    }
+  }
+
+  function ChangeDueDateAction(){
+    $('#btn_confirm_change_due_date').hide()
+    var new_due_date = $('#id_new_due_date').val();
+    var note = $('#id_note_change_due_date').val();
+    var new_change_due_date_interest = $('#id_new_change_due_date_interest').val()
+    if (new_due_date == '' ) {
+      toast_danger('Alert!!','Isi Jangka Waktu');
+    }else if (note == '' ) {
+      toast_danger('Alert!!','Isi Catatan');
+    }else if (new_change_due_date_interest == '') {
+      toast_danger('Alert!!','Isi Fee Perubahan Tanggal Jatuh Tempo');
+    }else{
+      $.ajax({
+          url :  "{% url 'payment_status:ajax_change_due_dates' %}/",
+          type : "POST",
+          data : {
+                payment_id : {{payment_obj.id}},
+                new_date : new_due_date,
+                note : note,
+                new_change_due_date_interest: new_change_due_date_interest,
+          },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                $('#responsive-modal-change-due-date').hide()
+                toast_success('Sukses!!',json.message);
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.message);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+              toast_danger('Failed Update',xhr.responseText);
+              $('#btn_confirm_change_due_date').hide()
+          }
+      });
+    }
+    $('#btn_use_change_due_date').show()
+  }
+
+  function set_reminder(){
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'payment_status:set_payment_reminder' %}/", // the endpoint
+        type : "GET", // http method
+        data : { payment_id: {{payment_obj.id}},
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+
+            if (json.result == "successful!"){
+              toast_success('Sukses!!',json.reason);
+            }
+            else {
+              console.log(json);
+              toast_danger('Failed Update',json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            toast_danger('Failed Update set Reminder');
+        }
+
+
+    }); // end of ajax
+
+  }//end of function
+
+  function ActionReverseAccountTransactionEvent(action, event_id, event_type, event_date, event_payment, event_due_amount, payment_methods, payment_receipt){
+    //event_id is account_transaction_id
+    //account_dest_id is account_id
+    if(action){
+      $('#btn_reverse_event').button('loading');
+      note = $('#RpeNote').val()
+      event_id = $("#frp_event_id").val();
+      reason = $("#frp_reason").val();
+      account_dest_id = $("#frp_move_to_account_id").val();
+      if (note == ""){ note= "-"}
+      $.ajax({
+        url :  "{%url 'account_payment_status:ajax_reversal_account_payment_event' %}/",
+        type : "POST", // http method
+        data : {
+                  event_id: event_id,
+                  note: note,
+                  reason: reason,
+                  account_dest_id: account_dest_id
+               },
+        success : function(json) {
+          if (json.result == "success"){
+            $('#responsive-modal-reverse-event').modal('hide');
+            toast_success('Sukses!!',json.messages);
+            window.location.reload(true);
+          }else{
+            if (json.multiple_account_payment_flag == true) {
+              alert(json.messages);
+            } else {
+              toast_danger('Failed!', json.messages);
+            }
+            $('#btn_reverse_event').button('reset');
+          }
+        },
+        error : function(xhr,errmsg,err) {
+          console.log(xhr.status + ": " + xhr.responseText);
+          toast_danger('Failed Reverse Payment Event');
+          $('#btn_reverse_event').button('reset');
+        }
+      }); // end of ajax
+    }else{
+      if(event_type=='payment'){
+          $("#frp_reason_selectbox_container").show();
+      }else{
+          $("#frp_reason_selectbox_container").hide();
+      }
+      $("#frp_event_id").val(event_id);
+      $("#frp_event_type").val(event_type);
+      $("#frp_event_date").val(event_date);
+      $("#frp_event_payment").val(event_payment);
+      $("#frp_event_due_amount").val(event_due_amount);
+      $("#frp_payment_method").val(payment_methods);
+      $("#frp_payment_receipt").val(payment_receipt);
+      $('#responsive-modal-reverse-event').modal('show');
+    }
+  }
+
+  function ShowHIdeMoveToPaymentId() {
+     var reason = $("#frp_reason").val();
+     $('#payment_dest_warning').html('').hide();
+     if (reason == "{{reversal_reason_show_move_payment}}"){
+       $("#frp_reason_container").show();
+       $("#frp_move_to_account_id").attr("disabled", false);
+       $("#btn_reverse_event").attr("disabled", true);
+     }else{
+      $("#frp_reason_container").hide();
+       $("#frp_move_to_account_id").attr("disabled", true);
+       $("#btn_reverse_event").attr("disabled", false);
+     }
+  }
+
+
+  function BackFormPaymentEvent() {
+    ResetFormPaymentEvent()
+    $('#back_payment_event').hide();
+    $('#LayoutPaymentEventForms').show();
+    $('#close_payment_event').show();
+  }
+
+  function ResetFormPaymentEvent() {
+    $('#FormEventTypePayment').hide();
+    $('#FormEventTypeLateFee').hide();
+    $('#FormEventTypeCustomerWallet').hide();
+    $('#FormEventTypeWaiveLateFee').hide();
+    $('#FormEventTypeWaiveInterest').hide();
+    $('#FormEventTypeWaivePrincipal').hide();
+    $('#save_payment_event').hide();
+    $('#PaymentEventForms').val('')
+    $('#EtpPaymentAmount').val('');
+    $('#EtpPaymentMethodId').prop('selectedIndex',0);
+    $("#EtpPaymentMethodReceipt").val('');
+    $("#EtpCredits").prop("checked", false);
+    $("#EtpPaidDate").val('');
+    $("#EtpNote").val('');
+    $("#EtlfaddLateFeeAmount").val('');
+    $("#EtlfDateLateFee").val('');
+    $("#EtcwUseCashbackAmount").val('');
+    $("#EtcwEventDate").val('');
+    $("#EtwlfaddLateFeeAmount").val('');
+    $("#EtwlfNote").val('');
+  }
+
+  function CheckAccountDestination() {
+    var account_id = $("#frp_move_to_account_id").val();
+    var amount = $("#frp_event_payment").val();
+    $.ajax({
+      url :  "{%url 'account_payment_status:reversal_payment_event_check_account_destination' %}",
+      type : "POST",
+      data : {account_id: account_id},
+      success : function(json) {
+        if (json.result == "success"){
+          html_content = 'anda akan melakukan pemindahan pembayaran sebesar '+ amount + ' kepada '+ json.message
+
+          $('#payment_dest_warning').html(html_content).show();
+          $("#btn_reverse_event").attr("disabled", false);
+        }else{
+          $('#payment_dest_warning').html(json.message).show();
+          $("#btn_reverse_event").attr("disabled", true);
+        }
+      },
+      error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText);
+        html_content = 'Error tidak dapat terhubung dengan server'
+          $('#payment_dest_warning').html(html_content).show();
+          $("#btn_reverse_event").attr("disabled", true);
+      }
+    }); // end of ajax
+  }
+
+  function ChooseFormPaymentEvent() {
+    form_event_selected = $("#PaymentEventForms").val();
+    if (form_event_selected == 'payment'){
+      $('#FormEventTypePayment').show();
+    }else if(form_event_selected == 'late_fee'){
+      $('#FormEventTypeLateFee').show();
+    }else if(form_event_selected == 'customer_wallet'){
+      $('#FormEventTypeCustomerWallet').show();
+    }else if(form_event_selected == 'waive_late_fee_paid'){
+      $('#FormEventTypeWaiveLateFee').show();
+      $('.waiver-unpaid-items').hide();
+      $('.waiver-paid-items').show();
+      $('.waiver-late-fee-paid-items').show();
+    }else if(form_event_selected == 'waive_late_fee_unpaid'){
+      $('#FormEventTypeWaiveLateFee').show();
+      $('.waiver-unpaid-items').show();
+      $('.waiver-paid-items').show();
+      $('.waiver-late-fee-paid-items').hide();
+    }else if(form_event_selected == 'waive_interest_paid'){
+      $('#FormEventTypeWaiveInterest').show();
+      $('.waiver-unpaid-items').hide();
+      $('.waiver-paid-items').show();
+      $('.waiver-interest-paid-items').show();
+    }else if(form_event_selected == 'waive_interest_unpaid'){
+      $('#FormEventTypeWaiveInterest').show();
+      $('.waiver-unpaid-items').show();
+      $('.waiver-paid-items').show();
+      $('.waiver-interest-paid-items').hide();
+    }else if(form_event_selected == 'waive_principal_paid'){
+      $('#FormEventTypeWaivePrincipal').show();
+      $('.waiver-unpaid-items').hide();
+      $('.waiver-paid-items').show();
+      $('.waiver-principal-paid-items').show();
+    }else if(form_event_selected == 'waive_principal_unpaid'){
+      $('#FormEventTypeWaivePrincipal').show();
+      $('.waiver-unpaid-items').show();
+      $('.waiver-paid-items').show();
+      $('.waiver-principal-paid-items').hide();
+    }else{
+      return
+    }
+    $('#LayoutPaymentEventForms').hide();
+    $('#close_payment_event').hide();
+    $('#save_payment_event').show();
+    $('#back_payment_event').show();
+  }
+
+  function ActionAddPaymentEvent(account_payment_id){
+      $('#save_payment_event').button('loading');
+      form_event_selected = $("#PaymentEventForms").val();
+      result = [false, 'Payment Event Gagal.']
+      if (form_event_selected == 'payment'){
+        result = EventTypePayment(account_payment_id)
+      }
+      if (result[0]){
+        $('#responsive-modal').modal('hide');
+        toast_success('Sukses',result[1]);
+        window.location.reload(true);
+      }else{
+        toast_danger('Failed',result[1]);
+        $('#save_payment_event').button('reset');
+      }
+  } //end function ActionAddPaymentEvent
+
+  function setDefaultValue(id_obj, def_value){
+    $("#"+id_obj).val(def_value);
+  }
+  function EventTypePayment(account_payment_id){
+    var payment_amount = $("#EtpPaymentAmount").val();
+    var paid_date = $("#EtpPaidDate").val();
+    var pmt_notes = $("#EtpNote").val();
+    var use_credits =  $("#EtpCredits")[0].checked;
+    var payment_method_id = $("#EtpPaymentMethodId").val();
+    var payment_method_text = $("#EtpPaymentMethodId option:selected").text().toLowerCase();
+    var payment_receipt = $("#EtpPaymentMethodReceipt").val();
+    if (payment_method_id == "" && !use_credits){
+      return [false, "Payment Method atau Receipt tidak boleh kosong!!!"]
+    }
+    if (payment_method_text.indexOf('offline') == -1 && payment_receipt == "" && !use_credits){
+      return [false, "Payment Method atau Receipt tidak boleh kosong!!!"]
+    }
+    if (payment_amount == "" || paid_date == "" || pmt_notes == ""){
+      return [false, "Payment, paid date atau notes tidak boleh kosong!!!"]
+    } else {
+        result = [false, 'Add Account Payment Event Gagal.']
+        var AjaxResult = $.ajax({
+            url :  "{%url 'account_payment_status:add_account_transaction' %}/", // the endpoint
+            type : "POST", // http method
+            async: false,
+            data : {
+                  account_payment_id: account_payment_id,
+                  partial_payment: payment_amount,
+                  paid_date: paid_date,
+                  notes: pmt_notes,
+                  use_credits: use_credits,
+                  payment_method_id: payment_method_id,
+                  payment_receipt: payment_receipt,
+                  event_type: "payment"
+              }, // data sent with the get request
+        })
+        result_json = AjaxResult.responseJSON;
+        if (typeof result_json != 'undefined' && result_json.result == "success"){
+          result[0] = true
+          result[1] = "Add Account Payment Event Berhasil."
+        }
+        else{
+          console.log(AjaxResult.responseText);
+        }
+        return result
+    } // end else
+  } //end function EventTypePayment
+
+  function EventTypeLateFee(payment_id){
+    var late_fee_amount = $("#EtlfaddLateFeeAmount").val();
+    var event_date = $("#EtlfEventDate").val();
+    if (late_fee_amount == "" || event_date == ""){
+      return [false, "Amount atau Date tidak boleh kosong!!!"]
+    } else {
+        result = [false, 'Payment Event Gagal.']
+        var AjaxResult = $.ajax({
+            url :  "{%url 'payment_status:add_payment_event' %}/", // the endpoint
+            type : "POST", // http method
+            async: false,
+            data : {
+                  payment_id : payment_id,
+                  late_fee_amount : late_fee_amount,
+                  event_date : event_date,
+                  event_type: 'late_fee'
+              }, // data sent with the get request
+        })
+        result_json = AjaxResult.responseJSON;
+        if (typeof result_json != 'undefined' && result_json.result == "success"){
+          result[0] = true
+          result[1] = "Payment Event Berhasil."
+        }
+        else{
+          console.log(AjaxResult.responseText);
+        }
+        return result
+    } // end else
+  } //end function EventTypeLateFee
+
+  function EventTypeCustomerWallet(payment_id){
+    var cashback_amount = $('#EtcwCashbackAmount').val();
+    available = cashback_amount.replace(/[.]/g,'')
+    var use_cashback_amount = $('#EtcwUseCashbackAmount').val();
+    used = use_cashback_amount.replace(/[.]/g,'')
+    var event_date = $("#EtcwEventDate").val();
+    if (use_cashback_amount == "" || event_date == ""){
+      return [false, "Use Cashback Amount atau date tidak boleh kosong!!!"]
+    }else if(available == "-"){
+      return [false, "Cashback not available!!!"]
+    }else if(Number(used) > Number(available)){
+      return [false, "Available Cashback tidak cukup!!!"]
+    } else {
+        result = [false, 'Payment Event Gagal.']
+        var AjaxResult = $.ajax({
+            url :  "{%url 'payment_status:add_payment_event' %}/", // the endpoint
+            type : "POST", // http method
+            async: false,
+            data : {
+                  payment_id : payment_id,
+                  use_cashback_amount : use_cashback_amount,
+                  event_date: event_date,
+                  event_type: 'customer_wallet'
+              }, // data sent with the get request
+        })
+        result_json = AjaxResult.responseJSON;
+        if (typeof result_json != 'undefined' && result_json.result == "success"){
+          result[0] = true
+          result[1] = "Payment Event Berhasil."
+        }
+        else{
+          console.log(AjaxResult.responseText);
+        }
+        return result
+    } // end else
+  } //end function EventTypeCustomerWallet
+
+  new Vue({
+      delimiters: ['[[', ']]'],
+      el: '#fdc_details',
+      data() {
+        return {
+          lastFdcId: null,
+          fdc_call_loading: true,
+          FDCSummary: [],
+          isFdcCallLastPage: false
+        }
+      },
+      methods: {
+        async fetchFDCSummary() {
+          this.FDCSummary = []; // Clear existing data
+          this.lastFdcId = null; // Reset lastFdcId for new fetch
+          this.isFdcCallLastPage = false; // Reset pagination flag
+          this.fdc_call_loading = true;
+          const resp = await axios({
+            method: 'get',
+            url: `{% url 'account_payment_status:ajax_get_fdc_details' customer_id %}?last_fdc_id=${this.lastFdcId}`,
+            xstfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFToken',
+            headers: {
+              'X-CSRFToken': 'csrftoken',
+            },
+          });
+
+          this.lastFdcId = resp.data.data.last_fdc_id;
+            if (Array.isArray(resp.data.data.fdc_details)) {
+                fdc_details = resp.data.data.fdc_details
+                if (this.lastFdcId && fdc_details.length> 0) {
+                    this.FDCSummary = resp.data.data.fdc_details
+                }
+           }
+          this.fdc_call_loading = false;
+        },
+        async fetchNextFDCSummary() {
+          if (this.fdc_call_loading || this.isFdcCallLastPage) return;
+          this.fdc_call_loading = true;
+          const resp = await axios({
+            method: 'get',
+            url: `{% url 'account_payment_status:ajax_get_fdc_details' customer_id %}?last_fdc_id=${this.lastFdcId}`,
+            xstfCookieName: 'csrftoken',
+            xsrfHeaderName: 'X-CSRFToken',
+            headers: {
+              'X-CSRFToken': 'csrftoken',
+            },
+          });
+
+          this.lastFdcId = resp.data.data.last_fdc_id;
+          const newFdcData = resp.data.data.fdc_details;
+          if (this.lastFdcId && newFdcData.length> 0) {
+            this.FDCSummary = [...this.FDCSummary, ...newFdcData];
+          } else {
+                this.isFdcCallLastPage = true;
+          }
+          this.fdc_call_loading = false;
+        }
+      },
+      mounted() {
+        this.fetchFDCSummary();
+         // Ensure you correctly select the container that has the scrollable content
+          const container = document.querySelector("#slim_pmts");
+          const tab = container.querySelector(".customtab");
+          if (container) {
+            container.addEventListener('scroll', () => {
+              const foundFDCTabAsActive = tab.querySelector('.active.tab a[href="#fdc_details"]')
+              const { scrollTop, scrollHeight, clientHeight } = container;
+              if (!this.isFdcCallLastPage && foundFDCTabAsActive && (scrollTop + clientHeight + tab.clientHeight >= scrollHeight / 2)) {
+                this.fetchNextFDCSummary();
+              }
+            });
+          }
+      }
+  });
+
+  function EventTypeWaiveLateFee(payment_id){
+    var waive_late_fee_amount = $("#EtwlfaddLateFeeAmount").val();
+    var max_late_fee_amount = $("#EtwlfMaxLateFeeAmount").val();
+    var max_payment_number = $("#EtwlfMaxLateFeePaymentNumber").val();
+    var note = $("#EtwlfNote").val();
+    var validity_date = set_validity_date("late_fee");
+    amount = waive_late_fee_amount.replace(/[.]/g,'')
+    max_amount = max_late_fee_amount.replace(/[.]/g,'')
+    if (waive_late_fee_amount == "" || note == ""){
+      return [false, "Amount atau Note tidak boleh kosong!!!"]
+    }else if(Number(amount) > Number(max_amount) && form_event_selected == 'waive_late_fee_unpaid'){
+      return [false, "Amount melebihi Max!!!"]
+    }else {
+        result = [false, 'Payment Event Gagal.']
+        var AjaxResult = $.ajax({
+            url :  "{%url 'payment_status:add_payment_event' %}/", // the endpoint
+            type : "POST", // http method
+            async: false,
+            data : {
+                  payment_id : payment_id,
+                  waive_late_fee_amount : waive_late_fee_amount,
+                  note : note,
+                  event_type: form_event_selected,
+                  max_payment_number: max_payment_number,
+                  waive_validity_date: validity_date,
+              }, // data sent with the get request
+        })
+        result_json = AjaxResult.responseJSON;
+        if (typeof result_json != 'undefined' && result_json.result == "success"){
+          result[0] = true
+          result[1] = "Payment Event Berhasil."
+        }
+        else{
+          result[0] = false
+          result[1] = result_json.messages
+          console.log(AjaxResult.responseText);
+        }
+        return result
+    } // end else
+  } //end function EventTypeWaiveLateFee
+
+  function EventTypeWaiveInterest(payment_id){
+    var waive_interest_amount = $("#EtwlfaddInterestAmount").val();
+    var max_interest_amount = $("#EtwlfMaxInterestAmount").val();
+    var max_payment_number = $("#EtwlfMaxInterestPaymentNumber").val();
+    var note = $("#EtwlfInterestNote").val();
+    var validity_date = set_validity_date("interest");
+    amount = waive_interest_amount.replace(/[.]/g,'')
+    max_amount = max_interest_amount.replace(/[.]/g,'')
+    if (waive_interest_amount == "" || note == ""){
+      return [false, "Amount atau Note tidak boleh kosong!!!"]
+    }else if(Number(amount) > Number(max_amount) && form_event_selected == 'waive_interest_unpaid'){
+      return [false, "Amount melebihi Max!!!"]
+    }else {
+        result = [false, 'Payment Event Gagal.']
+        var AjaxResult = $.ajax({
+            url :  "{%url 'payment_status:add_payment_event' %}/", // the endpoint
+            type : "POST", // http method
+            async: false,
+            data : {
+                  payment_id : payment_id,
+                  waive_interest_amount : waive_interest_amount,
+                  note : note,
+                  event_type: form_event_selected,
+                  max_payment_number: max_payment_number,
+                  waive_validity_date: validity_date,
+              }, // data sent with the get request
+        })
+        result_json = AjaxResult.responseJSON;
+        if (typeof result_json != 'undefined' && result_json.result == "success"){
+          result[0] = true
+          result[1] = "Payment Event Berhasil."
+        }
+        else{
+          result[0] = false
+          result[1] = result_json.messages
+          console.log(AjaxResult.responseText);
+        }
+        return result
+    } // end else
+  } //end function EventTypeWaiveInterest
+
+  function EventTypeWaivePrincipal(payment_id){
+    var waive_principal_amount = $("#EtwlfaddPrincipalAmount").val();
+    var max_principal_amount = $("#EtwlfMaxPrincipalAmount").val();
+    var max_payment_number = $("#EtwlfMaxPrincipalPaymentNumber").val();
+    var note = $("#EtwlfPrincipalNote").val();
+    var validity_date = set_validity_date("principal");
+    amount = waive_principal_amount.replace(/[.]/g,'');
+    max_amount = max_principal_amount.replace(/[.]/g,'');
+    if (waive_principal_amount == "" || note == ""){
+      return [false, "Amount atau Note tidak boleh kosong!!!"]
+    }else if(Number(amount) > Number(max_amount) && form_event_selected == 'waive_principal_unpaid'){
+      return [false, "Amount melebihi Max!!!"]
+    }else {
+        result = [false, 'Payment Event Gagal.']
+        var AjaxResult = $.ajax({
+            url :  "{%url 'payment_status:add_payment_event' %}/", // the endpoint
+            type : "POST", // http method
+            async: false,
+            data : {
+                  payment_id : payment_id,
+                  waive_principal_amount : waive_principal_amount,
+                  note : note,
+                  event_type: form_event_selected,
+                  max_payment_number: max_payment_number,
+                  waive_validity_date: validity_date
+              }, // data sent with the get request
+        })
+        result_json = AjaxResult.responseJSON;
+        if (typeof result_json != 'undefined' && result_json.result == "success"){
+          result[0] = true
+          result[1] = "Payment Event Berhasil."
+        }
+        else{
+          result[0] = false
+          result[1] = result_json.messages
+          console.log(AjaxResult.responseText);
+        }
+        return result
+    } // end else
+  } //end function EventTypeWaivePrincipal
+
+  function set_validity_date(action){
+    validity_today = $("input[name="+action+"_validity_period_type]").prop('checked');
+    validity_date = $("#"+action+"_validity_period_date");
+    if(validity_today){
+      today = new Date();
+      day = today.getDate();
+      month = today.getMonth() + 1;
+      year = today.getFullYear();
+      if (day < 10) {
+          day = '0' + day;
+      };
+      if (month < 10) {
+          month = '0' + month;
+      };
+      new_format = day + "-" + month + "-" + year;
+      validity_date.val(new_format);
+    }
+
+    return validity_date.val();
+  }
+
+  function UpdateRemainingAmount(payment_id, event_type){
+    if (event_type == "late_fee") {
+      event_name = "LateFee";
+      event_name_space = "Late Fee";
+    } else {
+      event_name = event_type.replace(/^./, event_type[0].toUpperCase());
+      event_name_space = event_name;
+    }
+    var max_payment_number = $("#EtwlfMax" + event_name + "PaymentNumber").val();
+
+    var AjaxResult = $.ajax({
+        url :  "{%url 'payment_status:ajax_get_remaining_amount' %}/", // the endpoint
+        type : "POST", // http method
+        async: false,
+        data : {
+              payment_id : payment_id,
+              event_type: event_type,
+              max_payment_number: max_payment_number,
+          }, // data sent with the get request
+    })
+    result_json = AjaxResult.responseJSON;
+    if (typeof result_json != 'undefined' && result_json.result == "success"){
+      remaining_amount = result_json.remaining_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      remaining_amount_minus = parseInt(result_json.remaining_amount - 1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      inputElm = $("#EtwlfMax" + event_name + "Amount");
+      spanElm = $(".all_" + event_type);
+      old_value = inputElm.val();
+      if ( old_value != remaining_amount ) {
+        toast_success('Sukses',"Max Waive " + event_name_space + " Amount berhasil di update.");
+        if (event_type == "principal") {
+          inputElm.val(remaining_amount_minus);
+        } else {
+          inputElm.val(remaining_amount);
+        }
+        spanElm.html("Rp. " + remaining_amount);
+      }
+    } else{
+      toast_danger('Failed',"Max Waive " + event_name_space + " Amount gagal di update.");
+    }
+  } //end function UpdateRemainingAmount
+
+  function set_ignore_calls(action){
+    var csrftoken = getCookie('csrftoken');
+    $.ajax({
+      url :  "{%url 'payment_status:ajax_set_ignore_calls' %}/",
+      type : "GET",
+      data : { payment_id: {{payment_obj.id}},
+               csrfmiddlewaretoken: csrftoken,
+               action:action
+              },
+      success : function(json) {
+        if (json.result == "success"){
+          toast_success('Sukses!!',json.reason);
+          $('#send_ignore_calls').hide();
+          window.location.reload(true);
+        }else if(json.result == "warning"){
+          toast_warning('Warning',json.reason);
+        }else {
+          console.log(json);
+          toast_danger('Failed Update',json.reason);
+        }
+      },
+      error : function(xhr,errmsg,err) {
+        console.log(xhr.status + ": " + xhr.responseText);
+        toast_danger('Failed Update set Reminder');
+      }
+    }); // end of ajax
+  }//end of function
+
+  function ActionSetWhatsapp(){
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url :  "{%url 'payment_status:ajax_set_payment_whatsapp' %}/", // the endpoint
+        type : "GET", // http method
+        data : { payment_id: {{payment_obj.id}},
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+
+            if (json.result == "successful!"){
+              toast_success('Sukses!!',json.reason);
+              window.location.reload(true);
+            }
+            else {
+              console.log(json);
+              toast_danger('Failed Update',json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            toast_danger('Failed Update set Reminder');
+        }
+    }); // end of ajax
+  }//end of function
+
+  function ShowFormWhatsappNoContact(){
+    $('#responsive-modal-whatsapp-no-contact').modal('show');
+  }
+
+  function ShowFormWhatsappBrokenPtp(){
+    $('#responsive-modal-whatsapp-broken-ptp').modal('show');
+  }
+
+  function ShowFormMultipleFactors(){
+    $('#responsive-modal-multiple-factors').modal('show');
+  }
+
+  function ProcessFormMultiplFfactorEasyWatsapp(flag){
+    $('#responsive-modal-multiple-factors').modal('hide');
+    if(flag == 'is_5_days_unreachable')
+       ShowFormWhatsappNoContact();
+    else if(flag == 'is_broken_ptp_plus_1')
+       ShowFormWhatsappBrokenPtp();
+
+  }
+
+  function ActionWaChatNoContact(){
+    var phone = $("#wa_no_contact_mobile_select").val()
+    phone = phone.replace('+','');
+    url = 'https://web.whatsapp.com/send?phone='+phone+'&text='+GLOBAL_TEMPLATE_WHATSAPP_NO_CONTACT
+    window.open(url,'_blank');
+  }
+
+ function ActionWaChatBrokenPtp(){
+    var phone = $("#wa_contact_mobile_select").val()
+    phone = phone.replace('+','')
+    url = 'https://web.whatsapp.com/send?phone='+phone+'&text='+GLOBAL_TEMPLATE_WHATSAPP_BROKEN_PTP_PLUS_1
+    window.open(url,'_blank');
+  }
+
+  function ShowFormWhatsapp(){
+    $('#responsive-modal-whatsapp').modal('show');
+  }
+  function ActionWaChoice(id, result){
+    btnclassName = $('#btn_wa_'+id).attr('class');
+    $(".btn-whatsapp").removeClass('btn-success');
+    $(".btn-whatsapp").addClass('btn-default');
+    $(".icon-whatsapp").removeClass('fa-check-square');
+    $(".icon-whatsapp").addClass('fa-square');
+    if(btnclassName.includes('btn-default')){
+      $('#btn_wa_'+id).removeClass('btn-default');
+      $('#btn_wa_'+id).addClass('btn-success');
+      $('#icon_wa_'+id).removeClass('fa-square');
+      $('#icon_wa_'+id).addClass('fa-check-square');
+      $('#result_wa').val(result)
+      $('#btn_save_wa').show()
+    }else if(btnclassName.includes('btn-success')){
+      $('#btn_wa_'+id).removeClass('btn-success');
+      $('#btn_wa_'+id).addClass('btn-default');
+      $('#icon_wa_'+id).removeClass('fa-check-square');
+      $('#icon_wa_'+id).addClass('fa-square');
+      $('#result_wa').val(result)
+      $('#btn_save_wa').hide()
+    }
+  }
+
+  function ActionWaChat(phone){
+    phone = phone.replace('+','');
+    url = 'https://web.whatsapp.com/send?phone='+phone+'&text='+GLOBAL_TEMPLATE_WHATSAPP
+    window.open(url,'_blank');
+  }
+
+  function ActionWaSave(){
+    result = $('#result_wa').val()
+    console.log(result)
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url :  "{%url 'payment_status:ajax_save_whatsapp' %}/", // the endpoint
+        type : "GET", // http method
+        data : { payment_id: {{payment_obj.id}},
+                 note:result,
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            console.log(json); // log the returned json to the console
+
+            if (json.result == "successful!"){
+              $('#responsive-modal-whatsapp').modal('hide');
+              toast_success('Sukses!!',json.reason);
+              window.location.reload(true);
+            }
+            else {
+              console.log(json);
+              toast_danger('Failed Update',json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            toast_danger('Failed Update set Reminder');
+        }
+    }); // end of ajax
+  }
+  <!-- Start PTP Action-->
+  function onModalPTPShow(){
+    $("#responsive-modal-ptp-date").modal("show")
+    robocall_template_id = $("#id_robocall_template_choice").val()
+    text = ''
+    robo_templates = '{{robo_templates_map | safe}}'
+    console.log('log disini')
+    console.log(JSON.parse(robo_templates))
+    robo_template_obj = JSON.parse(robo_templates)
+    robo_template_text = robo_template_obj[robocall_template_id]
+    $("#robocall_template_text").text(robo_template_text)
+    onChangePtpMobile();
+  }
+  function onChangePtpMobile() {
+    var ptp_mobile_phone = $("#id_ptp_mobile_select").val();
+    if (ptp_mobile_phone == "custom") {
+      $("#id_ptp_mobile_phone_number").removeAttr("disabled")
+      $("#id_ptp_mobile_phone_number").val(0)
+    } else {
+      $("#id_ptp_mobile_phone_number").attr("disabled", "disabled")
+      $("#id_ptp_mobile_phone_number").val(ptp_mobile_phone)
+    }
+  }
+  function onChangeRoboTemplate(){
+    robocall_template_id = $("#id_robocall_template_choice").val();
+    text = '';
+    robo_templates = '{{robo_templates_map | safe}}'
+    console.log('log disini');
+    console.log(JSON.parse(robo_templates));
+    robo_template_obj = JSON.parse(robo_templates);
+    robo_template_text = robo_template_obj[robocall_template_id]
+    $("#robocall_template_text").text(robo_template_text);
+  }
+  function updatePTPDateConfirm(){
+    var ptp_date = $("#id_form2-ptp_date").val();
+    var ptp_amount = $("#id_ptp_amount").val();
+    var ptp_robo_mobile_phone = $("#id_ptp_mobile_phone_number").val()
+    var ptp_robo_template_name = $("#id_robocall_template_choice :selected").text();
+    var ptp_robo_template_text = $("#robocall_template_text").text();
+    var is_ptp_robocall_active = $("#is_ptp_robocall_active_choosen").val();
+    // show change to ptp modal confirm
+    $("#id_new_ptp_date_text").text(ptp_date);
+    $("#id_new_ptp_amount_text").text(ptp_amount);
+    $("#id_new_ptp_mobile_phone_text").text(ptp_robo_mobile_phone);
+    if (is_ptp_robocall_active == "true" || is_ptp_robocall_active == '' || is_ptp_robocall_active == null) {
+      $("#id_ptp_robocall_active").text('active')
+    } else {
+      $("#id_ptp_robocall_active").text('not active')
+    }
+    $("#id_robocall_template_ptp_date_name_text").text(ptp_robo_template_name);
+    $("#id_robocall_template_text_conf").text(ptp_robo_template_text);
+    $("#responsive-modal-ptp-date").modal("hide");
+    $("#responsive-modal-confirm-ptpdate").modal("show");
+  }
+  function onPtpActive(value) {
+    $("#is_ptp_robocall_active_choosen").val(value)
+  }
+
+  function updatePtpDate(){
+    var ptp_date_value = $('#id_form2-ptp_date').val();
+    var ptp_amount_value = $('#id_ptp_amount').val();
+    if(ptp_date_value == ''){
+      toast_danger('Warning','Please Fill PTP Date');
+    }else{
+      {% if loan_obj %}
+      $.ajax({
+          url :  "{% url 'loan_status:ajax_update_ptp' %}/",
+          type : "POST",
+          data : {
+                loan_id : {{loan_obj.id}},
+                ptp_date : reverseDate(ptp_date_value),
+                ptp_amount : ptp_amount,
+          },
+
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                toast_success('Sukses!!','Update PTP Date.');
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.messages);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+      {% endif %}
+    }
+  }
+
+  function common_popup_display(title, body) {
+    $("#modal_default_title").html("" + title);
+    $("#modal_default_body").html("" + body);
+    $('#modal-success-default').modal('show');
+  }
+  var previous_selected_div = 'app_status_history'
+  function HideandShowDiv(div_id) {
+     if (div_id == 'app_status_history') {
+         if (div_id != previous_selected_div) {
+             $("#"+previous_selected_div).css("display", "none");
+         }
+         $("#history_and_cll_summary_div").css("display", "block");
+     } else {
+        $("#history_and_cll_summary_div").css("display", "none");
+        previous_selected_div = div_id
+     }
+  }
+  function updatePTPDateAction(){
+    var ptp_date = $("#id_form2-ptp_date").val();
+    var ptp_amount = ($("#id_ptp_amount").val()).replace(/\./g, '');
+    var ptp_robo_mobile_phone = $("#id_ptp_mobile_phone_number").val();
+    var ptp_robo_template_id = $("#id_robocall_template_choice").val();
+    console.log('choosen', ptp_robo_template_id)
+    var is_ptp_robocall_active = $("#is_ptp_robocall_active_choosen").val();
+
+    if (ptp_date == '' ) {
+      toast_danger('Alert!!','Isi PTP Date');
+    }else if (ptp_amount == '' || ptp_amount <= 0) {
+      toast_danger('Alert!!','Isi PTP Amount');
+    }else if (ptp_robo_mobile_phone == '' || ptp_robo_mobile_phone == '0') {
+      toast_danger('Alert!!','Isi Tujuan PTP Robocall');
+    }else if (ptp_robo_template_id == '' ) {
+      toast_danger('Alert!!','Pilih Robocall Template');
+    }else{
+      $('#btn_confirm_update_ptp_date').hide()
+      console.log(ptp_robo_template_id)
+      {% if loan_obj %}
+      $.ajax({
+          url :  "{% url 'loan_status:ajax_update_ptp' %}/",
+          type : "POST",
+          data : {
+                loan_id : {{loan_obj.id}},
+                ptp_date : ptp_date,
+                ptp_amount : ptp_amount,
+                ptp_robo_mobile_phone: ptp_robo_mobile_phone,
+                robocall_template_id : ptp_robo_template_id,
+                is_ptp_robocall_active: is_ptp_robocall_active,
+
+          },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                $('#responsive-modal-confirm-ptpdate').hide()
+                toast_success('Sukses!!',json.message);
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.message);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+            console.log(err, errmsg, 'halo')
+              console.log(xhr.status + ": " + xhr.responseText);
+              toast_danger('Failed Update',xhr.responseText);
+              $('#btn_confirm_update_ptp_date').show()
+          }
+      });
+      {% endif %}
+    }
+    $('#btn_use_change_due_date').show()
+  }
+  var is_for_ojk = '{{ is_for_ojk }}';
+  if (is_for_ojk.length > 0 && is_for_ojk == 'True'){
+      is_for_ojk = true;
+  }else{
+      is_for_ojk = false;
+  }
+  if (is_for_ojk==true){
+    $('#sd_tab').hide();
+    $('#offer_tab').hide();
+    $('#add_payment_event').hide();
+    $('button[title="edit cycle day and first installment amount"]').hide();
+    $('.tab-sd').hide()
+    $('.tab-dv').hide()
+    $('.tab-pv').hide()
+    $('.tab-fin').hide()
+  }
+  
+    var hide_tabs = {{ hide_tabs|safe }}
+    if (hide_tabs.length > 0) {
+      for (i = 0; i < hide_tabs.length; i++) {
+          $('#'+hide_tabs[i]).hide();
+      } 
+    }
+
+  {% if user.groups.all|validate_group:'collection_supervisor' == False %}
+    if (is_ojk_audit_active=='True'){
+      // $('.tab-sd').hide();
+      // $('.tab-dv').hide();
+      // $('.tab-pv').hide();
+      // $('.tab-fin').hide();
+      // $('.tab-ca').hide();
+      // $('#offer_tab').hide();
+      // $('#sd_tab').hide();
+      // $('#st').addClass('active');
+      if ($('.tab-coll').length > 0) {
+        sortCAby($(".tab-coll"),'coll');
+      }
+      if (!is_show_document) {
+        // $('.tab_dvc').hide();
+        $('.tab_doc_verify').hide();
+        // $('#dvc').removeClass('active');
+      };
+    };
+  {% endif %}
+
+    const customerId = '{{ customer.id }}'
+    const applicationId = '{{ application.id }}'
+    const userToken = "{{ user.auth_expiry_token.key }}"
+
+    // Identify Watermark Text
+    var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+{% endblock %}
+
+{% block script_end %}
+    <script src="{% static 'default/js/additional-address.js' %}"></script>
+
+    <!-- Watermark JS -->
+    <script type="text/javascript" charset="utf8"  src="{% static 'theme/plugins/watermark/watermark.js' %}"></script>
+{% endblock %}

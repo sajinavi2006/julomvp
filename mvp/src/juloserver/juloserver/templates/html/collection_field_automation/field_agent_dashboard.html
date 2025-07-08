@@ -1,0 +1,425 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+{% load unit %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+  <style type="text/css">
+  table.dataTable.no-footer {
+        border-bottom: 0 !important;
+    }
+</style>
+{% endblock %}
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">FIELD COLLECTION AUTOMATION</h3><br/>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    {% if ask_for_gps %}
+        <p id="gps_info">Tolong Allow GPS terlebih dahulu untuk melanjutkan</p>
+    {% else %}
+        <form method="post" id="formFilter" class="form-inline">
+            {% csrf_token %}
+            <input type="hidden" id="globalPageNumber" name="page_number">
+            <div class="row" style="display: flex;">
+                <div class="col-md-3 col-sm-6">
+                    <div class="input-group">
+                          <input type="text" id="filter_account_id" name="filter_account_id" class="form-control" placeholder="Account ID" value="{{ filter_account_id }}">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default btnFilter" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                          </span>
+                      </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <button type="button" class="btn btn-default" id="btn_advance_filter" data-toggle="modal" data-target="#modalAdvanceFilter">
+                        <i class="fa fa-filter" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal fade modal-position" id="modalAdvanceFilter" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="border-bottom: none">
+                            <h3 align="center">
+                                Filter
+                            </h3>
+                        </div>
+                        <div class="modal-body" style="padding: 0;height: 250px">
+                            <div class="col-md-12">
+                                <label class="col-md-12 col-sm-12">Expiry Assignment Date</label>
+                                <div class="input-group m-t-10 ">
+                                    <span class="input-group-addon btn_calendar" input_name="filter_expiry_date"><i class="fa fa-calendar"></i></span>
+                                    <input class="form-control" id="filter_expiry_date"
+                                       name="filter_expiry_date" type="text" value="{{ filter_expiry_date }}"/>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="col-md-12 col-sm-12">Area</label>
+                                <select class="form-control" id="filter_area" name="filter_area">
+                                    <option value="" {% if not filter_area %}selected{% endif %}>----</option>
+                                    {% for area in area_list %}
+                                        <option value="{{ area }}" {% if filter_area == area %}selected{% endif %}>
+                                            {{ area }}
+                                        </option>
+                                    {% endfor %}
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="button-container" align="center">
+                                <button type="button"
+                                        class="btn btn-default text-center"
+                                        data-dismiss="modal">Kembali
+                                </button>
+                                <button type="button"
+                                        class="btn btn-primary text-center btnFilter"
+                                        style="background-color: #03a9f3;
+                                       border-color: #03a9f3;" data-dismiss="modal">Cari
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <table class="table table-striped table-responsive" id="table_field_assignments" style="width:100%">
+                <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Status</th>
+                    <th>Account ID</th>
+                    <th>Nama<br> Nasabah</th>
+                    <th>Area</th>
+                    <th>Expiry for<br> assignment</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for agent_data in field_assignments %}
+                    <tr>
+                        <td>
+                            {{ agent_data.data_number }}
+                        </td>
+                        <td style="color: #54C392;">
+                            {% if agent_data.done_status %}
+                            <span class="glyphicon glyphicon-ok-sign"></span> <b>Done</b>
+                            {% else %}-
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="openDetail" data-id="{{ agent_data.id }}">{{ agent_data.account_id }}</a>
+                        </td>
+                        <td>
+                            {{ agent_data.fullname }}
+                        </td>
+                        <td>
+                            {{ agent_data.area }}
+                        </td>
+                        <td>
+                            {{ agent_data.expiry_date|default:"-" }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+            {% if field_assignments.has_previous %}
+                <li class="page-item">
+                    <a class="page-link btnPage" href="#"
+                       page_number="{{ field_assignments.previous_page_number }}">
+                        Previous
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
+
+            {% if raw_data.number|add:'-9' > 1 %}
+                <li class="page-item">
+                    <a class="page-link btnPage" href="#" page_number="{{ raw_data.number|add:'-10' }}">&hellip;</a>
+                </li>
+            {% endif %}
+
+            {% for i in raw_data.paginator.page_range %}
+                {% if raw_data.number == i %}
+                    <li class="page-item active" aria-current="page">
+              <span class="page-link">
+                {{ i }}
+                <span class="sr-only">(current)</span>
+              </span>
+                    </li>
+                {% elif i > raw_data.number|add:'-10' and i < raw_data.number|add:'10' %}
+                    <li class="page-item">
+                        <a class="page-link btnPage" href="#" page_number="{{ i }}">{{ i }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if raw_data.paginator.num_pages > raw_data.number|add:'9' %}
+                <li class="page-item"><a class="page-link btnPage" href="#"
+                                         page_number="{{ raw_data.number|add:'10' }}">&hellip;</a></li>
+            {% endif %}
+
+            {% if recording_detail_lists.has_next %}
+                <li class="page-item">
+                    <a class="page-link btnPage" href="#" page_number="{{ raw_data.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+    <link href="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.min.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/datatables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/datatables-responsive/css/responsive.bootstrap.scss' %}" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+    <script src="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/DataTables/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/datatables/media/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/datatables-responsive/js/dataTables.responsive.js' %}"></script>
+{% endblock %}
+<script>
+    {% block script_bottom_inside %}
+        var table = $('#table_field_assignments').DataTable({
+            sScrollX: '50%',
+            sScrollY: '50%',
+            searching: false, paging: false, info: false,
+            language: {
+                "emptyTable": "Data kosong atau data tidak ditemukan"
+            }
+        })
+        $('#table_field_assignments tbody').on('click', 'a.openDetail', function () {
+            const id = $(this).data('id')
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( detailData(row.data(), id) ).show();
+                tr.addClass('shown');
+            }
+        } );
+        function detailData ( row_data, id ) {
+            var div = $('<div/>').addClass( 'loading' ).text( 'Loading...' );
+             $.ajax({
+                url: `{% url 'collection_field:get_field_assignment_detail' %}`,
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    field_assignment_id: id,
+                },
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status == 'success') {
+
+                        var data = json.data
+                        var report_status = ''
+                        if (data.result){
+                            report_status = "background-color:grey"
+                        }
+                        var img_photo = '<span>-</span>'
+                        if(data.result_foto){
+                            img_photo = '<img src="'+data.result_foto+'" class="img-responsive" alt="...">'
+                        }
+                        div.html('<table class="table table-striped col-sm-6">'+
+                                '<tr><td colspan="2" class="col-sm-12"><b>Details:</b></td></tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Nama Nasabah</b></td>'+
+                                    '<td class="col-sm-6 fullnameDetail">'+row_data[3]+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Alamat</b></td>'+
+                                    '<td class="col-sm-6 addressDetail">'+data.full_address+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Titik Kordinat Nasabah</b></td>'+
+                                    '<td class="col-sm-6 coordinateDetail"><a href="'+data.gmaps_url+'" target="_blank">maps</a></td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>KTP dan Selfie</b></td>'+
+                                    '<td class="col-sm-6">'+
+                                        '<a class="btn btn-success" href="/collection_field/customer_identity/'+data.account_id+'" target="_blank">Lihat Gambar</a>'+
+                                    '</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Nama Kantor</b></td>'+
+                                    '<td class="col-sm-6 officeNameDetail">'+data.company_name+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Nomer Telepon</b></td>'+
+                                    '<td class="col-sm-6 officeNameDetail">'+data.phone_number+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Bucket</b></td>'+
+                                    '<td class="col-sm-6 bucketDetail">'+data.bucket+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Date of assignment</b></td>'+
+                                    '<td class="col-sm-6 assignmentDateDetail">'+data.assignment_date+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Outstanding amount</b></td>'+
+                                    '<td class="col-sm-6 outstandingDetail">'+data.outstanding_amount+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Total due amount</b></td>'+
+                                    '<td class="col-sm-6 outstandingDetail">'+data.overdue_amount+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Agent PIC</b></td>'+
+                                    '<td class="col-sm-6 agentNameDetail">'+data.agent_username+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Result</b></td>'+
+                                    '<td class="col-sm-6 resultDetail">'+data.result+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Visit Foto</b></td>'+
+                                    '<td class="col-sm-6 resultDetail">'+img_photo+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Last payment date</b></td>'+
+                                    '<td class="col-sm-6 lastPaymentDateDetail">'+data.last_payment_date+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Last payment amount</b></td>'+
+                                    '<td class="col-sm-6 lastPaymentDateDetail">'+data.last_payment_amount+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>PTP Date</b></td>'+
+                                    '<td class="col-sm-6 ptpDateDetail">'+data.ptp_date+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>PTP Amount</b></td>'+
+                                    '<td class="col-sm-6 ptpAmountDetail">'+data.ptp_amount+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Metode Pembayaran</b></td>'+
+                                    '<td class="col-sm-6 paymentMethodDetail">'+data.payment_method+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Nomer VA</b></td>'+
+                                    '<td class="col-sm-6 vaNumberDetail">'+data.payment_method_number+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-6"><b>Status</b></td>'+
+                                    '<td class="col-sm-6 statusDetail" style="color: #54C392;">'+row_data[1]+'</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="col-sm-12" colspan="2">'+
+                                        '<a class="btn btn-success col-sm-12" style="width:60%;'+report_status+'" href="/collection_field/agent_field_report_form/'+id+'" target="_blank">Report</a>'+
+                                    '</td>'+
+                                '</tr>'+
+                            '</table>').removeClass( 'loading' );
+                    }
+                }
+             })
+             return div
+        }
+
+        function ToastDanger(body_message) {
+            $.toast({
+                heading: 'Failure',
+                text: body_message,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'error',
+                hideAfter: 2800
+            });
+        }
+        function ToastSuccess(header_msg, body_message) {
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'success',
+                hideAfter: 1500,
+                stack: 6
+            });
+        }
+        if ('{{ ask_for_gps }}' == 'True') {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    $.ajax({
+                        url: `{% url 'collection_field:store_location_agent_attendance' %}`,
+                        type: 'POST',
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            field_agent_attendance_id: '{{ field_agent_attendance_id }}',
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                        },
+                        success: function (json) {
+                            // todo do something if location already stored
+                            if (json.status == 'success') {
+                                window.location.reload();
+                            }else{
+                                $('#gps_info').text(json.messages)
+                            }
+                        }
+                    });
+                });
+            } else {
+                alert("Geolocation is not supported by this browser! tolong ganti browser yang anda gunakan");
+            }
+        }
+         $('.btnPage').click(function (e) {
+            number = $(this).attr('page_number')
+            $('#globalPageNumber').val(number)
+            $('#formFilter').submit()
+         })
+        $('.btnFilter').click(function (e) {
+            number = $(this).attr('page_number')
+            $('#globalPageNumber').val(1)
+            $('#formFilter').submit()
+         })
+        $('#filter_expiry_date').datetimepicker({
+          format:'d-m-Y'
+        });
+        $('.btn_calendar').click(function (e) {
+            input_id = $(this).attr('input_name')
+            $('#'+input_id).datetimepicker('show');
+        })
+    {% endblock %}
+</script>

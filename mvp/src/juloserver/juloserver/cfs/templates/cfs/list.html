@@ -1,0 +1,405 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+
+
+{% block additional_title %}CFS Mission{% endblock %}
+
+{% block meta %}
+    <!-- remarked if for production -->
+    <!-- <meta http-equiv="refresh" content="3" > -->
+{% endblock %}
+
+{% block breadcrumb_title %}Data Aplikasi {% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li class="active">Seluruhnya</li>
+{% endblock %}
+
+{% block list_title %}CFS MISSION {% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+
+<form id="search-form" class="row">
+    {{ filter_form.sort_q }}
+    <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Cari Berdasarkan</label>
+      <div class="m-t-10">
+          <select name="filter_field" class="form-control" >
+            {% for filter_field, filter_field_text in filter_form.filter_field.field.choices %}
+              <option
+                  value="{{ filter_field }}"
+                  {% if filter_field == filter_form.filter_field.value %}
+                    selected
+                  {% endif %}
+              >{{ filter_field_text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Kondisi</label>
+      <div class="m-t-4">
+          <select name="filter_condition" class="form-control" style="width:auto;">
+            {% for value, text in filter_form.filter_condition.field.choices %}
+              <option
+                  value="{{ value }}"
+                  {% if value == filter_form.filter_condition.value %}
+                    selected
+                  {% endif %}
+              >{{ text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Pencarian</label>
+      <div class="input-group m-t-10">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <input type="text"
+               name="filter_keyword"
+               id="filter_keyword"
+               class="form-control"
+               aria-describedby="basic-addon1"
+               placeholder="Pencarian"
+               value="{{ filter_form.filter_keyword.value | default:'' }}"
+        >
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Mission</label>
+      <div class="m-t-4">
+          <select name="filter_action" id="filter_action" class="form-control">
+            {% for value, text in filter_form.filter_action.field.choices %}
+              <option
+                  value="{{ value }}"
+                  {% if value|stringformat:"i"  == filter_form.filter_action.value %}
+                    selected
+                  {% endif %}
+              >{{ text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+
+    <div class="col-md-12 m-t-10">
+      <div class="row">
+        <div class="col-md-2 col-xs-12">
+          <button type="submit" class="btn btn-primary btn-rounded btn-block">
+            <strong><i class="fa fa-search" ></i> Cari</strong>
+          </button>
+        </div>
+        <div class="col-md-2 col-xs-12">
+          <button type="button" name="reset" value="empty" class="btn btn-info btn-rounded btn-block" onClick="clearSearchForm();">
+            <strong><i class="fa fa-eraser fa-fw"></i>Kosongkan</strong>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+<table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size="{{results_per_page}}">
+    <thead>
+        <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+            <th data-toggle="true" data-sort-ignore="true">No</th>
+            <th data-sort-ignore="true" data-julo-sort="id">Assignment ID</th>
+            <th data-sort-ignore="true">Customer name</th>
+            <th data-sort-ignore="true">Email</th>
+            <th data-sort-ignore="true">Account ID</th>
+            <th class="julo-sort-header" data-sort-ignore="true" data-julo-sort="cdate" >Create Date</th>
+            <th data-sort-ignore="true">Mission</th>
+            <th data-hide="phone" data-sort-ignore="true" style="width:1%"></th>
+            <th data-hide="phone" data-sort-ignore="true" style="width:1%">Verify</th>
+            <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">Actions</th>
+        </tr>
+    </thead>
+    <div class="form-inline padding-bottom-15">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12 hidden-xs"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-xs-12 hidden-xs"></div>
+        </div>
+    </div>
+    <tbody>
+        {% if object_list %} {% for object in object_list %}
+        <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+            <td>
+                {{ object.id|default:"-"|safe}}
+            </td>
+            <td>
+                {{ object.cfs_action_assignment.customer.fullname|default:"-"|safe}}
+            </td>
+            <td>
+                <a href="{% url 'app_status:change_status_by_customer' object.cfs_action_assignment.customer_id %}?tab=cfs" target="_blank">
+                    {{ object.cfs_action_assignment.customer.email|default:"-"|safe}}
+                </a>
+            </td>
+            <td>
+                {{ object.account.id|default:"-"|safe}}
+            </td>
+            <td>
+                <strong>
+                    {{ object.cdate|date:"Y-m-d H:i:s"|safe }}
+                </strong>
+            </td>
+            <td>
+                {{ object.cfs_action_assignment.action.action_code|default:"-"|safe}}
+            </td>
+            <td class="text-center" style="vertical-align: middle">
+              {% if object.is_locked %}
+                <span class="label label-danger lbl-sm lbl-rounded pull-right" title="Locked by {{ object.locked_by_info }}"><i class="fa fa-lock"></i></span>
+              {% else %}
+                <span class="label label-custom lbl-sm lbl-rounded pull-right"><i class="fa fa-unlock"></i></span>
+              {% endif %}
+            </td>
+            <td>
+              {%if object.cfs_action_assignment.action.action_code == 'upload_salary_slip' or object.cfs_action_assignment.action.action_code == 'upload_utilities_bill' or object.cfs_action_assignment.action.action_code == 'upload_bank_statement' or object.cfs_action_assignment.action.action_code == 'upload_credit_card' %}
+                <button class="btn btn-success btn-rounded m-b-5" onclick="show_assignment_modal({{ object.id }})"><i class="fa fa-pencil fa-fw"></i> Lihat Gambar </button>
+              {% endif %}
+
+              {%if object.cfs_action_assignment.action.action_code == 'verify_family_phone_number' or object.cfs_action_assignment.action.action_code == 'verify_office_phone_number' %}
+                <button class="btn btn-success btn-rounded m-b-5" onclick="show_assignment_modal({{ object.id }})"><i class="fa fa-pencil fa-fw"></i> <i class="bi bi-telephone"></i> {{object.cfs_action_assignment.extra_data.phone_number}} </button>
+              {% endif %}
+
+              {%if object.cfs_action_assignment.action.action_code == 'connect_bank' %}
+                <button class="btn btn-success btn-rounded m-b-5" onclick="show_assignment_modal({{ object.id }})"><i class="fa fa-folder-open"></i> Scraped Data Download </button>
+              {% endif %}
+            </td>
+            <td class='text-center'>
+              <div class="btn-group m-r-10">
+                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-primary btn-rounded dropdown-toggle waves-effect waves-light" type="button">
+                   --Pilih-- <span class="caret"></span>
+                </button>
+                <ul role="menu" class="dropdown-menu">
+                  {%if object.locked_by_id %}
+                    <li>
+                      <button class="btn btn-danger btn-block" title="Unlock assignment ini" onclick="unlock_assignment({{ object.id }})">Unlock</button>
+                    </li>
+                  {%else %}
+                    <li>
+                      <button class="btn btn-danger btn-block" title="lock assignment ini" onclick="lock_assignment({{ object.id }})">Lock</button>
+                    </li>
+                  {%endif%}
+                </ul>
+              </div>
+            </td>
+        </tr>
+        {% endfor %} {% else %}
+        <tr>
+            <td colspan="8" class="center">Kosong - Tidak ada Data</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+<tfoot>
+    <tr>
+        <td colspan="5">
+            <div class="text-right">
+                {% pagination2 is_paginated paginator page_obj q 4 %}
+            </div>
+        </td>
+    </tr>
+</tfoot>
+
+
+<div id="modal_locked" class="modal" tabindex="-1" role="dialog"aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-warning">
+        <h4 class="modal-title">Assignment sudah di-Lock</h4>
+      </div>
+      <div class="modal-body">
+        Body
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning waves-effect js-detail-btn" data-dismiss="modal">
+          Lihat Assignment
+        </button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal_unlocked" class="modal" tabindex="-1" role="dialog"aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-success">
+        <h4 class="modal-title">Assignment belum di-lock</h4>
+      </div>
+      <div class="modal-body">
+        Body
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning waves-effect js-detail-btn" data-dismiss="modal">
+          Lihat Assignment
+        </button>
+        <button type="button" class="btn btn-custom waves-effect js-lock-detail-btn" data-dismiss="modal">
+          Lock dan verify Assignment
+        </button>
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+   function clearSearchForm(){
+    $("#id_search_q").val('');
+    $("#filter_keyword").val('');
+    $("#filter_action").val('');
+    $("#filter_action option[value=null]").attr('selected','selected');
+    try{
+        document.getElementById('id_err_msg').innerHTML='';
+    }
+    catch(err) {
+    }
+  }
+{% endblock %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+    <script>
+      window.CSRF_TOKEN = '{{ csrf_token }}';
+      window.CFS_ASSIGNMENT_VERIFICATION_DETAIL_URL = '{% url "crm_cfs:update_verification_check" 0 %}'.replace('0', '')
+      window.CFS_ASSIGNMENT_VERIFICATION_CHECK_LOCK_URL = '{% url "crm_cfs:assignment_verification.check_lock_status" 0 %}'.replace('0', '')
+      window.CFS_ASSIGNMENT_VERIFICATION_LOCK_URL = '{% url "crm_cfs:assignment_verification.lock" 0 %}'.replace('0', '')
+      window.CFS_ASSIGNMENT_VERIFICATION_UNLOCK_URL = '{% url "crm_cfs:assignment_verification.unlock" 0 %}'.replace('0', '')
+    </script>
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <!-- Footable -->
+    <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+
+    <!--FooTable init-->
+    <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+    <script src="{% static 'default/js/julo-sorting.js' %}"></script>
+
+    <script>
+      function go_to_assignment_detail(id, with_lock){
+        var detail_url = window.CFS_ASSIGNMENT_VERIFICATION_DETAIL_URL + id;
+        if(!with_lock){
+          return window.open(detail_url, '_BLANK');
+        }
+
+        lock_assignment(id).success(function(data){
+          window.open(detail_url, '_BLANK');
+        });
+      }
+
+      function show_assignment_modal(id){
+        $.ajax({
+          url: window.CFS_ASSIGNMENT_VERIFICATION_CHECK_LOCK_URL + id,
+          type: 'GET',
+          statusCode: {
+            200: function(response) {
+              var modal_dom = null
+              console.log(response)
+              if(response.data.is_locked == true){
+                modal_dom = $("#modal_locked");
+                modal_dom.find('.modal-body').html("Assignment telah di lock oleh <code>" + response.data.locked_by_info + "</code>, Apakah ingin lanjut?");
+              } else {
+                modal_dom = $("#modal_unlocked")
+                modal_dom.find('.modal-body').html('Assignment masih belum diproses dan di-lock oleh Agent, Silahkan Pilih tombol aksi dibawah ini!');
+              }
+              modal_dom.find('.js-detail-btn').off('click')
+              modal_dom.find('.js-lock-detail-btn').off('click')
+              modal_dom.find('.js-detail-btn').click(function() {go_to_assignment_detail(id)})
+              modal_dom.find('.js-lock-detail-btn').click(function() {go_to_assignment_detail(id, true)})
+              modal_dom.modal('show')
+            },
+            404: function() {
+              alert('Assignment verification tidak ditemukan.')
+            }
+          },
+          error: function(){
+            alert('Terjadi kesalahan pada server.')
+          }
+        });
+      }
+
+      function lock_assignment(id) {
+        is_confirm = confirm('Apakah anda yakin ingin lock assignment ini?')
+        if(!is_confirm) {
+          return;
+        }
+        return $.ajax({
+          url: window.CFS_ASSIGNMENT_VERIFICATION_LOCK_URL + id,
+          data: {'csrfmiddlewaretoken': window.CSRF_TOKEN},
+          type: 'POST',
+          statusCode: {
+            201: function (response) {
+              alert('Assignment berhasil di-lock.')
+              window.location.reload()
+            },
+            423: function (response) {
+              alert('Assignment verification sudah di-lock.')
+              window.location.reload()
+            },
+            404: function () {
+              alert('Assignment verification tidak ditemukan.')
+            }
+          },
+          error: function () {
+            alert('Terjadi kesalahan pada server.')
+          }
+        });
+      }
+
+      function unlock_assignment(id) {
+        is_confirm = confirm('Apakah anda yakin ingin unlock assignment ini?')
+        if(!is_confirm) {
+          return;
+        }
+
+        return $.ajax({
+          url: window.CFS_ASSIGNMENT_VERIFICATION_UNLOCK_URL + id,
+          data: {'csrfmiddlewaretoken': window.CSRF_TOKEN},
+          type: 'POST',
+          statusCode: {
+            200: function(response) {
+              alert('Assignment berhasil di-unlock.')
+              window.location.reload()
+            }
+          },
+          error: function(){
+            alert('Terjadi kesalahan pada server.')
+          }
+        });
+      }
+    </script>
+{% endblock %}

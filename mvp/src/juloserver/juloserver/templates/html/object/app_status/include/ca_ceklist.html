@@ -1,0 +1,88 @@
+{% load unit %}
+{% load checkusergroup from common %}
+
+{% if object.groups|ca_cek_group:'sd' %}
+  {% checkusergroup in ['bo_sd_verifier'] %}
+      {% with object=object.groups|ca_get_group:'sd' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail.html" %}
+      {% endwith %}
+  {% else %}
+      {% with object=object.groups|ca_get_group:'sd' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail_hide.html" %}
+      {% endwith %}
+  {% endcheckusergroup %}
+{% else %}
+  <td></td> 
+{% endif %}
+
+{% if object.groups|ca_cek_group:'dv' %}
+  {% checkusergroup in ['bo_data_verifier'] %}
+      {% with object=object.groups|ca_get_group:'dv' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail.html" %}
+      {% endwith %}
+  {% else %}
+      {% with object=object.groups|ca_get_group:'dv' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail_hide.html" %}
+      {% endwith %}
+  {% endcheckusergroup %}
+{% else %}
+  <td></td> 
+{% endif %}
+
+{% if object.groups|ca_cek_group:'pv' %}
+  {% checkusergroup in ['bo_outbound_caller'] %}
+      {% with object=object.groups|ca_get_group:'pv' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail.html" %}
+      {% endwith %}
+  {% else %}
+      {% with object=object.groups|ca_get_group:'pv' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail_hide.html" %}
+      {% endwith %}
+  {% endcheckusergroup %}
+{% else %}
+  <td></td> 
+{% endif %}
+
+{% if object.groups|ca_cek_group:'ca' %}
+  {% checkusergroup in ['bo_credit_analyst'] %}
+      {% with object=object.groups|ca_get_group:'ca' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail.html" %}
+      {% endwith %}
+  {% else %}
+      {% with object=object.groups|ca_get_group:'ca' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail_hide.html" %}
+      {% endwith %}
+  {% endcheckusergroup %}
+{% else %}
+  <td></td> 
+{% endif %}
+
+{% if object.groups|ca_cek_group:'fin' %}
+  {% checkusergroup in ['bo_finance'] %}
+      {% with object=object.groups|ca_get_group:'fin' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail.html" %}
+      {% endwith %}
+  {% else %}
+      {% with object=object.groups|ca_get_group:'fin' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail_hide.html" %}
+      {% endwith %}
+  {% endcheckusergroup %}
+{% else %}
+  <td></td>
+{% endif %}
+  <td></td>
+
+{% if object.groups|ca_cek_group:'coll' %}
+  {% checkusergroup in ['collection_agent_1','collection_supervisor','collection_agent_2','collection_bucket_1','collection_agent_5','collection_agent_3','collection_recovery','collection_agent_2a','collection_agent_2b','collection_agent_3a','collection_agent_3b'] %}
+      {% with object=object.groups|ca_get_group:'coll' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail.html" %}
+      {% endwith %}
+  {% else %}
+      {% with object=object.groups|ca_get_group:'coll' field_name=field_name %}
+        {% include "object/app_status/include/ca_ceklist_detail_hide.html" %}
+      {% endwith %}
+  {% endcheckusergroup %}
+{% else %}
+  <td></td>
+{% endif %}
+  <td></td>

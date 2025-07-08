@@ -1,0 +1,1 @@
+Hi {{first_name}}, THR sudah di tangan? Ini KESEMPATAN TERAKHIR u/ menangkan total hadiah 20 juta rupiah! Bayar sekarang {{payment_link}}

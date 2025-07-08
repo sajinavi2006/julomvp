@@ -1,0 +1,33 @@
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{%if 'app_status'  in request.get_full_path %}
+  {% checkusergroup in ['cs_team_leader','cs_admin','ccs_agent','bo_general_cs'] %}
+  <!-- Tab updated data -->
+  <div class="tab-pane active" id="updated_data">
+    {% if app_obj.application_status.status_code == 190 and app_obj.product_line_id == 1 and not app_obj.is_deleted %}
+      <div class="button-new-crm button-tambah-perubahan-data">Tambah Perubahan Data</div>
+    {% endif %}
+    <table id="updatedDataTable" class="display" cellspacing="0" width="100%" style="margin:0px;" >
+        <thead id="updatedDataTable_head" style="background-color:#ffffff">
+            <tr>
+                <th id="sort_by_no">No</th>
+                <th id="sort_by_created">Created Date</th>
+                <th id="sort_by_updated">Updated Date</th>
+                <th id="sort_by_request">Request From</th>
+                <th id="sort_by_status" style="white-space: nowrap;">Status</th>
+                <th class="no-sort">Reason</th>
+                <th class="no-sort">Action</th>
+            </tr>
+        </thead>
+        <tbody id="updatedDataTable_body">
+          <tr>
+            <td>
+              <div class='loading-gif'><img style='width:85px' src="{% static 'images/julo/loading.gif' %}" alt='loading'></div>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+  </div>
+  {% endcheckusergroup %}
+{% endif %}

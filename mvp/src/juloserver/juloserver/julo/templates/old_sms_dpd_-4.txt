@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Mengingatkan angsuran {{ payment_number }} Anda {{ due_amount }} jatuh tempo {{ due_date }}. Bayar di {{ due_date_minus_4 }} agar dpt Ekstra Cashback {{ cashback_multiplier }}x dari normal cashback {{ payment_cashback_amount }}. Cara bayar: {{url}} dan cek aplikasi anda.

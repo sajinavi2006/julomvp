@@ -1,0 +1,894 @@
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{%if 'app_status'  in request.get_full_path %}
+  {% checkusergroup in ['cs_team_leader','cs_admin','ccs_agent','bo_general_cs'] %}
+    <style>
+    /*modal post data*/
+      #responsive_modal_post_updated_data .modal-dialog,
+      #responsive_modal_success_updated_data .modal-dialog,
+      #responsive_modal_error_updated_data .modal-dialog{
+        min-width: 800px;
+      }
+      #responsive_modal_post_updated_data .modal-body,
+      #responsive_modal_success_updated_data .modal-body,
+      #responsive_modal_error_updated_data .modal-body{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      #responsive_modal_post_updated_data .modal-content,
+      #responsive_modal_success_updated_data .modal-content{
+        width: 100%;
+      }
+      #responsive_modal_post_updated_data #modal_post_updated_data_title,
+      #responsive_modal_success_updated_data #modal_success_updated_data_title,
+      #responsive_modal_error_updated_data #modal_error_updated_data_title{
+        color:white;
+        font-size: 15px;
+        margin-left: 12px;
+        font-weight: 500;
+      }
+      #responsive_modal_post_updated_data .modal-footer,
+      #responsive_modal_success_updated_data .modal-footer,
+      #responsive_modal_error_updated_data .modal-footer{
+        border-top: 0;
+        text-align: left;
+        padding: 0;
+        margin-bottom: 20px;
+      }
+      #responsive_modal_post_updated_data .modal-footer button,
+      #responsive_modal_success_updated_data .modal-footer button,
+      #responsive_modal_error_updated_data .modal-footer button{
+        margin: auto;
+        margin-left: 14px;
+      }
+      #responsive_modal_post_updated_data .form-update-data-section,
+      #responsive_modal_success_updated_data .form-update-data-section,
+      #responsive_modal_error_updated_data .form-update-data-section{
+        margin: 12px 20px;
+      }
+      #responsive_modal_post_updated_data .form-update-data-section_title,
+      #responsive_modal_success_updated_data .form-update-data-section_title,
+      #responsive_modal_error_updated_data .form-update-data-section_title{
+        padding-left: 16px;
+        font-weight: 600;
+        color: #181818;
+        font-size: 16px;
+        border-bottom: 1px solid #E0E0E0;
+        padding-bottom: 16px;
+      }
+      #responsive_modal_post_updated_data .form-update-data-section_fields__field label{
+        padding-left: 16px;
+        width: 43%;
+        font-size: 14px;
+        font-weight: 400;
+        color: #757575;
+      }
+      #responsive_modal_post_updated_data .form-update-data-section_fields__field .form-update-data-input, .form-update-data-section_fields__field-file-input{
+        border: 1px solid #C2C2C2;
+        width: 50%;
+        height: 48px;
+        margin-right: 24px;
+        border-radius: 8px;
+        background: white;
+        box-shadow: none;
+        padding: 0px 8px;
+      }
+      .form-update-data-section_fields__field-file-input{
+        border: 2px dashed #00ACF0;
+        border-radius: 8px;
+        background: #F5F5F5;
+        position: relative;
+        overflow: hidden;
+        height: 62px!important;
+        width: 50%;
+      }
+      .form-update-data-section_fields__field-file-input label{
+        position: absolute;
+        color: #00ACF0!important;
+        left: 0;
+        top: 24px;
+        font-size: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 86%!important;
+      }
+      .form-update-data-section_fields__field-file-input input{
+        background: #F5F5F5!important;
+        padding: 20px 16px;
+        color: transparent;
+        border-radius: 8px;
+        height: 62px!important;
+        opacity: 0;
+        cursor: pointer;
+        border: 0;
+        width: 100%!important;
+        height: auto;
+        margin-right: 0;
+      }
+      .form-update-data-section_fields__field-file-input .remove-file{
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 53%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        cursor: pointer;
+        right: 3%;
+        background: url(https://cms-static.julo.co.id/media/654344483747f_crossicon.png)!important;
+        background-repeat: no-repeat!important;
+        color: transparent;
+        width: 11px;
+        z-index: 99;
+      }
+      .form-update-data-section_fields__field-file-input.data-changed{
+        border: 1px solid #C2C2C2;
+        background: transparent;
+      }
+      .form-update-data-section_fields__field-file-input.data-changed label{
+        font-size: 12px!important;
+        color: #404040!important;
+        font-weight: 100!important;
+      }
+      .form-update-data-section_fields__field-file-input.data-changed .remove-file{
+        display: block;
+      }
+
+      #responsive_modal_post_updated_data .form-update-data-section_fields__field{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 0px;
+        border-bottom: 1px solid #E0E0E0;
+        position: relative;
+      }
+      #responsive_modal_post_updated_data .form-update-data-section_fields__field-input-with-prefix{
+        display: flex;
+        align-items: center;
+        width: 50%;
+        margin-right: 24px;
+        border: 1px solid #E0E0E0;
+        border-radius: 8px;
+        padding: 0px 8px;
+
+      }
+      #responsive_modal_post_updated_data .form-update-data-section_fields__field-input-with-prefix input.form-update-data-input{
+        border: 0px;
+        margin-right: 0px;
+        width:100%;
+        margin-left: 8px;
+        padding: 0px;
+      }
+      #responsive_modal_post_updated_data .prefix-currency{
+        font-weight: 400;
+      }
+
+      #payday.warning{
+        border-color: red!important;
+      }
+      .warning-tanggal{
+        position: absolute;
+        bottom: 0;
+        right: 233px;
+        font-size: 11px;
+        color: red;
+        opacity: 0;
+      }
+      .warning-tanggal.warning{
+        opacity: 1;
+      }
+      .warning-upload{
+        position: absolute;
+        bottom: 0;
+        right: 23px;
+        font-size: 9px;
+        color: red;
+        opacity: 1;
+      }
+      .button-submission.disabled{
+        background: #EDEDED;
+        color:#9E9E9E;
+        border-color:transparent;
+        pointer-events: none;
+      }
+      .button-tambah-perubahan-data{
+        display: none;
+      }
+    </style>
+    <script type="application/javascript">
+
+      var selectedProvince = "";
+      var selectedCity = "";
+      var selectedDistrict = "";
+      var selectedSubDistrict = "";
+      var selectedJobType = "";
+      var selectedJobIndustry = "";
+      var selectedJobDescription = "";
+      var selectedLastEducation = "";
+
+      //UTILS
+      function prefilled_change_data_form(data){
+        Object.keys(data).forEach(function(key, index) {
+          if(key !== "address_transfer_certificate_image_url"
+            && key !== "company_proof_image_url"
+            && key !== "paystub_image_url"){
+
+            var formField = $('#responsive_modal_post_updated_data #'+key);
+            if(formField.hasClass('format-number-thousand') && data[key] !== null){
+              formField.attr('value', data[key].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.'));
+              formField.val(data[key].toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.'));
+            }else{
+              formField.attr('value', data[key]);
+              formField.val(data[key]);
+            }
+            formField.removeClass("data-changed");
+
+            if($('#responsive_modal_post_updated_data #'+key).prop('tagName') === 'TEXTAREA'){
+              formField.html(data[key]);
+            }
+
+            if(key === "address_provinsi"){
+              selectedProvince = data[key] ? data[key] : "";
+              $("#address_provinsi").removeClass("data-changed");
+            }else if(key === "address_kabupaten"){
+              selectedCity = data[key] ? data[key] : "";
+              $("#address_kabupaten").removeClass("data-changed");
+            }else if(key === "address_kecamatan"){
+              selectedDistrict = data[key] ? data[key] : "";
+              $("#address_kecamatan").removeClass("data-changed");
+            }else if(key === "address_kelurahan"){
+              selectedSubDistrict = data[key] ? data[key] : "";
+              $("#address_kelurahan").removeClass("data-changed");
+            }else if(key === "address_kodepos"){
+              $("#address_kodepos").val(data[key]);
+            }else if(key === "job_type"){
+              selectedJobType = data[key] ? data[key] : "";
+              $("#job_type").removeClass("data-changed");
+            }else if(key === "job_industry"){
+              selectedJobIndustry = data[key] ? data[key] : "";
+              $("#job_industry").removeClass("data-changed");
+            }else if(key === "job_description"){
+              selectedJobDescription = data[key] ? data[key] : "";
+              $("#job_description").removeClass("data-changed");
+            }else if(key === "last_education"){
+              selectedLastEducation = data[key] || "";
+              $("#last_education").removeClass("data-changed");
+            }
+          }
+        });
+
+        $("#address_provinsi").val(selectedProvince);
+        populate_dropdown_address("province", "#address_kabupaten",true);
+        populate_dropdown_address("city", "#address_kecamatan",true);
+        populate_dropdown_address("district", "#address_kelurahan",true);
+
+        $("#job_type").val(selectedJobType);
+        populate_dropdown_address("job_type", "#job_industry",true);
+        populate_dropdown_address("job_industry", "#job_description",true);
+
+        $("#address_transfer_certificate_image_url").val('');
+        $("#address_transfer_certificate_image_url--label").html("+ Upload File");
+        $("#address_transfer_certificate_image_url").parent().parent().removeClass('data-changed');
+
+        $("#company_proof_image_url").val('');
+        $("#company_proof_image_url--label").html("+ Upload File");
+        $("#company_proof_image_url").parent().parent().removeClass('data-changed');
+
+        $("#paystub_image_url").val('');
+        $("#paystub_image_url--label").html("+ Upload File");
+        $("#paystub_image_url").parent().parent().removeClass('data-changed');
+      }
+
+      function validate_job_type(jobType, isFirstLoad){
+        if(jobType === 'Ibu rumah tangga' || jobType === 'Mahasiswa' || jobType === 'Tidak bekerja'){
+          if(!isFirstLoad){
+            $("#company_name").val("");
+            $("#company_phone_number").val("");
+            $("#payday").val(0);
+          }
+          $("#company_name").parent().css("display","none");
+          $("#company_phone_number").parent().css("display","none");
+          $("#payday").parent().css("display","none");
+        }else{
+          $("#company_name").parent().css("display","flex");
+          $("#company_phone_number").parent().css("display","flex");
+          $("#payday").parent().css("display","flex");
+        }
+      }
+
+      function populate_dropdown_address(parentType, childId, isFirstLoad){
+        var dropdownApiUrl = "";
+        var defaultOption = "";
+        var defaultValue = "";
+
+        if(parentType == "province"){
+          dropdownApiUrl = "/new_crm/v1/dropdown/address/?province="+selectedProvince;
+          defaultOption = "Pilih Kabupaten";
+          defaultValue = selectedCity;
+
+          if(!isFirstLoad){
+            selectedDistrict = "";
+            selectedSubDistrict = "";
+            $("#address_kecamatan").val("");
+            $("#address_kelurahan").val("");
+          }
+        }else if(parentType === "city"){
+          dropdownApiUrl = "/new_crm/v1/dropdown/address/?province="+selectedProvince+"&city="+selectedCity;
+          defaultOption = "Pilih Kecamatan";
+          defaultValue = selectedDistrict;
+
+          if(!isFirstLoad){
+            selectedSubDistrict = "";
+            $("#address_kelurahan").val("");
+          }
+        }else if(parentType === "district"){
+          dropdownApiUrl = "/new_crm/v1/dropdown/address/?province="+selectedProvince+"&city="+selectedCity+"&district="+selectedDistrict;
+          defaultOption = "Pilih Kelurahan";
+          defaultValue = selectedSubDistrict;
+        }else if(parentType === "job_type"){
+          dropdownApiUrl = "/new_crm/v1/dropdown/job/?level="+selectedJobType;
+          defaultOption = "Pilih Bidang Pekerjaan";
+          defaultValue = selectedJobIndustry;
+          validate_job_type(selectedJobType, isFirstLoad);
+          if(!isFirstLoad){
+            selectedJobDescription = "";
+            $("#job_description").val("");
+          }
+        }else if(parentType === "job_industry"){
+          dropdownApiUrl = "/new_crm/v1/dropdown/job/?level="+selectedJobType+","+selectedJobIndustry;
+          defaultOption = "Pilih Posisi Pekerjaan";
+          defaultValue = selectedJobDescription;
+        }
+
+        $(childId).find('option').remove().end().append("<option value=''>"+defaultOption+"</option>");
+        $.ajax({
+            url :  dropdownApiUrl,
+            type : "GET", // http method
+            // handle a successful response
+            success : function(json) {
+              var data = json.data;
+              if(data[0] !== ""){
+                if(parentType === "job_type"){
+                  $("#job_industry").parent().css('display','flex');
+                  $("#job_description").parent().css('display','flex');
+                }else if(parentType === "job_industry"){
+                  $(childId).parent().css('display','flex');
+                }
+
+                for(var i = 0; i < data.length; i++){
+                  var returnData = parentType === "district" ? data[i].subDistrict : data[i];
+                  var zipcode = parentType === "district" ? data[i].zipcode : "";
+
+                  $(childId).append("<option value='"+returnData+"' zipcode='"+zipcode+"'>"+returnData+"</option>");
+                }
+                if(isFirstLoad){
+                  if($(childId + " option[value='"+defaultValue+"']").length > 0){
+                    $(childId).val(defaultValue);
+                  }else{
+                    $(childId).val("");
+                  }
+                }
+              }else{
+                if(parentType === "job_type"){
+                  $("#job_industry").parent().css('display','none');
+                  $("#job_description").parent().css('display','none');
+                }else if(parentType === "job_industry"){
+                  $(childId).parent().css('display','none');
+                }
+              }
+            },
+            // handle a non-successful response
+            error : function(xhr, errmsg, err) {
+              if (xhr.status == 404){
+                alert("404 - populate "+childId);
+                $("#address_kecamatan").val("");
+                $("#address_kelurahan").val("");
+              }
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+      }
+
+      function check_data_changed(){
+        if($(".data-changed").length > 0){
+          $('.button-submission').removeClass('disabled');
+        }else{
+          $('.button-submission').addClass('disabled');
+        }
+      }
+
+      //EVENTS
+      $(document).ready(function () {
+        var dataPrefilled = {}
+
+        $(".button-new-crm.button-tambah-perubahan-data").on("click", function () {
+          prefilled_change_data_form(dataPrefilled);
+          check_data_changed();
+          $('#responsive_modal_post_updated_data').modal('show');
+        });
+
+        /*address dropdown*/
+        $("#address_provinsi").on('change', function() {
+          selectedProvince = this.value;
+          populate_dropdown_address("province","#address_kabupaten",false);
+        });
+        $("#responsive_modal_post_updated_data").on('change', '#address_kabupaten',  function() {
+          selectedCity = this.value;
+          populate_dropdown_address("city","#address_kecamatan",false);
+        });
+        $("#responsive_modal_post_updated_data").on('change', '#address_kecamatan',  function() {
+          selectedDistrict = this.value;
+          populate_dropdown_address("district","#address_kelurahan",false);
+        });
+        $("#responsive_modal_post_updated_data").on('change', '#address_kelurahan',  function() {
+          selectedSubDistrict = this.value;
+          $("#address_kodepos").val($("#address_kelurahan option:selected").attr('zipcode'));
+        });
+
+        /*job dropdown*/
+        $("#job_type").on('change', function() {
+          selectedJobType = this.value;
+          populate_dropdown_address("job_type","#job_industry",false);
+          validate_job_type(selectedJobType);
+        });
+        $("#responsive_modal_post_updated_data").on('change', '#job_industry',  function() {
+          selectedJobIndustry = this.value;
+          populate_dropdown_address("job_industry","#job_description",false);
+        });
+        $("#responsive_modal_post_updated_data").on('change', '#job_description',  function() {
+          selectedJobDescription = this.value;
+        });
+
+        /*last_education dropdown*/
+        $("#responsive_modal_post_updated_data").on('change', '#last_education',  function() {
+          selectedLastEducation = this.value;
+        });
+
+        /*Button Submit*/
+        $("#responsive_modal_post_updated_data .button-new-crm.button-submission").on("click", function () {
+          $("#responsive_modal_post_updated_data form").submit();
+        });
+        $("#responsive_modal_post_updated_data form").submit(function(e){
+          e.preventDefault();
+          var formData = new FormData(this);
+          formData.set('monthly_income', $(".monthly_income").val().replaceAll('.',''));
+          formData.set('monthly_expenses', $("#monthly_expenses").val().replaceAll('.',''));
+          formData.set('monthly_housing_cost', $("#monthly_housing_cost").val().replaceAll('.',''));
+          formData.set('total_current_debt', $("#total_current_debt").val().replaceAll('.',''));
+
+          $.ajax({
+              url :  "/api/customer-module/v1/customer-data/change-request/customer-info/{{app_obj.customer_id}}/",
+              type : "POST",
+              data: formData,
+              contentType: false,
+              processData: false,
+              dataType: 'json',
+              // handle a successful response
+              success : function(json) {
+                $("#responsive_modal_success_updated_data").modal("show");
+                $("#responsive_modal_post_updated_data").modal("hide");
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                var errorMsg = "";
+                $("#responsive_modal_error_updated_data #modal_error_updated_data_title").html("Terjadi Kesalahan");
+                errorMsg +=  "<strong>"+xhr.responseJSON.errors+"</strong><br>";
+                if(xhr.responseJSON.data !== null){
+                  for (const [key, value] of Object.entries(xhr.responseJSON.data)) {
+                    errorMsg += "<strong>"+FIELD_DATA_CHANGE[key]+"</strong> - "+value+"<br>";
+                  }
+                }
+                $("#responsive_modal_error_updated_data #modal_error_updated_data_body div").html(errorMsg);
+                $("#responsive_modal_error_updated_data").modal("show");
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+        });
+
+        //Success Modal
+        $("#responsive_modal_success_updated_data").on("hidden.bs.modal", function () {
+          if($('#updatedDataTable_wrapper.dataTables_wrapper').length > 0){
+            CHANGEDATA_TABLE.destroy();
+          }
+          $("#updatedDataTable #updatedDataTable_body tr").remove();
+          $("#updatedDataTable #updatedDataTable_body").append("<tr>"+LOADING_GIF+"</tr>");
+
+          $.ajax({
+              url :  "/api/customer-module/v1/customer-data/change-request/?page_size=150&page=1&application_id={{app_obj.id}}",
+              type : "GET", // http method
+
+              // handle a successful response
+              success : function(json) {
+                $("#updatedDataTable #updatedDataTable_body tr").remove();
+                $("#updatedDataTable tbody").off("click", "td .get-changed-data");
+                populate_change_data(json.data);
+                if(json.data.count > 0){
+                  datatable();
+                  if($('.status-badge.konfirmasi-ubah-data').length == 0){
+                    $("ul.customtab .tab_updated_data").append("<span class='status-badge konfirmasi-ubah-data'><i class='fa fa-exclamation-circle' aria-hidden='true'></i></span>");
+                  }
+                }
+              },
+
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                jQuery("#updatedDataTable #updatedDataTable_body tr").remove();
+                if (xhr.status == 404){
+                  return populate_change_data([])
+                }
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+            });
+        });
+
+        //Error Modal
+        $('#responsive_modal_error_updated_data').on('hidden.bs.modal', function(){
+            $('body').addClass('modal-open');
+        });
+
+        //Input validation
+        $("input.format-number-thousand").on("input", function (e) { //format thousand
+          var value = $(this).val().replace(/[^0-9]/g,"");
+          if($(this).val().length > 1){
+            value = $(this).val().replace(/^0/,"").replace(/[^0-9]/g,"");
+          }
+          $(this).val(value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, "."));
+        });
+        $("#responsive_modal_post_updated_data .form-update-data-select").on("change", function () { //validasi select
+          if($(this).val() != $(this).attr("value")){
+            $(this).addClass("data-changed");
+          }else{
+            $(this).removeClass("data-changed");
+          }
+          check_data_changed();
+        });
+        $("#responsive_modal_post_updated_data .form-update-data-text").on("input", function () { //validasi text
+          if($(this).val() != $(this).attr("value")){
+            $(this).addClass("data-changed");
+          }else{
+            $(this).removeClass("data-changed");
+          }
+          check_data_changed();
+        });
+        $("#responsive_modal_post_updated_data textarea.form-update-data-input").on("input", function () { //validasi textarea
+          if($(this).val() != $(this).attr("value")){
+            $(this).addClass("data-changed");
+          }else{
+            $(this).removeClass("data-changed");
+          }
+          check_data_changed();
+        });
+        $("#payday").on("input", function (e) { //validasi payday
+          var $this = $(this);
+          var maxLength = $this.attr('max').length;
+          var value = $this.val();
+          if (value && value > 31) {
+            $this.val(31);
+            $(this).addClass("warning");
+            $(".warning-tanggal").addClass("warning");
+
+            setTimeout(function(){
+              $("#payday").removeClass("warning");
+              $(".warning-tanggal").removeClass("warning");
+            },1000);
+          }else if (value && value < 1){
+            $this.val(1);
+            $(this).addClass("warning");
+            $(".warning-tanggal").addClass("warning");
+
+            setTimeout(function(){
+              $("#payday").removeClass("warning");
+              $(".warning-tanggal").removeClass("warning");
+            },1000);
+          }
+          if($(this).val() != $(this).attr("value")){
+            $(this).addClass("data-changed");
+          }else{
+            $(this).removeClass("data-changed");
+          }
+          check_data_changed();
+        });
+        $('.form-update-data-section_fields__field-file-input .form-update-data-file').change(function(){ //validasi file
+          const [file] = $(this).prop('files');
+          let uploadFile = $(this);
+
+          if(file.name && file.name != ""){
+            if(file.size > 5000000 || (file.type !== "image/jpeg" && file.type !== "image/png" && file.type !== "application/pdf")){
+              thisFile = $(this);
+              thisFile.val("");
+              thisFile.parent().parent().css("border-color","red");
+              thisFile.parent().parent().find("label").html("+ Upload File");
+              thisFile.parent().parent().removeClass('data-changed');
+              thisFile.parent().parent().parent().append("<div class='warning-upload' style='opacity:1'>Pastikan file yang diupload memiliki format png, jpg atau pdf dan tidak melebihi 5Mb</div>");
+
+              setTimeout(function(){
+                thisFile.parent().parent().css("border-color","#00ACF0");
+                $(".warning-upload").remove();
+              },2000);
+            }else{
+              uploadFile.parent().parent().find('label').html("<div style='align-items: center;display:flex;'><i class='fa fa-check-circle' style='color: #1E7461;margin-right: 9px;font-size: 18px;'></i><div>"+file.name + "<br><span style='font-size: 10px;color: #757575;'>File berhasil di upload</span></div></div>");
+              $(this).parent().parent().addClass('data-changed');
+            }
+          }else{
+            $(this).parent().parent().removeClass('data-changed');
+          }
+          check_data_changed();
+        });
+        $('.form-update-data-section_fields__field-file-input .remove-file').click(function(){
+          $(this).parent().find("input").val('');
+          $(this).parent().parent().find('label').html("+ Upload File");
+          $(this).parent().parent().removeClass('data-changed');
+          check_data_changed();
+        });
+
+        $(document).ready(function () {
+          var currentGender = "{{ app_obj.gender }}";
+          $("#last_education").val("");
+          
+          $.ajax({
+              url :  "/new_crm/v1/dropdown/address/",
+              type : "GET", // http method
+              // handle a successful response
+              success : function(json) {
+                var data = json.data;
+                for(var i = 0; i < data.length; i++){
+                  $("#address_provinsi").append("<option value='"+data[i]+"'>"+data[i]+"</option>");
+                }
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                if (xhr.status == 404){
+                  alert("404 - populate province");
+                }
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+
+          $.ajax({
+              url :  "/new_crm/v1/dropdown/job/",
+              type : "GET", // http method
+              // handle a successful response
+              success : function(json) {
+                var data = json.data;
+                for(var i = 0; i < data.length; i++){
+                  if (data[i].toLowerCase() === 'ibu rumah tangga' && currentGender.toLowerCase() === 'pria') {
+                    continue;
+                  }
+                  $("#job_type").append("<option value='"+data[i]+"'>"+data[i]+"</option>");
+                }
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                if (xhr.status == 404){
+                  alert("404 - populate job type");
+                }
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+
+          $.ajax({
+              url :  "/api/customer-module/v1/customer-data/change-request/customer-info/{{app_obj.customer_id}}",
+              type : "GET", // http method
+              // handle a successful response
+              success : function(json) {
+                var data = json.data;
+                dataPrefilled = {
+                    address_street_num: data.address_street_num,
+                    address_provinsi: data.address_provinsi,
+                    address_kabupaten: data.address_kabupaten,
+                    address_kecamatan: data.address_kecamatan,
+                    address_kelurahan: data.address_kelurahan,
+                    last_education: data.last_education,
+                    address_kodepos: data.address_kodepos,
+                    job_type: data.job_type,
+                    job_industry: data.job_industry,
+                    job_description: data.job_description,
+                    company_name: data.company_name,
+                    company_phone_number: data.company_phone_number,
+                    payday: data.payday,
+                    monthly_income: data.monthly_income,
+                    monthly_expenses: data.monthly_expenses,
+                    monthly_housing_cost: data.monthly_housing_cost,
+                    total_current_debt: data.total_current_debt,
+                    address_transfer_certificate_image_url: "Surat Keterangan Pindah",
+                    company_proof_image_url: "Dokumen Pendukung",
+                    paystub_image_url: "Slip Gaji"
+                }
+              },
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+        });
+      });
+    </script>
+
+    <!-- modal compare data -->
+    <div id="responsive_modal_post_updated_data" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header label-success">
+                <h4 class="modal-title" id="modal_post_updated_data_title">Permintaan Perubahan Data</h4></div>
+              <div class="modal-body" id="modal_post_updated_data_body">
+                <form enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <input type="hidden" name="application_id" value={{app_obj.id}}>
+                  <input type="hidden" id="address_kodepos" name="address_kodepos" value="">
+                  <div class="form-update-data-section">
+                    <div class="form-update-data-section_title">Identitas Diri</div>
+                    <div class="form-update-data-section_fields">
+                      <div class="form-update-data-section_fields__field">
+                        <label>Alamat Tempat Tinggal</label>
+                        <textarea style="padding-top: 8px;" id="address_street_num" name="address_street_num" rows="2" cols="60" maxlength="520" class="ft-form-textarea form-update-data-input"></textarea>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Provinsi</label>
+                        <select id="address_provinsi" name="address_provinsi" class="form-update-data-input form-update-data-select"></select>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Kabupaten</label>
+                        <select id="address_kabupaten" name="address_kabupaten" class="form-update-data-input form-update-data-select">
+                          <option value="">Pilih Kabupaten</option>
+                        </select>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Kecamatan</label>
+                        <select id="address_kecamatan" name="address_kecamatan" class="form-update-data-input form-update-data-select">
+                          <option value="">Pilih Kecamatan</option>
+                        </select>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Kelurahan</label>
+                        <select id="address_kelurahan" name="address_kelurahan" class="form-update-data-input form-update-data-select">
+                          <option value="">Pilih Kelurahan</option>
+                        </select>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Surat Keterangan Pindah</label>
+                        <div class="form-update-data-section_fields__field-file-input">
+                          <label for="address_transfer_certificate_image_url" id="address_transfer_certificate_image_url--label">+ Upload File</label>
+                          <div id="address_transfer_certificate_image_url--wrapper" class="form-managed-file--wrapper">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg, .pdf" id="address_transfer_certificate_image_url" name="address_transfer_certificate_image" size="22" class="form-update-data-input form-update-data-file">
+                            <div class="remove-file">X</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Pendidikan Terakhir</label>
+                        <select id="last_education" name="last_education" class="form-update-data-input form-update-data-select">
+                          <option value="">Pilih Pendidikan Terakhir</option>
+                          <option value="SD">SD</option>
+                          <option value="SLTP">SLTP</option>
+                          <option value="SLTA">SLTA</option>
+                          <option value="Diploma">Diploma</option>
+                          <option value="S1">S1</option>
+                          <option value="S2">S2</option>
+                          <option value="S3">S3</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-update-data-section_title" style="margin-top: 62px;">Informasi Pekerjaan</div>
+                    <div class="form-update-data-section_fields">
+                      <div class="form-update-data-section_fields__field">
+                        <label>Tipe Pekerjaan</label>
+                        <select id="job_type" name="job_type" class="form-update-data-input form-update-data-select"></select>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Bidang Pekerjaan</label>
+                        <select id="job_industry" name="job_industry" class="form-update-data-input form-update-data-select"></select>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Posisi Pekerjaan</label>
+                        <select id="job_description" name="job_description" class="form-update-data-input form-update-data-select"></select>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Nama Perusahaan</label>
+                        <input type="text" id="company_name" name="company_name" class="form-update-data-text form-update-data-input">
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Nomor Telepon Perusahaan</label>
+                        <input type="text" id="company_phone_number" name="company_phone_number" class="form-update-data-text form-update-data-input">
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Tanggal Gajian</label>
+                        <input type="number" id="payday" name="payday" min="1" max="31" class="fi-form-input form-update-data-input">
+                        <div class="warning-tanggal">Tanggal yang valid 1 sampai 31</div>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Dokumen Pendukung</label>
+                        <div class="form-update-data-section_fields__field-file-input">
+                          <label for="company_proof_image_url" id="company_proof_image_url--label">+ Upload File</label>
+                          <div id="company_proof_image_url--wrapper" class="form-managed-file--wrapper">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg, .pdf" id="company_proof_image_url" name="company_proof_image" size="22" class="form-update-data-input form-update-data-file">
+                            <div class="remove-file">X</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-update-data-section_title" style="margin-top: 62px;">Informasi Keuangan</div>
+                    <div class="form-update-data-section_fields">
+                      <div class="form-update-data-section_fields__field">
+                        <label>Total Penghasilan Bulanan</label>
+                        <div class="form-update-data-section_fields__field-input-with-prefix">
+                          <span class="prefix-currency">Rp</span>
+                          <input type="text" id="monthly_income" name="monthly_income" class="form-update-data-text monthly_income form-update-data-input format-number-thousand">
+                        </div>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Slip Gaji</label>
+                        <div class="form-update-data-section_fields__field-file-input">
+                          <label for="paystub_image_url" id="paystub_image_url--label">+ Upload File</label>
+                          <div id="paystub_image_url--wrapper" class="form-managed-file--wrapper">
+                            <input type="file" accept="image/png, image/jpeg, image/jpg, .pdf" id="paystub_image_url" name="paystub_image" size="22" class="form-update-data-input form-update-data-file">
+                            <div class="remove-file">X</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Total Pengeluaran Rumah Tangga Bulanan</label>
+                        <div class="form-update-data-section_fields__field-input-with-prefix">
+                          <span class="prefix-currency">Rp</span>
+                          <input type="text" id="monthly_expenses" name="monthly_expenses"  class="form-update-data-text form-update-data-input format-number-thousand">
+                        </div>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Total Cicilan/Sewa Rumah Bulanan</label>
+                        <div class="form-update-data-section_fields__field-input-with-prefix">
+                          <span class="prefix-currency">Rp</span>
+                          <input type="text" id="monthly_housing_cost" name="monthly_housing_cost" class="form-update-data-text form-update-data-input format-number-thousand">
+                        </div>
+                      </div>
+                      <div class="form-update-data-section_fields__field">
+                        <label>Total Cicilan Hutang Bulanan</label>
+                        <div class="form-update-data-section_fields__field-input-with-prefix">
+                          <span class="prefix-currency">Rp</span>
+                          <input type="text" id="total_current_debt" name="total_current_debt" class="form-update-data-text form-update-data-input format-number-thousand">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="button-new-crm" data-dismiss="modal" style="border:0px;">Batal</button>
+                  <button type="button" class="button-new-crm button-submission disabled" style="float: right;margin-right: 18px;">Ajukan</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div id="responsive_modal_success_updated_data" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header label-success">
+                <h4 class="modal-title" id="modal_success_updated_data_title">Perubahan Data Berhasil</h4></div>
+              <div class="modal-body" id="modal_success_updated_data_body">
+                <div class="form-update-data-section">
+                  Perubahan Data Customer <strong>{{app_obj.customer_id}}</strong> berhasil dikirim dan akan diproses oleh admin CS
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="button-new-crm button-success-submission" data-dismiss="modal" style="float: right;margin-right: 18px;">Oke</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div id="responsive_modal_error_updated_data" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;background: rgb(0 0 0 / 20%);">
+      <div class="modal-dialog">
+          <div class="modal-content" style="width: 100%;">
+              <div class="modal-header label-error" style="background:#db4d3d">
+                <h4 class="modal-title" id="modal_error_updated_data_title"></h4></div>
+              <div class="modal-body" id="modal_error_updated_data_body">
+                <div class="form-update-data-section">
+                  
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="button-new-crm button-error-submission" data-dismiss="modal" style="float: right;margin-right: 18px;">Oke</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class='watermarked-preview watermarked-preview-global'></div>
+  {% endcheckusergroup %}
+{% endif %}

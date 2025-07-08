@@ -1,0 +1,21 @@
+{% load checkusergroup from common %}
+{% load unit utils %}
+
+{% if document.image_url %}
+  <div class="col-sm-3 text-center">
+    {% load static from staticfiles %}
+    <a id="href_{{document.id}}" class="image-popup-vertical-fit m-b-20 center-block" href="#" title="{{ document.image_type|display_safe }}">
+      <div class="watermarked">
+        <img id="img_{{document.id}}" src="{% static 'images/icons/ic-placeholder.png' %}" class="img-responsive" />
+      </div>
+    </a>
+    <a href="{% url 'loan_app:partnership_detail_image_edit' pk=document.id application_id=app_obj.id%}" target="_blank">
+        <button id="edit_image" type="button" class="btn btn-success btn-block">
+            <i class="fa fa-back"></i> <small>Edit Gbr</small>
+        </button>
+    </a>
+    <small class="m-t-10 center-block">
+      {{ document.image_type|display_safe }}
+    </small>
+  </div>
+{% endif %}

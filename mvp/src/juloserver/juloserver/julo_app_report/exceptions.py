@@ -1,0 +1,2 @@
+class JuloAppReportException(Exception):
+    pass

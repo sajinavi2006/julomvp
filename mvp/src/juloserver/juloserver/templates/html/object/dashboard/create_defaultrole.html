@@ -1,0 +1,69 @@
+{% extends "common/theme1/crup/crup_1_theme1.html" %}
+{% load model %}
+
+{% block breadcrumb_title %}Set Default Role{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Role</a></li>
+    <li><a href="#">Default</a></li>
+    <li class="active">Form</li>
+{% endblock %}
+ 
+{% block list_title %}Default Role - 
+    <label class="label label-info m-l-5"> {{ msg_title }}
+    </label>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-body %}
+    <div class="row">
+      <div class="col-md-6 col-xs-12 col-md-offset-2">
+        Role Default saat ini: <br/>
+        <label class="label label-warning">
+          {{ current_role|default:"-"|safe }}
+        </label>
+        <hr>
+      </div>
+    
+      
+      <div class="col-md-6 col-xs-12 col-md-offset-2">
+        <form method='post'>
+          {% csrf_token %}
+            <div class='tab-content'>
+              <div class="form-body">
+                  {% if form.non_field_errors %}
+                    <span class='error'>{{ form.non_field_errors }}</span>
+                  {% endif %}
+                  {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                  {% endfor %}
+
+                  <div class="form-group">
+                      <label class="control-label">
+                        Silahkan Pilih default role yang tersedia{% if form.role_default.field.required %}<span class='alert'>*</span>{% endif %}
+                      </label>
+                      {% if form.role_default.errors %}
+                        <span class='error'>{{ form.role_default.errors }}</span></br>
+                      {% endif %}
+                      {{ form.role_default }}
+                      <!-- <span class="help-block"> Select your default role </span> </div> -->
+                  </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" value='Submit' class="btn btn-success"> <i class="fa fa-check"></i> Simpan</button>
+              </div>
+            </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      $("#id_role_default").addClass('form-control')
+  });
+{% endblock %}
+

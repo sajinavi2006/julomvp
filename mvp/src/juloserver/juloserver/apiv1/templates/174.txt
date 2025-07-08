@@ -1,0 +1,1 @@
+DP anda, {{ paid_amount }} sudah melewati batas tempo yang diberikan dan belum dibayarkan. silahkan hubungi customer service JULO melalui info di halaman <a href=\"www.julofinance.com/android/goto/contactus\">Hubungi JULO</a>.

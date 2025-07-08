@@ -1,0 +1,81 @@
+{% load unit %}
+<tr 
+  class= "ca-none {{ app_data.loan_amount_request.statuses|ca_tr_class|default:''|safe}}">
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Jumlah Pinjaman</strong></div>
+    <div class="col-xs-6">: {{ application.loan_amount_request|f_rupiahs:"no"|safe}}</div>
+  </td>
+</tr>
+<tr
+  class= "ca-none {{ app_data.loan_amount_request.statuses|ca_tr_class|default:''|safe}}">
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Product</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.product_line.product_line_code}}-{{ application.product_line.product_line_type}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Tujuan Pinjaman</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.loan_purpose}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Uraian Tujuan Pinjaman</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.loan_purpose_desc}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Score Credit</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.creditscore.score}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Score Message</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.creditscore.message}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Sumber Marketing</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.marketing_source}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>Kode Referral</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.referral_code}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>IMEI</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.device.imei}}
+    </div>
+  </td>
+</tr>
+<tr>
+  <td  class="col-xs-12">
+    <div class="col-xs-6 no-left"><strong>App Version</strong></div>
+    <div class="col-xs-6">: 
+      {{ application.app_version}}
+    </div>
+  </td>
+</tr>

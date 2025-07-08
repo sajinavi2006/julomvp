@@ -1,0 +1,50 @@
+<div class="alert alert-warning" id="email_error_div" style="display: none;">
+Error mengirim Email:<p id="email_error_message"></p>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 mt-2 form_event-group ">
+      <div class="col-md-2 col-sm-2">
+        <label>To Email :</label>
+      </div>
+      <div class="col-md-10 col-sm-10">
+        <textarea id="to_email"style="width:100%" rows="2"></textarea>
+      </div>
+    </div>
+    <br>
+    <div class="col-md-12 col-sm-12  mt-2 form_event-group ">
+      <div class="col-md-2 col-sm-2">
+        <label>CC :</label>
+      </div>
+      <div class="col-md-10 col-sm-10">
+        <textarea id="cc_email" style="width:100%" rows="2"></textarea>
+      </div>
+    </div>
+    <br>
+     <div class="col-md-12 col-sm-12  mt-2 form_event-group ">
+      <div class="col-md-2 col-sm-2">
+        <label>Subject :</label>
+      </div>
+      <div class="col-md-10 col-sm-10">
+        {{ form_send_email.email_subject }}
+      </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-9 col-xs-9">Email Content</label>
+        <div class="col-md-3 col-xs-3">
+            <div class="dropdown" style="right: 30px">
+                <button class="btn btn-default dropdown-toggle canned-btn" type="button" data-toggle="dropdown">Canned Response
+                <span class="caret"></span></button>
+                <ul id="canned_list" class="dropdown-menu scrollable-menu" role="menu">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12">
+      {{ form_send_email.email_content }}
+      <input type="hidden" id="content_value"/>
+    </div>
+</div>
+

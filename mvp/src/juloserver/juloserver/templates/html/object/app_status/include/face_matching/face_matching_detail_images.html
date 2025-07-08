@@ -1,0 +1,61 @@
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+{% load unit utils %}
+
+{% comment %} Selfie Section {% endcomment %}
+<div class="row m-24">
+  <p class="font-black semi-bold font-16 nunito">Selfie</p>
+  <div class="col-sm-12 bg-neutrals-20 px-8 py-16 radius-8" style="display: flex;flex-direction: column;">
+    {% for document in image_list %}
+      {% if document.image_type|display_safe == 'Selfie' %}
+        <div class="col-sm-3 text-center">
+          <div class="watermarked">
+            <div class="image_box_modal_face_matching radius-8" style="background:url('{{ document.image_url }}');background-size: cover;background-position: center;"></div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% comment %} Liveness Section {% endcomment %}
+<div class="row m-24" id="modal_liveness_x_selfie_match">
+  <p class="font-black semi-bold font-16 nunito">Liveness</p>
+  <div class="col-sm-12 bg-neutrals-20 px-8 py-16 radius-8">
+    {% for document in image_list %}
+      {% if 'Active Liveness' in document.image_type|display_safe or 'Selfie Check Liveness' in document.image_type|display_safe %}
+        <div class="col-sm-3 text-center">
+          <div class="watermarked">
+            <div class="image_box_modal_face_matching radius-8" style="background:url('{{ document.image_url }}');background-size: cover;background-position: center;"></div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+    <div style="display: inline-block;width: 100%;">
+      <div style="display: flex;align-items: center;gap: 4px;" class="mt-8 ml-8">
+        <input type="checkbox" autocomplete="off" class="mt-0" id="checkbox-match-selfie" />
+        <p class="mb-0">Match</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} KTP Section {% endcomment %}
+<div class="row m-24" id="modal_liveness_x_ktp_match">
+  <p class="font-black semi-bold font-16 nunito">KTP</p>
+  <div class="col-sm-12 bg-neutrals-20 px-8 py-16 radius-8" style="display: flex;flex-direction: column;">
+    {% for document in image_list %}
+      {% if document.image_type|display_safe == 'Ktp Self' %}
+        <div class="col-sm-12 text-center">
+          <div class="watermarked">
+            <div class="image_box_modal_face_matching radius-8" style="background:url('{{ document.image_url }}');background-size: cover;background-position: center;"></div>
+          </div>
+        </div>
+        <div style="display: flex;align-items: center;gap: 4px;" class="mt-8 ml-8">
+          <input type="checkbox" autocomplete="off" class="mt-0" id="checkbox-match-ktp" />
+          <p class="mb-0">Match</p>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

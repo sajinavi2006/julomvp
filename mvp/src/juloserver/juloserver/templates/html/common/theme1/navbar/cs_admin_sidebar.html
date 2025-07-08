@@ -1,0 +1,61 @@
+{% load checkusergroup from common %}
+{% load unit %}
+
+<!-- Left navbar-header -->
+  <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+
+      <ul class="nav" id="side-menu">
+        <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+          <!-- input-group -->
+          <div class="input-group custom-search-form">
+            <input type="text" class="form-control" placeholder="Cari...">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+            </span> </div>
+          <!-- /input-group -->
+        </li>
+
+        <li id="mnu_dashboard_li"> <a href="{% url 'dashboard:default' %}" class="waves-effect">
+          <i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Dashboard </span>
+          </a>
+        </li>
+
+        {%if julo_roles|length > 1 %}
+          <li><a href="javascript:void(0)" class="waves-effect">
+            <i class="linea-icon linea-basic fa-fw text-danger" data-icon="7"></i> <span class="hide-menu">
+              Pindah Role<span class="fa arrow"></span>
+            </span></a>
+            <ul class="nav nav-second-level">
+            {% for role_item in julo_roles %}
+                <li><a href="{{ role_item.url }}" class="waves-effect">{{ role_item.role|display_safe }}
+                  </a>
+                </li>
+            {% empty %}
+                <li>Tidak ada</li>
+            {% endfor %}
+            </ul>
+          </li>
+        {% endif %}
+  
+        <li id="mnu_application_li"> <a href="#" class="waves-effect active"><i data-icon="f" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Delete Account<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_app_img_verify_li" class="active"> <a href="{% url 'dashboard:cs_admin_dashboard' %}" >
+              <span class="hide-menu">Account Search and Delete</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="{% url 'logout'%}" class="waves-effect hidden-md hidden-lg hidden-sm"><i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span></a>
+          <a href="javascript:void(0)" alt="alert" class="img-responsive model_img hidden-xs" id="signout-warning2">
+            <i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Left navbar-header end -->

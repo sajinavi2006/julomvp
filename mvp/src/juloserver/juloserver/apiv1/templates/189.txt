@@ -1,0 +1,6 @@
+Selamat!!<br>
+Aplikasi anda telah disetujui oleh BFI dengan informasi sebagai berikut:<br>
+No. kontrak: {{contract_number}}<br>
+Jumlah pinjaman: {{loan_amount}}<br>
+<br>
+Silahkan hubungi Customer Service BFI di 1500018 untuk informasi lebih lanjut.

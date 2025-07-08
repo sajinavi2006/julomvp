@@ -1,0 +1,86 @@
+{% load utils %}
+{% load format_date %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/custom.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/regular.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/all.css">
+    <style type="text/css">
+        .card {
+            margin-bottom: 10px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+        }
+
+        .card div {
+            padding: 15px;
+        }
+
+        .force-blue {
+            background-color: #00abf0;
+            border-color: #00abf0;
+            width: 100%;
+            font-size: .8em;
+        }
+
+        .force-blue:hover {
+            background-color: #0299d6;
+            border-color: #0299d6;
+        }
+
+        .mt20 {
+            margin-top: 20px;
+        }
+    </style>
+
+    <title>julo</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="mt20">
+                    <strong>Apa Itu Pinjaman Lain?</strong><br/>
+                    Marketplace kumpulan produk pinjaman yang memberikan kesempatan untuk Anda mengajukan pinjaman kembali.
+                    Yuk, segera pilih produk pinjamanmu sekarang!
+                </p>
+                <hr>
+            </div>
+            <div class="col-md-12">
+                {% for other_loan in other_loans %}
+                    <div class=card>
+                        <img src="{{ other_loan.image_url }}">
+                        <div>
+                            <p>
+                                <strong>{{ other_loan.name }}</strong><br/>
+                                {{ other_loan.short_description }}
+                            </p>
+                            <a href="{{ other_loan.url }}" class="btn btn-primary force-blue">Unduh</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://julo.co.id/assets/script/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://julo.co.id/assets/web/assets/jquery/jquery.min.js"></script>
+</body>
+
+</html>

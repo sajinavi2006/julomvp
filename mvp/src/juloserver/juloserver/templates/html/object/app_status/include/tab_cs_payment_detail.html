@@ -1,0 +1,61 @@
+{% load unit %}
+<div>
+    {% if account_objects %}
+        Account ID :
+        <a href="{% url 'account_payment_status:account_dashboard' account_objects.id %}" target="_blank">
+            {{account_objects.id}}
+        </a>
+        <code>{{account_objects.status.status_code}}</code>
+    {% endif %}
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                <b>No</b>
+            </th>
+            <th scope="col">
+                <b>Acc-Pmt-ID</b>
+            </th>
+            <th scope="col">
+                <b>Acc-Pmt-Status</b>
+            </th>
+            <th scope="col">
+                <b>Acc-Pmt-dpd</b>
+            </th>
+            <th scope="col">
+                <b>Due Amount</b>
+            </th>
+            <th scope="col">
+                <b>Paid Amount</b>
+            </th>
+            <th scope="col">
+                <b>Due Date</b>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in account_payment_objects %}
+            <tr>
+                <td scope="row">{{ forloop.counter }}</td>
+                <td>
+                    <a href="{% url 'account_payment_status:change_status' obj.id %}" target="_blank">
+                        {{obj.id}}
+                    </a>
+                </td>
+                <td>{{obj.status.status_code}}</td>
+                <td>{{obj.status.status}}</td>
+                <td>{{obj.due_amount|f_rupiahs:"-"|safe }}</td>
+                <td>{{obj.paid_amount|f_rupiahs:"-"|safe }}</td>
+                <td>{{obj.due_date}}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7">
+                    <code>-- Tidak ada data --</code>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

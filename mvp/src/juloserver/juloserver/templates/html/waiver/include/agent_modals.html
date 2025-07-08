@@ -1,0 +1,193 @@
+<!--########################### modal box ###############################################-->
+<div id="error_pop_up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Collection Offer for J1</h4>
+            </div>
+            <div class="modal-body">
+                 <div class="row">
+                    <div class="col-md-12 col-sm-12" id="pop_msg"></div>
+                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="existing_offer_pop_up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog existing_offer_modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Offer history</h4>
+            </div>
+            <div class="modal-body">
+                 <div class="row">
+                     <div class="col-md-12 col-sm-12 text-center" id="blank_existing_offer_content">
+                        Customer ini belum pernah mendapatkan refinancing sebelumnya
+                    </div>
+                    <div class="col-md-12 col-sm-12" id="existing_offer_content">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle"> No. </th>
+                                    <th class="align-middle"> Offer Type </th>
+                                    <th class="align-middle"> Request Date </th>
+                                    <th class="align-middle"> Principal disc. </th>
+                                    <th class="align-middle"> Interest disc. </th>
+                                    <th class="align-middle"> Late Fee disc. </th>
+                                    <th class="align-middle"> Extension </th>
+                                    <th class="align-middle"> Status </th>
+                                    <th class="align-middle"> Pre-requisite Amount </th>
+                                    <th class="align-middle"> Status Date </th>
+                                    <th class="align-middle"> Requested Expire Date </th>
+                                    <th class="align-middle"> Expire Date </th>
+                                </tr>
+                            </thead>
+                            <tbody id='existing_offer_table_body'>
+                            </tbody>
+                        </table>
+                        <div id="existing_offer_ps">
+                        </div>
+                    </div>
+                 </div>
+            </div>
+            <div class="modal-footer" id="existing_offer_footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="agent_notes_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                 <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <h1 align="center"><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color: #F9992E"></span></h1>
+                        <h3 id="text_agent_note"></h3>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="5" id="agent_note"></textarea>
+                        </div>
+                        <h3>Group Penanganan</h3>
+                        <div class="form-group">
+                            <select id="agentGroups" class="form-control">
+                                <option value="Desk Collector" selected>Desk Collector</option>
+                                <option value="Field Collector">Field Collector</option>
+                            </select>
+                        </div>
+                        <div id="agentDetail" style="display: none;">
+                            <h3>Agent Pemohon Program</h3>
+                            <div class="searchable-select form-group">
+                                <div style="position: relative;">
+                                    <input type="text" id="searchInput" class="form-control" placeholder="Type to search...">
+                                    <button id="clearButton" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; display: none;">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </div>
+                                <span id="searchSpinner" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display: none;"></span>
+                                <select id="searchResults" size="5"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 text-center">
+                        <button class="btn btn-primary" style="background-color: white; color: #000000; border-color: #0a0a0a" data-dismiss="modal">Tidak</button>
+                        <button class="btn btn-primary" id="btn_waiver_request_submit" data-dismiss="modal" disabled>Ya</button>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="multiple_ptp_payment_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                 <div class="row">
+                    <div class="col-md-9 col-sm-9">
+                        <label class="col-md-7 col-md-7">PTP Amount</label>
+                        <div class="form-group col-md-5 col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-addon">Rp.</span>
+                                <input class="form-control"name="max_multiple_ptp_amount" type="text" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9 col-sm-9">
+                        <label class="col-md-7 col-md-7">Dalam berapa kali<br/>angsuran PTP akan dibayar?</label>
+                        <div class="form-group col-md-5 col-md-5">
+                            <select class="form-control" name="jumlah_angsuran_ptp_payment">
+                                <option value="0" selected disabled hidden>Pilih Jumlah Angsuran</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-md-12">
+                        <table class="table table-bordered multiple-ptp-payment-table" style="display: none;">
+                            <thead class="text-center">
+                                <th class="text-center" style="width: 50%;">Tanggal Bayar</th>
+                                <th class="text-center" style="width: 50%;">Jumlah Yang Dibayar</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                            <input class="form-control datepicker" id="multiple_payment_date_1" maxlength="None" name="multiple_payment_date_1" placeholder="dd M yyyy" type="text" value="">
+                                            <input type="hidden" id="multiple_payment_date_1_db" value="" name="multiple_payment_date_1_db">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Rp.</span>
+                                            <input type="text" class="form-control" maxlength="15" name="multiple_ptp_amount_1">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td style="text-align: left;">Total</td>
+                                    <td style="text-align: right;" class="total-multiple-payment">Rp. 0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-md-12 col-md-12" id="multiple_ptp_payment_validation"></div>
+                    <div class="col-md-12 col-md-12">
+                        <div style="border-top: solid #00ACF0; background-color: #F3FCFF;">
+                            <p>Catatan :</p>
+                            <ol>
+                                <li>
+                                    Total jumlah yang dibayar dalam tabel harus sama dengan&nbsp;
+                                    Rp.&nbsp;<span id="multiple_ptp_amount_txt">0</span>
+                                </li>
+                                <li>
+                                    Tanggal bayar terakhir dalam tabel harus jatuh sebelum atau pada tanggal&nbsp;
+                                    <span id="multiple_validity_date_txt">00 Xxx 0000</span>
+                                </li>
+                                <li>
+                                    Tanggal bayar dan Jumlah yang dibayar harus diisi
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-md-12 text-center">
+                        <button class="btn btn-primary" id="btn_multiple_ptp_payment_cancel" style="background-color: white; color: #000000; border-color: #0a0a0a" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" id="btn_multiple_ptp_payment_submit" disabled>Submit</button>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "waiver/include/collection_offers_portal_modal.html" %}

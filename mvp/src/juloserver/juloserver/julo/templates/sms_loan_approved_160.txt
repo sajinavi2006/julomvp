@@ -1,0 +1,1 @@
+Selamat! Pinjaman anda dengan Jumlah {{loan_amount}} & jangka {{loan_duration}} bulan berhasil disetujui. Tinggal selangkah lagi menuju pencairan klik disini {{shortened_url}}

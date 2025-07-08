@@ -1,0 +1,61 @@
+<button type="button" onclick="make_call()"
+        class="form-row field-default_dial" style="background: #79aec8; border: none; border-radius: 4px; color: #fff;
+        padding: 10px 15px; margin-left: 15px;"
+>Dial
+</button>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content" style="border-radius: 10px;">
+            <div class="modal-header" style="background: #79aec8;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="padding: 0;">We are trying to do a test call, please try again on
+                    5 minutes if it is fail</h4>
+            </div>
+            <div class="modal-body">
+                <div style=" text-align: center;" class="row">
+                    <div class="col-sm-4" style="left: 100px;">
+                        <span style="font-size:30px; color: #79aec8;">&#9990;</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <label id="hours" style="display: inline-block; font-size: 30px; padding: 0; width: auto; float: none; line-height: normal;">00:</label>
+                        <label id="minutes" style="display: inline-block; font-size: 30px; padding: 0; width: auto; float: none; line-height: normal;">00</label>
+                        <label id="minute" style="display: inline-block; font-size: 30px; padding: 0; width: auto; float: none; line-height: normal;">:</label>
+                        <label id="seconds" style="display: inline-block; font-size: 30px; padding: 0; width: auto; float: none; line-height: normal;">00</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style=" text-align: center;">
+                <button type="button" class="btn btn-default" style="background: #417690;
+              color: #fff; padding: 9px 29px;" data-dismiss="modal">Ok
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="errorbox" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content" style="border-radius: 10px;">
+            <div class="modal-header" style="background: #79aec8;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Error</h4>
+            </div>
+            <div class="modal-body">
+                <div style=" text-align: center;" class="row">
+                    <b> The Test To Call Number Should not be Empty</b>
+                </div>
+            </div>
+            <div class="modal-footer" style=" text-align: center;">
+                <button type="button" class="btn btn-default" style="background: #417690;
+              color: #fff; padding: 9px 29px;" data-dismiss="modal">Ok
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

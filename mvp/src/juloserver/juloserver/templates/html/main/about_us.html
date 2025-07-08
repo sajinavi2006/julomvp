@@ -1,0 +1,97 @@
+{% extends "common/layout_nonuser.html" %}
+
+
+{% block additional_css %}
+
+{% endblock %}
+
+
+{% block inside_body %}
+
+<!-- Page Content -->
+  <div id="page-wrapper">
+    <div class="container-fluid">
+    
+      <div class="row bg-title text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <h1 class="page-title">
+          		<span class="label label-danger text-center fade in">
+	            	Who we are?
+	            </span>
+	      </h4>
+        </div>
+      </div>
+      <!-- /.row -->
+     
+    <div class="row">
+    	<div class="white-box">
+    		<div class="row">
+		    <div class="col-md-7 col-xs-12 "> 
+		    	<p class="text-justify">Julo Finance adalah applikasi web yang bersifat sebagai aggregator dan penyedia solusi lander and borrower (Pemberi dan Penerima Kredit).
+				</p>
+		        <br/>
+				<p class="text-justify">Perusahaan ini didirikan dengan tujuan menyediakan platform keuangan yang mudah digunakan 
+				dimana dunia bisnis bisa melakukan bla2 yang kompetitif. 
+				Di dukung dengan pengetahuan dan keahlian veteran di industri ini.
+				</p>
+		    </div>
+{% load static from staticfiles %}
+		    <div class="col-md-5 col-xs-12 "> 
+		    	<img src="{% static 'images/collections/truck3.png' %}" class="img-responsive img-rounded m-l-15 m-r-15" width="560" alt="tentang kami">
+		    </div>
+		   	</div>
+		</div>
+  	</div>
+  	
+    <div class="row">
+        <div class="white-box">
+        	<div class="row">
+            <div class="col-xs-12 col-md-7">
+	                <img src="{% static 'images/collections/truck4.jpg' %}" class="img-responsive img-rounded m-l-10" width="560" alt="tentang kami">
+            </div>
+            
+            <div class="col-md-5 col-xs-12">
+                <p class="text-justify">In simplified terms Julo Finance Logistic is a web based finance business and 
+	                hohoho (see the "How do we do it section" for more information).
+	                </p>
+	                <br/>
+	                <p class="text-justify">
+	                JULO provides affordable unsecured personal loan (KTA) exclusively to smartphone users
+	                </p>
+	                <br/>
+	                <p class="text-justify">
+	                More than 100M Indonesians are marginalized by formal lending institutions, exploited by loan sharks, or do not have valuable possessions to be collateralized or pawned. JULO extends affordable credit to this excluded segment by utilizing state-of-the-art technologies. The entire lending process is done via smartphone for user convenience, to maximize penetration nationwide, and to enable use of rich data for verification and risk assessment purposes.
+	                </p>
+	                <br/>
+	                <p class="text-justify">
+	                Sed varius nisl urna. Aliquam mollis risus consequat mauris consectetur, at sodales arcu sollicitudin. Maecenas est ligula, dictum sit amet ipsum sit amet, pretium ultrices dolor. Ut ac tellus lectus. Maecenas nisl neque, vulputate vel quam sed, aliquet dictum ex. Nunc ultricies dapibus consequat. Etiam dapibus, massa a varius sagittis, urna metus auctor sem, quis malesuada est lectus id dolor. Aenean viverra nibh eget molestie viverra. Duis pulvinar dui ac faucibus posuere. Nam feugiat odio at venenatis mollis. Aliquam diam felis, semper vitae luctus quis, dapibus eget sem. Donec ligula augue, pulvinar eget scelerisque et, placerat at lorem. Etiam ut lobortis nisi.
+	                </p>
+	                <br/>
+	                <p class="text-justify">
+	                Hopefully our customer testimonials will speak for themselves.
+	                </p>
+            </div>
+            </div>
+        </div>
+    </div>
+	
+	
+
+    </div>
+      <!-- /.container-fluid -->
+  </div>
+  <!-- /.page wrapper -->
+      
+{% endblock %}
+
+{% block script_additional %}
+	
+{% endblock %}
+
+{% block script_bottom_inside %}
+	jQuery(document).ready(function() {
+	    //$("#id_welcome_dashboard a:first").removeClass("active");
+	    //$("#id_welcome_aboutus a:first").addClass("active");
+    });
+{% endblock %}
+

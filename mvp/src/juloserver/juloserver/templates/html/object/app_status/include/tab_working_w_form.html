@@ -1,0 +1,224 @@
+{% load unit %}
+
+
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Tipe Pekerjaan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.job_type|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Bidang Pekerjaan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.job_industry|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Pekerjaan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.job_description|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Nama Perusahaan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.company_name|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>No Telp Perusahaan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    
+    <div class="input-group input-group-sm {% if form_app.company_phone_number.errors %} has-error {% endif %}"> 
+      {{form_app.company_phone_number}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-company_phone_number', '{{ object.company_phone_number|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Kode Pos Kantor</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.work_kodepos|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Tanggal Mulai Bekerja</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    
+      {{ object.job_start|date:"d M Y"|default:"-"|safe}} - Lama:  
+      {{ object.job_start|age|safe}} Tahun
+    
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Penghasilan Bersih Per Bulan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    
+    <div class="input-group input-group-sm {% if form_app.monthly_income.errors %} has-error {% endif %}"> 
+      <span class="input-group-addon">
+        Rp.
+      </span>
+      {{form_app.monthly_income}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-monthly_income', '{{ object.monthly_income|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Tanggal Gajian</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    
+    <div class="input-group input-group-sm {% if form_app.payday.errors %} has-error {% endif %}"> 
+      <span class="input-group-addon">1 to 31</span>
+      {{form_app.payday}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-payday', '{{ object.payday|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+
+     
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Penghasilan T-1</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    
+      {{ object.income_1|f_rupiahs:"no"|safe}}
+    
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Penghasilan T-2</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    
+      {{ object.income_2|f_rupiahs:"no"|safe}}
+    
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Penghasilan T-3</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    
+      {{ object.income_3|f_rupiahs:"no"|safe}}
+    
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Pendidikan Terakhir</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.last_education|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>  
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Perguruan Tinggi</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.college|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Jurusan</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.major|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Tahun Lulus</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.graduation_year|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+    
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>IPK</strong>
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    {{ object.gpa|default:"-"|safe}}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>

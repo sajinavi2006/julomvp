@@ -1,0 +1,152 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load checkusergroup from common %}
+
+
+{% block meta %}
+    <!-- remarked if for production -->
+    <!-- <meta http-equiv="refresh" content="3" > -->
+{% endblock %}
+
+{% block breadcrumb_title %}Payment {% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Payment</a></li>
+    <li class="active">Event</li>
+{% endblock %}
+ 
+{% block list_title %}Payments{% endblock %}
+{% block list_subtitle %}Silahkan masukan data pencarian{% endblock %}
+ 
+
+ {% block content-list %}
+
+  <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size='{{results_per_page}}'>
+    <thead>
+      <tr>
+        <th data-toggle="true"> No </th>
+        <th> Email </th>
+        <th data-toggle="true"> Status </th>
+        <th data-toggle="true"> Due Amount </th>
+        <th data-hide="phone"> Pay-Num </th>
+        <th data-hide="all"> Detail </th>
+        <th data-hide="phone" data-sort-ignore="true" class="min-width text-center">
+            Actions
+        </th>
+      </tr>
+    </thead>
+    <div class="form-inline padding-bottom-15">
+        <div class="row">
+          <div class="col-sm-6 col-xs-12 hidden-xs">
+            {% block search-form %}{% search_form q %}{% endblock %}
+          </div>
+        </div>
+      </div>
+    <tbody>
+      {% if object_list %}
+        {% for object in object_list %}
+          <tr>
+            <td>{% increment_counter_one forloop.counter0 page_obj.number results_per_page %}</td>
+            <td><a href="{% url 'payment:detail_partial_payment' object.id %}">{{ object.loan.application.email|default:"-"|safe}}</a></td>
+            <td>
+                {{ object.payment_status|default:"-"|safe}}
+            </td>
+             <td>
+                {{ object.due_amount|f_rupiahs:'no'|default:"-"|safe}}
+            </td>
+            <td>
+                <label class="label label-danger">{{ object.payment_number|default:"-"|safe}}</label>
+            </td>
+            <td>
+              {% include "object/payment/include/td_detail.html" %}
+            </td>
+            
+            <td class='text-center'>
+                  <a href="{% url 'payment:create_partial_payment' object.id %}" title='Partial Payment'>
+                      <button class="btn btn-success m-b-5"><i class="fa fa-money fa-fw"></i> Payment Event</button>
+                  </a>
+              </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+          <tr>
+              <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+          </tr>
+      {% endif %}
+      
+    </tbody>
+  </table>
+  <tfoot>
+    <tr>
+      <td colspan="5"><div class="text-right">
+          {% pagination2 is_paginated paginator page_obj q 4 %}
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+ 
+{% endblock %}
+
+{% block script_bottom_inside %}
+ 
+    function goBack() {
+        window.history.back();
+    }       
+
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      /*
+      $('#mnu_dashboard_li a:first').removeClass('active');
+      $('#{{nav_menu}}').addClass('active');
+      $('#{{nav_menu}} a:first').addClass('active');
+      $('#{{nav_submenu}}').addClass('active');
+      $('#{{nav_subsubmenu}}').addClass('active');
+      */
+  });
+{% endblock %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link href="{% static 'theme/plugins/bower_components/footable/css/footable.core.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+  <!-- Date picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}" rel="stylesheet" type="text/css" />
+  <!-- Daterange picker plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block script_additional %}
+    
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+
+    <!-- Date Picker Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- Date range Plugin JavaScript -->
+    <script src="{% static 'theme/plugins/bower_components/timepicker/bootstrap-timepicker.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-daterangepicker/daterangepicker-julo.js' %}"></script>
+
+    <!-- Footable -->
+    <script src="{% static 'theme/plugins/bower_components/footable/js/footable.all.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.js' %}" type="text/javascript"></script>
+    
+    <!--FooTable init-->
+    <script src="{% static 'theme/nav-inverse/js/footable-init.js' %}"></script>
+    <!--Style Switcher -->
+    <script src="{% static 'theme/plugins/bower_components/styleswitcher/jQuery.style.switcher.js' %}"></script>
+
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,246 @@
+{% load unit utils %}
+
+<table>
+
+    <tr>
+      <td class='m-r-10'>
+        Jumlah pinjaman
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        &nbsp;&nbsp;<strong>{{ object.loan_amount_request|f_rupiahs:"no_currency"|default:"-"|safe}}</strong>
+      </td>
+      <td rowspan="3">&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn btn-primary btn-rounded" id="id_btn_clipboard_app">
+          <i class="txt-warning fa fa-clipboard fa-fw"></i> Copy data &nbsp;&nbsp;
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Jangka Waktu
+      </td>
+      <td class="text-left">
+      </td>
+      <td class="text-right">
+        &nbsp;&nbsp;<strong>{{ object.loan_duration_request|default:"-"|safe}} {{ object.determine_kind_of_installment }}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Bunga per bulan
+      </td>
+      <td class="text-left">
+      </td>
+      <td class="text-right">
+        {% if object.product_line %}
+          &nbsp;&nbsp;<strong>{{ object.default_interest_rate|percentage_100 }}%</strong>
+        {% else %}
+          &nbsp;&nbsp;<strong>-%</strong>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        ===============================
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Cicilan
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        {% if object.product_line %}
+          &nbsp;&nbsp;<strong>{{ object.basic_installment|f_rupiahs:"no_currency"|default:"-"|safe}}</strong>
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="4">
+        ----------------------------------------
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        80% Cicilan
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        {% if object.product_line %}
+          &nbsp;&nbsp;<strong>{{ object.basic_installment_discount|f_rupiahs:"no_currency"|default:"-"|safe}}</strong>
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="4">
+        ----------------------------------------
+      </td>
+    </tr>
+
+
+    <tr>
+      <td colspan="4">
+        <br/>
+      </td>
+    </tr>
+
+    <tr>
+      <td class='m-r-10'>
+        Penghasilan Bersih
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        &nbsp;&nbsp;<strong >{{ object.monthly_income|f_rupiahs:"no_currency"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Biaya Sewa/Cicilan Rumah &nbsp;&nbsp;
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        &nbsp;&nbsp;<strong>-{{ object.monthly_housing_cost|f_rupiahs:"no_currency"|safe}}</strong>
+      </td>
+    </tr>
+
+    <tr>
+      <td class='m-r-10'>
+        Pengeluaran Rutin
+      </td>
+      <td class="text-left">
+       <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        &nbsp;&nbsp;<strong> -{{ object.monthly_expenses|f_rupiahs:"no_currency"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10 m-t-10 m-b-10'>
+        Cicilan Hutang
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right m-r-10">
+        &nbsp;&nbsp;<strong>-{{ object.total_current_debt|f_rupiahs:"no_currency"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        ===============================
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Sisa Penghasilan
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        <strong>{{ object.basic_financial|f_rupiahs:"no_currency"|default:"-"|safe}}</strong>
+      </td>
+      <td>
+         &nbsp;&nbsp; Sisa >= 80% Cicilan?
+         {% if object.product_line %}
+           {% if object.basic_financial >= object.basic_installment_discount %}
+            &nbsp;<i class="text-success fa fa-check-circle"></i>&nbsp;
+           {% else %}
+            &nbsp;<i class="text-danger fa fa-times-circle"></i>&nbsp;
+           {% endif %}
+         {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        ----------------------------------------
+      </td>
+    </tr>
+
+
+    <tr>
+      <td colspan="4">
+        <br/>
+      </td>
+    </tr>
+
+    <tr>
+      <td class='m-r-10'>
+        Penghasilan Bersih
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        &nbsp;&nbsp;<strong >{{ object.monthly_income|f_rupiahs:"no_currency"|safe}}</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        DTI
+      </td>
+      <td class="text-left">
+      </td>
+      <td class="text-right">
+        {% if object.product_line %}
+        &nbsp;&nbsp;<strong>{{ object.dti_multiplier|percentage_100 }}%</strong>
+        {% else %}
+        &nbsp;&nbsp;<strong>-%</strong>
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="4">
+        ===============================
+      </td>
+    </tr>
+    <tr>
+      <td class='m-r-10'>
+        Kapasitas DTI
+      </td>
+      <td class="text-left">
+        <strong> Rp.</strong>
+      </td>
+      <td class="text-right">
+        <strong>{{ object.dti_capacity|f_rupiahs:"no_currency"|default:"-"|safe}}</strong>
+      </td>
+      <td>
+        &nbsp;&nbsp; DTI >= 80% Cicilan?
+        {% if object.dti_capacity >= object.basic_installment_discount %}
+          &nbsp;<i class="text-success fa fa-check-circle"></i>&nbsp;
+        {% else %}
+          &nbsp;<i class="text-danger fa fa-times-circle"></i>&nbsp;
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        ----------------------------------------
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="4">
+        <hr>
+      </td>
+    </tr>
+
+</table>
+
+<div class="col-md-6 col-xs-6 m-t-30">
+
+</div>

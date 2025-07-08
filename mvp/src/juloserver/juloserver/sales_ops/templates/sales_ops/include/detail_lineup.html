@@ -1,0 +1,212 @@
+{% load unit utils %}
+{% load static %}
+
+<ul class="nav nav-tabs customtab tabs" id="user_info_tab">
+   <li class="active tab">
+      <a href="#user_info" data-toggle="tab">
+        <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">User Info</span>
+      </a>
+  </li>
+  <li class="tab">
+    <a href="#skip_tracing" data-toggle="tab" aria-expanded="false" title="Skip Tracing">
+      <span class="visible-xs"><i class="fa fa-chevron-circle-down"></i></span>
+      <span class="hidden-xs">ST</span>
+    </a>
+  </li>
+  <li class="tab">
+      <a href="#callback" data-toggle="tab">
+        <span class="visible-xs"><i class="fa fa-user"></i></span> <span class="hidden-xs">Callback</span>
+      </a>
+  </li>
+</ul>
+
+<div class="tab-content" style="overflow-y:auto; overflow-x:hidden">
+  <div id="user_info" class="tab-pane active">
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Account ID</div>
+      <div class="col-xs-6">:
+        {% if object.account_id %}
+          <a href="{% url 'account_payment_status:list' 'all' %}?search_q={{object.account.id}}&search={{object.account.id}}&filter_category=Account ID" target="_blank">
+            <strong>{{ object.account_id }}</strong>
+          </a>
+        {% else %}
+            -
+        {% endif %}
+      </div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Application ID</div>
+      <div class="col-xs-6">:
+        {% if object.latest_application_id %}
+          <a href="{% url 'app_status:change_status' object.latest_application_id %}" target="_blank">
+            <strong>{{ object.latest_application_id | default:'-' }}</strong>
+          </a>
+        {% else %}
+          -
+        {% endif %}
+      </div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Full Name</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_application.fullname | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Date Limit Approved</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_account_limit.cdate | date:'F Y, d' | default:'-' }}</strong></div>
+    </div>
+    {% if not object.latest_account_property.last_graduation_date %}
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Last Graduated Date</div>
+      <div class="col-xs-6">: <strong>-</strong></div>
+    </div>
+    {% with set_limit=object.latest_account_limit.set_limit %}
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Previous Given Limit</div>
+      <div class="col-xs-6">: <strong>{{ set_limit | f_rupiahs:'no' | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Current Given Limit</div>
+      <div class="col-xs-6">: <strong>{{ set_limit | f_rupiahs:'no' | default:'-' }}</strong></div>
+    </div>
+    {% endwith %}
+    {% else %}
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Last Graduated Date</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_account_property.last_graduation_date | date:'F Y, d' | default:'-' }}</strong></div>
+    </div>
+    {% with latest_limit_values_graduation=object.account.latest_limit_values_graduation %}
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Previous Given Limit</div>
+      <div class="col-xs-6">: <strong>{{ latest_limit_values_graduation.value_old | f_rupiahs:'no' | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Current Given Limit</div>
+      <div class="col-xs-6">: <strong>{{ latest_limit_values_graduation.value_new | f_rupiahs:'no' | default:'-' }}</strong></div>
+    </div>
+    {% endwith %}
+    {% endif %}
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Available Limit</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_account_limit.available_limit | f_rupiahs:'no' | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Total Limit Used</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_account_limit.used_limit | f_rupiahs:'no' | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Last Disbursed Loan ID</div>
+      <div class="col-xs-6">:
+        {% if object.latest_disbursed_loan_id %}
+          <a href="{% url 'loan_status:details' object.latest_disbursed_loan_id %}" target="_blank">
+            <strong>{{ object.latest_disbursed_loan_id | default:'-' }}</strong>
+          </a>
+        {% else %}
+          -
+        {% endif %}
+      </div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Last Disbursement Date</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_disbursed_loan.fund_transfer_ts | date:'F Y, d'   | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Last Disbursement Type</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_disbursed_loan.transaction_method.fe_display_name | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Tujuan Pinjaman</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_application.loan_purpose | default:'-' }}.</strong> {{ object.latest_application.loan_purpose_desc | default:'-' }}</div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Jenis Kelamin</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_application.gender | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Status Pernikahan</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_application.marital_status | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Tipe Pekerjaan</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_application.job_type | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Nomor HP1</div>
+      <div class="col-xs-6">: <strong>{{ object.latest_application.mobile_phone_1 | default:'-' }}</strong></div>
+    </div>
+
+    {% for offer_code, offer_label, is_locked in product_locked_list %}
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">Offer {{ offer_label }}</div>
+      <div class="col-xs-6">: <strong>
+        {% if is_locked %}
+          No
+        {% else %}
+          Yes
+        {% endif %}
+      </strong></div>
+    </div>
+    {% endfor %}
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">CFS Tier</div>
+      <div class="col-xs-6">: <strong>{{ cfs_tier.name | default:'-' }}</strong></div>
+    </div>
+    <div class="row m-b-5 m-t-5">
+      <div class="col-xs-6 col-md-4 no-left">CFS JScore</div>
+      <div class="col-xs-6">: <strong>{{ cfs_j_score | default:'-' }}</strong></div>
+    </div>
+  </div>
+  <div id="callback" class="tab-pane">
+    <div class="col-md-12 col-xs-12">
+        <form method="POST" class="form-horizontal row" name="callback_history" action="{% url 'sales_ops.crm:create_callback_history' %}">
+          {% csrf_token %}
+          <input type="hidden" id="lineup_id" name="lineup_id" value="{{object.id}}">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="callback_at">callback at</label>
+              {{ form_callback.callback_at }}
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="callback_note">callback note</label>
+              {{ form_callback.callback_note }}
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-primary btn-block text-uppercase waves-effect waves-light">
+              Simpan
+            </button>
+          </div>
+        </form>
+    </div>
+    <div class="col-md-12 col-xs-12">
+      <table class="table">
+        <tr>
+          <th>callback at</th>
+          <th>callback note</th>
+        </tr>
+        {% for callback_history in callback_histories %}
+        <tr>
+          <th>
+            <div class="row m-b-5">
+                <div class="col-xs-6 col-md-8">
+                  {{ callback_history.callback_at | date:'d M Y H:i:s' }}
+                </div>
+              </div>
+          </th>
+          <th>
+            <div class="row m-b-5">
+                <div class="col-xs-6 col-md-8">
+                  {{ callback_history.note }}
+                </div>
+              </div>
+          </th>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <div id="skip_tracing" class="tab-pane">
+      {% include "sales_ops/include/tab_skip_tracing.html" with lineup=object %}
+  </div>
+</div>

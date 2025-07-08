@@ -1,0 +1,1 @@
+{{name}}. Angsuran JULO anda sudah TERLAMBAT 5 hari. Bantu kami untuk membantu Anda, hubungi kami di collections@julo.co.id, Segera bayar angsuran {{payment_number}} berikut denda sebesar {{due_amount}}. Cara bayar, cek aplikasi PEDE.

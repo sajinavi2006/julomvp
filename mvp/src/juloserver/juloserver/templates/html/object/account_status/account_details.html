@@ -1,0 +1,2399 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+{% block additional_title %}Account Details: {{ account.id }} {% endblock %}
+
+{% block custom_link %}
+{% endblock %}
+
+{% block custom_css %}
+    <!-- Watermark CSS -->
+    <link href="{% static 'theme/plugins/watermark/watermark.css' %}" rel="stylesheet" />
+
+    <!-- Popup CSS -->
+    <link href="{% static 'theme/plugins/bower_components/Magnific-Popup-master/dist/magnific-popup.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block css_inside %}
+  .modal-custom-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+  .pmt_event {
+    margin-top:10px !important;
+  }
+  td.day{
+    position:relative;
+  }
+  .enabled a{
+    color:black !important;
+    background:green !important;
+  }
+    td.day{
+    position:relative;
+  }
+
+  td.day.disabled:hover:before {
+      content: 'This date is disabled';
+      color: white;
+      background-color: grey;
+      top: 28px;
+      position: absolute;
+      width: 136px;
+      left: -34px;
+      z-index: 1000;
+      text-align: center;
+      padding: 2px;
+  }
+
+  td.disabled-date {
+      background-color: red !important;
+      color: white !important;
+  }
+
+  .modal-content {
+    width: 120%;
+  }
+  .select_cls {
+      width: 232px;
+      height: 36px;
+      border: solid 1px #d5d6d6;
+      background-color: #ffffff;
+  }
+  .red{color: red;}
+  .green{color: green;}
+  .no-left{padding-left:0px;}
+  .m-l-30 { margin-left: 30px; }
+  .abs-t-10 { position: absolute; top: 10px; }
+  .m-l-18 { margin-left: 18px; }
+  .l-50 { left: 50px; }
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'loan_app:status_changes' %}">Status Payment</a></li>
+    <li class="active">Ubah/Update</li>
+{% endblock %}
+
+{% block list_title %}
+
+    {% with payment_obj as object %}
+      <div class="row m-b-10">
+        <div class="col-md-2 col-xs-6 label-danger p-t-10">
+          <small>APP-ID</small>: {{ application.id|default:"-"|safe  }}
+        </div>
+        <div class="col-md-1 col-xs-6 label-primary text-center p-t-10">
+          <code>{{ account.status_id|default:"-"|safe }}</code>
+        </div>
+        <div class="col-md-3 col-xs-6 label-success p-t-10">
+          <small>email</small>: {{ application.email|default:"-"|safe  }}
+        </div>
+        <div class="col-md-3 col-xs-6 label-danger p-t-10">
+          <small>name</small>: {{ application.fullname|default:"-"|safe  }}
+        </div>
+       <div class="col-md-3 col-xs-12 label-warning p-t-10">
+          <small>Acc-ID</small>: {{account.id}} </code>
+        </div>
+      </div>
+    {% endwith %}
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-12 col-xs-12">
+
+    <div class="row">
+      <!-- Application detail -->
+      <div class="col-md-6 col-xs-12">
+
+          {% with application as object %}
+            {% include "object/app_status/include/app_details.html" %}
+          {% endwith %}
+      </div>
+      <!-- Acccount detail -->
+      <div class="col-md-6 col-xs-12">
+
+         <div class="row">
+           <div class="col-md-12 col-xs-12">
+             {% include "object/account_status/include/tab_account_details.html" %}
+           </div>
+         </div>
+       </div>
+
+    </div>
+    <!-- end of row -->
+
+    <!-- form start -->
+    <div class="row">
+      <hr>
+      <div class="col-md-6 col-xs-12 block_form" style="height:300px;">
+        <form class="form-horizontal" id="status_form" role="form" method="POST">
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+          {% endfor %}
+
+          {% if form.errors %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-xs-12 m-t-30" id="id_form_selection">
+              <button id="id_btn_simpan_note" class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="button">
+                <i class="fa fa-file-text-o fa-fw"></i> Tambah Note
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 col-xs-12" id="id_form_selection">
+                <div class="row collapse" id="id_form_simpan_note" aria-expanded="false" style="height: 0px;">
+                  <div class="row m-t-10">
+                    <div class="col-md-12 col-sm-12 form-group {% if form.notes_only.errors %} has-error {% endif %} m-r-10">
+                      {{ form.notes_only }}
+                    </div>
+                  </div>
+                  <!-- end row -->
+
+                  <div class="row m-t-10">
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                        <button id="id_batal_simpan_note" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button">Batal</button>
+                      </div>
+                      <div class="form-group col-md-6 col-sm-4 col-xs-6">
+                        <button id="id-submit-simpan-note" class="btn btn-default btn-block text-uppercase waves-effect waves-light" name="simpan_note" type="submit" disabled="true">Simpan Note</button>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </form>
+    </div>
+    <!-- end col-md-12 -->
+
+
+
+      <div class="col-md-6 col-xs-12">
+        <!-- <div id="slim_history_note"> -->
+         {% with payment_obj as object %}
+             {% include "object/account_status/include/account_details_history.html" %}
+         {% endwith %}
+      </div>
+    </div>
+    <!-- end row -->
+
+<div class="row m-t-10 m-b-10">
+</div>
+
+<!-- #############################Send Email Modal Form#########################-->
+<div id="responsive-modal-email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header label-warning">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h4 class="modal-title">Send custom Email</h4> </div>
+          <div class="modal-body">
+            {% with payment_obj as object %}
+              {% include "object/payment_status/include/form_send_email_account_payment.html" %}
+            {% endwith %}
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-danger waves-effect waves-light"
+                      onclick="sendAccountEmail({{ account.id }});">
+                  Kirim
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- #############################Send Sms Modal Form#########################-->
+<div id="responsive-modal-sms" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Send custom SMS</h4> </div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/payment_status/include/form_send_sms_account_payment.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light"
+                        onclick="sendAccountSms({{ account.id }});">
+                    Kirim
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--############################# Modal Success Send SMS ##########################################-->
+<!-- Modal Success SMs -->
+<div id="responsive-modal-success-sms" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Pesan telah berhasil dikirim dan tersimpan di sms history
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- sms failed modal febby -->
+<div id="responsive-modal-failed-sms" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Pesan gagal dikirim silahakan coba lagi
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--############################# Modal Success Send Email ######################################-->
+<!-- Modal Success Email -->
+<div id="responsive-modal-success-email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Email telah berhasil dikirim dan tersimpan di email history
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Failed Email -->
+<div id="responsive-modal-failed-email" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+              Email gagal dikirim silahakan coba lagi
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+                        onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal DOKU -->
+<div id="modalDoku" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title">DOKU</h4> </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6 col-sm-12 form_event-group">
+                    <div class="col-md-12 col-sm-12">
+                      <div class="m-t-10">
+                        <label> <b>Name</b> : <span>{{ application.fullname|default:"-"|safe  }}</span></label>
+                      </div>
+                      <div class="m-t-10">
+                        <label> <b>DOKU ID</b> : <span id="id_account_id"></span></label>
+                      </div>
+                      <div class="m-t-10">
+                        <label> DOKU Balance : </label>
+                        <div>
+                          <div class="input-group m-t-10">
+                              <span class="input-group-addon">Rp.</span>
+                              <input id="id_doku_balance" maxlength="15" class="form-control" disabled="disabled" type="text" >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <hr class="col-xs-12">
+                <div class="col-md-6 col-sm-12 form_event-group">
+                  <div class="col-md-12 col-sm-12">
+                    <label class="col-md-12 col-sm-12"> Due Amount : </label>
+                    <div class="input-group">
+                      <span class="input-group-addon">Rp.</span>
+                      <input id="id_due_amount" maxlength="15" class="form-control" disabled="disabled" type="text">
+                    </div>
+                    <br>
+                    <label class="col-md-12 col-sm-12"> Payment Amount : </label>
+                    <div class="input-group">
+                        <span class="input-group-addon">Rp.</span>
+                        <input class="form-control mask" id="id_partial_payment_doku" maxlength="15" class="form-control" disabled="disabled" type="text">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" id="id_auto_debet" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing" onclick="actionAutoDebet();">Auto Debet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal for generic-->
+ <div id="modal-success-default" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title" id="modal_default_title">Title</h4> </div>
+            <div class="modal-body" id="modal_default_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------ Modal PTP Update --------------------------------------------->
+<!-- /.modal PTP event-->
+<div id="responsive-modal-ptp-date"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Update PTP Date</h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/loan_status/include/form_update_ptp_date.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_use_uptdate_ptp_date"
+                        class="btn btn-danger waves-effect waves-light"
+                        data-toggle="modal"
+                        onclick="updatePTPDateConfirm()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal Confirm PTP event-->
+<div id="responsive-modal-confirm-ptpdate"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Konfirmasi Update PTP Date </h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/loan_status/include/form_update_ptp_date_confirm.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_confirm_update_ptp_date" class="btn btn-danger waves-effect waves-light" onclick="updatePTPDateAction();">Setuju</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- #############################Generate PAID Letter Sparate By SPHP#########################-->
+<div id="responsive-modal-sphp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-warning">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Generate Paid Letter</h4>
+      </div>
+      <div class="modal-body">
+          <table class="table table-striped">
+              <thead>
+                <tr>
+                    <th><label><input type="checkbox" id="paid_letter_check_all">  Select All</label></th>
+                    <th>Loan ID</th>
+                    <th>SPHP Number</th>
+                </tr>
+              </thead>
+              <tbody id="paid_letter_eligible_loans">
+
+              </tbody>
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger waves-effect waves-light" id="btnGeneratePaidLetter"
+          onclick="generatePaidOfLetter()">
+          Generate PDF
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--############################# Modal Success Generate Paid Letter ##########################################-->
+<!-- Modal Success Generate Paid Letter -->
+<div id="modal-success-generate-sphp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        Berhasil melakukan generate paid letter
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+          onclick="">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Faild Generate Paid Letter -->
+<div id="modal-failed-generate-sphp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body" id="paid_letter_failed_message">
+        Gagal melakukan generate paid letter, silahakan coba lagi
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal"
+          onclick="">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------------------------------ END Modal PTP Update --------------------------------------------->
+{% endblock %}
+
+
+{% block button_part %}
+{% endblock %}
+{% block script_bottom_inside %}
+   $('.previewshow').click(function (e) {
+                var content_id = $(this).attr('content-id');
+                var email_content = $('#email_content_'+content_id).val()
+                $('#preview_div').html(email_content)
+                $('#content-preview').modal('show');
+   });
+
+  $('#slim_images').slimScroll({
+      // position: 'left',
+      height: '42vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  $('#slim_apps').slimScroll({
+      // position: 'left',
+      height: '42vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+
+  $('#slim_pmts').slimScroll({
+      // position: 'left',
+      height: '48vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  $('#slim_history_note').slimScroll({
+      // position: 'left',
+      height: '450px',
+      railVisible: true,
+      alwaysVisible: true
+  });
+  //febby
+  $("#phone_selects").change(function(){
+    value = $("#phone_selects").val();
+    $("#number").val(value);
+    if (value == 0){
+      $('#number').val('');
+      $("#number").removeAttr('disabled');
+    }
+  });
+
+
+  $("#id_btn_ubah_status").button().click(function(){
+    $("#id_form_selection").hide();
+    $("#id_form_ubah_status").show();
+    localStorage.app_status_btn_selected = 'ubah_status';
+  });
+
+
+  $("#id_batal_ubah_status").button().click(function(){
+      $("#id_form_selection").show();
+      $("#id_form_ubah_status").hide();
+
+      localStorage.app_status_btn_selected = 'ubah_status_batal';
+  });
+
+  $("#id_btn_simpan_note").button().click(function(){
+      $("#id_form_selection").hide();
+      $("#id_form_simpan_note").show();
+
+      localStorage.app_status_btn_selected = 'simpan_note';
+  });
+
+  $("#id_batal_simpan_note").button().click(function(){
+      $("#id_form_selection").show();
+      $("#id_form_simpan_note").hide();
+      localStorage.app_status_btn_selected = 'simpan_note_batal';
+  });
+
+  $("input[name$='validity_period_type']").change(function(){
+    input_parent = $(this).parents('.input-group.input-group-sm');
+    input_date = input_parent.find("input[name$='validity_period_date']");
+    input_date.val('');
+    if ( $(this).val() == "specify_date" ) {
+      input_date.prop('disabled', false);
+    } else {
+      input_date.prop('disabled', true);
+    }
+  });
+
+  $('#principal_validity_period_date, #interest_validity_period_date, #late_fee_validity_period_date').parent('.input-group').datepicker({
+    format: 'dd-mm-yyyy',
+    startDate: new Date(),
+    endDate: '+39d',
+  }).on('keypress paste', function (e) {
+    e.preventDefault();
+    return false;
+  });
+
+  function btn_selection_show(){
+      $("#id_form_selection").show();
+      $("#id_form_simpan_note").hide();
+      $("#id_form_ubah_status").hide();
+  }
+
+  function check_active_form(){
+    var active_form = localStorage.app_status_btn_selected;
+    if(active_form=='ubah_status'){
+      if({{ubah_status_active}}){
+        $("#id_form_selection").hide();
+        $("#id_form_ubah_status").show();
+      } else {
+        btn_selection_show()
+      }
+
+    }
+    else if(active_form=='simpan_note'){
+      if({{simpan_note_active}}){
+        $("#id_form_selection").hide();
+        $("#id_form_simpan_note").show();
+      }else{
+        btn_selection_show();
+      }
+    }
+    else {
+      btn_selection_show();
+    }
+  }
+  function add_available_parameter_to_email_content(parameter_text){
+    var email_content = tinymce.get('email_content').getContent();
+    if(email_content.includes(parameter_text)){
+          return false;
+    }
+    email_content = email_content+" {"+parameter_text+"} ";
+    tinymce.get('email_content').setContent(email_content);
+    $("#content_value").val(email_content);
+  }
+  function send_email_account_onclick(){
+    $('#email_error_message').hide();
+    var custom_email_content = '{{custom_email_template_content|escapejs}}';
+    $("#email_content").val(custom_email_content);
+    tinymce.activeEditor.setContent(custom_email_content);
+  }
+
+  function sendAccountEmail(account_id){
+    var csrftoken = getCookie('csrftoken');
+    var to_email = $('#to_email').val();
+    if (to_email == ''){
+      $("#email_error_message").text("email tujuan tidak boleh kosong")
+      $("#email_error_message").css("display", "block");
+      $("#email_error_div").show();
+      return true
+    }
+    var template_code = $("#email_category_selects option:selected" ).val();
+    var category = $("#email_category_selects option:selected" ).text();
+    if (template_code == ''){
+      $("#email_error_message").text("Mohon pilih Kategori")
+      $("#email_error_message").css("display", "block");
+      $("#email_error_div").show();
+      return true
+    }
+    var pre_header = $('#email_pre_header').val();
+    var email_subject = $('#email_subject').val();
+    var email_content = tinymce.get('email_content').getContent();
+    $("#content_value").val(email_content);
+
+    var content = $("#content_value").val();
+    if (content == ''){
+      $("#email_error_message").text("content email tidak boleh kosong")
+      $("#email_error_message").css("display", "block");
+      $("#email_error_div").show();
+      return true
+    }
+
+    $.ajax({
+          url :  "{% url 'account_status:send_email' %}/",
+          type : "POST",
+          data : {
+                account_id: account_id,
+                content: content,
+                to_email: to_email,
+                subject: email_subject,
+                pre_header: pre_header,
+                template_code: template_code,
+                category: category,
+          },
+           // handle a successful response
+          success : function(json) {
+
+              if (json.result == "successful!"){
+                $('#responsive-modal-email').modal('hide');
+                $('#responsive-modal-success-email').modal('show');
+              } else if(json.result == "nok"){
+                $("#email_error_message").text(json.error_message)
+                $("#email_error_message").css("display", "block");
+                $("#email_error_div").show();
+              }
+          },
+
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+    }); // end of ajax
+  } // end of function send_email
+
+  function add_available_parameter_to_sms_content(parameter_text){
+        var sms_message_text = $("#sms_message").val();
+        if(sms_message_text.includes(parameter_text)){
+              return false;
+        }
+        $("#sms_message").val(sms_message_text+" {"+parameter_text+"} ");
+
+  }
+
+  function send_account_sms_onclick(){
+    $('#sms_error_message').hide();
+    $("#sms_message").val('{{custom_sms_content|safe }}')
+  }
+
+  function sendAccountSms(account_id){
+      //checker : ensure user select phone number Febby
+      var index_phone = $("#phone_selects option:selected" ).val();
+      if (index_phone == ''){
+        $("#sms_error_message").html("Mohon pilih Nomor Handphone");
+        $("#sms_error_div").show();
+        $("#sms_error_message").css("display", "block");
+        return true
+      }
+      var template_code = $("#sms_category_selects option:selected" ).val();
+      var category = $("#sms_category_selects option:selected" ).text();
+      if (template_code == ''){
+        $("#sms_error_message").html("Mohon pilih Kategori");
+        $("#sms_error_div").show();
+        $("#sms_error_message").css("display", "block");
+        return true
+      }
+      //febby
+      var phone_type = $("#phone_selects option:selected" ).text();
+      var number_phone = $("#number").val();
+      if (number_phone == ''){
+        $("#sms_error_message").html("Mohon pilih Nomor Handphone");
+        $("#sms_error_div").show();
+        $("#sms_error_message").css("display", "block");
+        return true
+      }
+
+      var csrftoken = getCookie('csrftoken');
+      var sms_message = $("#sms_message").val();
+      $.ajax({
+          url :  "{% url 'account_status:send_sms' %}/",
+          type : "POST",
+          data : {
+                account_id : account_id,
+                to_number : number_phone,
+                phone_type : phone_type,
+                sms_message : sms_message,
+                template_code : template_code,
+                category: category,
+          },
+
+          // handle a successful response
+          success : function(json) {
+
+              if (json.result == "successful!"){
+                $('#responsive-modal-sms').modal('hide');
+                $('#responsive-modal-success-sms').modal('show');
+              } else if(json.result == "nok"){
+                $("#sms_error_message").text(json.error_message)
+                $("#sms_error_message").css("display", "block");
+                $("#sms_error_div").show();
+              }
+          },
+
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+
+      });
+  }
+
+  function generate_paid_letter(){
+    $('#paid_letter_eligible_loans').html("Mohon Tunggu")
+      $('#paid_letter_check_all').prop('checked',false);
+      $.ajax({
+          url :  "{% url 'account_status:loan_paid_letter_ajax' %}/",
+          type : "GET",
+          headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "Authorization": 'token {{ token }}',
+          },
+          data : {
+                account_id : {{ account.id }},
+          },
+          // handle a successful response
+          success : function(json) {
+              loan_ids = json.data.eligible_loan_ids
+            $('#paid_letter_eligible_loans').html("")
+              $.each(loan_ids, function (index, value){
+                  $('#paid_letter_eligible_loans').append(
+                      '<tr><td><input class="paid_letter_checkbox" type="checkbox" name="selected_paid_letter" value="'+value.id+'"></td><td>'+value.id+'</td><td>'+value.loan_xid+'</td></tr>'
+                  )
+              })
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+  }
+  $('#paid_letter_check_all').change(function (e) {
+        if(this.checked) {
+            $('.paid_letter_checkbox').prop('checked',true);
+        }
+        else{$('.paid_letter_checkbox').prop('checked',false);}
+  })
+
+  function generatePaidOfLetter() {
+      var selected_loan_for_generate = [];
+      $('.paid_letter_checkbox:checked').each(function(i){
+          selected_loan_for_generate[i] = $(this).val();
+      });
+      if (selected_loan_for_generate.length == 0){
+            $('#paid_letter_failed_message').html("Mohon pilih salah satu loan ID yang akan di generate")
+            $('#modal-failed-generate-sphp').modal('show')
+            return
+      }
+        $('#btnGeneratePaidLetter').html("Mohon Tunggu")
+        $('#btnGeneratePaidLetter').prop('disabled', true)
+       var payload = {
+            selected_loan_ids : selected_loan_for_generate,
+        };
+        var data = new FormData();
+        data.append( "json", JSON.stringify( payload ) );
+        let filename = '';
+        fetch("{% url 'account_status:loan_paid_letter_ajax' %}/",
+        {
+            method: "POST",
+            body: data,
+            credentials: 'same-origin',
+            headers: {
+                "Authorization": 'token {{ token }}',
+           },
+        })
+        .then((resp) => {
+            const header = resp.headers.get('Content-Disposition');
+            const parts = header.split(';');
+            filename = parts[1].split('=')[1].replaceAll('"', '');
+            return resp.blob();
+        })
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            // the filename you want
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            $('#responsive-modal-sphp').modal('hide')
+            $('#modal-success-generate-sphp').modal('show')
+            $('#btnGeneratePaidLetter').html("Generate PDF")
+            $('#btnGeneratePaidLetter').prop('disabled', false)
+          })
+          .catch(() => $('#modal-failed-generate-sphp').modal('show'));
+  }
+
+  //febby
+  $('#sms_message').keyup(function(){
+      total_length = this.value.length
+      if (total_length > 320){
+        this.value = this.value.substr(0, len);
+      }
+
+      remain_char = 160 - total_length
+      if (total_length > 160){
+        remain_char = 320 - total_length
+      }
+      count = (total_length/160)
+      $('#divcharlength').text( 'remaining ' + remain_char + '/'+ Math.ceil(160) +' karakter');
+  });
+
+  jQuery.fn.delay = function(time,func){
+      this.each(function(){
+          setTimeout(func,time);
+      });
+
+      return this;
+  };
+
+  /*
+  function initMap() {
+    // Create a map object and specify the DOM element for display.
+    var map = new google.maps.Map(document.getElementById('overlayermap'), {
+      center: {lat: -34.397, lng: 150.644},
+      scrollwheel: false,
+      zoom: 8
+    });
+  }
+  */
+
+  // triggered after each item is loaded
+  function onProgress( imgLoad, image ) {
+    // change class if the image is loaded or broken
+    var $item = $( image.img ).parent();
+    $item.removeClass('is-loading');
+    if ( !image.isLoaded ) {
+      $item.addClass('is-broken');
+    }
+  }
+
+  // hide status when done
+  function onAlways() {
+    // unblock div area
+    $('div.block_image').unblock();
+  }
+
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      // console.log(cookieValue);
+      return cookieValue;
+  }
+
+
+  jQuery(document).ready(function() {
+    $(".waiver-unpaid-items").hide();
+    $(".waiver-paid-items").hide();
+    var is_iso_inactive = '{{ is_iso_inactive }}'
+    if (is_iso_inactive == 'False') {
+      sortCAby($("#casort_coll_id"),'coll');
+    }
+    //SkipTrace document ready for load table
+    $('#dvc').removeClass('active');
+    $('#st').addClass('active');
+    console.log(typeof '{{ is_iso_inactive }}')
+    GLOBAL_TABLE = $('#skiptraceTable').DataTable( {
+        "paging": false,
+        "searching": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "order": [[ 3, 'desc' ], [ 6, 'asc' ]],
+        "columnDefs": [
+          {
+            "targets"  : "no-sort",
+            "orderable": false,
+          },
+          {
+            "targets": [0,1,2,3,4,5,8],
+            "orderSequence": ["desc"]
+          },
+          {
+            "targets": [6,7],
+            "visible": false
+          },
+          {"targets": [0], "data": "NAME"},
+          {"targets": [1], "data": "SOURCE"},
+          {"targets": [2], "data": "ACTION"},
+          {"targets": [3], "data": "EFF"},
+          {"targets": [4], "data": "REC"},
+          {"targets": [5], "data": "FREQ"},
+          {"targets": [6], "data": "ID"},
+          {"targets": [7], "data": "NUMBER_PHONE"},
+          {"targets": [8], "data": "OPERATOR"},
+        ]
+    } );
+
+    $('#skiptraceTable tbody').on('click', 'td #id_call_skip_trace', function () {
+        var tr = $(this).closest('tr');
+        var row = GLOBAL_TABLE.row( tr );
+        var row_data = GLOBAL_TABLE.row( tr ).data();
+        console.log(row_data)
+        var is_iso_inactive = '{{ is_iso_inactive }}'
+        if ( row.child.isShown() ) {
+            //ActionCall(1,row_data.ID, '', '', '');
+            if(GLOBAL_HOLD_ACTION){
+              $(this).find('i').attr( 'class', 'fa fa-chevron-circle-down' );
+              $(this).attr( 'class', 'btn btn btn-success btn-rounded' );
+              row.child.hide();
+              tr.removeClass('shown');
+            }
+        }
+        else {
+            GLOBAL_OBJ_START_TS.id = row_data.ID;
+            GLOBAL_OBJ_START_TS.time = GetTime();
+            GLOBAL_ARR_START_TS.push(GLOBAL_OBJ_START_TS);
+            GLOBAL_OBJ_START_TS = {};
+            $(this).find('i').attr( 'class', 'fa fa-times' );
+            $(this).attr( 'class', 'btn btn btn-danger btn-rounded' );
+            row.child( format(row.data(), '', is_iso_inactive) ).show();
+            $( '.mydatepicker' ).datepicker({
+              format: 'dd-mm-yyyy'
+            });
+            $('.input-daterange-timepicker').datetimepicker({
+            });
+            $(".masknum").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+            tr.addClass('shown');
+        }
+      } );
+
+    $('#id_btn_add_skip_trace').on( 'click', function () {
+      SaveSkipTrace();
+    } );
+
+    $('#id_btn_update_skip_trace').on( 'click', function () {
+      UpdateSkipTrace();
+    } );
+
+    $.ajaxSetup({
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
+    $('#id_form2_reminder_call_date').datetimepicker({
+      format:'d-m-Y H:i'
+    });
+
+    //load_call_result example
+    $.ajax({
+          url :  "{% url 'payment_status:load_call_result' %}/", // the endpoint
+          type : "GET", // http method
+
+          // handle a successful response
+          success : function(json) {
+              GLOBAL_ARR_BTN_CALL = json.data;
+              GLOBAL_ARR_BTN_CALL.shift();
+          },
+
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+      });
+
+    // alert("Document is ready");
+    $('#id_status_to').on('change', function() {
+      // alert( this.value );
+      if(this.value != ''){
+        set_reason_list(this.value);
+      }
+    });
+
+    window.scroll(0,80);
+
+    $(".mask").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    jQuery('.mydatepicker, #datepicker').datepicker({
+               format: 'dd-mm-yyyy',
+               buttonClasses: ['btn', 'btn-sm'],
+               applyClass: 'btn-danger',
+               cancelClass: 'btn-inverse',
+               dateLimit: {
+                   days: 6
+               },
+               autoclose: true,
+               todayHighlight: true,
+               todayBtn: "linked",
+           });
+     jQuery('.cashbackdatepicker').datepicker({
+                format: 'dd-mm-yyyy',
+                buttonClasses: ['btn', 'btn-sm'],
+                applyClass: 'btn-danger',
+                cancelClass: 'btn-inverse',
+                dateLimit: {
+                    days: 6
+                },
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: "linked",
+            });
+    $('#id_reason')
+        .empty()
+        .append('<option selected="selected" value>-- Pilih Alasan --</option>');
+
+    if($("#mymce").length > 0){
+      tinymce.init({
+        selector: "textarea#mymce",
+        theme: "modern",
+        height:250,
+        plugins: [
+        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking","save table contextmenu directionality emoticons template paste textcolor"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
+      });
+    }
+
+    function set_reason_list(status_to) {
+      var csrftoken = getCookie('csrftoken');
+      if(status_to==''){
+        // set empty reason list
+        $('#id_reason')
+            .empty()
+            .append('<option selected="selected" value>-- Pilih Alasan--</option>')
+        ;
+        return -1;
+      }
+
+      $.ajax({
+          url :  "{%url 'payment_status:populate_reason' %}/", // the endpoint
+          type : "GET", // http method
+          data : { status_code   : status_to,
+               csrfmiddlewaretoken: csrftoken,
+            }, // data sent with the get request
+
+          // handle a successful response
+          success : function(json) {
+              // console.log(json); // log the returned json to the console
+              // console.log(json.reason_list);
+              // console.log(json.result);
+
+              if (json.result == "successful!"){
+                // set empty reason list
+                $('#id_reason')
+                    .empty()
+                    .append('<option selected="selected" value>-- Pilih Alasan--</option>')
+                ;
+                $.each(json.reason_list, function(i, value) {
+                    $('#id_reason').append($('<option>').text(value[1]).attr('value', value[0]));
+                    <!-- console.log('hihihi: ', value); -->
+                });
+              }
+              // console.log("success"); // another sanity check
+          },
+
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+      });
+
+    } // end function set_reason_list
+
+    //check form active
+    check_active_form();
+
+    //check if status_id has value
+    $("#id_status_to :selected").map(function(i, el) {
+       if($(el).val()!=''){
+        set_reason_list($(el).val());
+       }
+    });
+       /**/
+
+     tinymce.init({
+       selector: "textarea#email_content",
+       theme: "modern",
+       height:250,
+       fontsize_formats: '12pt 14pt 18pt 24pt 36pt',
+       plugins: [
+       "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+       "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+       "save table contextmenu directionality emoticons template paste textcolor"
+       ],
+       toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons | fontsizeselect",
+
+    });
+
+    var $container = $('#image_row');
+
+    $.each({{ json_image_list|safe }}, function(i, obj) {
+      //console.log(obj, i);
+      var href_id = $("#href_"+obj.pk);
+      var src_id = $("#img_"+obj.pk);
+      var but_href_id = $("#button_href_"+obj.pk)
+      $.each(obj, function(i, obj_item) {
+        // console.log(obj_item);
+
+        if(obj_item.image_ext == '.pdf'){
+          src_id.attr('src', '{% static 'images/collections/image-pdf.png' %}');
+          but_href_id.attr('href', obj_item.image_url)
+        }
+        else {
+          src_id.attr('src', obj_item.image_url);
+        }
+        href_id.attr('href', obj_item.image_url);
+      });
+
+    });
+
+     $.each({{ json_image_list_1|safe }}, function(i, obj) {
+      //console.log(obj, i);
+      var href_id = $("#href_"+obj.pk);
+      var src_id = $("#img_"+obj.pk);
+      var but_href_id = $("#button_href_"+obj.pk)
+      $.each(obj, function(i, obj_item) {
+        //console.log(obj_item);
+
+        if(obj_item.image_ext == '.pdf'){
+          src_id.attr('src', '{% static 'images/collections/image-pdf.png' %}');
+          but_href_id.attr('href', obj_item.image_url);
+        }
+        else {
+          src_id.attr('src', obj_item.image_url);
+        }
+        href_id.attr('href', obj_item.image_url);
+      });
+
+    });
+
+    //for voice image
+    $.each({{ json_voice_list|safe }}, function(i, obj) {
+      var img_voice_id = $('#img_voice_'+obj.pk);
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+    });
+    $.each({{ json_voice_list_1|safe }}, function(i, obj) {
+      var img_voice_id = $('#img_voice_'+obj.pk);
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+      img_voice_id.attr('src', '{% static 'images/collections/audio.png' %}');
+    });
+
+     $container.imagesLoaded()
+        .progress( onProgress )
+        .always( onAlways );
+      // reset progress counter
+      imageCount = $container.find('img').length;
+      //console.log(imageCount);
+
+      $("#id_btn_unlock_app").button().click(function(){
+        $('#responsive-modal-unlock-app').modal('show');
+      });
+
+    //button click
+    $("#id_unlock_payment").button().click(function(){
+        set_unlocked_payment("{{payment_obj.id}}");
+    });
+    //set blocked div
+    if({{lock_status}}){
+        $('div.block_form').block({
+            message: "You Are Not Allowed to Change Status, status has been locked by: {{lock_by|default:"-"|safe}}"
+            , overlayCSS: {
+                backgroundColor: '#000'
+            }
+            , css: {
+                border: '1px solid #fff'
+            }
+        });
+        //
+        $("#id_btn-ptp_date").addClass("disabled");
+        $("#id_btn-ptp_date").attr("disabled", true);
+
+        $("#send_email_button").addClass("disabled");
+        $("#send_email_button").attr("disabled", true);
+
+        $("#send_sms_button").addClass("disabled");
+        $("#send_sms_button").attr("disabled", true);
+
+        $("#id_btn_update_app").addClass("disabled");
+        $("#id_btn_update_app").attr("disabled", true);
+
+        $("#send_called_button").addClass("disabled");
+        $("#send_called_button").attr("disabled", true);
+
+        // hide upload document
+        $("#id_upload_doc").hide();
+
+        //block disbursement
+        $("#id_cek_saldo_doku").addClass("disabled");
+        $("#id_cek_saldo_doku").attr("disabled", true);
+    };
+
+    if({{is_payment_called}}){
+        $("#send_called_button").addClass("disabled");
+        $("#send_called_button").attr("disabled", true);
+    };
+
+    var bank_name_list = {{ bank_name_list|safe }};
+    $( "#id_cashback_bank_name" ).autocomplete({
+       source: bank_name_list
+    }).autocomplete("option", "appendTo", "#responsive-modal-cashback-cash");
+
+    $('.pymt-info').each(function() { // Notice the .each() loop, discussed below
+      $(this).qtip({
+        content: {
+          text:$(this).children('.pymt-body'),
+          button:'Close'
+        },
+        style: {
+          classes: 'qtip-light qtip-shadow'
+        },
+        position:{
+          my: 'bottom right',
+          at: 'top left'
+        },
+        show: 'click',
+        hide: 'click'
+      })
+    });
+    //load_unavailable_due_dates();
+  }); //end document ready
+
+
+
+  function close_btn(){
+    window.location.reload(true);
+  }
+
+
+
+  function set_today(id_selected){
+    $("#"+id_selected).datepicker({ dateFormat: "dd-mm-yyyy"}).datepicker("setDate", "0");
+  }
+
+
+  function add_available_parameter_to_email_content(parameter_text){
+    var email_content = tinymce.get('email_content').getContent();
+    if(email_content.includes(parameter_text)){
+          return false;
+    }
+    email_content = email_content+" {"+parameter_text+"} ";
+    tinymce.get('email_content').setContent(email_content);
+    $("#content_value").val(email_content);
+  }
+  function send_email_account_payment_onclick(){
+    $('#email_error_message').hide();
+  }
+
+
+  function add_available_parameter_to_sms_content(parameter_text){
+        var sms_message_text = $("#sms_message").val();
+        if(sms_message_text.includes(parameter_text)){
+              return false;
+        }
+        $("#sms_message").val(sms_message_text+" {"+parameter_text+"} ");
+
+  }
+
+
+
+  function formValidationNote(oEvent) {
+      //oEvent = oEvent || window.event;
+      //var txtField = oEvent.target || oEvent.srcElement;
+      //alert("validation");
+      if(document.getElementById("id_notes_only").value.length > 0 )
+      {
+        document.getElementById("id-submit-simpan-note").disabled = false;
+        $("#id-submit-simpan-note").removeClass("btn-default");
+        $("#id-submit-simpan-note").addClass("btn-info");
+      }else {
+        document.getElementById("id-submit-simpan-note").disabled = true;
+        $("#id-submit-simpan-note").addClass("btn-default");
+        $("#id-submit-simpan-note").removeClass("btn-info");
+      }
+    }
+
+  function formValidationStatus(oEvent) {
+    //alert("validation status");
+    if($('#id_status_to').val() != "" && $('#id_reason').val() != ""){
+      document.getElementById("submit_status").disabled = false;
+      $("#submit_status").removeClass("btn-default");
+      $("#submit_status").addClass("btn-danger");
+    } else {
+      document.getElementById("submit_status").disabled = true;
+      $("#submit_status").addClass("btn-default");
+      $("#submit_status").removeClass("btn-danger");
+    }
+
+  }
+
+  function resetForm(){
+    document.getElementById("id_notes_only").disabled = true;
+    document.getElementById("id_notes_status").disabled = true;
+  }
+
+  $("#id_btn_update_app").click(function(){
+    //validate
+    var ret_validate = validation_update_app();
+    if(ret_validate!='OK'){
+        failed_validation_display(ret_validate);
+        return;
+    }
+
+    // and show changes
+    var field_change_tbl = show_fields_latest_change();
+    var init_title = "Aplikasi <b>{{application_id|safe}}</b> akan di update, apakah anda yakin?";
+
+    if (field_change_tbl == 0){
+      $("#modal_default_title").html(""+ "Update Aplikasi !");
+      $("#modal_default_body").html(""+ "Tidak ada perubahan data !!!");
+      $('#modal-success-default').modal('show');
+    }else{
+      $("#modal_update_app_body").html("\n" + field_change_tbl +"\n <div>" + init_title +"</div>");
+      $('#modal-update-app').modal('show');
+      update_app_selected_field();
+    }
+  });
+
+
+
+  function check_if_ktp_exists(){
+    var csrftoken = getCookie('csrftoken');
+    var ret_value;
+    $.ajax({
+        url :  "{%url 'app_status:ajax_check_ktp' %}/",
+        type : "POST",
+        async: false,
+        data : {
+              customer_id   : '{{application.customer_id}}',
+              application_id : '{{application_id}}',
+              ktp: $("#id_form2-ktp").val()
+          },
+        // handle a successful response
+        success : function(json) {
+            ret_value = json;
+        },
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+    return ret_value;
+  }
+
+  function validation_update_app(){
+    ret_err = "";
+    var app_status = '{{ application.application_status_id|default:"-"|safe }}';
+    var exclude_status = ['100', '106'];
+
+    for (i = 1; i <= GLOBAL_LENGTH_EXPENSE; i++) {
+      var id_desc= '#undisclosed_expense_desc_'+i;
+      var id_amount= '#undisclosed_expense_amount_'+i;
+      var id_stat = '#undisclosed_expense_stat_'+i;
+      var desc = $(id_desc).val();
+      var amount = $(id_amount).val();
+      var stat = $(id_stat).val();
+      if(stat != 'deleted'){
+        if(desc == '' || amount == '' ){
+          validate_expense = false;
+        }
+      }
+    }
+
+    if (ret_err == ""){
+        return 'OK';
+    }
+    else {
+      return ret_err;
+    }
+  }
+
+  function add_row_table(field_name, field_default, field_change){
+    var header_table = "<tr>\n" +
+      "<td  style='width: 30%;overflow: hidden;word-break: break-all;'>" + field_name + "</td>\n" +
+      "<td  style='width: 40%;overflow: hidden;word-break: break-all;'>" + field_default + "</td>\n" +
+      "<td  style='width: 40%;overflow: hidden;word-break: break-all;'>" + field_change + "</td>\n" +
+      "</tr>\n";
+    return header_table;
+  }
+
+  function show_fields_latest_change(){
+    console.log(GLOBAL_CHECKLIST_CA)
+    global_note_update_app = "Perubahan Data Aplikasi:";
+    var field_changes_html = "<table class='table' id='id_tbl_app_update' style='width:100%;'>" +
+        "<thead><tr>\n" +
+        "<th> Field </th>\n" +
+        "<th> From </th>\n" +
+        "<th> Update</th>\n" +
+        "</tr>\n</thead>\n<tbody>";
+
+    {% autoescape on %}
+    // looping for the changes
+    var fields_list = [
+      ['Nama Jalan','{{application.address_street_num|default:''|escapejs}}',$("#id_form2-address_street_num").val(),'address_street_num'],
+      ['Kecamatan','{{application.address_kecamatan|default:''}}',$("#id_form2-address_kecamatan").val(),'address_kecamatan'],
+      ['Kelurahan','{{application.address_kelurahan|default:''}}',$("#id_form2-address_kelurahan").val(),'address_kelurahan'],
+      ['Kabupaten','{{application.address_kabupaten|default:''}}',$("#id_form2-address_kabupaten").val(),'address_kabupaten'],
+      ['Propinsi','{{application.address_provinsi|default:''}}',$("#id_form2-address_provinsi").val(),'address_provinsi'],
+      ['Kodepos','{{application.address_kodepos|default:''}}',$("#id_form2-address_kodepos").val(),'address_kodepos'],
+    ]
+    {% endautoescape %}
+
+    //add checklist
+
+    for (i = 0; i < GLOBAL_CHECKLIST_CA.length; i++) {
+      var id = GLOBAL_CHECKLIST_CA[i][3];
+      var str_value = GLOBAL_CHECKLIST_CA[i][1];
+      GLOBAL_CHECKLIST_CA[i][2] = $(id).val();
+      GLOBAL_CHECKLIST_CA[i][1] = str_value.replace(/&lt;br&gt;/g, '\n');
+      fields_list.push(GLOBAL_CHECKLIST_CA[i]);
+    }
+
+    //add expense
+    GLOBAL_RESULT_EXPENSE[2] = '';
+    for (i = 1; i <= GLOBAL_LENGTH_EXPENSE; i++) {
+      var id_desc = '#undisclosed_expense_desc_'+i;
+      var id_amount = '#undisclosed_expense_amount_'+i;
+      var id_stat = '#undisclosed_expense_stat_'+i;
+      var desc = $(id_desc).val();
+      var amount = $(id_amount).val();
+      var stat = $(id_stat).val();
+      if(stat != 'deleted'){
+        GLOBAL_RESULT_EXPENSE[2] = GLOBAL_RESULT_EXPENSE[2] +'('+ desc + ' - ' + amount.toString() + ')';
+      }
+    }
+    fields_list.push(GLOBAL_RESULT_EXPENSE);
+
+    var rows_data = "";
+    var index_change = 0;
+
+    //fields_list
+    GLOBAL_SAVE_CHECKLIST=[];
+    $.each(fields_list, function(id, obj_item) {
+      var obj0 = obj_item[0];
+      var obj1 = html_unescape(obj_item[1]);
+      var obj2 = obj_item[2];
+      var obj3 = obj_item[3];
+
+      if (obj0 == 'Tgl Lahir Pasangan'){
+        if('{{app_obj.marital_status|default:''|safe}}' != 'Menikah'){
+          obj1 = '';
+          obj2 = '';
+        }
+      }
+
+      if (obj0 == 'Penghasilan Bersih Per Bulan' || obj0 == 'Besar Penghasilan' || obj0 == 'Biaya Sewa/Cicilan Rumah per Bulan' || obj0 == 'Pengeluaran Rutin per Bulan'|| obj0 == 'Total Cicilan Hutang per Bulan'){
+        //console.log(obj0);
+        //console.log('obj2-1: ' + obj2);
+        obj2 = obj2.replace('.', '').replace('.', '').replace('.', '').replace('.', '');
+        //console.log('obj2-2: ' + obj2);
+      }
+
+      if (obj2 != undefined) {
+          if ((obj1 != obj2) && !(obj1 === '' && obj2 === '0')){
+            rows_data += add_row_table(obj0, obj1, obj2);
+            global_note_update_app += " \r\n* " + obj0 + ": " + obj1 + " >> " + obj2;
+            index_change++;
+
+            var obj = { "field_name" : "",
+                        "group" : "-",
+                        "agent" : "",
+                        "type" : "",
+                        "undisclosed_expense" : [],
+                        "value" : ""
+                      };
+
+            if(obj0.includes('checklist')){
+              obj.field_name = obj_item[4];
+              obj.group = obj_item[5];
+              obj.type = "checklist";
+              obj.value =  formatChecklist(obj2);
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+              if(obj_item[4] == "address_street_num" && formatChecklist(obj2) == true){
+                call_update_payment_note()
+                }
+            }else if(obj0.includes('comment')){
+              obj.field_name = obj_item[4];
+              obj.group = obj_item[5];
+              obj.type = "comment";
+              obj.value =  obj2;
+              obj.agent =  '{{ user.id }}';
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+            }else if(obj0 == 'Undisclosed Expense'){
+              var arr_undisclosed_expense = [] ;
+              var total = 0 ;
+              var group = '';
+              {% checkusergroup in ['bo_sd_verifier'] %}
+                group = 'sd';
+              {% endcheckusergroup %}
+              {% checkusergroup in ['bo_credit_analyst'] %}
+                group = 'ca';
+              {% endcheckusergroup %}
+              for (i = 1; i <= GLOBAL_LENGTH_EXPENSE; i++) {
+                var id_expense = '<tr id="undisclose"></tr>d_expense_id_'+i;
+                var id_desc = '#undisclosed_expense_desc_'+i;
+                var id_amount = '#undisclosed_expense_amount_'+i;
+                var id_stat = '#undisclosed_expense_stat_'+i;
+                var desc = $(id_desc).val();
+                var amount = $(id_amount).val();
+                var stat = $(id_stat).val();
+                var id = $(id_expense).val();
+
+                if(stat == 'activate'){
+                  var temp_obj = {"id" : "","desc" : "","amount" : ""};
+                  temp_obj.id = id;
+                  temp_obj.desc = desc;
+                  temp_obj.amount = Number(amount);
+                  arr_undisclosed_expense.push(temp_obj);
+                  total += Number(amount);
+                }else if(stat == 'added'){
+                  var temp_obj = {"desc" : "","amount" : ""};
+                  temp_obj.desc = desc;
+                  temp_obj.amount = Number(amount);
+                  arr_undisclosed_expense.push(temp_obj);
+                  total += Number(amount);
+                }
+              }
+
+              obj.field_name = 'total_current_debt';
+              obj.type = "undisclosed_expense";
+              obj.group = group;
+              obj.value =  total;
+              obj.undisclosed_expense = arr_undisclosed_expense;
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+            }else{
+              obj.field_name = obj3;
+              obj.type = "field";
+              obj.value =  obj2;
+              GLOBAL_SAVE_CHECKLIST.push(obj);
+            }
+          }
+      }
+    });
+
+    // closing table tag
+    field_changes_html += rows_data + "\n</tbody>\n</table>";
+    //console.log(field_changes_html);
+    if (index_change==0){
+      return index_change
+    }else {
+      return field_changes_html;
+    }
+  }
+
+  function reload_btn(){
+    window.location.reload(true);
+  }
+
+  function html_unescape(s) {
+    var div = document.createElement("div");
+    div.innerHTML = s;
+    return div.textContent || div.innerText;
+  }
+
+  function update_app_selected_field(){
+    var csrftoken = getCookie('csrftoken');
+    $.ajax({
+        url :  "{%url 'app_status:update_checklist' %}/", // the endpoint
+        type : "POST", // http method
+        data : {
+              application_id   : '{{application_id}}',
+              data: JSON.stringify(GLOBAL_SAVE_CHECKLIST)
+          },
+        // handle a successful response
+        success : function(json) {
+            if (json.status == "success"){
+              toast_success("Update Aplikasi Success", ""+ json.messages);
+              setTimeout(reload_btn(), 1200);
+            }
+            else {
+              $("#modal_default_title").html(""+ json.status);
+              $("#modal_default_body").html(""+ json.messages);
+              $('#modal-success-default').modal('show');
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+  }
+
+
+
+  window.onload = function () {
+    {%  for key, value in app_data.items %}
+      {% if key not in deprecated_list %}
+        {%  for obj in value.groups %}
+            var temp_checklist=[];
+            var temp_comment=[];
+            temp_checklist.push('{{key}}-{{obj.group_name}}-checklist');
+            temp_comment.push('{{key}}-{{obj.group_name}}-comment');
+            temp_checklist.push('{{obj.checklist_value}}');
+            temp_comment.push('{{obj.comments.0.comment|breakjs}}');
+            temp_checklist.push('');
+            temp_comment.push('');
+            temp_checklist.push('#ca_checklist_value_{{key}}_{{obj.group_name}}');
+            temp_comment.push('#ca_comment_value_temp_{{key}}_{{obj.group_name}}');
+            temp_checklist.push('{{key}}');
+            temp_comment.push('{{key}}');
+            temp_checklist.push('{{obj.group_name}}');
+            temp_comment.push('{{obj.group_name}}');
+            GLOBAL_CHECKLIST_CA.push(temp_checklist);
+            GLOBAL_CHECKLIST_CA.push(temp_comment);
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    $('#id_btn_update_app').show();
+    var note_only = document.getElementById("id_notes_only");
+    var status_change = document.getElementById("id_status_to");
+    var reason_change = document.getElementById("id_reason");
+
+    note_only.onkeyup = formValidationNote;
+
+    //DOM Manipulation For Skip Tracing
+    $('#st').removeClass('active');
+    $('#dvc').addClass('active');
+    $('#skiptraceTable').find('th').css( 'background', 'none' );
+    $('#skiptraceTable').find('th').css( 'pointer-events', 'none' );
+
+    //DragScroll for Skrip Trace
+    $(function(){
+      var curDown = false,
+          curYPos = 0,
+          curXPos = 0;
+      $('#st').mousemove(function(m){
+        if(curDown === true){
+         $('#st').scrollTop($('#st').scrollTop() + (curYPos - m.pageY));
+         $('#st').scrollLeft($('#st').scrollLeft() + (curXPos - m.pageX));
+        }
+      });
+
+      $('#st').mousedown(function(m){
+        $(this).css( 'cursor', 'move' );
+        $(this).css('user-select', 'none');
+        curDown = true;
+        curYPos = m.pageY;
+        curXPos = m.pageX;
+      });
+
+      $('#st').mouseup(function(){
+        $(this).css( 'cursor', 'default' );
+        $(this).css('user-select', 'auto');
+        curDown = false;
+      });
+    })
+
+    {% if loan_obj.account and application%}
+
+    GLOBAL_TEMPLATE_WHATSAPP=encodeURI(`{{ whatsapp_text|safe }}`);
+
+    {% endif %}
+
+    if ('{{first_installment_btn_active}}'=='True'){
+      var old_due_date = document.getElementById("id_old_due_date");
+      var new_due_date = document.getElementById("id_cycle_date_requested");
+      var button_cancel = document.getElementById("reset");
+      var payday_requested = document.getElementById("id_payday_requested");
+
+      new_due_date.onchange = simulate_adjusted_payment_auto;
+      payday_requested.onfocusout = update_due_datepicker;
+      button_cancel.onclick = set_initial_value;
+    }
+     GLOBAL_TEMPLATE_WHATSAPP_NO_CONTACT=encodeURI(`{{ no_contact_whatsapp_text|safe }}`);
+     GLOBAL_TEMPLATE_WHATSAPP_BROKEN_PTP_PLUS_1=encodeURI(`{{ broken_ptp_whatsapp_text|safe }}`);
+    //ResetFormPaymentEvent()
+  }
+
+  function SaveSkipTrace(){
+    var obj_skiptrace = GetFormSkipTrace();
+    var result = ValidateFormSkipTrace(obj_skiptrace);
+    //console.log(obj_skiptrace);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'payment_status:add_skiptrace' %}/",
+          type : "POST",
+          data : {
+                application : {{application_id}},
+                contact_name : obj_skiptrace.name,
+                contact_source : obj_skiptrace.source,
+                phone_number: obj_skiptrace.number_phone
+          },
+
+          statusCode: {
+            404: function(json) {
+              toast_warning('Warning 404!',json['responseText']);
+            },
+            400: function(json) {
+              toast_warning('Warning 400!',json['responseText']);
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            200: function(json) {
+              toast_success('Success','Add skiptrace '+json.data.contact_name);
+              GLOBAL_TABLE.row.add( {
+                "NAME": json.data.contact_name,
+                "SOURCE": json.data.contact_source,
+                "OPERATOR": formating(json.data.phone_operator),
+                "EFF": formating(json.data.effectiveness),
+                "REC": formatingDate(json.data.recency),
+                "FREQ": formating(json.data.frequency),
+                "ID": json.data.id,
+                "NUMBER_PHONE": json.data.phone_number,
+                "ACTION": '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>'
+              } ).order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+              ResetFormSkipTrace();
+              HideFormSkipTrace();
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success add: "+json.data);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_warning('Warning',result.reason);
+    }
+  }
+
+  function UpdateSkipTrace(){
+    var obj_skiptrace = GetFormSkipTrace();
+    var result = ValidateFormSkipTrace(obj_skiptrace);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'payment_status:update_skiptrace' %}/",
+          type : "POST",
+          data : {
+                skiptrace_id: obj_skiptrace.id,
+                application : {{application_id}},
+                contact_name : obj_skiptrace.name,
+                contact_source : obj_skiptrace.source,
+                phone_number: obj_skiptrace.number_phone
+          },
+
+          statusCode: {
+            404: function(json) {
+              toast_warning('Warning 404!',json['responseText']);
+            },
+            400: function(json) {
+              toast_warning('Warning 400!',json['responseText']);
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            200: function(json) {
+              toast_success('Success','Update skiptrace '+json.data.contact_name);
+              var tr = $(obj_skiptrace.row_table).parents('tr').prev();
+              var data = GLOBAL_TABLE.row( tr ).data();
+              var row = GLOBAL_TABLE.row( tr );
+              row.child.hide();
+              tr.removeClass('shown');
+              data.NAME =  json.data.contact_name;
+              data.SOURCE = json.data.contact_source;
+              data.OPERATOR = formating(json.data.phone_operator);
+              data.EFF = formating(json.data.effectiveness);
+              data.REC = formatingDate(json.data.recency);
+              data.FREQ = formating(json.data.frequency);
+              data.ID = json.data.id;
+              data.NUMBER_PHONE = json.data.phone_number;
+              data.ACTION = '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>';
+              GLOBAL_TABLE.row(tr)
+                    .data(data)
+                    .order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+              ResetFormSkipTrace();
+              HideFormSkipTrace();
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success update: "+json.data);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_warning('Warning',result.reason);
+    }
+  }
+
+  function ActionCall(id,skiptrace_id, level1='', level2='', level3='', skip_ptp_amount='', skip_ptp_date='', skip_note = '', skip_time ='', non_payment_reason='', contact_person='', self){
+    var obj = {};
+    var obj_time = GetTS(skiptrace_id);
+    obj.id = id ;
+    obj.skiptrace_id = skiptrace_id;
+    obj.application_id = {{application_id}};
+    obj.account_id = {{account.id}};
+    obj.start_ts = obj_time.start;
+    obj.end_ts = obj_time.end;
+    var result = ValidateActionCall(obj);
+    if(result.isValid){
+      $.ajax({
+          url :  "{% url 'account_status:skiptrace_history' %}/",
+          type : "POST",
+          data : {
+                skiptrace : obj.skiptrace_id,
+                application : obj.application_id,
+                start_ts : obj.start_ts,
+                end_ts : obj.end_ts,
+                call_result: obj.id,
+                account_id: obj.account_id,
+                level1: level1,
+                level2: level2,
+                level3: level3,
+                skip_ptp_amount: skip_ptp_amount,
+                skip_ptp_date: skip_ptp_date,
+                skip_note: skip_note,
+                skip_time: skip_time,
+                non_payment_reason: non_payment_reason,
+                spoke_with: contact_person,
+                source: 'CRM',
+          },
+          statusCode: {
+            404: function(json) {
+              toast_warning('Warning 404!',json['responseText']);
+            },
+            400: function(json) {
+              toast_warning('Warning 400!',json['responseText']);
+            },
+            405: function(json) {
+              toast_warning('Warning 405!',json['responseText']);
+            },
+            200: function(json) {
+              if(json.data){
+                var tr = $(self).parents('tr').prev();
+                var data = GLOBAL_TABLE.row( tr ).data();
+                var row = GLOBAL_TABLE.row( tr );
+                row.child.hide();
+                tr.removeClass('shown');
+                data.NAME =  json.data.contact_name;
+                data.SOURCE = json.data.contact_source;
+                data.OPERATOR = formating(json.data.phone_operator);
+                data.EFF = formating(json.data.effectiveness);
+                data.REC = formatingDate(json.data.recency);
+                data.FREQ = formating(json.data.frequency);
+                data.ID = json.data.id;
+                data.NUMBER_PHONE = json.data.phone_number;
+                data.ACTION = '<button type="button" id="id_call_skip_trace" class="btn btn btn-success btn-rounded"> <i class="fa fa-chevron-circle-down"></i></button>';
+                GLOBAL_TABLE.row(tr)
+                      .data(data)
+                      .order( [ 3, 'desc' ], [ 6, 'asc' ] ).draw(false);
+                ResetFormSkipTrace();
+                HideFormSkipTrace();
+                toast_success('Success',json.messages);
+              }
+            },
+          },
+
+          // handle a successful response
+          success : function(json) {
+              //console.log("success ",json);
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log({{payment_obj.id}})
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }else{
+      toast_danger('Failed!!',result.reason);
+    }
+  }
+
+  function autodialcall(number_phone){
+    $.ajax({
+        url :  "{% url 'app_status:trigger_autodial' %}/",
+        type : "GET",
+        data : {
+              number_phone : number_phone,
+              user_extension : GLOBAL_USER_EXTENSION
+        },
+
+        // handle a successful response
+        success : function(json) {
+
+            if (json.status == "success"){
+              toast_success('Click2Call',json.messages);
+            } else if(json.status == "failed"){
+              toast_danger('Click2Call',json.messages);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr, errmsg, err) {
+            toast_danger('Click2Call Failed!', err);
+              }
+      })
+  }
+
+
+  function formatCurrency(params){
+    return params.toLocaleString('IDR');
+  }
+
+  function reverseDate(params) {
+    var result = params.split("-").reverse().join("-");
+    return result;
+  }
+
+  function update_robocall(paymentid){
+        var id = '#btn-robo-'+paymentid;
+        var className = $(id).attr('class');
+        $.ajax({
+            url :  "{% url 'payment_status:julo_one_update_robocall' %}/",
+            type : "GET",
+            data : {payment_id : paymentid
+                  },
+
+            // handle a successful response
+            success : function(json) {
+
+                if (json.status == "success"){
+                  if(className.includes('btn-default')){
+                      $(id).removeClass('btn-default');
+                      $(id).addClass('btn-success');
+                  }else if(className.includes('btn-success')){
+                      $(id).removeClass('btn-success');
+                      $(id).addClass('btn-danger');
+                  }else if(className.includes('btn-danger')){
+                      $(id).removeClass('btn-danger');
+                      $(id).addClass('btn-success');
+                  }
+                  toast_success('Robocall Update',json.message);
+                } else if(json.status == "failed"){
+                  toast_danger('Robocall Update',json.message);
+                }
+            },
+
+            // handle a non-successful response
+            error : function(xhr, errmsg, err) {
+                toast_danger('Robocall Update Failed!', err);
+                  }
+          })
+  }
+  //Show modal voice
+  function ShowModalVoice(voice_id){
+    var csrftoken = getCookie('csrftoken');
+    $.each({{ json_voice_list|safe }}, function(i, obj) {
+       var src_id = $("#myVoice");
+      $.each(obj, function(i, obj_item) {
+        if(voice_id == obj.pk){
+          src_id.attr('src', obj_item.presigned_url);
+        }
+      });
+    });
+    $.each({{ json_voice_list_1|safe }}, function(i, obj) {
+       var src_id = $("#myVoice");
+      $.each(obj, function(i, obj_item) {
+        if(voice_id == obj.pk){
+          src_id.attr('src', obj_item.presigned_url);
+        }
+      });
+    });
+    $('#modal-see-voice').modal('show');
+    $('#modal_voice_title').html('Check Voice Agreement '+voice_id);
+    {% if loan_obj %}
+    $.ajax({
+        url :  "{%url 'app_status:voice_records_script' %}/", // the endpoint
+        type : "GET", // http method
+        data : {
+                application_id : '{{ loan_obj.application.id|default:"-"|safe  }}',
+                 csrfmiddlewaretoken : csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            if (json.result == "successful!"){
+              //console.log(json.reason);
+              $('#text_agreement').html(json.reason);
+            }
+            else {
+              toast_danger("Error", json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            toast_danger("Error", xhr,errmsg,err);
+        }
+    }); // end of ajax
+    {% endif %}
+  }
+
+  //Event Modal
+  $("#id_btn_close_voice").click(function(){
+    var x = document.getElementById("myVoice");
+    x.pause();
+  });
+
+
+
+
+  function showChangeDueDate(){
+    $('#responsive-modal-change-due-date').modal('show');
+    changeDueDateInit()
+  }
+
+  function reverifyAccount(tab="reverification") {
+    swal({
+        html:true,
+        title: '',
+        text: 'Apakah kamu yakin telah reverification user ini?',
+        imageUrl: '{% static 'theme/plugins/images/question.png' %}',
+        imageWidth: 600,
+        imageHeight: 600,
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonClass: "btn-primary",
+        cancelButtonClass: "btn-default",
+
+        cancelButtonText: "Kembali",
+        closeOnCancel: true,
+        confirmButtonText: "Yakin",
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true
+    },
+    function() {
+        setTimeout(function () {
+            var csrftoken = getCookie('csrftoken');
+            $.ajax({
+                url :  "{%url 'app_status:ajax_fraud_reverify_account' %}/",
+                type : "POST",
+                async: false,
+                data : {
+                      account_id : '{{account.id}}',
+                },
+                // handle a successful response
+                success : function(json) {
+                    if(json.status == 'success') {
+                        swal("Sukses !", "Reverification Success", "success");
+                    } else {
+                        swal("Failed !", json.message, "error");
+                    }
+                },
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    swal("Failed !", "something went wrong", "error");
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+          location.reload();
+        }, 5000);
+    });
+  }
+
+  function changeDueDateConfirm(){
+    var new_due_date = $('#id_new_due_date').val();
+    var note = $('#id_note_change_due_date').val();
+    var new_change_due_date_interest = $('#id_new_change_due_date_interest').val()
+    //validation begin
+    if (new_due_date == '' ) {
+      toast_danger('Alert!!','Isi Jangka Waktu');
+    }else if (note == '' ) {
+      toast_danger('Alert!!','Isi Catatan');
+    }else if (new_change_due_date_interest == '') {
+      toast_danger('Alert!!','Isi Fee Perubahan Tanggal Jatuh Tempo');
+    }else{
+      $("#responsive-modal-change-due-date").modal("hide");
+      $("#responsive-modal-confirm-duedate").modal("show");
+      $("#id_new_due_date_text").text(new_due_date);
+      $("#id_change_due_date_interest_text").text(new_change_due_date_interest);
+      $("#id_new_change_reason_text").text(note);
+    }
+  }
+
+
+  function set_validity_date(action){
+    validity_today = $("input[name="+action+"_validity_period_type]").prop('checked');
+    validity_date = $("#"+action+"_validity_period_date");
+    if(validity_today){
+      today = new Date();
+      day = today.getDate();
+      month = today.getMonth() + 1;
+      year = today.getFullYear();
+      if (day < 10) {
+          day = '0' + day;
+      };
+      if (month < 10) {
+          month = '0' + month;
+      };
+      new_format = day + "-" + month + "-" + year;
+      validity_date.val(new_format);
+    }
+
+    return validity_date.val();
+  }
+
+  function ShowFormWhatsapp(){
+    $('#responsive-modal-whatsapp').modal('show');
+  }
+  function ActionWaChoice(id, result){
+    btnclassName = $('#btn_wa_'+id).attr('class');
+    $(".btn-whatsapp").removeClass('btn-success');
+    $(".btn-whatsapp").addClass('btn-default');
+    $(".icon-whatsapp").removeClass('fa-check-square');
+    $(".icon-whatsapp").addClass('fa-square');
+    if(btnclassName.includes('btn-default')){
+      $('#btn_wa_'+id).removeClass('btn-default');
+      $('#btn_wa_'+id).addClass('btn-success');
+      $('#icon_wa_'+id).removeClass('fa-square');
+      $('#icon_wa_'+id).addClass('fa-check-square');
+      $('#result_wa').val(result)
+      $('#btn_save_wa').show()
+    }else if(btnclassName.includes('btn-success')){
+      $('#btn_wa_'+id).removeClass('btn-success');
+      $('#btn_wa_'+id).addClass('btn-default');
+      $('#icon_wa_'+id).removeClass('fa-check-square');
+      $('#icon_wa_'+id).addClass('fa-square');
+      $('#result_wa').val(result)
+      $('#btn_save_wa').hide()
+    }
+  }
+
+  function ActionWaChat(phone){
+    phone = phone.replace('+','');
+    url = 'https://web.whatsapp.com/send?phone='+phone+'&text='+GLOBAL_TEMPLATE_WHATSAPP
+    window.open(url,'_blank');
+  }
+
+
+  <!-- Start PTP Action-->
+  function onModalPTPShow(){
+    $("#responsive-modal-ptp-date").modal("show")
+    robocall_template_id = $("#id_robocall_template_choice").val()
+    text = ''
+    robo_templates = '{{robo_templates_map | safe}}'
+    console.log('log disini')
+    console.log(JSON.parse(robo_templates))
+    robo_template_obj = JSON.parse(robo_templates)
+    robo_template_text = robo_template_obj[robocall_template_id]
+    $("#robocall_template_text").text(robo_template_text)
+    onChangePtpMobile();
+  }
+  function onChangePtpMobile() {
+    var ptp_mobile_phone = $("#id_ptp_mobile_select").val();
+    if (ptp_mobile_phone == "custom") {
+      $("#id_ptp_mobile_phone_number").removeAttr("disabled")
+      $("#id_ptp_mobile_phone_number").val(0)
+    } else {
+      $("#id_ptp_mobile_phone_number").attr("disabled", "disabled")
+      $("#id_ptp_mobile_phone_number").val(ptp_mobile_phone)
+    }
+  }
+  function onChangeRoboTemplate(){
+    robocall_template_id = $("#id_robocall_template_choice").val();
+    text = '';
+    robo_templates = '{{robo_templates_map | safe}}'
+    console.log('log disini');
+    console.log(JSON.parse(robo_templates));
+    robo_template_obj = JSON.parse(robo_templates);
+    robo_template_text = robo_template_obj[robocall_template_id]
+    $("#robocall_template_text").text(robo_template_text);
+  }
+  function updatePTPDateConfirm(){
+    var ptp_date = $("#id_form2-ptp_date").val();
+    var ptp_amount = $("#id_ptp_amount").val();
+    var ptp_robo_mobile_phone = $("#id_ptp_mobile_phone_number").val()
+    var ptp_robo_template_name = $("#id_robocall_template_choice :selected").text();
+    var ptp_robo_template_text = $("#robocall_template_text").text();
+    var is_ptp_robocall_active = $("#is_ptp_robocall_active_choosen").val();
+    // show change to ptp modal confirm
+    $("#id_new_ptp_date_text").text(ptp_date);
+    $("#id_new_ptp_amount_text").text(ptp_amount);
+    $("#id_new_ptp_mobile_phone_text").text(ptp_robo_mobile_phone);
+    if (is_ptp_robocall_active == "true" || is_ptp_robocall_active == '' || is_ptp_robocall_active == null) {
+      $("#id_ptp_robocall_active").text('active')
+    } else {
+      $("#id_ptp_robocall_active").text('not active')
+    }
+    $("#id_robocall_template_ptp_date_name_text").text(ptp_robo_template_name);
+    $("#id_robocall_template_text_conf").text(ptp_robo_template_text);
+    $("#responsive-modal-ptp-date").modal("hide");
+    $("#responsive-modal-confirm-ptpdate").modal("show");
+  }
+  function onPtpActive(value) {
+    $("#is_ptp_robocall_active_choosen").val(value)
+  }
+
+  function updatePtpDate(){
+    var ptp_date_value = $('#id_form2-ptp_date').val();
+    var ptp_amount_value = $('#id_ptp_amount').val();
+    if(ptp_date_value == ''){
+      toast_danger('Warning','Please Fill PTP Date');
+    }else{
+      {% if loan_obj %}
+      $.ajax({
+          url :  "{% url 'loan_status:ajax_update_ptp' %}/",
+          type : "POST",
+          data : {
+                loan_id : {{loan_obj.id}},
+                ptp_date : reverseDate(ptp_date_value),
+                ptp_amount : ptp_amount,
+          },
+
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                toast_success('Sukses!!','Update PTP Date.');
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.messages);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+      {% endif %}
+    }
+  }
+
+  function updatePTPDateAction(){
+    var ptp_date = $("#id_form2-ptp_date").val();
+    var ptp_amount = ($("#id_ptp_amount").val()).replace(/\./g, '');
+    var ptp_robo_mobile_phone = $("#id_ptp_mobile_phone_number").val();
+    var ptp_robo_template_id = $("#id_robocall_template_choice").val();
+    console.log('choosen', ptp_robo_template_id)
+    var is_ptp_robocall_active = $("#is_ptp_robocall_active_choosen").val();
+
+    if (ptp_date == '' ) {
+      toast_danger('Alert!!','Isi PTP Date');
+    }else if (ptp_amount == '' || ptp_amount <= 0) {
+      toast_danger('Alert!!','Isi PTP Amount');
+    }else if (ptp_robo_mobile_phone == '' || ptp_robo_mobile_phone == '0') {
+      toast_danger('Alert!!','Isi Tujuan PTP Robocall');
+    }else if (ptp_robo_template_id == '' ) {
+      toast_danger('Alert!!','Pilih Robocall Template');
+    }else{
+      $('#btn_confirm_update_ptp_date').hide()
+      console.log(ptp_robo_template_id)
+      {% if loan_obj %}
+      $.ajax({
+          url :  "{% url 'loan_status:ajax_update_ptp' %}/",
+          type : "POST",
+          data : {
+                loan_id : {{loan_obj.id}},
+                ptp_date : ptp_date,
+                ptp_amount : ptp_amount,
+                ptp_robo_mobile_phone: ptp_robo_mobile_phone,
+                robocall_template_id : ptp_robo_template_id,
+                is_ptp_robocall_active: is_ptp_robocall_active,
+
+          },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                $('#responsive-modal-confirm-ptpdate').hide()
+                toast_success('Sukses!!',json.message);
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.message);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+            console.log(err, errmsg, 'halo')
+              console.log(xhr.status + ": " + xhr.responseText);
+              toast_danger('Failed Update',xhr.responseText);
+              $('#btn_confirm_update_ptp_date').show()
+          }
+      });
+      {% endif %}
+    }
+    $('#btn_use_change_due_date').show()
+  }
+  var is_for_ojk = '{{ is_for_ojk }}';
+  if (is_for_ojk.length > 0 && is_for_ojk == 'True'){
+      is_for_ojk = true;
+  }else{
+      is_for_ojk = false;
+  }
+  if (is_for_ojk==true){
+    $('#sd_tab').hide();
+    $('#offer_tab').hide();
+    $('#add_payment_event').hide();
+    $('button[title="edit cycle day and first installment amount"]').hide();
+    $('.tab-sd').hide()
+    $('.tab-dv').hide()
+    $('.tab-pv').hide()
+    $('.tab-fin').hide()
+  }
+
+  var hide_tabs = {{ hide_tabs|safe }}
+  if (hide_tabs.length > 0) {
+    for (i = 0; i < hide_tabs.length; i++) {
+        $('#'+hide_tabs[i]).hide();
+    } 
+  }
+
+    const customerId = '{{ customer.id }}'
+    const applicationId = '{{ application.id }}'
+    const userToken = "{{ user.auth_expiry_token.key }}"
+
+    // Identify Watermark Text
+    var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+{% endblock %}
+
+{% block script_end %}
+    <script src="{% static 'default/js/additional-address.js' %}"></script>
+
+    <!-- Watermark JS -->
+    <script type="text/javascript" charset="utf8"  src="{% static 'theme/plugins/watermark/watermark.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,658 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-9">
+            <h3 class="box-title m-b-0">ADD NEW ACCOUNT</h3>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalConfirmation" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <h1 align="center">
+                        <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #F9942D;"></span>
+                    </h1>
+                </div>
+                <div class="modal-body" style="padding: 0;height: 150px">
+                    <p class="text-center" style="font-size: 20px;">
+                        <b>Apakah anda yakin untuk retain account untuk Vendor ini ?</b>
+                    </p>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-default text-center"
+                                data-dismiss="modal" id="btnCancel">Kembali
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btn_submit">submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal-position" id="modalSuccess" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+            <div class="modal-content" style="height: 300px;">
+                <div class="modal-header" style="border-bottom: none">
+                    <img src="/static/images/collections/verified.png"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;">
+                </div>
+                <div class="modal-body" style="padding: 0;height: 150px">
+                    <p class="text-center" style="font-size: 20px;">
+                        <b>Success !</b>
+                    </p>
+                    <p class="text-center">Account berhasil ditransfer</p>
+                    <div class="button-container" align="center" style="margin-top: 10%">
+                        <button type="button"
+                                class="btn btn-primary text-center"
+                                style="background-color: #03a9f3;
+                               border-color: #03a9f3;" id="btnOk">OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="form_search">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+                <label class="col-md-12 col-sm-12">Product Type</label>
+                <select class="form-control" id="product_type" name="product_type">
+                    <option value="">Chose Product</option>
+                    {% for product_type_val, product_type_name in available_products %}
+                        <option value="{{ product_type_val }}">{{ product_type_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 col-xs-12 p-l-10 p-r-10 pre-j1 pre-show" style="display: none;">
+                <label class="col-md-12 col-sm-12">Application Xid</label>
+                <div class="input-group m-t-10 ">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input class="form-control" id="application_xid" placeholder="type Application Xid"
+                       name="application_xid" maxlength="100" type="text"/>
+                </div>
+                <span class="help-block error_msg h5">
+              </span>
+            </div>
+            <div class="col-md-3 col-xs-12 p-l-10 p-r-10 after-j1 pre-show" style="display: none;">
+                <label class="col-md-12 col-sm-12">Account Id</label>
+                <div class="input-group m-t-10 ">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input class="form-control" id="account_id" name="account_id" placeholder="Type Account Id"
+                           type="text" value="{{ account_id }}">
+                </div>
+                <span class="help-block error_msg h5">
+              </span>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align pre-show" style="display: none;">
+                <button class="btn btn-primary btn-search" id="btn_search" type="button"
+                        style="background-color: #03a9f3;border-color: #03a9f3;">Cari
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <form method="post" id="form_retain" style="display: none">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Application ID</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="application_id" for="description">: 1231231</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Assign Time:</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="assign_time" for="description">: 1231231</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">DPD (as of Assign Time)</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="dpd" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">DPD (as of Today)</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="dpd_current" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Subbucket (as of Assign Time)</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="sub_bucket" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Subbucket (as of today)</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="sub_bucket_current" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row j1">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Account ID</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="account_id_display" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row j1">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Account Payment ID</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="account_payment_id" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row non-j1">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Loan ID</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="loan_id" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row non-j1">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Payment ID</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="payment_id" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Customer Name</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="customer_name" for="description">: 132</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Customer Email</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="email" for="email">: 132</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Retain Reason</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <textarea class="form-control" id="retain_reason" rows="4"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label for="description">Retain removal date</label>
+            </div>
+            <div class="col-md-3 col-sm-12 txt-align">
+                <label id="retain_removal_date" for="email">: 132</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 txt-align" align="center">
+                <input type="hidden" name="save_type" value="" id="save_type">
+                <button class="btn btn-primary btnSave" value="save_continue" name="save_type" type="button" style="background-color: #03a9f3;
+                           border-color: #03a9f3;">Save and continue editing
+                </button>
+                <button class="btn btn-primary btnSave" value="save" name="save_type" type="button" style="background-color: #03a9f3;
+                           border-color: #03a9f3;">Save
+                </button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+<script>
+{% block script_bottom_inside %}
+{#    <script>#}
+    var payment_id = null;
+    var loan_id = null;
+    var vendor_id = null;
+    var account_payment_id = null;
+    var account_id = null;
+    save_type = null;
+    function ToastDanger(body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'error',
+            hideAfter: 2800
+        });
+    }
+    function validateRetainReason() {
+        if ($('#retain_reason').val().length == 0) {
+            ToastDanger('Mohon isi Retain Reason')
+            return false
+        }
+        return true
+    }
+    function validateSearchRetain() {
+        if ($('#application_xid').val().length == 0 && $('#product_type').val() == 'mtl') {
+            ToastDanger('Mohon isi Application')
+            return false
+        }
+        else if ($('#account_id').val().length == 0 && $('#product_type').val() != 'mtl') {
+            ToastDanger('Mohon isi Application')
+            return false
+        }
+        return true
+    }
+    $('#btn_search').click(function (e) {
+        var product_type = $('#product_type').val()
+        var application_xid = $('#application_xid').val()
+        if (product_type === 'j1' || product_type === 'grab'){
+            application_xid = $('#account_id').val()
+        }
+        var validate_status = validateSearchRetain()
+        if (validate_status) {
+            $.ajax({
+                url: `retain_assignment/${application_xid}`, // the endpoint
+                type: "GET", // http method
+                success: function (json) {
+                    if (json.status == "success") {
+                        $('#form_retain').css('display', 'block')
+                        $('#application_id').text(`: ${json.data.application_id}`)
+                        $('#assign_time').text(`: ${json.data.assign_time}`)
+                        $('#dpd').text(`: ${json.data.dpd}`)
+                        $('#dpd_current').text(`: ${json.data.dpd_current}`)
+                        $('#sub_bucket').text(`: ${json.data.subbucket}`)
+                        $('#sub_bucket_current').text(`: ${json.data.subbucket_current}`)
+                        if (json.data.is_julo_one){
+                            $('.j1').show()
+                            $('.non-j1').hide()
+                            $('#account_id_display').text(`: ${json.data.account_id}`)
+                            $('#account_payment_id').text(`: ${json.data.account_payment_id}`)
+                            account_payment_id = json.data.account_payment_id
+                            account_id = json.data.account_id
+                        }else{
+                            $('.j1').hide()
+                            $('.non-j1').show()
+                            $('#loan_id').text(`: ${json.data.loan_id}`)
+                            $('#payment_id').text(`: ${json.data.payment_id}`)
+                            payment_id = json.data.payment_id
+                            loan_id = json.data.loan_id
+                        }
+                        $('#customer_name').text(`: ${json.data.customer_name}`)
+                        $('#email').text(`: ${json.data.customer_email}`)
+                        $('#retain_removal_date').text(`: ${json.data.extension_date}`)
+                        vendor_id = json.data.vendor_id
+
+                    } else {
+                        ToastDanger(json.messages);
+                    }
+                },
+            })
+        }
+    })
+    $('.btnSave').click(function (e) {
+        save_type = $(this).val()
+        $('#modalConfirmation').modal('show')
+    })
+    $('#btn_submit').click(function (e) {
+        $('#modalConfirmation').modal('hide')
+        validate_status = validateRetainReason()
+        if (payment_id == null){
+            payment_id=0
+        }
+        if (account_payment_id == null){
+            account_payment_id=0
+        }
+        if (validate_status) {
+            $.ajax({
+                url: `{%url 'collection_vendor:store_retain_assignment' %}`, // the endpoint
+                type: "POST", // http method
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    payment_id: payment_id,
+                    vendor_id: vendor_id,
+                    account_payment_id: account_payment_id,
+                    retain_reason: $('#retain_reason').val()
+                },
+                success: function (json) {
+                    if (json.status == "success") {
+                        $('#modalSuccess').modal('show')
+                    } else {
+                        negative_response_swal(json.messages);
+                    }
+                },
+            })
+        }
+    })
+    function negative_response_swal(msg) {
+        swal({
+          title: "Gagal!",
+          html:true,
+          text: msg,
+          type: "error",
+          showCancelButton: true,
+          showConfirmButton: false,
+          cancelButtonColor: "#ffffff",
+          cancelButtonText: "Kembali",
+          closeOnCancel: true
+        });
+    }
+    $('#btnOk').click(function (e) {
+        $('#modalSuccess').modal('hide')
+        if (save_type == 'save') {
+            window.location.replace("/collection_vendor/collection_retain_data/");
+        }
+        $('#form_retain').css('display', 'none')
+    })
+    $('#product_type').change(function (e){
+        val = $(this).val()
+        if (val === ''){
+            $('.pre-show').hide()
+            return
+        }
+        $('.pre-show').show()
+        if (val === 'j1' || val === 'grab'){
+            $('#application_xid').val('')
+            $('.pre-j1').hide()
+            $('.after-j1').show(200)
+        }else{
+            $('#account_id').val('')
+            $('.pre-j1').show(200)
+            $('.after-j1').hide()
+        }
+    })
+
+
+{% endblock %}

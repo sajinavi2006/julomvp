@@ -1,0 +1,58 @@
+
+{% if is_paginated %}
+  <div class="dataTables_paginate paging_simple_numbers text-center">
+    <span class="current">
+        Halaman {{ page_obj.number }} dari {{ page_obj.paginator.num_pages }} - Total {{ page_obj.paginator.count }}.
+    </span>
+  </div>
+  <br/>
+  <div class="dataTables_paginate paging_simple_numbers text-center">
+    <ul class="pagination_julo">
+      {% if has_previous %}
+          <li class="previous" >
+              <a href="?page={{ previous }}&{{ parameters }}">&laquo; </a>
+          </li>
+      {% else %}
+          <li class="previous disabled" >
+              <a class="disabled" href="#">&laquo; </a>
+          </li>
+      {% endif %}
+
+      {% if show_first %}
+        <li><a class="" href="?page=1&{{ parameters }}">1</a></li>
+        <li><a class="disabled" href="#">...</a></li>
+      {% endif %}
+
+      {% for linkpage in page_numbers %}
+        {% ifequal linkpage page %}
+           <li class="">
+              <a class="disabled active" href="?page={{ page }}">{{ page }}</a>
+           </li>
+        {% else %}
+           <li class="">
+              <a href="?page={{ linkpage }}&{{ parameters }}">{{ linkpage }}</a>
+          </li>
+        {% endifequal %}
+      {% endfor %}
+
+      {% if show_last %}
+        <li class=""><a class="disabled" href="#">...</a></li>
+        <li class=""><a href="?page=last&{{ parameters }}">{{ pages }}</a></li>
+      {% endif %}
+
+      {% if has_next %}
+          <li class="next" >
+              <a href="?page={{ next }}&{{ parameters }}">&raquo; </a>
+          </li>
+      {% else %}
+          <li class="next disabled" >
+              <a class="disabled" href="#">&raquo; </a>
+          </li>
+      {% endif %}
+    </ul>
+  </div>
+
+  <p style="height: 50px;">
+
+  </p>
+{% endif %}

@@ -1,0 +1,45 @@
+{% load unit %}
+{% load static %}
+
+{% block content-list %}
+  <form id="search-form" class="row">
+    {{ filter_form.sort_q }}
+  </form>
+
+  <div class="table-responsive" style="overflow: scroll; height: 460px">
+    <table class="table toggle-circle table-hover" id="balance_consolidation_fdc_table">
+      <thead>
+        <tr>
+          <th class="col">ID</th>
+          <th class="col">Nilai Pendanaan</th>
+          <th class="col">Sisa Pinjaman Berjalan</th>
+          <th class="col">Nama Borrower</th>
+          <th class="col">Kualitas Pinjaman</th>
+          <th class="col">DPD Max</th>
+          <th class="col">DPD Terakhir</th>
+          <th class="col">Status Pinjaman</th>
+          <th class="col">Tanggal Penyaluran Dana</th>
+          <th class="col">Tanggal Jatuh Tempo</th>
+          <th class="col">Tanggal Perjanjian Borrower</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in latest_fdc_inquiry_loans %}
+        <tr>
+          <td>{{ object.id_penyelenggara }}</td>
+          <td>{{ object.nilai_pendanaan }}</td>
+          <td>{{ object.sisa_pinjaman_berjalan }}</td>
+          <td>{{ object.nama_borrower }}</td>
+          <td>{{ object.kualitas_pinjaman }}</td>
+          <td>{{ object.dpd_max }}</td>
+          <td>{{ object.dpd_terakhir }}</td>
+          <td>{{ object.status_pinjaman }}</td>
+          <td>{{ object.tgl_penyaluran_dana|date:'Y-m-d'|default:'-'|safe }}</td>
+          <td>{{ object.tgl_jatuh_tempo_pinjaman|date:'Y-m-d'|default:'-'|safe }}</td>
+          <td>{{ object.tgl_perjanjian_borrower|date:'Y-m-d'|default:'-'|safe }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

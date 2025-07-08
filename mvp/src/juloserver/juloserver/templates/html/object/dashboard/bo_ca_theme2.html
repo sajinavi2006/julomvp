@@ -1,0 +1,144 @@
+{% extends "common/theme2/layout_bo_credit_analyst.html" %}
+
+{% load checkusergroup from common %}
+{% load humanize %}
+
+{% block custom_css %}
+	<!-- morris CSS -->
+{% endblock %}
+
+{% block script_head %}
+{% endblock %}
+
+{% block inside_body %}
+<!-- Page Content -->
+  <div id="page-wrapper">
+    <div class="container-fluid">
+      <!-- .row -->
+      <div class="row bg-title" style="background:url({% static 'theme/plugins/images/heading-title-bg.jpg' %}) no-repeat center center /cover;">
+        <div class="col-lg-12">
+          <h4 class="page-title"><label class="label lbl-info">JuloFinance - BO Credit Analyst</label></h4>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xs-12">
+          <ol class="breadcrumb pull-left">
+            <li class="active"><a href="#"><label class="label lbl-default">Beranda</label></a></li>
+          </ol>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xs-12">
+          <form role="search" class="app-search hidden-xs pull-right" method="GET">
+            <input type="text" placeholder="Cari data ..." class="form-control">
+            <a href="javascript:void(0)"><i class="fa fa-search"></i></a>
+          </form>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+      <!-- /.row -->
+
+      <!--row count data-->
+      <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <div class="white-box">
+            <div class="row row-in">
+              <div class="col-lg-3 col-sm-6 row-in-br">
+                <div class="col-in row">
+                  <div class="col-md-6 col-sm-6 col-xs-6"> <i data-icon="E" class="linea-icon linea-basic" ></i>
+                    <h5 class="text-muted vb">PELANGGAN</h5>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-6">
+                    <h3 class="counter text-right m-t-15 text-danger">23</h3>
+                  </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6 row-in-br  b-r-none">
+                <div class="col-in row">
+                  <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+                    <h5 class="text-muted vb">ORDER BARU</h5>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-6">
+                    <h3 class="counter text-right m-t-15 text-megna">169</h3>
+                  </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-megna" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6 row-in-br">
+                <div class="col-in row">
+                  <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+                    <h5 class="text-muted vb">INVOICE BARU</h5>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-6">
+                    <h3 class="counter text-right m-t-15 text-primary">157</h3>
+                  </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-6  b-0">
+                <div class="col-in row">
+                  <div class="col-md-6 col-sm-6 col-xs-6"> <i class="linea-icon linea-basic" data-icon="&#xe016;"></i>
+                    <h5 class="text-muted vb">SEMUA ORDER</h5>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-6">
+                    <h3 class="counter text-right m-t-15 text-success">431</h3>
+                  </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"> <span class="sr-only">40% Complete (success)</span> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.row count data -->
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /#page-wrapper -->
+{% endblock %}
+
+{% block script_additional %}
+
+	<!--Morris JavaScript -->
+
+	<!-- Custom Theme JavaScript -->
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+	$(document).ready(function() {
+		 $.toast({
+	        heading: 'Selamat Datang {{ user.username }}',
+	        text: 'Kemudahan dan Solusi Keuangan Anda Percayakan kepada JuloFinance',
+	        position: 'top-right',
+	        loaderBg:'#ff6849',
+	        icon: 'info',
+	        hideAfter: 2500,
+
+	        stack: 6
+	      });
+	      $('.vcarousel').carousel({
+	            interval: 3000
+	       });
+
+	    // Executes when the HTML document is loaded and the DOM is ready
+	    // alert("Document is ready");
+	    // $('#mnu_dashboard_li').addClass('active');
+	    //$('#mnu_dashboard_li a:first').addClass('active');
+
+	});
+{% endblock %}
+

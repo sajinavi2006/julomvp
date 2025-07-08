@@ -1,0 +1,215 @@
+{% load unit utils %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-4 m-b-20">
+            <h4>SURAT PERJANJIAN HUTANG PIUTANG</h4>
+        </div>
+        <table>
+            <tbody>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;width: 150px;">Nama</th>
+                <td>:&nbsp;{{ object.fullname }}
+                </td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Customer ID</th>
+                <td>:&nbsp;{{ object.customer.id|default:"-no id-"|safe}}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir</th>
+                <td>:&nbsp;{{ object.dob|date:"d F Y" }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP</th>
+                <td>:&nbsp;{{ object.ktp|no_ktp|safe }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon #1</th>
+                <td>:&nbsp;+62 {{ object.mobile_phone_1|no_hp }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon #2</th>
+                <td>:&nbsp;+62 {{ object.mobile_phone_2|no_hp }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat</th>
+                <td>:&nbsp;
+                        {{ object.address_street_num }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kecamatan }} -
+                        {{ object.address_kelurahan }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kabupaten }} -
+                        {{ object.address_provinsi }}  <br/>&nbsp;&nbsp;
+                        {{ object.address_kodepos }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="row m-l-20 m-t-30">
+            <table>
+                <tbody>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">Pinjaman yang diminta </td>
+                    <td>: <b>{{ object.loan_amount_request|f_rupiahs:"no" }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Pinjaman yang disetujui </td>
+                    <td>: <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Cicilan yang disetujui </td>
+                    <td>: <b>{{ object.loan.installment_amount|f_rupiahs:"no" }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Bunga per bulan </td> <!-- PRODUCT_LOOKUP.INTEREST_RATE / 12 -->
+                    <td>: <b>{{ object.loan.offer.interest_rate_monthly|percentage_100|safe }} %</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top; white-space: nowrap;">
+                    Tujuan Pinjaman </td>
+                    <td>: <b>{{ object.loan_purpose|default:"-"|safe }}</b> </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left; vertical-align: top;">
+                    Uraian Tujuan Pinjaman </td>
+                    <td>: {{ object.loan_purpose_desc|default:"-"|safe }} </td>
+                </tr>
+                </tbody>
+            </table>
+        <p></p>
+          <tr>
+              {%if object.partner %}
+                {%if object.partner.name in 'doku'%}
+                  <td>Rekening DOKU Customer : <b>{{ partner_account_id|safe }}</b>,
+                      <br>atau<br>
+                      <table>
+                          <tbody>
+                            <tr>
+                              <td>Bank Customer</td>
+                              <td style="text-align: left; padding-left: 47px; vertical-align: top; white-space: nowrap;">: <b>{{ object.bank_name|safe }}</b></td>
+                            </tr>
+                            <tr>
+                              <td>No rek. Customer</td>
+                              <td style="text-align: left; padding-left: 47px; vertical-align: top; white-space: nowrap;">: <b>{{ object.bank_account_number|safe }}</b></td>
+                            </tr>
+                          </tbody>
+                      </table>
+                      </br>
+                  </td>
+                {% else %}
+                  <table>
+                      <tbody>
+                        <tr>
+                          <td>Bank Customer</td>
+                          <td style="text-align: left; padding-left: 47px; vertical-align: top; white-space: nowrap;">: <b>{{ object.bank_name|safe }}</b></td>
+                        </tr>
+                        <tr>
+                          <td>No rek. Customer</td>
+                          <td style="text-align: left; padding-left: 47px; vertical-align: top; white-space: nowrap;">: <b>{{ object.bank_account_number|safe }}</b></td>
+                        </tr>
+                      </tbody>
+                  </table>
+                  </br>
+                {%endif%}
+              {% else %}
+                <table>
+                    <tbody>
+                      <tr>
+                        <td>Bank Customer</td>
+                        <td style="text-align: left; padding-left: 47px; vertical-align: top; white-space: nowrap;">: <b>{{ object.bank_name|safe }}</b></td>
+                      </tr>
+                      <tr>
+                        <td>No rek. Customer</td>
+                        <td style="text-align: left; padding-left: 47px; vertical-align: top; white-space: nowrap;">: <b>{{ object.bank_account_number|safe }}</b></td>
+                      </tr>
+                    </tbody>
+                </table>
+                </br>
+              {%endif%}
+          </tr>
+
+        </div>
+
+        <br/>
+        <p>Selamat {{ object.gender|bapak_or_ibu|safe }},</p>
+        <table>
+            <tbody>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">1.</td>
+                {%if object.partner %}
+                  {%if object.partner.name in 'doku'%}
+                    <td>Atas rekomendasi Credit Analyst, pinjaman tunai JULO sebesar <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b>
+                        telah disetujui oleh JULO. Dana cair, nett setelah biaya provisi adalah
+                        <b>{{ object.loan.loan_disbursement_amount|f_rupiahs:"no" }}</b>,
+                        akan di transfer ke rekening DOKU {{ object.gender|bapak_or_ibu|safe }} tadi.
+                  {% else %}
+                    <td>Atas rekomendasi Credit Analyst, pinjaman tunai JULO sebesar <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b>
+                        telah disetujui oleh JULO. Dana cair, nett setelah biaya provisi adalah
+                        <b>{{ object.loan.loan_disbursement_amount|f_rupiahs:"no" }}</b>,
+                        akan di transfer ke rekening bank {{ object.gender|bapak_or_ibu|safe }} tadi.
+                    </td>
+                  {%endif%}
+                </td>
+                {% else %}
+                  <td>Atas rekomendasi Credit Analyst, pinjaman tunai JULO sebesar <b>{{ object.loan.loan_amount|f_rupiahs:"no" }}</b>
+                      telah disetujui oleh JULO. Dana cair, nett setelah biaya provisi adalah
+                      <b>{{ object.loan.loan_disbursement_amount|f_rupiahs:"no" }}</b>,
+                      akan di transfer ke rekening bank {{ object.gender|bapak_or_ibu|safe }} tadi.
+                  </td>
+                {%endif%}
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">2.</td>
+                <td>{{ object.gender|bapak_or_ibu|safe }} berjanji untuk melunasi pinjaman sebesar <b>{{ object.loan.payment_set.first.original_due_amount|f_rupiahs:"no" }}</b> sebelum tanggal jatuh tempo <b>{{ object.loan.payment_set.first.due_date|date:"d M Y"|safe }}</b>
+                  ke rekening
+                  {%if object.partner %}
+                    {%if object.partner.name in 'doku'%}
+                      <b> DOKU JULO : {{account_doku_julo}}</b>
+                      atau
+                    {%endif%}
+                  {%endif%}
+                  Virtual Account JULO di <b> {{ object.loan.julo_bank_name|safe }}</b>. No. VA &amp; info selengkapnya dapat ditemukan di aplikasi JULO, menu “Aktivitas Pinjaman”.
+                  {%if object.partner %}
+                    {%if object.partner.name in 'doku'%}
+                      <br/> Jika pembayaran tidak diterima JULO pada tanggal jatuh tempo,
+                          JULO berhak dan akan melakukan pendebetan pada rekening DOKU
+                          {{ object.gender|bapak_or_ibu|safe }}.
+                    {%endif%}
+                  {%endif%}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">3.</td>
+                <td>Jika terlambat, langsung terkena denda sebesar <b>Rp.50.000</b>. Denda bertambah <b>Rp.50.000</b> lagi di hari ke-10 dan <b>Rp.100.000</b> di hari ke-30. Denda akan bertambah dan berjalan terus selama belum ada pelunasan. Jadi kami menghimbau {{ object.gender|bapak_or_ibu|safe }} untuk jangan sampai terlambat membayar. Jika bayar tepat waktu, pengajuan selanjutnya akan mudah di-ACC.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </br>
+        Setelah telepon ini,
+        <table>
+            <tbody>
+            {% if not validate_bank_account %}
+                <tr>
+                    <td style="text-align: left; vertical-align: top; width: 20px;">-</td>
+                    <td>
+                      melakukan validasi akun rekening bank Anda di Aplikasi JULO.
+                    </td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">-</td>
+                <td>
+                  SPHP akan langsung terkirim via Aplikasi JULO. Mohon {{ object.gender|bapak_or_ibu|safe }} tandatangani SPHP secara eletronik dan rekam suara {{ object.gender|bapak_or_ibu|safe }} membacakan teks yang terdapat di dalam Aplikasi. SPHP ini sah sesuai Hukum Perdata.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">-</td>
+                <td>
+                  Dana akan cair dalam 1 hari kerja.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <p>Semoga kita bisa bekerjasama dengan baik, {{ object.gender|bapak_or_ibu|safe }}. Selamat siang dan selamat beraktivitas kembali.</p>
+    </div>
+
+</div>

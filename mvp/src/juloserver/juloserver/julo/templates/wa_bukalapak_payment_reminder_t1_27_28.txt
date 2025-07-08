@@ -1,0 +1,1 @@
+Yth {{fullname}}. Balance tagihan BayarNanti kamu sebesar {{due_amount}} segera jatuh tempo pada {{due_date}}. Sebelum kelupaan, segera bayar tagihan kamu, agar kamu tetap bisa pakai BayarNanti untuk berbelanja banyak kebutuhan kamu di Bukalapak. Informasi cara melakukan pembayaran tersedia pada Aplikasi Bukalapak. Whatsapp pertanyaan Anda ke {{collection_whatsapp}}.

@@ -1,0 +1,1 @@
+Pembayaran cicilan ke-{{payment_seq}} Anda sebesar {{due_amount}} akan ter-debit langsung secara otomatis pada tanggal jatuh tempo sesuai jadwal pembayaran di <a href="http://www.julofinance.com/android/goto/agreement"><u>Perjanjian Hutang Piutang</u></a>.

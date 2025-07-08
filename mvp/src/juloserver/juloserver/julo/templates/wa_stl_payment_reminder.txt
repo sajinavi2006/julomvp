@@ -1,0 +1,1 @@
+Yth {{fullname}}, sy Ani dr JULO. Mengingatkan pinjaman Anda {{due_amount}} jatuh tempo pada {{due_date}}.\r\n\r\nSilakan lakukan pembayaran ke Virtual Account {{bank_name}}: {{virtual_account_number}}.\r\n\r\nWhatsapp pertanyaan anda ke {{collection_whatsapp}}. Cek aplikasi untuk metode pembayaran lainnya. Informasi cara bayar cek di www.julo.co.id/cara-membayar.html

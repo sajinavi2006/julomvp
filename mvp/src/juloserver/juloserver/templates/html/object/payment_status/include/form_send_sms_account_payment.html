@@ -1,0 +1,46 @@
+<div class="alert alert-warning" id="sms_error_div" style="display: none;">
+    Error mengirim SMS: <div id="sms_error_message"></div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-6 col-xs-6">Select Number</label>
+    </div>
+      <div class="col-md-6 col-sm-6">
+          {{ form_app_phone.phones }}
+      </div>
+      <div class="col-md-6 col-sm-6">
+        <input type="text" name="number" id="number" class="form-control" disabled="disabled" />
+      </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-6 col-xs-6">Kategori</label>
+    </div>
+    <div class="col-md-6 col-sm-6">
+          {{ form_app_phone.template_code }}
+      </div>
+</div>
+{% if available_parameters %}
+ <div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-6 col-xs-6"> Available Parameters :</label>
+    </div>
+    <div class="col-md-6 col-sm-6">
+        <button id="avaialable_param_wl_url" type="button" class="btn btn-default waves-effect"  onclick="add_available_parameter_to_sms_content('wl_url');">Latest Warning Letter</button>
+    </div>
+</div>
+{% endif %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group ">
+      <label class="col-md-12 col-sm-12">SMS</label>
+      <div class="col-md-12 col-sm-12">
+          <textarea class="form-control" cols="40" id="sms_message" name="message" maxlength="160"
+                    required="" rows="5"></textarea>
+          <span class="help-block">
+            <small>Silahkan tulis SMS 160 karakter</small>
+          </span>
+          <div id=divcharlength></div>
+      </div>
+    </div>
+</div>
+

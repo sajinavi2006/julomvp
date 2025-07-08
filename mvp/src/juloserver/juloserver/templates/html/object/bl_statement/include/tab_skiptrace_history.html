@@ -1,0 +1,38 @@
+{% load default unit %}
+<table class="table">
+  <thead>
+    <tr>
+      
+      <th width="15%">Waktu</th>
+      
+      <th width="70%">Content / Catatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for obj in skiptrace_history_list %}
+         <tr class="success">
+          <td>
+            <label class="label label-warning m-b-10">
+              {{ obj.cdate|date:"d M Y H:i:s" }}
+            </label><br>
+            <label class="label label-danger m-b-10">
+              Action
+            </label>
+          </td>
+          <td>
+            Agent : <code>{{ obj.agent.username|default:'-'|safe }}</code><br/>
+            <strong>{{ obj.call_result.name|default:'-'|safe }}</strong><br/>
+            Phone : {{ obj.skiptrace.phone_number|no_hp|default:'-'|safe }}<br/>
+            Source : {{ obj.skiptrace.contact_source|default:'-'|safe }}<br/>
+            Statement-Id : {{ obj.statement.id|default:'-'|safe }}<br/>
+          </td>
+        </tr>
+    {% empty %}
+      <tr>
+        <td colspan="2">
+          <span> Tidak ada Data </span>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,284 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% load model template default unit %}
+{% load static from staticfiles %}
+
+
+{% block custom_css %}
+
+  <!-- Autodialer CSS dependencies -->
+  <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+  <link href="{% static 'default/css/sales_ops/autodialer.css' %}" rel="stylesheet">
+  <style>
+      .error_message {
+        padding-left: 50px;
+        line-height: 100px;
+      }
+  </style>
+  <!-- end of Autodialer CSS dependencies -->
+{% endblock %}
+
+{% block additional_title %}Sales Ops - Bucket List{% endblock %}
+
+{% block list_title %}{{bucket_title}} {% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+  <form id="search-form" class="row" autocomplete="off">
+    {{ filter_form.sort_q }}
+    {{ filter_form.bucket_code}}
+    <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Cari Berdasarkan</label>
+      <div class="m-t-10">
+          <select name="filter_field" class="form-control" >
+            {% for filter_field, filter_field_text in filter_form.filter_field.field.choices %}
+              <option
+                  value="{{ filter_field }}"
+                  {% if filter_field == filter_form.filter_field.value %}
+                    selected
+                  {% endif %}
+              >{{ filter_field_text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="col-md-2 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Kondisi</label>
+      <div class="m-t-4">
+          <select name="filter_condition" class="form-control" style="width:auto;">
+            {% for value, text in filter_form.filter_condition.field.choices %}
+              <option
+                  value="{{ value }}"
+                  {% if value == filter_form.filter_condition.value %}
+                    selected
+                  {% endif %}
+              >{{ text }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Pencarian</label>
+      <div class="input-group m-t-10">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+        <input type="text"
+               name="filter_keyword"
+               id="filter_keyword"
+               class="form-control sales-ops-search-keyword"
+               aria-describedby="basic-addon1"
+               placeholder="Pencarian"
+               value="{{ filter_form.filter_keyword.value | default:'' }}"
+        >
+      </div>
+    </div>
+    <div class="col-md-3 col-xs-12 p-l-10 p-r-10">
+      <label class="col-md-12 col-sm-12">Sorting Agent</label>
+      <div class="m-t-4">
+          <select name="filter_agent" id="filter_agent" class="form-control">
+            <option value=""> --- </option>
+            {% for agent in filter_form.filter_agent.field.queryset %}
+              <option
+                  value="{{ agent.id }}"
+                  {% if agent.id|stringformat:"i" == filter_form.filter_agent.value %}
+                    selected
+                  {% endif %}
+              >{{ agent.user_extension }}</option>
+            {% endfor %}
+          </select>
+      </div>
+    </div>
+
+    <div class="col-md-12 m-t-10">
+      <div class="row">
+        <div class="col-md-2 col-xs-12">
+          <button type="submit" class="btn btn-primary btn-rounded btn-block">
+            <strong><i class="fa fa-search" ></i> Cari</strong>
+          </button>
+        </div>
+        <div class="col-md-2 col-xs-12">
+          <button type="button" name="reset" value="empty" class="btn btn-info btn-rounded btn-block" onClick="clearSearchForm();">
+            <strong><i class="fa fa-eraser fa-fw"></i>Kosongkan</strong>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  {% if error_message %}
+    <div class="error_message">
+        {{ error_message }}
+    </div>
+  {% endif %}
+  <table id="demo-foo-row-toggler" class="table toggle-circle table-hover" data-page-size={{page_obj.paginator.per_page}}>
+    <thead>
+      <tr id="julo-sort-form" data-julo-sort-form="search-form" data-julo-sort-query-field="id_sort_q">
+        <th data-sort-ignore="true" data-toggle="true">No</th>
+        <th class="julo-sort-header" data-julo-sort="latest_application__id" data-sort-ignore="true">App-ID</th>
+        <th class="julo-sort-header" data-julo-sort="latest_application__fullname" data-sort-ignore="true" data-hide="phone">Full Name</th>
+        <th class="julo-sort-header" data-julo-sort="latest_application__email" data-sort-ignore="true"> Email </th>
+        <th class="julo-sort-header" data-julo-sort="latest_application__mobile_phone_1" data-sort-ignore="true" data-hide="phone"> Phone Number </th>
+        {% if bucket_code == 'graduation' %}
+          <th data-sort-ignore="true"> Last Graduated Date </th>
+          <th data-sort-ignore="true"> Previous Given Limit </th>
+        {% else %}
+          <th class="julo-sort-header" data-julo-sort="latest_account_property__pgood" data-sort-ignore="true" data-hide="phone"> Pgood </th>
+          <th class="julo-sort-header" data-julo-sort="latest_account_limit__cdate" data-sort-ignore="true" data-hide="phone"> Date Limit Approved </th>
+        {% endif %}
+        <th class="julo-sort-header" data-julo-sort="latest_account_limit__set_limit" data-sort-ignore="true" data-hide="phone"> Current Given Limit </th>
+        <th class="julo-sort-header" data-julo-sort="latest_account_limit__available_limit" data-sort-ignore="true" data-hide="phone"> Available Limit </th>
+        <th class="julo-sort-header" data-julo-sort="latest_disbursed_loan__fund_transfer_ts" data-sort-ignore="true" data-hide="phone"> Last Disbursement </th>
+        <th class="julo-sort-header" data-julo-sort="latest_disbursed_loan__fund_transfer_ts" data-sort-ignore="true" data-hide="phone">Block</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lineup in object_list %}
+        <tr>
+          <td>{% increment_counter_one forloop.counter0 page_obj.number page_obj.paginator.per_page %}</td>
+          <td>
+            <a href="{% url 'sales_ops.crm:detail' lineup.id %}">
+              {{ lineup.latest_application.id | default:'-no app id-' }}
+            </a>
+          </td>
+          <td>{{ lineup.latest_application.fullname | default:'-' }}</td>
+          <td>{{ lineup.latest_application.email | default:'-' }}</td>
+          <td>{{ lineup.latest_application.mobile_phone_1 | default:'-' }}</td>
+          {% if bucket_code == 'graduation' %}
+            <td>{{ lineup.last_graduated_date | date:"Y-m-d" }}</td>
+            <td>{{ lineup.previous_given_limit | f_rupiahs:"no" | default:'-' }}</td>
+          {% else %}
+            <td>{{ lineup.latest_account_property.pgood | floatformat:2 | default:'-' }}</td>
+            <td>{{ lineup.latest_account_limit.cdate | date:"Y-m-d" }}</td>
+          {% endif %}
+          <td>{{ lineup.latest_account_limit.set_limit| f_rupiahs:"no" | default:'-' }}</td>
+          <td>{{ lineup.latest_account_limit.available_limit | f_rupiahs:"no" | default:'-' }}</td>
+          <td>{{ lineup.latest_disbursed_loan.fund_transfer_ts | date:"Y-m-d" }}</td>
+          <td>
+              <div class="btn-group m-r-10">
+                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-primary btn-rounded dropdown-toggle waves-effect waves-light" type="button">
+                   --Pilih--
+                   <span class="caret"></span>
+                </button>
+                <ul role="menu" class="dropdown-menu">
+                    <div style="max-width: 170px; display: flex; flex-direction: column;">
+                      <label for="block_days">Block customer for</label>
+                      <div>
+                        <input id="days_for_{{ lineup.id }}" type="number" name="block_days" min="1" value="180" style="width: 100px;">days
+                      </div>
+                      <button class="btn btn-danger btn-block" onclick="block_sales_ops({{ lineup.id }})">Block</button>
+                    </div>
+                </ul>
+              </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan=8 class='center'>Kosong - Tidak ada Data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5">
+          {% pagination2 is_paginated paginator page_obj q 4 %}
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  {% include 'sales_ops/include/widget_autodialer.html' %}
+{% endblock %}
+
+{% block custom_link %}
+  <link href="{% static 'default/css/julo-sorting.css' %}" rel="stylesheet">
+  <link href="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block script_additional %}
+    <script>
+      window.activation_call_change_status = {{ activation_call_change_status }}
+      window.csrf_token = "{{ csrf_token }}"
+      window.urls = Object()
+      window.urls['app_status:ajax_courtesy_email'] = "{% url 'app_status:ajax_courtesy_email' %}/"
+      window.urls['app_status:ajax_update_courtesy'] = "{% url 'app_status:ajax_update_courtesy' %}/"
+      window.urls['app_status:change_status'] = "{% url 'app_status:change_status' 123456 %}"
+      window.urls['app_status:set_app_locked'] = "{% url 'app_status:set_app_locked' %}/"
+      window.urls['app_status:set_app_unlocked'] = "{% url 'app_status:set_app_unlocked' %}/"
+      window.urls['app_status:trigger_autodial'] = "{% url 'app_status:trigger_autodial' %}/"
+      window.urls['dashboard:ajax_get_application_autodialer'] = "{% url 'dashboard:ajax_get_application_autodialer' %}/"
+      window.urls['dashboard:ajax_change_status'] = "{% url 'dashboard:ajax_change_status' %}/"
+      window.urls['dashboard:get_script_for_agent'] = "{% url 'dashboard:get_script_for_agent' %}/"
+      window.urls['dashboard:ajax_autodialer_history_record'] = "{% url 'dashboard:ajax_autodialer_history_record' %}/"
+      window.urls['dashboard:ajax_unlock_autodialer_agent'] = "{% url 'dashboard:ajax_unlock_autodialer_agent' %}/"
+      window.urls['dashboard:ajax_autodialer_agent_status'] = "{% url 'dashboard:ajax_autodialer_agent_status' %}/"
+      window.urls['dashboard:ajax_autodialer_session_status'] = "{% url 'dashboard:ajax_autodialer_session_status' %}/"
+      window.urls['payment_status:change_status'] = "{% url 'payment_status:change_status' 123456 %}"
+      window.urls['payment_status:skiptrace_history'] = "{% url 'payment_status:skiptrace_history' %}/"
+      window.urls['payment_status:set_payment_unlocked'] = "{% url 'payment_status:set_payment_unlocked' %}/"
+      window.urls['payment_status:set_payment_locked'] = "{% url 'payment_status:set_payment_locked' %}/"
+      window.urls['sales_ops.crm:detail'] = "{% url 'sales_ops.crm:detail' 123456 %}"
+      window.SALES_OPS_BLOCK_URL = "{% url 'sales_ops.crm:ajax-block' 0 %}".replace('0', '')
+    </script>
+    <script type="text/javascript" src="{% static 'default/js/julo-sorting.js' %}"></script>
+    <script type="text/javascript" src="{% static 'default/js/utils.js' %}"></script>
+    <script src="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/DataTables/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'default/js/sales_ops/lineup-list.js' %}"></script>
+
+    <!-- Autodialer JS dependencies -->
+    <script type="text/javascript" src="{% static 'theme/plugins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript" src="{% static 'theme/plugins/moment/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'default/js/vue.js' %}"></script>
+    <script type="text/javascript" src="{% static 'default/js/sales_ops/autodialer-vue.js' %}"></script>
+    <!-- end of Autodialer JS dependencies -->
+
+    <script>
+      function block_sales_ops(id) {
+        var elem = document.getElementById('days_for_'+id)
+
+        days = elem.value
+        if (1 > days) {
+          toast_danger('invalid value','');
+          return;
+        }
+        is_confirm = confirm('You want to remove this user from sales ops for ' + days + ' days?')
+        if(!is_confirm) {
+          return;
+        }
+        return $.ajax({
+          url: window.SALES_OPS_BLOCK_URL + id,
+          data: {
+            'csrfmiddlewaretoken': window.csrf_token,
+            'days': days
+            },
+          type: 'POST',
+          success: function (data) {
+              toast_success('Block success!')
+              window.location.reload()
+          },
+          error: function (request, status, error) {
+            if (request.status == 400) {
+              toast_danger('Error',request.responseText);
+            }
+            else {
+              toast_danger('Error',request.status);
+            }
+          }
+        });
+      }
+
+    </script>
+{% endblock %}
+
+{% block script_bottom_inside %}
+   function clearSearchForm(){
+    $("#id_search_q").val('');
+    $("#filter_keyword").val('');
+    $("#filter_agent").val('');
+    $("#filter_agent option[value=null]").attr('selected','selected');
+    try{
+        document.getElementById('id_err_msg').innerHTML='';
+    }
+    catch(err) {
+    }
+  }
+{% endblock %}

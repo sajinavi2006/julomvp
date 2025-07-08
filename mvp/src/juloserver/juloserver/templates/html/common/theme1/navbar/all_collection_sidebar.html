@@ -1,0 +1,300 @@
+{% load checkusergroup from common %}
+{% load unit %}
+
+<!-- Left navbar-header -->
+  <div class="navbar-default sidebar" role="navigation">
+
+    <div class="sidebar-nav navbar-expanded slimscrollsidebar">
+
+      <ul class="nav" id="side-menu">
+        <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+          <!-- input-group -->
+          <div class="input-group custom-search-form">
+            <input type="text" class="form-control" placeholder="Cari...">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+            </span> </div>
+          <!-- /input-group -->
+        </li>
+
+        <li id="mnu_dashboard_li"> <a href="{% url 'dashboard:default' %}" class="waves-effect">
+          <i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Dashboard
+        </a>
+        <ul class="nav nav-second-level">
+          {% checkusergroup in ['collection_agent_2'] %}
+          <li><a href="{% url 'dashboard:collection_agent_2'%}" class="waves-effect">Dashboard Agent 2
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['collection_agent_3'] %}
+          <li><a href="{% url 'dashboard:collection_agent_3'%}" class="waves-effect">Dashboard Agent 3
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['collection_agent_4'] %}
+          <li><a href="{% url 'dashboard:collection_agent_4'%}" class="waves-effect">Dashboard Agent 4
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['collection_agent_5'] %}
+          <li><a href="{% url 'dashboard:collection_agent_5'%}" class="waves-effect">Dashboard Agent 5
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['collection_supervisor'] %}
+          <li><a href="{% url 'dashboard:collection_supervisor'%}" class="waves-effect">My Dashboard
+            </a>
+          </li>
+          <li><a href="{% url 'loan_status:bulk_loan_reassignment' %}" class="waves-effect">Loan Reassignment
+            </a>
+          </li>
+          <li><a href="{% url 'dashboard:change_of_repayment_channel' %}" class="waves-effect">Change of Repayment
+              Channel
+            </a>
+          </li>
+          <li><a href="{% url 'dashboard:change_of_payment_visibility' %}" class="waves-effect">Change Customers'Payment
+              Channel Visibility
+            </a>
+          </li>
+          <li><a href="{% url 'mini_squad:agent_properties' %}" class="waves-effect">Agent Properties
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['julo_partners'] %}
+          <li><a href="{% url 'dashboard:lender_list_page'%}" class="waves-effect">My Dashboard
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['product_manager'] %}
+          <li>
+            <a href="{% url 'app_status:mass_move_apps'%}" class="waves-effect">Mass Move by CSV</a>
+            <a href="{% url 'dashboard:va_modifier'%}" class="waves-effect">VA Modifier</a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['bo_finance'] %}
+          <li><a href="{% url 'dashboard:bo_finance'%}" class="waves-effect">Dashboard Finance
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          <li><a href="{% url 'loan_refinancing:covid_refinancing_web_portal'%}" target="_blank"
+              class="waves-effect">Refinancing Simulation
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'waiver:collection-offer-j1' %}" target="_blank" class="waves-effect">
+              Waiver Offer for J1
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'refinancing_collection_offer_j1' %}" target="_blank" class="waves-effect">
+              Collection Offer for J1
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'streamlined:get_pause_reminder' %}" target="_blank" class="waves-effect">
+              Pause Reminder
+            </a>
+          </li>
+          {% checkusergroup in ['collection_supervisor','ops_team_leader'] %}
+          <li>
+            <a href="{% url 'minisquad:blacklist' %}" target="_blank" class="waves-effect">
+              Blacklist Contact
+            </a>
+          </li>
+          {% endcheckusergroup %}
+        {% if user.groups.all|validate_group:'collection_team_leader' == True %}
+            <li><a href="{% url 'dashboard:change_of_repayment_channel' %}" target="_blank" class="waves-effect">Change of Repayment
+              Channel
+            </a>
+          </li>
+          <li id="mnu_waiver_expiry_feature"> <a href="{% url 'waiver:manual_waiver_expiry_page' %}" target="_blank">
+              <span class="hide-menu">Refinancing Expiry Feature
+              </span>
+            </a>
+          </li>
+
+        {% elif user.groups.all|validate_group:'collection_area_coordinator' == True %}
+            <li><a href="{% url 'dashboard:change_of_repayment_channel' %}" target="_blank" class="waves-effect">Change of Repayment
+              Channel
+            </a>
+          </li>
+          <li id="mnu_waiver_expiry_feature"> <a href="{% url 'waiver:manual_waiver_expiry_page' %}" target="_blank">
+              <span class="hide-menu">Refinancing Expiry Feature
+              </span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </li>
+
+        {% checkusergroup in ['product_manager'] %}
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="&#xe006;" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu"> Collection HI Season <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{%url 'collection_hi_season:collection_hi_season_campaign_list' %}" >
+              <span class="hide-menu"> List </span>
+              </a>
+            </li>
+
+            <li id="mnu_reason_selection_li"> <a href="{%url 'collection_hi_season:collection_hi_season_campaign_form' %}" >
+              <span class="hide-menu"> Add New </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endcheckusergroup %}
+
+        {% checkusergroup in ['cohort_campaign_editor'] %}
+          <li id="mnu_app_img_verify_li"> <a href="{% url 'cohort_campaign_automation:cohort_campaign_automation_list' %}">
+              <i data-icon="&#xe006;" class="linea-icon linea-basic"></i><span class="hide-menu m-l-10"> Cohort Campaign Automation</span>
+            </a>
+          </li>
+        {% endcheckusergroup %}
+
+        {% checkusergroup in ['cs_admin'] %}
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="&#xe006;" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu"> CS Admin <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{%url 'customer_module:manual-deletion' %}" >
+              <span class="hide-menu"> Manual </span>
+              </a>
+            </li>
+
+            <li id="mnu_reason_selection_li"> <a href="{%url 'customer_module:deletion-request-inapp' %}" >
+              <span class="hide-menu"> JULO App </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endcheckusergroup %}
+
+        {% include 'common/theme1/navbar/includes/account_deletion_history.html' %}
+
+        {% include 'common/theme1/navbar/includes/cs_admin_menu.html' %}
+
+        {%if julo_roles|length > 0 %}
+          <li><a href="javascript:void(0)" class="waves-effect">
+            <i class="linea-icon linea-basic fa-fw text-danger" data-icon="7"></i> <span class="hide-menu">
+              Pindah Role<span class="fa arrow"></span>
+            </span></a>
+            <ul class="nav nav-second-level">
+            {% for role_item in julo_roles %}
+                <li><a href="{{ role_item.url }}" class="waves-effect">{{ role_item.role|display_safe }}
+                  </a>
+                </li>
+            {% empty %}
+                <li>Tidak ada</li>
+            {% endfor %}
+            </ul>
+          </li>
+        {% endif %}
+
+        {% include 'common/theme1/navbar/includes/cs_admin_menu.html' %}
+
+        <li id="mnu_payment_li"> <a href="#" class="waves-effect"><i class="linea-icon linea-basic"
+            data-icon="&#xe00b;"></i>
+          <span class="hide-menu m-l-10"> Collections & Payments <span class="fa arrow"></span></span>
+        </a>
+        <ul class="nav nav-second-level">
+          {% checkusergroup in ['bo_finance'] %}
+          <li id="mnu_payment_status_bulk_update"> <a href="{% url 'payment_status:manual_payment_bulk_update' %}"
+              target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i>Bulk Update for Manual
+                Payment(BCA/CIMB)</span>
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          {% checkusergroup in ['collection_supervisor'] %}
+          <li id="mnu_payment_status_bulk_update"> <a href="{% url 'collection_vendor:agent_removal' %}"
+              target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i>Agent Removal</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_bulk_update"> <a href="{% url 'collection_field:field_supervisor_dashboard' %}"
+              target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i>Collection Field</span>
+            </a>
+          </li>
+          {% endcheckusergroup %}
+          <li id="mnu_payment_status_all_li"> <a href="{% url 'payment_status:list_v2' 'all' %}" target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> All 300's</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_all_li"> <a href="{% url 'account_payment_status:list' 'all' %}" target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> J1 All 300's</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_0_li"> <a href="{% url 'payment_status:list_v2' '6' %}">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> T <i class="linea-icon linea-aerrow"
+                  data-icon="&#xe04c;"></i> -5</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_2_li"> <a href="{% url 'payment_status:list_v2' '4' %}" target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> T -4</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_3_li"> <a href="{% url 'payment_status:list_v2' '3' %}" target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> T -3</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_4_li"> <a href="{% url 'payment_status:list_v2' '2' %}" target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> T -2</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_5_li"> <a href="{% url 'payment_status:list_v2' '1' %}" target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> T -1</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_6_li"> <a href="{% url 'payment_status:list_v2' '0' %}" target="_blank">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> T 0</span>
+            </a>
+          </li>
+          <li id="mnu_payment_status_7_li"> <a href="{% url 'payment_status:list_v2' 'minusone' %}">
+              <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> T <i class="linea-icon linea-aerrow"
+                  data-icon="&#xe04b;"></i> 0</span>
+            </a>
+          </li>
+        </ul>
+        </li>
+        {% checkusergroup in ['collection_supervisor'] %}
+        <li id="mnu_tools_collection_li"> <a href="#" class="waves-effect"><i class="icon-cloud-upload fa-fw"></i>
+          <span class="hide-menu m-l-10">Tools<span class="fa arrow"></span></span></a>
+            <ul class="nav nav-second-level">
+                <li id="mnu_bulk_cancel_call_from_ai_rudder"> <a href="{% url 'minisquad:bulk_cancel_call_ai_rudder' %}"
+                  target="_blank">
+                      <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> Bulk Cancel Call From AI Rudder </span>
+                    </a>
+                </li>
+                <li id="ai_rudder_task_strategy"> <a href="{% url 'minisquad:ai_rudder_task_configuration' %}"
+                  target="_blank">
+                      <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> Task Setting AiRudder </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% endcheckusergroup %}
+        {% if julo_current_role|display_safe == 'Collection Supervisor' %}
+        <li id="mnu_loan_li">
+          <a href="#" class="waves-effect"><i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+            <span class="hide-menu m-l-10"> Loans <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_loan_status_all_li"> <a href="{% url 'loan_status:list' 'all' %}" target="_blank">
+                <span class="hide-menu"><i class="fa fa-arrow-right m-t-10"></i> All 200's</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endif %}
+        <li>
+          <a href="{% url 'logout'%}" class="waves-effect hidden-md hidden-lg hidden-sm"><i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span></a>
+          <a href="javascript:void(0)" alt="alert" class="img-responsive model_img hidden-xs" id="signout-warning2">
+            <i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Left navbar-header end -->

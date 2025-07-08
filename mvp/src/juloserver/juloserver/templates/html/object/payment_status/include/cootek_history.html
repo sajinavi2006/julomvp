@@ -1,0 +1,35 @@
+{% load default unit %}
+<table class="table">
+  <thead>
+    <tr>
+      
+      <th width="15%" class="th-sticky">Waktu</th>
+      
+      <th width="70%" class="th-sticky">Content / Catatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%  for obj in cootek_payment %}
+         <tr class="success">
+          <td>
+            <label class="label label-warning m-b-10">
+              {{ obj.udate|date:"d M Y H:i:s" }}
+            </label><br>
+            <label class="label label-danger m-b-10">
+              Action
+            </label>
+          </td>
+          <td>
+            Cootek Status : <code>{{ obj.call_status|default:'-'|safe }}</code><br/>
+            Intention : <code>{{ obj.intention|default:'-'|safe }}</code><br/>
+          </td>
+        </tr>
+    {% empty %}
+      <tr>
+        <td colspan="2">
+          <span> Tidak ada Data </span>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

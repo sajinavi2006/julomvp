@@ -1,0 +1,154 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+@media (max-width: 600px) {
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+.agent-retrofix-form{
+  margin:auto;box-shadow: 0px 1px 16px 0px rgba(0, 0, 0, 0.12);background: white;padding: 20px;border-radius: 12px;
+  margin-top: 20px;
+}
+.input-field{ margin-bottom: 16px; }
+.input-field label { display:block; font-size: 12px; font-weight: bold;}
+.input-field input {    
+  width: 100%; transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms; border-radius: 8px; border: 1px solid #E0E0E0;
+  font-weight: 400; font-size: 14px; line-height: 14px; padding: 12px; margin-top: 4px;
+  min-height: 46px;
+}
+.input-field input:read-only { background-color: #EDEDED; color: #757575;} 
+button{
+  font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background-color: #00ACF0; width: 100%; font-size:16px; color:white; padding: 12px 16px; border-radius: 8px;
+  border-color: transparent; font-weight: bold; cursor: pointer;
+} 
+button.disable{ pointer-events: none; background-color: #EDEDED; } 
+.error{ font-size: 10px; color: #DB4D3D; margin-top:4px;}
+input.err { border: 1px solid #DB4D3D; }
+textarea:focus, input:focus{
+    outline: none;
+}
+#error_message{
+  color:red;
+  font-weight: bold;
+  font-size: 15px;
+}
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-6">
+            <h3 class="box-title m-b-0">Agent Retrofix - Change Application Data</h3>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+<div style="margin-left:12px; margin-right:12px;">    
+    <div class="agent-retrofix-form">
+      <p style="font-weight: bold;font-size: 18px;padding-top: 0;margin-top: 0;">
+        Form ubah data application
+      </p>
+      <p style="font-weight: bold;font-size: 18px;padding-top: 0;margin-top: 0;color:blue">
+        INGAT, HATI2 MENGGUNAKAN FITUR INI. TANYA MAS SAMUEL/MAS RAFI (GRAB) KALAU RAGU. SETELAH MENGGUNAKAN FITUR INI, MOHON DI CROSSCHECK DI HALAMAN APPLICATION YANG BIASA AGENT BUKA !!
+      </p>
+      <p id="message_from_backend"> </p>
+      <div>
+        <form id="agent_retrofix_form" method="post" action="{% url 'pre:change_application_data' %}">
+          {% csrf_token %}
+          <div class="">
+            <!-- input application id -->
+            <div class="input-field">
+              <label for="application_id">Application ID</label>
+              <div class="application_id" style="position:relative;">
+                <input type="text" class="validate" placeholder="Masukkan Application ID" name="application_id" id="application_id" autocomplete="off" inputmode="numeric" size="6">
+              </div>
+            </div>
+            <!-- input field  -->
+            <div class="input-field">
+              <label for="field_name">Field Name</label>
+              <div class="field_name" style="position:relative;">
+                <input type="text" class="validate" placeholder="Masukkan Filed Name (cth : job_type, job_industry, fullname, etc)" name="field_name" id="field_name" autocomplete="off">
+              </div>
+            </div>
+            <!-- input new value  -->
+            <div class="input-field">
+                <label for="new_value">New Value</label>
+                <div class="new_value" style="position:relative;">
+                  <input type="text" class="validate" placeholder="Masukkan New Value (cth : pegawai swasta)" name="new_value" id="new_value" autocomplete="off">
+                </div>
+              </div>
+            <div class="" style="text-align:center; margin-top: 40px;">
+              <button type="submit" class="waves-effect waves-light btn-large blue">Ubah Data !!</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}"
+          rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}"
+          rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}"
+          rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+{% block script_bottom_inside %}
+    $(function() {
+        const message = '{{message}}';
+        const type_message = '{{type_message}}';
+
+        console.log("check message");
+        console.log(message);
+        console.log("type_message");
+        console.log(type_message);
+
+        if (type_message == 'success') {
+            $("#message_from_backend").css('color', 'green');
+            $("#message_from_backend").text("Success, please make sure again in the CRM");
+        } else {
+            $("#message_from_backend").css('color', 'red');
+            $("#message_from_backend").text(message ?? "");
+        }
+    })
+{% endblock %}

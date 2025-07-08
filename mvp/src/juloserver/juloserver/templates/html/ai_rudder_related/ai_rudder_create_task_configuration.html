@@ -1,0 +1,1817 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+    <style type="text/css">
+        .flex {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .switch-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .mb10 {
+            margin-bottom: 10px;
+        }
+
+        .ml5 {
+            margin-left: 5px;
+        }
+
+        .w100 {
+            width: 100px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .lb-result {
+            font-size: larger;
+        }
+
+        .center {
+            align-items: center;
+        }
+
+        .no-border {
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: bold;
+            color: #67717F;
+        }
+
+        .dot-false {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-true {
+            height: 15px;
+            width: 15px;
+            background-color: #5AD3A6;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .txt-align {
+            padding: 10px;
+        }
+
+        .txt-blue {
+            color: blue;
+        }
+
+        .modal-body {
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .error-msg {
+            border: 1px solid red;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .container {
+            width: 90% !important;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .modal-preview {
+            width: 750px;
+        }
+
+        /* Toggle */
+        .onoffswitch {
+            position: relative;
+            width: 90px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            display: inline-block;
+        }
+
+        .onoffswitch-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .onoffswitch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #999999;
+            border-radius: 20px;
+        }
+
+        .onoffswitch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 30px;
+            padding: 0;
+            line-height: 30px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ON";
+            padding-left: 10px;
+            background-color: rgb(52, 193, 59);
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "OFF";
+            padding-right: 10px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+        .onoffswitch-switch {
+            display: block;
+            width: 20px;
+            height: 20px;
+            margin: 6px;
+            background: #FFFFFF;
+            position: absolute;
+            right: 56px;
+            border: 2px solid #999999;
+            border-radius: 20px;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+            margin-left: 0;
+        }
+
+        .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+            right: 0px;
+        }
+
+        .custom-radio-button input {
+            visibility: hidden;
+            position: absolute;
+        }
+
+        /* Custom checkmark style */
+        .custom-radio-button .checkmark {
+            position: relative;
+            height: 20px;
+            width: 20px;
+            background-color: #FFFFFF; /* Default background */
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            display: inline-block;
+            cursor: pointer;
+            vertical-align: middle; /* Aligns with adjacent text */
+        }
+
+        /* Style when the radio button is checked */
+        .custom-radio-button input:checked ~ .checkmark {
+            background-color: #008AC0;
+        }
+
+        /* Create the indicator (the dot) inside the button */
+        .custom-radio-button .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Exact center alignment */
+            width: 10px; /* Adjusted size */
+            height: 10px; /* Adjusted size */
+            border-radius: 50%;
+            background: white;
+        }
+
+        /* Show the indicator when checked */
+        .custom-radio-button input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Style for the state label next to the radio button */
+        .state-label {
+            margin-left: 10px;
+            vertical-align: middle; /* Aligns text vertically centered */
+        }
+    </style>
+{% endblock %}
+
+{% block list_title %}
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-10">
+            <h3 class="box-title m-b-0">AI Rudder Task Strategy Configuration</h3>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" id="btnAdd" data-toggle="modal" data-target="#modalForm">Add new strategy</button>
+        </div>
+    </div>
+
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+    <div class="modal fade modal-position" id="modalMessage" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 300px;">
+          <div class="modal-header" style="border-bottom: none">
+          </div>
+          <div class="modal-body" style="padding: 0;height: 100px">
+            <p class="text-center" style="font-size: 24px;">
+                <b>Sukses!</b>
+            </p>
+            <p class="text-center" style="font-weight: 300" id="modal_content"></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #03a9f3;
+                           border-color: #03a9f3;
+                           width: 92px;
+                           height: 48px;
+                           border-radius: 5px;"
+                    data-dismiss="modal" id="btnOk">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-position" id="modalConfirmation" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 400px;">
+          <div class="modal-header" style="border-bottom: none">
+          </div>
+          <div class="modal-body" style="padding: 0;height: 150px">
+            <p class="text-center" style="font-size: 24px;">
+                <b>Apakah anda yakin ingin menghapus data ini ?</b>
+            </p>
+            <p class="text-center" style="font-weight: 300" id="confirmation_content"></p>
+              <input type="hidden" id="bucket_name_delete">
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #BA2121;
+                           border-color: #BA2121;" id="btnOkToDelete">Hapus</button>
+              <button type="button"
+                    class="btn btn-default text-center"
+                    data-dismiss="modal" id="btnCancel">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-position" id="modalForm" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 1000px;" role="document">
+        <div class="modal-content" style="height: 700px;">
+          <div class="modal-header" style="border-bottom: none">
+            <h2 id="form-title"></h2>
+          </div>
+          <div class="modal-body">
+              <div class="form-group">
+            <form id="editForm">
+                <input type="hidden" id="operation" name="operation">
+                <div class="form-group">
+                <label for="bucket_name">Bucket Name</label>
+                <input type="text" class="form-control" id="bucket_name" name="bucket_name" placeholder="Bucket Name">
+              </div>
+              <!-- Add your form fields here -->
+              <div class="form-group">
+                <label for="acwTime">ACW Time</label>
+                <input type="text" class="form-control" id="acwTime" name="acwTime" placeholder="ACW Time">
+              </div>
+                <div class="form-group">
+                <label for="ringLimit">Ringlimit</label>
+                <input type="text" class="form-control" id="ringLimit" name="ringLimit" placeholder="Ring Limit">
+              </div>
+                <!-- Add your form fields here -->
+              <div class="form-group">
+                <label for="dialingMode">dialingMode</label>
+                  <select class="form-control" id="dialingMode" name="dialingMode" placeholder="dialingMode">
+                      <option value="0" selected>Predictive Dialer</option>
+                      <option value="1">Progressive Dialer</option>
+                  </select>
+              </div>  <!-- Add your form fields here -->
+              <div class="form-group">
+                <label for="maxLostRate">maxLostRate</label>
+                <input type="text" class="form-control" id="maxLostRate" name="maxLostRate" placeholder="maxLostRate">
+              </div>
+                <div class="form-group">
+                <label for="repeatTimes">repeatTimes</label>
+                <input type="text" class="form-control" id="repeatTimes" name="repeatTimes" placeholder="repeatTimes">
+              </div>
+
+                <div class="form-group">
+                <label for="callInterval">callInterval</label>
+                <input type="text" class="form-control" id="callInterval" name="callInterval" placeholder="callInterval">
+              </div>
+
+                <div class="form-group">
+                <label for="autoSlotFactor">autoSlotFactor</label>
+                <select class="form-control" id="autoSlotFactor" name="autoSlotFactor" placeholder="autoSlotFactor">
+                  <option value="0">Not Active</option>
+                  <option value="1" selected>Active</option>
+                </select>
+              </div>
+                <div class="form-group slot_factor_section">
+                    <label for="SlotFactor">SlotFactor</label>
+                    <input type="text" class="form-control" id="slotFactor" name="slotFactor" placeholder="slotFactor">
+                    <small id="restTimeHelp" class="form-text text-muted">
+                        Default value is 2.5 jika autoslot factor Not Active
+                    </small>
+              </div>
+                <div class="form-group">
+                <label for="bulkCallInterval">bulkCallInterval</label>
+                <input type="text" class="form-control" id="bulkCallInterval" name="bulkCallInterval" placeholder="bulkCallInterval">
+              </div>
+                <div class="form-group">
+                <label for="contactNumberInterval">contactNumberInterval</label>
+                <input type="text" class="form-control" id="contactNumberInterval" name="contactNumberInterval" placeholder="contactNumberInterval">
+              </div>
+                <div class="form-group">
+                <label for="start_time">start_time</label>
+                <input type="text" class="form-control start_time" id="start_time" name="start_time" placeholder="contoh 08:00">
+              </div>
+                <div class="form-group">
+                <label for="end_time">end_time</label>
+                <input type="text" class="form-control end_time" id="end_time" name="end_time" placeholder="contoh 20:00">
+              </div>
+                <div class="form-group">
+                    <label for="start_rest_time">Rest Time (*optional)</label>
+                    <div class="rest-time-container col-md-12">
+                        <div class="rest-time-row row">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control start-rest-time" id="first_start_rest_time" name="start_rest_time[]" placeholder="contoh 12:00">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control end-rest-time" id="first_end_rest_time" name="end_rest_time[]" placeholder="contoh 13:00">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <small id="restTimeHelp" class="form-text text-muted">
+                            tekan tambah jika ingin menambah jam istirahat, note: input pertama adalah jam mulai istirahat dan yang kedua adalah jam istirahat berakhir, mohon di catat rest time harus berurut end rest start times tidak boleh lebih besar dari rest end time
+                        </small>
+                    </div>
+                    <div class="col-md-3 col-md-offset-9">
+                        <button type="button" class="btn btn-primary" id="btn-add-rest-time">Tambah</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                <label for="end_rest_time">Dialing Order</label>
+                    <textarea class="form-control" id="dialing_order" name="dialing_order" placeholder="tambah koma tiap value"></textarea>
+                    <small id="emailHelp" class="form-text text-muted">
+                        mohon ingat value hanya bisa {{ allowed_dialing_order|join:", "|safe }}
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="autoQA">autoQA</label>
+                    <select class="form-control" id="autoQA" name="autoQA">
+                        <option value="Y">Yes</option>
+                        <option value="N" selected>No</option>
+                    </select>
+                </div>
+                <div class="form-group qa_config_id_section">
+                    <label for="SlotFactor">qaConfigId</label>
+                    <input type="text" class="form-control" id="qaConfigId" name="qaConfigId" placeholder="qaConfigId">
+                    <small class="form-text text-muted">
+                        Default value is 142 jika belum di isi
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="SlotFactor">qaLimitLength</label>
+                    <input type="text" class="form-control" id="qaLimitLength" name="qaLimitLength" placeholder="qaLimitLength">
+                    <small class="form-text text-muted">
+                        Default value 0 jika belum di isi
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="SlotFactor">qaLimitRate</label>
+                    <input type="text" class="form-control" id="qaLimitRate" name="qaLimitRate" placeholder="qaLimitRate">
+                    <small class="form-text text-muted">
+                        Default value 100 jika belum di isi
+                    </small>
+                </div>
+                <div class="form-group row ineffective-phone-number">
+                </div>
+                <div class="form-group">
+                    <div class="switch-wrapper">
+                        <label for="voicemailRedial">Redial or Not</label>
+                        <label class="switch">
+                            <input type="checkbox" id="voicemailRedial">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <small class="form-text text-muted">
+                        Default value 0 jika belum di isi
+                    </small>
+                </div>
+               <div class="form-group">
+                  <label for="dialingMode">Check Voicemail</label>
+                  <select class="form-control" id="voicemailCheck" name="voicemailCheck" placeholder="voicemailCheck">
+                      <option value="0" selected>Default</option>
+                      <option value="-1">Off</option>
+                      <option value="1">On</option>
+                  </select>
+               </div>  <!-- Add your form fields here -->
+                <div class="form-group voicemail-duration">
+                    <label for="SlotFactor">Voicemail Detection Time</label>
+                    <input type="text" class="form-control" id="voicemailCheckDuration" name="voicemailCheckDuration" placeholder="voicemailCheckDuration">
+                    <small class="form-text text-muted">
+                        isi jika check voicemail on
+                    </small>
+                </div>
+                <div class="form-group voicemail-duration">
+                    <label for="SlotFactor">Voicemail Handle</label>
+                    <select class="form-control" id="voicemailHandle" name="voicemailHandle">
+                      <option value="1" selected>Hanging up automatically</option>
+                      <option value="2">Hanging up after leaving a message automatically </option>
+                  </select>
+                    <small class="form-text text-muted">
+                        isi jika check voicemail on
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="resultStrategies">resultStrategies</label>
+                    <select class="form-control" id="resultStrategies" name="resultStrategies">
+                        <option value="on">On</option>
+                        <option value="off" selected>Off</option>
+                    </select>
+                </div>
+                <div class="resultStrategies-container col-md-12 resultStrategies-config">
+                    <div class="resultStrategies-row row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="resultStrategiesTitle">title</label>
+                                <select class="form-control" id="resultStrategiesTitleFirst" name="resultStrategiesTitle[]">
+                                    <option value="Level1" selected>Level1</option>
+                                    <option value="Level2">Level2</option>
+                                    <option value="Spokewith">Spokewith</option>
+                                    <option value="nopaymentreason">nopaymentreason</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="value">value</label>
+                                <select class="form-control" id="resultStrategiesValueFirst" name="resultStrategiesValue[]">
+                                    <optgroup label="Level1" class="Level1">
+                                        <option value="Connected" selected>Connected</option>
+                                        <option value="NotConnected">NotConnected</option>
+                                        <option value="WA">WA</option>
+                                    </optgroup>
+                                    <optgroup label="Level2" class="Level2">
+                                        <option value="RPC">RPC</option>
+                                        <option value="WPC">WPC</option>
+                                        <option value="ShortCall">ShortCall</option>
+                                        <option value="AnsweringMachine">AnsweringMachine</option>
+                                        <option value="BusyTone">BusyTone</option>
+                                        <option value="Ringing">Ringing</option>
+                                        <option value="DeadCall">DeadCall</option>
+                                        <option value="WAText">WAText</option>
+                                    </optgroup>
+                                    <optgroup label="Level3" class="Level3">
+                                        <option value="RPC-Regular">RPC-Regular</option>
+                                        <option value="RPC-PTP">RPC-PTP</option>
+                                        <option value="RPC-HTP">RPC-HTP</option>
+                                        <option value="RPC-BrokenPromise">RPC-BrokenPromise</option>
+                                        <option value="RPC-CallBack">RPC-CallBack</option>
+                                        <option value="WPC-Regular">WPC-Regular</option>
+                                        <option value="WPC-LeftMessage">WPC-LeftMessage</option>
+                                    </optgroup>
+                                    <optgroup label="Spokewith" class="Spokewith">
+                                        <option value="Child">Child</option>
+                                        <option value="Coworker">Coworker</option>
+                                        <option value="Friend">Friend</option>
+                                        <option value="Other">Other</option>
+                                        <option value="Parent">Parent</option>
+                                        <option value="Sibling">Sibling</option>
+                                        <option value="Spouse">Spouse</option>
+                                        <option value="User">User</option>
+                                    </optgroup>
+                                    <optgroup label="nopaymentreason" class="nopaymentreason">
+                                        <option value="Banyak_cicilan/pinjaman_dari_tempat_lain">Banyak_cicilan/pinjaman_dari_tempat_lain</option>
+                                        <option value="Bencana_Alam">Bencana_Alam</option>
+                                        <option value="Dana_terpakai_untuk_kebutuhan_mendesak">Dana_terpakai_untuk_kebutuhan_mendesak</option>
+                                        <option value="Indikasi_fraud">Indikasi_fraud</option>
+                                        <option value="Jobless/Bangkrut">Jobless/Bangkrut</option>
+                                        <option value="Kontak_tidak_bisa_dihubungi">Kontak_tidak_bisa_dihubungi</option>
+                                        <option value="Lupa_Tanggal_Pembayaran">Lupa_Tanggal_Pembayaran</option>
+                                        <option value="Pembayaran_Gagal">Pembayaran_Gagal</option>
+                                        <option value="Peminjam_digunakan_untuk_orang_lain">Peminjam_digunakan_untuk_orang_lain</option>
+                                        <option value="Peminjam_sedang_perjalanan_keluar_kota">Peminjam_sedang_perjalanan_keluar_kota</option>
+                                        <option value="Peminjam/orang_terdekat_terkena_musibah/kecelakaan">Peminjam/orang_terdekat_terkena_musibah/kecelakaan</option>
+                                        <option value="Pengajuan_keringanan">Pengajuan_keringanan</option>
+                                        <option value="Penghasilan_pekerjaan/bisnis_sedang_menurun">Penghasilan_pekerjaan/bisnis_sedang_menurun</option>
+                                        <option value="Perubahan_status_pekerjaan-perubahan_tanggal_gajian">Perubahan_status_pekerjaan-perubahan_tanggal_gajian</option>
+                                        <option value="Sakit_kronis-Peminjam_Mengalami_Sakit_Kronis">Sakit_kronis-Peminjam_Mengalami_Sakit_Kronis</option>
+                                        <option value="Tidak_Bisa_Membuka_Aplikasi_JULO">Tidak_Bisa_Membuka_Aplikasi_JULO</option>
+                                        <option value="Nasabah_meninggal">Nasabah_meninggal</option>
+                                        <option value="Tidak_mau_membayar">Tidak_mau_membayar</option>
+                                        <option value="Others">Others</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="value">action</label>
+                                <select class="form-control resultStrategiesAction" id="resultStrategiesActionFirst" name="resultStrategiesAction[]" multiple>
+                                    <option value="1" selected>Call Next Number of the Contact</option>
+                                    <option value="2">Add to Do-Not-Call List</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group dndDaySection" style="display: none;">
+                                <label for="dndDay">dncDay</label>
+                                <input type="number" class="form-control" id="resultStrategiesdndDayFirst" name="resultStrategiesdndDay[]" placeholder="1-30" max="30">
+                                <small class="form-text text-muted">
+                                    value mulai dari 1-30
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="resultStrategies-config">
+                    <small id="restTimeHelp" class="form-text text-muted ">
+                        tekan tambah jika ingin menambah konfigurasi
+                    </small>
+                </div>
+                <div class="col-md-3 col-md-offset-9 resultStrategies-config">
+                    <button type="button" class="btn btn-primary" id="btn-add-stategies-config">Tambah</button>
+                </div>
+                <div class="form-group">
+                    <label for="automateTimeframe">automateTimeframe</label>
+                    <select class="form-control" id="automateTimeframe" name="automateTimeframe">
+                        <option value="on">On</option>
+                        <option value="off" selected>Off</option>
+                    </select>
+                </div>
+                <div class="automateTimeframe-container col-md-12 automateTimeframe-config">
+                    <div class="automateTimeframe-row row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="automateTimeframeTitle">Title</label>
+                                <p class='automateTimeframeTitle'>Timeframe 1</p>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="automateTimeframeRepeatTimes">Repeat Times</label>
+                                <input type="number" min="1" class="form-control" id="automateTimeframeRepeatTimes" name="automateTimeframeRepeatTimes" placeholder="repeat times">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="value">Call List</label>
+                                <select class="form-control" id="callListFirst" name="callList[]" multiple>
+                                    <option value="mobile_phone_1" selected>mobile_phone_1</option>
+                                    <option value="mobile_phone_2">mobile_phone_2</option>
+                                    <option value="spouse_mobile_phone">spouse_mobile_phone</option>
+                                    <option value="company_phone_number">company_phone_number</option>
+                                    <!-- <option value="new_phone_number_1">new_phone_number_1</option>
+                                    <option value="new_phone_number_2">new_phone_number_2</option>
+                                    <option value="new_phone_number_3">new_phone_number_3</option>
+                                    <option value="new_phone_number_4">new_phone_number_4</option>
+                                    <option value="new_phone_number_5">new_phone_number_5</option>
+                                    <option value="new_phone_number_6">new_phone_number_6</option>
+                                    <option value="new_phone_number_7">new_phone_number_7</option>
+                                    <option value="new_phone_number_8">new_phone_number_8</option>
+                                    <option value="new_phone_number_9">new_phone_number_9</option>
+                                    <option value="new_phone_number_10">new_phone_number_10</option> -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="value">call result condition</label>
+                                <select class="form-control" id="callResultConditionFirst" name="callResultCondition[]" multiple>
+                                    <option value="all" selected>All unconnected(if there is no call history)</option>
+                                    <option value="RPC - Already Paid">RPC - Already Paid (connected)</option>
+                                    <option value="RPC - Already PTP">RPC - Already PTP (connected)</option>
+                                    <option value="RPC - Whatsapp">RPC - Whatsapp (connected)</option>
+                                    <option value="RPC - Telegram">RPC - Telegram (connected)</option>
+                                    <option value="RPC - Regular">RPC - Regular (connected)</option>
+                                    <option value="RPC - PTP">RPC - PTP (connected)</option>
+                                    <option value="RPC - HTP">RPC - HTP (connected)</option>
+                                    <option value="Unreachable">Unreachable (unconnected)</option>
+                                    <option value="Tidak Diangkat">Tidak Diangkat (unconnected)</option>
+                                    <option value="Short Call">Short Call (unconnected)</option>
+                                    <option value="Ringing">Ringing (unconnected)</option>
+                                    <option value="NULL">Null (unconnected)</option>
+                                    <option value="Disconnect By network">Disconnect By network (unconnected)</option>
+                                    <option value="Dead call">Dead call (unconnected)</option>
+                                    <option value="Busy tone">Busy tone (unconnected)</option>
+                                    <option value="Busy">Busy (unconnected)</option>
+                                    <option value="Answering Machine">Answering Machine (unconnected)</option>
+                                    <option value="Abandoned by System">Abandoned by System (unconnected)</option>
+                                    <option value="Abandoned by Customer">Abandoned by Customer (unconnected)</option>
+                                    <option value="WPC - Regular">WPC - Regular</option>
+                                    <option value="WPC - Left Message">WPC - Left Message</option>
+                                    <option value="WPC">WPC</option>
+                                    <option value="RPC">RPC</option>
+                                    <option value="RPC - Left Message">RPC - Left Message</option>
+                                    <option value="RPC - Call Back">RPC - Call Back</option>
+                                    <option value="RPC - Broken Promise">RPC - Broken Promise</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group dndDaySection" style="display: none;">
+                                <label for="dndDay">dncDay</label>
+                                <input type="number" class="form-control" id="automateTimeframedndDayFirst" name="automateTimeframedndDay[]" placeholder="1-30" max="30">
+                                <small class="form-text text-muted">
+                                    value mulai dari 1-30
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="automateTimeframe-config">
+                    <small id="restTimeHelp" class="form-text text-muted ">
+                        tekan tambah jika ingin menambah konfigurasi
+                    </small>
+                </div>
+                <div class="col-md-3 col-md-offset-9 automateTimeframe-config">
+                    <button type="button" class="btn btn-primary" id="btn-add-automate-timeframe">Tambah</button>
+                </div>
+                <div class="julo-gold-form">
+                </div>
+            </form>
+              </div>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button"
+                    class="btn btn-primary text-center"
+                    style="background-color: #BA2121;
+                           border-color: #BA2121;" id="btnSubmit">Simpan</button>
+              <button type="button"
+                    class="btn btn-default text-center"
+                    data-dismiss="modal" id="btnCancel">Kembali</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column column-top">
+        <div class="header-content">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">bucket name</th>
+                        <th scope="col">start - end times</th>
+                        <th scope="col">rest_times</th>
+                        <th scope="col">Details</th>
+                        <th scope="col">dialingMode</th>
+                        <th scope="col" style="font-size: 12px">autoSlotFactor - slotFactor</th>
+                        <th scope="col" style="font-size: 12px">autoQA-qaConfigId</th>
+                        <th scope="col">qaLimitLength</th>
+                        <th scope="col">qaLimitRate</th>
+                        <th scope="col">resultStrategies</th>
+                        <th scope="col">DialingOrder</th>
+                        <th scope="col">automateTimeframe</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, values in data.items %}
+                      <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ values.start_time }} - {{ values.end_time }}</td>
+                        <td style="font-size: 12px">
+                            {% for time_range in values.rest_times %}
+                                {{ time_range.0 }} - {{ time_range.1 }}
+                                {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <ul>
+                                <li>AcwTime : <b>{{ values.acwTime }}</b></li>
+                                <li>ringLimit : <b>{{ values.ringLimit }}</b></li>
+                                <li>maxLostRate : <b>{{ values.maxLostRate }}</b></li>
+                                <li>repeatTimes : <b>{{ values.repeatTimes }}</b></li>
+                                <li>callInterval : <b>{{ values.callInterval }}</b></li>
+                                <li>bulkCallInterval : <b>{{ values.bulkCallInterval }}</b></li>
+                                <li>contactNumberInterval : <b>{{ values.contactNumberInterval }}</b></li>
+                            </ul>
+                        </td>
+                        <td>
+                            {% if values.dialingMode == '0' %}
+                                Predictive Dialer
+                            {% else %}
+                                Progressive Dialer
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if values.autoSlotFactor == '0' %}
+                                Not Active{% if values.slotFactor %} - {{ values.slotFactor }}{% endif %}
+                            {% else %}
+                                Active{% if values.slotFactor %} - {{ values.slotFactor }}{% endif %}
+                            {% endif %}
+                        </td>
+                        <td style="font-size: 12px">{{ values.autoQA }} - {{ values.qaConfigId }}</td>
+                        <td style="font-size: 12px">{{ values.qaLimitLength | default:0 }}</td>
+                        <td style="font-size: 12px">{{ values.qaLimitRate | default:100}}</td>
+                        <td style="font-size: 12px">
+                            <b>{{ values.resultStrategies }}</b><br/>
+                            {% if values.resultStrategies == "on" %}
+                                {{ values.resultStrategiesConfig }}
+                            {% endif %}
+                        </td>
+                        <td style="font-size: 12px">{{ values.dialingOrder }}</td>
+                        <td style="font-size: 12px">
+                            <b>{{ values.timeFrameStatus | default:"off" }}</b><br/>
+                            {% if values.timeFrameStatus == "on" %}
+                                {{ values.timeFrames }}
+                            {% endif %}
+                        </td>
+                      <td><button class="btn btn-primary btnEdit" bucket_name="{{ key }}" data-values="{{ values }}" data-toggle="modal" data-target="#modalForm">Edit</button></td>
+                      <td><button type="button" class="btn btn-danger btnDelete" bucket_name="{{ key }}"><i class="fa fa-trash-o"></i></button></td>
+                      </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">
+                                <div class="alert alert-info empty-info">
+                                    <strong>Info!</strong> Tidak ada Data.
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/multiselect/css/multi-select.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+    <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet"
+          type="text/css">
+{% endblock %}
+{% block script_additional %}
+    <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'theme/plugins/bower_components/multiselect/js/jquery.multi-select.js' %}"></script>
+    <script src="{% static 'default/js/jquery.json-editor.min.js' %}"></script>
+    <!-- Sweet-Alert  -->
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+{% endblock %}
+{% block script_bottom_inside %}
+
+$('.qa_config_id_section').hide()
+$('.resultStrategies-config').hide()
+$('.automateTimeframe-config').hide()
+$('.dndDaySection').hide()
+var newRowStrategies = `
+        <div class="resultStrategies-row row dynamic-resultStrategies">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="resultStrategiesTitle">title</label>
+                    <select class="form-control dynamic-title" name="resultStrategiesTitle[]">
+                        <option value="Level1" selected>Level1</option>
+                        <option value="Level2">Level2</option>
+                        <option value="Spokewith">Spokewith</option>
+                        <option value="nopaymentreason">nopaymentreason</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="value">value</label>
+                    <select class="form-control dynamic-value" name="resultStrategiesValue[]">
+                        <optgroup label="Level1" class="Level1">
+                            <option value="Connected" selected>Connected</option>
+                            <option value="NotConnected">NotConnected</option>
+                            <option value="WA">WA</option>
+                        </optgroup>
+                        <optgroup label="Level2" class="Level2">
+                            <option value="RPC">RPC</option>
+                            <option value="WPC">WPC</option>
+                            <option value="ShortCall">ShortCall</option>
+                            <option value="AnsweringMachine">AnsweringMachine</option>
+                            <option value="BusyTone">BusyTone</option>
+                            <option value="Ringing">Ringing</option>
+                            <option value="DeadCall">DeadCall</option>
+                            <option value="WAText">WAText</option>
+                        </optgroup>
+                        <optgroup label="Level3" class="Level3">
+                            <option value="RPC-Regular">RPC-Regular</option>
+                            <option value="RPC-PTP">RPC-PTP</option>
+                            <option value="RPC-HTP">RPC-HTP</option>
+                            <option value="RPC-BrokenPromise">RPC-BrokenPromise</option>
+                            <option value="RPC-CallBack">RPC-CallBack</option>
+                            <option value="WPC-Regular">WPC-Regular</option>
+                            <option value="WPC-LeftMessage">WPC-LeftMessage</option>
+                        </optgroup>
+                        <optgroup label="Spokewith" class="Spokewith">
+                            <option value="Child">Child</option>
+                            <option value="Coworker">Coworker</option>
+                            <option value="Friend">Friend</option>
+                            <option value="Other">Other</option>
+                            <option value="Parent">Parent</option>
+                            <option value="Sibling">Sibling</option>
+                            <option value="Spouse">Spouse</option>
+                            <option value="User">User</option>
+                        </optgroup>
+                        <optgroup label="nopaymentreason" class="nopaymentreason">
+                            <option value="Banyak_cicilan/pinjaman_dari_tempat_lain">Banyak_cicilan/pinjaman_dari_tempat_lain</option>
+                            <option value="Bencana_Alam">Bencana_Alam</option>
+                            <option value="Dana_terpakai_untuk_kebutuhan_mendesak">Dana_terpakai_untuk_kebutuhan_mendesak</option>
+                            <option value="Indikasi_fraud">Indikasi_fraud</option>
+                            <option value="Jobless/Bangkrut">Jobless/Bangkrut</option>
+                            <option value="Kontak_tidak_bisa_dihubungi">Kontak_tidak_bisa_dihubungi</option>
+                            <option value="Lupa_Tanggal_Pembayaran">Lupa_Tanggal_Pembayaran</option>
+                            <option value="Pembayaran_Gagal">Pembayaran_Gagal</option>
+                            <option value="Peminjam_digunakan_untuk_orang_lain">Peminjam_digunakan_untuk_orang_lain</option>
+                            <option value="Peminjam_sedang_perjalanan_keluar_kota">Peminjam_sedang_perjalanan_keluar_kota</option>
+                            <option value="Peminjam/orang_terdekat_terkena_musibah/kecelakaan">Peminjam/orang_terdekat_terkena_musibah/kecelakaan</option>
+                            <option value="Pengajuan_keringanan">Pengajuan_keringanan</option>
+                            <option value="Penghasilan_pekerjaan/bisnis_sedang_menurun">Penghasilan_pekerjaan/bisnis_sedang_menurun</option>
+                            <option value="Perubahan_status_pekerjaan-perubahan_tanggal_gajian">Perubahan_status_pekerjaan-perubahan_tanggal_gajian</option>
+                            <option value="Sakit_kronis-Peminjam_Mengalami_Sakit_Kronis">Sakit_kronis-Peminjam_Mengalami_Sakit_Kronis</option>
+                            <option value="Tidak_Bisa_Membuka_Aplikasi_JULO">Tidak_Bisa_Membuka_Aplikasi_JULO</option>
+                            <option value="Nasabah_meninggal">Nasabah_meninggal</option>
+                            <option value="Tidak_mau_membayar">Tidak_mau_membayar</option>
+                            <option value="Others">Others</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="value">action</label>
+                    <select class="form-control resultStrategiesAction dynamic-action" name="resultStrategiesAction[]" multiple>
+                        <option value="1" selected>Call Next Number of the Contact</option>
+                        <option value="2">Add to Do-Not-Call List</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group dndDaySection" style="display: none;">
+                    <label for="dndDay">dncDay</label>
+                    <input type="number" class="form-control dynamic-dndDay" name="resultStrategiesdndDay[]" placeholder="1-30" max="30">
+                    <small class="form-text text-muted">
+                        value mulai dari 1-30
+                    </small>
+                </div>
+                <button type="button" style="margin-top: 10px;" class="btn btn-danger remove-resultStrategies">Hapus</button>
+            </div>
+        </div>
+    `;
+const newRowAutomateTimeframeStrategies = (i) => {return `
+<div class="automateTimeframe-row row dynamic-automateTimeframe">
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="automateTimeframeTitle">Title</label>
+            <p class="automateTimeframeTitle">Timeframe ${i}</p>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="automateTimeframeRepeatTimes">Repeat Times</label>
+            <input type="number" min="1" class="form-control" id="automateTimeframeRepeatTimes" name="automateTimeframeRepeatTimes" placeholder="repeat times">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="value">Call List</label>
+            <select class="form-control" id="callListFirst" name="callList[]" multiple>
+                <option value="mobile_phone_1" selected>mobile_phone_1</option>
+                <option value="mobile_phone_2">mobile_phone_2</option>
+                <option value="spouse_mobile_phone">spouse_mobile_phone</option>
+                <option value="company_phone_number">company_phone_number</option>
+                <!-- <option value="new_phone_number_1">new_phone_number_1</option>
+                <option value="new_phone_number_2">new_phone_number_2</option>
+                <option value="new_phone_number_3">new_phone_number_3</option>
+                <option value="new_phone_number_4">new_phone_number_4</option>
+                <option value="new_phone_number_5">new_phone_number_5</option>
+                <option value="new_phone_number_6">new_phone_number_6</option>
+                <option value="new_phone_number_7">new_phone_number_7</option>
+                <option value="new_phone_number_8">new_phone_number_8</option>
+                <option value="new_phone_number_9">new_phone_number_9</option>
+                <option value="new_phone_number_10">new_phone_number_10</option> -->
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="value">call result condition</label>
+            <select class="form-control" id="callResultConditionFirst" name="callResultCondition[]" multiple>
+                <option value="all" selected>All unconnected(if there is no call history)</option>
+                <option value="RPC - Already Paid">RPC - Already Paid (connected)</option>
+                <option value="RPC - Already PTP">RPC - Already PTP (connected)</option>
+                <option value="RPC - Whatsapp">RPC - Whatsapp (connected)</option>
+                <option value="RPC - Telegram">RPC - Telegram (connected)</option>
+                <option value="RPC - Regular">RPC - Regular (connected)</option>
+                <option value="RPC - PTP">RPC - PTP (connected)</option>
+                <option value="RPC - HTP">RPC - HTP (connected)</option>
+                <option value="Unreachable">Unreachable (unconnected)</option>
+                <option value="Tidak Diangkat">Tidak Diangkat (unconnected)</option>
+                <option value="Short Call">Short Call (unconnected)</option>
+                <option value="Ringing">Ringing (unconnected)</option>
+                <option value="NULL">Null (unconnected)</option>
+                <option value="Disconnect By network">Disconnect By network (unconnected)</option>
+                <option value="Dead call">Dead call (unconnected)</option>
+                <option value="Busy tone">Busy tone (unconnected)</option>
+                <option value="Busy">Busy (unconnected)</option>
+                <option value="Answering Machine">Answering Machine (unconnected)</option>
+                <option value="Abandoned by System">Abandoned by System (unconnected)</option>
+                <option value="Abandoned by Customer">Abandoned by Customer (unconnected)</option>
+                <option value="WPC - Regular">WPC - Regular</option>
+                <option value="WPC - Left Message">WPC - Left Message</option>
+                <option value="WPC">WPC</option>
+                <option value="RPC">RPC</option>
+                <option value="RPC - Left Message">RPC - Left Message</option>
+                <option value="RPC - Call Back">RPC - Call Back</option>
+                <option value="RPC - Broken Promise">RPC - Broken Promise</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <button type="button" style="margin-top: 10px;" class="btn btn-danger remove-automateTimeframe">Hapus</button>
+    </div>
+</div>
+`};
+function PrepareForm(operation, bucket_name = '', init_data = {}){
+
+    $('.qa_config_id_section').hide()
+    $('.voicemail-duration').hide()
+    $('.dynamic-rest-time').html("")
+    $('.dynamic-resultStrategies').html("")
+    $('.dynamic-automateTimeframe').remove()
+    if (operation=='add'){
+        $('#bucket_name').attr('readonly', false)
+        $('#form-title').text('Tambah strategy configuration baru')
+            // Reset text input fields to their default values (empty)
+        $("input[type='text']").val('');
+
+        // Reset number input fields to their default values (0)
+        $("input[type='number']").val(0);
+
+        // Reset select elements to their default values
+        $("select").val(function() {
+            // Get the default value from the "data-default" attribute
+            return $(this).data("default");
+        });
+    }else{
+        $('#bucket_name').attr('readonly', 'readonly')
+        $('#form-title').text('Ubah configuration: '+ bucket_name)
+    }
+    $('#bucket_name').val(bucket_name)
+    $('#operation').val(operation)
+    if (operation=='edit'){
+        $('#acwTime').val(init_data.acwTime)
+        $('#dialingMode').val(init_data.dialingMode)
+        $('#maxLostRate').val(init_data.maxLostRate)
+        $('#ringLimit').val(init_data.ringLimit)
+        $('#repeatTimes').val(init_data.repeatTimes)
+        $('#callInterval').val(init_data.callInterval)
+        $('#autoSlotFactor').val(init_data.autoSlotFactor)
+        $('#voicemailCheck').val(init_data.voicemailCheck).trigger('change')
+        if (init_data.voicemailCheck == 1) {
+            $('#voicemailCheckDuration').val(init_data.voicemailCheckDuration)
+            $('#voicemailHandle').val(init_data.voicemailHandle ?? 1)
+        }
+        $('#autoQA').val(init_data.autoQA)
+        $('#slotFactor').val(init_data.slotFactor ?? '')
+        if (init_data.autoQA=="Y") {
+            $('#qaConfigId').val(init_data.qaConfigId)
+        }else{$('#qaConfigId').val('')}
+        $('#bulkCallInterval').val(init_data.bulkCallInterval)
+        $('#contactNumberInterval').val(init_data.contactNumberInterval)
+        $('#start_time').val(init_data.start_time)
+        $('#end_time').val(init_data.end_time)
+        var restTimesContainer = $('.rest-time-container')
+        var restTimes = init_data.rest_times
+        var firstRestTimes = restTimes.shift();
+        if (firstRestTimes && firstRestTimes.length) {
+            $('#first_start_rest_time').val(firstRestTimes[0])
+            $('#first_end_rest_time').val(firstRestTimes[1])
+        }
+        if (init_data.timeFrameStatus === "on") {
+            $('#automateTimeframe').val("on")
+        } else {
+            $('#automateTimeframe').val("off")
+        }
+        $('#resultStrategies').val(init_data.resultStrategies)
+        $('#qaLimitLength').val(init_data.qaLimitLength || 0)
+        $('#qaLimitRate').val(init_data.qaLimitRate || 100)
+        init_data.rest_times.forEach(function (timeRange) {
+            var startTime = timeRange[0];
+            var endTime = timeRange[1];
+            var newRow = `
+                <div class="rest-time-row row dynamic-rest-time" style="margin-top: 5px;">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control start-rest-time"
+                               name="start_rest_time[]" placeholder="contoh 12:00" value="`+startTime+`">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control end-rest-time"
+                               name="end_rest_time[]" placeholder="contoh 20:00" value="`+endTime+`">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger remove-rest-time">Hapus</button>
+                    </div>
+                </div>
+            `;
+            restTimesContainer.append(newRow);
+        });
+        if (init_data.resultStrategies === "on"){
+            var resultStrategiesConfig = init_data.resultStrategiesConfig
+            var firstResultStrategiesConfig = resultStrategiesConfig.shift();
+
+            $('#resultStrategiesTitleFirst').val(firstResultStrategiesConfig.title).trigger('change')
+            $('#resultStrategiesValueFirst').val(firstResultStrategiesConfig.value)
+            $('#resultStrategiesActionFirst').val(firstResultStrategiesConfig.action).trigger('change')
+            if (firstResultStrategiesConfig.dncDay){
+                $('#resultStrategiesdndDayFirst').val(firstResultStrategiesConfig.dncDay)
+            }
+            resultStrategiesConfig.forEach(function (strategies_config) {
+                $(".resultStrategies-container").append(newRowStrategies);
+                var rowToEdit = $(".resultStrategies-container .resultStrategies-row:last-child");
+                rowToEdit.find(".dynamic-title").val(strategies_config.title).trigger('change');
+                rowToEdit.find(".dynamic-value").val(strategies_config.value);
+                rowToEdit.find(".dynamic-action").val(strategies_config.action).trigger('change');
+                rowToEdit.find(".dynamic-dndDay").val(strategies_config.dncDay);
+            })
+        }
+        const timeFrames = init_data.timeFrames;
+        if (!timeFrames || !timeFrames.length) {
+            $('#automateTimeframeRepeatTimes').val('')
+            $('#automateTimeframeValueFirst').val('')
+            $('#callResultConditionFirst').val('')
+            $('#callListFirst').val('')
+        } else {
+            const firstAutomateTimeFrames = timeFrames.shift();
+
+            $('#automateTimeframeValueFirst').val(firstAutomateTimeFrames.contactInfoSource).trigger('change')
+            $('#callResultConditionFirst').val(firstAutomateTimeFrames.callResultCondition).trigger('change')
+            $('#automateTimeframeRepeatTimes').val(firstAutomateTimeFrames.repeatTimes)
+            $('#callListFirst').val(firstAutomateTimeFrames.callList).trigger('change')
+    
+            timeFrames.forEach(function (timeframe, index) {
+                $(".automateTimeframe-container").append(newRowAutomateTimeframeStrategies(index + 2));
+                const createdTimeframe = $(".automateTimeframe-container .automateTimeframe-row:last-child");
+
+                createdTimeframe.find("#automateTimeframeRepeatTimes").val(timeframe.repeatTimes);
+                createdTimeframe.find("#callResultConditionFirst").val(timeframe.callResultCondition).trigger('change');
+                createdTimeframe.find("#callListFirst").val(timeframe.callList).trigger('change');
+            });
+        }
+        var juloGoldForm = $('.julo-gold-form')
+        var juloGoldBuckets = ['JULO_T-1', 'JULO_T-3', 'JULO_T-5', 'JULO_T0', 'bttc-BC-test3-A', 'bttc-BC-test3-B', 'bttc-BC-test3-C', 'bttc-BC-test3-D'];
+        if (juloGoldBuckets.includes(bucket_name)) {
+            var newRadioButton = `
+                <div class="form-group">
+                    <label for="automateTimeframe">JULO Gold</label>
+                    <div>
+                        <label class="custom-radio-button">
+                            <input type="radio" id='juloGoldStatusNone' name="juloGoldStatus" value="">
+                            <span class="checkmark"></span>
+                        </label>
+                        <span class="state-label">None</span>
+                    </div>    
+                    <div>
+                        <label class="custom-radio-button">
+                            <input type="radio" id='juloGoldStatusExclude' name="juloGoldStatus" value="exclude">
+                            <span class="checkmark"></span>
+                        </label>
+                        <span class="state-label">Exclude JULO Gold</span>
+                    </div>
+                    <div>
+                        <label class="custom-radio-button">
+                            <input type="radio" id='juloGoldStatusExecute' name="juloGoldStatus" value="execute">
+                            <span class="checkmark"></span>
+                        </label>
+                        <span class="state-label">Execute to only JULO Gold</span>
+                    </div>        
+                </div>
+            `
+            juloGoldForm.append(newRadioButton);
+        }
+        var ineffectiveForm = $('.ineffective-phone-number')
+        var bucketNameLower = bucket_name.toLowerCase()
+        if (!(bucketNameLower.includes('grab') || bucketNameLower.includes('dana'))) {
+            var newEffectivePhone = `
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="consecutive_days_title">Consecutive Day</label>
+                        <input type="number" min="0" class="form-control" id="consecutive_days" name="consecutive_days" placeholder="consecutive days">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="is_ineffective_refresh" style="margin-right: 50px">Is Refresh</label>
+                        <label class="switch" style="margin-left: 0px;">
+                            <input type="checkbox" id="is_ineffective_refresh">
+                            <span class="slider"></span>
+                        </label>    
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="threshold_refresh_days_title">Threshold Refresh Day</label>
+                        <input type="number" min="1" class="form-control" id="threshold_refresh_days" name="threshold_refresh_days" placeholder="Threshold Refresh Day">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="hangup_ids_title">Unreachable Hangup Ids</label>
+                        <input type="text" min="1" class="form-control" id="unreachable_hangup_ids" name="unreachable_hangup_ids" placeholder="tambah koma tiap value">
+                    </div>
+                </div>
+            `
+            ineffectiveForm.append(newEffectivePhone);
+        }
+    }
+    $('#autoSlotFactor').trigger('change')
+    $('#autoQA').trigger('change')
+    $('#dialing_order').val(init_data.dialingOrder)
+    $('#resultStrategies').trigger('change')
+    $('#automateTimeframe').trigger('change')
+    var juloGoldStatus = init_data.hasOwnProperty('julo_gold_status') ? init_data['julo_gold_status'] : null;
+    if (juloGoldStatus != null) {
+        if (juloGoldStatus === '') {
+            document.getElementById('juloGoldStatusNone').checked = true;
+        } else if (juloGoldStatus === 'exclude') {
+            document.getElementById('juloGoldStatusExclude').checked = true;
+        } else if (juloGoldStatus === 'execute') {
+            document.getElementById('juloGoldStatusExecute').checked = true;
+        }
+    }
+    var voicemailRedial = init_data.hasOwnProperty('voicemailRedial') ? init_data['voicemailRedial'] : 0;
+    if (voicemailRedial === 1) {
+        document.getElementById('voicemailRedial').checked = true;
+    } else {
+        document.getElementById('voicemailRedial').checked = false;
+    }
+    $('#consecutive_days').val(init_data.consecutive_days)
+    $('#threshold_refresh_days').val(init_data.threshold_refresh_days)
+    $('#unreachable_hangup_ids').val(init_data.unreachable_hangup_ids)
+    var is_ineffective_refresh = init_data.hasOwnProperty('is_ineffective_refresh') ? init_data['is_ineffective_refresh'] : null;
+    if (is_ineffective_refresh != null) {
+        if (is_ineffective_refresh === 1) {
+            document.getElementById('is_ineffective_refresh').checked = true;
+        } else {
+            document.getElementById('is_ineffective_refresh').checked = false;
+        }
+    }
+}
+function is_validated_input() {
+    var validInput = true;
+    var bucket_name = $('#bucket_name').val()
+    var bucketNameLower = bucket_name.toLowerCase()
+    if (!(bucketNameLower.includes('grab') || bucketNameLower.includes('dana'))) {
+        var numericFields = [
+            'callInterval',
+            'acwTime',
+            'maxLostRate',
+            'contactNumberInterval',
+            'ringLimit',
+            'dialingMode',
+            'repeatTimes',
+            'bulkCallInterval',
+            'consecutive_days',
+            'threshold_refresh_days',
+        ];
+    } else {
+        var numericFields = [
+            'callInterval',
+            'acwTime',
+            'maxLostRate',
+            'contactNumberInterval',
+            'ringLimit',
+            'dialingMode',
+            'repeatTimes',
+            'bulkCallInterval',
+        ];
+    }
+    var wrong_field = []
+    numericFields.forEach(function (field) {
+        var fieldValue = $('#' + field).val();
+        if (!$.isNumeric(fieldValue) || parseFloat(fieldValue) < 0) {
+            validInput = false;
+            wrong_field.push(field)
+        }
+    });
+    if (wrong_field.length > 0){
+        ToastDanger(wrong_field.join(', ') + ' should be a valid number and > 0');
+    }
+    // Validate time fields
+    var timeFields = ['start_time', 'end_time'];
+    var timePattern = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+    timeFields.forEach(function (field) {
+        var fieldValue = $('.'+field).val();
+        // Allow empty string only for 'start_time'
+        if (field === 'start_time' && fieldValue === '') {
+            return;
+        }
+        if (!timePattern.test(fieldValue)) {
+            validInput = false;
+            // Handle validation error for time fields
+            ToastDanger(field + ' is not in the correct format');
+        }
+    });
+    //$(".start-rest-time").each(function () {
+    //    var fieldValue = $(this).val();
+    //    if (!timePattern.test(fieldValue)) {
+    //        validInput = false;
+    //        // Handle validation error for time fields
+    //        ToastDanger('Start Rest time is not in the correct format');
+    //    }
+    //});
+
+    //$(".end-rest-time").each(function () {
+    //    var fieldValue = $(this).val();
+    //    if (!timePattern.test(fieldValue)) {
+    //        validInput = false;
+    //        // Handle validation error for time fields
+    //        ToastDanger('End Rest time is not in the correct format');
+    //    }
+    //});
+    var fieldValue = $('#slotFactor').val();
+    if ($('#autoSlotFactor').val() == '0' || fieldValue !== ''){
+        if (!$.isNumeric(fieldValue) || parseFloat(fieldValue) < 0) {
+            validInput = false;
+            wrong_field.push('autoSlotFactor')
+            ToastDanger('Slot Factor format salah dan wajib jika autoslot factor 0');
+        }
+    }
+    if ($('#autoQA').val() == 'Y'){
+        var fieldValue = $('#qaConfigId').val();
+        if (!$.isNumeric(fieldValue) || parseFloat(fieldValue) < 0) {
+            validInput = false;
+            wrong_field.push('qaConfigId')
+            ToastDanger('qaConfigId format salah dan wajib jika autoQA Y');
+        }
+    }
+    if (!$('#bucket_name').val()) {
+        validInput = false;
+        ToastDanger('Bucket name cannot be null');
+    }
+    var bulkCallInterval = $('#bulkCallInterval').val()
+    if ($.isNumeric(bulkCallInterval) && parseFloat(bulkCallInterval) < 60){
+        validInput = false;
+        ToastDanger('Bulk Call Interval cannot less than 60');
+    }
+    var allowedDialingOrder = {{ allowed_dialing_order|safe }}
+    if ($('#dialing_order').val().length > 0){
+        var inputDialingOrder = $('#dialing_order').val().split(',').map(function (item) {
+            return item.trim(); // Remove leading/trailing spaces
+        });
+
+        var validOrder = inputDialingOrder.every(function (item) {
+            return allowedDialingOrder.includes(item);
+        });
+        if (!validOrder) {
+            ToastDanger('Dialing Order input not allowed');
+            validInput = false;
+        }
+    }
+    if ($('#voicemailCheck').val() == '1'){
+        var fieldValue = $('#voicemailCheckDuration').val();
+        if (!$.isNumeric(fieldValue) || parseFloat(fieldValue) < 0) {
+            validInput = false;
+            wrong_field.push('voicemailCheckDuration')
+            ToastDanger('voicemailCheckDuration format salah wajib numeric');
+        }else {
+            var voicemailCheckDuration = parseInt($('#voicemailCheckDuration').val())
+            if ( voicemailCheckDuration <= 0 || voicemailCheckDuration > 10000){
+                validInput = false;
+                wrong_field.push('voicemailCheckDuration')
+                ToastDanger('voicemailCheckDuration harus > 0 dan <= 10000');
+            }
+        }
+    }
+    var startRestTimesData = [];
+    var endRestTimesData = [];
+    $(".start-rest-time").each(function () {
+        startRestTimesData.push(parseInt($(this).val().replace(':', '')));
+    });
+    $(".end-rest-time").each(function () {
+        endRestTimesData.push(parseInt($(this).val().replace(':', '')));
+    });
+    var schedule = [];
+    for (var i = 0; i < startRestTimesData.length; i++) {
+        var start = startRestTimesData[i];
+        var end = endRestTimesData[i];
+        if (end <= start){
+            validInput = false;
+            ToastDanger('Jam istirahat harus berurut tidak boleh ada yang lebih kecil dari jam sebelumnya');
+        }
+        for (var j = 0; j < schedule.length; j++) {
+            var existingStart = schedule[j][0];
+            var existingEnd = schedule[j][1];
+            if (start <= existingEnd && end >= existingStart) {
+                validInput = false;
+                ToastDanger('Jam istirahat harus berurut tidak boleh ada yang lebih kecil dari jam sebelumnya');
+            }
+        }
+
+        schedule.push([start, end]);
+    }
+    if ($('#automateTimeframe').val() ==='on'){
+        $('.automateTimeframe-row').each(function (index) {
+            const repeatTimes = $("input[name='automateTimeframeRepeatTimes']").eq(index).val()
+            const contactInfoSource = $("select[name='automateTimeframeValue[]']").eq(index).val()
+            const callResultCondition = $("select[name='callResultCondition[]']").eq(index).val()
+            const callList = $("select[name='callList[]']").eq(index).val()
+            // Validate repeat times
+            if (!repeatTimes || !Number.isInteger(parseFloat(repeatTimes)) || parseInt(repeatTimes) < 1 || repeatTimes.length > 2) {
+                validInput = false;
+                if (repeatTimes.length > 2) {
+                    ToastDanger('Please input number less than 100');
+                } else {
+                    ToastDanger('Repeat times input must be an integer with value 1 or more');
+                }
+            }
+            // Validate contact info
+            if (!callResultCondition) {
+                validInput = false;
+                ToastDanger('Call Result Condition cannot be empty');
+            }
+            if (!callList) {
+                validInput = false;
+                ToastDanger('Call List cannot be empty');
+            }
+        });
+    }
+    if ($('#resultStrategies').val() ==='on'){
+        $("input[name='resultStrategiesTitle[]']").each(function () {
+            value = $(this).val()
+            if (value.length==0){
+                validInput = false
+                ToastDanger('Title strategies tidak boleh kosong');
+            }
+        });
+        $("select[name='resultStrategiesAction[]']").each(function () {
+            var selectedValue = $(this).val()
+            var commonAncestor = $(this).closest(".resultStrategies-row");
+            if ($.inArray('2', selectedValue) !== -1){
+                var dnd_day = commonAncestor.find("input[name='resultStrategiesdndDay[]']").val()
+                if (dnd_day.length == 0 || !$.isNumeric(dnd_day) || dnd_day > 30 || dnd_day < 1){
+                    validInput = false
+                    ToastDanger('DndDays strategies tidak boleh kosong harus int dan hanya dalam range 1 - 30');
+                }
+            }
+        });
+    }
+    var numericQAFields = ['qaLimitLength', 'qaLimitRate'];
+    var wrong_qa_field = []
+    numericQAFields.forEach(function (field) {
+        var fieldValue = $('#' + field).val();
+        if (!$.isNumeric(fieldValue) || fieldValue.includes('.')) {
+            validInput = false;
+            wrong_qa_field.push(field)
+        }
+    });
+    if (wrong_qa_field.length > 0){
+        ToastDanger(wrong_qa_field.join(', ') + ' should be a valid number');
+    }
+    if ($('#qaLimitLength').val() < 0) {
+        validInput = false;
+        ToastDanger('value qaLimitLength kurang dari 0');
+    }
+    if ($('#qaLimitRate').val() < 1 || $('#qaLimitRate').val() > 100) {
+        validInput = false;
+        ToastDanger('value qaLimitRate dari range 1 - 100');
+    }
+    return validInput;
+}
+
+function ToastDanger (body_message) {
+        $.toast({
+            heading: 'Failure',
+            text: body_message,
+            position: 'top-right',
+            loaderBg:'#ff6849',
+            icon: 'error',
+            hideAfter: 7500
+        });
+    }
+$('#autoQA').on('change', function(e){
+    var selectedValue = $(this).val();
+    // Do something with the selected value
+    if (selectedValue == 'Y'){
+        $('.qa_config_id_section').show(200)
+    }else{$('.qa_config_id_section').hide(200)}
+})
+$('#resultStrategies').on('change', function(e){
+    var selectedValue = $(this).val();
+    // Do something with the selected value
+    if (selectedValue === 'on'){
+        $('.resultStrategies-config').show(200)
+    }else{$('.resultStrategies-config').hide(200)}
+})
+$('#automateTimeframe').on('change', function(e){
+    var selectedValue = $(this).val();
+    // Do something with the selected value
+    if (selectedValue === 'on'){
+        $('.automateTimeframe-config').show(200)
+    }else{$('.automateTimeframe-config').hide(200)}
+})
+$('#voicemailCheck').on('change', function(e){
+    var selectedValue = parseInt($(this).val());
+    // Do something with the selected value
+    if (selectedValue === 1){
+        $('.voicemail-duration').show(200)
+    }else{$('.voicemail-duration').hide(200)}
+})
+$(document).on("change", "select[name='resultStrategiesTitle[]']", function() {
+    var selectedValue = $(this).val();
+    var commonAncestor = $(this).closest(".resultStrategies-row");
+    commonAncestor.find("select[name='resultStrategiesValue[]'] optgroup").hide()
+    commonAncestor.find("." + selectedValue).show();
+    commonAncestor.find("." + selectedValue + " option:first").prop("selected", true);
+});
+$('.btnDelete').click(function (e){
+    var bucket_name = $(this).attr('bucket_name')
+    $('#confirmation_content').html(
+        '<p>Bucket Name: '+ bucket_name +'</p>'
+    )
+    $('#bucket_name_delete').val(bucket_name)
+    $('#modalConfirmation').modal('show')
+})
+$('.btnEdit').click(function (e){
+    e.preventDefault();
+    var bucket_name = $(this).attr('bucket_name')
+    var valuesString = $(this).data('values');
+    var values = JSON.parse(valuesString.replace(/'/g, '"'));
+    $('.julo-gold-form').html('');
+    $('.ineffective-phone-number').html('');
+    PrepareForm('edit', bucket_name, values)
+})
+$('#btnAdd').click(function (e){
+    e.preventDefault();
+    PrepareForm('add')
+})
+
+$("#btn-add-rest-time").click(function () {
+    var newRow = `
+        <div class="rest-time-row row dynamic-rest-time" style="margin-top: 5px;">
+            <div class="col-md-3">
+                <input type="text" class="form-control start-rest-time" name="start_rest_time[]" placeholder="contoh 12:00">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control end-rest-time" name="end_rest_time[]" placeholder="contoh 20:00">
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-danger remove-rest-time">Hapus</button>
+            </div>
+        </div>
+    `;
+    $(".rest-time-container").append(newRow);
+});
+$("#btn-add-stategies-config").click(function () {
+    $(".resultStrategies-container").append(newRowStrategies);
+});
+$("#btn-add-automate-timeframe").click(function () {
+    const row = $(".automateTimeframe-row")
+    if (row && row.length < 5) {
+        $(".automateTimeframe-container").append(newRowAutomateTimeframeStrategies(row.length + 1));
+    } else {
+        ToastDanger('already reach limit amount of timeframe')
+    }
+});
+$(document).on("change", ".resultStrategiesAction", function(){
+    var selectedValue = $(this).val()
+    var commonAncestor = $(this).closest(".resultStrategies-row");
+    if ($.inArray('2', selectedValue) !== -1){
+        commonAncestor.find(".dndDaySection").show();
+    }else{commonAncestor.find(".dndDaySection").hide();}
+})
+// Remove restultsStrategies Action
+$(document).on("click", ".remove-resultStrategies", function () {
+    var shouldRemove = confirm("Are you sure you want to remove this item?");
+    if (shouldRemove) {
+        $(this).closest(".resultStrategies-row").remove();
+    }
+});
+$(document).on("click", ".remove-automateTimeframe", function () {
+    var shouldRemove = confirm("Are you sure you want to remove this item?");
+    if (shouldRemove) {
+        $(this).closest(".automateTimeframe-row").remove();
+        $(".automateTimeframeTitle").each(function(index,element) {
+            $(element).text(`Timeframe ${index + 1}`)
+        })
+    }
+});
+// Remove Rest Time Row
+$(document).on("click", ".remove-rest-time", function () {
+    var shouldRemove = confirm("Are you sure you want to remove this item?");
+    if (shouldRemove) {
+        $(this).closest(".rest-time-row").remove();
+    }
+});
+$('#btnOkToDelete').click(function (e) {
+    $(this).text('Waiting ...').addClass('disabled').attr('disabled', 'disabled')
+    $.ajax({
+        url: "{%url 'minisquad:ai_rudder_task_configuration_api' %}/", // the endpoint
+        type: "POST", // http method
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            bucket_name:$('#bucket_name_delete').val(),
+            operation: 'delete'
+        },
+        success: function (json) {
+            if (json.status == "success") {
+                $('#modalConfirmation').modal('hide')
+                $('#modal_content').html(json.messages)
+                $('#modalMessage').modal('show')
+                $(this).text('Hapus').removeClass('disabled').attr("disabled", false)
+                location.reload();
+            } else {
+                ToastDanger(json.messages);
+            }
+        },
+    })
+})
+
+
+// Function to combine two dictionaries
+function combineDictionaries(dictA, dictB) {
+    var combinedDict = {};
+
+    // Iterate through the properties of dictA and add them to combinedDict
+    for (var key in dictA) {
+        if (dictA.hasOwnProperty(key)) {
+            combinedDict[key] = dictA[key];
+        }
+    }
+
+    // Iterate through the properties of dictB and add them to combinedDict
+    for (var key in dictB) {
+        if (dictB.hasOwnProperty(key)) {
+            combinedDict[key] = dictB[key];
+        }
+    }
+
+    return combinedDict;
+}
+
+$('#btnSubmit').click(function (e) {
+    if (is_validated_input() == false){
+        return
+    }
+    var startTimes = [];
+    var endTimes = [];
+
+    // Iterate through the input fields and collect values
+    $(".start-rest-time").each(function () {
+        startTimes.push($(this).val());
+    });
+
+    $(".end-rest-time").each(function () {
+        endTimes.push($(this).val());
+    });
+
+    // Combine startTimes and endTimes into the desired format
+    var result = [];
+
+    for (var i = 0; i < startTimes.length; i++) {
+        if (startTimes[i] && endTimes[i]) {
+            result.push([startTimes[i], endTimes[i]]);
+        }
+    }
+    var dialing_order = $('#dialing_order').val().split(",")
+    if ($('#dialing_order').val().length == 0){
+        dialing_order = []
+    }
+    var julo_gold_status = $('input[name="juloGoldStatus"]:checked').val();
+    var voicemailRedialValue = document.getElementById("voicemailRedial").checked ? 1 : 0;
+    var voicemailCheck = parseInt($('#voicemailCheck').val())
+    var bucket_name = $('#bucket_name').val()
+    var bucketNameLower = bucket_name.toLowerCase()
+    var data_to_save = {
+        "start_time":$('#start_time').val(),
+        "end_time":$('#end_time').val(),
+        "rest_times":result,
+        "autoSlotFactor":$('#autoSlotFactor').val(),
+        "slotFactor": $('#slotFactor').val(),
+        "callInterval":$('#callInterval').val(),
+        "acwTime":$('#acwTime').val(),
+        "maxLostRate":$('#maxLostRate').val(),
+        "contactNumberInterval":$('#contactNumberInterval').val(),
+        "ringLimit":$('#ringLimit').val(),
+        "dialingMode":$('#dialingMode').val(),
+        "repeatTimes":$('#repeatTimes').val(),
+        "bulkCallInterval":$('#bulkCallInterval').val(),
+        "dialingOrder": dialing_order,
+        "autoQA":$('#autoQA').val(),
+        "qaConfigId":$('#qaConfigId').val(),
+        "resultStrategies":$('#resultStrategies').val(),
+        "resultStrategiesConfig": [],
+        "qaLimitLength": $('#qaLimitLength').val(),
+        "qaLimitRate": $('#qaLimitRate').val(),
+        "timeFrameStatus": $('#automateTimeframe').val(),
+        "timeFrames": [],
+        "julo_gold_status": julo_gold_status,
+        "voicemailRedial": voicemailRedialValue,
+        "voicemailCheck": voicemailCheck,
+    }
+    if (!(bucketNameLower.includes('grab') || bucketNameLower.includes('dana'))) {
+        var is_ineffective_refresh_value = document.getElementById("is_ineffective_refresh").checked ? 1 : 0;
+        var unreachable_hangup_ids_val = $('#unreachable_hangup_ids').val().split(",")
+        if ($('#unreachable_hangup_ids').val().length == 0){
+            unreachable_hangup_ids_val = []
+        } else {
+            var unreachable_hangup_ids_val_int = unreachable_hangup_ids_val.map(Number);
+            unreachable_hangup_ids_val = unreachable_hangup_ids_val_int
+        }
+        data_to_save["is_ineffective_refresh"] = is_ineffective_refresh_value
+        data_to_save["unreachable_hangup_ids"] = unreachable_hangup_ids_val
+        data_to_save["consecutive_days"] = parseInt($('#consecutive_days').val())
+        data_to_save["threshold_refresh_days"] = parseInt($('#threshold_refresh_days').val())
+    }
+    if ($('#autoQA').val() !== 'Y'){
+        delete data_to_save["qaConfigId"];
+    }
+    if ($('#resultStrategies').val() === 'on'){
+        var resultStrategiesConfig = []
+        var title = []
+        var value = []
+        var action = []
+        $("select[name='resultStrategiesTitle[]']").each(function () {
+            title.push($(this).val())
+        });
+        $("select[name='resultStrategiesValue[]']").each(function () {
+            value.push($(this).val())
+        });
+        $("select[name='resultStrategiesAction[]']").each(function () {
+            var selectedValue = $(this).val()
+            var numberArray = $.map(selectedValue, function(value) {
+                return parseInt(value, 10);
+            });
+            var action_converted = {
+                "action": numberArray
+            }
+            var commonAncestor = $(this).closest(".resultStrategies-row");
+            if ($.inArray('2', selectedValue) !== -1){
+                var dnd_day = commonAncestor.find("input[name='resultStrategiesdndDay[]']").val()
+                action_converted['dncDay'] = parseInt(dnd_day)
+            }
+            action.push(action_converted)
+        });
+        for (var i = 0; i < action.length; i++) {
+            var results_dict = {
+                "title": title[i],
+                "value": value[i],
+                "oper": "==",
+            }
+
+            resultStrategiesConfig.push(combineDictionaries(results_dict, action[i]));
+        }
+        data_to_save["resultStrategiesConfig"] = resultStrategiesConfig
+    }
+    const timeFrames = []
+    $('.automateTimeframe-row').each(function (index) {
+        const repeatTimes = $("input[name='automateTimeframeRepeatTimes']").eq(index).val()
+        const callResultCondition = $("select[name='callResultCondition[]']").eq(index).val()
+        const callList = $("select[name='callList[]']").eq(index).val()
+        if (!repeatTimes || !callResultCondition || !callList){
+            return
+        }
+        timeFrames.push({
+            "repeatTimes": parseInt(repeatTimes),
+            "callResultCondition": callResultCondition,
+            "callList": callList,
+        })
+    })
+    if (voicemailCheck == 1){
+        data_to_save["voicemailCheckDuration"] = parseInt($('#voicemailCheckDuration').val())
+        data_to_save["voicemailHandle"] = parseInt($('#voicemailHandle').val())
+    }
+    data_to_save["timeFrameStatus"] = $('#automateTimeframe').val() || "off"
+    data_to_save["timeFrames"] = timeFrames
+    $(this).text('Waiting ...').addClass('disabled').attr('disabled', 'disabled')
+    $.ajax({
+        url: "{%url 'minisquad:ai_rudder_task_configuration_api' %}/", // the endpoint
+        type: "POST", // http method
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            bucket_name:$('#bucket_name').val(),
+            operation: $('#operation').val(),
+            data_to_save: JSON.stringify(data_to_save)
+        },
+        success: function (json) {
+            if (json.status == "success") {
+                $('#modalForm').modal('hide')
+                $('#modal_content').html(json.messages)
+                $('#modalMessage').modal('show')
+                $(this).text('Simpan').removeClass('disabled').attr("disabled", false)
+                location.reload();
+            } else {
+                ToastDanger(json.messages);
+            }
+        },
+    })
+})
+{% endblock %}

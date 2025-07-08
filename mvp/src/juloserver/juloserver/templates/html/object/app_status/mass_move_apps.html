@@ -1,0 +1,118 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+
+
+{% load static from staticfiles %}
+{% block custom_link %}
+  <link rel="stylesheet" href="{% static 'theme/plugins/bower_components/dropify/dist/css/dropify.min.css' %}">
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block list_title %}Upload CSV{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+{% load unit %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-6 col-xs-12 col-md-offset-3">
+    <form class="form-horizontal form-material" id="img_upload_form" role="form" enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      <h3 class="box-title m-t-10 m-b-0">Pastikan format file adalah CSV</h3>
+      <small>file csv harus sesuai dengan template yg ditentukan</small>
+
+      <p class="m-t-20">
+
+        Upload CSV File :
+        <input type="file" id="id_csv_file" name="csv_file" class="dropify" />
+        <span class="help-block h5 text-white bg-danger">
+            {% if message %}
+                {{ message }}
+            {% endif %}
+          </span>
+        <div class="form-group text-center m-t-20">
+          <div class="col-xs-12">
+            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Upload</button>
+          </div>
+        </div>
+       </p>
+    </form>
+  </div>
+</div>
+
+<h3>list hasil proses</h3>
+<div class="row m-t-10 m-b-10">
+    <table class="table table-striped">
+        <tr><th>id</th><th>filename</th><th>status</th><th>result</th><th>agent</th></tr>
+        {% for row in data %}
+            <tr>
+                <td>{{row.id}}</td>
+                <td>{{row.filename}}</td>
+                <td>{{row.status}}</td>
+                <td><pre>{{row.result}}</pre></td>
+                <td>{{row.agent}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
+
+
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+      // Basic
+      $('.dropify').dropify();
+
+      // Translated
+      $('.dropify-fr').dropify({
+          messages: {
+              default: 'Glissez-déposez un fichier ici ou cliquez',
+              replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+              remove:  'Supprimer',
+              error:   'Désolé, le fichier trop volumineux'
+          }
+      });
+
+      // Used events
+      var drEvent = $('#input-file-events').dropify();
+
+      drEvent.on('dropify.beforeClear', function(event, element){
+          return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+      });
+
+      drEvent.on('dropify.afterClear', function(event, element){
+          alert('File deleted');
+      });
+
+      drEvent.on('dropify.errors', function(event, element){
+          console.log('Has Errors');
+      });
+
+      var drDestroy = $('#input-file-to-destroy').dropify();
+      drDestroy = drDestroy.data('dropify')
+      $('#toggleDropify').on('click', function(e){
+          e.preventDefault();
+          if (drDestroy.isDropified()) {
+              drDestroy.destroy();
+          } else {
+              drDestroy.init();
+          }
+      })
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+  });
+{% endblock %}
+
+
+{% block script_additional %}
+    <script src="{% static 'theme/nav-full/js/mask.js' %}"></script>
+    <!-- jQuery file upload -->
+    <script src="{% static 'theme/plugins/bower_components/dropify/dist/js/dropify.min.js' %}"></script>
+{% endblock %}

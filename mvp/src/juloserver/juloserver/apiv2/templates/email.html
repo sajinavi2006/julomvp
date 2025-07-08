@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 15px;
+            color: #404040;
+            background: #f1f1f1;
+        }
+
+        p {
+            margin: 0;
+            float: left;
+            width: 100%;
+        }
+
+        a {
+            color: #0077a9;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .container {
+            width: 600px;
+            margin: auto;
+
+        }
+
+        .cover {
+            background: #fff;
+            padding: 15px;
+            float: left;
+            width: 100%;
+        }
+
+        .top {
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #d8d8d8;
+        }
+
+        .top_right {
+            float: right;
+
+        }
+
+        .top_right p {
+            margin-bottom: 0;
+        }
+
+        .top_right span {
+            font-weight: bold;
+        }
+
+        .table_content {
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .table_content p {
+            margin-bottom: 5px;
+        }
+
+        .table_content span {
+            float: left;
+        }
+
+        .table_content .left {
+            width: 25%;
+            font-weight: normal;
+        }
+
+        .table_content .mid {
+            width: 5%;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .table_content .right {
+            width: 70%;
+            font-weight: normal;
+        }
+
+        .bottom {
+            float: left;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        h6 {
+            font-weight: bold;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .content {
+            float: left;
+            width: 100%;
+            line-height: 28px;
+            margin-bottom: 25px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+        }
+
+        .content span {
+            font-weight: bold;
+        }
+
+        .content li {
+            list-style: disc;
+            margin-bottom: 15px;
+        }
+
+        .footer_content {
+            float: left;
+            width: 100%;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #d8d8d8;
+        }
+
+        .footer_content .f_top {
+            float: left;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .f_mid {
+            float: left;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .f_bttm {
+            float: left;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            max-width: 175px;
+            margin-bottom: 25px;
+        },
+
+    </style>
+</head>
+
+<body>
+<img src="{{header_image}}" style="width:100%"/>
+    <div class="container">
+        <div class="cover">
+            <div class="top">
+                <div class="top_right">
+                    <p>Jakarta, <span>{{now}}</span></p>
+                </div>
+            </div>
+            <div class="table_content">
+                <p>
+                    <span class="left">Nomor</span>
+                    <span class="mid">:</span>
+                    <span class="right">{{application_xid}} - 1</span>
+                </p>
+                <p>
+                    <span class="left">Lampiran</span>
+                    <span class="mid">:</span>
+                    <span class="right">1 (satu) lembar</span>
+                </p>
+                <p>
+                    <span class="left">Perihal</span>
+                    <span class="mid">:</span>
+                    <span class="right">Surat Peringatan Pertama
+                    <br>
+                    <b> Mohon ditindak lanjuti selambat-lambatnya 7 (tujuh) x 24 jam sejak tanggal surat ini</b>
+</span>
+                </p>
+            </div>
+            <div class="bottom">
+                <p>Kepada Yth.</p>
+                {{name}}
+            </div>
+
+            <div class="content">
+                <p>
+                Dengan Hormat,
+                </p>
+                <p>
+                    Menunjuk Surat Perjanjian Hutang Piutang (“SPHP”) saudara Nomor <span>{{application_xid}}</span> yang
+                    telah
+                    ditandatangani pada tanggal <span>{{sphp_accepted_ts}}</span> atas nama <span>{{fullname}}</span> dengan
+                    jumlah
+                    plafon kredit
+                    sebesar Rp. <span>{{loan_amount}}</span> <a href="{{url}}">(terlampir bersama surat ini)</a> dengan jangka waktu sesuai yang
+                    tercantum
+                    dalam SPHP ,
+                    bersama ini disampaikan bahwa dalam catatan administrasi perkreditan kami, saudara belum melakukan
+                    pembayaran atas
+                    kewajiban saudara yang akan atau telah jatuh tempo. Kami telah berusaha melakukan upaya-upaya untuk
+                    menangani
+                    keterlambatan atas kewajiban debitur seperti melakukan panggilan melalui telepon, email, sms yang
+                    bertujuan untuk
+                    melakukan penagihan.
+                    Sebagai
+                    informasi perlu kami sampaikan bahwa saudara telah menunggak sebanyak <span> <b>Rp.{{total_sum}}</b></span>
+
+                </p>
+
+                <p>
+
+                     <div class="table_content">
+                     Berikut informasi pembayaran:
+                <p>
+                    <span class="left">Bank Penerima</span>
+                    <span class="mid">:</span>
+                    <span class="right">{{julo_bank_name}}
+</span><br>
+
+
+ <span class="left">Nomor Rekening</span>
+                    <span class="mid">:</span>
+                    <span class="right">{{julo_bank_account_number}}
+</span><br>
+
+ <span class="left">Total yang harus dibayar</span>
+                    <span class="mid">:</span>
+                    <span class="right"> <b>Rp {{total_sum}} </b>
+</span><br>
+
+                </p>
+
+
+            </div>
+
+                   Untuk menghindari beban kewajiban yang lebih besar karena denda bunga yang terakumulasi, maka kami menghimbau saudara  untuk <b>segera menyelesaikan seluruh tunggakan  diatas selambat-lambatnya 7 (tujuh) x 24 jam sejak tanggal surat ini dan  Wajib memberikan Bukti Pembayaran/Bukti transfer kepada Kami.</b> Jika pelunasan tunggakan tidak dilaksanakan, maka kami tidak bertanggung jawab atas penambahan beban kewajiban saudara dan akan mengambil tindakan yang lebih tegas.  Mohon abaikan surat peringatan ini jika telah melakukan pelunasan tunggakan.
+<br>
+<br>
+Untuk informasi lebih lanjut, silahkan menghubungi Petugas Kami di Nomor Whatsapp CS  di 0819 3110 0452 atau email korespondensi di  collections@julo.co.id.
+
+
+<br>
+<br>
+
+Demikian disampaikan untuk menjadi perhatian saudara.
+
+
+                </p>
+                <p>
+                <img style="width:155px;margin-left:-24px;" src="{{sign_image}}">
+                </p>
+
+            </div>
+            <div class="footer_content">
+
+                <div class="f_mid">
+                    <p>
+                     Departemen Hukum<br/>
+                    PT. Julo Teknologi Finansial <br/>
+
+                     legal.dept@julo.co.id<br/>
+                     Berdasarkan Kuasa dari Perusahaan Pemberi Pinjaman
+
+                     </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+<img src="{{footer_image}}" style="width: 100%;"/>
+
+
+</body>
+
+</html>

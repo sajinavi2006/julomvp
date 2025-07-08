@@ -1,0 +1,71 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat:400,700" />
+    <mj-attributes>
+      <mj-all font-family="Montserrat, sans-serif" />
+    </mj-attributes>
+  </mj-head>
+    <mj-body>
+      <mj-section>
+        <mj-column>
+          <mj-image src="https://julocampaign.julo.co.id/pede_campaign/Creative%20PEDE.png">
+          </mj-image>
+          <mj-text>Halo {{fullname_with_title}}!</mj-text>
+          <mj-text line-height="20px">
+                JULO dan PEDE menghadirkan kesempatan menarik untuk meringankan tagihan Anda.
+                Caranya sangat mudah, lunasi tagihan Anda di antara tanggal 17-Okt-19 hingga 5-Nov-19 dan
+                dapatkan keuntungan berupa:
+          </mj-text>
+          <mj-text padding-left="50px"><span style="color:green">✓ 100% </span>Penghapusan Bunga</mj-text>
+          <mj-text padding-left="50px"><span style="color:green">✓ 100% </span>Penghapusan Denda Keterlambatan</mj-text>
+          <mj-text line-height="20px">Yuk, bebaskan dirimu dari beban hutang sekarang juga!!!<br>
+             Jangan lewatkan kesempatan menarik ini dengan segera lunasi tagihan Anda.
+          </mj-text>
+          <mj-text line-height="20px">Detail Tagihan Anda -
+              <ul style="margin-top: 0px;">
+                <li>Tagihan – IDR {{principal_amount}}</li>
+                <li>Bunga – IDR {{interest_amount}}</li>
+                <li>Denda Keterlambatan– IDR {{late_fee_amount}}</li>
+                <li>Total - IDR {{due_amount}}</li>
+              </ul>
+          </mj-text>
+          <mj-text line-height="20px">
+            <strong>Total tagihan Anda adalah IDR {{due_amount}}. Tapi, Anda hanya perlu membayar sebesar IDR {{principal_amount}} saja.</strong><br>
+            Denda keterlambatan dan bunga yang tertera dalam aplikasi PEDE akan kami hapuskan dalam waktu 7 hari kerja jika Anda melunasi tagihan paling lambat 5-Nov-2019!
+          </mj-text>
+          <mj-text line-height="25px" text-decoration="underline" padding-bottom="0px">
+            Berikut informasi pembayaran:
+          </mj-text>
+            <mj-table padding-top="0px">
+              <tr>
+                <td><strong>Bank Tujuan</strong></td>
+                <td>:{{julo_bank_name}}</td>
+              </tr>
+              <tr>
+                <td><strong>Nomor Virtual Account</strong></td>
+                <td>:{{julo_bank_account_number}}</td>
+              </tr>
+              <tr>
+                <td><strong>Atau Indomaret dengan nomor transaksi</strong></td>
+                <td>:{{indomaret_va}}</td>
+              </tr>
+              <tr>
+                <td><strong>Total yang harus dibayar</strong></td>
+                <td>:IDR {{principal_amount}}</td>
+              </tr>
+            </mj-table>
+            <mj-text line-height="20px">Untuk informasi lebih lanjut, silahkan menghubungi petugas Kami di:
+              <ul style="margin-top: 0px; margin-bottom: 0px">
+                <li>Whatsapp - <strong>0819 3110 0452</strong> atau</li>
+                <li>Email - promotions@julo.co.id</li>
+              </ul>
+            </mj-text>
+            <mj-button background-color="#0E9AD0" href="https://play.google.com/store/apps/details?id=com.pede.emoney&hl=in">Bayar Sekarang!</mj-button>
+            <mj-text font-size="10px" padding-top="0px">Dalam kontes ini, Anda diminta untuk membayar sebesar {{principal_amount}}
+            untuk memenuhi syarat. Bagaimanapun, jika Anda membayar lebih dari {{principal_amount}},
+            kami tidak dapat memberikan pengembalian dana.
+            </mj-text>
+          </mj-column>
+      </mj-section>
+    </mj-body>
+  </mjml>

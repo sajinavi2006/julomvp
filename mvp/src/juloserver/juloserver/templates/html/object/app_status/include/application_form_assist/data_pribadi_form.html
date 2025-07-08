@@ -1,0 +1,49 @@
+<div class="form-group">
+    <label for="full_name">Nama Lengkap</label>
+    <input type="text" class="form-control form-control-afs" onkeyup="validate_the_form('#fullname');" id="fullname" value="{{ app_obj.fullname|default:''|safe }}" placeholder="Masukkan nama lengkap">
+</div>
+
+<div class="form-group">
+    <label for="birth_place">Tempat lahir</label>
+    <input type="text" class="form-control form-control-afs" onkeyup="validate_the_form('#birth_place');" onchange="validate_the_form('#birth_place');" id="birth_place" value="{{ app_obj.birth_place|default:''|safe }}" placeholder="Masukkan tempat lahir">
+</div>
+
+<div class="form-group">
+    <label for="dob">Tanggal lahir</label>
+    <input type="text" class="form-control form-control-afs" id="dob" onchange="validate_the_form('#dob');" maxlength="10" value="{{ app_obj.dob|default:''|safe }}" placeholder="Pilih tanggal lahir">
+</div>
+
+<div class="form-group">
+    <div id="section_message_err_gender">
+        <label for="gender">Jenis kelamin</label> <br>
+        <div class="form-check form-check-inline" style="display:inline-block;">
+          <input class="form-check-input" type="radio" name="gender" id="gender_pria" onchange="validate_standard_form('#gender');" value="Pria" {% if app_obj.gender == 'Pria' %} checked {% endif %}>
+          <label class="form-check-label" for="gender_pria">
+            Pria
+          </label>
+        </div>
+        &nbsp;
+        <div class="form-check form-check-inline" style="display:inline-block;">
+          <input class="form-check-input" type="radio" name="gender" id="gender_wanita" onchange="validate_standard_form('#gender');" value="Wanita" {% if app_obj.gender == 'Wanita' %} checked {% endif %}>
+          <label class="form-check-label" for="gender_wanita">
+            Wanita
+          </label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="mother_maiden_name">Nama Lengkap Ibu Kandung</label>
+    <input type="text" class="form-control form-control-afs" id="mother_maiden_name" onkeyup="validate_the_form('#mother_maiden_name')" value="{{ app_obj.mother_maiden_name|default:''|safe }}" placeholder="Masukkan nama lengkap ibu kandung">
+</div>
+
+<div class="form-group">
+    <label for="marital_status">Status Sipil</label>
+    <select id="marital_status" class="form-control form-control-afs" onchange="validate_the_form('#marital_status')">
+        <option>Pilih</option>
+        <option value="Lajang" {% if app_obj.marital_status == 'Lajang' %} selected {% endif %}>Lajang</option>
+        <option value="Menikah" {% if app_obj.marital_status == 'Menikah' %} selected {% endif %}>Menikah</option>
+        <option value="Cerai" {% if app_obj.marital_status == 'Cerai' %} selected {% endif %}>Cerai</option>
+        <option value="Janda / duda" {% if app_obj.marital_status == 'Janda / duda' %} selected {% endif %}>Janda / duda</option>
+    </select>
+</div>

@@ -1,0 +1,55 @@
+{% load default unit %}
+<table class="table">
+  <thead>
+    <tr>
+      <th width="15%">Waktu</th>
+      <th width="70%">Content / Catatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%  for obj in skiptrace_history_list %}
+      {%if obj.call_result_id != 1 %}
+         <tr class="success">
+          <td>
+            <label class="label label-warning m-b-10">
+              {{ obj.cdate|date:"d M Y H:i:s" }}
+            </label><br>
+            <label class="label label-danger m-b-10">
+              Action
+            </label>
+          </td>
+          <td>
+            Agent : <code>{{ obj.agent_name|default:'-'|safe }}</code><br/>
+            <strong>{{ obj.call_result.name|default:'-'|safe }}</strong><br/>
+            {%if obj.callback_time and obj.call_result.name == 'RPC - Call Back' %}
+              Call Back Time : {{ obj.callback_time|default:'-'|safe }}<br/>
+            {% endif %}
+            Phone : {{ obj.skiptrace.phone_number|no_hp|default:'-'|safe }}<br/>
+            Source : {{ obj.skiptrace.contact_source|default:'-'|safe }}<br/>
+            Contact-Person : {{ obj.spoke_with|default:'-'|safe }}<br/>
+            App-Id : {{ obj.application_id|default:'-'|safe }}<br/>
+            {%if obj.account_payment_id %}
+            Acc-id: {{ obj.account_id|default:'-'|safe }}<br/>
+            Acc-pmt-id : {{ obj.account_payment_id|default:'-'|safe }}<br/>
+            {% endif %}
+            {%if obj.loan_id %}
+              Loan-Id : {{ obj.loan_id|default:'-'|safe }}<br/>
+              Payment-Id : {{ obj.payment_id|default:'-'|safe }}<br/>
+            {% endif %}
+            Start : {{ obj.start_ts|date:"d M Y H:i:s"|safe }}<br/>
+            End : {{ obj.end_ts|date:"d M Y H:i:s"|safe }}<br/>
+            {%if obj.non_payment_reason %}
+              Non Payment Reason : {{ obj.non_payment_reason|default:'-'|safe }}<br/>
+            {% endif %}
+          </td>
+        </tr>
+      {% endif %}
+    {% empty %}
+      <tr>
+        <td colspan="2">
+          <span> Tidak ada Data </span>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,319 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+{% load checkusergroup from common %}
+
+{% block css_inside %}
+.disabled {
+  pointer-events: none;
+}
+.pagination > li > a:focus {
+    background-color: #fff;
+}
+{% endblock %}
+
+{% block custom_css %}
+    <!-- Static Css -->
+    <link href="{% static 'theme/nav-mini/css/campaign_automation_custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block list_title %}
+<div class="row" style="margin-bottom: 40px;">
+    <div class="col-md-3">
+        <h3 class="box-title m-b-0 green" style="height: 34px; padding: auto; align-items: center;">R4-R5-R6 Cohort Campaign</h3>
+    </div>
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-3 text-right">
+        <a href="{% url 'cohort_campaign_automation:create_cohort_campaign_automation' %}" title="Create Campaign">
+            <button class="btn btn-success btn-rounded m-b-5 blue"> Buat Campaign </button>
+        </a>
+    </div>
+</div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+{% block content-list %}
+<div id="cohort-campaign-list" class="a-table">
+    <table class="table toggle-circle table-new-clean" :data-page-size="max_row_per_page">
+        <thead>
+            <tr>
+            <th class="large-width p-l-20" scope="col"><strong>Nama Campaign</strong></th>
+            <th class="large-width" scope="col"><strong>Dibuat Oleh</strong></th>
+            <th class="large-width" scope="col"><strong>Tanggal Mulai</strong></th>
+            <th class="large-width" scope="col"><strong>Tanggal Berakhir</strong></th>
+            <th class="large-width" scope="col"><strong>Type Program</strong></th>
+            <th class="large-width" scope="col"><strong>Status</strong></th>
+            <th class="large-width" scope="col"><strong>Action</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            <template v-for="(cohort_automation, index) in cohort_automation_list">
+                <tr class="parent-row">
+                    <td class="p-l-20"> 
+                        <div class="campaign-name-link">
+                            <% Truncate(cohort_automation.campaign_name) %>
+                        </div> 
+                    </td>
+                    <td>
+                        <div v-if="cohort_automation.created_by">
+                            <% cohort_automation.created_by %>
+                        </div>
+                        <div v-else>
+                            -
+                        </div>
+                    </td>
+                    <td><% (cohort_automation.start_date) | formatDateCampaign %></td>
+                    <td><% (cohort_automation.end_date) | formatDateCampaign %></td>
+                    <td>
+                        <div v-if="cohort_automation.program_type">
+                            <% cohort_automation.program_type %>
+                        </div>
+                        <div v-else>
+                            -
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="cohort_automation.status === 'Scheduled'" class="status scheduled">
+                            <span><i class="fa fa-bell fa-fw"></i><% cohort_automation.status %></span>
+                        </div>
+                        <div v-else-if="cohort_automation.status === 'Running'" class="status running">
+                            <span><i class="fa fa-bell fa-fw"></i><% cohort_automation.status %></span>
+                        </div>
+                        <div v-else-if="cohort_automation.status === 'Done'" class="status done">
+                            <span><i class="fa fa-check-circle fa-fw"></i><% cohort_automation.status %></span>
+                        </div>
+                        <div v-else-if="cohort_automation.status === 'Failed' || cohort_automation.status === 'Canceled'" class="status failed" status="failed">
+                            <span><i class="fa fa-times-circle fa-fw"></i><% cohort_automation.status %></span>
+                        </div>
+                        <div v-else><% cohort_automation.status %></div>
+                    </td>
+                    <td>
+                        <i v-on:click="ShowActions(cohort_automation.campaign_name)" class="fa fa-ellipsis-h fa-fw action" style="cursor: pointer"></i>
+                        <div class="action-list" :id="(cohort_automation.campaign_name)" style="display: none;">
+                            <div class="bottom-action">
+                                <div v-if="cohort_automation.status === 'Scheduled' || cohort_automation.status === 'Failed' || cohort_automation.status === 'Canceled'">
+                                    <div v-on:click="EditCohortCampaign(cohort_automation.campaign_name)" style="cursor: pointer"><i class="fa fa-pencil-square-o fa-fw"></i>Edit</div>
+                                </div>
+                                <div v-if="cohort_automation.status === 'Scheduled'">
+                                    <div v-on:click="CancelCohortCampaign(cohort_automation.campaign_name)" class="delete" style="cursor: pointer"><i class="fa fa-trash fa-fw"></i>Cancel</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </template>
+            <!-- iF no data, can show no data row-->
+        </tbody>
+    </table>
+    <tfoot>
+        <div v-if="cohort_automation_list.length < 1">
+            <tr>
+                <td colspan="18">
+                    <div class="alert alert-info empty-info" align="center">
+                        <strong>Info!</strong> Tidak ada Data.
+                    </div>
+                </td>
+            </tr>
+        </div>
+        <tr>
+            <td>
+                <div class="text-center">
+                    <ul class="pagination">
+                        <li v-for="(n, index) in page_array" v-bind:class="GetClassPagination(n)" v-on:click="ChoosePage(n)">
+                            <a href="#" v-if="n == 0">...</a>
+                            <a href="#" v-else><% n %></a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tfoot>
+</div>
+<div class="status-message failed" style="background:#404040; color:white; width:290px; position:absolute; padding:16px; border-radius: 8px;">
+    <span class="arrow-up"></span><div style="font-size:16px; font-weight:bold">Mengapa Status Bisa Gagal?</div><br>Mohon cek kembali hal di bawah ini:<br><ul><li>Account ID tidak boleh masuk dalam campaign lainnya</li><li>Data yang di-upload di CSV ada yang tidak sesuai</li><li>Tidak mendaftarkan account yang tidak dapat menerima promo</li></ul>
+</div>
+<link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block script_additional %}
+<!-- Plugin JavaScript -->
+<script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+<!-- vue js -->
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type>"text/javascript"
+var CohortAutomationList = new Vue({
+    el: '#cohort-campaign-list',
+    delimiters: ["<%", "%>"],
+    data: {
+        csrftoken: '{{csrf_token}}',
+        cohort_automation_list: '',
+        page_array: [],
+        current_page: 0,
+        page_choose: 1,
+        start_index: 0,
+        max_row_per_page: 25,
+        count_page: 0,
+    },
+    beforeMount() {
+        self = this;
+        var message = '{{ request.GET.message }}';
+        self.GetCohortAutomationList();
+        if (message) {
+            if (message == 'status_changed') {
+                var element = document.getElementById("success-approve");
+                element.style.display = "block";
+            } else {
+                swal("", '{{ request.GET.message }}', "warning");
+            }
+        }
+    },
+    methods: {
+        GetCohortAutomationList: function() {
+            var self = this
+            $.ajax({
+                url: "{%url 'cohort_campaign_automation:ajax_cohort_campaign_automation_list_view' %}",
+                type: "GET",
+                data: {
+                    page: self.page_choose,
+                    max_per_page: self.max_row_per_page
+                },
+                success: function(json) {
+                    if(json.status == 'success') {
+                        self.cohort_automation_list = json.cohort_automation_list
+                        self.count_page = json.count_page
+                        self.current_page = json.current_page
+                        self.UpdatePageArray()
+                    } else {
+                        swal("", json.message, "warning");
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    swal("", err, "error");
+                }
+            })
+        },
+        ShowActions: function(campaign_name) {
+            actionList = document.getElementById(campaign_name);
+            allActionList = document.querySelectorAll('.action-list');
+
+            if (actionList.style.display === "none") {
+                allActionList.forEach((element) => {
+                    element.style.display = "none";
+                });
+                actionList.style.display = "block";
+            } else {
+                actionList.style.display = "none";
+            }
+        },
+        GetUrl: function(url) {
+            if (url === "") {
+                return '#'
+            } else {
+                return url;
+            }
+        },
+        GetClassPagination: function(index) {
+            allActionList = document.querySelectorAll('.action-list');
+            allActionList.forEach((element) => {
+                element.style.display = "none";
+            });
+            if (index == 0) return {'disabled': 1};
+            return {
+                'active': this.current_page == index
+            }
+        },
+        ChoosePage: function(page) {
+            this.page_choose = page
+            this.start_index = (page - 1) * this.max_row_per_page
+            this.GetCohortAutomationList()
+        },
+        UpdatePageArray: function() {
+            var self = this;
+            if (self.count_page == 1)
+                return;
+            self.page_array = [1];
+            if (self.current_page > 4)
+                self.page_array.push(0);
+            if (self.current_page > 3)
+                self.page_array.push(self.current_page - 2);
+            if (self.current_page > 2)
+                self.page_array.push(self.current_page - 1);
+            if (self.current_page > 1)
+                self.page_array.push(self.current_page);
+            if (self.current_page < self.count_page)
+                self.page_array.push(self.current_page + 1);
+            if (self.current_page + 1 < self.count_page)
+                self.page_array.push(self.current_page + 2);
+            if (self.current_page + 2 < self.count_page)
+                self.page_array.push(0);
+        },
+        CancelCohortCampaign: function(campaign_name) {
+            self = this
+            $.ajax({
+                url: "{%url 'cohort_campaign_automation:cancel_status_cohort_campaign_automation' %}",
+                type: "POST",
+                data: {
+                    campaign_name: campaign_name,
+                    csrfmiddlewaretoken: self.csrftoken
+                },
+                statusCode: {
+                    400: function(json) {
+                        self.SwalWarning(json['responseJSON'].message)
+                    },
+                },
+                success: function(json) {
+                    if (json.status == "success") {
+                        self.SwalSuccess(json.message)
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    self.SwalError(err)
+                }
+            })
+        },
+        EditCohortCampaign: function(campaign_name) {
+            $(location).attr('href', "{%url 'cohort_campaign_automation:edit_cohort_campaign_automation' 'campaign_name' %}".replace(/campaign_name/, campaign_name));
+        },
+        Truncate(value) {
+            var length = 25
+            if (value.length > length) {
+                return value.substring(0, length) + "...";
+            } else {
+                return value;
+            }
+        },
+        SwalSuccess: function(message) {
+            swal({
+                title: "",
+                text: message,
+                type: "success"
+            }, function() {
+                window.location.reload();
+            });
+        },
+        SwalWarning: function(message) {
+            swal({
+                title: "",
+                text: message,
+                type: "warning"
+            }, function() {
+                window.location.reload();
+            });
+        },
+        SwalError: function(message) {
+            swal({
+                title: "",
+                text: message,
+                type: "error"
+            }, function() {
+                window.location.reload();
+            });
+        }
+    }
+})
+</script>
+{% endblock %}

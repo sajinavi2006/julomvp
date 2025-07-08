@@ -1,0 +1,17 @@
+{% extends "admin/change_form.html" %}
+{% load admin_static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+  <link rel="stylesheet" href="{% static 'default/css/loyalty/loyalty.css' %}">
+{% endblock %}
+
+
+{% block admin_change_form_document_ready %}
+  {{ block.super }}
+  <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+  <script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+  <script src="{% static 'default/js/loyalty/mission-target-script.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,7 @@
+[
+  {
+    "action": "talk",
+    "voiceName": "Damayanti",
+    "text": "Nasabah Julo yang terhormat, tagihan Anda yang ke {{ payment_number }} akan jatuh tempo pada tanggal {{ due_date }}. Dengan jumlah tagihan sebesar {{ due_amount }} rupiah. Apabila melunasi angsuran Anda 2 hari sebelum jatuh tempo, maka akan langsung mendapatkan cash back sebesar 20000 rupiah! Promo ini berlaku sampai dengan 2 september 2018. Informasi lebih lanjut hubungi customer service julo. Terima Kasih."
+  }
+]

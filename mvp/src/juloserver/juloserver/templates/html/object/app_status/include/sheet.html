@@ -1,0 +1,71 @@
+{% extends "common/theme1/detail/detail_theme1.html" %}
+{% load model %}
+
+{% block breadcrumb_title %}SHEET{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li><a href="#">SHEET/a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+ 
+{% block list_title %}
+<div class="list-worksheet">
+  <div id="sd_worksheet"></div>
+</div>
+{% endblock %}
+
+{% block list_subtitle %}
+<div class="form-sheet">
+  <div class="form-left">
+    <div class="form-group">
+      <select class="form-control" id="form_sheet_sel">
+        <option value="all">----ALL----</option>
+      </select>
+      <input class="form-control" id='search_field' type="search" placeholder="Key"/>
+      <button type="button" id='btn_search_field' class="btn btn-primary">Search</button>
+      <span id='search_result'> result</span> 
+      <span id='btn_reset_field' class="btn btn-default btn-xs glyphicon glyphicon-refresh" onclick="clearForm()"></span>
+      <div class="btn-group" id="form_option_select_color" data-toggle="buttons" style="float:right;padding:5px;">
+        <label class="btn btn-xs btn-default active" id="select_color_default">
+          <input type="radio" name="option_select_color">
+          <span class="glyphicon glyphicon-ok"></span>
+        </label>
+        
+        <label class="btn btn-xs btn-danger" id="select_color_danger">
+          <input type="radio" name="option_select_color">
+          <span class="glyphicon glyphicon-ok"></span>
+        </label>
+
+        <label class="btn btn-xs btn-warning" id="select_color_warning">
+          <input type="radio" name="option_select_color">
+          <span class="glyphicon glyphicon-ok"></span>
+        </label>
+
+        <label class="btn btn-xs btn-info" id="select_color_info">
+          <input type="radio" name="option_select_color">
+          <span class="glyphicon glyphicon-ok"></span>
+        </label>
+      </div>
+    </div> 
+  </div>
+  <div class="form-right">
+    <textarea id="id_textarea_sheet" name="name"></textarea>
+  </div>
+</div>
+  <div class="row">
+      <div id="sd_sheet" class="handsontable"></div>
+      <div id="failed_load">
+        <center><h2>FAILED LOAD</h2><br>
+          <code >---- <span id="id_sheet_error"></span> ----</code>
+        </center>
+      </div>
+  </div>  
+{% endblock %}
+{% block button_part %}
+{% endblock %}
+{% block script_bottom_inside %}
+	$(document).ready(function() {
+    var url = localStorage.getItem('sheet_url_s3');
+    handleDrop(url);
+	});
+{% endblock %}

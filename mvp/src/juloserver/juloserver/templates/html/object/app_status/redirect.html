@@ -1,0 +1,208 @@
+{% load static from staticfiles %}
+<head>
+	<!-- Bootstrap Core CSS -->
+	<link href="{% static 'theme/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- animation CSS -->
+  <link href="{% static 'theme/nav-mini/css/animate.css' %}" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'theme/nav-mini/css/style.css' %}" rel="stylesheet">
+
+  <!-- color CSS -->
+  <link href="{% static 'theme/nav-mini/css/colors/default.css' %}" id="theme"  rel="stylesheet">
+
+  <!-- Page plugins css -->
+  <link href="{% static 'theme/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css' %}" rel="stylesheet">
+</head>
+
+<!-- /.modal payment event-->
+<div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <h4 class="modal-title" id="modal_title">Title</h4> </div>
+            <div class="modal-body" id="modal_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="close_btn()">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-success">
+                <h4 class="modal-title" id="modal-locked-app_title">Title</h4> </div>
+            <div class="modal-body" id="modal-locked-app_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning waves-effect" data-dismiss="modal" onclick="see_only_btn();">Lihat Aplikasi</button>
+                <button type="button" class="btn btn-custom waves-effect" data-dismiss="modal" onclick="go_locked_app();">Lock dan Edit Aplikasi</button>
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="close_btn();">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-see-locked-app" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-success">
+                <h4 class="modal-title" id="modal_see_title">Title</h4> </div>
+            <div class="modal-body" id="modal_see_body">
+              Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning waves-effect" data-dismiss="modal" onclick="see_only_btn();">Lihat Aplikasi</button>
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="{% static 'theme/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+	$(document).ready(function (e) {
+		check_locked_data('{% url "app_status:change_status" application_id %}', '{{ application_id }}');
+	})
+
+	// using jQuery
+	function getCookie(name) {
+	    var cookieValue = null;
+	    if (document.cookie && document.cookie != '') {
+	        var cookies = document.cookie.split(';');
+	        for (var i = 0; i < cookies.length; i++) {
+	            var cookie = jQuery.trim(cookies[i]);
+	            // Does this cookie string begin with the name we want?
+	            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                break;
+	            }
+	        }
+	    }
+	    // console.log(cookieValue);
+	    return cookieValue;
+	}
+
+	function check_locked_data(url_selected, application_id){
+	    //check using ajax
+	    var csrftoken = getCookie('csrftoken');
+
+	    $.ajax({
+	        url :  "{%url 'app_status:check_app_locked' %}/", // the endpoint
+	        type : "GET", // http method
+	        data : { application_id: application_id,
+	                 csrfmiddlewaretoken: csrftoken,
+	                }, // data sent with the get request
+
+	        // handle a successful response
+	        success : function(json) {
+	            //console.log(json); // log the returned json to the console
+	            localStorage.app_selected = application_id;
+	            if (json.code == "03"){
+	              //show notification that app free to locked
+	              console.log(json.reason);
+	              // set var into localstorage
+	              //set_localStorage("app_selected", application_id);
+	              $("#modal-locked-app_title").html("Aplikasi Masih Belum di-Lock!");
+	              $("#modal-locked-app_body").html("Aplikasi masih blum diproses dan di-lock oleh Agent, Silahkan Pilih tombol aksi dibawah ini!");
+	              $('#modal-locked-app').modal('show');
+	            }
+	            else if (json.code == "02"){
+	              //show notification that app was locked and not allowed edit status changes
+	              //console.log(json.reason);
+	              $("#modal_see_title").html("Application Sudah di-Lock");
+	              $("#modal_see_body").html("Aplikasi telah di lock oleh " + (json.reason[1]) + " dengan TS: " + (json.reason[3]) + ", Apakah Ingin Lanjut?");
+	              $('#modal-see-locked-app').modal('show');
+	            }
+	            else if (json.code == "09"){
+	              //show notification that app was locked and not allowed edit status changes
+	              //console.log(json.reason);
+	              $("#modal_see_title").html("Perhatian!!!");
+	              $("#modal_see_body").html(""+ json.reason);
+	              $('#modal-see-locked-app').modal('show');
+	            }
+	            else {
+	              //redirect this page
+	              //console.log("buka url donk :" + json.reason);
+	              see_only_btn();
+	            }
+	            // console.log("success"); // another sanity check
+	        },
+
+	        // handle a non-successful response
+	        error : function(xhr,errmsg,err) {
+	            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+	            $("#modal_title").html("!! Error !!");
+	            $("#modal_body").html("Error on getting data from server");
+	            $('#responsive-modal-success').modal('show');
+	        }
+	    }); // end of ajax
+	}
+
+	function set_locked_n_edit_app(app_id){
+		console.log("set_locked_n_edit_app dulu ya ");
+		//check using ajax
+		var csrftoken = getCookie('csrftoken');
+
+        $.ajax({
+            url :  "{%url 'app_status:set_app_locked' %}/", // the endpoint
+            type : "GET", // http method
+            data : { application_id: app_id,
+                csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+            // handle a successful response
+            success : function(json) {
+                console.log(json); // log the returned json to the console
+
+                if (json.result == "successful!"){
+                    //redirect this page
+                    console.log("sukses");
+                    see_only_btn();
+                }
+                else {
+                    //show notification that app was locked
+                    console.log(json.reason);
+                    $("#modal_title").html("Lock Gagal");
+                    $("#modal_body").html(""+ json.reason);
+                    $('#responsive-modal-success').modal('show');
+               }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                $("#modal_title").html("!! Error !!");
+                $("#modal_body").html("Error on getting data from server");
+                $('#responsive-modal-success').modal('show');
+            }
+        }); // end of ajax
+
+    }
+
+    function see_only_btn(){
+        var app_id = localStorage.app_selected;
+        window.location.href = "/app_status/change_status/"+app_id;
+    }
+
+    function go_locked_app(){
+        var app_id = localStorage.app_selected;
+        set_locked_n_edit_app(app_id);
+    }
+
+    function close_btn(){
+        window.close();
+    }
+</script>

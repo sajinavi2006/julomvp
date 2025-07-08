@@ -1,0 +1,101 @@
+{% load unit %}
+
+<!-- Left navbar-header -->
+  <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse slimscrollsidebar">
+
+      <ul class="nav" id="side-menu">
+        <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+          <!-- input-group -->
+          <div class="input-group custom-search-form">
+            <input type="text" class="form-control" placeholder="Cari...">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+            </span> </div>
+          <!-- /input-group -->
+        </li>
+
+        <li id="mnu_dashboard_li"> <a href="{% url 'dashboard:default' %}" class="waves-effect">
+          <i class="linea-icon linea-basic fa-fw" data-icon="v"></i> <span class="hide-menu"> Dashboard
+          </a>
+        </li>
+
+        {%if julo_roles|length > 1 %}
+          <li><a href="javascript:void(0)" class="waves-effect">
+            <i class="linea-icon linea-basic fa-fw text-danger" data-icon="7"></i> <span class="hide-menu">
+              Pindah Role<span class="fa arrow"></span>
+            </span></a>
+            <ul class="nav nav-second-level">
+            {% for role_item in julo_roles %}
+                <li><a href="{{ role_item.url }}" class="waves-effect">{{ role_item.role|display_safe }}
+                  </a>
+                </li>
+            {% empty %}
+                <li>Tidak ada</li>
+            {% endfor %}
+            </ul>
+          </li>
+        {% endif %}
+
+        {% include 'common/theme1/navbar/includes/cs_admin_menu.html' %}
+
+        {% include 'common/theme1/navbar/includes/account_deletion_history.html' %}
+
+        {% checkusergroup in ['product_manager'] %}
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="&#xe006;" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu"> Collection HI Season <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{%url 'collection_hi_season:collection_hi_season_campaign_list' %}" >
+              <span class="hide-menu"> List </span>
+              </a>
+            </li>
+
+            <li id="mnu_reason_selection_li"> <a href="{%url 'collection_hi_season:collection_hi_season_campaign_form' %}" >
+              <span class="hide-menu"> Add New </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endcheckusergroup %}
+
+        {% checkusergroup in ['cs_admin'] %}
+        <li id="mnu_master_li"> <a href="#" class="waves-effect"><i data-icon="&#xe006;" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu"> CS Admin <span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_status_selection_li"> <a href="{%url 'customer_module:manual-deletion' %}" >
+              <span class="hide-menu"> Manual </span>
+              </a>
+            </li>
+
+            <li id="mnu_reason_selection_li"> <a href="{%url 'customer_module:deletion-request-inapp' %}" >
+              <span class="hide-menu"> JULO App </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endcheckusergroup %}
+
+        <li id="mnu_application_li"> <a href="#" class="waves-effect"><i data-icon="v" class="linea-icon linea-basic fa-fw"></i>
+          <span class="hide-menu">Aplikasi<span class="fa arrow"></span></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li id="mnu_partnernew_li"> <a href="{% url 'loan_app:roles_sphp' %}" >
+              <span class="hide-menu">SPHP <span class="label label-rouded label-warning pull-right">Baru</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+        <li>
+          <a href="{% url 'logout'%}" class="waves-effect hidden-md hidden-lg hidden-sm"><i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span></a>
+          <a href="javascript:void(0)" alt="alert" class="img-responsive model_img hidden-xs" id="signout-warning2">
+            <i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- Left navbar-header end -->

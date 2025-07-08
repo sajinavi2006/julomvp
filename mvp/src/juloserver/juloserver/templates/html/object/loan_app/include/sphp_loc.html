@@ -1,0 +1,88 @@
+{% load unit utils %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-4 m-b-20">
+            <h4>SURAT PERJANJIAN HUTANG PIUTANG</h4>
+        </div>
+        <table>
+            <tbody>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;width: 150px;">Nama</th>
+                <td>:&nbsp;{{ object.fullname }}
+                </td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Customer ID</th>
+                <td>:&nbsp;{{ object.customer.id|default:"-no id-"|safe}}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Tgl. lahir</th>
+                <td>:&nbsp;{{ object.dob|date:"d F Y" }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP</th>
+                <td>:&nbsp;{{ object.ktp|no_ktp|safe }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon #1</th>
+                <td>:&nbsp;+62 {{ object.mobile_phone_1|no_hp }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. telpon #2</th>
+                <td>:&nbsp;+62 {{ object.mobile_phone_2|no_hp }}</td>
+            </tr>
+            <tr><th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Alamat</th>
+                <td>:&nbsp;
+                        {{ object.address_street_num }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kecamatan }} -
+                        {{ object.address_kelurahan }} <br/>&nbsp;&nbsp;
+                        {{ object.address_kabupaten }} -
+                        {{ object.address_provinsi }}  <br/>&nbsp;&nbsp;
+                        {{ object.address_kodepos }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br/>
+        <p>Selamat {{ object.fullname_with_title|safe }},</p>
+        <table>
+            <tbody>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">1.</td>
+                  <td>Atas rekomendasi Credit Analyst, pengaktifan limit kredit JULO sebesar <b>{{ object.line_of_credit.limit|f_rupiahs:"no" }}</b>
+                      telah disetujui oleh JULO. Limit kredit akan dapat digunakan di aplikasi JULO untuk membeli produk digital berupa pulsa atau sejenis nya.
+                  </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">2.</td>
+                <td>{{ object.fullname_with_title|safe }} berjanji untuk melunasi limit kredit sebesar penggunaan limit kredit sebelum tanggal jatuh tempo ke rekening Virtual Account JULO, info selengkapnya dapat ditemukan di aplikasi JULO, menu “Aktivitas Pinjaman”
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top;">3.</td>
+                <td>Jika terlambat, akan terkena denda sebesar 20% dari total jumlah tagihan Anda bulan ini atau minimum Rp 15.000,- (mana yang lebih besar).
+                    Denda akan bertambah dan berjalan terus selama belum ada pelunasan. Jadi kami menghimbau {{ object.gender|bapak_or_ibu|safe }} untuk jangan sampai terlambat membayar.
+                    Jika bayar tepat waktu, pengajuan pinjaman lainnya akan mudah di-ACC.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </br>
+        Setelah telepon ini,
+        <table>
+            <tbody>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">-</td>
+                <td>
+                    SPHP akan langsung terkirim via Aplikasi JULO. Mohon {{ object.fullname_with_title|safe }} tandatangani SPHP secara eletronik dan rekam suara {{ object.gender|bapak_or_ibu|safe }} membacakan teks yang terdapat di dalam Aplikasi. SPHP ini sah sesuai Hukum Perdata.
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; vertical-align: top; width: 20px;">-</td>
+                <td>
+                  Limit Kredit akan dapat digunakan dalam 1 hari kerja.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <p>Semoga kita bisa bekerjasama dengan baik, {{ object.fullname_with_title|safe }}. Selamat siang dan selamat beraktivitas kembali.</p>
+    </div>
+
+</div>

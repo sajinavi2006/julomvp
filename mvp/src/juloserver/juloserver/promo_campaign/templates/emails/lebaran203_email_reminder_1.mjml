@@ -1,0 +1,69 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat:400,700" />
+    <mj-attributes>
+      <mj-text font-size="12px" line-height="25px" />
+      <mj-all font-family="Montserrat, sans-serif" /> </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" align="right" src="https://s3-ap-southeast-1.amazonaws.com/julopublic/email_assets/Logo_JULO.jpg" /> </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text> Salam Hangat, JULOvers. </mj-text>
+        <mj-image src="https://julocampaign.julo.co.id/promo_ramadhan_2020/JULO-Ramadhan-High-Season-Email-Header-Phase-3-1.png" />
+        <mj-text>
+          <p>Memperingati bulan Suci Ramadan, JULO kembali hadir dengan kejutan menarik untuk Anda!</p>
+          <p>Hi {{fullname_with_title}}, yuk sambut bulan suci Ramadan dengan memulai sesuatu yang baik, yaitu membayar kewajiban hutang Anda. Kami menyediakan kesempatan menarik bagi Anda yang telah tercatat terlambat membayar dan mau membayar pinjaman
+            Anda! Anda dapat berpartisipasi untuk memenangkan hadiah total senilai <span style="font-weight:700; font-size: 16px">20 juta rupiah!</span> Syaratnya mudah, segera lunasi tunggakan angsuran Anda pada periode kampanye, yaitu pada tanggal <strong>11 May 2020 - 8 Juni 2020.</strong>            </p>
+          <p>Silahkan lunasi pembayaran pinjaman Anda yang pada 11 May 2020 tercatat sebagai berikut: </p>
+        </mj-text>
+        <mj-table align="center">
+          <tr style="border:1px solid black;text-align:center;padding:15px 0; background: #B7B7B7">
+            <th style="border: 1px solid black">Pembayaran ke</th>
+            <th style="border: 1px solid black">Tanggal Jatuh Tempo</th>
+            <th style="border: 1px solid black">Total Yang Harus Dibayar</th>
+            <th>Status Pembayaran</th>
+          </tr> {% for payment in payments %}
+          <tr style="border:1px solid black;text-align:center;padding:15px 0;">
+            <td style="border:1px solid black;padding: 0 15px 0 0;">{{payment.payment_number}}</td>
+            <td style="border:1px solid black;padding: 0 15px;">{{payment.due_date|format_date_to_locale_format}}</td>
+            <td style="border:1px solid black;padding: 0 0 0 15px;">{{payment.due_amount|add_rupiah_and_separator}}</td> {% if payment.payment_status_id
+            < 330 %} <td style="border:1px solid black;padding: 0 0 0 15px;">Belum Lunas</td> {% else %}
+              <td style="border:1px solid black;padding: 0 0 0 15px;">Lunas</td>
+          </tr> {% end if %} {% endfor %} </mj-table>
+        <mj-text>
+          <p>Jika Anda telah mengikuti syarat tersebut, Anda secara otomatis akan terdaftar dalam undian Kami. </p>
+          <p>Tunggu apalagi?</p>
+        </mj-text>
+        <mj-button background-color="#1597DE" color="white" href={{payment_link}}>Bayar sekarang</mj-button>
+        <mj-text>
+          <p>Untuk informasi lebih lanjut anda dapat melihatnya disini <a href={{terms_link}}>Syarat & Ketentuan</a></p>
+        </mj-text>
+        <mj-divider border-width="1px" border-color="lightgrey"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section padding-top=0>
+      <mj-group>
+        <mj-column>
+          <mj-text align="left" font-size="10px" padding-top=0>
+            <p>PT.JULO Teknologi Finansial </p>
+            <p>88@Kasablanka Tower A Lantai 5. Jl. Casablanka Raya Kav.88, Jakarta Selatan 12870</p>
+            <p>© Copyright PT JULO Teknologi Finansial - All Rights Reserved</p>
+          </mj-text>
+        </mj-column>
+        <mj-column>
+          <mj-social font-size="12px" icon-size="15px" mode="horizontal">
+            <mj-social-element name="facebook" href="https://www.facebook.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="linkedin" href="https://www.linkedin.com/company/juloindonesia"> </mj-social-element>
+            <mj-social-element name="twitter" href="https://twitter.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="youtube" href="https://www.youtube.com/channel/UCA9WsBMIg3IHxwVA-RvSctA"> </mj-social-element>
+            <mj-social-element name="instagram" href="https://www.instagram.com/juloindonesia"> </mj-social-element>
+          </mj-social>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+  </mj-body>
+</mjml>

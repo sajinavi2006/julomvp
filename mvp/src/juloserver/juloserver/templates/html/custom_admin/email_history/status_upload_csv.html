@@ -1,0 +1,25 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools %}
+<div class="object-tools">
+    <ul class="addlink">
+        <li>
+            <a href="{% url 'admin:julo_emailhistory_uploadcsv' %}?from_csv_upload=1" class="addlink">
+                Update ME Status via CSV
+            </a>
+        </li>
+        {% if error_csv_exists %}
+        <li>
+            <a href="#" class="downloadlink" id="download-error-report" rel="nofollow">
+                Download error report
+            </a>
+        </li>
+        <script type="text/javascript">
+            document.getElementById('download-error-report').onclick = function() {
+                window.location.href = "{% url 'admin:julo_emailhistory_downloaderrors' %}";
+            };
+        </script>
+    {% endif %}
+    </ul>
+</div>
+{% endblock %}

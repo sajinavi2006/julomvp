@@ -1,0 +1,112 @@
+{% load unit utils %}
+{% load static %}
+{% load checkusergroup from common %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+  <li class="tab active">
+    <a href="#data" data-toggle="tab" title="Data" class="tab_data">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Informasi Produk</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#loan_info" data-toggle="tab" title="Data" class="loan_info">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Informasi Pinjaman</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#shipping_tab" data-toggle="tab" title="Data" class="shipping_tab">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Informasi Pengiriman</span>
+    </a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="data">
+    {% include "include/product_info_tab.html" %}
+  </div>
+  <div class="tab-pane" id="loan_info">
+    {% include "include/loan_info_tab.html" %}
+  </div>
+  <div class="tab-pane" id="shipping_tab">
+    {% include "include/shipping_info_tab.html" %}
+  </div>
+</div>
+
+<div class="m-t-10">
+  {% include "include/j_financing_approval_component.html" %}
+</div>
+<div id="modal-update-balance-cons" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-danger">
+        <h4 class="modal-title" id="modal-update-balance-cons-title"></h4>
+      </div>
+      <div class="modal-body" id="modal-update-balance-cons-body">
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+          <button id="update-balance-cons" type="button" class="btn btn-success waves-effect">Ya, Update Aplikasi</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modal-success-default" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header label-warning">
+        <h4 class="modal-title" id="modal-default-title"></h4>
+      </div>
+      <div class="modal-body" id="modal-default-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="shipping_info_modal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header" style="background-color: orange">
+              <h4 class="modal-title">Ubah Informasi Pengiriman</h4>
+          </div>
+
+          <!-- Modal Body -->
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="exampleFormControlSelect1">Kurir: </label>
+                <select class="form-control" id="courier-name">
+                  {% if not object.j_financing_checkout.courier_name %}
+                    <option value="" selected> - </option>
+                  {% endif%}
+                  {% for value  in courier_choices %}
+                      <option value="{{ value|safe }}" {% if value == object.j_financing_checkout.courier_name %} selected {% endif %}>{{ value }}</option>
+                 {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="message-text" class="col-form-label">Nomor resi: </label>
+                <input type="text" class="form-control" id="courier-tracking-id" value="{{ object.j_financing_checkout.courier_tracking_id|default:'' }}" placeholder="Nomor resi ..." maxlength="50">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-primary" id="submit-update-courier-info">Update</button>
+          </div>
+      </div>
+  </div>
+</div>

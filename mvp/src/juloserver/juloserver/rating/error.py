@@ -1,0 +1,2 @@
+class RatingServiceAPIError(Exception):
+    pass

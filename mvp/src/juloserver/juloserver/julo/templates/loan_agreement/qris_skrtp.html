@@ -1,0 +1,339 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Pinyon Script" rel="stylesheet">
+    <style>
+         @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: justify;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .header {
+            position: running(header);
+            text-align: center;
+        }
+        .footer {
+            position: running(footer);
+            text-align: center;
+        }
+        @page {
+            @top-center { content: element(header) }
+            @bottom-center { content: element(footer) }
+        }
+
+        h4 {
+            text-align: center;
+        }
+
+        .installment {
+            width: 100%;
+            border-collapse: collapse;
+            width: 100%;
+            text-align: center;
+        }
+
+        #topBottomBorder {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        #bottomBorder {
+            border-bottom: 1px solid black;
+        }
+
+        .hideExtra {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .divContent {
+            padding-top: 15px;
+            page-break-before: always;
+        }
+
+        .spaceSign {
+            height: 120px;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .col {
+            flex: 1;
+            text-align: center;
+        }
+
+        .box-left {
+            float: left;
+            min-width: 100px;
+            text-align: left;
+        }
+
+        .box-right {
+            float: right;
+            min-width: 100px;
+            text-align: left;
+        }
+
+        .sig:after {
+            content: ".";
+            visibility: hidden;
+        }
+
+        ol.list-counter {
+            counter-reset: item;
+        }
+
+        ol.list-counter>li {
+            display: block;
+            margin-top: 10px;
+        }
+
+        ol.list-counter>li:before {
+            content: counters(item, ".") ". ";
+            counter-increment: item;
+            font-weight: bold;
+        }
+
+        ol.custom-list {
+            counter-reset: list;
+        }
+
+        ol.custom-list>li {
+            list-style: none;
+        }
+
+        ol.custom-list>li:before {
+            content: "(" counter(list, decimal) ")";
+            counter-increment: list;
+            margin-left: -22px;
+        }
+
+        .inline-list {
+            margin: 0 0 0 30px;
+        }
+
+        .inline-list-40 {
+            margin: 0 0 0 40px;
+        }
+
+        .signature-font {
+            font-family: Pinyon Script;
+            font-size: 22px;
+            padding-top: 47px;
+        }
+
+        .sig:after {
+            content: ".";
+            visibility: hidden;
+        }
+        .center-table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 80%; /* Adjust this value as needed */
+        }
+        
+        .center-table th, .center-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .center-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h4>Lampiran 3</h4>
+        <h4>SURAT KONFIRMASI RINCIAN TRANSAKSI PENDANAAN</h4>
+        <h4>Nomor : {{ loan_xid }} </h4>
+
+        <p>Surat Konfirmasi Rincian Transaksi Pendanaan (selanjutnya disebut "SKRTP") ini dibuat dan disetujui pada
+            tanggal {{ transaction_date }}, oleh dan antara:</p>
+        <ol class="list-counter">
+            <li>
+                <b>Pemberi Dana</b> yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai
+                berikut:
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">a. Nama
+                            </td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.fullname }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">b. Tgl.Lahir</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ dob }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">c. No.
+                                KTP</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.ktp }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">d. No.
+                                Telpon</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.mobile_phone_1 }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">d. Alamat
+                            </td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td style="vertical-align: top;">{{ application.full_address }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li>
+                <b>Penerima Dana</b>, yaitu perusahaan atau orang perseorangan dengan detail identitas legalitas sebagai
+                berikut :
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                a. Nama/Perusahaan</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.company_name | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">
+                                b. Nama Perwakilan Perusahaan</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.poc_name | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                c. Nomor Izin Perusahaan Terkait</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.license_number | safe }}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">
+                                d. Alamat Terdaftar</td>
+                            <td style="vertical-align: top; max-width: 5px;"> : </td>
+                            <td> {{ lender.lender_address | safe }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ol>
+
+        <p>Untuk selanjutnya, Penerima Dana dan JULO secara bersama-sama disebut juga "Para Pihak" dan masing- masing
+            disebut "Pihak".</p>
+
+        <p>Penerima Dana menyatakan setuju untuk mengikatkan diri kepada JULO atas ketentuan-ketentuan sebagai berikut:
+        </p>
+
+        <ol>
+            <li>Bahwa Penerima Dana mengkonfirmasi dan setuju bahwa pengajuan Pendanaan yang disetujui akan diberikan
+                dalam bentuk Pendanaan berupa pemberian jumlah Pendanaan tertentu kepada Penerima Dana sebagaimana yang
+                tertuang dalam Perjanjian Pendanaan No. {{ hash_digi_sign }}. Penerima Dana dapat melakukan
+                transaksi jika jumlah Pendanaan mencukupi.</li>
+            <li>Bahwa Penerima Dana dengan ini mengkonfirmasi untuk mengajukan Permohonan Penggunaan Pendanaan dengan
+                nomor SKRTP melalui JULO, dan telah disetujui sebesar Rp ("pokok pinjaman")
+                dan Bunga Pendanaan sebesar Rp. Permohonan Penggunaan Pendanaan ini akan memotong jumlah
+                Pendanaan yang tersedia.</li>
+            <li>Bahwa Penerima Dana mengkonfirmasi dan berjanji untuk melunasi Dana dengan melakukan pembayaran Nilai Angsuran sesuai Tabel Angsuran berikut ini:
+                <table class="center-table">
+                    <tr>
+                        <th>Cicilan</th>
+                        <th>Jumlah</th>
+                        <th>Jatuh Tempo</th>
+                    </tr>
+                    {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.payment_number }}</td>
+                            <td>{{ payment.due_amount }}</td>
+                            <td>{{ payment.due_date }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <p>Berdasarkan Tabel Angsuran diatas, maka jangka waktu adalah</p>
+            </li>
+            <li>
+                Bahwa Penerima Dana akan mengkonfirmasi untuk melakukan pembayaran setiap bulan sebelum tanggal jatuh tempo. Keterlambatan akan dikenakan biaya Denda Keterlambatan sebesar % per hari, untuk setiap angsuran yang terlambat, dengan total kumulatif tidak melebihi Rp.
+            </li>
+            <li>
+                Bahwa pembayaran setiap bulan akan dilakukan langsung oleh Penerima Dana melalui Aplikasi Milik Mitra Bisnis.
+            </li>
+            <li>
+                Pernyataan Persetujuan
+                <ol type="a">
+                    <li>
+                        Penerima Dana dan Pemberi Dana mengerti atas hak dan kewajiban masing-masing pihak, sesuai dengan yang tertuang pada Perjanjian Pendanaan sesuai No. {{ hash_digi_sign }} dan akan senantiasa mematuhi ketentuan hukum yang berlaku dalam melaksanakan SKRTP ini.
+                    </li>
+                    <li>
+                        Hal yang belum dituangkan dalam SKRTP ini akan diatur di kemudian hari melalui Perubahan SKRTP (Addendum), yang merupakan persetujuan lebih lanjut antara Pemberi Dana dan Penerima Dana, dan bagian yang tidak terpisahkan dari SKRTP ini, serta tidak memerlukan tanda tangan ulang.
+                    </li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+    <div class="page-break"></div>
+    <div>
+        <p>
+            <b>DEMIKIAN</b>, SKRTP ini disetujui atau ditandatangani secara elektronik (termasuk menggunakan tanda tangan elektronik) sesuai dengan ketentuan dalam Undang-Undang Republik Indonesia No. 11 Tahun 2008 tanggal 21 April 2008 tentang informasi dan Transaksi Elektronik berikut dengan segala perubahan/amandemennya dan peraturan pelaksananya beserta segala perubahan/amandemennya, dari waktu ke waktu oleh Para Pihak atau perwakilannya yang sah dan mempunyai kekuatan yang sama dengan perjanjian yang dibuat dan ditandatangani secara fisik.
+        </p>
+        <div class="row">
+            <div class="col">
+                <div class="box-left">
+                    <div class="row">
+                        <div class="sig"></div>
+                    </div>
+                    <div class="row">
+                        <div class="sig"><b>Penerima Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign"> 
+                            {% if qris_signature %}
+                                <img height="auto" src="{{qris_signature|safe}}" style="border:0;display:block;outline:none;text-decoration:none;height:auto" />
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="sig">{{ application.fullname }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="box-right">
+                    <div class="row">
+                        <div>Jakarta, {{ signed_date }}</div>
+                    </div>
+                    <div class="row">
+                        <div><b>Pemberi Dana</b></div>
+                    </div>
+                    <div class="row">
+                        <div class="spaceSign">
+                            <div class="signature-font">{{ lender.poc_name }}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>{{ lender.poc_name }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

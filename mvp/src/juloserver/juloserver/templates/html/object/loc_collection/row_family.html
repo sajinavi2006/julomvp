@@ -1,0 +1,100 @@
+{% load unit %}
+<tr class= "ca-none {{ app_data.marital_status.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Status Pernikahan</strong></div>
+        <div class="col-xs-6">
+            {{application.marital_status|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.dependent.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Jumlah Tanggungan</strong></div>
+        <div class="col-xs-6">
+            {{application.dependent|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.spouse_name.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Pasangan</strong></div>
+        <div class="col-xs-6">
+            {{application.spouse_name|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.spouse_dob.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tanggal Lahir Pasangan</strong></div>
+        <div class="col-xs-6">
+            {{application.spouse_dob|date:'d-m-Y'|default:''|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.spouse_mobile_phone.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No HP Pasangan</strong></div>
+        <div class="col-xs-6">
+            {{application.spouse_mobile_phone|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.spouse_mobile_phone.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No HP Pasangan</strong></div>
+        <div class="col-xs-6">
+            {{application.spouse_mobile_phone}} -  ADA WA: {{application.spouse_has_whatsapp|yesno:"Ya, Tidak"|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.kin_name.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Keluarga Kandung</strong></div>
+        <div class="col-xs-6">
+            {{application.kin_name|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.kin_dob.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Tanggal lahir Keluarga Kandung</strong></div>
+        <div class="col-xs-6">
+            {{application.kin_dob|date:'d-m-Y'|default:''|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.kin_gender.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Jenis Kelamin Keluarga Kandung</strong></div>
+        <div class="col-xs-6">
+            {{application.kin_gender|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.kin_mobile_phone.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No. HP Keluarga Kandung</strong></div>
+        <div class="col-xs-6">
+            {{application.kin_mobile_phone|safe}}
+        </div>
+    </div>
+  </td>
+</tr>
+<tr class= "ca-none {{ app_data.kin_relationship.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Hubungan</strong></div>
+        <div class="col-xs-6">
+            {{application.kin_relationship|safe}}
+        </div>
+    </div>
+  </td>
+</tr>

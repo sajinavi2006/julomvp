@@ -1,0 +1,227 @@
+{% load utils %}
+{% load format_date %}
+{% load currency %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'plugins/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/css/custom.css' %}"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'plugins/css/regular.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/css/all.css' %}">
+    <style type="text/css">
+        .title {
+            font-weight: bold;
+            color: #0cadf0;
+        }
+
+        .illustration {
+            text-align: center;
+            max-width: 250px;
+            width: auto;
+            margin: 0 auto;
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        .note {
+            color: red;
+            border-top: 5px solid red;
+            background-color: #feefee;
+            font-weight: bold;
+            padding: 20px;
+        }
+
+        .note svg {
+            position: absolute;
+        }
+
+        .note p {
+            display: block;
+            margin-left: 30px;
+        }
+
+        .row {
+            margin-bottom: 25px;
+        }
+
+        .table-contact {
+            margin-bottom: 1rem;
+        }
+
+        .table-contact td {
+            padding: 0 0 10px 0;
+            vertical-align: top;
+        }
+
+        .table-contact ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .table-contact p {
+            margin: 0;
+        }
+
+        .va-information {
+            width: 100%;
+        }
+
+        .va-information td {
+            width: 50%;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+        }
+
+        .header h4 {
+            display: none;
+        }
+
+        .header h4, .header h2 {
+            text-align: right !important;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .header {
+                display: block;
+            }
+            .header h2 {
+                display: none;
+            }
+            .jumbotron .logo {
+                width: 85px;
+            }
+            .header h4 {
+                width: calc(100% - 85px);
+                display: inline-block;
+                margin-top: 30px !important;
+                font-size: 10px;
+                color: white;
+            }
+
+            .illustration {
+                max-width: 200px;
+            }
+        }
+
+
+    </style>
+
+    <title>JULO</title>
+</head>
+
+<body>
+
+<div class="jumbotron">
+    <div class="logo"><img src="{% static 'images/julo/JULO_logo_white_small.png' %}"/></div>
+    <div class="container header">
+        <h2>{{ email }}</h2>
+        <h4>{{ email }}</h4>
+    </div>
+</div>
+<div id="summary_content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <img src="{% static 'images/loan_refinancing/approved.png' %}" class="illustration">
+                <h5 class="title">Terima kasih telah melakukan konfirmasi atas program restrukturisasi pinjaman.</h5>
+                <p class="subtitle">
+                    Segera lakukan pembayaran sejumlah <strong>{{ prerequisite_amount|add_rupiah_and_separator }}</strong>
+                    paling lambat tanggal <strong>{{ first_due_date|format_date_to_locale_format }}</strong>
+                    untuk mengaktifkan program restrukturisasi ini.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="note">
+                    <svg class="bi bi-info-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd"/>
+                        <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+                        <circle cx="8" cy="4.5" r="1"/>
+                    </svg>
+                    <p>
+                        Jika pembayaran tidak dilakukan sebelum atau pada tanggal
+                        {{ first_due_date|format_date_to_locale_format }}, program keringanan hutang akan hilang
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p>Pembayaran dapat dilakukan melalui nomor Virtual Account berikut.</p>
+                <table border="1" class="va-information">
+                    <tr>
+                        <td>VA {{ bank_name }}</td>
+                        <td>{{ va_number }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p>Apabila ada pertanyaan lebih lanjut, silahkan hubungi JULO customer care melalui:</p>
+                <table class="table-contact">
+                    <tr>
+                        <td style="width: 140px;"><p>Telepon :</p></td>
+                        <td>
+                            <ul>
+                                <li><p>021-5091-9036</p></li>
+                                <li><p>021-5091-9037</p></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><p>Email :</p></td>
+                        <td><p><a href="mailto: collections@julo.co.id">collections@julo.co.id</a></p></td>
+                    </tr>
+                </table>
+                <p>Terima Kasih {{ fullname_with_title }}, dan tetap sehat #DirumahAja.</p>
+                <p>PT. Julo Teknologi Finansial</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-top">
+        <div class="logo-footer">
+            <img src="{% static 'images/julo/JULO_logo_blue_small.png' %}"/>
+        </div>
+        <div class="copyright">
+            <p>
+                © Copyright 2021 PT JULO Teknologi Finansial - All Rights Reserved
+            </p>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-area">
+            <div class="footer-conent">
+                <p>PT. JULO TEKNOLOGI FINANSIAL merupakan perusahaan penyedia layanan pinjaman online yang terdaftar dan
+                    berada dalam pengawasan oleh Otoritas Jasa Keuangan (OJK) dengan nomor registrasi S-589/NB.213/2018
+                    sesuai dengan Hukum Republik Indonesia dan Peraturan Otoritas Jasa Keuangan nomor 77/POJK.01/2016.
+                    Oleh karena itu,
+                    PT JULO TEKNOLOGI FINANSIAL berkomitmen untuk menjunjung tinggi integritas dan melaksanakan
+                    perlindungan konsumen sesuai dengan hukum yang berlaku.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'plugins/js/refinancing/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static 'plugins/js/refinancing/jquery.min.js' %}"></script>
+</body>
+
+</html>

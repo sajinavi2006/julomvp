@@ -1,0 +1,175 @@
+{% extends "common/theme1/detail/detail_admin1.html" %}
+{% load model %}
+
+{% block css_inside %}
+  /* Watermark Start */
+  .watermarked {
+      position: relative;
+      overflow: hidden;
+  }
+
+  /* Global Watermark */
+  .watermarked {
+      position: relative;
+      overflow: hidden;
+  }
+
+  .watermarked span {
+      position: absolute;
+      font-size: 10px;
+      transform: rotate(-26.98deg);
+      color: #fff;
+      opacity: 0.4;
+      word-spacing: 0;
+  }
+
+  .watermarked>span:nth-child(1) {
+      left: 0;
+      top: -3%;
+  }
+
+  .watermarked>span:nth-child(2) {
+      left: 5%;
+      top: 15%;
+  }
+
+  .watermarked>span:nth-child(3) {
+      left: 25%;
+      top: 50%;
+  }
+
+  .watermarked>span:nth-child(4) {
+      right: 0;
+      top: 75%;
+  }
+
+  .watermarked>span:nth-child(5) {
+      right: 0;
+      top: 100%;
+  }
+
+  .watermarked>span:nth-child(6) {
+      right: 2%;
+      top: 60%;
+  }
+
+  .watermarked>span:nth-child(7) {
+      left: 0;
+      top: 82%;
+  }
+
+  .watermarked>span:nth-child(8) {
+      left: 50%;
+      bottom: 2%;
+  }
+
+  /* Watermark Container */
+  .mfp-content .watermarked>span:nth-child(1) {
+      left: 0;
+      top: -3%;
+  }
+
+  .mfp-content .watermarked>span:nth-child(2) {
+      left: -10%;
+      top: 10%;
+  }
+
+  .mfp-content .watermarked>span:nth-child(3) {
+      left: 5%;
+      top: 55%;
+  }
+
+  .mfp-content .watermarked>span:nth-child(4) {
+      right: -45%;
+      top: 75%;
+  }
+
+  .mfp-content .watermarked>span:nth-child(5) {
+      right: 0;
+      top: 100%;
+  }
+
+  .mfp-content .watermarked>span:nth-child(6) {
+      right: 2%;
+      top: 60%;
+  }
+
+  .mfp-content .watermarked>span:nth-child(7) {
+      left: 0;
+      top: 82%;
+  }
+
+  .mfp-content .watermarked>span:nth-child(8) {
+      left: 50%;
+      bottom: 2%;
+  }
+
+  .mfp-content .watermarked>span {
+      font-size: 24px;
+      height: 100%;
+      text-align: center;
+      width: 100%;
+      line-height: normal;
+  }
+
+  .watermarked>.mfp-img {
+      padding: 0 !important;
+  }
+{% endblock %}
+
+{% block breadcrumb_title %}
+
+{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li><a href="#">Verifikasi Dokumen</a></li>
+    <li class="active">Detail</li>
+{% endblock %}
+
+{% block list_title %}
+        Verifikasi Dokumen
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+    {% include "object/loan_app/include/image_verification.html" %}
+    {% include "object/loan_app/include/detail_image.html" %}
+
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{% url 'loan_app:image_verification' %}">
+    <button id="back" type="button" class="btn btn-info">
+      <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+    </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(document).on('contextmenu', '.mfp-container', function () {
+    return false;
+  });
+
+  var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+
+  // Watermark image and Protect right click
+  $(document).ready(function () {
+      $(document).on('contextmenu', 'img', function () {
+          return false;
+      });
+      $(document).on('contextmenu', '.watermarked span', function () {
+          return false;
+      });
+      $(document).on('contextmenu', '.mfp-container', function () {
+          return false;
+      });
+      $('.image-popup-vertical-fit').click(function () {
+          $(".mfp-img").wrap('<div class="watermarked"></div>');
+          $(".mfp-content .watermarked").append('<span>' + watermark_text + '</span><span>' + watermark_text + '</span><span>' + watermark_text + '</span>');
+      });
+      $(".watermarked").append('<span>' + watermark_text + '</span><span>' + watermark_text + '</span><span>' + watermark_text + '</span>');
+  });
+{% endblock %}

@@ -1,0 +1,1 @@
+{{name}}, kami ingatkan angsuran PEDE Pinter {{payment_number}} Anda {{due_amount}} sdh TERLAMBAT. Mohon segera bayar: cek aplikasi PEDE. Abaikan jika sudah bayar.

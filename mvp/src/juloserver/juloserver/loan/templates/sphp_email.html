@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+</head>
+<body>
+<table cellspacing="0" cellpadding="0" border="0" style="background-color: #00acf0; width: 100%; font-family: 'Nunito'; text-align: center;">
+    <tr>
+        <td style="padding-top: 32px">
+            <img src="{{ image_prefix_url }}education/Logo-primary.png" width="160px" height="70px"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p style="font-weight: 700; font-size: 24px; line-height: 32px; color: #ffffff; padding-bottom: 32px; padding-top: 8px; margin: 0;">
+                Transaksi Berhasil
+            </p>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <table cellpadding="0" border="0" style="margin: 0 auto; padding: 0 16px;">
+                <tr>
+                    <td>
+                        <table cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; padding: 5%; border-radius: 16px; min-width: 328px; max-width: 640px">
+                            <tr>
+                                <td style="padding-top: 0">
+                                    <img src="{{ image_prefix_url }}loan/placeholder%402x.png" style="border-radius: 8px;" width="100%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left">
+                                    <p style="font-size: 16px">
+                                        <b>Yth {{fullname_with_title}},</b>
+                                        <br><br>
+                                        Selamat! Transaksimu sebesar <b>{{ loan_amount_display }}</b> selesai diproses dan status pinjaman telah aktif. Kami lampirkan Surat Konfirmasi Rincian Transaksi Pendanaan (SKRTP) yang bisa kamu download di email ini. Berikut adalah info tagihan terbaru kamu:
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table cellspacing="0" cellpadding="0" border="0" style="background-color: #f5f5f5; padding: 24px; border-radius: 16px; width: 100%; font-weight: 700; font-size: 16px">
+                                        <tr>
+                                            <td>
+                                                <p style="text-align: left; color: #757575; font-size: 14px;">
+                                                    Kategori produk
+                                                </p>
+                                            </td>
+                                            <td style="text-align: right">
+                                                <img src="{{ transaction_method_foreground_icon }}" style="width: 24px; height: 24px; vertical-align:middle;"/>
+                                                <p style="display: inline; color: #404040">
+                                                    {{ transaction_method_fe_display_name }}
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p style="text-align: left; color: #757575; font-size: 14px;">
+                                                    Tagihan per bulan
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p style="text-align: right; color: #00acf0">
+                                                    {{ first_payment_amount_display }}
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p style="text-align: left; color: #757575; font-size: 14px;">
+                                                    Jatuh Tempo
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p style="text-align: right; color: #404040">
+                                                    {{ first_payment_due_date }}
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table cellspacing="0" cellpadding="0" border="0" style="background-color: #f5f5f5; margin: 16px 0; padding: 24px; border-radius: 16px; width: 100%; font-size: 16px">
+                                        <tr>
+                                            <td>
+                                                <p style="color: #404040; font-weight: 700; font-size: 16px;">
+                                                    Metode Pembayaran
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; border-radius: 8px; width: 100%; color: #404040; font-size: 16px;">
+                                                    <tr>
+                                                        <td style="height: 56px">
+                                                            {% if payment_method_logo_url %}
+                                                            <img src="{{ payment_method_logo_url }}" style="display: inline-block; vertical-align:middle;" height="32px"/>
+                                                            {% endif %}
+                                                            <p style="display: inline-block; vertical-align:middle;">
+                                                                <b>{{ payment_method_name }}</b> dan <b>Bank Lainnya</b>
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border-top: #f5f5f5 2px solid;">
+                                                            <p style="font-weight: 700;">
+                                                                {{ payment_method_virtual_account }}
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p style="color: #404040;">
+                                                    Kamu juga bisa melihat info tagihanmu melalui aplikasi JULO di HP kamu, kok!
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a href="https://r.julo.co.id/1mYI/tagihan" target="_blank" style="text-decoration: none; width: 100%; background-color: #00acf0; color: #ffffff; border-radius: 8px; height: 54px; font-weight: 700; display: inline-block; vertical-align:middle;">
+                                                    <p style="display: inline-block; vertical-align:middle;">
+                                                        Lihat Tagihan di Aplikasi JULO
+                                                    </p>
+                                                    <img src="{{ image_prefix_url }}loan/externallink.png" style="width: 16px; height: 16px; display: inline-block; vertical-align:middle;"/>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0;">
+                                    <img src="{{ image_prefix_url }}loan/infocardsautodebet-with-cashback.png" style="border-radius: 8px;" width="100%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-size: 16px;">
+                                    <p>
+                                        Mohon berhati-hati terhadap modus penipuan melalui E-mail,
+                                        SMS, Whatsapp, dan sosial media mengatasnamakan JULO.
+                                        Informasi transaksi dan program JULO hanya dikirim dari
+                                        email resmi JULO yang berakhiran @julo.co.id dan
+                                        @juloperdana.co.id.<br><br>
+                                        Pastikan juga bahwa kamu hanya melakukan pembayaran
+                                        ke Virtual Account yang tertera pada aplikasi JULO.<br><br>
+                                        Jika kamu menemukan informasi mencurigakan atau ada
+                                        pertanyaan lebih lanjut, silakan konfirmasi langsung melalui
+                                        email atau telepon ke nomor di bawah ini:
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding-top: 32px; padding-bottom: 10px;">
+            <img src="{{ image_prefix_url }}education/question.png" style="width: 32px; height: 32px; display: inline-block; vertical-align:middle;"/>
+            <p style="font-weight: 700; font-size: 16px; line-height: 24px; padding-left: 8px; display: inline-block; vertical-align:middle; color: #ffffff; ">
+                Ada pertanyaan? Hubungi Kami
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-bottom: 32px;">
+            <span style="display: inline-block;">
+                <img src="{{ image_prefix_url }}education/mail-3.png" style="width: 16px; height: 16px; display: inline-block; vertical-align:middle;"/>
+                <p style="display: inline-block; color: #ffffff; vertical-align:middle; font-weight: 700; font-size: 14px;">
+                    <a href="mailto:cs@julo.co.id" target="_blank" style="color: #ffffff; text-decoration: none;">cs@julo.co.id</a>
+                </p>
+            </span>
+            <span style="display: inline-block; width: 290px">
+                <img src="{{ image_prefix_url }}education/phone-3.png" style="width: 16px; height: 16px; padding-left: 16px; display: inline-block; vertical-align:middle;"/>
+            	<p style="display: inline-block; color: #ffffff; vertical-align:middle; font-weight: 700; font-size: 14px;">
+                    021 5091 9034 &#124; 021 5091 9035
+                </p>
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: 700; font-size: 14px; color: #ffffff; line-height: 24px;">
+            <table cellpadding="0" border="0" style="margin: 0 auto;">
+                <tr>
+                    <td style="border-top: #ffffff 0.5px dashed; border-bottom: #ffffff 0.5px dashed; padding: 32px 0;">
+                        <span style="display: inline-block;">
+                			<p style="display: inline-block;">
+                                Download Aplikasi JULO Gratis!
+                            </p>
+                			<a href="https://go.onelink.me/zOQD/93d068ac" target="_blank"><img src="{{ image_prefix_url }}education/Google-play.png" style="width: 79.2px; height: 24px; vertical-align:middle;"/></a>
+            			</span>
+                        <span style="display: inline-block;">
+                			<p style="display: inline-block;">Terdaftar dan diawasi oleh</p>
+                			<img src="{{ image_prefix_url }}education/OJK-logo.png" style="width: 39.1px; height: 28.2px; border-radius: 0.64px; padding-right: 12.83px; padding-left: 8px; vertical-align:middle;"/>
+                			<img src="{{ image_prefix_url }}education/AFPI-logo.png" style="width: 39.1px; height: 28.2px; border-radius: 0.64px; padding-right: 12.83px; vertical-align:middle;"/>
+                			<img src="{{ image_prefix_url }}education/AFPI-logo-2.png" style="width: 39.1px; height: 28.2px; border-radius: 0.64px; vertical-align:middle;"/>
+            			</span>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p style="margin: 32px 0; font-weight: 700; font-size: 12px; line-height: 17px; color: #ffffff;">
+                PT JULO Teknologi Finansial<br/>
+                88@Kasablanka Tower A Lantai 5. Jl. Raya Casablanca<br/>
+                Kav.88, Jakarta Selatan 12870
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p style="margin: 0; margin-bottom: 32px; font-weight: 400; font-size: 14px; line-height: 22px; color: #ffffff;">
+                Keamananmu adalah prioritas kami. Pelajari tentang
+                <a href="https://www.julo.co.id/privacy-policy" target="_blank" style="color: #ffffff;">kebijakan privasi</a> kami.<br/>
+                <a href="https://www.julo.co.id/cara-bayar" target="_blank" style="color: #ffffff;">Panduan Pembayaran</a> |
+                <a href="https://www.julo.co.id/faq" target="_blank" style="color: #ffffff;">Pusat Bantuan</a> |
+                <a href="http://link.julo.co.id/wf/unsubscribe?upn=U7z7oSqRMSwdl2rYt9JJ4x2nCQGTp6Vg-2FqRyFdt-2BIT2L5wWSNbNjH-2Fxln3x6QAbRN407Xs5zP5JH4NdCNQBFPW4GrSIiDIq9IXiTliZ-2FHzMtY4yFKHgqqcGQZA35Gvz7OgjGyAwGuzwg-2FCDsl7371gYj7Cants7CiFmMr98d-2FQpJ1UMcrf1QKXT-2BjW6tpDigxz0kvnT4QnmBBXCZ-2Fyff97d-2Fqaml4AmK35AAIABKwH8KKt0aF-2F5F05eAFU-2FZmsh3BpYIYKHa-2F6U-2B5vQMXOec5d5851D5tGS84plNMEMgNkW1n66HHLsQkYMG-2F7n5q44Cs9OFWNcbb5WYeXkUwhQ5C9mM9QCsvCtAVI-2But5eGnu6QZKaW2bzKET5DP9hQSzCwLplcpk0VlJhT1pbRjXMx-2F9aoi3V-2B4JB-2Fp-2ByYQ-2B4B0qpEtuRjwS3cn7TpP6Rg9crJN-2F9B1bHSiJ5vd98tb71FtNchUwVRD0DIcVXIOGL5Brt5qOgPXdnZjGZvExijz4oEkmFNmIkhfOqLnnrFsmBWZIE3GWjfMJk-2F79yR9dRouxJ1tE49KAbemS0zi6Goh4dA" rel="noopener" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://link.julo.co.id/wf/unsubscribe?upn%3DU7z7oSqRMSwdl2rYt9JJ4x2nCQGTp6Vg-2FqRyFdt-2BIT2L5wWSNbNjH-2Fxln3x6QAbRN407Xs5zP5JH4NdCNQBFPW4GrSIiDIq9IXiTliZ-2FHzMtY4yFKHgqqcGQZA35Gvz7OgjGyAwGuzwg-2FCDsl7371gYj7Cants7CiFmMr98d-2FQpJ1UMcrf1QKXT-2BjW6tpDigxz0kvnT4QnmBBXCZ-2Fyff97d-2Fqaml4AmK35AAIABKwH8KKt0aF-2F5F05eAFU-2FZmsh3BpYIYKHa-2F6U-2B5vQMXOec5d5851D5tGS84plNMEMgNkW1n66HHLsQkYMG-2F7n5q44Cs9OFWNcbb5WYeXkUwhQ5C9mM9QCsvCtAVI-2But5eGnu6QZKaW2bzKET5DP9hQSzCwLplcpk0VlJhT1pbRjXMx-2F9aoi3V-2B4JB-2Fp-2ByYQ-2B4B0qpEtuRjwS3cn7TpP6Rg9crJN-2F9B1bHSiJ5vd98tb71FtNchUwVRD0DIcVXIOGL5Brt5qOgPXdnZjGZvExijz4oEkmFNmIkhfOqLnnrFsmBWZIE3GWjfMJk-2F79yR9dRouxJ1tE49KAbemS0zi6Goh4dA&amp;source=gmail&amp;ust=1650013062671000&amp;usg=AOvVaw3Al721Oi1YWOhZWyRuEIqV" target="_blank" style="text-decoration: none; color: #ffffff;">Unsubscribe</a>
+            </p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

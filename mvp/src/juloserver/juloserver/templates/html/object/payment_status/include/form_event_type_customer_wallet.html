@@ -1,0 +1,49 @@
+{% load unit %}
+
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12">Available cashback Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input class="form-control mask" id="EtcwCashbackAmount" maxlength="11" type="text" disabled value="{{ object.loan.customer.wallet_balance_available|f_rupiahs:'no_currency'|safe}}">
+          </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12">Due Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input maxlength="15" class="form-control" disabled="disabled" type="text" value="{{ payment_obj.due_amount|f_rupiahs:'no_currency'|safe}}">
+        </div>
+      </div>
+  </div>
+</div>
+
+<div class="row m-t-10">
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12">Use cashback Amount: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+              <span class="input-group-addon">Rp.</span>
+              <input class="form-control mask" id="EtcwUseCashbackAmount" maxlength="11" value="">
+          </div>
+          <span class="help-block">
+            <small>Masukan besar pembayaran ...</small>
+          </span>
+      </div>
+  </div>
+  <div class="col-md-6 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12">Event Date: </label>
+      <div class="col-md-12 col-sm-12">
+          <div class="input-group m-t-10">
+             <input class="form-control mydatepicker" id="EtcwEventDate" placeholder="dd-mm-yyyy" required="" type="text">
+             <span class="input-group-addon" id="EtcwSetEventDate" onclick="set_today('EtcwEventDate');"><i class="icon-calender"></i></span> 
+          </div>
+          <span class="help-block">
+            <small>Masukan event customer wallet  ...</small>
+          </span>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,338 @@
+{% load utils %}
+{% load format_date %}
+{% load currency %}
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+  <style>
+    html,
+    body,
+    div,
+    span,
+    applet,
+    object,
+    iframe,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    blockquote,
+    pre,
+    a,
+    abbr,
+    acronym,
+    address,
+    big,
+    cite,
+    code,
+    del,
+    dfn,
+    em,
+    img,
+    ins,
+    kbd,
+    q,
+    s,
+    samp,
+    small,
+    strike,
+    strong,
+    sub,
+    sup,
+    tt,
+    var,
+    b,
+    u,
+    i,
+    center,
+    dl,
+    dt,
+    dd,
+    ol,
+    ul,
+    li,
+    fieldset,
+    form,
+    label,
+    legend,
+    table,
+    caption,
+    tbody,
+    tfoot,
+    thead,
+    tr,
+    th,
+    td,
+    article,
+    aside,
+    canvas,
+    details,
+    embed,
+    figure,
+    figcaption,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    output,
+    ruby,
+    section,
+    summary,
+    time,
+    mark,
+    audio,
+    video {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline;
+    }
+
+    /* HTML5 display-role reset for older browsers */
+
+    article,
+    aside,
+    details,
+    figcaption,
+    figure,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    section {
+      display: block;
+    }
+
+    html {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      line-height: 2;
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      font-size: 16px;
+      flex-direction: column;
+      align-items: centre;
+      flex: 0 1 auto;
+      margin: 0 auto;
+      width: 50%;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    .bold-text {
+      font-weight: 700;
+    }
+
+    .content {
+      margin-bottom: 8px;
+    }
+
+    .table-payment {
+      table-layout: fixed;
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin-bottom: 24px;
+    }
+
+    .table-payment td,
+    .table-payment th {
+      border-top: solid 1px #e0e0e0;
+      border-bottom: solid 1px #e0e0e0;
+      color: #666666;
+      font-size: 14px;
+    }
+
+    .table-payment thead th,
+    .table-payment tbody td,
+    .table-payment tfoot td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .table-payment tfoot td {
+      font-weight: 700;
+      background-color: #f7f7f7;
+      font-size: 12px;
+    }
+
+    .table-payment tr th {
+      padding: 20px;
+    }
+
+    .table-payment tr td {
+      padding: 15px;
+    }
+
+    .julo-promo-info-header {
+      height: 30px;
+      background-color: #ffbc33;
+      padding: 11px 40px;
+      color: #fffdf8;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .julo-promo-info-content {
+      background-color: #fffdf8;
+      padding: 24px 40px;
+      color: #5e5e5e;
+    }
+
+    .summary {
+      margin-top: 20px;
+    }
+
+    .summary-header-title {
+      background-image: linear-gradient(to bottom, #0f5b72 -15%, #094f64);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .seperator {
+      margin-right: 24px;
+    }
+
+    .btn-continue {
+      width: 115px;
+      display: inline;
+      height: 45px;
+      border-radius: 5px;
+      margin-left: 16px;
+    }
+
+    .footer-txt {
+      color: #666666;
+      font-weight: bold;
+    }
+
+    .warning-box {
+      border-top: solid 3px #e2574c;
+      background-color: #ffefee;
+      height: 85px;
+      padding: 5px 80px 0px 20px;
+      color: #e2574c;
+      line-height: 1.38;
+      font-weight: 800;
+    }
+
+    ul {
+      margin-left: 20px;
+    }
+
+    ul li {
+      font-size: 14px;
+    }
+
+    .summary-payment th,
+    .summary-payment tr {
+      border-collapse: collapse;
+      padding: 5px 0px 5px 0px;
+      font-size: 12px;
+      text-align: left;
+      color: #666666;
+    }
+
+    .summary-payment {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    <p>Halo {{fullname_with_title}},</p>
+  </div>
+  <p class="content">Terima kasih atas kepercayaan Anda untuk memilih JULO. Kami
+    informasikan bahwa Refinancing Anda telah disetujui dengan detail sebagai berikut: </p>
+  <div class="bold-text content">
+    <p>Cicilan: {{due_amount}}</p>
+    <p>VA {{bank_name}}: {{va_number}}</p>
+    <p>Kode Bank: {{bank_code|default:"-"|safe}}</p>
+  </div>
+  <p style="color: #182940; font-size:13px;" class="bold-text">Jadwal pembayaran pinjaman Anda Sekarang</p>
+  <table class="table-payment content">
+    <thead>
+      <tr>
+        <th>Pembayaran#</th>
+        <th>Jatuh Tempo</th>
+        <th>Cicilan</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for payment in payments %}
+      <tr>
+        <td>{{payment.payment_number}}</td>
+        <td>{{payment.due_date|format_date_to_locale_format}}</td>
+        <td>{{payment.due_amount|add_rupiah_and_separator}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td></td>
+        <td>{{total_due_amount}}</td>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="julo-promo-info-header bold-text">
+    <p class="">Informasi mengenai Denda Keterlambatan, Cashback, dan Promosi Anda</p>
+  </div>
+  <div class="julo-promo-info-content">
+    <p>Julo ingin meringankan beban angsuran Anda dengan cara menghapuskan denda keterlambatan sebesar
+      {{late_fee_discount}} dan memperpanjang tenor angsuran.</p>
+    <p style="margin-top:25px">Namun, saat refinancing berlangsung Anda akan menerima konsekuensi sebagai berikut:</p>
+    <ul>
+      <li>Seluruh cashback yang Anda miliki saat ini akan hilang. Tetapi, Jika Anda membayar cicilan tepat waktu Anda
+        akan tetap mendapatkan cashback pada pembayaran selanjutnya.</li>
+      <li>Anda tidak dapat meningkatkan poin dan mengikuti promosi yang sedang berjalan.</li>
+    </ul>
+    <p style="margin-top: 5px;">Kami berharap Anda dapat segera melunasi pinjaman ini.</p>
+    <div class="warning-box">
+      <p>
+        Anda wajib membayar angsuran pertama paling lambat 5 hari setelah penawaran ini disetujui. Jika melewati batas tersebut,
+        Refinancing akan dibatalkan.</p>
+  </div>
+  <div class="summary">
+      <p style="font-weight: bold">Ringkasan</p>
+      <table class="summary-payment">
+        <tbody>
+          <tr>
+            <th scope="row">Cicilan</th>
+            <td><span class="seperator">:</span>{{due_amount}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Tenor</th>
+            <td><span class="seperator">:</span>Diperpanjang {{chosen_tenure}} bulan
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Jumlah denda yang dihapuskan</th>
+            <td><span class="seperator">:</span>{{late_fee_discount}}</td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>
+      <p style="margin-top: 12px;">Silahkan lakukan pembayaran sebelum tanggal jatuh tempo & raih cashback tiap bulannya!
+Untuk pertanyaan, keluhan & informasi lebih lanjut silahkan email ke: collections@julo.co.id</p>
+</body>
+</html>

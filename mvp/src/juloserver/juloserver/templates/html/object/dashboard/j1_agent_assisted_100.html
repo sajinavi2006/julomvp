@@ -1,0 +1,446 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{% block meta %}
+    <!-- <meta http-equiv="refresh" content="120"> -->
+{% endblock %}
+
+{% block custom_css %}
+  <!-- morris CSS -->
+  <!-- <link href="{% static 'theme/plugins/bower_components/morrisjs/morris.css' %}" rel="stylesheet"> -->
+  <!-- toast -->
+  <link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block css_inside %}
+  .status_font {
+    font-size: 24px;
+  }
+  .analytics-info {
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .panel{
+    border: solid 1px;
+    border-radius: 3px;
+  }
+  .container-fluid {
+    background-color: white;
+  }
+  hr{
+    margin-top: 0px !important;
+    margin-bottom: 10px !important;
+  }
+   .clearFix
+   {
+       clear:both;
+   }
+   .panel.panel-chat
+   {
+       position: fixed;
+       bottom:0;
+       right:10px;
+       max-width: 800px;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat.panel-chat-extend
+   {
+       position: fixed;
+       bottom:0;
+       right:60em;
+       max-width: 800px;
+       height:50em;
+       box-shadow: none;
+       -webkit-box-shadow: none;
+   }
+   .panel.panel-chat .panel-heading
+   {
+       background: #4b67a8;
+       border: 1px solid #2e4588;
+       color:#FFF;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(1)
+   {
+       text-decoration: none;
+       width: 800px;
+       color:#FFF;
+       font-weight: bold;
+       float:left;
+   }
+   .panel.panel-chat .panel-heading a:nth-of-type(2)
+   {
+       text-decoration: none;
+       max-width: 11px;
+       width: 11px;
+       color:#FFF;
+       float:right;
+   }
+   .panel.panel-chat .panel-body
+   {
+       display: block;
+       padding: 10px;
+       margin: 0;
+       max-height: 350px;
+       height: 350px;
+       border-left: 1px solid #b2b2b2;
+       border-right: 1px solid #b2b2b2;
+       background: white;
+       overflow: auto;
+   }
+   .panel.panel-chat .panel-body::-webkit-scrollbar {
+        display: none;
+    }
+    .panel.panel-chat .panel-body-extend
+    {
+        display: block;
+        padding: 10px;
+        margin: 0;
+        max-height: 40em;
+        height: 40em;
+        border-left: 1px solid #b2b2b2;
+        border-right: 1px solid #b2b2b2;
+        background: white;
+        overflow: auto;
+    }
+    .panel.panel-chat .panel-body-extend::-webkit-scrollbar {
+         display: none;
+     }
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .custom-button{
+      border: 2px solid #4CAF50;
+      background-color: white;
+      color: green;
+      padding: 5px 28px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .custom-button:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .status-box {
+      background: #ffffff;
+      margin-bottom: 15px;
+    }
+    .status-box-title {
+      padding: 20px 25px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+    .status-box-footer {
+      padding: 25px;
+      text-align: center;
+    }
+    .status-box-title-text{
+      font-weight: 600;
+      color: #2B2B2B
+    }
+    .fs-24{
+      font-size: 24px
+    }
+    .load-card-title{
+      padding: 25px 25px 0px 25px;
+      border-bottom: 1px solid #eee;
+    }
+    .load-card-body{
+      padding: 10px 25px 25px;
+    }
+    .p-0{
+      padding: 0px;
+    }
+    .card-tag{
+      position: absolute;
+      top: 5px;
+      right: 12px;
+      text-transform: uppercase;
+      background-color: white;
+      padding: 0px 5px;
+      border-radius: 10%;
+      color: #2B2B2B;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .dark-color{
+      color: "#2B2B2B"
+    }
+    .light-color{
+      color: "#fff"
+    }
+{% endblock %}
+
+
+{% block script_head %}
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-19175540-9', 'auto');
+    ga('send', 'pageview');
+
+    window.onbeforeunload = function() {
+      return "Jangan refresh ketika auto chooser berlangsung, anda yakin?";
+    };
+  </script>
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+
+
+
+<div id="page-wrapper">
+    <div id="app1" class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-col-xs-6">
+                <h4 class="page-title">
+                    <a href="#">
+                      <button class="btn btn-success btn-block">Aplikasi</button>
+                    </a>
+                </h4>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-col-xs-6 col-lg-offset-6 col-md-offset-6">
+                <h4 class="page-title">
+                    <a class="waves-effect waves-light" href="javascript:void(0)">
+                      <button class="btn btn-primary btn-block right-side-toggle"><i class="fa fa-search fa-fw"></i> Check Application-Locked List</button>
+                    </a>
+                </h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row">
+                <div class="col-lg-1 col-sm-1 col-xs-6">
+                    <label class="label label-info text-default">To-Do</label>
+                </div>
+                <div class="col-lg-1 col-sm-1 col-xs-6">
+                    <a href="{% url 'app_status:list_w_status' '100_j1_assisted_agent' %}" id="app_priority_100" target="_blank">
+                        <div class="panel panel-info">
+                            <div class="panel-heading"> 100 - Dibantu
+                            </div>
+                            <div class="panel-wrapper collapse in" aria-expanded="true">
+                                <div class="panel-body">
+                                    <span class="status_font text-success"><% app_dashboard.to_do['agent_assisted_100'] %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script_additional %}
+
+<script type="text/javascript">
+    $(function(){
+        $(".panel.panel-chat > .panel-heading > .chatMinimize").click(function(){
+            if($(this).parent().parent().hasClass('mini'))
+            {
+                $(this).parent().parent().removeClass('mini').addClass('normal');
+
+                $('.panel.panel-chat > .panel-body').animate({height: "350px"}, 500).show();
+
+            }
+            else
+            {
+                $(this).parent().parent().removeClass('normal').addClass('mini');
+
+                $('.panel.panel-chat > .panel-body').animate({height: "0"}, 500);
+
+                setTimeout(function() {
+                    $('.panel.panel-chat > .panel-body').hide();
+                    $('.panel.panel-chat > .panel-footer').hide();
+                }, 500);
+
+
+            }
+
+        });
+        $(".panel.panel-chat > .panel-heading > .chatClose").click(function(){
+            $(this).parent().parent().remove();
+        });
+    })
+    function copyToClipboard(text) {
+        if (window.clipboardData && window.clipboardData.setData) {
+            // IE specific code path to prevent textarea being shown while dialog is visible.
+            return clipboardData.setData("Text", text);
+
+        } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+            var textarea = document.createElement("textarea");
+            textarea.textContent = text;
+            textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+            } catch (ex) {
+                console.warn("Copy to clipboard failed.", ex);
+                return false;
+            } finally {
+                document.body.removeChild(textarea);
+                $.toast({
+                  heading: 'success',
+                  text: 'success copy '+ text,
+                  position: 'top-right',
+                  loaderBg:'#ff6849',
+                  icon: 'success',
+                  hideAfter: 1500,
+                  stack: 6
+                });
+            }
+        }
+    }
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+  <script type="text/javascript" src="{% static 'default/js/vue.js' %}"></script>
+  <script type="text/javascript">
+    var app1 = new Vue({
+      el: '#app1',
+      delimiters: ["<%", "%>"],
+      data: {
+        app_dashboard : {},
+        app_priority_dashboard : {},
+        payment_dashboard : {},
+        loan_dashboard : {},
+        loc_payment_dashboard: {},
+        loc_payment_bucket_list: [
+          { 'name': 'T-1',
+            'key': 'Tmin1',
+            'url': '{% url "loc_collection:list" "Tmin1" %}'
+          },
+          { 'name': 'T0',
+            'key': 'T0',
+            'url': '{% url "loc_collection:list" "T0" %}'
+          },
+          { 'name': 'T +1 to T +29',
+            'key': 'T1to29',
+            'url': '{% url "loc_collection:list" "T1to29" %}'
+          },
+          { 'name': 'T > 29',
+            'key': 'Tplus30',
+            'url': '{% url "loc_collection:list" "Tplus30" %}'
+          },
+        ],
+        window_tab_status:true
+      },
+      beforeMount(){
+        this.get_bucket_count();
+      },
+      methods: {
+        get_bucket_count: function () {
+          if (!this.window_tab_status){return}
+          console.log('Get list')
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:get_dashboard_bucket_count' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                csrfmiddlewaretoken: this.csrftoken
+                }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+                  if(json.status == "success"){
+                    self.app_dashboard = json.app_dashboard
+                    self.app_priority_dashboard = json.app_priority_dashboard
+                    self.payment_dashboard = json.payment_dashboard
+                    self.loan_dashboard = json.loan_dashboard
+                  }
+
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  this.callProcess = 'we have an erorr while getting data'
+              }
+          }); // end of ajax
+        },
+        get_loc_bucket_count: function () {
+          var self = this
+          $.ajax({
+              url :  "{%url 'dashboard:get_loc_collection_agent_bucket' %}/", // the endpoint
+              type : "GET", // http method
+              data : {
+                csrfmiddlewaretoken: this.csrftoken
+                }, // data sent with the get request
+
+              // handle a successful response
+              success : function(json) {
+                  console.log(json); // log the returned json to the console
+                  if(json.status == "success"){
+                    self.loc_payment_dashboard = json.loc_payment_dashboard
+                  }
+
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  this.callProcess = 'we have an erorr while getting data'
+              }
+          }); // end of ajax
+        },
+        SetWindowTabStatus: function(status) {
+          this.window_tab_status = status
+        },
+      }
+    })
+  </script>
+  <script src="{% static 'theme/plugins/moment/moment.min.js' %}"></script>
+
+{% endblock %}
+
+{% block script_bottom_inside %}
+  $(document).ready(function() {
+
+      // Executes when the HTML document is loaded and the DOM is ready
+      //alert("Document is ready");
+      $('#mnu_dashboard_li').addClass('active');
+      $('#mnu_dashboard_li a:first').addClass('active');
+
+      setInterval(function () {
+        app1.get_bucket_count();
+      }, 30000)
+  });
+
+  // Active
+  window.addEventListener('focus', ActionActiveTab);
+
+  // Inactive
+  window.addEventListener('blur', ActionInactiveTab);
+
+  function ActionActiveTab(){
+    console.log('Active tab')
+    app1.SetWindowTabStatus(true)
+  }
+  function ActionInactiveTab(){
+    console.log('Inactive tab')
+    app1.SetWindowTabStatus(false);
+  }
+
+{% endblock %}

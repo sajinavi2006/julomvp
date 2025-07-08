@@ -1,0 +1,19 @@
+<html>
+  <body>
+    <p>Dear Team,</p>
+
+    {% if bni_va_count == 999999 %}
+        <p>Our system has detected that the BNI VA generation has reached {{bni_va_count}}. <br/>
+        This means that we are reaching our maximum limit for BNI VA generation. We will stop generating.</p>
+    {% else %}
+        <p>Our system has detected that the BNI VA generation has reached {{bni_va_count}}. <br/>
+        This means that we are nearing our maximum limit for BNI VA generation.</p>
+    {% endif %}
+    <p>Please use the existing BNI VAs efficiently and prioritize the most important tasks to ensure that we can continue to meet the demands of our customers.</p>
+    <p>If you have any concerns or suggestions, please feel free to reach out to the concerned team member. <br/>
+    Thank you for your attention to this matter.</p>
+
+    <p>Best regards, <br/>
+    JULO Repayment Squad</p>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/custom.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/regular.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/all.css">
+    <style type="text/css">
+        div#preloader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 999;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        {#background: #333 url('/assets/images/loading.gif') no-repeat center center;#}
+
+        }
+
+        .payment-detail2 {
+            margin: auto;
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .small-text {
+            margin-top: 2px;
+            font-size: 14px;
+            color: #5e5e5e;
+        }
+
+        .no-space {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .less-space {
+            padding-left: 5px;
+            padding-right: 0px;
+        }
+
+
+        @media only screen and (max-width: 500px) {
+            .payment-value {
+                font-size: 13px;
+            }
+
+            .small-text {
+                font-size: 10px;
+            }
+
+            .payment-detail2 {
+                padding: 10px 5px;
+            }
+        }
+    </style>
+
+    <title>julo</title>
+</head>
+
+<body>
+
+<div class="jumbotron">
+    <div class="logo"><img src="https://julo.co.id/assets/img/logo-primary.png"/></div>
+    <div class="container header">
+        <h2>Error Report Intelix</h2>
+    </div>
+</div>
+<div id="preloader"></div>
+<div id="summary_content">
+    <div class="container">
+        <div class="billing-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12  payment-detail2">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col" style="text-align: center">loan_id</th>
+                                <th scope="col" style="text-align: center">payment_id</th>
+                                <th scope="col" style="text-align: center">error message</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for error in failed_stores %}
+                                <tr>
+                                    <td style="text-align: center">{{ error.loan_id }}</td>
+                                    <td style="text-align: center">{{ error.payment_id}}</td>
+                                    <td style="text-align: center">{{ error.error_msg}}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+</body>
+
+</html>

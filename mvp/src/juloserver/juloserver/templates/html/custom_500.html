@@ -1,0 +1,9 @@
+{% extends "common/layout_error.html" %}
+
+{% block inside_body %}
+    <div class="error-body text-center">
+      <h3 class="text-uppercase">500 Internal Server Error</h3>
+      <h3>{{exception_type}}: {{exception_value}}</h3>
+      <h4>{{request.get_full_path}}</h4>
+    </div>
+{% endblock %}

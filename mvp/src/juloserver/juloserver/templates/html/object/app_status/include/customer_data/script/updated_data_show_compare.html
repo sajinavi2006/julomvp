@@ -1,0 +1,605 @@
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{%if 'app_status'  in request.get_full_path %}
+  {% checkusergroup in ['cs_team_leader','cs_admin','ccs_agent','bo_general_cs'] %}
+    <style>
+      .tab-pane#updated_data{
+        width: 99%;
+      }
+      .button-new-crm{
+        border: 1px solid #00ACF0;
+        color: #00ACF0;
+        font-weight: 400;
+        padding: 12px 24px;
+        border-radius: 8px;
+        width: fit-content;
+        margin: auto;
+        margin-right: 5px;
+        font-size: 13px;
+        line-height: 15px;
+        cursor: pointer;
+        margin-top: 18px;
+        background: white;
+        margin-bottom: 8px;
+      }
+      .button-new-crm:hover{
+        background: #00ACF0;
+        color: white;
+      }
+      .button-new-crm.button-compare{
+        border: 1px solid #FB9777;
+        color: #FB9777;
+        margin: auto;
+        margin-left: 0px;
+        position: absolute;
+        margin-top: 15px;
+      }
+      .button-new-crm.button-compare:hover{
+        background: #FB9777;
+        color: white;
+      }
+      .status-badge{
+        padding: 10px 8px;
+        font-weight: 600;
+        color: #777777;
+        background-color: #EDEDED;
+        border: 1px solid #E0E0E0;
+        border-radius: 6rem;
+        font-size: 12px;
+        line-height: 12px;
+        text-align: center;
+      }
+      .status-badge.konfirmasi-ubah-data{
+        padding: 0;
+        color: #F69539;
+        background-color: transparent;
+        border: 0;
+        margin-left: 4px;
+        font-size: 14px;
+      }
+      .status-badge.konfirmasi-ubah-data .fa{
+        margin-right: 4px;
+      }
+      .status-badge.approved{
+        text-transform: capitalize;
+        color: #61A697;
+        background-color: #C8F1E8;
+        border: 1px solid #61A697;
+      }
+      .status-badge.rejected{
+        text-transform: capitalize;
+        color: #E9948B;
+        background-color: #F7D8D4;
+        border: 1px solid #E9948B;
+      }
+      #updatedDataTable tbody tr:hover{
+        background: transparent;
+        cursor: pointer;
+      }
+      #updatedDataTable button.get-changed-data{
+        background: transparent;
+        border: 0;
+      }
+      #updatedDataTable button.get-changed-data .fa.fa-chevron-circle-down,
+      #updatedDataTable button.get-changed-data .fa.fa-chevron-circle-up{
+        font-size: 28px;
+        color: #00ACF0;
+      }
+
+      /*wrapper-changed-data*/
+      .wrapper-changed-data{
+        border: 0.5px solid #E4E7EA;
+        border-radius: 8px;
+        margin: 8px;
+        overflow: hidden;
+        width: 98%;
+        cursor: initial;
+        margin-bottom: 60px;
+      }
+      .wrapper-changed-data .fdc-row{
+        display:flex;
+        padding: 8px 12px;
+        border-bottom: 1px solid #E4E7EA;
+      }
+      .wrapper-changed-data .fdc-row:last-child{
+        border-bottom: 0;
+      }
+      .wrapper-changed-data .fdc-row.even{
+        background: #F8FAFC;
+      }
+      .wrapper-changed-data .fdc-label{
+        width: 38%;
+        margin-left: 2px;
+      }
+      .wrapper-changed-data .fdc-value{
+        width: 62%;
+        margin-left: 2px;
+        display: flex;
+        word-break: break-word;
+        align-items: center;
+        font-size: 13px;
+      }
+      .btn-watermarked-preview{
+        padding: 8px;
+        background: #00ACF0;
+        color: white;
+        margin-left: 4px;
+        cursor: pointer;
+      }
+      .watermarked-preview{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background: rgb(0 0 0 / 70%);
+        margin: auto;
+        text-align: center;
+        display: none;
+      }
+      .watermarked-preview.show{
+        display: flex!important;
+      }
+      .watermarked-preview-img{
+        position: relative;
+        margin: auto;
+        overflow: hidden;
+      }
+      .watermarked-preview-img img{
+        max-width: 100%;
+      }
+      .watermarked-preview-img span {
+        position: absolute;
+        font-size: 25px;
+        transform: rotate(-26.98deg);
+        color: #fff;
+        opacity: 0.4;
+        word-spacing: 0;
+      }
+      .watermarked-preview-img>span:nth-child(1) {
+        left: 0;
+        top: -3%;
+      }
+      .watermarked-preview-img>span:nth-child(2) {
+        left: 5%;
+        top: 15%;
+      }
+      .watermarked-preview-img>span:nth-child(3) {
+        left: 25%;
+        top: 50%;
+      }
+      .watermarked-preview-img>span:nth-child(4) {
+        right: 0;
+        top: 75%;
+      }
+      /*wrapper-changed-data*/
+
+      /*modal compare data*/
+      .temp-compared-data{
+        display: none;
+      }
+      #responsive_modal_compare_updated_data .modal-dialog{
+        width: 50%;
+        min-width: 1000px;
+      }
+      #responsive_modal_compare_updated_data .modal-body{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      #responsive_modal_compare_updated_data .modal-content{
+        width: 100%;
+      }
+      #responsive_modal_compare_updated_data #modal_compare_updated_data_title{
+        color:white;
+        font-size: 15px;
+        margin-left: 12px;
+        font-weight: 500;
+      }
+      #responsive_modal_compare_updated_data .modal-footer{
+        border-top: 0;
+        text-align: left;
+        padding: 0;
+      }
+      #responsive_modal_compare_updated_data .modal-footer button{
+        margin: auto;
+        margin-left: 27px;
+        margin-bottom: 20px;
+      }
+      .row-compare-data{
+        display:flex;
+        align-items: center;
+        font-size: 14px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        border-bottom:1px solid #E0E0E0;
+        padding-left: 16px;
+      }
+      .row-compare-data.even{
+        background: #F8FAFC;
+      }
+      .row-compare-data-data.is-header, .row-compare-data.is-header .row-compare-data-before, .row-compare-data.is-header .row-compare-data-previous, .row-compare-data.is-header .row-compare-data-after{
+        font-weight: 600;
+      }
+      .row-compare-data-data{
+        padding-left: 12px;
+        text-transform: capitalize;
+        width: 18%;
+        font-weight: 400;
+        color: #757575;
+      }
+      .row-compare-data-before{
+        padding-left: 12px;
+        word-break: break-word;
+        padding-right: 8px;
+        color: #757575;
+      }
+      .row-compare-data-arrow{
+        width: 5%;
+        margin-left: 5%;
+        text-align: center;
+      }
+      .row-compare-data .btn-watermarked-preview{
+        margin-left: 0;
+        width: fit-content;
+      }
+      .class-cols-2{
+        width: 32%;
+      }
+      .class-cols-3{
+        width: 20%;
+      }
+      /*modal compare data*/
+
+    </style>
+    <script type="application/javascript">
+      function datatable(){
+        //CHANGEDATA_TABLE-cx-591
+        CHANGEDATA_TABLE = $("#updatedDataTable").DataTable( {
+            "paging": false,
+            "searching": false,
+            "lengthChange": false,
+            "bInfo": false,
+            "bDestroy": true,
+            "columnDefs": [
+              {
+                "targets"  : "no-sort",
+                "orderable": false,
+              },
+              {
+                "targets": [1,2,3,4,5,6],
+                "orderSequence": ["desc"]
+              },
+              {
+                "targets": [0],
+                "orderSequence": ["asc"]
+              },
+              {"targets": [0], "data": "NO"},
+              {"targets": [1], "data": "CREATED_DATE"},
+              {"targets": [2], "data": "UPDATED_DATE"},
+              {"targets": [3], "data": "REQUEST_FORM"},
+              {"targets": [4], "data": "STATUS"},
+              {"targets": [5], "data": "REASON"},
+              {"targets": [6], "data": "ACTION"},
+            ]
+        } );
+
+        $("#updatedDataTable tbody").on("click", "td .get-changed-data", function () {
+            var tr = $(this).closest("tr");
+            var row = CHANGEDATA_TABLE.row( tr );
+            var row_data = CHANGEDATA_TABLE.row( tr ).data();
+            var application_status = '{{app_obj.application_status_id}}'
+            const rowId = $(this).attr("td_id");
+
+            if ( row.child.isShown() ) {
+                $(this).find('i').attr( 'class', 'fa fa-chevron-circle-down' );
+                $(this).attr( 'class', 'btn btn btn-success btn-rounded get-changed-data' );
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                $(this).find('i').attr( 'class', 'fa fa-chevron-circle-up' );
+                $(this).attr( 'class', 'btn btn btn-danger btn-rounded get-changed-data' );
+                row.child("<div class='wrapper-changed-data' id='"+rowId+"'>"+LOADING_GIF+"</div>").show();
+                get_changed_data_detail(rowId);
+
+                tr.addClass('shown');
+            }
+        });
+
+        if($("#updatedDataTable_wrapper .status-badge.waiting").length == 0){
+          $(".button-new-crm.button-tambah-perubahan-data").css('display','block');
+        }else{
+          $(".button-new-crm.button-tambah-perubahan-data").css('display','none');
+        }
+        //CHANGEDATA_TABLE-cx-591
+      }
+
+      //UTILS
+      function formatDateL(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+        const months = ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+        if (day.length < 2)
+            day = "0" + day;
+
+        return [day, months[month-1], year].join(" ");
+      }
+      function formatThousandL(number) {
+        return (
+          "Rp" + number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.')
+        );
+      };
+      function formatStatusL(status) {
+        let badge = "";
+        if(status === "submitted"){
+          badge = "<div class='status-badge waiting'>Waiting for approval</div>";
+        }else{
+          badge = "<div class='status-badge "+status.replace("_", " ")+"'>"+status.replace("_", " ")+"</div>";
+        }
+        return badge;
+      }
+      function formatChangedDataValueL(field, data, id){
+        let res = '';
+        if(data){
+          if(field === "address_transfer_certificate_image_url" || field === "company_proof_image_url" || field === "paystub_image_url"){
+            res = "<div class='watermarked-preview' field="+id+"-"+field+"><div class='watermarked-preview-img'><img src='"+data+"'><span>INTERNAL USE ONLY ({{user.id}})</span><span>INTERNAL USE ONLY ({{ user.id }})</span><span>INTERNAL USE ONLY ({{ user.id }})</span></div></div>"+
+                  "<div class='btn-watermarked-preview' field="+id+"-"+field+">Lihat Dokumen</div>";
+            return res;
+          }else if(field === "monthly_expenses" || field === "monthly_housing_cost" || field === "monthly_income" || field === "total_current_debt"){
+            return formatThousandL(data);
+          }else{
+            return data;
+          }
+        } else {
+          return '-';
+        }
+      }
+      function formatCompareDataL(field, data, id, style, isHeader = false){
+        const before = data.original_data[field];
+        const after = data.check_data[field];
+        let previous = null;
+        let cols = 2;
+        let html = '';
+        let labelHtml = FIELD_DATA_CHANGE[field];
+        let beforeHtml = formatChangedDataValueL(field, before, id+'-before');
+        let previousHtml= '';
+        let afterHtml= formatChangedDataValueL(field, after, id+'-after');
+
+        if(data.previous_data){
+          previous = data.previous_data[field];
+          previousHtml = formatChangedDataValueL(field, previous, id+'-previous');
+          cols = 3;
+        }
+
+        const classCols = cols === 3 ? 'class-cols-3' : 'class-cols-2';
+
+        if(isHeader){
+          labelHtml = 'Data';
+          beforeHtml = 'Data Pertama';
+          if(data.previous_data){
+            previousHtml = 'Sebelum Diubah';
+          }
+          afterHtml = 'Setelah Diubah';
+          style += ' is-header'
+        }
+        html += "<div class='row-compare-data "+style+"'>"+
+                  "<div class='row-compare-data-data'>"+labelHtml+"</div>"+
+                  "<div class='row-compare-data-before "+classCols+"'>"+beforeHtml+"</div>";
+        if(cols === 3){
+          html += "<div class='row-compare-data-arrow'><i class='fa fa-arrow-circle-right' aria-hidden='true'></i></div>";
+          html += "<div class='row-compare-data-previous "+classCols+"'>"+previousHtml+"</div>";
+        }
+          html += "<div class='row-compare-data-arrow'><i class='fa fa-arrow-circle-right' aria-hidden='true'></i></div>";
+          html += "<div class='row-compare-data-after "+classCols+"'>"+afterHtml+"</div>"+
+                "</div>";
+
+        return html;
+      }
+
+      // CONSTANT
+      const LOADING_GIF = "<div class='loading-gif'><img style='width:85px' src='{% static 'images/julo/loading.gif' %}' alt='loading'></div>";
+      const FIELD_DATA_NUMBER = [
+        "monthly_expenses",
+        "monthly_housing_cost",
+        "monthly_income",
+        "total_current_debt"
+      ];
+      const FIELD_DATA_CHANGE = {
+        address_street_num: "Alamat Tempat Tinggal",
+        address_provinsi: "Provinsi",
+        address_kabupaten: "Kabupaten",
+        address_kecamatan: "Kecamatan",
+        address_kelurahan: "Kelurahan",
+        address_kodepos: "Kode Pos",
+        address_latitude: "Latitude",
+        address_longitude: "Longitude",
+        last_education: "Pendidikan Terakhir",
+        job_type: "Tipe Pekerjaan",
+        job_industry: "Bidang Pekerjaan",
+        job_description: "Posisi Pekerjaan",
+        company_name: "Nama Perusahaan",
+        company_phone_number: "Nomor Telepon Perusahaan",
+        payday: "Tanggal Gajian",
+        monthly_income: "Total Penghasilan Bulanan",
+        monthly_expenses: "Total Pengeluaran Rumah Tangga Bulanan",
+        monthly_housing_cost: "Total Cicilan/Sewa Rumah Bulanan",
+        total_current_debt: "Total Cicilan Hutang Bulanan",
+        address_transfer_certificate_image_url: "Surat Keterangan Pindah",
+        company_proof_image_url: "Dokumen Pendukung",
+        paystub_image_url: "Slip Gaji"
+      };
+      const FIELD_SORT_DATA_CHANGE = [
+        "address_street_num",
+        "address_provinsi",
+        "address_kabupaten",
+        "address_kecamatan",
+        "address_kelurahan",
+        "address_kodepos",
+        "address_transfer_certificate_image_url",
+        "last_education",
+        "job_type",
+        "job_industry",
+        "job_description",
+        "company_name",
+        "company_phone_number",
+        "payday",
+        "company_proof_image_url",
+        "monthly_income",
+        "paystub_image_url",
+        "monthly_expenses",
+        "monthly_housing_cost",
+        "total_current_debt"
+      ];
+
+      function populate_change_data(data){
+        if(data.results && data.count > 0){
+          const results = data.results;
+
+          for(let i=0; i < results.length; i++){
+              jQuery("#updatedDataTable_body").append(
+                "<tr tr_id="+results[i].id+">"+
+                  "<td style='width:2.5%'>"+(i+1)+"</td>"+
+                  "<td style='width:15%'>"+formatDateL(results[i].cdate)+"</td>"+
+                  "<td style='width:17.5%'>"+formatDateL(results[i].udate)+"</td>"+
+                  "<td style='width:17.5%'>"+(results[i].source === "app" ? "In App" : "Call/Email")+"</td>"+
+                  "<td style='width:20%'>"+formatStatusL(results[i].status)+'</td>'+
+                  "<td style='width:25%'>"+(results[i].approval_note ? results[i].approval_note : "")+"</td>"+
+                  "<td style='width:2.5%'><button type='button' id='id_call_updated_data' td_id="+results[i].id+" class='btn btn btn-success btn-rounded get-changed-data'><i class='fa fa-chevron-circle-down'></i></button></td>"+
+               +"</tr>"
+              );
+          }
+        }else{
+          jQuery("#updatedDataTable_body").append(
+            "<tr>"+
+              "<td colspan='6'>"+
+              "<div style='display:flex;flex-direction:column;align-items: center;width: 235px;margin: auto;text-align: center;margin-top: 60px;'>"+
+                "<img style='margin-bottom:24px;width: 120px;' src='{% static 'images/icons/ic-empty-state.png' %}'>"+
+                "<div style='color:#00ACF0; font-weight:600;margin-bottom:12px;'>Belum Ada Riwayat Ubah Data</div>"+
+                "<div>Perubahan data yang disetujui akan ditampilkan di sini</div>"+
+              "</div>"+
+              "</td>"+
+            "</tr>");
+        }
+      }
+
+      function populate_change_data_detail(data, id){
+        let changedData = "";
+        let compareData = "";
+        if(data.change_fields.length > 0){
+          const datasort = FIELD_SORT_DATA_CHANGE.filter(element =>
+            data.change_fields.includes(element)
+          );
+
+          changedData = "<div style='display:flex; flex-direction:column'>";
+          for(let i=0; i < datasort.length; i++){
+            changedData += "<div class='fdc-row "+((i+1)%2 == 0 ? "even" : "odd")+"'>"+
+                              "<div class='fdc-label' style='font-weight:bold'>"+FIELD_DATA_CHANGE[datasort[i]]+"</div>"+
+                              "<div class='fdc-value'>: "+formatChangedDataValueL(datasort[i],data.check_data[datasort[i]],id)+"</div>"+
+                            "</div>";
+            if( i == 0 ){
+              compareData += formatCompareDataL("header", data, id, "odd", true);
+            }
+            compareData += formatCompareDataL(datasort[i], data, id, (i+1)%2 == 0 ? "even" : "odd");
+          }
+          changedData += "</div>";
+          changedData += "<div class='button-new-crm button-compare' target='temp-compare-"+id+"'>Compare Updated Data</div>";
+        }
+        jQuery("#updatedDataTable_body .wrapper-changed-data#"+id).html(changedData);
+        jQuery("#updatedDataTable_body .wrapper-changed-data#"+id).parent().append("<div class='temp-compared-data' id='temp-compare-"+id+"'>"+compareData+"</div>");
+      }
+
+      function get_changed_data_detail(id){
+        $.ajax({
+          url :  "/api/customer-module/v1/customer-data/change-request/"+id+"/",
+          type : "GET", // http method
+
+          // handle a successful response
+          success : function(json) {
+            populate_change_data_detail(json.data, id);
+          },
+
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+        });
+      }
+
+      //EVENTS
+      $("#updatedDataTable tbody").on("click", ".btn-watermarked-preview", function () {
+        const field = $(this).attr('field');
+        $(".watermarked-preview[field|='"+field+"']").addClass('show');
+      });
+      $("#updatedDataTable tbody").on("click", ".watermarked-preview", function () {
+        $('.watermarked-preview').removeClass('show');
+      });
+      $("#updatedDataTable tbody").on("click", ".button-compare", function () {
+        const targetId = $(this).attr('target');
+        const targetHtml = $("#"+targetId).html();
+        $('#responsive_modal_compare_updated_data #modal_compare_updated_data_body').html(targetHtml);
+        $('#responsive_modal_compare_updated_data').modal('show');
+
+        $("#modal_compare_updated_data_body").on("click", ".btn-watermarked-preview", function () {
+          const field = $(this).attr('field');
+          $(".watermarked-preview-global").html($(".watermarked-preview[field|='"+field+"']").html());
+          $(".watermarked-preview-global").addClass('show');
+        });
+        $(".watermarked-preview-global").on("click", function () {
+          $(".watermarked-preview-global").removeClass('show');
+        });
+      });
+
+      $(document).ready(function () {
+        setTimeout(function(){
+          $.ajax({
+              url :  "/api/customer-module/v1/customer-data/change-request/?page_size=150&page=1&application_id={{app_obj.id}}",
+              type : "GET", // http method
+
+              // handle a successful response
+              success : function(json) {
+                jQuery("#updatedDataTable_body tr").remove();
+                populate_change_data(json.data);
+                if(json.data.count > 0){
+                  datatable();
+                  jQuery("ul.customtab .tab_updated_data").append("<span class='status-badge konfirmasi-ubah-data'><i class='fa fa-exclamation-circle' aria-hidden='true'></i></span>");
+                }
+              },
+
+              // handle a non-successful response
+              error : function(xhr, errmsg, err) {
+                jQuery("#updatedDataTable_body tr").remove();
+                if (xhr.status == 404){
+                  $(".button-new-crm.button-tambah-perubahan-data").css('display','block');
+                  return populate_change_data([])
+                }
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+            });
+          })}
+        ,1000)
+    </script>
+
+    <!-- modal compare data -->
+    <div id="responsive_modal_compare_updated_data" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header label-success">
+                  <h4 class="modal-title" id="modal_compare_updated_data_title">Konfirmasi Perubahan Data</h4> </div>
+              <div class="modal-body" id="modal_compare_updated_data_body">
+                Body
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="button-new-crm" data-dismiss="modal">Kembali</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class='watermarked-preview watermarked-preview-global'></div>
+    {% include "object/app_status/include/customer_data/script/updated_data_submission.html" %}
+  {% endcheckusergroup %}
+{% endif %}

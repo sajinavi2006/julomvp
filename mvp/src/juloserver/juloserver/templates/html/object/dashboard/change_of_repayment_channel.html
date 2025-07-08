@@ -1,0 +1,793 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load static from staticfiles %}
+
+{% block meta %}
+    <!-- <meta http-equiv="refresh" content="120"> -->
+{% endblock %}
+
+{% block css_inside %}
+    .white-box {
+        padding-left: 100px;
+    }
+    .col-md-offset-2 {
+        margin-left: 125px;
+    }
+    .col-top-pad {
+        padding-top : 30px;
+    }
+    .col-md-offset-3 {
+        margin-left: 133px;
+    }
+    .grey-box {
+        background : #cccccc3d;
+        padding:12px;
+        border: 1px solid #ccc;
+    }
+    .col-top-pad-1 {
+        padding-top : 15px;
+    }
+    .col-align-center {
+        align:center;
+    }
+    .font_red {
+        color: red;
+    }
+{% endblock %}
+{% block inside_body %}
+<div class="row m-b-12 p-t-0" id="app_repay">
+    <div class="col-md-12 col-xs-12">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="white-box">
+                    <h3 class="box-title m-b-0">CHANGE OF REPAYMENT CHANNEL</h3>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" >
+            {% csrf_token %}
+            <div class="row m-b-12 p-t-0">
+                 <div class="col-md-2 col-xs-12  col-md-offset-2">
+                  <label class="col-md-12 col-sm-12">Product:</label>
+                  <div class="input-group m-t-10 ">
+
+                    <select id='product' v-model='product' class="form-control" style="height: 40px" v-on:change="choose_product()">
+                        <option disabled value="">Select Product</option>
+                        <option>MTL & STL</option>
+                        <option>J1</option>
+                        <option>Axiata</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-md-offset-2">
+                &nbsp;<br/><br/>
+                </div>
+            </div>
+            <div class="row m-b-12 p-t-0" v-if="show_search_box_mtl">
+                <div class="col-md-2 col-xs-12  col-md-offset-2">
+                  <label class="col-md-12 col-sm-12">Application ID:</label>
+                  <div class="input-group m-t-10 ">
+                      <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                      <input class="form-control" v-model="appln_id" id="appln_id" name="appln_id" placeholder="Pencarian" type="text" maxlength="13">
+                  </div>
+                </div>
+                <div class="col-md-4 col-xs-12">
+                  <div class="col-md-3 col-xs-12"><label class="col-md-12 col-sm-12">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary btn-rounded btn-block" v-on:click="search_application('search')">
+                        <strong><i class="fa fa-search"></i> Cari</strong>
+                    </button>
+                  </div>
+                </div>
+            </div>
+            <div class="row m-b-12 p-t-0" v-if="show_search_box_j1">
+                <div class="col-md-2 col-xs-12  col-md-offset-2">
+                  <label class="col-md-12 col-sm-12">Account ID:</label>
+                  <div class="input-group m-t-10 ">
+                      <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                      <input class="form-control" v-model="account_id" id="account_id" name="account_id" placeholder="Pencarian" type="text" maxlength="13">
+                  </div>
+                </div>
+                <div class="col-md-4 col-xs-12">
+                  <div class="col-md-3 col-xs-12"><label class="col-md-12 col-sm-12">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary btn-rounded btn-block" v-on:click="search_account('search')">
+                        <strong><i class="fa fa-search"></i> Cari</strong>
+                    </button>
+                  </div>
+                </div>
+            </div>
+            <div class="row m-b-12 p-t-0" v-if="show_search_box_axiata">
+                <div class="col-md-2 col-xs-12  col-md-offset-2">
+                  <label class="col-md-12 col-sm-12">Application ID:</label>
+                  <div class="input-group m-t-10 ">
+                      <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                      <input class="form-control" v-model="axiata_application_id" id="axiata_application_id" name="axiata_application_id" placeholder="Pencarian" type="text" maxlength="13">
+                  </div>
+                </div>
+                <div class="col-md-4 col-xs-12">
+                  <div class="col-md-3 col-xs-12"><label class="col-md-12 col-sm-12">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary btn-rounded btn-block" v-on:click="search_application_axiata('search')">
+                        <strong><i class="fa fa-search"></i> Cari</strong>
+                    </button>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-md-offset-2">
+                &nbsp;<br><br>
+            </div>
+        </div>
+        <div class="row m-b-12 p-t-0" v-if="show_channel">
+            <div class="col-md-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Application ID:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 "><span v-html="application.id"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Customer Name:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 ">
+                            <span v-html="application.fullname"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                      <label class="col-md-12 col-sm-12 col-top-pad">Prefered Channel</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-xs-12  col-md-offset-3 ">
+                        <div class="col-md-12 col-xs-12 grey-box">
+
+                        <span v-for="(row, idx1) in payment_methods">
+                            <span  v-if="idx2 === 'is_primary' && val === true"  v-for="(val, idx2) in row.fields">
+                                <span v-html="row.fields.payment_method_name"></span> (<span v-html="row.fields.payment_method_code"></span>)
+                            </span>
+                        </span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                      <label class="col-md-12 col-sm-12 col-top-pad">New Prefered Channel</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-xs-12  col-md-offset-2 ">
+                        <div class="col-md-12 col-xs-12 col-top-pad-1">
+                            <span v-for="(row, idx1) in payment_methods">
+                                <span  v-if="idx2 === 'is_shown' && val === false"  v-for="(val, idx2) in row.fields">
+                                    <input type="radio" name="paymethod_id" v-model="paymethod_id" v-bind:value="row.pk" v-on:change="change_button_style()"> <span v-html="row.fields.payment_method_name"></span> (<span v-html="row.fields.payment_method_code"></span>)<br>
+                                </span>
+                            </span>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-12  col-md-offset-2 ">
+                        <div class="col-md-6 col-xs-12 col-top-pad col-align-center">
+                            <button type="submit" class="btn btn-info btn-rounded" id="update_btn" v-bind:disabled="btnDisable" v-on:click="search_application('update')">
+                                <strong>Submit</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-b-12 p-t-0" v-if="show_channel_j1">
+            <div class="col-md-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Account ID:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 "><span v-html="account.id"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Customer Name:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 ">
+                             <span v-html="account.fullname"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                      <label class="col-md-12 col-sm-12 col-top-pad">Available Channel</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 col-xs-12  col-md-offset-3 ">
+                        <div class="col-md-12 col-xs-12">
+
+                            <table class="table table-hover table-bordered" width="300px">
+                                 <tr>
+                                    <th>
+                                        Shown
+                                    </th>
+                                    <th>
+                                        Primary
+                                    </th>
+                                    <th>
+                                        Channel
+                                    </th>
+                                </tr>
+                                <tr v-for="(row, idx1) in payment_methods_j1">
+                                    <td>
+                                         <input
+                                            type="checkbox"
+                                            :id="idx1"
+                                            v-model="payment_methods_shown_j1"
+                                            :value="row"
+                                          />
+                                    </td>
+                                    <td>
+                                         <input
+                                            type="radio"
+                                            :id="row.id"
+                                            v-model="j1_is_primary"
+                                            :value="row.id"
+                                          />
+                                    </td>
+                                    <td>
+                                        <span v-html="row.name"></span> (<span v-html="row.va"></span>)
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                 <div class="row" >
+                    <div class="col-md-5 col-xs-12  col-md-offset-2 ">
+                        <div class="col-md-6 col-xs-12 col-top-pad col-align-center" style="padding-bottom: 20px;">
+                            <button type="submit" class="btn btn-info btn-rounded" id="update_btn_j1" v-bind:disabled="btnDisableJ1" v-on:click="search_account('update')">
+                                <strong>Save</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-md-2 col-xs-12  col-md-offset-2" v-if="show_permata_j1 || show_bca_j1" style="border: 1px solid #000; padding-bottom: 20px;">
+                      <label class="col-md-12 col-sm-12 col-top-pad">Generate Channel</label>
+                        <div v-if="show_permata_j1">
+                            <label class="col-md-12 col-sm-12">
+                                 <input
+                                    type="radio"
+                                    :value="permata_code"
+                                    v-model="bank_code"
+                                    v-on:change="change_va_button_style('permata')"
+                                  /> PERMATA Bank
+                             </label>
+                        </div>
+                        <div v-if="show_bca_j1">
+                            <label class="col-md-12 col-sm-12">
+                                 <input
+                                    type="radio"
+                                     :value="bca_code"
+                                     v-model="bank_code"
+                                     v-on:change="change_va_button_style('bca')"
+                                  /> Bank BCA
+                        </label>
+                        </div>
+                        <label class="col-md-12 col-sm-12">
+                            <button type="submit" class="btn btn-info btn-rounded" id="generate_va_j1" v-bind:disabled="btnVaDisableJ1" v-on:click="search_account('generate_va')">
+                                <strong>Generate</strong>
+                            </button>
+                        </label>
+                    </div>
+
+
+                </div>
+
+                 <div class="row" style="padding-bottom: 100px;">
+                    <div class="col-md-5 col-xs-12  col-md-offset-2 ">
+                      &nbsp;
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row m-b-12 p-t-0" v-if="show_channel_axiata">
+            <div class="col-md-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Application ID:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 "><span v-html="application.id"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                        <div class="col-md-12 col-xs-12">
+                            Customer Name:
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+                        <div class="col-md-12 col-xs-12 ">
+                            <span v-html="application.fullname"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 col-xs-12  col-md-offset-2">
+                      <label class="col-md-12 col-sm-12 col-top-pad">Available Repayment Channel</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 col-xs-12  col-md-offset-3 ">
+                        <div class="col-md-12 col-xs-12">
+
+                            <table class="table table-hover table-bordered" width="300px">
+                                 <tr>
+                                    <th>
+                                        Activate
+                                    </th>
+                                    <th>
+                                        Is Shown
+                                    </th>
+                                    <th>
+                                        Primary
+                                    </th>
+                                    <th>
+                                        Channel
+                                    </th>
+                                </tr>
+                                <tr v-for="payment_method in application_axiata_payment_channel">
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            :id="payment_method.pk"
+                                            v-model="selected_channel_axiata"
+                                            :value="payment_method"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            :id="payment_method.pk"
+                                            v-model="axiata_payment_channel_is_shown"
+                                            :value="payment_method"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="radio"
+                                            :id="payment_method.pk"
+                                            v-model="axiata_payment_channel_primary"
+                                            :value="payment_method"
+                                        />
+                                    </td>
+                                    <td>
+                                        <span v-html="payment_method.payment_method_name"></span> (<span v-html="payment_method.payment_method_code"></span>)
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 col-xs-12  col-md-offset-2 ">
+                        <div class="col-md-6 col-xs-12 col-top-pad col-align-center">
+                            <button type="submit" class="btn btn-info btn-rounded" id="update_btn" v-on:click="search_application_axiata('update')">
+                                <strong>Submit</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-b-12 p-t-0" v-if="show_error">
+            <div class="col-md-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-8 col-xs-12  col-md-offset-3 ">
+                        <div class="col-md-12 col-xs-12 grey-box font_red">
+                            <span v-html="msg"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+{% endblock %}
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script type="text/javascript">
+
+var app_repay = new Vue({
+    el: '#app_repay',
+    data: {
+        appln_id: '',
+        application: {
+            id: null,
+            fullname: null
+        },
+        payment_methods: [],
+        show_channel: false,
+        show_error: false,
+        msg: '',
+        paymethod_id: '',
+        loan_id: null,
+        btnDisable: true,
+        product: '',
+        show_search_box_mtl: false,
+        show_search_box_j1: false,
+        show_search_box_axiata: false,
+        account_id: '',
+        payment_methods_j1: [],
+        show_channel_j1: false,
+        paymethod_id_j1: '',
+        account: {
+            id: null,
+            fullname: null
+        },
+        payment_methods_shown_j1: [],
+        payment_method_primary_j1: [],
+        payment_method_customer_bank_j1: [],
+        j1_is_primary: '',
+        btnDisableJ1: true,
+        j1_shown_payment_methods: [],
+        j1_bank_code: '',
+        btnVaDisableJ1: true,
+        show_permata_j1: false,
+        permata_code: "{{ bank_permata_code }}",
+        bca_code: "{{ bank_bca_code }}",
+        show_bca_j1: false,
+        bank_code: '',
+        payment_count: 0,
+        flag: 0,
+        show_channel_axiata: false,
+        selected_channel_axiata: [],
+        application_axiata_payment_channel: [],
+        axiata_payment_channel_primary: {},
+        axiata_payment_channel_is_shown: [],
+        axiata_application_id: ''
+    },
+    methods: {
+        choose_product: function () {
+             this.show_error = false;
+             this.msg = '';
+             self.appln_id = '';
+             self.account_id = '';
+             if(this.product == 'J1') {
+                this.show_search_box_mtl = false;
+                this.show_search_box_j1 = true;
+                this.show_search_box_axiata = false;
+                this.show_channel_j1 = false;
+                this.show_channel = false;
+                this.show_channel_axiata = false;
+             } else if (this.product == 'Axiata'){
+                this.show_search_box_mtl = false;
+                this.show_search_box_j1 = false;
+                this.show_search_box_axiata = true;
+                this.show_channel_j1 =false;
+                this.show_channel = false;
+                this.show_channel_axiata = false;
+             } else {
+                this.show_search_box_mtl = true;
+                this.show_search_box_j1 = false;
+                this.show_search_box_axiata = false;
+                this.show_channel_j1 =false;
+                this.show_channel = false;
+                this.show_channel_axiata = false;
+             }
+        },
+        search_account: function (type) {
+            self = this
+            this.j1_shown_payment_methods = [];
+            self.payment_count = 0;
+            self.flag = 0;
+            if(type == 'generate_va') {
+               self.bank_code = self.bank_code
+               self.payment_count = 1
+            } else {
+               self.bank_code = ''
+            }
+            if (type == 'update') {
+                if(self.payment_methods_shown_j1.length > 0) {
+                    for(var i = 0; i < self.payment_methods_shown_j1.length; i++) {
+                        this.j1_shown_payment_methods[i] = parseInt(self.payment_methods_shown_j1[i]['id']);
+                        if(self.j1_is_primary == this.j1_shown_payment_methods[i]) {
+                            self.flag = 1;
+                        }
+                    }
+                    self.payment_count = self.payment_methods_shown_j1.length;
+
+                } else {
+                    self.payment_count = 0;
+                    self.ToastDanger('Error', 'Please select at least one shown checkbox');
+                }
+                if(self.payment_methods_shown_j1.length > 0) {
+                    if(self.j1_is_primary == '') {
+                        self.payment_count = 0;
+                        self.ToastDanger('Error', 'Please select one one channel as primary');
+                    } else {
+                        if(self.flag == 0) {
+                            self.payment_count = 0;
+                            self.ToastDanger('Error', 'Please select the shown checkbox for the primary channel selected');
+                        }
+                    }
+                }
+            }
+            if(self.payment_count > 0 || type == 'search') {
+                self.show_error = false;
+                self.msg = '';
+                self.show_permata_j1 = false;
+                self.show_bca_j1 = false;
+                self.btnVaDisableJ1 = true;
+                $.ajax({
+                    url :  "{%url 'dashboard:get_available_repaymet_channel_for_account' %}/", // the endpoint
+                    type : "POST", // http method
+                    data : {
+                        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                        account_id: this.account_id,
+                        submit_type: type,
+                        bank_code: self.bank_code,
+                        is_primary_j1_payment_method_id: this.j1_is_primary,
+                        is_shown_j1_payment_methods_id: JSON.stringify(self.j1_shown_payment_methods)
+                    }, // data sent with the post request
+                    // handle a successful response
+                    success : function(json) {
+                        if(json.data.status == "success") {
+                            self.account.id = json.data.application_det.fields.account
+                            self.account.fullname = json.data.application_det.fields.fullname
+                            self.payment_methods_j1 = json.data.payment_methods
+                            self.show_channel_j1 = true
+                            self.payment_methods_shown_j1 = json.data.payment_methods_shown
+                            self.payment_method_primary_j1 = json.data.payment_method_primary
+                            self.payment_method_customer_bank_j1 = json.data.payment_method_customer_bank
+                            if(self.payment_method_customer_bank_j1.length > 0) {
+                                self.show_permata_j1 = true;
+                                self.show_bca_j1 = true;
+                                for( var j = 0; j <  self.payment_method_customer_bank_j1.length; j++) {
+
+                                    if(self.payment_method_customer_bank_j1[j]['code'] == self.permata_code) {
+                                        self.show_permata_j1 = false;
+                                    }
+                                    if(self.payment_method_customer_bank_j1[j]['code'] == self.bca_code) {
+                                        self.show_bca_j1 = false;
+                                    }
+                                }
+
+                            } else {
+                                self.show_permata_j1 = true;
+                                self.show_bca_j1 = true;
+                            }
+                            if(self.payment_method_primary_j1.length > 0) {
+                                self.j1_is_primary = self.payment_method_primary_j1[0]['id']
+                            } else {
+                                self.j1_is_primary = '';
+                            }
+                            if(self.payment_methods_j1.length > 0) {
+                                self.btnDisableJ1 = false;
+                            }
+                            if (type == 'update') {
+                                swal("Sukses !", "Submit berhasil", "success");
+                            }
+                            if (type == 'generate_va') {
+                                swal("Sukses !", "VA created successfully!!", "success");
+                            }
+                        } else {
+                            self.show_channel_j1 = false
+                            self.show_error = true
+                            self.msg = json.data.msg
+                            self.ToastDanger('Error', json.data.msg);
+                        }
+
+                    },
+                    // handle a non-successful response
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        self.ToastDanger('Error', 'Some error occured!');
+                    }
+                });
+            }
+        },
+        change_button_style: function () {
+            this.btnDisable = false;
+        },
+        change_va_button_style: function (bank) {
+            if(bank == 'bca' || bank == 'permata') {
+                this.btnVaDisableJ1 = false;
+            }
+        },
+        search_application: function (type) {
+            self = this
+            self.show_error = false;
+            self.msg = '';
+
+            $.ajax({
+                url :  "{%url 'dashboard:get_repaymet_channel_details' %}/", // the endpoint
+                type : "POST", // http method
+                data : {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    appln_id: this.appln_id,
+                    paymethod_id: self.paymethod_id,
+                    submit_type: type
+                }, // data sent with the post request
+                // handle a successful response
+                success : function(json) {
+                    if(json.data.status == "success") {
+                        self.application.id = json.data.application_det.pk
+                        self.loan_id = json.data.loan
+                        self.application.fullname = json.data.application_det.fields.fullname
+                        self.payment_methods = json.data.payment_methods
+                        self.show_channel = true
+                        self.show_error = false
+                        self.btnDisable = true;
+                        if (type == 'update') {
+                            swal("Sukses !", "Submit berhasil", "success");
+                        }
+                    } else {
+                        self.show_channel = false
+                        self.show_error = true
+                        self.msg = json.data.msg
+                        self.ToastDanger('Error', json.data.msg);
+                    }
+
+                },
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    self.ToastDanger('Error', 'some error occured!');
+                }
+            });
+        },
+        search_application_axiata: function (type) {
+            self = this
+            self.show_error = false;
+            self.msg = '';
+
+            $.ajax({
+                url :  "{%url 'dashboard:get_repayment_channel_details_axiata' %}/", // the endpoint
+                type : "POST", // http method
+                data : {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    application_id: this.axiata_application_id,
+                    select_payment_channel_primary: JSON.stringify(self.axiata_payment_channel_primary),
+                    selected_channel_axiata: JSON.stringify(self.selected_channel_axiata),
+                    payment_channel_is_shown: JSON.stringify(self.axiata_payment_channel_is_shown),
+                    submit_type: type
+                }, // data sent with the post request
+                // handle a successful response
+                success : function(json) {
+                    if(json.data.status == "success") {
+                        paymentMethods = json.data.payment_methods
+                        self.application_axiata_payment_channel = []
+                        self.selected_channel_axiata = []
+                        self.axiata_payment_channel_is_shown = []
+                        for (let i = 0; i < paymentMethods.length; i++) {
+                            fields = paymentMethods[i]['fields']
+                            paymentMethodObj = {
+                                id: paymentMethods[i].pk,
+                                payment_method_code: fields.payment_method_code,
+                                payment_method_name: fields.payment_method_name,
+                                virtual_account: fields.virtual_account,
+                                is_shown: fields.is_shown,
+                                is_primary: fields.is_primary
+                            }
+
+                            if (fields.loan !== null) {
+                                self.selected_channel_axiata.push(paymentMethodObj);
+                            }
+
+                            if (paymentMethodObj.is_primary === true) {
+                                self.axiata_payment_channel_primary = paymentMethodObj
+                            }
+
+                            if (paymentMethodObj.is_shown === true) {
+                                self.axiata_payment_channel_is_shown.push(paymentMethodObj)
+                            }
+
+                            self.application_axiata_payment_channel.push(paymentMethodObj)
+                        }
+                        self.application.id = json.data.application_det.pk
+                        self.loan_id = json.data.loan
+                        self.application.fullname = json.data.application_det.fields.fullname
+                        self.payment_methods = json.data.payment_methods
+                        self.show_channel_axiata = true
+                        self.show_error = false
+                        self.btnDisable = true;
+                        if (type == 'update') {
+                            swal("Sukses !", "Submit berhasil", "success");
+                        }
+                    } else {
+                        self.show_channel_axiata = false
+                        self.show_error = true
+                        self.msg = json.data.msg
+                        self.ToastDanger('Error', json.data.msg);
+                    }
+
+                },
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    self.ToastDanger('Error', 'some error occured!');
+                }
+            });
+        },
+        change_button_style_axiata: function () {
+            if (this.selected_channel_axiata.length > 0) {
+                this.btnDisable = false;
+            } else {
+                this.btnDisable = false;
+            }
+        },
+        ToastSuccess: function(header_msg, body_message){
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg:'#ff6849',
+                icon: 'success',
+                hideAfter: 1500,
+                stack: 6
+            });
+        },
+        ToastDanger: function(header_msg, body_message){
+            $.toast({
+                heading: header_msg,
+                text: body_message,
+                position: 'top-right',
+                loaderBg:'#ff6849',
+                icon: 'error',
+                hideAfter: 2800
+            });
+        },
+    }
+})
+
+</script>
+{% endblock %}

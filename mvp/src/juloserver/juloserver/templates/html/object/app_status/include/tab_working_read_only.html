@@ -1,0 +1,167 @@
+{% load unit %}
+
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Tipe Pekerjaan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.job_type|default:"-"|safe}}
+  </div>
+</div>
+
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Bidang Pekerjaan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.job_industry|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Pekerjaan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.job_description|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Nama Perusahaan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.company_name|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>No Telp Perusahaan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.company_phone_number|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Kode Pos Kantor</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.work_kodepos|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Tanggal Mulai Bekerja</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	
+      {{ object.job_start|date:"d M Y"|default:"-"|safe}} - Lama:  
+      {{ object.job_start|age|safe}} Tahun
+    
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Penghasilan Bersih Per Bulan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.monthly_income|f_rupiahs:"no"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Tanggal Gajian</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	
+      {{ object.payday|date:"d M Y"|default:"-"|safe}}
+    
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Penghasilan T-1</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	
+      {{ object.income_1|f_rupiahs:"no"|safe}}
+    
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Penghasilan T-2</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	
+      {{ object.income_2|f_rupiahs:"no"|safe}}
+    
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Penghasilan T-3</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	
+      {{ object.income_3|f_rupiahs:"no"|safe}}
+    
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Pendidikan Terakhir</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.last_education|default:"-"|safe}}
+  </div>
+</div>	
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Perguruan Tinggi</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.college|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Jurusan</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.major|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>Tahun Lulus</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.graduation_year|default:"-"|safe}}
+  </div>
+</div>
+	
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+  	<strong>IPK</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+  	{{ object.gpa|default:"-"|safe}}
+  </div>
+</div>

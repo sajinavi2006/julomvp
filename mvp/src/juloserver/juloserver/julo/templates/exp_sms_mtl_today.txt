@@ -1,0 +1,1 @@
+Nasabah yth,angs {{payment_number}} Anda {{due_amount}} jatuh tempo hari ini {{due_date}}. Segera lakukan pembayaran ke {{bank_name}} a/n JULO no VA {{account_number}}. WA CS 082211127334

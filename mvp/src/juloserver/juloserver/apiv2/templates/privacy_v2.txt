@@ -1,0 +1,450 @@
+<style>
+    #olParent {
+        margin: 0px 0;
+        padding: 0;
+        list-style-type: upper-roman;
+    }
+
+    #olChild {
+        margin: 5px 0;
+        padding: 0;
+    }
+
+    ol li {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    inline {
+        display: inline-block;
+        margin: 1em;
+    }
+
+    .wrap {
+        display: table;
+    }
+
+    .wrap p {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    * {
+        font-size: 12;
+        color: #5E5E5E;
+    }
+</style>
+<!-- LEGEND
+   <br> (linebreak)
+   &nbsp; (space)
+   <i> italic
+   <b> bold
+   -->
+JULO menjunjung tinggi privasi Anda dan melindungi data-data pribadi Anda, selanjutnya disebut "Konten Anda". JULO berkomitmen untuk tidak menjual Konten Anda kepada pihak manapun yang tidak berkepentingan.
+<table>
+    <tr valign="top">
+        <td>I.</td>
+        <td>
+            <i>Smartphone</i> yang Anda gunakan untuk mengunduh, menggunakan, mengisi dan mengajukan Pinjaman melalui Aplikasi JULO adalah
+            <i>smartphone</i> milik Anda pribadi yang Anda gunakan untuk kebutuhan Anda sehari-hari. Anda secara sukarela dan bertanggung-jawab sepenuhnya atas segala materi dan informasi yang Anda kirimkan, berikan, unggah, sediakan atau tampilkan pada Aplikasi JULO.("Konten Anda").
+
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>II.</td>
+        <td>
+            Dengan menggunakan Aplikasi JULO, Anda memberikan hak kepada JULO untuk mengumpulkan, menyimpan, menyalin, memproses, membuka informasi, mengakses, mentransfer, mengkaji, mengungkap dan menggunakan Konten Anda untuk tujuan yang terkait dengan proses pengajuan Pinjaman Anda secara terus-menerus, sesuai Hukum yang berlaku.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>III.</td>
+        <td>
+            Dengan menggunakan Aplikasi JULO, Anda secara sukarela menyetujui dan memberikan hak kepada JULO untuk memproses pengajuan Pinjaman Anda dengan menggunakan Konten Anda yang diperoleh melalui cara yang termasuk, namun tidak terbatas pada:
+            <table>
+                <tr valign="top">
+                    <td>a.</td>
+                    <td>
+                        Informasi pendaftaran. Pendaftaran akun baru JULO dapat dilakukan dengan menggunakan nomor KTP dan Gmail login. JULO mengumpulkan informasi yang terdapat pada akun Gmail Anda, termasuk email dari pengirim yang mencurigakan maupun sejarah keterlambatan maupun penunggakan kredit. Tujuan: untuk memverifikasi identitas diri dan menentukan kelayakan kredit Anda. Jika Anda ingin membuat pengecualian sewaktu-waktu dalam memberikan akses data tersebut kepada JULO, Anda dapat melakukannya melalui pengaturan akun Google.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>b.</td>
+                    <td>
+                        Informasi dari formulir pengajuan Pinjaman. Pengguna memberikan informasi termasuk namun tidak terbatas terkait nama, tanggal lahir, KTP, paspor atau nomor atau keterangan identifikasi lain, alamat, alamat email, nomor telepon, rincian kontak, informasi keuangan atau informasi dari e-banking dan kartu kredit, deskripsi dan foto pribadi, informasi portofolio produk dan layanan, pola dan perilaku transaksi, latar belakang keuangan, sejarah pendanaan, latar belakang pendidikan dan data kependudukan. Tujuan: untuk memverifikasi identitas diri dan memperhitungkan kesanggupan kredit (<i>financial capability</i>) Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>c.</td>
+                    <td>
+                        Informasi ID Perangkat. Saat pendaftaran pada Aplikasi JULO, kami membuat nomor identifikasi khusus yang berkaitan dengan pemasangan perangkat lunak tersebut. Tujuan: untuk mencegah fraud dan pemakaian perangkat yang sama oleh beberapa oknum.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>d.</td>
+                    <td>
+                        Informasi navigasi. JULO mengumpulkan informasi mengenai cara Anda menavigasi Aplikasi JULO, termasuk cara Anda melihat and berinteraksi dengan konten pada Aplikasi JULO, informasi yang Anda cari, konten yang Anda lihat dan tindakan yang Anda lakukan. Tujuan: untuk pencegahan tindakan fraud, pencegahan pengisian informasi dengan menggunakan bot, maupun untuk membantu proses <i>troubleshooting</i> saat Anda mengalami kesulitan dalam penggunaan aplikasi JULO.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>e.</td>
+                    <td>
+                        Informasi mengenai jejak Jejaring Sosial Anda. JULO merekam interaksi informasi dasar yang didapatkan dari Jejaring Sosial seperti Facebook & LinkedIn. Agar terhubung dengan Jejaring Sosial, Anda harus memasukkan informasi <i>login</i> akun Anda (nama pengguna dan kata sandi). JULO tidak menyimpan informasi <i>login</i> tersebut, dan hanya mengumpulkan data-data dasar dari Jejaring Sosial seperti nama, <i>gender</i>, jumlah teman dan tanggal pembukaan akun. Tujuan: untuk mencegah <i>fraud</i> dan memverifikasi identitas Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>f.</td>
+                    <td>
+                        Informasi mengenai penghasilan Anda. Untuk membuktikan besar penghasilan, Anda dapat mengunggah bukti penghasilan (slip gaji) di Aplikasi JULO, atau apabila memiliki internet banking, Anda dapat login ke internet banking Anda. JULO tidak pernah menyimpan informasi login tersebut, dan hanya mengumpulkan data-data transaksi bank dari tiga bulan terakhir. Tujuan: untuk memverifikasi penghasilan bulanan Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>g.</td>
+                    <td>
+                        Informasi mengenai tempat usaha, tempat bekerja dan tempat tinggal Anda berdasarkan teknologi GPS (<i>Global Positioning System</i>). Tujuan: untuk memverifikasi identitas, tempat tinggal dan tempat bekerja Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>h.</td>
+                    <td>
+                        Foto selfie Anda. Tujuan: untuk memverifikasi identitas dan mencegah fraud.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>i.</td>
+                    <td>
+                        Informasi dan data mengenai Anda yang dipandang penting oleh JULO yang terdapat pada berikut ini. Tujuan: untuk memverifikasi identitas Anda and mencegah fraud.
+                        <table>
+                            <tr valign="top">
+                                <td>i.</td>
+                                <td>
+                                    Kantor perwakilan dan cabang, dan/atau perusahaan atau perusahaan asosiasi terkait Penerima Pinjaman, pada yuridiksi manapun;
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td>ii.</td>
+                                <td>
+                                    Pemerintah atau badan pemerintahan atau badan otoritas;
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td>iii.</td>
+                                <td>
+                                    Institusi finansial lainnya;
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td>iv.</td>
+                                <td>
+                                    Setiap calon pengalihan hak Penerima Pinjaman dan/atau pihak yang telah atau dapat memiliki hubungan kontraktual dengan Penerima Pinjaman dalam kaitannya dengan fasilitas Pinjaman;
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td>v.</td>
+                                <td>
+                                    Biro kredit, termasuk anggota biro kredit tersebut;
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td>vi.</td>
+                                <td>
+                                    Setiap pihak ketiga, suami, istri, keluarga, teman, atasan, bawahan, rekan kerja, penyedia jasa, agen, dan/atau partner bisnis (termasuk, tidak terbatas pada, referensi kredit atau agen evaluasi) dimanapun situasinya mungkin terjadi; dan
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <td>vii.</td>
+                                <td>
+                                    Kepada pihak yang membuka informasi yang diperbolehkan oleh Hukum untuk membuka informasi.
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>IV.</td>
+        <td>
+            Anda memahami bahwa Anda tidak wajib untuk memberikan akses ke data-data di <i>smartphone</i> Anda. Namun, dengan memberikan akses ke data tersebut, Anda akan meningkatkan kesempatan Anda untuk mendapatkan produk Pinjaman dari JULO. Data-data tersebut mendukung Konten Anda termasuk, namun tidak terbatas pada:
+            <table>
+                <tr valign="top">
+                    <td>a.</td>
+                    <td>
+                        Verifikasi identitas
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>b.</td>
+                    <td>
+                        Mitigasi risiko penipuan identitas
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>c.</td>
+                    <td>
+                        Penilaian risiko kredit untuk proses
+                        <i>underwriting</i> Pinjaman
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>d.</td>
+                    <td>
+                        Statistik analisis/kuantitatif
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>e.</td>
+                    <td>
+                        Melakukan kontrol regulasi
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>f.</td>
+                    <td>
+                        Memberikan informasi dan menjawab pertanyaan
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>g.</td>
+                    <td>
+                        Mencegah penipuan, pencucian uang dan kegiatan criminal lainnya.
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>V.</td>
+        <td>
+            Penggunaan Konten Anda yang dikumpulkan melalui Aplikasi JULO dimaksudkan untuk beberapa tujuan yang dapat dipertanggung-jawabkan:
+            <table>
+                <tr valign="top">
+                    <td>a.</td>
+                    <td>
+                        Memverifikasi dan mengesahkan identitas Anda untuk tujuan pencegahan penipuan/<i>fraud</i>.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>b.</td>
+                    <td>
+                        Menaksir sejarah kredit, menguji kelayakan, reputasi kredit dan kemampuan simpan pinjam Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>c.</td>
+                    <td>
+                        Mengkonfirmasi pekerjaan Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>d.</td>
+                    <td>
+                        Mengelola akurasi dan memverifikasi informasi mengenai Anda, sesuai dengan pertimbangan tunggal dan absolut JULO jika dianggap perlu.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>e.</td>
+                    <td>
+                        Memformulasikan data statistik mengenai Anda melalui tindakan penjelajahan dan pola pemakaian <i>smartphone</i> Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>f.</td>
+                    <td>
+                        Menghubungi pihak ketika, misalkan atasan tempat Anda bekerja, suami/istri, keluarga, teman, yang telah Anda ajukan untuk mengonfirmasi tentang diri Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>g.</td>
+                    <td>
+                        Membuat analisa statistik dan mengembangkan juga meningkatkan model statistik JULO untuk memperkirakan risiko Pinjaman.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>h.</td>
+                    <td>
+                        Mengidentifikasi Anda ketika Anda menghubungi JULO dan/atau mengunjungi Aplikasi JULO.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>i.</td>
+                    <td>
+                        Mengidentifikasi produk JULO atau rekan JULO yang menarik bagi Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>j.</td>
+                    <td>
+                        Mencegah dan mendeteksi penipuan.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>k.</td>
+                    <td>
+                        Menghubungi Anda terkait dengan permintaan Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>l.</td>
+                    <td>
+                        Memutakhirkan model statistik dan Aplikasi JULO guna memenuhi kebutuhan pengguna di masa mendatang.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>m.</td>
+                    <td>
+                        Memastikan bahwa konten pada Aplikasi JULO disajikan dengan penyajian yang paling efektif untuk Anda.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>n.</td>
+                    <td>
+                        Mengizinkan Anda berpartisipasi dalam berbagai fitur Layanan yang ditawarkan oleh JULO.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>o.</td>
+                    <td>
+                        Mengevaluasi keefektifan dari pemasaran Aplikasi JULO, untuk pengecekan berkala dan riset pemasaran.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>p.</td>
+                    <td>
+                        Memberitahu Anda tentang perubahan Layanan.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>q.</td>
+                    <td>
+                        Mengizinkan bank, badan keuangan dan/atau pihak ketiga yang berwenang guna mengadakan pengecekan terbatas pada status Anda dalam <i>database</i> atau Layanan JULO.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>r.</td>
+                    <td>
+                        Yang pada akhirnya untuk keperluan bisnis JULO secara umum, yaitu memproses transaksi Pinjaman, membuat keputusan dan memberi fasilitas Pinjaman yang sesuai untuk Anda.
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>VI.</td>
+        <td>
+            Anda berhak untuk menarik Konten Anda setiap saat. Apabila Anda menarik Konten Anda dari Aplikasi JULO, segala hak yang telah Anda berikan pada JULO sebagaimana dimaksud diatas, masih tetap berlaku.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>VII.</td>
+        <td>
+            JULO tidak akan menjual data Anda secara langsung ataupun tidak langsung kepada pihak ketiga yang tidak berkepentingan melalui proses Pinjaman kepada JULO.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>VIII.</td>
+        <td>
+            JULO sewaktu-waktu dapat melakukan modifikasi terhadap data Anda yang disimpan di dalam <i>database</i>. Hal ini termasuk, namun tidak terbatas pada pembaruan informasi Konten Anda, data pengajuan Pinjaman, dan dokumen-dokumen tambahan yang terkait dengan data pengajuan Anda.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>IX.</td>
+        <td>
+            JULO menyetujui, merahasiakan, menjaga dan menghormati privasi Konten Anda. JULO tidak pernah dan tidak akan pernah menjual Konten Anda ke pihak manapun yang tidak berkepentingan. Namun, dengan ketentuan bahwa hal tersebut diatas tidak berlaku apabila:
+            <table>
+                <tr valign="top">
+                    <td>a.</td>
+                    <td>
+                        Terjadi pengakuan secara sah oleh pihak tersebut atas kepemilikan terhadap Konten Anda sebelum pengungkapan.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>b.</td>
+                    <td>
+                        Konten Anda telah diketahui publik dan pada saat itu belum diketahui pelanggaran Hukum yang berlaku.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>c.</td>
+                    <td>
+                        Konten Anda diketahui publik melalui tanpa adanya kesalahan pihak tersebut;
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>d.</td>
+                    <td>
+                        Konten Anda diperoleh secara sah oleh pihak tersebut tanpa larangan kerahasiaan dari sumber-sumber lain.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>e.</td>
+                    <td>
+                        Konten Anda disyaratkan untuk diungkap oleh perintah pengadilan dan/atau menurut Hukum yang berlaku.
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>f.</td>
+                    <td>
+                        Konten Anda diungkapkan dalam proses litigasi apapun.
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>X.</td>
+        <td>
+            Konten Anda disimpan dengan aman. JULO memberikan Anda (atau Anda telah memilih) sebuah kata sandi yang memudahkan Anda untuk mengakses bagian tertentu dari Aplikasi JULO, dan Anda bertanggung-jawab untuk memberlakukan sandi tersebut sebagai sesuatu yang sangat rahasia dan tidak membagi sandi tersebut kepada pihak yang tidak berkepentingan.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>XI.</td>
+        <td>
+            Pengiriman informasi melalui internet tidak sepenuhnya aman. Meskipun JULO telah melakukan hal yang terbaik untuk melindungi Konten Anda, JULO tidak dapat menjamin keamanan Konten Anda yang dikirim melalui koneksi internet Anda. Pengiriman apapun adalah tanggung jawab Anda. Ketika JULO menerima informasi Anda, JULO akan menggunakan prosedur yang ketat dan fitur keamanan sebagai usaha untuk mencegah akses yang tidak bertanggung jawab.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>XII.</td>
+        <td>
+            Sistem keamanan JULO telah memenuhi/melampaui standar industri dan JULO senantiasa mengamati perkembangan teknologi guna memastikan sistem JULO berkembang seperti yang disyaratkan. JULO juga melakukan tes terhadap sistem secara berkala untuk memastikan mekanisme keamanan JULO selalu mutakhir. JULO tunduk kepada hukum perlindungan privasi data di Indonesia dan sepenuhnya mematuhi serta memberikan rasa hormat terbesar.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>XIII.</td>
+        <td>
+            Anda memahami dan menyetujui bahwa JULO berhak, namun tidak berkewajiban, atas kebijakannya sendiri, meninjau dan/atau menghapus (tanpa pemberitahuan) segala Konten Anda termasuk, namun tidak terbatas pada, Konten Anda yang atas kebijakan JULO digolongkan sebagai pelanggaran atas Syarat dan Ketentuan umum, bertentangan dengan Hukum yang berlaku, dan/atau dapat melanggar atau membahayakan hak dan keamanan pengguna lain.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>XIV.</td>
+        <td>
+            Anda memahami dan menyetujui bahwa JULO berhak untuk menyimpan dan menggunakan informasi dan data tentang Anda dengan penuh tanggung jawab, yang dikumpulkan oleh JULO ketika Anda berpartisipasi dalam acara yang kami selenggarakan, seperti pesta, seminar, program kontes atau penghargaan, yang dapat termasuk foto, rekaman video dan suara Anda.
+        </td>
+    </tr>
+    <tr valign="top">
+        <td>XV.</td>
+        <td>
+            Komitmen Kebijakan Sistem Manajemen Keamanan Informasi (SMKI) diatur sesuai dengan karakteristik layanan khususnya pengelolaan sistem JULO dan operasional yang digunakan, bisnis perusahaan dengan mempertimbangkan regulasi bisnis dan undang-undang atau persyaratan yang mengatur kewajiban dan keamanan sesuai dengan kontrak yang dipersyaratkan, maupun bilamana terjadi insiden pada organisasi, dan perbaikan sistem kelangsungan bisnis perusahaan. Komitmen Kebijakan Sistem Manajemen Keamanan Informasi (SMKI) tersebut adalah sebagai berikut:
+            <table>
+                <tr valign="top">
+                    <td>a.</td>
+                    <td>
+                        Memenuhi harapan Stakeholder dengan mewujudkan Confidentiality, Integrity dan Availability informasi melalui implementasi ISO/IEC 27001:2013 Sistem Manajemen Keamanan Informasi (SMKI)
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>b.</td>
+                    <td>
+                        Selalu menaati segala ketentuan dan peraturan terkait keamanan informasi yang berlaku di wilayah Republik Indonesia serta wilayah tempat yang dilakukannya pekerjaan
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>c.</td>
+                    <td>
+                        Berjalannya perbaikan yang berkesinambungan terhadap kinerja Sistem Manajemen Keamanan Informasi (SMKI).
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>        
+</table>

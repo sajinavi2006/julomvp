@@ -1,0 +1,2 @@
+Selamat dan terima kasih atas pelunasan pinjaman Anda!<br><br>
+{{can_reapply_desc}}

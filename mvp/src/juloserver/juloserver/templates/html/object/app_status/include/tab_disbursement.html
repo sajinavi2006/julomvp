@@ -1,0 +1,197 @@
+{% load unit %}
+  <p><strong>Disbursement Details</strong></p>
+  <div class="row m-l-15">
+    <div class="col-md-5 col-xs-6">
+      <b>Nama</b>
+    </div>
+    <div class="col-md-6 col-xs-6 b-l">
+      {{ object.fullname|default:"-"|safe}}
+    </div>
+  </div>
+  <div class="row m-l-15 m-t-3">
+    <div class="col-md-5 col-xs-6">
+      <b>Dana yang Ditransfer</b>
+    </div>
+    <div id="id_amount" class="col-md-6 col-xs-6 b-l">
+      {{object.loan.loan_disbursement_amount|f_rupiahs:"no"|safe}}
+    </div>
+  </div>
+  <div class="row m-l-15 m-t-3">
+    <div class="col-md-5 col-xs-6">
+      <b>Partner</b>
+    </div>
+    <div class="col-md-6 col-xs-6 b-l">
+      {{ object.partner.name|default:"-"|safe}}
+    </div>
+  </div>
+  <p><strong>Disbursement Method</strong></p>
+  <br />
+  <div class="row m-l-15 m-t-3">
+    <div class="col-md-5 col-xs-6">
+      <button type="button" class="btn btn-info" onclick="copyDataDisburse()">
+        <span class="fa fa-files-o"></span>
+        Copy Data Disbursement
+      </button>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <center>
+        <table style="width:100%;border: 1px solid {% if object.loan.loan_disbursement_method == 'doku disbursement' %}black{% else %}#00c292{% endif %};">
+          <thead>
+            <tr>
+              <th class="text-center p-t-5" colspan="2"
+                  style="{% if object.loan.loan_disbursement_method == 'doku disbursement' %}border: 1px solid black{% else %}color:#00c292;border: 1px solid #00c292{% endif %};padding-top:2%;padding-bottom:2%;">
+                Customer Information
+              </th>
+              <th class="text-center p-t-5 " style="{% if object.loan.loan_disbursement_method == 'doku disbursement' %}border: 1px solid black{% else %}color:#00c292;border: 1px solid #00c292{% endif %};padding-top:2%;padding-bottom:2%;">
+                Xendit
+              </th>
+              <th class="text-center p-t-5 " style="{% if object.loan.loan_disbursement_method == 'doku disbursement' %}border: 1px solid black{% else %}color:#00c292;border: 1px solid #00c292{% endif %};padding-top:2%;padding-bottom:2%;">
+                Statuses
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding-left:2%;padding-top:3%;"><b>Nama Bank</b></td>
+              <td style="padding-left:2%;padding-top:3%;">{{object.bank_name|default:"-"|safe}}</td>
+              <td style="padding-left:2%;padding-top:3%;">{{object.bank_name|default:"-"|safe}}</td>
+              <td style="padding-left:2%;padding-top:3%;color:green">VALID</td>
+            </tr>
+            <tr>
+              <td style="padding-left:2%"><b>Cabang Bank</b></td>
+              <td style="padding-left:2%">{{object.bank_branch|default:"-"|safe}}</td>
+              <td style="padding-left:2%">{{object.bank_branch|default:"-"|safe}}</td>
+              <td style="padding-left:2%;color:green">VALID</td>
+            </tr>
+            <tr>
+              <td style="padding-left:2%"><b>Nomor Rekening</b></td>
+              <td style="padding-left:2%">
+                {{object.bank_account_number|default:"-"|safe}}
+              </td>
+              <td style="padding-left:2%">
+                {{disbursement.bank_number|default:"-"|safe}}
+              </td>
+              <td style="padding-left:2%;{% if bank_number_validate == 'VALID' %}color:green{% endif %}">
+                {{bank_number_validate|default:"-"|safe}}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-left:2%;padding-bottom:3%;"><b>Nama Sesuai Rekening</b></td>
+              <td style="padding-left:2%;padding-bottom:3%;"><pre style="font-family:Poppins, sans-serif;font-size: 14px;color:#797979;">{{object.name_in_bank|default:"-"|safe}}</pre></td>
+              <td style="padding-left:2%;padding-bottom:3%;"><pre style="font-family:Poppins, sans-serif;font-size: 14px;color:#797979;">{{disbursement.validated_name|default:"-"|safe}}</pre></td>
+              <td style="padding-left:2%;padding-bottom:3%;{% if name_validate == 'VALID' %}color:green{% elif name_validate == 'INVALID' %}color:red{% endif %}">
+                {{name_validate|default:"-"|safe}}
+              </td>
+            </tr>
+            <tr style="border-top: 1px solid #00c292">
+              <td style="padding-left:2%"><b>Validation</b></td>
+              <td style="padding-left:2%"></td>
+              <td style="padding-left:2%"></td>
+              <td style="padding-left:2%;color:green">{{disbursement.validation_status|default:"-"|safe}}</td>
+            </tr>
+            <tr>
+              <td style="padding-left:2%"><b>Disbursement</b></td>
+              <td style="padding-left:2%"></td>
+              <td style="padding-left:2%"></td>
+              <td style="padding-left:2%;color:green">{{disbursement.disburse_status|default:"-"|safe}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </center>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:2%">
+    {% if object.partner %}
+      <div class="col-md-6 col-xs-6">
+          <table style="width:95%;border: 1px solid {% if object.loan.loan_disbursement_method == 'doku disbursement' %}black{% else %}#ab8ce4{% endif %};">
+            <tr>
+              <th class="text-center" colspan="2"
+                  style="{% if object.loan.loan_disbursement_method == 'doku disbursement' %}border: 1px solid black{% else %}color:#ab8ce4;border: 1px solid #ab8ce4{% endif %};padding-top:2%;padding-bottom:2%;">
+                DOKU
+              </th>
+            </tr>
+            <tr>
+              <td style="padding-left:2%;padding-top:2%;padding-bottom:2%;"><b>Doku ID</b></td>
+              <td style="padding-left:2%;padding-top:2%;padding-bottom:2%;">
+                {{partner_referral.partner_account_id|default:"-"|safe}}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-left:2%;"><b>Partner Status</b></td>
+              <td>
+              {% if object.loan.loan_disbursement_method == 'doku disbursement' %}
+                <small>
+                  <a class="btn btn-success btn-rounded" style="margin-bottom:5%">
+                    <i class="fa fa-check fa-lg"></i> Success
+                  </a>
+                </small>
+              {% else %}
+                <small>
+                  <button id="id_cek_saldo_doku" type="button" class="btn btn-warning btn-rounded"
+                      data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing" onclick="cekAvailable();">
+                      Cek
+                  </button>
+                  <a id="id_available_saldo_doku" class="btn btn-success btn-rounded" style="display: none;">
+                    <i class="fa fa-check fa-lg"></i> Available
+                  </a>
+                  <a id="id_notavailable_saldo_doku" class="btn btn-danger btn-rounded" style="display: none;">
+                    <i class="fa fa-times fa-lg"></i> Not Available
+                  </a>
+                </small>
+              {% endif %}
+              </td>
+            </tr>
+            {% if object.loan.loan_disbursement_method == 'doku disbursement' %}
+            {% else %}
+              <tr>
+                <td colspan="2" ><small><button id="id_transfer_doku" type="button"
+                    class="btn btn-primary btn-block disabled" style="width:96%;margin:2%;">
+                  DOKU Transfer
+                </button></small></td>
+              </tr>
+            {% endif %}
+          </table>
+      </div>
+    {% endif %}
+  </div>
+
+<div class="row">
+  <hr>
+  <div class="col-md-6 col-xs-6">
+    <div class="form-group">
+      <label for="id_form3_bank_name">Nama bank</label>
+      <input type="text" class="form-control" list="banks" name="banks" id="id_form3_bank_name" value="{{object.bank_name}}">
+      <datalist class="form_control" id="banks">
+        {% for bank in bank_list %}
+          <option value="{{ bank }}">{{ bank }}</option>
+        {% endfor %}
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label for="id_form3_bank_branch">Cabang bank</label>
+      <input type="text" class="form-control" id="id_form3_bank_branch" value="{{object.bank_branch}}">
+    </div>
+  </div>
+  <div class="col-md-6 col-xs-6">
+    <div class="form-group">
+      <label for="id_form3_bank_account_number">No rekening</label>
+      <input type="number" class="form-control" id="id_form3_bank_account_number" value="{{object.bank_account_number}}">
+    </div>
+    <div class="form-group">
+      <label for="id_form3_name_in_bank">Nama sesuai rekening bank</label>
+      <div class="input-group input-group-sm">
+      <input class="form-control" id="id_form3_name_in_bank" placeholder="Name in bank"
+            type="text" value="{{object.name_in_bank}}">
+      <span class="input-group-btn" onclick="setNameInBank('{{disbursement.validated_name|default:"-"|safe}}');">
+        <button type="button" class="btn btn-info btn-grp-default">
+          <i class="fa fa-files-o"></i>
+        </button>
+      </span>
+  </div>
+    </div>
+  </div>
+</div>

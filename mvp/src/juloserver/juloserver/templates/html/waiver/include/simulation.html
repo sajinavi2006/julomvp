@@ -1,0 +1,226 @@
+{% load static from staticfiles %}
+
+<div class="loading-div_simulasi" style="display:none" id="loading-div_simulasi" style="padding-left:30px;">
+    <img src="{% static 'images/collections/ajax-loader.gif' %}" >
+</div>
+
+<div id="leftover-var" style="display:none !important;">
+</div>
+
+<div class="row"><div class="col-md-12 box-padding">&nbsp;</div></div>
+<div class="row right-div-bg-bottom" id="div_simulasi_head" style="display:none;">
+    <div class="col-md-12" style="margin-left:200px;">Perhitungan Waiver</div>
+    <button class="btn btn-warning" id="btn_reset" disabled>Reset semua perhitungan</button>
+</div>
+<div class="row" id="div_simulasi_details" style="display:none;">
+    <div class="row" id="waiver_form">
+        <div class="col-md-9" style="display: inline-flex; width:100%;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="align-middle" colspan="3" style="background-color: #7455C4; color: white">Input Waiver Offer</th>
+                    </tr>
+                    <tr style="height: 77px">
+                        <th class="align-middle bg-grey"></th>
+                        <th class="align-middle">Batas Maks. Waiver</th>
+                        <th class="align-middle">Waiver yang Diterapkan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr id="waiver_recommendation_late_fee" class="bg-lightgrey" style="height: 77px">
+                            <td class="align-middle bg-white">Late fee waiver</td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle" id="actual_late_fee_percentage"></td>
+                        </tr>
+                        <tr id="waiver_recommendation_interest" class="bg-lightgrey" style="height: 77px">
+                            <td class="align-middle bg-white">Interest waiver</td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle" id="actual_interest_percentage"></td>
+                        </tr>
+                        <tr id="waiver_recommendation_principal" class="bg-lightgrey" style="height: 77px">
+                            <td class="align-middle bg-white">Principal waiver</td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle" id="actual_principal_percentage"></td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="align-middle" colspan="3" style="background-color: #7455C4; color: white">Perhitungan PTP</th>
+                    </tr>
+                    <tr style="height: 77px">
+                        <th class="align-middle bg-grey"></th>
+                        <th class="align-middle">Simulasi PTP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="height: 77px">
+                        <td class="align-middle w-50p" id="wording_recommended_waiver">Total dengan maksimal waiver</td>
+                        <td class="align-middle w-50p" id="selected_recommended_waiver"></td>
+                    </tr>
+                    <tr style="height: 77px">
+                        <td class="align-middle w-50p" id="wording_actual_waiver">Tagihan berjalan tanpa waiver</td>
+                        <td class="align-middle w-50p" id="outstanding_principal_waiver"></td>
+                    </tr>
+                    <tr style="height: 77px">
+                        <td class="align-middle w-50p" id="wording_100_waiver">Total PTP yang harus dibayar setelah waiver</td>
+                        <td class="align-middle w-50p" id="">
+                            <div class="center flex">
+                                <div class="input-group" style="width: 150px">
+                                    <span class="input-group-addon">Rp.</span>
+                                    <input type="text" class="form-control total-ptp" maxlength="15" id="ptp_amount" name="ptp_amount_waiver" onkeyup="grayedOut('ptp_amount')">
+                                </div>
+                                <p></p>
+                            </div>
+                        </td>
+                        <td class="align-middle w-50p" id="actual_principal_waiver" style="display:none;"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div id="waiver_table_2" style="margin-top: 2%;display: flex; flex-direction: column; ">
+        <div class="flex-row">
+            <table class="table table-bordered" style="margin-bottom: 0;">
+                <thead>
+                    <tr>
+                        <th class="align-middle" colspan="12" style="background-color: #AB8BE4; color: white">
+                            Perhitungan Rincian
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="flex-row">
+            <table class="table table-bordered" id="waiver_amount_table">
+                <thead>
+                    <tr>
+                        <th class="align-middle" colspan="6" style="background-color: #7455C4; color: white; height:37px;">
+                            Rincian Waiver
+                        </th>
+                    </tr>
+                    <tr style="height: 78px;">
+                        <th class="align-middle month-header" style="min-width: 110px;">Bulan Tagihan</th>
+                        <th class="align-middle apply-r4-header" style="min-width: 110px;">Principal</th>
+                        <th class="align-middle apply-r6-header" style="min-width: 110px;">Interest</th>
+                        <th class="align-middle apply-r5-header" style="min-width: 110px;">Late fee</th>
+                        <th class="align-middle" style="min-width: 110px;">Total Waiver</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr style="height: 65px">
+                        <td class="align-middle month-footer bg-grey"></td>
+                        <td class="align-middle weight-lighter apply-r4-footer"></td>
+                        <td class="align-middle weight-lighter apply-r6-footer"></td>
+                        <td class="align-middle weight-lighter apply-r5-footer"></td>
+                        <td class="align-middle"></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <table id="outstanding_amount_table" class="table table-bordered">
+                <thead>
+                    <th class="align-middle" colspan="6" style="background-color: #7455C4; color: white; height:37px;">
+                        Rincian Tagihan
+                    </th>
+                    <tr style="height: 78px">
+                        <th class="align-middle" style="width: 80px;">Jatuh tempo</th>
+                        <th class="align-middle" style="min-width: 110px;">Principal</th>
+                        <th class="align-middle" style="min-width: 110px;">Interest</th>
+                        <th class="align-middle" style="min-width: 110px;">Late fee</th>
+                        <th class="align-middle" style="min-width: 130px;">Total tagihan</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td class="align-middle weight-lighter bg-grey"></td>
+                        <td class="align-middle weight-lighter"></td>
+                        <td class="align-middle weight-lighter"></td>
+                        <td class="align-middle weight-lighter"></td>
+                        <td class="align-middle final_calculation"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="flex-row hide-for-r4">
+            <table id="remaining_installments_table" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="align-middle" colspan="5" style="background-color: #7455C4; color: white">Sisa Tagihan</th>
+                    </tr>
+                    <tr style="height: 78px">
+                        <th class="align-middle" style="min-width: 110px;">Bulan Tagihan</th>
+                        <th class="align-middle" style="min-width: 110px;">Principal</th>
+                        <th class="align-middle" style="min-width: 110px;">Interest</th>
+                        <th class="align-middle" style="min-width: 110px;">Late Fee</th>
+                        <th class="align-middle" style="min-width: 110px;">Total Tagihan</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr style="height: 65px">
+                        <td class="align-middle weight-bold">Total</td>
+                        <td class="align-middle weight-lighter"></td>
+                        <td class="align-middle weight-lighter"></td>
+                        <td class="align-middle weight-lighter"></td>
+                        <td class="align-middle final_calculation"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row"><div class="col-md-12 box-padding">&nbsp;</div></div>
+
+<div class="row" id="div_waiver_request_submit" style="display:none;">
+    <div class="row" id="waiver_validation"></div>
+    <div class="col-md-12" style="padding-left:25px; margin-bottom: 10px;">
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:15px;line-height:15px;">
+                <input type="checkbox" id="is_multiple_ptp_payment" name="is_multiple_ptp_payment" style="height:18px; width:18px; vertical-align: middle;" onChange="">
+                &nbsp;<label for="is_multiple_ptp_payment">Customer akan membayarkan PTP dalam beberapa kali angsuran</label>
+                <p class="multiple-ptp-payment-message" style="display: none;" data-previous="hide">Bagian ini harus di centang</p>
+                <p class="edit-link" data-toggle="modal" data-target="#multiple_ptp_payment_modal" style="display: none;">(Edit)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="padding-left:25px;">
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:15px;">
+                <b>Preferensi Channel Reminder</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:15px;line-height:15px;">
+                <input type="checkbox" id="comms_channel2_1" name="comms_channel2" value="Email"
+                        style="height:18px; width:18px; vertical-align: middle;"
+                        onChange="return check_comms()">&nbsp;<label for="comms_channel2_1">Email</label> &nbsp;&nbsp;
+                <input type="checkbox" id="comms_channel2_2" name="comms_channel2" value="PN"
+                        style="height:18px; width:18px; vertical-align: middle;"
+                        onChange="return check_comms()">&nbsp;<label for="comms_channel2_2">PN</label> &nbsp;&nbsp;
+                <input type="checkbox" id="comms_channel2_3" name="comms_channel2" value="SMS"
+                        style="height:18px; width:18px; vertical-align: middle;"
+                        onChange="return check_comms()">&nbsp;<label for="comms_channel2_3">SMS</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="padding-bottom:15px;line-height:15px;">
+                <input type="checkbox" id="is_customer_confirmed_waiver" name="is_customer_confirmed_waiver"
+                        style="height:18px; width:18px; vertical-align: middle;"
+                        onChange="">&nbsp;<label for="is_customer_confirmed_waiver">Customer tertarik dengan program ini dan sudah menyetujui pilihannya sekarang</label>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col-md-12" >
+                <button type="button"
+                    class="btn btn-primary btn-inactive btn_waiver_request_submit"
+                        id="btn_show_note_modal">
+                    SUBMIT WAIVER REQUEST</button>
+            </div>
+        </div>
+    </div>
+</div>

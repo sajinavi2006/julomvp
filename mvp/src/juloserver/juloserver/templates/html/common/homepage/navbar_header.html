@@ -1,0 +1,58 @@
+{% load checkusergroup from common %}
+
+  <!-- Left navbar-header -->
+  <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+          <li class="sidebar-search hidden-sm hidden-md hidden-lg">
+            <!-- input-group -->
+            <div class="input-group custom-search-form">
+              <input type="text" ng-model = "navSearchField2"  class="form-control" placeholder="Lacak Pengiriman atau cari data lainnya...">
+              <span class="input-group-btn">
+              <a href="{{navSearchField2}}" >
+                <button class="btn btn-default" type="button"> <i class="fa fa-search"></i> </button>
+                </span> 
+              </a>
+            </div>
+            <!-- /input-group -->
+          </li>
+          <li id="id_welcome_dashboard"> 
+            <a href="{% url 'welcome' %}" class="waves-effect"><i class="fa fa-home"></i> 
+              <span class="hide-menu"> Beranda <i class="icon-options-vertical hidden-xs"></i></span>
+            </a>
+          </li>
+          <li id="id_welcome_aboutus">
+            <a href="{% url 'about_us' %}" class="waves-effect"><i class="fa fa-list-alt"></i> 
+              <span class="hide-menu">Tentang Kami <i class="icon-options-vertical hidden-xs"></i></span>
+            </a>
+          </li>
+          <li id="id_welcome_promotions">
+            <a href="{% url 'promotions' %}" class="waves-effect"><i class="fa fa-product-hunt"></i> 
+              <span class="hide-menu">Promosi <i class="icon-options-vertical hidden-xs"></i></span>
+            </a>
+          </li>
+
+			
+		{% if user.is_authenticated %}
+			
+		{% else %}
+			<li class="pull-right hidden-xs">
+	            <a href="{% url 'login' %}" class="waves-effect">Silahkan <i class="icon-login"></i> Login</a>
+	        </li>
+          
+          <li class="pull-right hidden-xs">
+            <a href="javascript:void(0)" class="waves-effect"><i class="fa fa-group"></i>  <span class="hide-menu">Daftar</span></a>
+            <ul class="nav nav-second-level">
+              <li> <a href="#"><i class="ti-user"></i> Role 1</a> </li>
+              <li> <a href="#"><i class="ti-user"></i> Role 2</a> </li>
+              <li> <a href="#"><i class="fa fa-building"></i> Role 3</a> </li>
+            </ul>
+          </li>
+		{% endif %}
+		
+        </ul>
+    </div>
+
+  </div>
+  <!-- Left navbar-header end -->
+  

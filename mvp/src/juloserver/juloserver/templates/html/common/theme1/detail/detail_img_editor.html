@@ -1,0 +1,83 @@
+{% extends "common/theme1/layout_admin.html" %}
+{% load template %}
+
+
+{% block custom_css %}
+{% load static from staticfiles %}
+<!-- Cropper CSS -->
+<link href="{% static 'theme/plugins/bower_components/cropper/cropper.min.css' %}" rel="stylesheet">
+
+{% endblock %}  
+
+{% block script_head %}
+{% endblock %}
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+
+<div id="page-wrapper">
+    <div class="container-fluid p-b-0 hidden-xs">
+      <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+          <h4 class="page-title">
+          {% block breadcrumb_title %}Data{% endblock %}
+          </h4>
+        </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+          <ol class="breadcrumb">
+            {% block breadcrumb_path %}
+              <li><a href="#">Parent</a></li>
+              <li><a href="#">SubParent</a></li>
+              <li class="active">Detail</li>
+          {% endblock %}
+          </ol>
+        </div>
+        <!-- /.col-lg-9 -->
+      </div>
+      <!-- /.row bg-title -->
+      
+    </div>
+  <!-- /.container-fluid -->
+  
+      <!-- /row -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="white-box">
+            <h3 class="box-title m-b-0">{% block list_title %}Detail{% endblock %}</h3>
+            <p class="text-muted m-b-20">{% block list_subtitle %}Subtitle Here{% endblock %}</p>
+            {% block content-list %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      
+      <!-- /row -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="white-box">
+            {% block button_part %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      
+
+</div>
+<!-- /.page-wrapper -->
+        
+{% endblock %}
+
+
+{% block script_additional %}
+
+  <!-- Image cropper JavaScript -->
+  <script src="{% static 'theme/plugins/bower_components/cropper/cropper.min.js' %}"></script>
+  <script src="{% static 'default/js/cropper-init-julo.js' %}"></script>
+  <!-- <script src="{% static 'theme/plugins/bower_components/cropper/cropper-init.js' %}"></script> -->
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load checkusergroup from common %}
+{% checkusergroup in ['sales_ops'] %}
+  <!-- Sales Ops Buckets -->
+  {% for bucket_code, bucket_name, count_item in buckets_count %}
+    <div class="col-lg-1 col-sm-1 col-xs-6">
+      {% if bucket_code %}
+      <a href="{% url 'sales_ops.crm:list' %}?bucket_code={{bucket_code}}" id="sales_ops_list" target="_blank" test_id="sales_ops.bucket_count">
+      {% else %}
+      <a href="{% url 'sales_ops.crm:list' %}" id="sales_ops_list" target="_blank" test_id="sales_ops.bucket_count">
+      {% endif %}
+        <div class="panel panel-info">
+          <div class="panel-heading" style="text-align: center; padding-left: 10px; padding-right: 10px">{{ bucket_name }}
+          </div>
+          <div class="panel-wrapper collapse in" aria-expanded="true">
+            <div class="panel-body">
+              <span class="status_font text-success">{{ count_item }}</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  {% endfor %}
+  <!-- END of Sales ops Buckets -->
+{% endcheckusergroup %}

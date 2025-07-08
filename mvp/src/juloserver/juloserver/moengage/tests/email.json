@@ -1,0 +1,37 @@
+{
+	"app_name": "JuloMoeLive",
+	"source": "MOENGAGE",
+	"moe_request_id": "0fd950ae-8f8a-45a0-b288-1b4fc2699f7d",
+	"events": [{
+		"event_name": "Email Unsubscribed",
+		"event_code": "MOE_EMAIL_UNSUBSCRIBE",
+		"event_uuid": "f2126cc7-1e82-4263-a9a2-7bb5e4f8c7f5",
+		"event_time": 1656893498,
+		"event_type": "CAMPAIGN_EVENT",
+		"event_source": "MOENGAGE",
+		"uid": "1000004492",
+		"email_id": "alifachmi@gmail.com",
+		"event_attributes": {
+			"campaign_id": "60ac76f0d92b8a03c65693e0",
+			"campaign_name": "J1x220_Email",
+			"campaign_type": "SMART_TRIGGER",
+			"campaign_channel": "EMAIL",
+			"moe_delivery_type": "Event Triggered",
+			"moe_campaign_tags": [
+				"application"
+			],
+			"moe_campaign_channel": "Email",
+			"email_subject": "Pinjaman JULO telah aktif dan dana telah dicairkan"
+		},
+		"user_attributes": {
+			"account1_payment_id": 4065,
+			"loan_status_code": 220,
+			"payment_id": 4000025792,
+			"moengage_user_id": "625a068b3d3ed623d1031009",
+			"mobile_phone_1": "6289673568492",
+			"application_id": 2000000033,
+			"email": "alifachmi@gmail.com?"
+		},
+		"device_attributes": {}
+	}]
+}

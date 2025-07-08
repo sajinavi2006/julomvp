@@ -1,0 +1,134 @@
+{% load unit %}
+  <div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> PTP Date: </label>
+        <div class="col-md-12 col-sm-12">
+          <div class="col-md-3 col-sm-12">
+              <div class="input-group">
+                 <input class="form-control mydatepicker"
+                       id="id_form2-ptp_date" maxlength="None"
+                       name="form2-ptp_date_dob" placeholder="dd-mm-yyyy "
+                       type="text" value="{{ payment_obj.ptp_date|date:'d-m-Y'|default:''|safe }}">
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-6 col-sm-12 form_event-group">
+          <label class="col-md-12 col-sm-12"> PTP Amount: </label>
+          <div class="col-md-12 col-sm-12">
+              <div class="input-group m-t-12">
+                  <span class="input-group-addon">Rp.</span>
+                  <input class="form-control mask" id="id_ptp_amount" maxlength="15" type="text">
+                  <span class="input-group-addon" value="{{ ptp_amount.amount }}"><i class="icon-wallet" ></i></span>
+              </div>
+          </div>
+      </div>
+    </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> PTP mobile phone: </label>
+        <div class="col-md-6 col-sm-12">
+          <div class="col-md-12 col-sm-12">
+            <div class="input-group">
+              <select class="form-control"
+                      id="id_ptp_mobile_select"
+                      name="ptp_mobile_phone_select"
+                      placeholder=""
+                      onchange="onChangePtpMobile()"
+                      required="true"
+                      style="width:329px;">
+                  {% for ptp_mobile in ptp_robocall_mobile_list %}
+                    <option value="{{ ptp_mobile.phone_number | phone}}">
+                      {{ ptp_mobile.contact_source }}
+                    </option>
+                  {% endfor %}
+                  <option value="custom"> custom number </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="input-group">
+            <input class="form-control"
+                   type="number"
+                   id="id_ptp_mobile_phone_number"
+                   name="ptp_mobile_phone"
+                   {% if ptp.mobile_phone_number %}
+                     value="{{ ptp_mobile.phone_number }}"
+                    {% else %}} value="{{ app_obj.mobile_phone_1 }}" {% endif %}
+            />
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> Robocall template</label>
+        <div class="col-md-12 col-sm-12">
+          <div class="col-md-12 col-sm-12">
+              <div class="input-group">
+                {% if payment_obj.is_ptp_robocall_active == True %}
+                  <input type="radio" name="active_button"
+                         value="true" checked="checked" onclick="onPtpActive(true)">On
+                  <input type="radio" name="active_button"
+                         value="false" onclick="onPtpActive(false)">Off
+                {% else %}
+                  <input type="radio" name="active_button"
+                         value="true" onclick="onPtpActive(true)">On
+                  <input type="radio" name="active_button"
+                         checked="checked" value="false" onclick="onPtpActive(false)">Off
+                {% endif %}
+                  <input type="hidden" id="is_ptp_robocall_active_choosen" />
+
+              </div>
+              <div class="input-group">
+                <select class="form-control"
+                        id="id_robocall_template_choice"
+                        name="robocall_template"
+                        placeholder=""
+                        onchange="onChangeRoboTemplate()"
+                        required="true">
+                  {% if not payment_obj.ptp_robocall_template_id %}
+                    {% for robocall_template in robocall_templates %}
+                      {% if robocall_template.template_name == 'voice_payment_reminder_mtl' %}
+                        <option selected value="{{robocall_template.id}}">
+                          {{ robocall_template.template_name }}
+                        </option>
+                      {% else %}
+                        <option value="{{robocall_template.id}}">
+                          {{ robocall_template.template_name }}
+                        </option>
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                    {% for robocall_template in robocall_templates %}
+                        {% if payment_obj.ptp_robocall_template_id == robocall_template.id %}
+                          <option selected value="{{robocall_template.id}}">
+                            {{ robocall_template.template_name }}
+                          </option>
+                        {% else %}
+                          <option value="{{robocall_template.id}}">
+                            {{ robocall_template.template_name }}
+                          </option>
+                        {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                </select>
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 form_event-group">
+      <label class="col-md-12 col-sm-12"> Robocall template text</label>
+      <div class="col-md-12 col-sm-12">
+        <div class="col-md-12 col-sm-12">
+          <code id='robocall_template_text'>
+          </code>
+        </div>
+      </div>
+    </div>
+  </div>

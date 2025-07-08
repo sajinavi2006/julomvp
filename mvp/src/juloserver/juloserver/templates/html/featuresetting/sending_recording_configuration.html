@@ -1,0 +1,53 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls admin_static %}
+
+{% block extrahead %}{{ block.super }}
+<style type="text/css">
+    .form-row {
+        overflow: visible !important;
+    }
+    .selectize-control {
+        width: 300px;
+        display: inline-grid;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+</style>
+{% endblock %}
+{% block admin_change_form_document_ready %}
+<script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.field-duration_from').hide()
+        $('.field-duration_until').hide()
+        $('.recording-resource-control').selectize();
+        $('.buckets-control').selectize();
+        $('.call-result-ids-control').selectize();
+        $('#id_recording_duration').change(function(){
+            val = $(this).val()
+            if (val===''){
+                $('.field-duration_from').hide()
+                $('.field-duration_until').hide()
+                return
+            }
+            if (val==='between'){
+                $('.field-duration_from').show(200)
+                $('.field-duration_until').show(200)
+            }else{
+                $('.field-duration_from').show(200)
+                $('.field-duration_until').hide(200)
+            }
+        })
+        $('#id_recording_duration').trigger('change')
+    })
+</script>
+{% endblock %}

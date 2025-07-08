@@ -1,0 +1,16 @@
+{% load unit utils %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-4 m-b-20">
+            <b style="font-size: 120%">Limit is NOT Generated</b>
+        </div>
+
+        </br>
+        <p>Halo {{ object.fullname_with_title }},</p>
+
+        <p>Untuk penentuan disetujui/tidaknya Limit JULO Anda dapat tunggu dalam 1x24 jam kedepan, nanti akan mendapatkan notifikasi lebih lanjut melalui notifikasi di aplikasi ya {{ object.gender|bapak_or_ibu_lower|safe }}.</p>
+
+        <p>Selamat siang dan selamat beraktivitas kembali. Terima kasih.</p>
+    </div>
+</div>

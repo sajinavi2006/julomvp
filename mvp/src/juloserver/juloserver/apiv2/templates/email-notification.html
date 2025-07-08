@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 15px;
+            color: #404040;
+            background: #f1f1f1;
+        }
+
+        p {
+            margin: 0;
+            float: left;
+            width: 100%;
+        }
+
+        a {
+            color: #0077a9;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .container {
+            width: 50vw;
+            margin: auto;
+        }
+
+        .cover {
+            background: #fff;
+            padding: 15px;
+            float: left;
+            width: 100%;
+        }
+
+        .top {
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #d8d8d8;
+        }
+
+        .top_right {
+            float: right;
+
+        }
+
+        .top_right p {
+            margin-bottom: 0;
+        }
+
+        .top_right span {
+            font-weight: bold;
+        }
+
+        .table_content {
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .table_content p {
+            margin-bottom: 5px;
+            float: left;
+            width: 100%;
+        }
+
+        .table_content span {
+            float: left;
+        }
+
+        .table_content .left {
+            font-weight: normal;
+            float: left;
+            width: 12.5%;
+        }
+
+        .table_content .mid {
+            width: 5%;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .table_content .right {
+            width: 70%;
+            font-weight: normal;
+            line-height: 55px;
+            margin-top: -10px;
+        }
+
+        .centered {
+          width: 40%;
+          margin: auto;
+        }
+
+        .button{
+          background-color: #008CBA;
+          border: none;
+          width: 100%;
+          color: white;
+          padding: 15px 0;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 15px;
+          margin-bottom: 15px;
+        }
+
+        .bottom {
+            float: left;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        h6 {
+            font-weight: bold;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .content {
+            float: left;
+            width: 100%;
+            line-height: 28px;
+            margin-bottom: 25px;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+        }
+
+        .content span {
+            font-weight: bold;
+        }
+
+        .content li {
+            list-style: disc;
+            margin-bottom: 15px;
+        }
+
+        .footer_content {
+            float: left;
+            width: 100%;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #d8d8d8;
+        }
+
+        .footer_content .f_top {
+            float: left;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .f_mid {
+            float: left;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .f_bttm {
+            float: left;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            max-width: 175px;
+            margin-bottom: 25px;
+        },
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="cover">
+            <img src="{{header_notification}}"
+                 style="width:100%"/>
+            <div class="content">
+                <p>Hi JULOvers,</p>
+                <p>
+                    Dalam rangka peningkatan kualitas pembayaran pinjaman JULO, Kami melakukan perubahan 6 angka awal pada nomor Virtual Account Bank Permata
+                </p>
+                <p>
+                    dari {{old_va}} menjadi {{new_va}}
+                </p>
+                <p>
+                    terhitung mulai 25 Januari 2019 Pukul {{ udate|time:"h:ia" }}
+                </p>
+                <p style="margin-top:25px">
+                    Silahkan cek nomor Virtual Anda di aplikasi JULO.
+                </p>
+                <div class="centered">
+                  <a href="https://go.onelink.me/zOQD/490aeeb8" class="button">Cek No Virtual Account</a>
+                </div>
+                <p>
+                    Selain melalui Virtual Account Bank Permata, Anda dapat melakukan pembayaran melalui:
+                </p>
+                <p>
+                    <div class="table_content">
+                        <p style="float: left; width: 100%">
+                            <span  style="float: left" class="left"><img src="https://trello-attachments.s3.amazonaws.com/5b6aa596ee8ac749bf03883f/5c49a36d604712646336e564/f3b82e74aa12474494c95cebbea3e969/bca.png"/></span>
+
+                            <span class="right" style="line-height:55px">Virtual Account BCA</span>
+                        </p>
+                        <p style="float: left; width: 100%">
+                            <span  style="float: left" class="left"><img src="https://trello-attachments.s3.amazonaws.com/5b6aa596ee8ac749bf03883f/5c49a36d604712646336e564/2a7a07f640a180c2b6c2a68731129a97/indo.png"/></span>
+                            <span style="line-height:55px" class="right">Melalui Kasir Indomaret</span>
+                        </p>
+                        <p style="float: left; width: 100%">
+                            <span style="float: left" class="left"><img src="https://trello-attachments.s3.amazonaws.com/5b6aa596ee8ac749bf03883f/5c49a36d604712646336e564/58481c25cc045c78a72f8d87127651fc/alfa.png"/></span>
+                            <span style="line-height:55px" class="right"> Melalui Kasir Alfamart</span>
+                        </p>
+                    </div>
+                    <p style="float: left; width: 100%">
+                        Jangan lupa untuk terus melakukan pembayaran tepat waktu untuk skor kredit yang baik agar Anda dapat mengajukan Pinjaman JULO berikutnya.<br><br>
+                        Untuk informasi lebih lanjut, silahkan menghubungi Petugas Kami di Nomor Whatsapp CS  di 082211127334 atau email korespondensi di  collections@julo.co.id.
+                        <br>
+                        <br>Salam Hangat,<br>
+                        Tim JULO
+                    </p>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

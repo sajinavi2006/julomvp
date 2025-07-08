@@ -1,0 +1,70 @@
+{% extends "admin/base_site.html" %}
+{% load static from staticfiles %}
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'theme/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+            <table border="1" style="margin-bottom: 20px">
+                <tr>
+                    <td align="center"><h3>{{ notif.title }}</h3></td>
+                </tr>
+                <tr>
+                    <td align="center"><img src="{{ image_url }}" height="300" width="300"></td>
+                </tr>
+                <tr>
+                    <td align="center"><p>{{ notif.body }}</p></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <form method="post">
+                {% csrf_token %}
+                {{ send_form.as_p }}
+                <div class="submit-row">
+                    <input type="submit" value="Send" class="default" name="_save">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% block footer %}
+        <script src="{% static 'theme/plugins/bower_components/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'theme/bootstrap/dist/js/bootstrap.js' %}"></script>
+        <script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+    {% endblock %}
+
+    <script>
+        var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+            '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+        $('.basicAutoComplete').selectize({
+            delimiter: ';',
+            persist: false,
+            maxItems: null,
+            valueField: 'email',
+            labelField: 'email',
+            searchField: 'email',
+            options: [],
+            create: false,
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/admin/email_autocomplete/',
+                    type: 'GET',
+                    data: {
+                        q: query,
+                    },
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

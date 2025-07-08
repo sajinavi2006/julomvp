@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Pinyon Script" rel="stylesheet">
+  <style>
+    body {
+      color : #5E5E5E;
+      font-family: Montserrat;
+      text-align: justify;
+    }
+    h4 {
+      color : #0598D0;
+      text-align: center;
+    }
+    tr {
+      align: center;
+    }
+    .installment {
+      width: 100%;
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+    #topBottomBorder {
+      border-top: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+    #topBorder {
+      border-top: 1px solid black;
+    }
+    #bottomBorder {
+      border-bottom: 1px solid black;
+    }
+    .hideExtra {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow:ellipsis;
+    }
+    .box-left {
+      float: left;
+      min-width: 100px;
+      text-align: left;
+    }
+    .box-right {
+        float: right;
+        min-width: 100px;
+        text-align: left;
+    }
+    .spaceSign {
+      height: 120px;
+    }
+    .signature-font {
+        font-family: Pinyon Script;
+        font-size: 22px;
+        padding-top: 47px;
+    }
+  </style>
+</head>
+<body>
+  <h4>SURAT PERJANJIAN HUTANG PIUTANG<br>
+      UNTUK PEMBIAYAAN KARYAWAN<br>
+      Nomor: {{ loan.loan_xid | safe }}</h4>
+  <br/>
+  <p>Surat Perjanjian Hutang Piutang Untuk Pembiayaan Karyawan (selanjutnya disebut “SPHP”) ini dibuat dan disetujui
+      pada tanggal {{ date_today | safe }}, oleh dan antara :</p>
+  <ol>
+    <li>Pemberi Pinjaman  adalah Perseroan Terbatas berdasarkan hukum negara Republik Indonesia,  yang berkedudukan di
+        Jakarta Selatan. Dalam hal ini diwakilkan oleh Direktur atau wakilnya berdasarkan surat kuasa, yang bertindak
+        untuk dan atas nama PT Julo Teknologi Finansial dan afiliasinya (selanjutnya disebut “JULO atau “Pemberi Kerja”)
+        .</li>
+    <li>Penerima Pinjaman, adalah karyawan PT Julo Teknologi Finansial dan afiliasinya,
+        yang memiliki identitas sebagai berikut :
+      <table>
+        <tbody>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">Nama:</th>
+                <td>{{ application.fullname | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 50px;">Tgl. lahir:</th>
+                <td>{{ dob | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. KTP:</th>
+                <td>{{ real_nik | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap;">No. Telpon:</th>
+                <td>{{ application.mobile_phone_1 | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 100px;">Alamat:</th>
+                <td>{{ full_address | safe }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding-left: 20px; vertical-align: top; white-space: nowrap; width: 100px;">Bekerja di:</th>
+                <td>PT JULO Teknologi Finansial</td>
+            </tr>
+        </tbody>
+      </table>
+         <p>(selanjutnya disebut “ Penerima Pinjaman atau Karyawan”)</p>
+    </li>
+  </ol>
+  <p> Penerima Pinjaman menyatakan setuju untuk mengikatkan diri kepada JULO atas ketentuan-ketentuan sebagai
+      berikut:</p>
+  <ol>
+    <li>Bahwa Penerima Pinjaman mengajukan permohonan dengan nomor perjanjian pinjaman {{loan.loan_xid | safe}}
+        melalui JULO, dan telah disetujui pinjaman dalam bentuk {{ loan_type }} sebesar {{loan_amount | safe}}
+        ("Pinjaman"), tanpa biaya provisi dan dengan suku bunga 0%.</li>
+    <li>Bahwa Penerima Pinjaman berjanji untuk melunasi pinjaman dengan melakukan pembayaran sesuai dengan jadwal
+        berikut ini:
+      <table class="installment" style="margin-top:5px;">
+        <tr id ="topBottomBorder">
+          <th>Cicilan</th>
+          <th>Jumlah</th>
+          <th>Jatuh Tempo</th>
+        </tr>
+        {% for payment in payments %}
+          {% if forloop.last %}
+            <tr id="bottomBorder">
+          {% else %}
+            <tr>
+          {% endif %}
+              <td>
+                <div class="hideExtra">{{ payment.payment_number | safe }}</div>
+              </td>
+              <td>
+                <div class="hideExtra">{{ payment.due_amount | safe }}</div>
+              </td>
+              <td>
+                <div class="hideExtra">{{ payment.due_date | safe }}</div>
+              </td>
+            </tr>
+        {% endfor %}
+      </table>
+    </li>
+    <li>Bahwa Penerima Pinjaman akan melakukan pembayaran setiap bulan melalui pemotongan gaji secara otomatis sejumlah
+        nilai cicilan berdasarkan jadwal pembayaran diatas.
+    </li>
+    <li>
+        Bahwa apabila pada saat Penerima Pinjaman mengundurkan diri atau dikenakan pemutusan hubungan kerja masih
+        terdapat nilai terutang yang belum dibayarkan, maka Penerima Pinjaman dengan itikad baik dan penuh tanggung
+        jawab tidak dapat mengakhiri Perjanjian Kerjanya dengan Pemberi Kerja termasuk namun tidak terbatas untuk :
+      <ol>
+          <li>setuju untuk mengalokasikan dan mengutamakan  gaji yang diterima pada periode bulan terakhirnya bekerja di
+              perusahaan Pemberi Kerja  untuk melunasi sisa hutang tersebut.</li>
+          <li>jika seluruh total gaji yang telah dialokasikan sebagaimana ayat 1 tidak mencukupi untuk melunasi
+              keseluruhan dari nilai terutang dan masih terdapat sisa yang terutang, maka Penerima Pinjaman wajib untuk
+              melunasi sisa yang terutang tersebut kepada JULO secara sekaligus sebelum masa kerjanya di perusahaan
+              Pemberi Kerja berakhir.</li>
+          <li>setelah nilai terutang lunas dibayarkan, Penerima Pinjaman berhak untuk menerimakan gaji yang tersisa,
+              jika ada.</li>
+      </ol>
+    </li>
+    <li>Bahwa apabila Penerima Pinjaman tidak mengindahkan pasal 4 di atas, maka Penerima Pinjaman bersedia untuk
+        dilakukan penagihan oleh tim JULO atau pihak yang ditunjuk oleh JULO dan dianggap tidak memenuhi kewajibannya
+        sebagai karyawan, oleh karenanya Pemberi Kerja dapat melakukan penahanan sementara terhadap surat keterangan
+        kerja (<em>paklaring</em>) sampai dengan Penerima Pinjaman melunasi kewajibannya berdasarkan SPHP ini.
+    </li>
+  <li>
+    Pernyataan Persetujuan
+       <ol>
+          <li>Bahwa Penerima Pinjaman menyetujui dan mengetahui atas segala hak dan kewajibannya yang terdapat dalam perjanjian kerja dengan Pemberi Kerja adalah menjadi salah satu acuan bagi Pemberi Kerja untuk memberikan fasilitas pinjaman ini, sehingga Penerima Pinjaman wajib menyelesaikan segala kewajiban sebagai karyawan berdasarkan perjanjian kerja dan Pemberi Kerja dapat melakukan tindakan yang dianggap perlu sebagai Pemberi Kerja.
+          </li>
+          <li>Penerima Pinjaman dan JULO mengerti atas hak dan kewajiban masing-masing pihak, sesuai dengan yang
+              tertuang pada Syarat & Ketentuan dan akan senantiasa mematuhi ketentuan hukum yang berlaku dalam
+              melaksanakan Perjanjian ini. Sengketa yang mungkin timbul dari penafsiran dan/atau pelaksanaan Perjanjian
+              ini akan diselesaikan melalui musyawarah untuk mencapai mufakat antara kedua belah pihak dan/atau melalui
+              jalur hukum yurisdiksi yang kompeten. Hal yang belum dituangkan dalam Perjanjian ini akan diatur di
+              kemudian hari melalui Perubahan Perjanjian (Addendum), yang merupakan persetujuan lebih lanjut antara
+              Pemberi Pinjaman dan Penerima Pinjaman, dan bagian yang tidak terpisahkan dari SPHP ini, serta tidak
+              memerlukan tanda tangan ulang.</li>
+      </ol>
+</li>
+  <li>
+    Keadaan Kahar
+      <div>
+        Definisi Keadaan Kahar adalah suatu keadaan tanpa kesalahan ataupun kelalaian yang diakibatkan oleh salah satu Pihak yang terjadi di luar kendali Pihak tersebut, dimana Pihak tersebut secara wajar tidak mampu untuk mencegah atau mengatasinya, termasuk namun tidak terbatas pada bencana alam, wabah penyakit, perang (baik dideklarasikan maupun tidak), invasi, konflik bersenjata, kerusuhan, demonstrasi, revolusi atau kudeta, tindak terorisme, sabotase atau kerusakan akibat kriminalisme, ledakan nuklir, radioaktif atau kontaminasi kimia atau ionisasi radiasi, tekanan gelombang akibat pesawat terbang atau benda melayang lainnya yang berkecepatan suara atau diatas kecepatan suara, gangguan listrik, gangguan sistem atau jaringan pihak ketiga lainnya atau perubahan peraturan perundang-undangan atau kebijakan pemerintah yang dapat mempengaruhi kemampuan salah satu Pihak ataupun Para Pihak. Dalam keadaan kahar, Penerima Pinjaman tetap bertanggung jawab atas kewajibannya berdasarkan Perjanjian ini.
+      </div>
+  </li>
+</ol>
+<div style="page-break-before:always"></div>
+<p>
+  Perjanjian ini dibuat oleh JULO secara elektronik dan secara sah, serta mengikat Para Pihak terhitung mulai dari hari dan tanggal tersebut diatas. Perjanjian ini memiliki kekuatan hukum yang sama dengan perjanjian yang dicetak, ditulis tangan dan ditandatangani secara sadar dan tanpa paksaan dari pihak manapun, serta dilindungi oleh UU. No. 11/2008 tentang Informasi dan Transaksi Elektronik, dan Peraturan Pemerintah No.82/2012 beserta segala Amandemennya tentang Penyelenggaraan Sistem dan Transaksi Elektronik, dan Peraturan Pelaksananya. Segala penyalahgunaan atas dokumen perjanjian ini akan ditindak sesuai dengan hukum dan peraturan yang berlaku.
+</p>
+  <br />
+  <div class="row">
+    <div class="col">
+      <div class="box-left">
+          <div class="row">
+              <div>Jakarta, {{ date_today }}</div>
+          </div>
+          <div class="row">
+            <div>PT. JULO Teknologi Finansial</div>
+          </div>
+          <div class="row">
+              <div class="spaceSign">
+                {% if loan.loan_status_id > 210 %}
+                    <div class="signature-font">{{ loan.lender.poc_name }}</div>
+                {% endif %}
+              </div>
+          </div>
+          <div class="row">
+              <div>Direktur</div>
+          </div>
+      </div>
+  </div>
+    <div class="col">
+        <div class="box-right">
+            <div class="row">
+                <div class="sig"></div>
+            </div>
+            <div class="row">
+              <div class="sig">{{ application.fullname }}</div>
+           </div>
+            <div class="row">
+                <div class="sig"><b>Penerima Pinjaman</b></div>
+            </div>
+            <div class="row">
+                <div class="sig"></div>
+            </div>
+            <div class="row">
+                <div class="spaceSign"> {% if signature %} <img height="auto" src="{{signature|safe}}" style="border:0;display:block;outline:none;text-decoration:none;height:auto"/> {% endif %} </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

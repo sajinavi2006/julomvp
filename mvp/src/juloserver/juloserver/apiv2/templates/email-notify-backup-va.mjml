@@ -1,0 +1,50 @@
+<mjml>
+  <mj-head>
+    <mj-font name="Montserrat" href="https://fonts.googleapis.com/css?family=Montserrat:400,700" />
+    <mj-attributes>
+      <mj-all font-family="Montserrat, sans-serif" /> </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-image width="100px" align="right" src="https://s3-ap-southeast-1.amazonaws.com/julopublic/email_assets/Logo_JULO.jpg" /> </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-weight="700" font-size="14px"> Pelanggan Yth {{first_name}} </mj-text>
+        <mj-text font-size="12px" line-height="30px"> Terima kasih atas kepercayaan Anda untuk memilih JULO sebagai solusi keuangan Anda. Kami informasikan bahwa terdapat perubahan pada nomor Virtual Account Anda dengan detail sebagai berikut: </mj-text>
+        <mj-text font-size="12px" font-weight="700">
+        {{va_method}}: {{va_number}} </mj-text>
+        <mj-text font-size="12px" font-weight="700">Kode Bank: {{bank_code}} </mj-text>
+        <mj-text font-size="12px" line-height="30px"> Silahkan lakukan pembayaran angsuran JULO Anda dengan nomor Virtual Account yang telah tertera di atas. Untuk pertanyaan, keluhan atau informasi lebih lanjut, Anda dapat menghubungi customer service kami melalui email cs@julo.co.id. </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="12px" font-weight="700"> Hormat Kami, </mj-text>
+        <mj-text font-size="12px" font-weight="700">CS JULO</mj-text>
+        <mj-divider border-width="1px" border-color="lightgrey"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-group>
+        <mj-column>
+          <mj-text align="left" font-size="10px">
+            <p>PT.JULO Teknologi Finansial </p>
+            <p>88@Kasablanka Tower A Lantai 5. Jl. Casablanka Raya Kav.88, Jakarta Selatan 12870</p>
+            <p>© Copyright PT JULO Teknologi Finansial - All Rights Reserved</p>
+          </mj-text>
+        </mj-column>
+        <mj-column>
+          <mj-social font-size="12px" icon-size="15px" mode="horizontal">
+            <mj-social-element name="facebook" href="https://www.facebook.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="linkedin" href="https://www.linkedin.com/company/juloindonesia"> </mj-social-element>
+            <mj-social-element name="twitter" href="https://twitter.com/juloindonesia"> </mj-social-element>
+            <mj-social-element name="youtube" href="https://www.youtube.com/channel/UCA9WsBMIg3IHxwVA-RvSctA"> </mj-social-element>
+            <mj-social-element name="instagram" href="https://www.instagram.com/juloindonesia"> </mj-social-element>
+          </mj-social>
+        </mj-column>
+      </mj-group>
+    </mj-section>
+  </mj-body>
+</mjml>

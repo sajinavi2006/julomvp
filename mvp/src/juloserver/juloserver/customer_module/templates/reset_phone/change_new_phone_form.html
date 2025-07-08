@@ -1,0 +1,322 @@
+<html lang="id" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+  style="color-scheme: light dark;">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings xmlns:o="urn:schemas-microsoft-com:office:office">
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <style>
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+  </style>
+  <![endif]-->
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    @media (max-width: 600px) {}
+
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    .reset-pin-form {
+      max-width: 550px;
+      margin: auto;
+      box-shadow: 0px 1px 16px 0px rgba(0, 0, 0, 0.12);
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .input-field {
+      margin-bottom: 8px;
+    }
+
+    .input-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .input-field input {
+      width: 100%;
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+      border-radius: 8px;
+      border: 1px solid #E0E0E0;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 12px;
+      margin-top: 4px;
+      min-height: 46px;
+      background-color: white;
+      color:black;
+    }
+
+    .input-field input:read-only {
+      background-color: #EDEDED;
+      color: #757575;
+    }
+
+    button {
+      font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background-color: #00ACF0;
+      width: 100%;
+      font-size: 16px;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border-color: transparent;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.disable {
+      pointer-events: none;
+      background-color: #EDEDED;
+    }
+
+    .eye {
+      cursor: pointer;
+      position: absolute;
+      top: 22px;
+      right: 2%;
+      width: 15px;
+    }
+
+    .eye.off {
+      top: 21px;
+    }
+
+    .error {
+      font-size: 10px;
+      color: #DB4D3D;
+      margin-top: 4px;
+    }
+
+    input.err {
+      border: 1px solid #DB4D3D;
+    }
+
+    textarea:focus,
+    input:focus {
+      outline: none;
+    }
+    
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    #headerbrand img {
+      width: 80px;
+      height: 40px;
+      margin-left: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin: 13px 20px;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+
+<body
+  style="font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; word-break: break-word; margin: 0; width: 100%; background-color: #f8fafc; padding: 0;
+  padding-bottom: 30px;">
+  <div id="headerbrand" style="background: #00ACF0;"><img alt="julo" src="https://www.julo.co.id/sites/default/files/newsletter/ic-logo-julo.png" /></div>
+  <div style="margin-left:12px; margin-right:12px;">
+    <div class="reset-pin-form">
+      <p style="font-weight: bold; font-size: 16px; color:black;">
+        Isi form ini untuk nomor HP kamu
+      </p>
+      <div>
+        <form id="reset" action="{% url 'customer_module_apiv4:submit-request-phone' reset_key %}" method="post">
+          {% csrf_token %}
+          <div class="">
+            <div class="input-field">
+              <label for="old_phone">Nomor HP Lama</label>
+              <!-- BE need to adjust the {{old_phone}} -->
+              <input type="text" class="validate" name="old_phone" id="old_phone" placeholder="Nomor HP Lama" autocomplete="off"
+                value="{{ phone }}" size="30" readonly>
+            </div>
+            <div class="input-field">
+              <label for="phone">Nomor HP Baru</label>
+              <div style="position:relative;">
+                <input type="number" class="validate" placeholder="Masukkan Nomor HP Baru" name="phone" id="phone"
+                autocomplete="off" inputmode="numeric" maxlength="14" size="14" value="">
+                {{ err_message }}
+              </div>
+            </div>
+            <div class="input-field">
+              <label for="phone_confirm">Konfirmasi Nomor HP Baru</label>
+              <div style="position:relative;">
+                <input type="number" class="validate" placeholder="Konfirmasi Nomor HP Baru" name="phone_confirm" id="phone_confirm"
+                autocomplete="off" inputmode="numeric" maxlength="14" size="14" value="">
+                <input type="hidden" name="customer_xid" value="{{ customer_xid }}">
+                {{ err_message }}
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <button type="submit" class="disable waves-effect waves-light btn-large blue">Ubah Nomor HP</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function displayError(inputEl, msgId, text) {
+      inputEl.insertAdjacentHTML('afterend', '<div class="error" id="warning-' + msgId + '">' + text + '</div>');
+    }
+    
+    //var errorMessage = {% if err_message %}'{{err_message}}'{% else %}null{% endif %};
+    var errorMessage ="";
+    if(errorMessage) {
+      newPhone = document.querySelector("input#phone");
+      confirmPhone = document.querySelector("input#phone_confirm");
+      displayError(newPhone, 'phone', errorMessage);
+      displayError(confirmPhone, 'phone_confirm', errorMessage);
+      newPhone.classList.add("err");
+      confirmPhone.classList.add("err");
+    }
+
+    var validateCheck = true;
+    function validatePhone(inputId) {
+
+      var phoneEl = document.querySelector('input#' + inputId);
+      var msgEl = document.getElementById('warning-' + inputId);
+      var old_phone = document.getElementById('old_phone').value;
+
+      if (msgEl != null) {
+        msgEl.remove();
+        validateCheck = true;
+      }
+
+      if (phoneEl.value.length == 0) {  // validate not empty
+        displayError(phoneEl, inputId, 'Tidak boleh kosong.');
+        validateCheck = false;
+      } else {
+        if (phoneEl.value.length < 11) {  // validate < 11 digit
+          displayError(phoneEl, inputId, 'Pastikan informasi yang kamu masukkan benar');
+          validateCheck = false;
+        } else  {
+          console.log(phoneEl.value.slice(2));
+          if (/^([0-9])\1*$/.test(phoneEl.value.slice(2)) || !/^08/.test(phoneEl.value)) {
+            displayError(phoneEl, inputId, 'Pastikan informasi yang kamu masukkan benar');
+            validateCheck = false;
+          }else if(phoneEl.value === old_phone){
+            displayError(phoneEl, inputId, 'Nomor HP Baru tidak boleh sama dengan nomor HP lama');
+            validateCheck = false;
+          }
+        }
+      }
+
+      if (!validateCheck) { phoneEl.classList.add('err'); } else { phoneEl.classList.remove('err'); }
+
+      return validateCheck;
+    }
+
+    function matchPhone(newPhoneId, confirmPhoneId) {  // check match pin
+      var newPhone = document.querySelector("input#" + newPhoneId);
+      var confirmPhone = document.querySelector("input#" + confirmPhoneId);
+      var matchCheck = true;
+
+      if ((newPhone.value.length >=11 && newPhone.value.length <=14) && 
+          (confirmPhone.value.length >= 11 && confirmPhone.value.length <=14) && validateCheck) {
+        var msgEl = document.getElementById('warning-' + confirmPhoneId);
+        if (msgEl != null) {
+          msgEl.remove();
+        }
+
+        if (newPhone.value != confirmPhone.value) {
+          displayError(confirmPhone, confirmPhoneId, 'Nomor HP tidak cocok.');
+          matchCheck = false;
+        }
+
+        if (!matchCheck) { confirmPhone.classList.add("err"); } else { confirmPhone.classList.remove("err"); }
+        return matchCheck;
+      }
+    }
+
+    document.addEventListener('keypress', function (e) {
+      if (e.target && e.target.id == 'phone' || e.target && e.target.id == 'phone_confirm') {
+        var key = e.keyCode;
+        if ((e.keyCode < 48 || e.keyCode > 57)) {
+          e.preventDefault();
+        }
+      }
+    });
+
+    var button = document.querySelector("#reset button");
+    var phone = document.querySelector("input#phone");
+    var phone_confirm = document.querySelector("input#phone_confirm");
+
+    phone.addEventListener('input', function (e) {
+      if (phone.value.length <= phone.maxLength) {
+        var validate = validatePhone('phone');
+        var match = matchPhone('phone', 'phone_confirm');
+
+        if (validate && match) {
+          button.classList.remove("disable");
+        } else {
+          button.classList.add("disable");
+        }
+      } else {
+        phone.value = phone.value.slice(0, phone.maxLength);
+      }
+    });
+    phone_confirm.addEventListener('input', function (e) {
+      if (phone_confirm.value.length <= phone_confirm.maxLength) {
+        var validate = validatePhone('phone_confirm');
+        var match = matchPhone('phone', 'phone_confirm');
+
+        if (validate && match) {
+          button.classList.remove("disable");
+        } else {
+          button.classList.add("disable");
+        }
+      } else {
+        phone_confirm.value = phone_confirm.value.slice(0, phone_confirm.maxLength);
+      }
+    });
+    $("#phone, #phone_confirm").on("copy cut paste drop", function() {
+      return false;
+    });
+
+  </script>
+</body>
+
+</html>

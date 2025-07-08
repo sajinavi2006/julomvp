@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="https://statics.julo.co.id/montserrat/montserrat-v14-cyrillic-ext_vietnamese_latin-ext_cyrillic_latin.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Montserrat;
+            font-size: 12px;
+            color: #5e5e5e;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .container {
+            padding: 20px 100px 0px 0px;
+            width: 1430px;
+            height: 2040px;
+            font-size: 22px;
+        }
+
+        .titlepdf {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .content {
+            height: 1760px;
+        }
+
+        ol {
+            margin: 0px;
+            padding-inline-start: 50px;
+        }
+
+        li {
+            padding-left: 30px;
+            padding-top: 25px;
+        }
+
+        .divContent {
+            padding-top: 15px;
+        }
+
+        .logo {
+            width: 180px;
+            height: 75px;
+        }
+
+        .footer {
+            font-size: 20px;
+            text-align: right;
+            /* margin-bottom: 120px; */
+        }
+
+        .footerTop {
+            margin-top: 25px;
+        }
+
+        .roundDiv {
+            margin-top: 10px;
+            width: 450px;
+            height: 130px;
+            border-radius: 7px;
+            border: 1px solid #00acf0;
+            padding: 10px;
+        }
+
+        .dateText {
+            text-align: right;
+        }
+
+        .juloImg {
+            width: 250px;
+            height: 104px;
+            padding-top: 15px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .divRight {
+            float: right;
+        }
+
+        .divLeft {
+            float: left;
+        }
+
+        .spaceFoot {
+            height: 130px;
+        }
+
+        .spaceSign {
+            height: 120px;
+        }
+
+        .spaceSignature {
+            height: 50px;
+        }
+
+        .enter {
+            margin-top: 13px;
+        }
+
+        .firstT3TR {
+            font-weight: bold;
+            border-top: 2px solid rgb(46, 46, 46);
+            font-size: 24px;
+        }
+
+        .secondT3TR {
+            border-top: 2px solid rgb(46, 46, 46);
+        }
+
+        table {
+            width: 100%;
+        }
+
+        table.t1 td:first-child {
+            font-weight: normal;
+            font-size: 22px;
+            align: left;
+        }
+
+        table.t2 td {
+            padding-top: 10px;
+        }
+
+        table.t3 {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table.t3 tr {
+            font-size: 16px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        table.t3 th,
+        table.t3 td {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* table.t3 tR, table.t3 td {
+            max-height: 20px;
+          } */
+        table.t3 td {
+            max-height: 20px;
+            height: 10px;
+        }
+        pre {
+          display: block;
+          white-space: pre;
+          margin: 0em 0;
+        }
+        .title {
+            color: blue;
+        }
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div>
+        <img src="{{ julo_image }}" class="logo"/>
+    </div>
+    <div class="titlepdf">
+        <div>BPJS Report
+        </div>
+        <div>Application ID: {{ application_id }}</div>
+    </div>
+    <hr>
+    <hr>
+    <div class="content">
+        <div class="divContent">
+            <div>
+                <h2 class='title'>Profile</h2>
+                {% for key, value in profile.items %}
+                    {% if key != 'companies' %}
+                    <p>{{ key }}: {{ value }}</p>
+                    {% endif %}
+                {% endfor %}
+                <br>
+
+                {% for company in profile.companies %}
+                    <h4 class='title'>Company Detail</h4>
+                    {% for key, value in company.items %}
+                        {% if key != 'payments' %}
+                        <p>{{ key }}: {{ value }}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <br>
+
+                    <p>Payment Info</p>
+                    <table>
+
+                        <thead>
+                        <tr>
+                            {% for title in company.payments.0 %}
+                            <th>{{ title }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for payment in company.payments %}
+                            <tr>
+                            {% for key, value in payment.items %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

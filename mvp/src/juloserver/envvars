@@ -1,0 +1,919 @@
+#!/bin/sh
+# NOTE: This file is only used for localhost development. A similar is generated
+# by ansible when deploying to real environments.
+# The python local_nopost settings file will remove '"' and '=' characters from the values
+# If those are required inside the strings local_nopost need to be upgraded
+
+export BASE_URL="http://localhost:8000"
+export BROKER_URL="amqp://guest:guest@localhost:5672//"
+export DJANGO_SECRET_KEY="^b46w^zsxhrthkq2p7ty1dt5zov%4@eq@j8e%f(ki_#2rnbp%-d"
+export JWT_SECRET_KEY="this-is-a-secret-jwt-token-for-local"
+
+export POSTGRESQL_NAME=juloserver
+export POSTGRESQL_USER=juloserver
+export POSTGRESQL_PASSWORD=password
+export POSTGRESQL_HOST=localhost
+export POSTGRESQL_PORT=5432
+
+export POSTGRESQL_OPS_NAME=julodb
+export POSTGRESQL_OPS_USER=ops_server
+export POSTGRESQL_OPS_PASSWORD=password
+export POSTGRESQL_OPS_HOST=localhost
+export POSTGRESQL_OPS_PORT=5432
+
+export POSTGRESQL_REPLICA_OPS_NAME=julodb
+export POSTGRESQL_REPLICA_OPS_USER=ops_server
+export POSTGRESQL_REPLICA_OPS_PASSWORD=password
+export POSTGRESQL_REPLICA_OPS_HOST=localhost
+export POSTGRESQL_REPLICA_OPS_PORT=5432
+
+export POSTGRESQL_LOGGING_DB_NAME=julodb
+export POSTGRESQL_LOGGING_DB_USER=ops_server
+export POSTGRESQL_LOGGING_DB_PASSWORD=password
+export POSTGRESQL_LOGGING_DB_HOST=localhost
+export POSTGRESQL_LOGGING_DB_PORT=5432
+
+export POSTGRESQL_REPAYMENT_ASYNC_REPLICA_OPS_NAME=julodb
+export POSTGRESQL_REPAYMENT_ASYNC_REPLICA_OPS_USER=ops_server
+export POSTGRESQL_REPAYMENT_ASYNC_REPLICA_OPS_PASSWORD=password
+export POSTGRESQL_REPAYMENT_ASYNC_REPLICA_OPS_HOST=localhost
+export POSTGRESQL_REPAYMENT_ASYNC_REPLICA_OPS_PORT=5432
+
+export POSTGRESQL_JULO_ANA_DB_NAME=julodb
+export POSTGRESQL_JULO_ANA_DB_USER=ops_server
+export POSTGRESQL_JULO_ANA_DB_PASSWORD=password
+export POSTGRESQL_JULO_ANA_DB_HOST=localhost
+export POSTGRESQL_JULO_ANA_DB_PORT=5432
+
+export POSTGRESQL_JULO_BUREAU_DB_NAME=julodb
+export POSTGRESQL_JULO_BUREAU_DB_USER=ops_server
+export POSTGRESQL_JULO_BUREAU_DB_PASSWORD=password
+export POSTGRESQL_JULO_BUREAU_DB_HOST=localhost
+export POSTGRESQL_JULO_BUREAU_DB_PORT=5432
+
+export POSTGRESQL_JULO_ONBOARDING_DB_NAME=julodb
+export POSTGRESQL_JULO_ONBOARDING_DB_USER=ops_server
+export POSTGRESQL_JULO_ONBOARDING_DB_PASSWORD=password
+export POSTGRESQL_JULO_ONBOARDING_DB_HOST=localhost
+export POSTGRESQL_JULO_ONBOARDING_DB_PORT=5432
+
+export POSTGRESQL_JULO_PARTNERSHIP_DB_NAME=julodb
+export POSTGRESQL_JULO_PARTNERSHIP_DB_USER=ops_server
+export POSTGRESQL_JULO_PARTNERSHIP_DB_PASSWORD=password
+export POSTGRESQL_JULO_PARTNERSHIP_DB_HOST=localhost
+export POSTGRESQL_JULO_PARTNERSHIP_DB_PORT=5432
+
+export POSTGRESQL_JULO_LOAN_DB_NAME=julodb
+export POSTGRESQL_JULO_LOAN_DB_USER=ops_server
+export POSTGRESQL_JULO_LOAN_DB_PASSWORD=password
+export POSTGRESQL_JULO_LOAN_DB_HOST=localhost
+export POSTGRESQL_JULO_LOAN_DB_PORT=5432
+
+export POSTGRESQL_JULO_UTILIZATION_DB_NAME=julodb
+export POSTGRESQL_JULO_UTILIZATION_DB_USER=ops_server
+export POSTGRESQL_JULO_UTILIZATION_DB_PASSWORD=password
+export POSTGRESQL_JULO_UTILIZATION_DB_HOST=localhost
+export POSTGRESQL_JULO_UTILIZATION_DB_PORT=5432
+
+export POSTGRESQL_JULO_PLATFORM_DB_NAME=julodb
+export POSTGRESQL_JULO_PLATFORM_DB_USER=ops_server
+export POSTGRESQL_JULO_PLATFORM_DB_PASSWORD=password
+export POSTGRESQL_JULO_PLATFORM_DB_HOST=localhost
+export POSTGRESQL_JULO_PLATFORM_DB_PORT=5432
+
+export POSTGRESQL_JULO_REPAYMENT_DB_NAME=julodb
+export POSTGRESQL_JULO_REPAYMENT_DB_USER=ops_server
+export POSTGRESQL_JULO_REPAYMENT_DB_PASSWORD=password
+export POSTGRESQL_JULO_REPAYMENT_DB_HOST=localhost
+export POSTGRESQL_JULO_REPAYMENT_DB_PORT=5432
+
+export POSTGRESQL_JULO_PARTNERSHIP_ONBOARDING_DB_NAME=julodb
+export POSTGRESQL_JULO_PARTNERSHIP_ONBOARDING_DB_HOST=localhost
+
+export POSTGRESQL_JULO_COLLECTION_DB_NAME=julodb
+export POSTGRESQL_JULO_COLLECTION_DB_USER=ops_server
+export POSTGRESQL_JULO_COLLECTION_DB_PASSWORD=password
+export POSTGRESQL_JULO_COLLECTION_DB_HOST=localhost
+export POSTGRESQL_JULO_COLLECTION_DB_PORT=5432
+
+export S3_MEDIA_BUCKET=julomedia
+export S3_DATA_BUCKET=julodata
+export S3_ANALYTICS_BUCKET=juloanalytics-localhost
+export AWS_DEFAULT_REGION="us-east-1"
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+export OBJECT_STORAGE_ACCESS_KEY_ID="I0IQYLJMB58XEF29B1AG"
+export OBJECT_STORAGE_SECRET_ACCESS_KEY="y1wk1ENKWYRXTUGBDKpU6a59XOizoKHqocQL+JBG"
+export OBJECT_STORAGE_ENDPOINT_URL="http://116.206.196.84:9000"
+
+export SENTRY_DSN=""
+
+export GCM_SERVER_KEY="AAAAODuW1Fw:APA91bFL4dALRfh6ir8kE3ELjIB4VVv7nXYXJobpq5-N8KHc0n0NeVVNEdhKI1nfQMO69w9AnCO1IdtVY9rDWUaZKQXgj5_bNY977ljT_wLnpcMDG4i2lucSgvk41820MGBTPg3o0lfH"
+export GOOGLE_MAPS_API_KEY="AIzaSyC_QjbmiMRGso6GBtOvBQ4xVVXbu8aa7f4"
+
+export NEXMO_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export NEXMO_API_SECRET="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export NEXMO_SMS_URL="https://invalid-rest.nexmo.com/sms/json"
+export NEXMO_VOICE_URL="https://api.nexmo.com/v1/calls"
+export NEXMO_APPLICATION_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export NEXMO_PRIVATE_KEY='invalidxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+export LOAN_NEXMO_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export LOAN_NEXMO_API_SECRET="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export LOAN_NEXMO_APPLICATION_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export LOAN_NEXMO_PRIVATE_KEY='invalidxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+export NEXMO_NON_OTP_API_KEY="5axxxxxx"
+export NEXMO_NON_OTP_API_SECRET="xSRxxxxxxxxxxxxx"
+
+export MONTY_API_USERNAME=juloxxxx
+export MONTY_API_PASSWORD=Ju!Oxxxx
+export MONTY_NON_OTP_API_USERNAME=juloxxxxx
+export MONTY_NON_OTP_API_PASSWORD=Ju!Oxxxxx
+export MONTY_API_URL=https://httpsmsc.montymobile.com/HTTP/api/Client/SendSMS
+
+export NEXMO_PHONE_NUMBER="6285574671770"
+
+export SENDGRID_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export POSTGRESQL_ANALYTICS_USER=analytic
+export POSTGRESQL_ANALYTICS_PWD=password
+export POSTGRESQL_ANALYTICS_DATABASE=analytic
+export POSTGRESQL_ANALYTICS_PORT=5432
+export POSTGRESQL_ANALYTICS_HOSTNAME=localhost
+
+export POSTGRESQL_ANA_NAME=julodb
+export POSTGRESQL_ANA_USER=ana_server
+export POSTGRESQL_ANA_PASSWORD=password
+export POSTGRESQL_ANA_HOST=localhost
+export POSTGRESQL_ANA_PORT=5432
+
+export POSTGRESQL_JULO_PARTNERSHIP_GRAB_DB_NAME=julodb
+export POSTGRESQL_JULO_PARTNERSHIP_GRAB_DB_USER=ops_server
+export POSTGRESQL_JULO_PARTNERSHIP_GRAB_DB_PASSWORD=password
+export POSTGRESQL_JULO_PARTNERSHIP_GRAB_DB_HOST=localhost
+export POSTGRESQL_JULO_PARTNERSHIP_GRAB_DB_PORT=5432
+
+export ANASERVER_BASE_URL="http://localhost:8001"
+export ANASERVER_TOKEN=password
+
+export SCRAPER_BASE_URL="http://localhost:8002"
+export SCRAPER_TOKEN=password
+
+export DOKU_CLIENT_ID="2246"
+export DOKU_CLIENT_SECRET="9513dde7b2a84a6db83c0e6d637924ee"
+export DOKU_SHARED_KEY="Twzugcm4VbEdJPpE"
+export DOKU_BASE_URL="http://staging.doku.com/dokupay/h2h/"
+
+export SIP_API_KEY_CLICK2CALL="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export SIP_API_KEY_ROBODIAL="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export SIP_BASE_URL="http://202.43.169.165:7007"
+export SIP_BASE_URL_ROBODIAL="http://202.43.169.165:7007"
+
+export XENDIT_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export XENDIT_BASE_URL="https://api.xendit.co"
+export XENDIT_DISBURSEMENT_VALIDATION_TOKEN="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export XENDIT_AUTODEBET_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export XENDIT_AUTODEBET_BASE_URL="https://api.xendit.co"
+export XENDIT_AUTODEBET_CALLBACK_TOKEN="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export INSTAMONEY_API_KEY="sk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+export INSTAMONEY_API_TOKEN="0f7fbab2c78111XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+export INSTAMONEY_BASE_URL="https://api.instamoney.co"
+
+export BFI_CLIENT_ID="1707NC0007"
+export BFI_BASE_URL="http://202.43.183.141/apidigital/api.asmx?wsdl"
+
+export SLACK_WEB_API_TOKEN="xoxp-invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export SLACK_WEB_API_BOT_TOKEN="xoxp-invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export SLACK_MONITORING_CHANNEL="monitors_julodb_other"
+export SLACK_WEBHOOK_DUKCAPIL_LOW_BALANCE_URL="https://hooks.slack.com/workflows/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"
+
+export FASPAY_MERCHANT_NAME="JULO"
+export FASPAY_MERCHANT_ID="31932"
+export FASPAY_USER_ID="bot31932"
+export FASPAY_PASSWORD="p@ssw0rd"
+export FASPAY_API_BASE_URL="https://debit-sandbox.faspay.co.id"
+
+export BRI_X_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export BRI_CLIENT_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export BRI_CLIENT_SECRET="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export BRI_CODE="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export OTP_SECRET_KEY="37ISJLMY7XOWBIQD"
+
+export TOKOPEDIA_CLIENT_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export TOKOPEDIA_CLIENT_SECRET="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export TOKOPEDIA_BASE_URL="https://api-staging.tokopedia.com/"
+
+export APPS_FLYER_IOS_CLIENT_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export APPS_FLYER_CLIENT_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export APPS_FLYER_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export APPS_FLYER_BASE_URL="https://api2.appsflyer.com/inappevent/"
+
+export CRM_BASE_URL="http://localhost:8080/#"
+export CRM_REVAMP_BASE_URL="http://localhost:5000/"
+
+export OSS_ENDPOINT="https://oss-ap-southeast-5.aliyuncs.com"
+export OSS_ACCESS_KEY_ID="LTAIH82qJI3QFWf5"
+export OSS_ACCESS_KEY_SECRET="hRrrHcfl4l3FFZhhNWtZWat4OoOSDJ"
+export OSS_MEDIA_BUCKET=julofiles-localhost
+export OSS_CAMPAIGN_BUCKET=julofiles-localhost
+export OSS_CAMPAIGN_BASE_URL="https://julocampaign-staging.oss-ap-southeast-5.aliyuncs.com/"
+
+export OSS_DIGITAL_SIGNATURE_ACCESS_KEY_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export OSS_DIGITAL_SIGNATURE_ACCESS_KEY_SECRET="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export SEPULSA_BASE_URL="https://horven.sumpahpalapa.com/api/"
+export SEPULSA_USERNAME="julo"
+export SEPULSA_SECRET_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export SEPULSA_FERNET_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export SLACK_SEPULSA_CHANNEL="#sepulsa_local"
+
+export SEPULSA_LOAN_USERNAME="julo_loan"
+export SEPULSA_LOAN_SECRET_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export QUIROS_AUTODIAL_BASE_URL="https://outboundapi.qwertyaplikasi.com"
+export QUIROS_ROBOCALL_BASE_URL="https://voicebroapi.qwertyaplikasi.com"
+export QUIROS_ROBOCALL_USERNAME="julofinance"
+export QUIROS_ROBOCALL_PASSWORD="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export QISMO_BASE_URL="https://qismo.qiscus.com"
+export QISMO_USERNAME="nelsonwija@gmail.com"
+export QISMO_PASSWORD="qwerqwer"
+export QISMO_APP_ID="eluby-n2sr17onrtjqmy4"
+
+export PRIMO_BASE_URL="http://julo.primodialler.com"
+export PRIMO_USERNAME="Julo"
+export PRIMO_PASSWORD="juloprimo"
+
+export LOC_PIN_MODE="permissive"
+
+export BCA_API_KEY="8b628762-7348-4a22-927e-9b034656cde9"
+export BCA_API_SECRET_KEY="0724e318-385c-467e-b20c-00be50a19532"
+export BCA_CLIENT_ID="5a888249-1f56-4f33-8fa3-16632a596921"
+export BCA_CLIENT_SECRET="add2fef3-ebe1-47dd-b66e-190ff7868491"
+export BCA_CORPORATE_ID="BCAAPI2016"
+export BCA_ACCOUNT_NUMBER="0201245680"
+export BCA_BASE_URL="https://devapi.klikbca.com:9443"
+export SLACK_BCA_CHANNEL="#bca_local"
+
+export VA_BCA_API_KEY="8b628762-7348-4a22-927e-9b034656cde9"
+export VA_BCA_API_SECRET_KEY="0724e318-385c-467e-b20c-00be50a19532"
+export VA_BCA_CLIENT_ID="5a888249-1f56-4f33-8fa3-16632a596921"
+export VA_BCA_CLIENT_SECRET="add2fef3-ebe1-47dd-b66e-190ff7868491"
+export VA_BCA_CORPORATE_ID="BCAAPI2016"
+
+export AUTH_SERVER_BASE_URL="http://149.129.227.79:8000"
+
+
+export XFERS_APP_API_KEY="TjETqu8GsJPGgbxEN85jw8cBcEFs8p6HqsQ3dEcDgDw"
+export XFERS_APP_SECRET_KEY="od2P5AB_-EuSPwcAxy9-zW3PxzwhkeyzxJ-_sdAzeDx"
+export XFERS_BASE_URL="https://sandbox-id.xfers.com/api/v3"
+
+export XFERS_JTF_USER_TOKEN="e3pxu39WqWhcVB5-uWdWgpxjH9yFxqCi9DCTpi9Fcqz"
+export XFERS_JTP_USER_TOKEN="invalidxxxxxxxxxxxxxxxx"
+export XFERS_CALLBACK_URL_STEP_ONE="localhost:8000/api/disbursement/callbacks/xfers-disburse?step=1"
+export XFERS_CALLBACK_URL_STEP_TWO="localhost:8000/api/disbursement/callbacks/xfers-disburse?step=2"
+export XFERS_CALLBACK_URL="localhost:8000/api/disbursement/callbacks/xfers-disburse"
+
+export SIM_BASE_URL="http://172.16.31.199:3001"
+export SIM_USERNAME="xxxxx"
+export SIM_PASSWORD="xxxxxxx"
+
+export BITLY_TOKEN="a9fa49a5f38a9c94292e8e893cd0b80c0575efcd"
+
+export ADVANCE_AI_BASE_URL="https://api.advance.ai"
+export ADVANCE_AI_API_KEY="xxxxxxxxxxxxxxxx"
+export ADVANCE_AI_SECRET_KEY="xxxxxxxxxxxxxxxx"
+
+export DIGISIGN_BASE_URL="https://api.tandatanganku.com"
+export DIGISIGN_TOKEN="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DIGISIGN_USERID="deassy@julofinance.com"
+export DIGISIGN_PWD="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DIGISIGN_PLATFORM_EMAIL="deassy@julofinance.com"
+export DIGISIGN_PLATFORM_NAME="deassy"
+export DIGISIGN_PLATFORM_KEY="invalidxxxxxxxxxxxxxxxx"
+
+export BUKALAPAK_USERNAME="invalidxxxxxxxxxxxxxxxx"
+export BUKALAPAK_SECRET_KEY="invalidxxxxxxxxxxxxxxxx"
+
+export LAKU6_CALLBACK="http://wst.laku6.com/api/julo/v1/application/callback/approval"
+export LAKU6_TOKEN="A45sRYXR2JF*****"
+
+export NEMESYS_BASE_URL="https://api.julo.co.id/messaging-prod"
+
+export CENTERIX_USER_ID="CenterixAPI"
+export CENTERIX_PASSWORD="c2d5625909f9d0679864600f998cfd5f2c5e9272"
+export CENTERIX_BASE_URL="http://10.10.10.86:6060/CenterixAPIDEV/API.svc"
+
+export CENTERIX_JULO_USER_ID="JULO_CenterixAPI"
+export CENTERIX_JULO_PASSWORD="a9fa49a5f38a9c94292e8e893cd0b80c05789uhj"
+
+export GOPAY_SERVER_KEY="SB-Mid-server-*********************"
+export GOPAY_SNAP_BASE_URL="https://app.sandbox.midtrans.com"
+export GOPAY_BASE_URL="https://api.sandbox.midtrans.com"
+export REDIS_URL="localhost"
+export REDIS_PASSWORD=""
+
+export PEDE_BASE_URL="https://dev.pede.id"
+#Go-pay
+export GOPAY_API_KEY="IRIS-************************************"
+export GOPAY_APPROVER_API_KEY="IRIS-************************************"
+#  Cootek
+export COOTEK_API_KEY="COOTEK-************************************"
+export COOTEK_API_SECRET_KEY="COOTEK-************************************"
+export COOTEK_API_BASE_URL="COOTEK-************************************"
+
+export BCA_REPAYMENT_ACCOUNT_NUMBER="0613005827"
+export BCA_REPAYMENT_API_KEY="dcc99ba6-3b2f-479b-9f85-86a09ccaaacf"
+export BCA_REPAYMENT_API_SECRET_KEY="5e636b16-df7f-4a53-afbe-497e6fe07edc"
+export BCA_REPAYMENT_CLIENT_ID="b095ac9d-2d21-42a3-a70c-4781f4570704"
+export BCA_REPAYMENT_CLIENT_SECRET="bedd1f8d-3bd6-4d4a-8cb4-e61db41691c9"
+export BCA_REPAYMENT_CORPORATE_ID="h2hauto008"
+export BCA_CHANNEL_ID="95051"
+
+# FDC
+export FDC_SFTP_HOST="FDC-************************************"
+export FDC_SFTP_USERNAME="FDC-************************************"
+export FDC_SFTP_PASSWORD="FDC-************************************"
+export FDC_ZIP_PASSWORD="FDC-************************************"
+export FDC_API_BASE_URL="https://localhost:2005"
+export FDC_API_USERNAME="test@julo.co.id"
+export FDC_API_PASSWORD="test"
+
+export MINTOS_BASE_URL="https://playground.mintos.com/lender-api/v2/"
+export MINTOS_TOKEN="b70d237aa1d2211b19d74303552277f7f34e586538ae1be1f2635d1ddadec16c"
+
+# BPJS - Tongdun
+export TONGDUN_PARTNER_CODE="julo_id_test"
+export TONGDUN_PARTNER_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export TONGDUN_APP_NAME_ANDROID="julo_and"
+export TONGDUN_APP_NAME_WEB="julo_web"
+export TONGDUN_BOX_TOKEN_ANDROID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export TONGDUN_BOX_TOKEN_WEB="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export TONGDUN_BPJS_LOGIN_URL="https://talosopen.shujumohe.com/box/safety/id/bpjs"
+export TONGDUN_INTERFACE_API_BASE_URL="https://talosapi.shujumohe.com/octopus/task.unify.query/v3"
+export BPJS_WEB_REDIRECT_URL="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# privy development environment variables
+export PRIVY_BASE_URL="https://api-sandbox.privy.id/v1/merchant"
+export PRIVY_MERCHANT_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export PRIVY_USERNAME="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export PRIVY_SECRET_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export PRIVY_ENTERPRISE_TOKEN="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export PRIVY_ENTERPRISE_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export CALLBACK_BASE_URL="http://localhost:8000"
+export URL_SHORTENER_BASE="http://localhost:8000/rd/"
+export STATIC_ALICLOUD_BUCKET_URL='https://julofiles-staging.oss-ap-southeast-5.aliyuncs.com/static_test/'
+export STATIC_ALICLOUD_BUCKET_FOLDER='static_test/'
+export JULOFILES_BUCKET_URL='https://julofiles-staging.oss-ap-southeast-5.aliyuncs.com/'
+
+
+# MoEngage
+export MOENGAGE_API_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export MOENGAGE_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export MOENGAGE_API_BASE_URL="https://api.moengage.com/v1/"
+export INFOCARD_BASE_URL="https://julo-assets-localhost.oss-ap-southeast-5.aliyuncs.com/info-card/"
+export OSS_PUBLIC_ASSETS_BUCKET="julo-assets-localhost"
+
+# Pusdafil
+export PUSDAFIL_URL="https://pusdafil.ojk.go.id/PusdafilAPI/pelaporanharian"
+export PUSDAFIL_USERNAME="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export PUSDAFIL_PASSWORD="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+export PUSDAFIL_ENCRYPTION_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxx"
+export PUSDAFIL_ENCRYPTION_IV="invalidxxxxxxxxx"
+export PUSDAFIL_ENCRYPTION_BS=16
+
+# Webview ecommerce
+export WEBVIEW_ECOMMERCE_URL="https://view-staging.julo.co.id/ecommerce"
+
+# Grab
+export GRAB_API_URL="http://149.129.192.29:8081"
+export GRAB_CLIENT_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GRAB_CLIENT_NAME="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GRAB_HMAC_SECRET="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GRAB_HMAC_SECRET_PHONE_NUMBER="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GRAB_REFERRAL_CODE_SALT="invalidxxxxxxxxxxxxxxxxxxxx"
+export GRAB_FE_URL="invalidxxxxxxxxx"
+export GRAB_JWT_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxx"
+
+# Intelix Automation
+export INTELIX_SFTP_HOST="http://julo.xxxxnet:22230"
+export INTELIX_SFTP_USERNAME="invalidxxxxxxxxx"
+export INTELIX_SFTP_PASSWORD="invalidxxxxxxxxx"
+export INTELIX_SFTP_PORT=00000
+
+# Google analytics
+export GOOGLE_ANALYTICS_PROPERTY_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GOOGLE_ANALYTICS_CREDENTIALS_PATH="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GOOGLE_ANALYTICS_FIREBASE_APP_ID="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GOOGLE_ANALYTICS_API_SECRET_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# HERE maps geocoding
+export HERE_GEO_CODING_API_URL="https://geocode.search.hereapi.com/v1/geocode"
+export HERE_GEO_CODING_API_KEY="J8rQnC9fwNr5HezmFzeaHGdoC_DrT8U-NUcokEtwaxM"
+
+# CITCALL
+export CITCALL_URL="https://localhost/citcall"
+export CITCALL_BACKUP_URL="https://localhost/citcall-backup"
+export CITCALL_API_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# IPINFO.IO
+export IPINFO_HOST="https://ipinfo.io/"
+export IPINFO_API_TOKEN="invalidxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Bonza
+export BONZA_API_KEY="g6M7tVs8bNGgST5ZFqFugMRk04Gp14wxTrfs6VK4"
+export BONZA_API_BASE_URL="https://gotham-api-sandbox.bonza.dev/api/v1/clients/julo-snvsbwDS"
+export BONZA_INHOUSE_LOAN_SCORING_URL="https://testing-cluster.julo.co.id/staging-ana-gotham/predict"
+
+# Airudder QA Semi automation
+export QA_AIRUDDER_API_KEY="xxxxxxxxxxxxxxxxxxxxxx"
+export QA_AIRUDDER_API_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Dukcapil
+export DUKCAPIL_API_KEY="111847c1-bc0d-4259-87e9-0f510c29c953"
+export DUKCAPIL_API_BASE_URL="https://api.asliri.id:8443/julo_poc/"
+
+# Dukcapil Official
+export DUKCAPIL_OFFICIAL_USER_ID="11471212202110082juloteknologi"
+export DUKCAPIL_OFFICIAL_PASSWORD="123"
+export DUKCAPIL_OFFICIAL_API_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DUKCAPIL_OFFICIAL_API_VERIFY_URL="https://172.16.160.177:8000/dukcapil/get_json/JULO_TEKNOLOGI/CALL_VERIFY_BY_ELEMEN"
+export DUKCAPIL_OFFICIAL_API_STORE_URL="http://172.16.160.31/databalikan/api/store"
+export DUKCAPIL_OFFICIAL_ORGANIZATION_ID="organization_id"
+export DUKCAPIL_OFFICIAL_ORGANIZATION_NAME='organization_name'
+
+export WHITELABEL_SECRET_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxx"
+export WHITELABEL_PUBLIC_KEY="invalidxxxxxxxxxxxxxxxxxxxxxxxxx"
+export WHITELABEL_FRONTEND_BASE_URL="https://app-staging1.julo.co.id/"
+
+# Izidata
+export IZIDATA_APP_ACCESS_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export IZIDATA_APP_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export IZIDATA_BASE_URL="https://api.izi.credit/v1/"
+
+# BSS Channeling
+export BSS_CHANNELING_BASE_URL="http://117.54.10.50:8081/apichanneling/"
+export BSS_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Linkaja
+export LINKAJA_API_BASE_URL="https://partner-dev.linkaja.com"
+export LINKAJA_API_USERNAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export LINKAJA_API_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export LINKAJA_API_ALGORITHM="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# koleko
+export KOLEKO_GOOGLE_CLOUD_STORAGE_CREDENTIAL="credential.json"
+
+# BPJS Scrape with Brick
+export BRICK_CLIENT_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export BRICK_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export BRICK_BASE_URL="https://sandbox.onebrick.io"
+export BRICK_SALT="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export BRICK_WIDGET_BASE_URL="https://cdn.onebrick.io/sandbox-widget"
+
+# Employee Financing
+export WEB_FORM_JWT_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# BSS julo card
+export BSS_CREDIT_CARD_BASE_URL="http://117.54.10.50:8081/ibb-2021/rest/virtualAccount"
+export BSS_CREDIT_CARD_HASHCODE="xxxxxxxxxxxxxxxx"
+export BSS_JULO_CARD_VA_PREFIX="12151"
+
+# Shopee Scoring
+export SCORING_CUSTOMER_ID=xxxxxxxxxxxxxxxx
+export SCORING_APP_ID=xxxxxxxxxxxxxxxx
+export SCORING_KEY=xxxxxxxxxxxxxxxx
+export SCORING_URL=https://api-tob.uat.scoring.co.id
+export SCORING_JULO_PRIVATE_KEY=xxxxxxxxxxxxxxxx
+export SCORING_JULO_PUBLIC_KEY=xxxxxxxxxxxxxxxx
+export SCORING_PUBLIC_KEY=xxxxxxxxxxxxxxxx
+
+#zendesk JWT key
+export ZENDESK_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export ZENDESK_KEY_ID="xxxxxxxxxxxxxxxxxxxxxxx"
+
+#fdc reactivation
+export RABBITMQ_EXPORTER_METRIC_URL='http://prod-exporter.julo-internal.vpc:9420'
+export RABBITMQ_VHOST=juloserver_staging
+
+#bpjs direct testing env
+export BPJS_DIRECT_BASE_URL="https://dev.bpjsketenagakerjaan.go.id/wssvc/julo/"
+export BPJS_DIRECT_SECRET_KEY=xxxxxxxxxxxxxxxx
+export BPJS_DIRECT_USERNAME=xxxxxxxxxxxxxxxx
+export BPJS_DIRECT_PASSWORD=xxxxxxxxxxxxxxxx
+export BPJS_DIRECT_PREFIX="WEB"
+
+# DANA Consume API
+export DANA_SIGNATURE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_SIGNATURE_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export JULO_PEM_PUBLIC_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export JULO_PEM_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_PEM_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_PEM_PUBLIC_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_SALT="xxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_NAME_BANK_VALIDATION_ID="1"
+export DANA_API_BASE_URL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# DANA Request API
+export DANA_X_SIGNATURE_PUBLIC_KEY_REQUEST="xxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_X_SIGNATURE_PRIVATE_KEY_REQUEST="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Digital signature
+export DIGITAL_SIGNATURE_BUCKET=digital-signature-staging
+export DIGITAL_SIGNATURE_IV=1234567890123456
+export DIGITAL_SIGNATURE_BASE_KEY=1234567890123456
+
+# Certificate authority
+export JULO_CA_PRIVATE_KEY="-----BEGIN-----"
+export JULO_CA_PASSPHRASE="xxxxxxxxxx"
+export JULO_CA_CERTIFICATE="-----END-----"
+
+# Monnai (Fraud Score)
+export MONNAI_AUTH_BASE_URL="https://127.0.0.1"
+export MONNAI_INSIGHT_BASE_URL="https://127.0.0.1"
+export MONNAI_CLIENT_ID="monnai_client_id"
+export MONNAI_CLIENT_SECRET="monnai_client_secret"
+
+# AI Rudder Predictive Dialer System
+export AI_RUDDER_PDS_BASE_URL="https://fd8264f7-468a-4f4e-8c13-ad30e22f5b0b.mock.pstmn.io"
+export AI_RUDDER_PDS_APP_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export AI_RUDDER_PDS_APP_SECRET="xxxxxxxxxxxxxxxxxxxxxx"
+
+# INFOBIP (VOICE)
+export INFOBIP_VOICE_HOST="www.xxx.com"
+export INFOBIP_VOICE_API_KEY="xxxxxxxxxxxxxxxx"
+
+# Google Drive
+export GOOGLE_DRIVE_CREDENTIALS_PATH="xxxxx/xxxxx/xxxxx"
+export GOOGLE_DRIVE_TOKEN="xxxxxxxxx"
+export GOOGLE_CLIENT_ID="xxxxxxxxx"
+export GOOGLE_CLIENT_SECRET="xxxxxxxxx"
+
+# Engineer Google Drive
+export ENGINEER_GOOGLE_DRIVE_CREDENTIALS_PATH="xxxxx/xxxxx/xxxxx"
+export ENGINEER_GOOGLE_DRIVE_TOKEN="xxxxx/xxxxx/xxxxx"
+export ENGINEER_GOOGLE_CLIENT_ID="xxxxxxxxx"
+export ENGINEER_GOOGLE_CLIENT_SECRET="xxxxxxxxx"
+
+# IDfy API
+export IDFY_CONFIG_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export IDFY_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export IDFY_BASE_URL="https://127.0.0.1"
+export AUTODEBET_IDFY_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_IDFY_BASE_URL="https://127.0.0.1"
+
+# General Channeling
+export AR_SWITCHING_FAILED_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+export SYNC_FAILED_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+export SYNC_COMPLETE_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+export LOAN_WRITE_OFF_FAILED_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# FAMA Channeling
+export FAMA_SFTP_HOST="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_SFTP_USERNAME="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_SFTP_PORT=00000
+export FAMA_SFTP_RSA_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_SFTP_REMOTE_DIRECTORY="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_GPG_ENCRYPT_RECIPIENT="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_GPG_ENCRYPT_KEY_DATA="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_GPG_DECRYPT_RECIPIENT="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_GPG_DECRYPT_KEY_DATA="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_GPG_DECRYPT_PASSPHRASE="xxxxxxxxxxxxxxxxxxxxxxx"
+export FAMA_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# SMF Channeling
+export SMF_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Permata Channeling
+export PERMATA_SFTP_HOST="xxxxxxxxxxxxxxxxxxxxxxx"
+export PERMATA_SFTP_USERNAME="xxxxxxxxxxxxxxxxxxxxxxx"
+export PERMATA_SFTP_PORT=00000
+export PERMATA_SFTP_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxx"
+export PERMATA_GPG_ENCRYPT_RECIPIENT="xxxxxxxxxxxxxxxxxxxxxxx"
+export PERMATA_GPG_ENCRYPT_KEY_DATA="xxxxxxxxxxxxxxxxxxxxxxx"
+export PERMATA_GPG_DECRYPT_RECIPIENT="xxxxxxxxxxxxxxxxxxxxxxx"
+export PERMATA_GPG_DECRYPT_KEY_DATA="xxxxxxxxxxxxxxxxxxxxxxx"
+export PERMATA_GPG_DECRYPT_PASSPHRASE="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# BNI Channeling
+export BNI_SFTP_HOST="xxxxxxxxxxxxxxxxxxxxxxx"
+export BNI_SFTP_USERNAME="xxxxxxxxxxxxxxxxxxxxxxx"
+export BNI_SFTP_PORT=00000
+export BNI_SFTP_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Partnership JWT Key
+export PARTNERSHIP_JWT_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export PARTNERSHIP_HASH_ID_SALT="xxxxxxxxxxxxxxxxxxxxxxx"
+export MERCHANT_FINANCING_JWT_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export MERCHANT_FINANCING_HASH_ID_SALT="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Partnership Liveness key
+export PARTNERSHIP_LIVENESS_ENCRYPTION_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Metabase API
+export METABASE_BASE_URL="https://metabase-xxxxxxxxxxxxx/"
+export METABASE_API_USER="xxxxxxxxxxxxxxxx"
+export METABASE_API_PASSWORD="xxxxxxxxxxxxxxxx"
+
+# Ayoconnect
+export AYOCONNECT_CLIENT_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export AYOCONNECT_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export AYOCONNECT_BASE_URL="https://sandbox.api.of.ayoconnect.id"
+export AYOCONNECT_MERCHANT_CODE="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export AYOCONNECT_LATITUDE="-6.2146" # AS45102 Alibaba (US) Latitude
+export AYOCONNECT_LONGITUDE="106.845" # AS45102 Alibaba (US) Longitude
+export AYOCONNECT_IP_ADDRESS="192.168.100.12" # Server IP Address
+
+# payment gateway vendor
+export PAYMENT_GATEWAY_VENDOR_SALT="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Easy Income
+export MISSION_WEB_URL="xxxxxxxxxxxxxxxxxxxxx"
+export EASY_INCOME_AUTH_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DEFAULT_TOKEN_EXPIRE_AFTER_HOURS="24"
+
+# JULOCares
+export JULO_CARE_BASE_URL="http://julocaresxxxxxxxxxxxxxx"
+
+# growthbook
+export GROWTHBOOK_API_HOST="https://growthbook-xxxxxxxxxxx/"
+export GROWTHBOOK_CLIENT_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Dana wallet payment method
+export DANA_LINKING_API_BASE_URL="https://api.sandbox.dana.id"
+export DANA_LINKING_WEB_BASE_URL="https://m.sandbox.dana.id"
+export DANA_LINKING_MERCHANT_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_LINKING_CLIENT_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_LINKING_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_LINKING_CHANNEL_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_LINKING_PUBLIC_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_LINKING_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+
+# Vault service credential
+export PII_VAULT_BASE_URL="http://0.0.0.0:8000"
+export PII_VAULT_JULOVER_TOKEN="abcde-abcde-abcde-abcde"
+export PII_VAULT_ONBOARDING_TOKEN="abcde-abcde-abcde-abcde"
+export PII_VAULT_PARTNERSHIP_ONBOARDING_TOKEN="abcde-abcde-abcde-abcde"
+export PII_VAULT_REPAYMENT_TOKEN="abcde-abcde-abcde-abcde"
+export PII_VAULT_ANTIFRAUD_TOKEN="abcde-abcde-abcde-abcde"
+export PII_VAULT_UTILIZATION_TOKEN="abcde-abcde-abcde-abcde"
+export PII_VAULT_PLATFORM_TOKEN="abcde-abcde-abcde-abcde"
+export PII_VAULT_COLLECTION_TOKEN="abcde-abcde-abcde-abcde"
+
+
+# Perfios
+export PERFIOS_HOST="lsp-demo.perfios.com"
+export PERFIOS_ENDPOINT="https://lsp-demo.perfios.com/lspsdk/"
+export PERFIOS_CLIENT_ID="julo"
+export PERFIOS_CLIENT_SECRET="****"
+
+# Tokoscore
+export TOKOSCORE_BASE_URL="https://api-staging.sdbinsight.com"
+export TOKOSCORE_PUBLIC_KEY="xxxxxxxxxxxxxxx"
+export TOKOSCORE_PRIVATE_KEY="xxxxxxxxxxxxxxx"
+export TOKOSCORE_CLIENT_ID="xxxxxxxxxxxxxxx"
+export TOKOSCORE_CLIENT_SECRET="xxxxxxxxxxxxxxx"
+
+# Dana Biller
+export DANA_BILLER_PUBLIC_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DANA_BILLER_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Mandiri Autodebet
+export AUTODEBET_MANDIRI_CLIENT_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_MANDIRI_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_MANDIRI_MERCHANT_ID="xxxxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_MANDIRI_TERMINAL_ID="xxxxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_MANDIRI_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_MANDIRI_PUBLIC_KEY_LANDING_PAGE="xxxxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_MANDIRI_CARD_ENCRYPTION_KEY="xxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Julo Whatsapp-Service
+export JULO_WHATSAPP_API_KEY="local-whatsapp-key"
+export JULO_WHATSAPP_API_SECRET="local-whatsapp-secret"
+export JULO_WHATSAPP_BASE_URL="whatsapp_service_url"
+
+# OTPLess
+export JULO_OTPLESS_CLIENT_ID="local-otpless-client-id"
+export JULO_OTPLESS_CLIENT_SECRET="local-otpless-client-secret"
+export JULO_OTPLESS_BASE_URL="https://auth.otpless.app"
+
+# CLIK Services
+export CLIK_ENDPOINT="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# CX External Party
+export CX_FERNET_SECRET_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# BCA SNAP inbound
+export BCA_SNAP_PUBLIC_KEY_INBOUND="xxxxxxxxxxxxxxxxxxxxxxx"
+export BCA_SNAP_CLIENT_ID_INBOUND="xxxxxxxxxxxxxxxxxxxxxxx"
+export BCA_SNAP_CLIENT_SECRET_INBOUND="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# FASPAY SNAP
+export FASPAY_SNAP_PUBLIC_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export FASPAY_SNAP_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Account Deletion Request - Adjust Time Limit
+export ADJUST_AUTO_APPROVE_DATE_RELEASE="2024-03-08"
+
+# Rating Service
+export RATING_SERVICE_HOST="http://localhost:8500"
+
+# AYOCONNECT ACCESS TOKEN
+export AUTODEBET_BNI_AYO_CONNECT_CLIENT_ID="xxxxxxxxxxxxxxxxxxxxxxx"
+export AUTODEBET_BNI_AYO_CONNECT_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# JUICY SCORE
+export JUICY_SCORE_BASE_URL="https://api.juicyscore.net"
+export JUICY_SCORE_GET_SCORE_TOKEN="xxxxxxxxxxxxxxxxxxxxxxx"
+export JUICY_SCORE_ACCOUNT_ID="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Telco
+export TS_TELCO_SCORING_JULO_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+xxxxxxxxxxxxxxxxxxxxxxx
+-----END PUBLIC KEY-----
+"
+export TS_TELCO_SCORING_JULO_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+xxxxxxxxxxxxxxxxxxxxxxx
+-----END RSA PRIVATE KEY-----
+"
+export TS_TELCO_SCORING_TELKOMSEL_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+xxxxxxxxxxxxxxxxxxxxxxx
+-----END PUBLIC KEY-----
+"
+export TS_TELCO_SCORING_TELKOMSEL_BASE_URL="https://telkomsel-staging.trustingsocial.com"
+export TS_TELCO_SCORING_TELKOMSEL_USERNAME="xxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_TELKOMSEL_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxx#xxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_TELKOMSEL_CLIENT_CODE="xxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_INDOSAT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+xxxxxxxxxxxxxxxxxxxxxxx
+-----END PUBLIC KEY-----
+"
+export TS_TELCO_SCORING_INDOSAT_BASE_URL="https://indosat-staging.trustingsocial.com"
+export TS_TELCO_SCORING_INDOSAT_USERNAME="xxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_INDOSAT_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxx#xxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_INDOSAT_CLIENT_CODE="xxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_XL_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+xxxxxxxxxxxxxxxxxxxxxxx
+-----END PUBLIC KEY-----
+"
+export TS_TELCO_SCORING_XL_BASE_URL="https://creditinsight-staging-id.trustingsocial.com"
+export TS_TELCO_SCORING_XL_USERNAME="xxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_XL_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+export TS_TELCO_SCORING_XL_CLIENT_CODE="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Collection Serverless
+export COLLECTION_SERVERLESS_BASE_URL="xxxxxxxxxxxxxxxxxxxxxxx"
+export COLLECTION_SERVERLESS_TOKEN="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Partnership SMS Client
+export PARTNERSHIP_SMS_API_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export PARTNERSHIP_SMS_API_SECRET="xxxxxxxxxxxxxxxxxxxxxxx"
+export PARTNERSHIP_SMS_API_BASE_URL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# julo lite web view (smartphone financing)
+export JULO_LITE_BASE_URL="xxxxxxxxxxxxxxxxxxxxxxx"
+export J_FINANCING_SECRET_KEY_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx="
+
+# Anti Fraud Service
+export ANTI_FRAUD_BASE_URL="http://localhost:8080"
+
+export OMNICHANNEL_BASE_URL="http://localhost:8080"
+export OMNICHANNEL_TOKEN="this-is-a-secret-token"
+
+# Field Collection Service
+export FIELDCOLL_BASE_URL="xxxxxxxxxxxxxxxxxxxxxxx"
+export FIELDCOLL_TOKEN="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# SalesOps TNC Page Form
+export SALES_OPS_TNC_BASE_URL="localhost"
+
+# FASPAY SNAP OUTBOUND
+export FASPAY_SNAP_OUTBOUND_BASE_URL="https://debit-sandbox.faspay.co.id"
+export FASPAY_SNAP_OUTBOUND_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Credit Decision Engine
+export CDE_ENDPOINT="http://stg-provenir.julo-internal.vpc"
+export CDE_AUTH="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# DOKU SNAP
+export DOKU_SNAP_BASE_URL_OUTBOND="https://api-sandbox.doku.com"
+export DOKU_SNAP_CLIENT_ID_OUTBOND="xxxxxxxxxxxxxxxxxxxxxxx"
+export DOKU_SNAP_CLIENT_SECRET_OUTBOND="xxxxxxxxxxxxxxxxxxxxxxx"
+export DOKU_SNAP_PRIVATE_KEY_OUTBOND="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Partnership Google Drive
+export PARTNERSHIP_GOOGLE_DRIVE_CREDENTIALS_PATH="xxxxx/xxxxx/xxxxx"
+export PARTNERSHIP_GOOGLE_DRIVE_TOKEN="xxxxxxxxx"
+export PARTNERSHIP_GOOGLE_CLIENT_ID="xxxxxxxxx"
+export PARTNERSHIP_GOOGLE_CLIENT_SECRET="xxxxxxxxx"
+
+# Grab Service
+export GRAB_SERVICE_BASE_URL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# MVP Sync J360 to User Service
+export JULO_SYNC_REGISTRATION_KEY='xxxxxxxx'
+
+# Collection Google Drive
+export COLLECTION_GOOGLE_DRIVE_CREDENTIALS_PATH="xxxxx/xxxxx/xxxxx"
+export COLLECTION_GOOGLE_DRIVE_TOKEN="xxxxxxxxx"
+export COLLECTION_GOOGLE_CLIENT_ID="xxxxxxxxx"
+export COLLECTION_GOOGLE_CLIENT_SECRET="xxxxxxxxx"
+
+# NEW DIGISIGN
+export NEW_DIGISIGN_BASE_URL=""
+export NEW_DIGISIGN_API_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# NSQ
+export NSQD_HTTP_URL="http://127.0.0.1"
+export NSQD_HTTP_PORT=4151
+export NSQ_ENVIRONMENT="dev"
+
+# Email Service
+export EMAIL_SERVICE_BASE_URL="http://localhost:7000"
+export EMAIL_SERVICE_API_ID="no-id"
+export EMAIL_SERVICE_API_KEY="no-api-key"
+
+# Partnership Google vision credentials
+export PARTNERSHIP_GOOGLE_VISION_PROJECT_ID='xxxxxxxxxxxxx'
+export PARTNERSHIP_GOOGLE_VISION_PRIVATE_KEY_ID='xxxxxxxxxxxxx'
+export PARTNERSHIP_GOOGLE_VISION_PRIVATE_ID='xxxxxxxxxxxxx'
+export PARTNERSHIP_GOOGLE_VISION_CLIENT_EMAIL='partnership@julofinance.com'
+export PARTNERSHIP_GOOGLE_VISION_CLIENT_ID='xxxxxxxxxxxxx'
+export PARTNERSHIP_GOOGLE_VISION_AUTH_URI='https://accounts.google.com'
+export PARTNERSHIP_GOOGLE_VISION_TOKEN_URI='https://oauth2.googleapis.com'
+export PARTNERSHIP_GOOGLE_VISION_AUTH_PROVIDER='https://www.googleapis.com'
+export PARTNERSHIP_GOOGLE_VISION_CLIENT_X509_CERT_URL='https://www.googleapis.com'
+export PARTNERSHIP_GOOGLE_VISION_UNIVERSE_DOMAIN='googleapis.com'
+
+# Google Auth
+export GOOGLE_AUTH_CLIENT_ID_IOS='xxxxxxxxxxxxx'
+
+# Aegis Token
+export AEGIS_SERVICE_TOKEN='xxxxxxxxxxxxx'
+
+# DOKU GATEWAY
+export DOKU_PG_BASE_URL_OUTBOUND='xxxxxxxxxxxxx'
+export DOKU_PG_CLIENT_ID_OUTBOUND='xxxxxxxxxxxxxxxxxx'
+export DOKU_PG_PRIVATE_KEY_OUTBOUND='xxxxxxxxxxxxxxxxxxxxxx'
+export DOKU_PG_CLIENT_SECRET_OUTBOUND='xxxxxxxxxxxxxxxxxxxxxx'
+export PG_API_SECRET_KEY='xxxxxxxxxxxxxxxxxxxxxxxxx'
+
+# PARTNERSHIP DIGISIGN
+export PARTNERSHIP_AXIATA_DIGISIGN_TOKEN="xxxxxxxxxxxxxxxxxxxxxxx"
+export PARTNERSHIP_LEADGEN_STANDARD_PRODUCT_DIGISIGN_TOKEN="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Partnership Payment Gateway
+export PARTNERSHIP_PAYMENT_GATEWAY_CLIENT_ID='xxxxxxxxxxxxx'
+export PARTNERSHIP_PAYMENT_GATEWAY_API_KEY='xxxxxxxxxxxxxxxxxx'
+
+# Onboarding Payment Gateway
+export ONBOARDING_PG_CLIENT_ID='xxxxxxxxxxxxx'
+export ONBOARDING_PG_API_KEY='xxxxxxxxxxxxxxxxxx'
+
+# Grab Payment Gateway
+export PG_GRAB_CLIENT_ID='xxxxxxxxxxxxx'
+export PG_GRAB_API_KEY='xxxxxxxxxxxxxxxxxx'
+
+export OONA_ENCRYPTED_PASSPHRASE='v1:xxxxxxxxxxx'
+
+# Kangtau
+export KANGTAU_BASE_URL='https://cms-api.kangtauxxxxxxxx'
+export KANGTAU_API_INTEGRATION_TOKEN='xxxxxxxxxxxx'
+export KANGTAU_COMPANY_ID='xxxxxxxxxxxxx'
+export KANGTAU_PROJECT_ID='xxxxxxxxxxxxx'
+export KANGTAU_USER_EMAIL='dummyuser@mail.com'
+export KANGTAU_USER_PASSWORD='xxxxxxxx'
+
+# SMF Channeling API
+export SMF_CHANNELING_API_BASE_URL="https://sandbox.omni.saison-indonesia.com"
+export SMF_CHANNELING_API_URL_PREFIX="/olympus/hapi/apichanneling/"
+export SMF_CHANNELING_GTW_ACCESS_KEY='xxxxxxxxxxxxx'
+export SMF_CHANNELING_GTW_API_KEY='xxxxxxxxxxxxx'
+export SMF_CHANNELING_HMAC_SECRET_KEY='xxxxxxxxxxxxx'
+
+# DBS Channeling
+export DBS_API_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_CALLBACK_API_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_CHANNELING_BASE_URL="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_SFTP_HOST="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_SFTP_USERNAME="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_SFTP_PORT=00000
+export DBS_SFTP_RSA_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_SFTP_REMOTE_DIRECTORY="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_GPG_ENCRYPT_RECIPIENT="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_GPG_ENCRYPT_KEY_DATA="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_GPG_ENCRYPT_API_RECIPIENT="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_GPG_ENCRYPT_API_KEY_DATA="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_GPG_DECRYPT_RECIPIENT="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_GPG_DECRYPT_KEY_DATA="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_GPG_DECRYPT_PASSPHRASE="xxxxxxxxxxxxxxxxxxxxxxx"
+export DBS_SLACK_NOTIFICATION_CHANNEL="xxxxxxxxxxxxxxxxxxxxxxx"
+
+# FAKE loan token (32 bytes, based 64)
+export LOAN_TOKEN_SECRET_KEY='e--C0lcP1EZymLvrcZaiROWvbZhJVfvyVvsknMChx_I='

@@ -1,0 +1,4 @@
+[run]
+omit = */migrations/*, */test*, */retroloads*, */new_migrations*
+source = ./juloserver, ./collectioncrm
+data_file = /logs/.coverage

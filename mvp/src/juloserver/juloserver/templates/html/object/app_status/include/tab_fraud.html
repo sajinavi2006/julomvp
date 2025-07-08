@@ -1,0 +1,386 @@
+{% load static %}
+{% load unit %}
+{% load checkusergroup from common %}
+<form class="form-horizontal" id="fraud_form" role="form" method="POST">
+  {% csrf_token %}
+  {% if account_status_current > 399 %}
+    {% include "object/app_status/include/fraud_tab/fraud_swift_limit_drainer_user_appeal.html" %}
+  {% endif %}
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="col-xs-12 p-l-10">
+          {% if message_out_fraud_changes %}
+          <div class="alert alert-warning" id="id_error_security_div">
+            <code>{{ message_out_fraud_changes|escape }}</code><br />
+          </div>
+          {% endif %}
+
+          <div class="row p-t-30 p-b-10">
+
+            <div class="col-xs-12 p-b-10">
+              <strong> Ubah status </strong>
+            </div>
+            <div class="col-xs-6 p-b-10">
+
+              <select id="account_status_new" name="account_status_new" class="form-control">
+                {% for key,value in fraud_status_move_list.items %}
+                <option {% if key == account_status_current %} selected disabled="disabled" style="display:none;" {% endif %} value="{{ key }}">
+                  {{ key }} - {{ value|default:"-"|safe}}
+                </option>
+                {% endfor %}
+              </select>
+              <br>
+              *pilih salah satu status app
+
+            </div>
+            </div>
+            <div class="col-xs-12 p-b-10 p-t-10" style="display:none;" id="reason_change_title">
+                <strong> Alasan Ubah status </strong>
+            </div>
+            <div class="col-xs-6 p-b-10" id="reason_selector_div" style="display:none;">
+                <select id="account_status_new_reason" name="account_status_new_reason" class="form-control" required>
+                </select>
+            </div>
+
+
+            <div class="col-xs-6 status_change_warning hide" role="alert" id="account_status_change_info">
+              <span class="suspicious_warning_text"><img src="{% static 'theme/plugins/images/warning.svg'%}"
+                  height="14px">&nbsp;
+                <strong> "Karena Akun ini tercatat mempunyai limit lebih dari 500.000 maka limit yang tersedia akan
+                  dikurangi menjadi 500.000"</strong>
+              </span>
+            </div>
+          </div>
+
+          <div class="row hide p-t-10 p-b-10 border-top bg-white" id="section_account_takeover">
+            <div class="col-xs-12  p-b-10">
+              <strong> Pengambilalihan akun </strong>
+            </div>
+
+            <div class="col-xs-6 p-l-10">
+              <input type="radio" name="account_take_over" value="yes"> Lanjut menggunakan J1
+
+            </div>
+            <div class="col-xs-6 p-b-10">
+              <input type="radio" name="account_take_over" value="no"> Berhenti menggunakan J1
+            </div>
+
+          </div>
+
+          {% if account_status_current == 441 %}
+          <div class="row p-t-30 border-top border-bottom p-b-10">
+            <div class="col-md-4 col-sm-12 col-xs-12 ">
+              <strong>Total tagihan yang belum terbayar</strong>
+            </div>
+
+            <div class="col-xs-4">
+              <div class="input-group input-group-sm">
+                <input class="form-control mask" id="id_total_outstanding_due_amount"
+                  name="total_outstanding_due_amount" type="text"
+                  value='{{ total_outstanding_due_amount|f_rupiahs:"no"|safe }}' readonly="true">
+
+
+                </span>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <div class="row  p-t-10 border-top" id="section_continue_with_j1" style="display: none;">
+            <!-- fraud phone verification  -->
+            <div class="col-xs-12  p-t-10 p-b-10  bg-white">
+              <strong> KONFIRMASI NOMOR HANDPHONE </strong>
+            </div>
+            <div class="clearfix p-b-10"></div>
+            <div class="row p-l-10">
+              <div class="col-xs-4">
+                <b>Nomor handphone terdaftar</b>
+              </div>
+              <div class="col-xs-3">
+
+                <input class="form-control" type="text" id="registered_phone_number"
+                  value='{{registered_phone_number|default:""|safe}}' readonly="true">
+              </div>
+              <div class="clearfix p-b-10"></div>
+
+              <div class="col-xs-4">
+                <b>Nama Ibu Kandung</b>
+              </div>
+              <div class="col-xs-3">
+
+                <input class="form-control" type="text" value='{{ object.customer.mother_maiden_name|default:"-"|safe}}'
+                  readonly="true">
+              </div>
+
+              <div class="clearfix p-b-10"></div>
+              <div class="col-xs-4">
+                <b>Nomor handphone sekarang</b>
+              </div>
+              <div class="col-xs-3">
+
+                <input class="form-control" type="text" id="current_phone_number"
+                  value='{{object.mobile_phone_1|default:""|safe}}' readonly="true">
+              </div>
+              <div class="col-xs-5 alert" style="display:none;padding:2px;" role="alert" id="msg_is_using_registerd_phone"></div>
+
+              <div class="clearfix p-b-10"></div>
+            </div>
+
+
+            <div class="row  p-t-10  p-b-10 border-top bg-white">
+              <div class="col-xs-5 p-l-10 ">
+                <input type="radio" name="is_using_registerd_phone" value="yes"> Masih menggunakan nomer hp terdaftar
+              </div>
+              <div class="col-xs-5">
+                <input type="radio" name="is_using_registerd_phone" value="no"> Menggunakan nomer hp baru
+              </div>
+            </div>
+
+            <div class="row  bg-white p-t-10 p-b-10 border-top section-magic-link-phone" style="display:none;">
+              <div class="col-xs-4 p-l-10"> <strong>Nomor HP</strong> </div>
+              <div class="col-xs-3 p-l-10"> <input class="form-control" name="confirm_phone"
+                  id="id_confirm_phone" type="text" value=''> </div>
+            </div>
+
+            <div class="row p-t-30 p-b-30 border-top section-magic-link-phone" style="display:none;">
+              <div class="col-xs-12 m-l-10"><strong> Kirim magic Link </strong> </div>
+              <div class="col-xs-11 p-t-10 m-l-30">
+                <input type="hidden" id="is_magic_link_send_phone" value="no">
+                <button type="button" class="btn btn-success btn-block send_magic_link_phone" id="send_magic_link_phone">Kirim magic link ke
+                  nomor saat ini</button>
+                <span id="phone_magic_link_already_send_msg" class="p-t-10 p-b-10" style="display:none;">*Magic link send to customer</span>  
+              </div>
+              <div class="col-xs-4" id="section_magic_link_verified_phone"style="display:none;">
+                <div class="magicLinkVerifiedBox">
+                  Magic link confirmed by user
+                  <i class="fa fa-check-circle" style="color: #69E2C7"></i>
+                </div>
+              </div>
+              <div class="col-xs-4 m-l-30 p-t-10" id="section_resend_magic_link_phone"  style="display:none;">
+                <button type="button" class="btn btn-success btn-block send_magic_link_phone" id="send_resend_magic_link_phone">Resend magic link</button>
+              </div>
+            </div>
+
+            <div class="clearfix p-b-10"></div>
+
+            <!-- fraud email verification -->
+            <div class="row p-l-10" id="block_magic_link_email" style="display: none;">
+              <div class="col-xs-12  p-t-30 p-b-10  bg-white">
+                <strong> KONFIRMASI EMAIL </strong>
+              </div>
+              <div class="clearfix p-b-10"></div>
+  
+              <div class="row p-l-10">
+                <div class="col-xs-3">
+                  <b>Email terdaftar</b>
+                </div>
+                <div class="col-xs-4">
+                  <input class="form-control" type="text" id="registered_email"
+                    value='{{registered_email|default:""|safe}}' readonly="true">
+                </div>
+                <div class="clearfix p-b-10"></div>
+  
+                <div class="col-xs-3">
+                  <b>Nama Ibu Kandung</b>
+                </div>
+                <div class="col-xs-4">
+                  <input class="form-control" type="text" value='{{ object.customer.mother_maiden_name|default:"-"|safe}}'
+                    readonly="true">
+                </div>
+  
+                <div class="clearfix p-b-10"></div>
+                <div class="col-xs-3">
+                  <b>Email sekarang</b>
+                </div>
+                <div class="col-xs-4">
+  
+                  <input class="form-control" type="email" id="current_email" value='{{object.email|default:""|safe}}'
+                    readonly="true">
+                </div>
+                <div class="col-xs-5 alert" style="display:none;padding:2px;" role="alert" id="msg_is_using_registerd_email"> </div>
+  
+                <div class="clearfix p-b-10"></div>
+              </div>
+  
+  
+              <div class="row  p-t-30  p-b-10 border-top bg-white">
+                <div class="col-xs-5 p-l-10 ">
+                  <input type="radio" name="is_using_registerd_email" value="yes"> Masih menggunakan email terdaftar
+                </div>
+                <div class="col-xs-5">
+                  <input type="radio" name="is_using_registerd_email" value="no"> Menggunakan email baru
+                </div>
+              </div>
+  
+              <div class="row  bg-white p-t-10 p-b-10 border-top section-magic-link-email" style="display:none;">
+                <div class="col-xs-3 p-l-10"> <strong>Email</strong> </div>
+                <div class="col-xs-6 p-l-10"> 
+                  <input class="form-control" name="confirm_email" id="id_confirm_email" type="text" value=''> 
+                  <span id="fraud_errEmail"></span>
+                </div>
+              </div>
+  
+              <div class="row p-t-30 p-b-30 border-top section-magic-link-email" style="display:none;">
+                <div class="col-xs-12 m-l-10"><strong> Kirim magic Link </strong> </div>
+                <div class="col-xs-11 p-t-10 m-l-30">
+                  <input type="hidden" id="is_magic_link_send_email" value="no">
+                  <button type="button" class="btn btn-success btn-block send_magic_link_email" id="send_magic_link_email">Kirim magic link ke
+                    email saat ini</button>
+                    <span id="email_magic_link_already_send_msg" class="p-t-10 p-b-10 m-t-10" style="display:none;">*Magic link send to customer</span>  
+                  </div>
+                  <div class="col-xs-4" id="section_magic_link_verified_email"style="display:none;">
+                    <div class="magicLinkVerifiedBox">
+                      Magic link confirmed by user
+                      <i class="fa fa-check-circle" style="color: #69E2C7"></i>
+                    </div>
+                  </div>
+                  <div class="col-xs-4 m-l-30 p-t-10" id="section_resend_magic_link_email"  style="display:none;">
+                    <button type="button" class="btn btn-success btn-block send_magic_link_email" id="send_resend_magic_link_email">Resend magic link</button>
+                  </div>
+              </div>
+  
+            </div>
+            
+            <!-- end email verification -->
+
+            <!-- send reset pin -->
+            <div class="row p-t-30 p-b-30 border-top bg-white" id="fraud-send-reset-pin" style="display:none;">
+              <div class="col-xs-12 p-l-10"><strong> Set ulang PIN </strong> </div>
+              <div class="col-xs-11 p-t-10 m-l-30">
+                <input type="hidden" id="is_reset_pin" value="no">
+                <button type="button" class="btn btn-success btn-block" id="send_reset_pin_email"
+                  onclick="sendResetPinEmail('fraud');">Kirim set ulang PIN ke email saat ini</button>
+                  <span id="msg_reset_pin_email_sent" style="display:none;"></span>
+              </div>
+              <div class="col-xs-4" id="section_pin_reset_done" style="display:none;">
+                <div class="magicLinkVerifiedBox">
+                  PIN telah di set ulang oleh user
+                  <i class="fa fa-check-circle" style="color: #69E2C7"></i>
+                </div>
+              </div>
+              <div class="col-xs-6 p-t-10" id="section_resend_pin"  style="display:none;">
+                <button type="button" class="btn btn-success btn-block" id="send_resend_reset_pin_email"
+                  onclick="sendResetPinEmail('fraud');">Kirim set ulang PIN ke email saat ini</button>
+              </div>
+            </div>
+            <!-- send reset pin -->
+
+            <!-- device list and force logout -->
+            <div class="row p-t-30 p-b-30 border-top" id="fraud-device-logout" style="display:none;">
+              <div class="col-xs-12 m-l-10 m-b-10"><strong> Daftar perangkat & keluar paksa aplikasi </strong> </div>
+
+              <div class="col-md-12 m-l-30 ">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Android ID</th>
+                      <th scope="col">Nama model perangat</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for device in device_list %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }} </th>
+                      <td>{{ device.android_id }}</td>
+                      <td>{{ device.device_model_name|default:""|safe }}</td>
+
+                      {% endfor %}
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="col-xs-11 p-t-10 m-l-30">
+                <input type="hidden" id="is_force_logout" value="no">
+                <button type="button" class="btn btn-success btn-block" id="fraud_force_logout"
+                  onclick="actionFraudForceLogout();">Keluar paksa aplikasi semua perangkat</button>
+              </div>
+              <div class="col-xs-6" id="section_done_force_logout"style="display:none;">
+                <div class="magicLinkVerifiedBox">
+                  Semua akun telah dikeluarkan
+                  <i class="fa fa-check-circle" style="color: #69E2C7"></i>
+                </div>
+              </div>
+            </div>
+            <!-- end device list and forceloggout -->
+
+          </div>
+          <!-- end row section_continue_with_j1 -->
+
+          </div>
+
+
+          {% if account_status_current == 442 %}
+          <div class="row p-t-10 border-top border-bottom p-b-10 bg-white" style="display:none;" id="section_is_already_waived">
+            <div class="col-md-12 col-sm-12 col-xs-12 ">
+              <strong>Sudah melakukan waiver pada fraud sebelumnya?</strong>
+            </div>
+
+            <div class="row  p-t-30  p-b-10">
+              <div class="col-xs-5 p-l-10 ">
+                <input type="radio" name="is_already_waived" value="yes"> Sudah waiver
+              </div>
+              <div class="col-xs-5">
+                <input type="radio" name="is_already_waived" value="no"> Belum waiver
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Edit email section-->
+          <div class="row  p-t-30  p-b-10 border-top bg-white" id="section-automatic-email" style="display:none;">
+            <div class="col-md-12 col-sm-12 col-xs-12 p-b-30 ">
+              <strong>Email otomatis</strong>
+            </div>
+            <div class="col-xs-5 p-l-10 ">
+              <button id="id-edit-fraud-email" class="btn btn-primary btn-block  waves-effect waves-light" 
+              type="button" name="edit-fraud-email" > Ubah teks email</button>
+            </div>
+            <!-- <div class="col-xs-5">
+              <button id="id-no-edit-fraud-email" class="btn btn-success btn-block 
+            waves-effect waves-light"  type="button" name="submit-fraud-status">Lanjut</button>
+            </div> -->
+          </div>
+          <!-- END Edit email section-->
+
+          <div class="row p-t-30 border-top bg-white">
+            <div class="col-md-12 col-sm-12 col-xs-12 p-b-10">
+              <strong>Catatan</strong>
+            </div>
+          </div>
+          <div class="row m-t-12 bg-white">
+            <div class="col-md-12 col-sm-11
+               form-group  m-r-10" style="padding-left: 15px;">
+              <textarea class="form-control" cols="40" id="fraud_note" name="fraud_note" rows="6"
+                required=""></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-11 col-sm-11 col-xs-11" style="padding-left: 10px;padding-bottom: 20px;">
+              <input type="hidden" id="can_submit_form" name="can_submit_form"  value="">
+              <input type="hidden" id="is_magic_link_verified_phone" value="no">
+              <input type="hidden" id="is_magic_link_verified_email" value="no">
+              <input type="hidden" id="status_magic_link_phone"  value="">
+              <input type="hidden" id="status_magic_link_email"  value="">
+              <input type="hidden" id="fraud_email_template_key" name="fraud_email_template_key" value="">
+              <textarea type="hidden" id="fraud_email_content" name="fraud_email_content" style="display: none;"></textarea>
+
+              <button id="id-submit-fraud-status" class="btn btn-default btn-block text-uppercase
+            waves-effect waves-light" disabled="true" type="button" name="submit-fraud-status">SIMPAN</button>
+            </div>
+          </div>
+
+
+
+        </td>
+      </tr>
+
+
+
+    </tbody>
+  </table>
+</form>

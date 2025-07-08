@@ -1,0 +1,43 @@
+{% extends "common/layout.html" %}
+{% load template %}
+
+{% load static from staticfiles %}
+{% block link %}
+    <link href="{% static 'bootstrap/3.3.5/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    
+    <div class="row">
+        <div class="col-md-12">
+        {% block content-header %}
+        	<div id="toolbar" class="col-md-12 hidden-xs">
+    	    <div class="container-fluid">
+                <ul class="nav navbar-form navbar-left hidden-xs">
+                    <li>                
+                        {% block search-form %}{% search_form q %}{% endblock %}
+                    </li>
+                </ul>
+                
+    	        <ul class="nav navbar-nav navbar-right">
+    	            <li>                
+    	                {% block add_object %}{% endblock %}
+    	            </li>
+    	        </ul>
+    	    </div>            
+    	</div>
+        {% endblock %}
+        
+        <br />
+        {% block content-list %}{% endblock %}
+        
+        <br />
+        {% block content-footer %}
+            {% block pagination %}
+                {% pagination4 is_paginated paginator page_obj q 4 %}
+            {% endblock %}
+            
+        {% endblock %}
+	    </div>
+    </div>
+{% endblock %}

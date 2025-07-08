@@ -1,0 +1,67 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"><strong>Jumlah Pinjaman</strong> </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+    {{ object.loan_amount_request|f_rupiahs:"no"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Jangka Waktu</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+    {{ object.loan_duration_request|default:"-"|safe}} {{ object.determine_kind_of_installment }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Tujuan Pinjaman</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+      {{ object.loan_purpose|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>Uraian Tujuan Pinjaman</strong> </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+      {{ object.loan_purpose_desc|default:"-"|safe}}
+  </div>
+    <div class="col-md-3 col-xs-6 p-b-10">
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Sumber Marketing</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+    {{ object.marketing_source|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Kode Referral</strong>
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+    {{ object.referral_code|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>IMEI</strong> </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+    {{ object.device|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6"> <strong>App Version</strong> </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l">
+    {{object.app_version|default:"-"|safe}}
+  </div>
+</div>

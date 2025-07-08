@@ -1,0 +1,45 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+
+{% block inside_body %}
+
+<h3 style="margin : 30px 70px 10px">CALL RECORD URL DOWNLOADER</h3>
+
+<p style="margin : 36px 150px 10px">Insert Recording UUID/Call Record URL ID</p>
+
+<div style="margin : 30px 81px 10px">
+  <form action="/streamlined_communication/download_call_record/" method="get" >
+    <input id="record_uuid" style= "position: absolute; left: 150px; width: 500px;
+    height: 40px;" type="text" name="record_uuid" value="{{ record_uuid }}">
+    <input type="submit" style= "position: absolute; left: 700px; padding: 8px 40px; border: none;
+     background-color: #3498eb; color: white; font-size: 17px;" value="Download">
+  </form>
+</div>
+
+<div id="modal-see-locked-payment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header label-success">
+              <h4 class="modal-title" id="modal_see_title">Title</h4> </div>
+          <div class="modal-body" id="modal_see_body">
+            Body
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+
+var error = "{{message}}";
+if (error){
+  $("#modal_see_title").html("Download Failed");
+  $("#modal_see_body").html(""+ error);
+  $('#modal-see-locked-payment').modal('show');
+}
+{% endblock %}

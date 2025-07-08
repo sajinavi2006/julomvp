@@ -1,0 +1,1 @@
+{{name}}, sy Ani dr JULO. Angsuran {{ payment_number }} Prio Rental {{ due_amount }} jatuh tempo hari ini. Cara bayar: {{url}} dan cek aplikasi Prio Rental anda.

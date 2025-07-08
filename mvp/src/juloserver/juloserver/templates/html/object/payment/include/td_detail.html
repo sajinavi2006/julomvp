@@ -1,0 +1,170 @@
+{% load model template default unit %}
+
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Payment ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.id|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Loan ID
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.loan|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <hr>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Due Date
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.due_date|date:"d M Y"|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Late Fee Amount
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.late_fee_amount|f_rupiahs:'no'|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Cash Back Earned
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.cashback_earned|f_rupiahs:'no'|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <hr>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Paid Date
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.paid_date|date:"d M Y"|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Paid Amount
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object.paid_amount|f_rupiahs:'no'|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <hr>
+    </td>
+  </tr>
+
+{% with object.loan.application as object_app %}
+  <tr>
+    <td>
+      Application ID
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object_app.fullname|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Nama Lengkap
+    </td>
+    <td>
+       &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+       <strong> {{ object_app.fullname|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      No KTP
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object_app.ktp|no_ktp|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Tgl Lahir
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object_app.dob|date:"d M Y"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Loan Amount Request
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object_app.loan_amount_request|f_rupiahs:"no"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Loan Duration Request
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object_app.loan_duration_request|default:"-"|safe}} {{ object_app.determine_kind_of_installment }}</strong> 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Waktu Daftar Aplikasi
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object_app.cdate|date:"d M Y H:i:s"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      HP
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object_app.mobile_phone_1|no_hp|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+{% endwith %}
+
+</table>

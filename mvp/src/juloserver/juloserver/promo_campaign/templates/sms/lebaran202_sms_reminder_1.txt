@@ -1,0 +1,1 @@
+ Hi {{first_name}}, bayar cicilan JULO Anda sekarang & raih kesempatan mendapatkan uang tunai jutaan rupiah! Bayar sekarang {{payment_link}}

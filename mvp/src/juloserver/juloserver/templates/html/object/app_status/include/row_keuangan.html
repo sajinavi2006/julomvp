@@ -1,0 +1,260 @@
+{% load unit %}
+{% load static %}
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.has_other_income.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Ada Penghasilan Lain?</strong></div>
+    <div class="col-xs-6">: {{ object.has_other_income|yesno:"Ya, Tidak"|safe}}</div>
+  </td>
+  {% with object=app_data.has_other_income field_name='has_other_income'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.other_income_amount.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+
+    <div class="col-xs-6 no-left"><strong>Besar Penghasilan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.other_income_amount.errors %} has-error {% endif %}">
+        <span class="input-group-addon">
+          Rp.
+        </span>
+        {{form_app.other_income_amount}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-other_income_amount',
+                      '{{ object.other_income_amount|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.other_income_amount field_name='other_income_amount'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.other_income_source.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Sumber Penghasilan Lain</strong></div>
+    <div class="col-xs-6">: {{ object.other_income_source|default:"-"|safe}}</div>
+  </td>
+  {% with object=app_data.other_income_source field_name='other_income_source'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.vehicle_type_1.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Kendaraan Pribadi</strong></div>
+    <div class="col-xs-6">: {{ object.vehicle_type_1|default:"-"|safe}}</div>
+  </td>
+  {% with object=app_data.vehicle_type_1 field_name='vehicle_type_1'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.vehicle_ownership_1.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Kepemilikan Kendaraan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.vehicle_ownership_1.errors %} has-error {% endif %}">
+        {{form_app.vehicle_ownership_1}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-vehicle_ownership_1',
+                      '{{ object.vehicle_ownership_1|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.vehicle_ownership_1 field_name='vehicle_ownership_1'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.bank_name.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Nama Bank</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.bank_name.errors %} has-error {% endif %}">
+        {{form_app.bank_name}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-bank_name',
+                      '{{ object.bank_name|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.bank_name field_name='bank_name'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.bank_branch.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Cabang Bank</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.bank_branch.errors %} has-error {% endif %}">
+        {{form_app.bank_branch}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-bank_branch',
+                      '{{ object.bank_branch|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.bank_branch field_name='bank_branch'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none dv {{ app_data.bank_account_number.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>No rekening</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.bank_account_number.errors %} has-error {% endif %}">
+        {{form_app.bank_account_number}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-bank_account_number',
+                      '{{ object.bank_account_number|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.bank_account_number field_name='bank_account_number'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none dv">
+  <td class="col-xs-8">
+    <label><strong>Nama sesuai rekening bank</strong></label>
+      <div class="input-group input-group-sm
+                  {% if form_app.name_in_bank.errors %} has-error {% endif %}">
+        {{form_app.name_in_bank}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-name_in_bank',
+                      '{{ object.name_in_bank|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+  </td>
+    {% include "object/app_status/include/ca_ceklist_empty.html" %}
+</tr> {% endif %}
+
+
+{% if status_current.status_code < 300 or status_current.status_code >= 400 %} <tr class= "ca-none {{ app_data.other_income_source.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <strong>Sumber Penghasilan</strong> : {{ object.other_income_source|default:"-"|safe}}
+  </td>
+  {% with object=app_data.other_income_source field_name='other_income_source'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+<tr class= "ca-none {{ app_data.monthly_housing_cost.statuses|ca_tr_class|default:''|safe}}">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Biaya Sewa/ Cicilan Rumah per Bulan</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.monthly_housing_cost.errors %} has-error {% endif %}">
+        <span class="input-group-addon">
+          Rp.
+        </span>
+        {{form_app.monthly_housing_cost}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-monthly_housing_cost',
+                        '{{ object.monthly_housing_cost|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+            <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.monthly_housing_cost field_name='monthly_housing_cost'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr> {% endif %}
+
+<tr class= "ca-none {{ app_data.monthly_expenses.statuses|ca_tr_class|default:''|safe}} before_pv10">
+  <td class="col-xs-8">
+    <div class="col-xs-6 no-left"><strong>Pengeluaran Rutin per Bulan (selain Rumah)</strong></div>
+    <div class="col-xs-6">
+      <div class="input-group input-group-sm
+                  {% if form_app.monthly_expenses.errors %} has-error {% endif %}">
+        <span class="input-group-addon">
+          Rp.
+        </span>
+        {{form_app.monthly_expenses}}
+        <span class="input-group-btn"
+              onclick="setDefaultValue('id_form2-monthly_expenses',
+                      '{{ object.monthly_expenses|safe }}');">
+          <button type="button" class="btn btn-info btn-grp-default">
+              <i class="fa fa-history fa-fw"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </td>
+  {% with object=app_data.monthly_expenses field_name='monthly_expenses'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.total_current_debt.statuses|ca_tr_class|default:''|safe}} pv10a" >
+  <td class="col-xs-8">
+    <strong>Total Cicilan Hutang per Bulan</strong>: {{ object.total_current_debt|f_rupiahs:"no"|safe}} &nbsp;&nbsp;
+    <i class="fa fa-plus" aria-hidden="true" style="color:#00c292;cursor:pointer;" onclick="addExpense();"></i> </label></div>
+  </td>
+  {% with object=app_data.total_current_debt field_name='total_current_debt'%}
+    {% include "object/app_status/include/ca_ceklist.html" %}
+  {% endwith %}
+</tr>
+
+<tr class= "ca-none {{ app_data.total_current_debt.statuses|ca_tr_class|default:''|safe}} pv10b" >
+  <td  id="ca_expense" class="col-xs-10" colspan="8">
+  {% for obj in app_data.total_current_debt.undisclosed_expenses  %}
+    <div class="row" id="undisclosed_expense_{{forloop.counter}}">
+      <div class="col-sm-3 pl-1 m-0">
+        <input type="text" id="undisclosed_expense_desc_{{forloop.counter}}" class="form-control" placeholder="desc" value="{{obj.description|default:''}}">
+        <input type="text" id="undisclosed_expense_stat_{{forloop.counter}}" value="activate" hidden="true">
+        <input type="text" id="undisclosed_expense_id_{{forloop.counter}}" value="{{obj.id|default:''}}" hidden="true"></div>
+        <div class="col-sm-5 pl-1 m-0">
+          <div class="input-group">
+            <span class="input-group-addon">
+              Rp.
+            </span>
+            <input type="text" id="undisclosed_expense_amount_{{forloop.counter}}" class="form-control mask_currency" placeholder="amount" value="{{obj.amount|default:'0'}}">
+          </div>
+        </div>
+      <div class="col-sm-1 pl-1 m-0">
+        <button class="btn btn-danger" type="button" onclick="deleteExpense('{{forloop.counter}}');">X</button>
+      </div>
+      <div class="col-sm-3 pl-1 m-0">
+        {{obj.udate|date:"d M Y H:i"}} by {{obj.agent}}
+      </div>
+    </div>
+  {% endfor %}
+</td>
+</tr>

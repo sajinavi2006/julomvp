@@ -1,0 +1,112 @@
+{% load unit utils %}
+{% load checkusergroup from common %}
+{% load static %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+    <li class="tab active">
+        <a href="#pmt_list" data-toggle="tab">
+          <span class="hidden-xs">Account Payment List</span>
+        </a>
+      </li>
+  <li class="tab">
+    <a href="#waiver_temp" data-toggle="tab" title="Waiver">
+      <span class="visible-xs">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="hidden-xs">Waiver</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#bank_detail" data-toggle="tab" aria-expanded="true" title="Bank Info">
+      <span class="visible-xs">
+        <i class="fa fa-envelope-o"></i>
+      </span>
+      <span class="hidden-xs">VA Info</span>
+    </a>
+  </li>
+ 
+  <li class="tab">
+    <a href="#wallets" data-toggle="tab">
+      <span class="hidden-xs">Wallet List</span>
+    </a>
+  </li>
+  <li class="tab">
+    <a href="#loans" data-toggle="tab">
+      <span class="hidden-xs">Loan Details</span>
+    </a>
+  </li>
+</ul>
+
+<div id="slim_pmts">
+  <div class="tab-content pmt_event">
+    <!-- Tab Payment event -->
+    <div class="tab-pane" id="waiver_temp">
+      {% with waiver_temps as object %}
+        {% include "object/payment_status/include/tab_waiver_temp_account_payment.html" %}
+      {% endwith %}
+    </div>
+    <!-- bank_detail -->
+    <div class="tab-pane" id="bank_detail">
+      {% with loan_obj as object %}
+        {% include "object/payment_status/include/tab_loan_bank_info.html" %}
+      {% endwith %}
+    </div>
+    <!-- Tab Payment list-->
+    <div class="tab-pane active" id="pmt_list">
+      <div class="row">
+        <div class="col-md-5"></div>
+        <div class="col-md-6">
+          <span class="pull-right">
+            <a href="{% url 'account_payment_status:account_dashboard' account.id %}" target="_blank">
+            <button type="button" class="btn btn-info btn-rounded">Account ID: {{account.id}}</button>
+          </a>
+        </span>
+      </div>
+      </div>
+      {% with all_account_payments as payment_list %}
+        {% include "object/loan_status/include/tab_account_payment_list.html" %}
+      {% endwith %}
+      <div class="col-xs-12">
+        <div class="m-t-10">
+          <button id="send_sms_button"
+          class="btn btn-danger m-b-5"
+          title="send_sms"
+          data-toggle="modal"
+          data-target="#responsive-modal-sms"
+          onclick="send_account_sms_onclick();">
+      <i class="fa fa-envelope-o fa-fw" ></i> Kirim SMS
+      </button>
+      <button id="send_email_button"
+              class="btn btn-danger m-b-5"
+              title="send_email"
+              data-toggle="modal"
+              data-target="#responsive-modal-email"
+              onclick="send_email_account_onclick();">
+        <i class="fa fa-envelope-o fa-fw"></i> Kirim Email
+      </button>
+    {% if is_show_download_paid_off_letter %}
+      <button id="generate_paid_letter"
+              class="btn btn-success m-b-5"
+              title="generate_letter"
+              data-toggle="modal"
+              data-target="#responsive-modal-sphp"
+              onclick="generate_paid_letter();">
+        Generate Letter
+      </button>
+    {% endif %}
+      </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="wallets">
+      {% with wallets as wallets %}
+        {% include "object/loan_status/include/tab_wallet_account_payment.html" %}
+      {% endwith %}`
+    </div>
+    <div class="tab-pane" id="loans">
+      {% with loan_objects as payment_list %}
+        {% include "object/account_status/include/tab_account_loan_list.html" %}
+      {% endwith %}`
+    </div>
+  </div>
+</div>

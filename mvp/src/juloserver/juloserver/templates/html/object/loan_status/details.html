@@ -1,0 +1,1168 @@
+{% extends "common/theme1/crup/app_status_theme1.html" %}
+{% load model %}
+{% load unit %}
+
+
+{% block additional_title %}Julo-{{ loan_obj.id }} {% endblock %}
+
+{% block custom_link %}
+
+
+{% endblock %}
+
+
+{% block css_inside %}
+  #status {
+    opacity: 0;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background: hsla( 0, 0%, 0%, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2; /* over other stuff */
+  }
+  .pmt_event {
+    margin-top:10px !important;
+  }
+  td.day{
+    position:relative;
+  }
+
+  td.day.disabled:hover:before {
+      content: 'This date is disabled';
+      color: white;
+      background-color: grey;
+      top: 28px;
+      position: absolute;
+      width: 136px;
+      left: -34px;
+      z-index: 1000;
+      text-align: center;
+      padding: 2px;
+  }
+
+  td.disabled-date {
+      background-color: red !important;
+      color: white !important;
+  }
+
+  .modal-content {
+    width: 120%;
+  }
+
+  .align-buttons{
+        float: left;
+        width: 100%;
+    }
+    .align-buttons button {
+        float: left;
+        min-width: 31%;
+        margin-right:1%;
+        margin-bottom:7px !important;
+    }
+
+    .align-buttons select {
+        float: left;
+        max-width: 31%;
+        margin-right:1%;
+        height:34px;
+        margin-bottom:7px !important;
+    }
+
+
+  .red{color: red;}
+  .green{color: green;}
+  .no-left{padding-left:0px;}
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}{% endblock %}
+
+{% block list_title %}
+
+    {% with loan_obj as object %}
+      <div class="row m-b-10">
+        <div class="col-md-3 col-xs-6 label-danger p-t-10">
+          <small>Loan-id</small>: {{ object.id|default:"-"|safe  }}
+        </div>
+        <div class="col-md-2 col-xs-6 label-primary text-center p-t-10">
+          <small>status</small>: <code>{{ object.loan_status.status_code|default:"-"|safe }}</code>
+        </div>
+        <div class="col-md-4 col-xs-6 label-success p-t-10">
+          <small>email</small>: {{ object.get_application.email|default:"-"|safe  }}
+        </div>
+        <div class="col-md-3 col-xs-6 label-warning p-t-10">
+          <small>name</small>: {{ object.get_application.fullname|default:"-"|safe  }}
+        </div>
+      </div>
+    {% endwith %}
+{% endblock %}
+
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+<div class="row m-b-10 p-t-0">
+  <div class="col-md-12 col-xs-12">
+
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              {% include "object/loan_status/include/loan_details.html" %}
+            </div>
+          </div>
+
+      </div>
+
+      <!-- Application detail -->
+      <div class="col-md-6 col-xs-12">
+        {% with loan_obj.get_application as object %}
+          {% include "object/app_status/include/app_details.html" %}
+        {% endwith %}
+      </div>
+
+    </div>
+    <!-- end of row -->
+
+    <!-- form start -->
+    <div class="row">
+      <hr>
+      <div class="col-md-6 col-xs-12">
+
+        {% if messages %}
+            <div class="alert alert-warning">
+            {% for message in messages %}
+                <code>{{ message|escape }}</code><br/>
+            {% endfor %}
+            </div>
+        {% endif %}
+
+
+        <!-- New Form Begins -->
+        <form class="form-horizontal" id="status_form" role="form" method="POST">
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+          {% endfor %}
+
+          {% if form.errors %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-xs-12 m-t-30" id="id_form_selection">
+
+              <button id="id_btn_ubah_status" class="btn btn-info btn-block text-uppercase waves-effect waves-light" type="button">
+                <i class="fa fa-pencil fa-fw"></i> Ubah Status
+              </button>
+              <button id="id_btn_simpan_note" class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="button">
+                <i class="fa fa-file-text-o fa-fw"></i> Tambah Note
+              </button>
+
+            </div>
+          </div>
+          <!-- end row -->
+
+          <div class="row">
+            <div class="col-md-12 col-xs-12" id="id_form_selection">
+                <div class="row collapse" id="id_form_ubah_status" aria-expanded="false" style="height: 0px;">
+                  {% if message_out_ubah_status %}
+                      <div class="alert alert-warning" id="id_error_div_2">
+                          <code>{{ message_out_ubah_status|escape }}</code><br/>
+                      </div>
+                  {% endif %}
+
+                  <div class="row">
+                      <div class="col-md-2 col-xs-12 m-t-10">
+                        <small>From: </small> <code>{{ loan_obj.loan_status.status_code|default:"-"|safe }}</code>
+                      </div>
+                      <div class="col-md-1 col-xs-4 m-t-10">
+                        <small>To: </small>
+                      </div>
+                      <div class="col-md-8 col-xs-8{% if form.status_to.errors %} has-error {% endif %}">
+                          {{ loan_form.status_to }}
+                      </div>
+
+                  </div>
+                  <!-- end row -->
+
+                  <div class="row m-t-10">
+                    <div class="col-md-6 col-sm-12 form-group {% if form.reason.errors %} has-error {% endif %} m-r-10">
+                      <select multiple="multiple" class="form-control" id="id_reason" name="reason" style="height: 140px;"><option selected="selected" value="">-- Pilih Alasan --</option></select>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6 form-group {% if form.notes.errors %} has-error {% endif %}">
+                      {{ loan_form.notes }}
+                    </div>
+                  </div>
+                  <!-- end row -->
+
+                  <div class="row">
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                        <button id="id_batal_ubah_status" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button">Batal</button>
+                      </div>
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                          <button class="btn btn-default btn-block text-uppercase waves-effect waves-light" disabled="true"  type="submit" name="ubah_status" id="submit_status">Simpan</button>
+                      </div>
+                  </div>
+
+                </div>
+
+                <div class="row collapse" id="id_form_simpan_note" aria-expanded="false" style="height: 0px;">
+                  {% if update_app_active %}
+                      <div class="alert alert-warning" id="id_error_div_2">
+                          <code>{{ message_out_simpan_note|escape }}</code><br/>
+                      </div>
+                  {% endif %}
+                  <div class="row m-t-10">
+                    <div class="col-md-12 col-sm-12 form-group {% if form.notes_only.errors %} has-error {% endif %} m-r-10">
+                      {{ loan_form.notes_only }}
+                    </div>
+                  </div>
+                  <!-- end row -->
+
+                  <div class="row">
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                        <button id="id_batal_simpan_note" class="btn btn-primary btn-block text-uppercase waves-effect waves-light" type="button">Batal</button>
+                      </div>
+                      <div class="col-md-6 col-sm-4 col-xs-6">
+                        <button id="id-submit-simpan-note" class="btn btn-default btn-block text-uppercase waves-effect waves-light" disabled="true" type="submit" name="simpan_note">Simpan Note</button>
+                      </div>
+                  </div>
+
+                </div>
+            </div>
+            <!-- col.md.12 -->
+          </div>
+
+        </form>
+        <!-- New Form Ends -->
+
+        <!-- Old Form Beging -->
+        <form class="form-horizontal" id="status_form_2" role="form" method="POST">
+
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %}
+              {{ hidden }}
+          {% endfor %}
+
+          {% if form.errors %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <!-- /.modal payment event-->
+          <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header  label-warning">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Ubah Bank Account</h4> </div>
+                      <div class="modal-body">
+                        {% with loan_obj as object %}
+                          {% include "object/loan_status/include/form_loan.html" %}
+                        {% endwith %}
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                          <button type="submit" class="btn btn-danger waves-effect waves-light" name="ubah_loan">Simpan</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          {%if cycle_day_button_active %}
+          <!-- /.modal payment event-->
+          <div id="modal-cycleday" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header  label-warning">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Ubah Cycle Day</h4> </div>
+                      <div class="modal-body">
+                        {% with loan_obj as object %}
+                          {% include "object/loan_status/include/form_cycle_day.html" %}
+                        {% endwith %}
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                          <button type="submit" class="btn btn-danger waves-effect waves-light" name="ubah_cycle_day">Proses</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {%endif%}
+
+
+
+          {%if first_installment_btn_active %}
+          <!-- /.modal modal-first-settlement-->
+          <div id="modal-first-settlement" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header  label-warning">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h4 class="modal-title">Ubah Cycle Day and Installment Amount</h4> </div>
+                      <div class="modal-body">
+                        {% with loan_obj as object %}
+                          {% include "object/loan_status/include/form_change_installment.html" %}
+                        {% endwith %}
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-default waves-effect" id="reset" data-dismiss="modal">Batal</button>
+                          <button type="submit" class="btn btn-danger waves-effect waves-light" name="ubah_first_installment">Proses</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {%endif%}
+
+          <!-- <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <button class="btn btn-danger btn-block text-uppercase waves-effect waves-light" type="submit" name="simpan_note">Simpan Note</button>
+              </div>
+
+          </div> -->
+
+        </form>
+        <!-- Old Form Ends -->
+
+      </div>
+      <!-- form end -->
+
+      <div class="col-md-6 col-xs-12">
+        <!-- <div id="slim_history_note"> -->
+         {% with loan_obj as object %}
+             {% include "object/loan_status/include/payment_history.html" %}
+         {% endwith %}
+        <!-- </div> -->
+      </div>
+
+    </div>
+    <!-- end row -->
+
+  </div>
+  <!-- end col-md-12 -->
+</div>
+<!-- end root row -->
+
+<div class="row m-t-10 m-b-10">
+</div>
+
+<!-- /.modal payment event-->
+<div id="modal-restructuring" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header  label-warning">
+        <button type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true">×
+        </button>
+        <h4 class="modal-title">Loan Restructure</h4>
+      </div>
+      <div class="modal-body">
+        {% with loan_obj as object %}
+          {% include "object/loan_status/include/form_loan_restructuring.html" %}
+        {% endwith %}
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-default waves-effect"
+                data-dismiss="modal">Batal
+        </button>
+        <button type="submit"
+                class="btn btn-danger waves-effect waves-light"
+                name="ubah_loan">Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /.modal payment event-->
+<div id="responsive-modal-success" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit</h4> </div>
+            <div class="modal-body">
+              Loan
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" onclick="window.location.reload(true);">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal PTP event-->
+<div id="responsive-modal-ptp-date"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Update PTP Date</h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/loan_status/include/form_update_ptp_date.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_use_uptdate_ptp_date"
+                        class="btn btn-danger waves-effect waves-light"
+                        data-toggle="modal"
+                        onclick="updatePTPDateConfirm()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal Confirm PTP event-->
+<div id="responsive-modal-confirm-ptpdate"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Konfirmasi Update PTP Date </h4></div>
+            <div class="modal-body">
+              {% with payment_obj as object %}
+                {% include "object/loan_status/include/form_update_ptp_date_confirm.html" %}
+              {% endwith %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Batal</button>
+                <button type="button" id="btn_confirm_update_ptp_date" class="btn btn-danger waves-effect waves-light" onclick="updatePTPDateAction();">Setuju</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block button_part %}
+{% endblock %}
+
+
+
+{% block script_bottom_inside %}
+
+  $('#slim_images').slimScroll({
+      // position: 'left',
+      height: '45vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  $('#slim_apps').slimScroll({
+      // position: 'left',
+      height: '45vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+
+  $('#slim_pmts').slimScroll({
+      // position: 'left',
+      height: '45vh',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+  $('#slim_history_note').slimScroll({
+      // position: 'left',
+      height: '450px',
+      railVisible: true,
+      alwaysVisible: true
+  });
+
+
+  jQuery.fn.delay = function(time,func){
+      this.each(function(){
+          setTimeout(func,time);
+      });
+
+      return this;
+  };
+
+  // using jQuery
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      // console.log(cookieValue);
+      return cookieValue;
+  }
+
+  $.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+  });
+  function simulate_adjusted_payment(loan_id){
+    //check using ajax
+    var csrftoken = getCookie('csrftoken');
+    //$("#id_cycle_date_requested").val()
+
+    $.ajax({
+        url :  "{%url 'loan_status:simulate_adjusted_installment' %}/", // the endpoint
+        type : "GET", // http method
+        data : { loan_id: loan_id,
+                 new_due_date: $("#id_cycle_date_requested").val(),
+                 b_installment: $('#b_installment').val(),
+                 old_due_date: $("#id_old_due_date").val(),
+                 csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+        // handle a successful response
+        success : function(json) {
+            // console.log(json); // log the returned json to the console
+            if (json.result == "successful!"){
+              // console.log("sukses");
+              $("#id_first_payment_installment").val(json.output);
+            }
+            else {
+              //failed
+              console.log(json.reason);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+
+    }); // end of ajax
+  }//end of function
+
+  function set_today(id_selected){
+    $("#"+id_selected).datepicker({ dateFormat: "dd-mm-yyyy"}).datepicker("setDate", "0");
+  }
+
+  function set_initial_value(){
+    var payday = $("#payday_initial").html()
+    $("#id_payday_requested").val(payday);
+    load_unavailable_due_dates(payday)
+  }
+
+
+  function cek_valid_date(str_date) {
+    var new_date = new Date(str_date);
+    // m = new_date.getMonth()
+    if (new_date.getDate() < 29) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
+  function vendorLoanReassign() {
+
+    var selectedVendor = $("#vendor-reassign-loan-detail").val();
+    var csrftoken = getCookie('csrftoken');
+    var loan_id = {{loan_obj.id}};
+    var loan_status_code = {{loan_obj.loan_status.status_code}};
+
+    if (selectedVendor === '' || selectedVendor === undefined) {
+      toast_danger('No Vendor Selected', 'Please select vendor to reassign!!!')
+    }
+
+    $.ajax({
+      url :  "{%url 'loan_status:ajax_vendor_reassign' %}/", // the endpoint
+      type : "GET", // http method
+      data : {
+            csrfmiddlewaretoken: csrftoken,
+            vendor: selectedVendor,
+            loan_id: loan_id,
+            loan_status_code: loan_status_code
+      },
+      // handle a successful response
+      success : function(json) {
+          if (json.status == "success"){
+            toast_success("Reassign loan to vendor success", ""+ json.messages);
+            setTimeout(window.location.reload(true), 2800);
+          }
+          else {
+            toast_danger("Reassign loan to vendor failed", ""+ json.messages);
+          }
+      },
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+          console.log(xhr.status + ": " + xhr.responseText);
+      }
+    });
+  }
+
+
+  jQuery(document).ready(function() {
+
+    // alert("Document is ready");
+    window.scroll(0,80);
+
+
+    $('#dvc').removeClass('active');
+    $('#st').addClass('active');
+
+    $(".mask").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    $(".maskNumber").maskMoney({thousands:'', decimal:'', allowZero: true, suffix: '', precision:0});
+
+    var csrftoken = getCookie('csrftoken');
+    var loan_id = {{ loan_obj.id }};
+
+    // Tooltip for payment details and wallet details
+    $('.pymt-info').each(function() {
+      $(this).qtip({
+        content: {
+          text:$(this).children('.pymt-body'),
+          button:'Close'
+        },
+        style: {
+          classes: 'qtip-light qtip-shadow'
+        },
+        position:{
+          my: 'bottom right',
+          at: 'top left'
+        },
+        show: 'click',
+        hide: 'click'
+      })
+    });
+
+    load_unavailable_due_dates();
+    load_initial_payday();
+
+    $("#vendor_reassign").click(function() {
+        vendorLoanReassign();
+    });
+
+  });
+
+  function update_due_datepicker(){
+    var payday = $('#id_payday_requested').val();
+    jQuery("#id_cycle_date_requested").datepicker("remove");
+    load_unavailable_due_dates(payday);
+  }
+
+  function load_initial_payday(){
+    $('#id_payday_requested').datepicker({
+      format: 'dd',
+      buttonClasses: ['btn', 'btn-sm'],
+      applyClass: 'btn-danger',
+      cancelClass: 'btn-inverse',
+
+      autoclose: true,
+      todayHighlight: true,
+      todayBtn: "linked",
+    });
+  }
+
+  function load_unavailable_due_dates(payday=null){
+    var disabledDates = [];
+    var due_date_init = $("#id_due_date_initial").html();
+    $.ajax({
+      url :  "{%url 'loan_status:ajax_unavailable_due_dates' %}/", // the endpoint
+      type : "GET", // http method
+      data : { loan_id: {{ loan_obj.id }},
+               csrfmiddlewaretoken: getCookie('csrftoken'),
+               payday:payday,
+              }, // data sent with the get request
+
+      // handle a successful response
+      success : function(json) {
+          // console.log(json); // log the returned json to the console
+          if (json.result == "successful!"){
+            // console.log("sukses");
+            for (var i in json.output){
+              disabledDates.push(json.output[i]);
+              //console.log(disabledDates);
+            }
+            return disabledDates;
+              //return '28-7-2017';
+          }
+          else {
+            //failed
+            console.log(json.reason, 'disableDay');
+          }
+      },
+
+      // handle a non-successful response
+      error : function(xhr,errmsg,err) {
+          console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+    })
+    .then(function(value) {
+      disabledDates = value.output;
+      console.log(disabledDates);
+      jQuery('#id_cycle_date_requested').datepicker({
+                 datesDisabled: disabledDates,
+                 startDate: value.start,
+                 endDate: value.end,
+                 setDate: due_date_init,
+                 format: 'dd-mm-yyyy',
+                 buttonClasses: ['btn', 'btn-sm'],
+                 applyClass: 'btn-danger',
+                 cancelClass: 'btn-inverse',
+                 dateLimit: {
+                     days: 30
+                 },
+                 autoclose: true,
+                 todayHighlight: true,
+                 todayBtn: "linked",
+      });
+      $("#id_cycle_date_requested").val(due_date_init);
+      $("#id_old_due_date").val(due_date_init);
+      $("#id_first_payment_installment").val($("#id_installment_initial").text());
+    });
+  }
+
+  function formValidationNote(oEvent) {
+    //oEvent = oEvent || window.event;
+    //var txtField = oEvent.target || oEvent.srcElement;
+    //alert("validation");
+    if(document.getElementById("id_notes_only").value.length > 0 )
+    {
+      document.getElementById("id-submit-simpan-note").disabled = false;
+      $("#id-submit-simpan-note").removeClass("btn-default");
+      $("#id-submit-simpan-note").addClass("btn-info");
+    }else {
+      document.getElementById("id-submit-simpan-note").disabled = true;
+      $("#id-submit-simpan-note").addClass("btn-default");
+      $("#id-submit-simpan-note").removeClass("btn-info");
+    }
+  }
+
+  function simulate_adjusted_payment_auto(oEvent) {
+    if($('#id_cycle_date_requested').val() != "" ){
+      simulate_adjusted_payment({{ loan_obj.id }});
+    } else {
+      alert("simulate_adjusted_payment_auto failed");
+    }
+  }
+
+  window.onload = function () {
+    $('#st').removeClass('active');
+    $('#dvc').addClass('active');
+    $('#id_btn_update_app').hide();
+
+    if ('{{first_installment_btn_active}}'=='True'){
+      var old_due_date = document.getElementById("id_old_due_date");
+      var new_due_date = document.getElementById("id_cycle_date_requested");
+      var button_cancel = document.getElementById("reset");
+      var payday_requested = document.getElementById("id_payday_requested");
+
+      new_due_date.onchange = simulate_adjusted_payment_auto;
+      payday_requested.onchange = update_due_datepicker;
+      button_cancel.onclick = set_initial_value;
+    }
+  }
+
+  function update_robocall(paymentid){
+    var id = '#btn-robo-'+paymentid;
+    var className = $(id).attr('class');
+    $.ajax({
+        url :  "{% url 'payment_status:update_robocall' %}/",
+        type : "GET",
+        data : {payment_id : paymentid
+              },
+
+        // handle a successful response
+        success : function(json) {
+
+            if (json.status == "success"){
+              if(className.includes('btn-default')){
+                  $(id).removeClass('btn-default');
+                  $(id).addClass('btn-success');
+              }else if(className.includes('btn-success')){
+                  $(id).removeClass('btn-success');
+                  $(id).addClass('btn-danger');
+              }else if(className.includes('btn-danger')){
+                  $(id).removeClass('btn-danger');
+                  $(id).addClass('btn-success');
+              }
+              toast_success('Robocall Update',json.message);
+            } else if(json.status == "failed"){
+              toast_danger('Robocall Update',json.message);
+            }
+        },
+
+        // handle a non-successful response
+        error : function(xhr, errmsg, err) {
+            toast_danger('Robocall Update Failed!', err);
+              }
+      })
+  }
+
+  function mark_loan_to_restructure(loan_id){
+      $('#mark_loan_restructure_id').attr("disabled", true)
+      var loan_can_restructure = '{{ loan_can_restructure }}'
+      if (loan_can_restructure !== 'True'){
+        toast_danger('Cannot Restructure Paid Loan or Current Loan');
+      } else {
+        $.ajax({
+          url :  "{% url 'loan_status:ajax_mark_loan_restructure' %}/",
+          type : "GET",
+          data : {loan_id : loan_id
+                },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                toast_success('Mark Loan Restructure',json.message);
+                window.location.reload(true)
+              } else if(json.status == "failed"){
+                toast_danger('Mark Loan Restructure',json.message);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              toast_danger('Mark Loan Restructure!', err);
+                }
+        })
+      }
+  }
+  <!-- Coppied here started -->
+  function onModalPTPShow(){
+    $("#responsive-modal-ptp-date").modal("show")
+    robocall_template_id = $("#id_robocall_template_choice").val()
+    text = ''
+    robo_templates = '{{robo_templates_map | safe}}'
+    console.log('log disini')
+    console.log(JSON.parse(robo_templates))
+    robo_template_obj = JSON.parse(robo_templates)
+    robo_template_text = robo_template_obj[robocall_template_id]
+    $("#robocall_template_text").text(robo_template_text)
+    onChangePtpMobile();
+  }
+  function onChangePtpMobile() {
+    var ptp_mobile_phone = $("#id_ptp_mobile_select").val();
+    if (ptp_mobile_phone == "custom") {
+      $("#id_ptp_mobile_phone_number").removeAttr("disabled")
+      $("#id_ptp_mobile_phone_number").val(0)
+    } else {
+      $("#id_ptp_mobile_phone_number").attr("disabled", "disabled")
+      $("#id_ptp_mobile_phone_number").val(ptp_mobile_phone)
+    }
+  }
+  function onChangeRoboTemplate(){
+    robocall_template_id = $("#id_robocall_template_choice").val();
+    text = '';
+    robo_templates = '{{robo_templates_map | safe}}'
+    console.log('log disini');
+    console.log(JSON.parse(robo_templates));
+    robo_template_obj = JSON.parse(robo_templates);
+    robo_template_text = robo_template_obj[robocall_template_id]
+    $("#robocall_template_text").text(robo_template_text);
+  }
+  function updatePTPDateConfirm(){
+    var ptp_date = $("#id_form2-ptp_date").val();
+    var ptp_amount = $("#id_ptp_amount").val();
+    var ptp_robo_mobile_phone = $("#id_ptp_mobile_phone_number").val()
+    var ptp_robo_template_name = $("#id_robocall_template_choice :selected").text();
+    var ptp_robo_template_text = $("#robocall_template_text").text();
+    var is_ptp_robocall_active = $("#is_ptp_robocall_active_choosen").val();
+    // show change to ptp modal confirm
+    $("#id_new_ptp_date_text").text(ptp_date);
+    $("#id_new_ptp_amount_text").text(ptp_amount);
+    $("#id_new_ptp_mobile_phone_text").text(ptp_robo_mobile_phone);
+    if (is_ptp_robocall_active == "true" || is_ptp_robocall_active == '' || is_ptp_robocall_active == null) {
+      $("#id_ptp_robocall_active").text('active')
+    } else {
+      $("#id_ptp_robocall_active").text('not active')
+    }
+    $("#id_robocall_template_ptp_date_name_text").text(ptp_robo_template_name);
+    $("#id_robocall_template_text_conf").text(ptp_robo_template_text);
+    $("#responsive-modal-ptp-date").modal("hide");
+    $("#responsive-modal-confirm-ptpdate").modal("show");
+  }
+  function onPtpActive(value) {
+    $("#is_ptp_robocall_active_choosen").val(value)
+  }
+
+  function updatePtpDate(){
+    var ptp_date_value = $('#id_form2-ptp_date').val();
+    var ptp_amount_value = $('#id_ptp_amount').val();
+    if(ptp_date_value == ''){
+      toast_danger('Warning','Please Fill PTP Date');
+    }else{
+      $.ajax({
+          url :  "{% url 'loan_status:ajax_update_ptp' %}/",
+          type : "POST",
+          data : {
+                loan_id : {{loan_obj.id}},
+                ptp_date : reverseDate(ptp_date_value),
+                ptp_amount : ptp_amount,
+          },
+
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                toast_success('Sukses!!','Update PTP Date.');
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.messages);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+          }
+      });
+    }
+
+  }
+  jQuery('.mydatepicker, #datepicker').datepicker({
+    format: 'dd-mm-yyyy',
+    buttonClasses: ['btn', 'btn-sm'],
+    applyClass: 'btn-danger',
+    cancelClass: 'btn-inverse',
+    dateLimit: {
+        days: 6
+    },
+    autoclose: true,
+    todayHighlight: true,
+    todayBtn: "linked",
+  });
+
+  function updatePTPDateAction(){
+    var ptp_date = $("#id_form2-ptp_date").val();
+    var ptp_amount = ($("#id_ptp_amount").val()).replace(/\./g, '');
+    var ptp_robo_mobile_phone = $("#id_ptp_mobile_phone_number").val();
+    var ptp_robo_template_id = $("#id_robocall_template_choice").val();
+    console.log('choosen', ptp_robo_template_id)
+    var is_ptp_robocall_active = $("#is_ptp_robocall_active_choosen").val();
+
+    if (ptp_date == '' ) {
+      toast_danger('Alert!!','Isi PTP Date');
+    }else if (ptp_amount == '' || ptp_amount <= 0) {
+      toast_danger('Alert!!','Isi PTP Amount');
+    }else if (ptp_robo_mobile_phone == '' || ptp_robo_mobile_phone == '0') {
+      toast_danger('Alert!!','Isi Tujuan PTP Robocall');
+    }else if (ptp_robo_template_id == '' ) {
+      toast_danger('Alert!!','Pilih Robocall Template');
+    }else{
+      $('#btn_confirm_update_ptp_date').hide()
+      console.log(ptp_robo_template_id)
+      $.ajax({
+          url :  "{% url 'loan_status:ajax_update_ptp' %}/",
+          type : "POST",
+          data : {
+                loan_id : {{loan_obj.id}},
+                ptp_date : ptp_date,
+                ptp_amount : ptp_amount,
+                ptp_robo_mobile_phone: ptp_robo_mobile_phone,
+                robocall_template_id : ptp_robo_template_id,
+                is_ptp_robocall_active: is_ptp_robocall_active,
+
+          },
+          // handle a successful response
+          success : function(json) {
+              if (json.status == "success"){
+                $('#responsive-modal-confirm-ptpdate').hide()
+                toast_success('Sukses!!',json.message);
+                window.location.reload(true);
+              } else if(json.status == "failed"){
+                console.log(json);
+                toast_danger('Failed Update',json.message);
+              }
+          },
+          // handle a non-successful response
+          error : function(xhr, errmsg, err) {
+            console.log(err, errmsg, 'halo')
+              console.log(xhr.status + ": " + xhr.responseText);
+              toast_danger('Failed Update',xhr.responseText);
+              $('#btn_confirm_update_ptp_date').show()
+          }
+      });
+    }
+    $('#btn_use_change_due_date').show()
+  }
+
+  $("#id_btn_ubah_status").button().click(function(){
+      $("#id_form_selection").hide();
+      $("#id_form_ubah_status").show();
+
+      localStorage.app_status_btn_selected = 'ubah_status';
+  });
+
+  $("#id_batal_ubah_status").button().click(function(){
+      $("#id_form_selection").show();
+      $("#id_form_ubah_status").hide();
+
+      localStorage.app_status_btn_selected = 'ubah_status_batal';
+  });
+
+  $("#id_btn_simpan_note").button().click(function(){
+      $("#id_form_selection").hide();
+      $("#id_form_simpan_note").show();
+
+      localStorage.app_status_btn_selected = 'simpan_note';
+  });
+
+  $("#id_batal_simpan_note").button().click(function(){
+      $("#id_form_selection").show();
+      $("#id_form_simpan_note").hide();
+      localStorage.app_status_btn_selected = 'simpan_note_batal';
+  });
+
+
+  function btn_selection_show(){
+    $("#id_form_selection").show();
+    $("#id_form_simpan_note").hide();
+    $("#id_form_ubah_status").hide();
+}
+
+  function check_active_form(){
+    var active_form = localStorage.app_status_btn_selected;
+    if(active_form=='ubah_status'){
+      if({{ubah_status_active}}){
+        $("#id_form_selection").hide();
+        $("#id_form_ubah_status").show();
+      } else {
+        btn_selection_show()
+      }
+
+    }
+    else if(active_form=='simpan_note'){
+      if({{simpan_note_active}}){
+        $("#id_form_selection").hide();
+        $("#id_form_simpan_note").show();
+      }else{
+        btn_selection_show();
+      }
+    }
+    else {
+      btn_selection_show();
+    }
+  }
+
+
+  $('#submit_status').on("click",function() {
+      //console.log("submit_status clicked");
+      var arr_reason = [];
+      $("#id_reason :selected").map(function(i, el) {
+        arr_reason.push($(el).val());
+      });
+      var reason_selected = arr_reason.join(', ');
+      //console.log(reason_selected);
+      $("#id_reason_str").val(reason_selected);
+    });
+
+  $('#id_reason')
+      .empty()
+      .append('<option selected="selected" value>-- Pilih Alasan --</option>');
+
+  // alert("Document is ready");
+    $('#id_status_to').on('change', function() {
+      //alert(this.value);
+      if(this.value != ''){
+        set_reason_list(this.value);
+      }
+    });
+
+  function set_reason_list(status_to) {
+      var csrftoken = getCookie('csrftoken');
+      $.ajax({
+          url :  "{%url 'loan_app:populate_reason' %}/", // the endpoint
+          type : "GET", // http method
+          data : { status_code   : status_to,
+                    csrfmiddlewaretoken: csrftoken,
+                }, // data sent with the get request
+
+          // handle a successful response
+          success : function(json) {
+              // console.log(json); // log the returned json to the console
+              // console.log(json.reason_list);
+              // console.log(json.result);
+
+              if (json.result == "successful!"){
+                // set empty reason list
+                $('#id_reason')
+                    .empty()
+                    .append('<option selected="selected" value>-- Pilih --</option>')
+                ;
+                {% if app_obj.status == 141 and app_obj.is_julo_one%}
+                    json.reason_list.sort(function(x,y){ return x[1] == 'IPV verified' ? -1 : y[1] == 'IPV verified' ? 1 : 0; });
+                {% endif %}
+                $.each(json.reason_list, function(i, value) {
+                    $('#id_reason').append($('<option>').text(value[1]).attr('value', value[0]));
+                });
+              }
+              // console.log("success"); // another sanity check
+          },
+
+          // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+      });
+
+    };
+
+
+    //check if status_id has value
+    $("#id_status_to :selected").map(function(i, el) {
+       if($(el).val()!=''){
+        set_reason_list($(el).val());
+       }
+    });
+
+    function formValidationStatus(oEvent) {
+      //alert("validation status");
+      if($('#id_status_to').val() != "" && $('#id_reason').val() != ""){
+        document.getElementById("submit_status").disabled = false;
+        $("#submit_status").removeClass("btn-default");
+        $("#submit_status").addClass("btn-danger");
+      } else {
+        document.getElementById("submit_status").disabled = true;
+        $("#submit_status").addClass("btn-default");
+        $("#submit_status").removeClass("btn-danger");
+      }
+    }
+
+    var note_only = document.getElementById("id_notes_only");
+    var status_change = document.getElementById("id_status_to");
+    var reason_change = document.getElementById("id_reason");
+
+    note_only.onkeyup = formValidationNote;
+    status_change.onchange = formValidationStatus;
+    reason_change.onchange = formValidationStatus;
+
+
+
+
+  <!-- Coppiped here end -->
+{% endblock %}
+
+{% block script_end %}
+
+{% endblock %}

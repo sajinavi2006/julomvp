@@ -1,0 +1,38 @@
+{% load unit utils %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-4 m-b-20">
+            <h4>Courtesy Call</h4>
+        </div>
+
+        <br/>
+        <p>Selamat pagi {{ object.gender|pak_or_bu|safe }},</p>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    saya {{ user.username }} dari JULO,
+                    Hanya ingin silaturahmi untuk menanyakan
+                    <br/>- dana dari JULO sudah cair ke rekening {{ object.gender|bapak_or_ibu|safe }} sekitar 2 minggu yang lalu benar ya {{ object.gender|bapak_or_ibu|safe }}?
+                    <br/>- apakah dana tsb cukup membantu kebutuhan {{ object.gender|bapak_or_ibu|safe }} {{ object.loan_purpose|default:"-"|safe }} ?.
+                    <br/>Baik, kami sangat senang mendengarnya.
+                    <br/>Oya, sudah memberikan rating 5 utk JULO di Play Store dan Facebook?.
+                    <br/>
+                    <br/><b>[ Jika belum ]</b><br/>
+                    &nbsp;&nbsp;&nbsp; tolong untuk menyediakan waktunya sebentar untuk memberikan rating ya.
+                    <br/><b>[ Jika sudah ]</b><br/>
+                    &nbsp;&nbsp;&nbsp; terima kasih untuk review dan ratingnya ya {{ object.gender|bapak_or_ibu|safe }}.
+                    <br/>
+                    <br/>Baik, terima kasih atas waktunya, {{ object.gender|pak_or_bu|safe }},
+                    <br/>Sekedar mengingatkan, untuk
+                    {%if object.product_line_code in product_line_STL %} pelunasan {% else %} cicilan pertama {% endif %} jatuh tempo di tanggal {{ object.loan.payment_set.first.due_date|date:"d M Y" }}
+                    <br/>... Selamat siang, selamat beraktivitas kembali.
+                    <br>
+                    <br/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

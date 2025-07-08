@@ -1,0 +1,4 @@
+{% load unit %}
+
+HP : {{ object.mobile_phone_1|no_hp|default:"-"|safe}}<br/>
+{{ object.fullname|default:"-"|safe}}

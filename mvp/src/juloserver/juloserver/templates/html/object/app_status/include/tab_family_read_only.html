@@ -1,0 +1,111 @@
+{% load unit %}
+
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Status Pernikahan</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.marital_status|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Jumlah Tanggungan</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.dependent|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Nama Pasangan</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.spouse_name|default:"-"|safe}}
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Tgl Lahir Pasangan</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {% if object.marital_status == 'Menikah' %}
+      {{ object.spouse_dob|date:"d M Y"|default:"-"|safe}} - Usia: {{ object.spouse_dob|age|safe}} Tahun
+    {%else%}
+      -
+    {%endif%}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>No. HP Pasangan</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.spouse_mobile_phone|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>HP Pasangan Ada WA</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{object.spouse_has_whatsapp|yesno:"Ya, Tidak"|safe }}
+    
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Nama Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.kin_name|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Tgl Lahir Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    
+      {{ object.kin_dob|date:"d M Y"|default:"-"|safe}} - Usia:  
+      {{ object.kin_dob|age|safe}} Tahun
+    
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Jenis Kelamin Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.kin_gender|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>No HP Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.kin_mobile_phone|default:"-"|safe}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5 col-xs-6">
+    <strong>Hubungan</strong> 
+  </div>
+  <div class="col-md-6 col-xs-6 p-b-10 b-l"> 
+    {{ object.kin_relationship|default:"-"|safe}}
+  </div>
+</div>

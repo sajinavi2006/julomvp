@@ -1,0 +1,1 @@
+INFO: Hi {{first_name}}! Perubahan Nomor Virtual Account. Silahkan lakukan pembayaran angsuran JULO Anda dengan nomor {{va_method}}: {{va_number}}. Hubungi cs@julo.co.id u/ info lebih lanjut.

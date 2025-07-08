@@ -1,0 +1,208 @@
+{% load unit %}
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Status Pernikahan</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.marital_status.errors %} has-error {% endif %}"> 
+      {{form_app.marital_status}}
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-grp-default" onclick="setDefaultValue('id_form2-marital_status', '{{ object.marital_status|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Jumlah Tanggungan</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.dependent.errors %} has-error {% endif %}"> 
+      {{form_app.dependent}}
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-grp-default" id="id_btn-dependent" onclick="setDefaultValue('id_form2-dependent', '{{ object.dependent|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+    {% if form_app.dependent.errors %}
+      <span class="help-block error_msg h5">
+        <small>{{ form_app.dependent.errors.as_text }}</small>
+      </span>
+    {% endif %}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Nama Pasangan</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.spouse_name.errors %} has-error {% endif %}"> 
+      {{ form_app.spouse_name }}
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-grp-default" id="id_btn-spouse_name" onclick="setDefaultValue('id_form2-spouse_name', '{{ object.spouse_name|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Tgl Lahir Pasangan</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+      <div class="input-group input-group-sm {% if form_app.spouse_dob.errors %} has-error {% endif %}"> 
+        {% if object.marital_status == 'Menikah' %}
+          <input class="form-control mydatepicker" id="id_form2-spouse_dob" maxlength="None" name="form2-spouse_dob" placeholder="dd-mm-yyyy " type="text" value="{{ object.spouse_dob|date:'d-m-Y'|default:''|safe }}">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-info btn-grp-default" id="id_btn-spouse_dob" onclick="setDefaultValue('id_form2-spouse_dob', '{{ object.spouse_dob|date:'d-m-Y'|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+          </span>
+        {% else %}
+          <input class="form-control mydatepicker" id="id_form2-spouse_dob" maxlength="None" name="form2-spouse_dob" placeholder="dd-mm-yyyy " type="text" value="">
+          <span class="input-group-btn" onclick="setDefaultValue('id_form2-spouse_dob', '');">
+            <button type="button" class="btn btn-info btn-grp-default" id="id_btn-spouse_dob"  onclick="setDefaultValue('id_form2-spouse_dob', '{{ object.spouse_dob|date:'d-m-Y'|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+          </span>
+        {%endif%}
+      </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>No. HP Pasangan</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.spouse_mobile_phone.errors %} has-error {% endif %}"> 
+      {{form_app.spouse_mobile_phone}}
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-grp-default" id="id_btn-spouse_mobile_phone"  onclick="setDefaultValue('id_form2-spouse_mobile_phone', '{{ object.spouse_mobile_phone|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+    {% if form_app.spouse_mobile_phone.errors %}
+      <span class="help-block error_msg h5">
+        <small>{{ form_app.spouse_mobile_phone.errors.as_text }}</small>
+      </span>
+    {% endif %}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>HP Pasangan Ada WA</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.spouse_has_whatsapp.errors %} has-error {% endif %}"> 
+      {{form_app.spouse_has_whatsapp}}
+    </div>
+    {% if form_app.spouse_has_whatsapp.errors %}
+      <span class="help-block error_msg h5">
+        <small>{{ form_app.spouse_has_whatsapp.errors.as_text }}</small>
+      </span>
+    {% endif %}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Nama Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.kin_name.errors %} has-error {% endif %}"> 
+      {{form_app.kin_name}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-kin_name', '{{ object.kin_name|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+    {% if form_app.kin_name.errors %}
+      <span class="help-block error_msg h5">
+        <small>{{ form_app.kin_name.errors.as_text }}</small>
+      </span>
+    {% endif %}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Tgl Lahir Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.kin_dob.errors %} has-error {% endif %}"> 
+      <input class="form-control mydatepicker" id="id_form2-kin_dob" maxlength="None" name="form2-kin_dob" placeholder="dd-mm-yyyy " type="text" value="{{ object.kin_dob|date:'d-m-Y'|default:''|safe }}">
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-kin_dob', '{{ object.kin_dob|date:'d-m-Y'|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+    {% if form_app.kin_dob.errors %}
+      <span class="help-block error_msg h5">
+        <small>{{ form_app.kin_dob.errors.as_text }}</small>
+      </span>
+    {% endif %}
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Jenis Kelamin Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.kin_gender.errors %} has-error {% endif %}"> 
+      {{form_app.kin_gender}}
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-grp-default" onclick="setDefaultValue('id_form2-kin_gender', '{{ object.kin_gender|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>No HP Keluarga Kandung</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.kin_mobile_phone.errors %} has-error {% endif %}"> 
+      {{form_app.kin_mobile_phone}}
+      <span class="input-group-btn" onclick="setDefaultValue('id_form2-kin_mobile_phone', '{{ object.kin_mobile_phone|safe }}');">
+        <button type="button" class="btn btn-info btn-grp-default"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-xs-6 p-b-10">
+    <strong>Hubungan</strong> 
+  </div>
+  <div class="col-md-5 col-xs-6 p-b-10 b-l b-r"> 
+    <div class="input-group input-group-sm {% if form_app.kin_relationship.errors %} has-error {% endif %}"> 
+      {{form_app.kin_relationship}}
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-info btn-grp-default" onclick="setDefaultValue('id_form2-kin_relationship', '{{ object.kin_relationship|safe }}');"><i class="fa fa-history fa-fw"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3 col-xs-6 p-b-10">
+  </div>
+</div>
+

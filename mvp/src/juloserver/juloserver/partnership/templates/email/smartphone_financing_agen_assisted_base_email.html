@@ -1,0 +1,180 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <title></title>
+    <!--[if !mso]><!-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            font-family: 'Nunito', sans-serif;
+            font-style: normal;
+        }
+
+        table {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic;
+        }
+    </style>
+</head>
+<body style="background:#E1E8ED;">
+
+<div class="container">
+
+    <div style="margin:0px auto;max-width:447px;padding:64px 24px;background:#00ACF0;">
+
+        <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;" align="center" border="0">
+            <tr>
+                <td style="width:100px; text-align: center; vertical-align: middle;">
+                    <img alt="" title="" height="auto"
+                         src="https://www.julo.co.id/images/JULO_logo_white.png"
+                         style="border:none;border-radius:0px;display:block;height:auto;margin:0 auto;"
+                         width="100">
+                </td>
+            </tr>
+        </table>
+
+        <table role="presentation" cellpadding="0" cellspacing="0"
+               style="width:100%;max-width: 376px; margin: 32px auto;" align="center"
+               border="0">
+            <tr>
+                <td style="width:100%;background-color: #ffffff; padding:40px 24px; border-radius: 10px;">
+                    {% block content %}
+                    {% endblock %}
+                </td>
+            </tr>
+        </table>
+
+        <table style="min-width: 100%; width: 100%; margin-top:32px; margin-bottom:32px;" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td colspan="100" align="center" style="width:100%; text-align: center; vertical-align: middle;">
+                    <img style="vertical-align: middle; width:32px; height: auto;" src="{{cs_image}}" alt="customer service icon"/>
+                    <div style="color:#ffffff;font-size:16px;font-weight:700;line-height: 24px;display: inline; margin-left: 8px;">
+                        Ada pertanyaan? Hubungi kami
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100" align="center" style="width:100%; text-align: center; vertical-align: middle;padding-top:8px; padding-bottom:8px;">
+                    <img style="vertical-align: middle; width:16px; height: auto;" src="{{mail_icon}}" alt="mail icon"/>
+                    <div style="display: inline;">
+                        <a href="mailto:{{cs_email}}" target="_blank"
+                           style="color:#ffffff;font-size:16px;font-weight:700;line-height: 24px;text-decoration: none;">
+                            {{cs_email}}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100" align="center" style="width:100%; text-align: center; vertical-align: middle;">
+                    <img style="vertical-align: middle; width:16x; height: auto;" src="{{phone_icon}}" alt=""/>
+                    <div style="color:#ffffff;font-size:16px;font-weight:700;line-height: 24px;display: inline;">
+                        {{cs_phone}}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <hr style="border-top:1px dashed #ffffff">
+        <table style="min-width: 100%; width: 100%; margin-top:32px;" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td colspan="100" align="center" style="width:100%; text-align: center; vertical-align: middle;">
+                    <div style="color:#ffffff;font-size:14px;font-weight:700;line-height: 22px;display: inline; margin-right: 10px;">
+                        Download Aplikasi JULO Gratis
+                    </div>
+                    <a href="https://play.google.com/store/apps/details?id=com.julofinance.juloapp"
+                       style="color: #ffffff; text-decoration: underline;">
+                        <img style="vertical-align: middle; width:79px; height: auto;"
+                             src="{{play_store}}" alt="Google Play"/>
+                    </a>
+                </td>
+            </tr>
+        </table>
+
+        <table style="min-width: 100%; width: 100%; margin: 32px 0;" role="presentation" border="0" cellpadding="0"
+               cellspacing="0" width="100%">
+            <tr>
+                <td colspan="100" align="center" style="text-align: center; vertical-align: middle;">
+                    <div style="margin:0;color:#ffffff;font-size:14px;font-weight:700;line-height: 22px;display:inline;">
+                        Berizin dan Diawasi oleh
+                    </div>
+                    <img style="vertical-align: middle;margin-right: 5px; width:39px; height: auto;"
+                         src="{{ojk_icon}}" alt="ojk"/>
+                    <img style="vertical-align: middle;margin-right: 5px; width:39px; height: auto;"
+                         src="{{afpi_icon}}"/>
+                    <img style="vertical-align: middle;margin-right: 5px; width:39px; height: auto;"
+                         src="{{afj_icon}}"/>
+                </td>
+            </tr>
+        </table>
+        <hr style="border-top:1px dashed #ffffff">
+
+        <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; margin: 32px 0;" align="center"
+               border="0">
+            <tr>
+                <td style="width:100%; text-align: center; vertical-align: middle;">
+                    <p style="margin:0;color:#ffffff;font-size:12px;font-weight:700;line-height: 17px;">
+                        PT Julo Teknologi Finansial</p>
+                    <p style="margin:0;color:#ffffff;font-size:12px;font-weight:700;line-height: 17px;">
+                        88@Kasablanka Tower A Lantai 5. Jl. Raya Casablanca</p>
+                    <p style="margin:0;color:#ffffff;font-size:12px;font-weight:700;line-height: 17px;">
+                        Kav.88, Jakarta Selatan 12870</p>
+                </td>
+            </tr>
+        </table>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;" align="center" border="0">
+            <tr>
+                <td style="width:100%; text-align: center; vertical-align: middle; padding: 0 30px;">
+                    <p style="margin:0;color:#ffffff;font-size:14px;font-weight:400;line-height: 22px;">
+                        Keamananmu adalah prioritas kami. Pelajari tentang
+                        <a href="https://www.julo.co.id/privacy-policy"
+                           style="color:white;text-decoration-line: underline;" target="_blank" rel="noopener">kebijakan
+                            privasi</a>
+                        kami.</p>
+                    <p style="margin:0;color:#ffffff;font-size:14px;font-weight:400;line-height: 22px;">
+                        <a href="https://www.julo.co.id/cara-bayar" style="color:white;text-decoration-line: underline;"
+                           target="_blank" rel="noopener">Panduan Pembayaran</a> |
+                        <a href="https://www.julo.co.id/faq" style="color:white;text-decoration-line: underline;"
+                           target="_blank" rel="noopener">Pusat Bantuan</a>
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

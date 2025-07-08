@@ -1,0 +1,102 @@
+{% load unit utils %}
+{% load checkusergroup from common %}
+
+<!-- customtab -->
+<ul class="nav nav-tabs customtab tabs">
+   <li class="active tab">
+    <a href="#offer" data-toggle="tab"> <span class="visible-xs">
+    <i class="fa fa-home"></i></span> <span class="hidden-xs">Offer Detail</span> </a>
+  </li>
+  <li class="tab"><a href="#product" data-toggle="tab">
+    <span class="visible-xs"><i class="fa fa-money"></i></span> <span class="hidden-xs">Product</span> </a>
+  </li>
+  <li class="tab"><a href="#decision" data-toggle="tab">
+    <span class="visible-xs"><i class="fa fa-flag"></i></span> <span class="hidden-xs">Decision</span> </a>
+  </li>
+  <li class="tab"><a href="#app_detail" data-toggle="tab" aria-expanded="true">
+    <span class="visible-xs"><i class="fa fa-envelope-o"></i></span> <span class="hidden-xs">Application ID</span> </a>
+  </li>
+
+</ul>
+
+<div id="slim_pmts">
+  <div class="tab-content pmt_event">
+    <!-- Tab payment details -->
+    <div class="tab-pane active" id="offer">
+
+      <div class="row">
+        <div class="col-md-8 col-xs-12">
+          {% with offer_obj as object %}
+            {% include "object/offer/include/tab_offer.html" %}
+          {% endwith %}
+        </div>
+
+        {% if flag_edit_offer %}
+        <div class="col-md-4 col-xs-12">
+          {% checkusergroup in ['bo_sd_verifier','admin_full','bo_credit_analyst'] %}
+            <div class="m-t-10">
+              <button class="btn btn-warning m-b-5"  id="btn-edit-offer-modal" title="edit Offer" data-toggle="modal" data-target="#responsive-modal" onclick="set_disable_simpan_btn(1);">
+                <i class="fa fa-dollar fa-fw"></i> Edit Offer
+              </button>
+            </div>
+            {% endcheckusergroup %}
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- Tab Product data -->
+    <div class="tab-pane" id="product">
+    {%if offer_obj.product %}
+      {% with offer_obj.product as object %}
+        {% include "object/offer/include/tab_product.html" %}
+      {% endwith %}
+    {% else %}
+      <code>- Tidak Ada data -</code>
+    {% endif %}
+    </div>
+
+    <!-- Tab Decision data -->
+    <div class="tab-pane" id="decision">
+    {%if offer_obj.decision %}
+      {% with offer_obj.decision as object %}
+        {% include "object/offer/include/tab_decision.html" %}
+      {% endwith %}
+    {% else %}
+      <code>- Tidak Ada data -</code>
+    {% endif %}
+    </div>
+
+    <!-- Tab Application -->
+    <div class="tab-pane" id="app_detail">
+
+      <table>
+        <tr>
+          <td class='m-r-10'>
+            Application ID
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <a href="{% url 'app_status:change_status' offer_obj.application.id %}" target="_blank" title="Application Detail">
+              <strong> {{ offer_obj.application.id|default:"-"|safe}}</strong>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td class='m-r-10'>
+            Application Status
+          </td>
+          <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong> {{ offer_obj.application.application_status|default:"-"|safe}}</strong>
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
+
+
+  </div>
+</div>

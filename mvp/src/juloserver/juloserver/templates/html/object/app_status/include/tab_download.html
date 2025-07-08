@@ -1,0 +1,28 @@
+{% load unit %}
+{% if bpjs_details %}
+    <a href="{% url 'bpjs:bpjs_pdf' bpjs_details.application_id %}" target="_blank" title="download report excel file">
+      <button style="width:90%" class="button btn-warning btn-lg m-t-10"><i class="fa fa-download fa-fw"></i> <small>BPJS_Report_{{ bpjs_details.application_id }}.pdf</small></button>
+    </a>
+{% else %}
+  <code>-- No. BPJS Data --</code>
+{% endif %}
+{% if sd_data or bank_report_url  %}
+  {% if sd_data.reports_xls_s3_url %}
+    <a href="{% url 'app_status:sd_sheet'%}" title='sd_sheet' target="_blank" onclick="setUrlS3('{{ sd_data.reports_xls_s3_url }}')">
+      <button style="width:90%" class="button btn-success btn-lg m-t-10"><i class="fa fa-file-excel-o fa-fw"></i><small>{{ sd_data.reports_url|show_filename|safe }}</small>- View Report</button>
+    </a>
+    <br/>
+  {% endif %}
+  {% if bank_report_url %}
+    <a href="{% url 'app_status:sd_sheet'%}" title='sd_sheet' target="_blank" onclick="setUrlS3('{{ bank_report_url }}')">
+      <button style="width:90%" class="button btn-success btn-lg m-t-10"><i class="fa fa-file-excel-o fa-fw"></i><small>{{ bank_report_name|show_filename|safe }}</small>- View Bank Report</button>
+    </a>
+    <br/>
+    <a href="{{ bank_report_url }}" title='download bank report excel file"' target="_blank">
+      <button style="width:90%" class="button btn-success btn-lg m-t-10"><i class="fa fa-file-excel-o fa-fw"></i><small>{{ bank_report_name|show_filename|safe }}</small>- Download Bank Report</button>
+    </a>
+    <br/>
+  {% endif %}
+{% else %}
+  <br><code>-- No. SD Data --</code>
+{% endif %}

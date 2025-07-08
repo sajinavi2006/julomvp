@@ -1,0 +1,47 @@
+{% load unit utils %}
+
+{% load static from staticfiles %}
+  <div class="col-sm-2 text-center">
+        <img id="img_voice_{{document.id}}" src="{% static 'images/icons/ic-placeholder.png' %}" class="img-responsive" title="Audio Agreement" />
+        <button id="id_btn_see_voice" type="button" class="btn btn-success btn-block m-t-30" onclick="ShowModalVoice({{document.id}});">
+          <i class="fa fa-back"></i> <small>Lihat File</small>
+        </button>
+        {% if 'payment_status' not in request.path %}
+          <small>
+          {% if document.status == 0 %}
+            <button id="btn_kirim_ulang_voice_{{document.id}}" class="btn-default" onclick="VoiceResubmissionClick({{document.id}});">Mohon Dikirim Ulang</button>
+          {% elif document.status == 1 %}
+            <button id="btn_kirim_ulang_voice_{{document.id}}" class="btn-danger" onclick="VoiceResubmissionClick({{document.id}});">Batalkan Kirim Ulang</button>
+          {% elif document.status == -1 %}
+            <button id="btn_kirim_ulang_voice_{{document.id}}" class="btn-default" >Tidak Terpakai</button>
+          {% endif %}
+          </small>
+        {% endif %}
+    <small>
+      Voice Agreement {{document.pk}}
+    </small>
+  </div>
+
+  <!-- Modal AUdio-->
+    <div id="modal-see-voice" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header label-default">
+                    <h4 class="modal-title" id="modal_voice_title">Check Voice Agreement</h4> </div>
+                <div class="modal-body" id="modal_update_app_body">
+                    <div ><p id="text_agreement" style="text-align: justify;font-size: 17px;">
+                    </p></div>
+                    <br>
+                    <br>
+                    <center>
+                      <audio controls id="myVoice" style="width:100%;">
+                        <source src="" type="audio/mpeg">
+                      </audio>
+                  </center>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="id_btn_close_voice">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,83 @@
+{% load model template default unit %}
+
+<table>
+  <tr>
+    <td style="vertical-align: top">
+      <strong>Approved</strong>
+      {% if object.approved %}
+        {% for application in object.approved %}
+          <table style="margin-top: 10px; margin-right: 20px;">
+            <tr>
+              <td class='m-r-10'>
+                Application ID
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong> {{ application.id|default:"-"|safe}}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class='m-r-10'>
+                Application XID
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong> {{ application.application_xid|default:"-"|safe}}</strong>
+              </td>
+            </tr>
+          </table>
+          {% if forloop.counter < object.approved|length %}
+            <hr/>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <table style="margin-top: 10px; margin-right: 20px;">
+            <tr>
+              <td class='m-r-10'>
+                Kosong - Tidak ada Data
+              </td>
+            </tr>
+          </table>
+      {% endif %}
+      
+    </td>
+    <td style="vertical-align: top">
+      <strong>Rejected</strong>
+      {% if object.rejected %}
+        {% for application in object.rejected %}
+          <table style="margin-top: 10px; margin-right: 20px;">
+            <tr>
+              <td class='m-r-10'>
+                Application ID
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong> {{ application.id|default:"-"|safe}}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td class='m-r-10'>
+                Application XID
+              </td>
+              <td>
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong> {{ application.application_xid|default:"-"|safe}}</strong>
+              </td>
+            </tr>
+          </table>
+          {% if forloop.counter < object.approved|length %}
+            <hr/>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <table style="margin-top: 10px; margin-right: 20px;">
+            <tr>
+              <td class='m-r-10'>
+                Kosong - Tidak ada Data
+              </td>
+            </tr>
+          </table>
+      {% endif %}
+      
+    </td>
+</table>

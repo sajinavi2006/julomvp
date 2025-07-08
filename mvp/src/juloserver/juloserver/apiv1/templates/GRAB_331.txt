@@ -1,0 +1,3 @@
+Cicilan ke-{{payment_seq}} Anda telah dibayar. Terima kasih untuk pembayaran tepat waktu!<br>
+<br>
+Kunjungi halaman <a href="http://www.julofinance.com/android/goto/loan_activity">Aktivitas Pinjaman</a> untuk melihat cicilan selanjutnya.

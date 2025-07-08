@@ -1,0 +1,70 @@
+{% load unit utils i18n %}
+{% for obj1, obj2 in history_note_app %}
+<table>
+    <tr>
+        <td class='m-r-10'>
+            Application ID
+        </td>
+        <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>
+                <a class="see_app" style="cursor:pointer;"
+                   target="_blank" title="Application Detail">{{ obj1.id }}</a>
+                - {{ obj1.cdate|date:"d F Y"|safe}}
+            </strong>
+        </td>
+    </tr>
+    <tr>
+        <td class='m-r-10'>
+            Application Status
+        </td>
+        <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ obj1.status }} - {{ obj1.code_status }}</strong>
+        </td>
+    </tr>
+    <tr>
+        <td class='m-r-10'>
+            Application Product
+        </td>
+        <td>
+            {% if obj1.product_line.product_line_code %}
+                &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+                <strong>{{ obj1.product_line.product_line_code }}</strong>
+                -
+                <strong>{{ obj1.product_line.product_line_type }}</strong>
+            {% else %}
+                <strong>Product Tidak ditemukan</strong>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td class='m-r-10'>
+            Agent Note
+        </td>
+        <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ obj2.note_text|default:"-"|safe }}</strong>
+        </td>
+    </tr>
+    <tr>
+        <td class='m-r-10'>
+            Credit Score
+        </td>
+        <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ obj1.credit_score.0|default:"-"|safe }}</strong>
+        </td>
+    </tr>
+    <tr>
+        <td class='m-r-10'>
+            Credit Message
+        </td>
+        <td>
+            &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+            <strong>{{ obj1.credit_score.1|default:"-"|safe }}</strong>
+        </td>
+    </tr>
+</table>
+<hr>
+{% endfor %}

@@ -1,0 +1,57 @@
+{% extends "admin/base_site.html" %}
+{% load static from staticfiles %}
+{% block content %}
+    <table>
+        <tr>
+            <td>Promo Name :</td>
+            <td>
+               <strong>{{ data.promo_name }}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>Departement :</td>
+            <td>
+               <strong>{{ data.departement }}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>PIC Email :</td>
+            <td>
+               <strong>{{ data.pic_email }}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>Input File :</td>
+            <td>
+                <table>
+                    <tr>
+                        <td>Number of Customer : </td>
+                        <td>{{ data.number_of_customers }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Money : </td>
+                        <td>{{ data.total_money }}</td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                Requested by : {{ data.pic_email }}<br/>
+                from {{ data.departement }}
+            </td>
+        </tr>
+        <tr>
+            {% if not data.decision %}
+                <td>
+                    <a href="{{ edit_link }}" class="default">Edit</a>
+                </td>
+                <td>
+                    <a href="{{ request_link }}" class="default">Request Cashback Promo</a>
+                </td>
+            {% endif %}
+        </tr>
+    </table>
+{% endblock %}

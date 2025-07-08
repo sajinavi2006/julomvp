@@ -1,0 +1,1 @@
+Yth {{name}}, Kami ingtkn kmbli mgenai jnji pbayarn yg akn Anda lakukan pd {{ due_date }} sjmlh {{due_amount}}. Harap bayar ssuai janji yg dibuat. Trma kasih. Info: {{url}}

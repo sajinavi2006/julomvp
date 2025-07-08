@@ -1,0 +1,12 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls admin_static admin_modify %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label='followthemoney' %}">Followthemoney</a>
+&rsaquo; <a href="{% url 'admin:followthemoney_lendercurrent_changelist' %}">Lender currents</a>
+&rsaquo; <a href="{% url 'admin:followthemoney_lendercurrent_change' original.lender.id %}">{{ original.lender.lender_name }}</a>
+&rsaquo; {{ opts.verbose_name }}
+</div>
+{% endblock %}

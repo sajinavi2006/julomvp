@@ -1,0 +1,123 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+    .ml5 {
+        margin-left: 5px;
+    }
+    .w100 {
+        width: 100px;
+    }
+    .grid {
+        display: grid;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .lb-result {
+        font-size: larger;
+    }
+    .center {
+        align-items: center;
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">Create New Loan</h3>
+</div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<p><b>Upload Result : </b> Success {{count_valid_rows}} / Failure {{count_invalid_rows}}</p>
+<p><b>Partner : </b> {{ partner }}</p>
+{% if error_message %}
+<p><b>Error : </b> {{ error_message }}</p>
+{% else %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Row Number</th>
+        <th>NIK</th>
+        <th>Loan Amount</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for invalid in invalid_rows %}
+            <tr>
+                <td>{{ invalid.row_number }}</td>
+                <td>{{ invalid.nik }}</td>
+                <td>{{ invalid.financing_amount }}</td>
+                <td><b>{{ invalid.note }}</b></td>
+            </tr>
+        {% endfor %}
+        {% for valid in valid_rows %}
+            <tr>
+                <td>{{ valid.row_number }}</td>
+                <td>{{ valid.nik }}</td>
+                <td>{{ valid.financing_amount }}</td>
+                <td><b>{{ valid.note }}</b></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+
+<form method="post" action="{% url 'bulk_upload:mf_webapp_csv_loan_upload_docs' %}" id="nextForm">
+    {% csrf_token %}
+
+    <input type="hidden" id="{{partner}}" name="partner" value="{{partner}}">
+    {% for valid in valid_rows %}
+        <input type="hidden" name="list_row_number" value="{{valid.row_number}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.row_number}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.nik}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.distributor}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.funder}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.type}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.loan_request_date}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.interest_rate}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.provision_fee}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.financing_amount}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.financing_tenure}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.instalment_number}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.invoice_number}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.buyer_name}}">
+        <input type="hidden" name="{{valid.row_number}}" value="{{valid.buying_amount}}">
+    {% endfor %}
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-6">
+            <a href="javascript:history.go(-1)">
+                <button type="button" class="btn btn-primary">
+                    <i class="fa fa-back"></i> Back
+                </button>
+            </a>
+        </div>
+        <div class="col-md-6 text-right">
+            {% if count_valid_rows %}
+            <button class="btn btn-success" type="submit">Next</button>
+            {% endif %}
+        </div>
+    </div>
+
+</form>
+{% endblock %}

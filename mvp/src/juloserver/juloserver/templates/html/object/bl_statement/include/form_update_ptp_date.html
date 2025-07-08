@@ -1,0 +1,28 @@
+{% load unit %}
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> PTP Date: </label>
+        <div class="col-md-12 col-sm-12">
+          <div class="col-md-12 col-sm-12">
+              <div class="input-group">
+                 <input class="form-control mydatepicker"
+                       id="id_form2-ptp_date" maxlength="None"
+                       name="form2-ptp_date_dob" placeholder="dd-mm-yyyy "
+                       type="text" value="{{ payment_obj.ptp_date|date:'d-m-Y'|default:''|safe }}">
+              </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 form_event-group">
+        <label class="col-md-12 col-sm-12"> PTP Amount: </label>
+        <div class="col-md-12 col-sm-12">
+            <div class="input-group m-t-12">
+                <span class="input-group-addon">Rp.</span>
+                <input class="form-control mask" id="id_ptp_amount" maxlength="15" type="text">
+                <span class="input-group-addon" value="{{ ptp_amount.amount }}"><i class="icon-wallet" ></i></span>
+            </div>
+        </div>
+    </div>
+  </div>

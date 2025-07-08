@@ -1,0 +1,15 @@
+{% load unit %}
+{% load checkusergroup from common %}
+  <table id="ca_table" class="ca_table table table-hover table-striped" >
+    <thead>
+      <tr>
+        {% if 'bl_statement' in request.path %}
+            {% checkusergroup notin 'bo_outbond_caller_3rd_party' %}
+            {% endcheckusergroup %}
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+    {% include "object/bl_statement/include/row_customer.html" %}
+    <tbody>
+  </table>

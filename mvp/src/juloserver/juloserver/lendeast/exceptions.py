@@ -1,0 +1,2 @@
+class LendEastException(Exception):
+    pass

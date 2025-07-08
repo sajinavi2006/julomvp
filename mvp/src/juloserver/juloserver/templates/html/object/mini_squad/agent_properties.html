@@ -1,0 +1,387 @@
+{% extends "common/theme1/layout_theme1.html" %}
+
+{% load checkusergroup from common %}
+{% load ifusergroup from common %}
+{% load static from staticfiles %}
+
+{% block css_inside %}
+  .bold {
+    font-weight: 500;
+    color: #2b2b2b;
+  }
+
+  @media (min-width: 768px) {
+    .header-content {
+      margin-left: 8%;
+    }
+
+    .content {
+      margin-left: 15%;
+    }
+
+    .header-title {
+      margin-left: 5%;
+    }
+  }
+
+  div > p {
+    font-weight: 500;
+    color: #2b2b2b;
+  }
+
+  .column-top {
+    margin-top: 25px;
+  }
+
+  .btn-julo {
+    background-color: #02A8F3;
+    border-color: #02A8F3;
+    width: 45%;
+    border-radius: 5px;
+    height: 50px;
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+
+  .btn-nav {
+    border-color: white;
+    border-bottom-color: #ebebeb;
+    border-width: 2px;
+    width: 170px;
+    border-shadow: none;
+  }
+
+  .btn-nav-active {
+    border-bottom-color: #fb9678;
+    color: #fb9678;
+  }
+
+  button:active {
+    border-style: none;
+  }
+
+  .edit-btn {
+    border-radius: 17px;
+    width: 100px;
+    height: 33px;
+    text-transform: uppercase;
+    background-color: #fec107;
+    color: #ffffff;
+  }
+
+  .modal-position {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+{% endblock %}
+
+
+{% block script_head %}
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-19175540-9', 'auto');
+  ga('send', 'pageview');
+
+  window.onbeforeunload = function () {
+    return "Jangan refresh ketika auto chooser berlangsung, anda yakin?";
+  };
+
+</script>
+
+{% endblock %}
+
+
+{% block inside_body %}
+<!-- Preloader -->
+<div class="preloader">
+  <div class="cssload-speeding-wheel"></div>
+</div>
+<div id="wrapper">
+  <div id="app" class="container-fluid" style="padding-right: 100px">
+    <div class="row">
+      <div class="header-title m-b-10 m-t-10">
+        <h5 style="text-transform: uppercase" class="bold">agent properties</h5>
+      </div>
+    </div>
+    <div class="column column-top">
+        <div class="header-content">
+          <button
+            class="btn-nav"
+            @click="activeTab = 'assign'"
+            :class="{ 'btn-nav-active': activeTab === 'assign' }"
+          >Assign</button>
+          <button
+            class="btn-nav"
+            @click="activeTab = 'view'"
+            :class="{ 'btn-nav-active': activeTab === 'view' }"
+          >View</button>
+          <hr style="
+            margin-top: -2px;
+            border-color: #ebebeb;
+            border-width: 2px;"
+          >
+        </div>
+    </div>
+    <div v-show="activeTab === 'assign'">
+      <div class="column column-top">
+        <div class="header-content">
+          <div class="form-group">
+            <label for="list_agent" class="bold">Agent Name</label>
+            <select class="form-control" id="list_agents" v-model="selected_agent">
+              <option value='' disabled selected hidden>Select Agent</option>
+              <option v-for="agent in list_agents" :value="agent">
+                <% agent %>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="column column-top">
+        <div class="header-content">
+          <div class="form-group">
+            <label for="select_bucket" class="bold">Bucket</label>
+            <select class="form-control"
+                    id="list_buckets"
+                    v-model="selected_bucket"
+                    @change="OnBucketChange(this.value)" name="bucket_name">
+              <option value='' disabled selected hidden>Select Bucket</option>
+              <option v-for="bucket in list_bucket_types" v-bind:value="bucket.value">
+                <% bucket.name %>
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row text-center" style="margin-top: 32px">
+        <div class="col-12 col-xs-12">
+          <button
+            type="button"
+            class="btn btn-julo"
+            @click="AssignToSquad()"
+            :disabled="is_data_completed"
+            data-toggle="modal"
+            data-target="#modalMessage"
+          >assign</button>
+        </div>
+      </div>
+    </div>
+    <div v-show="activeTab === 'view'">
+      <div class="column column-top">
+        <div class="header-content">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col" class="text-center">Agent Name</th>
+                <th scope="col" class="text-center">Bucket</th>
+                <th scope="col" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="agent in list_assigned_agents">
+                <td class="text-center"><% agent.agent__username %></td>
+                <div>
+                  <td class="text-center">
+                    <% agent.bucket_name %>
+                  </td>
+                </div>
+                <td class="text-center">
+                  <button class="edit-btn" @click="MoveToAssignPage(agent.agent__username,
+                                                                    agent.bucket_name,)"
+                                                                >edit</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade modal-position" :style="{ display: showFlex }" id="modalMessage" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" style="width: 480px;" role="document">
+        <div class="modal-content" style="height: 300px;">
+          <div class="modal-header" style="border-bottom: none">
+            <img :src="logo"
+                 style="display: block;
+                        margin-top: 10px;
+                        margin-left: auto;
+                        margin-right: auto;" alt="verified_arrow">
+          </div>
+          <div class="modal-body" style="padding: 0;">
+            <p class="text-center" style="font-size: 24px;"><% response_status %></p>
+            <p class="text-center" style="font-weight: 300"><%response_message %></p>
+          </div>
+          <div class="modal-footer" style="border-top: none; text-align:center">
+            <button type="button text-center"
+                    class="btn btn-primary text-center"
+                    style="background-color: #03a9f3;
+                           border-color: #03a9f3;
+                           width: 92px;
+                           height: 48px;
+                           border-radius: 5px;"
+                    data-dismiss="modal">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/bootstrap-select/bootstrap-select.min.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block script_additional %}
+<script src="{% static 'default/js/vue.js' %}"></script>
+<script src="{% static 'default/js/filter.js' %}"></script>
+<script type="text/javascript">
+  var AgentProperties = new Vue({
+      el: '#app',
+      delimiters: ["<%", "%>"],
+      data: {
+        csrftoken: '{{csrf_token}}',
+        bucket_type: '',
+        agent: '',
+        list_agents: [],
+        list_bucket_types: [],
+        list_squads: [],
+        list_bucket_squads: [],
+        list_assigned_agents: [],
+        isNavActive: false,
+        selected_agent: '',
+        selected_bucket: '',
+        selected_squad: '',
+        activeTab: 'assign',
+        showModal: false,
+        showFlex: '',
+        logo: '',
+        response_status: '',
+        response_message: ''
+
+      },
+      beforeMount() {
+        this.GetBucketData();
+      },
+      computed: {
+        is_data_completed() {
+          console.log(this.selected_squad)
+          return !(this.selected_agent && this.selected_bucket);
+        }
+      },
+      methods: {
+        GetBucketData() {
+          var self = this;
+          $.ajax({
+            url :  "{%url 'mini_squad:ajax_get_bucket_and_agent_data' %}/", // the endpoint
+            type : "GET", // http method
+            data : {
+                  csrfmiddlewaretoken: self.csrftoken
+            },
+            // handle a successful response
+            success : function(json) {
+              if (json.status == "success") {
+                self.list_bucket_types = json.bucket_types;
+                self.list_agents = json.list_agents;
+                self.list_squads = json.list_squads;
+                self.list_assigned_agents = json.list_assigned_agents;
+              }
+              else {
+                self.showModal = true;
+                self.showFlex = 'flex';
+                self.response_status = 'Gagal!';
+                self.response_message = 'Gagal mendapat data';
+                self.logo = '../../../../../static/images/collections/fail-verified.png';
+              }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              console.log("Gagal", xhr.responseText);
+            }
+          })
+        },
+        MoveToAssignPage(username, bucket, squad) {
+          var self = this;
+          self.activeTab = 'assign';
+          self.selected_agent = username;
+          self.selected_bucket = bucket;
+          self.list_bucket_squads = self.list_squads[self.selected_bucket];
+          self.selected_squad = squad;
+
+        },
+        OnBucketChange(value) {
+          var self = this;
+          self.list_bucket_squads = self.list_squads[self.selected_bucket];
+          self.selected_squad = '';
+        },
+        AssignToSquad() {
+          var self = this;
+
+          $.ajax({
+            url :  "{%url 'mini_squad:ajax_assign_agent_to_squad' %}/", // the endpoint
+            type : "POST", // ht  tp method
+            data : {
+              csrfmiddlewaretoken: self.csrftoken,
+              agent: self.selected_agent,
+              bucket_name: self.selected_bucket,
+              squad: ''
+            },
+            // handle a successful response
+            success : function(json) {
+              if (json.status == "success") {
+                self.showModal = true;
+                self.showFlex = 'flex';
+                self.response_status = 'Sukses!';
+                self.response_message = 'Agent berhasil dipindahkan';
+                self.logo = '../../../../../static/images/collections/verified.png';
+
+                $.ajax({
+                  url :  "{%url 'mini_squad:ajax_get_bucket_and_agent_data' %}/", // the endpoint
+                  type : "GET", // http method
+                  data : {
+                        csrfmiddlewaretoken: self.csrftoken
+                  },
+                  // handle a successful response
+                  success : function(json) {
+                    if (json.status == "success") {
+                      self.list_bucket_types = json.bucket_types;
+                      self.list_agents = json.list_agents;
+                      self.list_squads = json.list_squads;
+                      self.list_assigned_agents = json.list_assigned_agents;
+                    }
+                    else {
+                      console.log("Gagal", 'gagal mendapat data');
+                    }
+                  }
+                })
+              } else {
+                self.showModal = true;
+                self.showFlex = 'flex';
+                self.response_status = 'Gagal!';
+                self.response_message = 'Agent tidak dapat dpindahkan karena tidak relevan';
+                self.logo = '../../../../../static/images/collections/fail-verified.png';
+              }
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+              console.log("Gagal", xhr.responseText);
+            }
+          })
+        },
+      }
+  })
+</script>
+{% endblock %}

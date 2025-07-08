@@ -1,0 +1,335 @@
+{% extends "common/theme1/detail/detail_editor_theme1.html" %}
+{% load static from staticfiles %}
+
+{% block custom_link %}
+    <link href="{% static 'theme/plugins/bower_components/datatables/jquery.dataTables.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'default/theme/css/buttons.dataTables.min.css' %}" rel="stylesheet" type="text/css" />
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-table/dist/bootstrap-table.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'theme/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css' %}" rel="stylesheet" />
+
+{% endblock %}
+
+
+{% block css_inside %}
+#submit_agent_note{
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#submit_agent_note:hover {
+  background-color: #45a049;
+}
+#id_agent_note{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+{% endblock %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="{% url 'loan_app:status_changes' %}">Status Aplikasi</a></li>
+    <li class="active">Ubah/Update</li>
+{% endblock %}
+
+{% block list_title %}{% endblock %}'
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+  {%if assignment_verification.cfs_action_assignment.action.action_code == 'upload_salary_slip' or assignment_verification.cfs_action_assignment.action.action_code == 'upload_utilities_bill' or assignment_verification.cfs_action_assignment.action.action_code == 'upload_bank_statement' or assignment_verification.cfs_action_assignment.action.action_code == 'upload_credit_card' %}
+    Uploaded Images
+    <div class="row block_image p-t-20 p-b-20" id="id_image_block">
+      <div class="col-sm-12">
+        {% for image in images %}
+          {% if image.image_url %}
+            <div class="col-sm-2 text-center">
+              <a id="href_{{image.id}}" class="image-popup-vertical-fit m-b-20 center-block" href="#" title="{{ image.image_type }} ({{image.image_ext}})">
+                <div>
+                  <img id="img_{{image.id}}" src="{{ image.image_url }}" class="img-responsive" />
+                </div>
+              </a>
+              {% if image.image_type != 'signature_ss'%}
+                <a href="{% url 'crm_cfs:image_editor' image.id %}" target="_blank">
+                  <button id="edit_image" type="button" class="btn btn-success btn-block">
+                    <i class="fa fa-back"></i> <small>Edit Gbr</small>
+                  </button>
+                </a>
+              {% endif %}
+              <small class="m-t-10 center-block">
+                Tipe Dokumen: {{ image.image_type }}
+              </small>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {%if assignment_verification.cfs_action_assignment.action.action_code == 'verify_office_phone_number' %}
+  <div>
+      <ul class="list-group list-group-flush">
+          <li class="list-group-item"><b>Phone number - {{assignment_verification.cfs_action_assignment.extra_data.phone_number}}</b></li>
+          <li class="list-group-item"><b>Company name - {{assignment_verification.cfs_action_assignment.extra_data.company_name}}</b></li>
+      </ul>
+  </div>
+  {% endif %}
+  {%if assignment_verification.cfs_action_assignment.action.action_code == 'verify_family_phone_number' %}
+   <div>
+      <ul class="list-group list-group-flush">
+          <li class="list-group-item"><b>Phone number - {{assignment_verification.cfs_action_assignment.extra_data.phone_number}}</b></li>
+          <li class="list-group-item"><b>Contact type - {{assignment_verification.cfs_action_assignment.extra_data.contact_type}}</b></li>
+          <li class="list-group-item"><b>Contact name - {{assignment_verification.cfs_action_assignment.extra_data.contact_name}}</b></li>
+      </ul>
+  </div>
+  {% endif %}
+  {%if assignment_verification.cfs_action_assignment.action.action_code == 'connect_bank' %}
+  <div class="tab-pane" id="download">
+      {% include "object/app_status/include/tab_download.html" %}
+  </div>
+  {% endif %}
+  {% if is_locked_by_me %}
+  <p>
+    <label for="id_agent_note">Agent Note (*):</label>
+    <textarea id="id_agent_note" maxlength="500" name="agent_note" rows="3"></textarea>
+  </p>
+  {% endif %}
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+              <th scope="col">Agent</th>
+              <th scope="col">Datetime</th>
+              <th scope="col">Note</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% if auth_user %}
+          <tr>
+              <td>{{auth_user.username}}</td>
+              <td>{{assignment_verification.udate|date:"Y-m-d H:i:s"|safe }}</td>
+              <td>{{assignment_verification.message}}</td>
+          </tr>
+          {% else %}
+          <tr>
+              <td colspan="3" style="text-align: center"><i>Belum ada note</i></td>
+          </tr>
+          {% endif %}
+      </tbody>
+  </table>
+
+  {% if assignment_verification.cfs_action_assignment.action.action_code == 'upload_salary_slip' or assignment_verification.cfs_action_assignment.action.action_code == 'upload_bank_statement' or assignment_verification.cfs_action_assignment.action.action_code == 'upload_credit_card' %}
+  <table id="ca_table" class="ca_table table table-hover table-striped">
+    <tbody>
+      <tr>
+        <td class="col-xs-4">
+          <div class="col-xs-2 no-left">
+            <strong>Penghasilan Bersih Per Bulan</strong>
+          </div>
+          <div class="col-xs-2">
+            <div class="input-group input-group-sm">
+                <span class="input-group-addon">Rp.</span>
+                <input type="text" class="form-control" name="monthly_income" id="id_monthly_income"
+                       value="{{ assignment_verification.monthly_income|default:0|safe }}">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-info btn-grp-default"
+                          onclick="setDefaultValue('id_monthly_income','{{ assignment_verification.monthly_income|safe }}');">
+                    <i class="fa fa-history fa-fw"></i>
+                  </button>
+                </span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  {% endif %}
+{% endblock %}
+
+{% block button_part %}
+  <div class="row">
+    <div class="col-md-8 col-xs-12 m-t-30">
+      <a href="{% url 'crm_cfs:list' %}">
+          <button id="back" type="button" class="btn btn-info">
+              <i class="fa fa-back"></i> << Kembali ke Daftar Pencarian Data
+          </button>
+      </a>
+    </div>
+    {%if assignment_verification.verify_status == null %}
+        <div class="col-md-4 col-xs-12 m-t-30" style="text-align: right">
+          {% if is_locked_by_me %}
+            <button id="approve" class="btn btn-success m-b-5"
+                    onclick="change_pending_state({{ assignment_verification.id }}, 'Approve', '{{assignment_verification.cfs_action_assignment.extra_data.phone_number}}');"
+            >
+              Save and Approve
+            </button>
+            <button id="refuse" class="btn btn-info m-b-5"
+                    onclick="change_pending_state({{ assignment_verification.id }}, 'Refuse', '{{assignment_verification.cfs_action_assignment.extra_data.phone_number}}');"
+            >
+              Save and Refuse
+            </button>
+            <button class="btn btn-danger m-b-5" onclick="unlock_assignment({{ assignment_verification.id }})">Unlock</button>
+          {% elif assignment_verification.is_locked %}
+            <b>Tidak bisa melakukan verifikasi karena sedang dikunci oleh <code>{{assignment_verification.locked_by_info}}</code></b>
+          {% else %}
+            <b>Tidak bisa melakukan verifikasi karena belum di-lock.</b>
+          {% endif %}
+        </div>
+        <div id="modal_change_pending_state" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header label-warning">
+                        <h4 class="modal-title" id="modal_change_pending_state_title">Title</h4> </div>
+                    <div class="modal-body" id="modal_change_pending_state_body">
+                      Body
+                    </div>
+                    <div class="modal-footer">
+                        <a id="modal_close_link">
+                          <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Tutup</button>
+                      </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elif assignment_verification.is_locked %}
+      <div class="col-md-4 col-xs-12 m-t-30" style="text-align: right">
+        <button class="btn btn-danger m-b-5" onclick="unlock_assignment({{ assignment_verification.id }})">Unlock</button>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/cropper/cropper.min.js' %}"></script>
+<script src="{% static 'default/js/cropper-init-julo.js' %}" type="text/javascript" charset="utf8" ></script>
+<script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="{% static 'default/js/change.status.js' %}"></script>
+<script type="text/javascript">
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function change_pending_state(verification_id, verify_action, phone_number) {
+        csrftoken = "{{ csrf_token }}";
+        agent_note = $("#id_agent_note").val().trim();
+        monthly_income = $("#id_monthly_income").val();
+        monthly_income = monthly_income ? monthly_income.replace(/[.]/g,'') : '0';
+        if (agent_note){
+            document.getElementById("approve").disabled = true;
+            document.getElementById("refuse").disabled = true;
+        }
+
+        $.ajax({
+            url: "/cfs/change_pending_state",
+            type: "POST",
+            data: {
+                verification_id: verification_id,
+                verify_action: verify_action,
+                phone_number: phone_number,
+                csrfmiddlewaretoken: csrftoken,
+                agent_note: agent_note,
+                monthly_income: monthly_income,
+            },
+            success: function(json) {
+                if (json.result == "success") {
+                    if (verify_action == 'Approve') {
+                        $("#modal_change_pending_state_title").html("Approve Success");
+                        $("#modal_change_pending_state_body").html("Mission <code>" + verification_id + "</code> Approved Succesfully");
+                    } else if (verify_action == 'Refuse') {
+                        $("#modal_change_pending_state_title").html("Refuse Success");
+                        $("#modal_change_pending_state_body").html("Mission <code>" + verification_id + "</code> Refuse Succesfully");
+                    }
+                    $('#modal_change_pending_state').modal('show');
+                    $('#modal_close_link').click(function() {
+                        window.close()
+                    });
+                } else {
+                    if (verify_action == 'Approve') {
+                        $("#modal_change_pending_state_title").html("Approve Failed");
+                    } else {
+                        $("#modal_change_pending_state_title").html("Refuse Failed");
+                    }
+                    $("#modal_change_pending_state_body").html("" + json.reason);
+                    $('#modal_change_pending_state').modal('show');
+                }
+            },
+
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+                $("#modal_change_pending_state_title").html("!! Error !!");
+                $("#modal_change_pending_state_body").html("Error on getting data from server");
+                $('#modal_change_pending_state').modal('show');
+
+                document.getElementById("approve").disabled = false;
+                document.getElementById("refuse").disabled = false;
+            },
+        });
+    }
+
+    function unlock_assignment(id) {
+      is_confirm = confirm('Apakah anda yakin ingin unlock assignment ini?')
+      if(!is_confirm) {
+        return;
+      }
+
+      return $.ajax({
+        url: '{% url 'crm_cfs:assignment_verification.unlock' assignment_verification.id %}',
+        data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        type: 'POST',
+        statusCode: {
+          200: function(response) {
+            window.close()
+          }
+        },
+        error: function(){
+          alert('Terjadi kesalahan pada server saat unlocking.')
+        }
+      });
+    }
+
+    //Disable Right Click
+    $(function() {
+        $(this).bind("contextmenu", function(e) {
+            e.preventDefault();
+        });
+    });
+
+    $(document).on('contextmenu', '.watermarked span', function () {
+      return false;
+    });
+
+    var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+    
+    function setDefaultValue(id_obj, def_value) {
+      $("#"+id_obj).val(def_value);
+    };
+
+    $(document).ready(function(){
+        $("#id_monthly_income").maskMoney({thousands:'.', decimal:',', allowZero: true, suffix: '', precision:0});
+    })
+</script>
+{% endblock %}

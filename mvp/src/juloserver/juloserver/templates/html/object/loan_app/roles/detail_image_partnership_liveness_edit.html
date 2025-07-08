@@ -1,0 +1,82 @@
+{% extends "common/theme1/detail/detail_editor_theme1.html" %}
+{% load model %}
+{% load static from staticfiles %}
+
+{% block css_inside %}
+  .watermarked {
+    overflow: hidden;
+    position: relative;
+  }
+  .watermarked::after {
+    position: inherit;
+    bottom: 50%;
+    display: block;
+    content: attr(data-watermark);
+    opacity: 0.5;
+    color: #fff;
+    font-size: medium;
+    font-weight: normal;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+    line-height: 2;
+    text-transform: uppercase;
+    background: black !important;
+  }
+  .cropper-container.cropper-bg {
+    height: 55vh !important;
+  }
+{% endblock %}
+
+{% block breadcrumb_title %}Data Aplikasi{% endblock %}
+{% block breadcrumb_path %}
+    <li><a href="#">Data Aplikasi</a></li>
+    <li><a href="#">Verifikasi Dokumen</a></li>
+    <li class="active">Image Editor</li>
+{% endblock %}
+
+{% block list_title %}
+  Image Editor - Tipe Dokumen: {{ object.image_type }} - Application ID : {{ application.id }}
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+
+    {% include "object/loan_app/include/image_editor.html" %}
+
+{% endblock %}
+
+
+{% block button_part %}
+  <a href="{%url 'loan_app:roles_detail_img_verification' application.id %}">
+    <button id="back" type="button" class="btn btn-info">
+      <i class="fa fa-back"></i> << Kembali ke Detail Verifikasi
+    </button>
+  </a>
+{% endblock %}
+
+
+{% block script_bottom_inside %}
+  $(function() {
+    $(document).on('DOMNodeInserted', function(e) {
+      $(".cropper-canvas").addClass('watermarked');
+      $(".cropper-canvas").attr("data-watermark", watermark_text);
+      // Prevent right click
+      $(document).on('contextmenu', '.cropper-container', function () {
+        return false;
+      });
+    });
+  });
+
+  var watermark_text = 'INTERNAL USE ONLY ({{ user.id }})'
+
+{% endblock %}
+
+{% block script_additional %}
+
+  <!-- Image cropper JavaScript -->
+  <script src="{% static 'theme/plugins/bower_components/cropper/cropper.min.js' %}"></script>
+  <script src="{% static 'default/js/cropper-init-julo.js' %}"></script>
+  <!-- <script src="{% static 'theme/plugins/bower_components/cropper/cropper-init.js' %}"></script> -->
+
+{% endblock %}

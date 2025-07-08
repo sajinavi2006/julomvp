@@ -1,0 +1,2 @@
+Yth nasabah, mohon lakukan pembayaran {{due_amount}} ke {{julo_bank_name}}: {{virtual_account}} sblm {{due_date}}.
+Cara pembayaran: {{payment_page_url}}.

@@ -1,0 +1,67 @@
+{% load unit %}
+
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Status Rumah</strong> <br>
+    <p class="text-muted">{{ object.home_status|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Ditempati Sejak</strong> <br>
+    <p class="text-muted">
+      {{ object.occupied_since|date:"d M Y"|safe}} - Lama:  
+      {{ object.occupied_since|age|safe}} Tahun
+
+    </p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>No.HP Pemilik Rumah</strong> <br>
+    <p class="text-muted">{{ object.landlord_mobile_phone|no_hp|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> 
+    <strong>Status Pernikahan</strong> <br>
+    <p class="text-muted">{{ object.marital_status|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Jml Tanggungan</strong> <br>
+    <p class="text-muted">{{ object.dependent|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Nama Pasangan</strong> <br>
+    <p class="text-muted">{{ object.spouse_name|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Tgl Lahir Pasangan</strong> <br>
+    <p class="text-muted">
+      {{ object.spouse_dob|date:"d M Y"|default:"-"|safe}} - Usia:  
+      {{ object.spouse_dob|age|safe}} Tahun
+    </p>
+  </div>
+  <div class="col-md-3 col-xs-6"> 
+    <strong>No. HP Pasangan</strong> <br>
+    <p class="text-muted">{{ object.spouse_mobile_phone|no_hp|default:"-"|safe}} - 
+    ada WA ({{object.spouse_has_whatsapp|yesno:"Ya, Tidak"|safe }})
+    </p>
+  </div>
+</div>
+<hr>
+
+<div class="row">
+  <div class="col-md-3 col-xs-6"> <strong>Nama Kerabat</strong> <br>
+    <p class="text-muted">{{ object.kin_name|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> <strong>Tgl Lahir Kerabat</strong> <br>
+    <p class="text-muted">
+      {{ object.kin_dob|date:"d M Y"|default:"-"|safe}}  - Usia:  
+      {{ object.kin_dob|age|safe}} Tahun
+    </p>
+  </div>
+  <div class="col-md-3 col-xs-6 b-r"> <strong>Gender Kerabat</strong> <br>
+    <p class="text-muted">{{ object.kin_gender|default:"-"|safe}}</p>
+  </div>
+  <div class="col-md-3 col-xs-6"> 
+    <strong>No. HP Kerabat</strong> <br>
+    <p class="text-muted">{{ object.kin_mobile_phone|no_hp|default:"-"|safe}} 
+    </p>
+    <br/>
+    <strong>Hubungan Kerabat</strong> <br>
+    <p class="text-muted">{{ object.kin_relationship|default:"-"|safe}}</p>
+  </div>
+</div>
+<hr>

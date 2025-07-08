@@ -1,0 +1,6 @@
+# change_form_help_text.html
+{% extends 'admin/change_form.html' %}
+{#{% block form_top %}#}
+{% block after_field_sets %}
+{% if help_text %}<p style="color:grey"><small>{{ help_text }}</small></p>{% endif %}
+{% endblock %}

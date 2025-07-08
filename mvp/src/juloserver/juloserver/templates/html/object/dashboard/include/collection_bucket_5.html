@@ -1,0 +1,39 @@
+<div class="col-lg-4 col-sm-4 col-xs-12" v-if="bucket.key === 'T101plus' && '{{ role_name }}' === 'collection_bucket_5'">
+  <a :href="bucket.collection_bucket_5_url" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase"><% bucket.name %></h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% collection_dashboard[bucket.key] %></span></li>
+      </ul>
+    </div>
+  </a>
+</div>
+<div class="col-lg-4 col-sm-4 col-xs-12" v-if="bucket.key === 'T101plus' && '{{ role_name }}' === 'collection_supervisor'">
+  <a :href="bucket.collection_bucket_5_supervisor_url" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase"><% bucket.name %></h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% collection_dashboard[bucket.key] %></span></li>
+      </ul>
+    </div>
+  </a>
+</div>
+<div class="col-lg-4 col-sm-4 col-xs-12" v-if="bucket.key === 'T101plus' && '{{ role_name }}' === 'bo_sd_verifier'">
+  <a :href="bucket.collection_bucket_5_bo_sd_verifier_url" target="_blank">
+    <div class="white-box analytics-info">
+      <h3 class="box-title-lowercase"><% bucket.name %></h3><hr>
+      <ul class="list-inline two-part">
+        <li>
+          <i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+        </li>
+        <li class="text-right"><span class="counter text-info"><% collection_dashboard[bucket.key] %></span></li>
+      </ul>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,5 @@
+# files and directories to be ignored when copying to a docker container
+**/__pycache__
+**/*.pyc
+**/.git
+

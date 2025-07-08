@@ -1,0 +1,178 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'plugins/js/selectize/selectize-bootstrap3.css' %}">
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+    .ml5 {
+        margin-left: 5px;
+    }
+    .w100 {
+        width: 190px;
+        vertical-align: top;
+        padding-top: 5px;
+    }
+    .field {
+        width: 300px;
+        display: inline-block;
+    }
+    .grid {
+        display: grid;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .lb-result {
+        font-size: larger;
+    }
+    .center {
+        align-items: center;
+    }
+    .success {
+       color: green;
+    }
+    .failure, .required {
+        color : red
+    }
+</style>
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">OPS Team Leader Status Change</h3>
+</div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+{% block content-list %}
+<form method="post" enctype="multipart/form-data" id="app_status_change">
+    {% csrf_token %}
+     <div class="center mb10">
+        <label class="w100">Application ID <span class="required">*</span></label>
+        <div class="field">
+            {{form.application_field}}
+        </div>
+     </div>
+     <div class="center mb10">
+        <label class="w100">Requesting Agent <span class="required">*</span></label>
+        <div class="field">
+            {{form.agent_field}}
+        </div>
+     </div>
+     <div class="center mb10">
+        <label class="w100">Change Status To <span class="required">*</span></label>
+        <div class="field">
+            {{form.status_field}}
+        </div>
+     </div>
+    <div class="center mb10">
+        <label class="w100">Change Reason <span class="required">*</span></label>
+        <div class="field">
+            {{form.reason_field}}
+        </div>
+    </div>
+    <div class="center mb10">
+        <label class="w100">Change Reason Detail <span class="required">*</span></label>
+        <div class="field">
+            {{form.reason_detail_field}}
+        </div>
+    </div>
+    {{form.hidden_raw_field}}
+    <button class="mb10 btn btn-info" type="submit">submit</button>
+</form>
+
+{% endblock %}
+
+{% block script_bottom %}
+    <script src="{% static 'plugins/js/selectize/selectize.js' %}"></script>
+    <script>
+        {% for message in messages %}
+            swal({
+                title: "{% if message.tags == 'success' %}Sukses{% else %}Failed{% endif %} !",   
+                text: "{{ message }}",
+                type: "{{ message.tags }}"
+            });
+        {% endfor %}
+
+        var csrfmiddlewaretoken = $("input[name=csrfmiddlewaretoken]").val();
+        var baseRaw = $("input[name=hidden_raw_field]").val();
+        var options = [];
+        var baseId = 0;
+
+        if (baseRaw != "") {
+            options = [JSON.parse(baseRaw)];
+            baseId = options[0]["user__id"];
+        }
+
+        $('#id_reason_field').selectize();
+        var $select = $('#id_agent_field').selectize({
+            valueField: 'user__id',
+            searchField: 'user__username',  
+            create: false,
+            options: options,
+            render: {
+                option: function(data, escape) {
+                    return '<div class="option">' +
+                            '<span class="title">' + escape(data.user__first_name) + ' ' + escape(data.user__last_name) +
+                            ' (' + escape(data.user__username) + ')</span>' +
+                        '</div>';
+                },
+                item: function(data, escape) {
+                    return '<div class="item agent-selected-item" data_username="'+escape(data.user__username)+'" data_first_name="'+escape(data.user__first_name)+'" data_last_name="'+escape(data.user__last_name)+'">' +
+                                escape(data.user__first_name) + ' ' + escape(data.user__last_name) +
+                                ' (' + escape(data.user__username) + ')</div>';
+                }
+            },
+            load: function(query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: "{% url 'dashboard:ajax_ops_team_leader_get_agent' %}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        q: query,
+                        csrfmiddlewaretoken: csrfmiddlewaretoken
+                    },
+                    error: function() {
+                        callback();
+                    },
+                    success: function(res) {
+                        callback(res.agents);
+                    }
+                });
+            },
+            onChange: function(value) {
+                selected = $(".agent-selected-item");
+                values = {
+                    'user__id': value,
+                    'user__username': selected.attr('data_username'),
+                    'user__first_name': selected.attr('data_first_name'),
+                    'user__last_name': selected.attr('data_last_name')
+                };
+
+                $("input[name=hidden_raw_field]").val( JSON.stringify( values ) );
+            }
+        });
+
+        $(".ops-team-lead-control").prop('required',true);
+        $("select.selectized").prop('required',true);
+        
+        var control = $select[0].selectize;
+        control.setValue(baseId);
+    </script>
+{% endblock %}

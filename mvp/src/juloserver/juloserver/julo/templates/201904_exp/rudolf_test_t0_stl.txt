@@ -1,0 +1,1 @@
+{{name}}, kembali Rudolf dr JULO. Pinjaman Anda {{due_amount}} telah jatuh tempo. Segera bayar sebelum perhitungan biaya dan denda berlaku. Cara bayar: {{url}}

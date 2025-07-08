@@ -1,0 +1,539 @@
+{% load utils %}
+{% load format_date %}
+{% load currency %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/custom.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/regular.css">
+    <link rel="stylesheet" href="https://julo.co.id/assets/css/all.css">
+    <style type="text/css">
+        div#preloader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 999;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        {#background: #333 url('/assets/images/loading.gif') no-repeat center center;#}
+
+        }
+
+        .payment-detail2 {
+            margin: auto;
+            padding: 20px 10px;
+            font-size: 16px;
+        }
+
+        .small-text {
+            margin-top: 2px;
+            font-size: 14px;
+            color: #5e5e5e;
+        }
+
+        .no-space {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .less-space {
+            padding-left: 5px;
+            padding-right: 0px;
+        }
+        .jumbotron{
+            margin-top:-55px;
+        }
+
+
+        @media only screen and (max-width: 500px) {
+            .payment-value {
+                font-size: 13px;
+            }
+
+            .small-text {
+                font-size: 10px;
+            }
+
+            .payment-detail2 {
+                padding: 10px 5px;
+            }
+
+            .alert-text {
+                font-size: 10px !important;
+            }
+
+            .card-text {
+                font-size: 11px !important;
+            }
+            .jumbotron{
+                margin-top: 0px;
+            }
+        }
+
+        .product_2, .product_1 {
+            background-color: #C6CBDA
+        }
+
+        .product_2_body, .product_1_body {
+            background-color: #F1F1F1
+        }
+
+        .blue {
+            background-color: rgb(10, 172, 239)
+        }
+
+        .white {
+            background-color: white;
+        }
+
+        .header h4 {
+            display: none;
+        }
+
+        .mt15 {
+            margin-top: 15px;
+        }
+
+        .phonenumber-one {
+                margin-left:44px;
+                margin-bottom: 0px;
+            }
+
+        .phonenumber-two {
+                margin-left:106px;
+                margin-bottom: 0px;
+            }
+
+        .phonenumber-three {
+                margin-left:106px;
+            }
+
+        .email {
+            margin-left: 53px;
+        }
+
+        .whatsapp {
+                margin-left: 15px;
+            }
+
+        @media only screen and (max-width: 768px) {
+            .header {
+                display: block;
+            }
+
+            .header h2 {
+                display: none;
+            }
+
+            .header h4 {
+                width: calc(100% - 85px);
+                display: inline-block;
+                font-size: 10px;
+                color: white;
+            }
+            .container.header{
+                padding-top: 15px;
+            }
+
+            .jumbotron .logo {
+                width: 85px;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            .header h4 {
+                float: right !important;
+            }
+            .jumbotron {
+                padding: 0.5rem 0.5rem !important;
+                margin-top: 0px;
+            }
+            .phonenumber-one {
+                margin-left:36px;
+                margin-bottom: 0px;
+            }
+            .phonenumber-two {
+                margin-left:83px;
+                margin-bottom: 0px;
+            }
+            .phonenumber-three {
+                margin-left:83px;
+            }
+            .email {
+                margin-left: 43px;
+            }
+            .whatsapp {
+                margin-left: 15px;
+            }
+            .text-size {
+                font-size: 11px;
+            }
+        }
+
+    </style>
+
+    <title>julo</title>
+</head>
+
+<body>
+
+<div class="jumbotron">
+    <div class="logo"><img src="https://julo.co.id/assets/img/logo-primary.png"/></div>
+    <div class="container header">
+        <h2 style="text-align: right; margin-bottom:-45px;">{{ fullname }}</h2>
+        <h4 style="text-align: right">{{ fullname }}</h4>
+        <h2 style="text-align: right">{{ email }}</h2>
+        <h4 style="text-align: right">{{ email }}</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table" style="table-layout: fixed; width: 100%">
+            <tr>
+                <td class="card-text" style="text-align: left;">Sisa hutang Anda di JULO</td>
+                <td class="card-text" style="text-align: right;">
+                    <strong>{{ all_outstanding_amount }}</strong>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <p style="text-align: left; margin-left: 11px;" class="text-size">
+            <strong>Pilih keringanan di bawah yang sesuai dengan kebutuhan Anda:</strong>
+        </p>
+    </div>
+</div>
+<div id="summary_content">
+    <div class="container">
+        <div class="billing-container">
+            <div class="container">
+                <div class="row">
+                    <form id="offerForm" action="{{ url }}" method="post">
+                    {% csrf_token %}
+                        <fieldset class="form-group">
+                            <div class="row">
+                                {% for recommendation_offer in recommendation_offers %}
+                                    {% if recommendation_offer.category == "waiver"%}
+                                        <div class="col-sm-6">
+                                            <label class="form-check-label mt15"
+                                                for="gridRadios{{ recommendation_offer.index }}">
+                                                <div class="card product_{{ recommendation_offer.index }}">
+                                                    <div class="form-check"
+                                                        style="margin-left: 4%; margin-top: 2%;">
+                                                        <input class="form-check-input" type="radio" name="product_type"
+                                                            id="gridRadios{{ recommendation_offer.index }}"
+                                                            value="{{ recommendation_offer.product }}" data-index="{{ recommendation_offer.index }}">
+                                                        <input type="hidden" name="product_id_{{ recommendation_offer.index }}" value="{{ recommendation_offer.id }}">
+                                                        <p style="margin-top: 0.9%">{{ recommendation_offer.product_name }}</p>
+                                                    </div>
+                                                    <div class="card-body product_{{ recommendation_offer.index }}_body">
+                                                        <table class="table" style="table-layout: fixed; width: 100%">
+                                                            <tr style="background-color: skyblue;">
+                                                                <td class="card-text" style="text-align: left;">{{ recommendation_offer.wording_product }}</td>
+                                                                <td class="card-text" style="text-align: right;">
+                                                                    <s style='color:red;'>
+                                                                        <span style='color:black'>
+                                                                            <strong>{{ recommendation_offer.total_payments }}</strong>
+                                                                        </span>
+                                                                    </s>
+                                                                    <br>
+                                                                    <span style='color:red;'>
+                                                                        <strong>{{ recommendation_offer.prerequisite_amount }}</strong>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <span style='color:red;'>
+                                                            <p class="card-text">Bayar <strong>{{ recommendation_offer.prerequisite_amount }}</strong> dalam 5 hari dan
+                                                             {% if recommendation_offer.product == "R4" %}
+                                                                 Anda <strong>BEBAS HUTANG</strong>
+                                                             {% else %}
+                                                                 sisa angsuran yang sudah jatuh tempo <strong>LUNAS</strong>
+                                                             {% endif %}
+                                                            </p>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-sm-6">
+                                            <label class="form-check-label mt15"
+                                                for="gridRadios{{ recommendation_offer.index }}">
+                                                <div class="card product_{{ recommendation_offer.index }}">
+                                                    <div class="form-check"
+                                                        style="margin-left: 4%; margin-top: 2%;">
+                                                        <input class="form-check-input" type="radio" name="product_type"
+                                                            id="gridRadios{{ recommendation_offer.index }}"
+                                                            value="{{ recommendation_offer.product }}" data-index="{{ recommendation_offer.index }}" required>
+                                                        <input type="hidden" name="product_id_{{ recommendation_offer.index }}" value="{{ recommendation_offer.id }}">
+                                                        <p style="margin-top: 0.9%">{{ recommendation_offer.product_name }}</p>
+                                                    </div>
+                                                    <div class="card-body product_{{ recommendation_offer.index }}_body table-responsive">
+                                                        <table class="table" style="table-layout: fixed; width: 100%">
+                                                            <tr style="background-color: skyblue;">
+                                                                <td class="card-text" style="text-align: left;">Cicilan per bulan</td>
+                                                                <td class="card-text" style="text-align: right;">
+                                                                    <s style='color:red;'>
+                                                                        <span style='color:black'>
+                                                                            <strong>{{ recommendation_offer.loan_investment }}</strong>
+                                                                        </span>
+                                                                    </s>
+                                                                    <br>
+                                                                    <span style='color:red;'>
+                                                                        <strong>{{ recommendation_offer.prerequisite_amount }}</strong>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                        <table class="table" style="table-layout: fixed; width: 100%">
+                                                            <tr>
+                                                                <th scope="col" class="card-text" style="text-align: center">
+                                                                    Angsuran
+                                                                </th>
+                                                                <th scope="col" class="card-text" style="text-align: center">
+                                                                    Jatuh Tempo
+                                                                </th>
+                                                                <th scope="col" class="card-text" style="text-align: center">
+                                                                    Cicilan
+                                                                </th>
+                                                            </tr>
+                                                            {% for payment in recommendation_offer.payments %}
+                                                                <tr>
+                                                                    <td class="card-text" style="text-align: center">
+                                                                        {{ payment.payment_number }}
+                                                                    </td>
+                                                                    <td class="card-text" style="text-align: center">
+                                                                        {{ payment.due_date|format_date_to_locale_format }}
+                                                                    </td>
+                                                                    <td class="card-text" style="text-align: left">
+                                                                        {{ payment.due_amount|add_rupiah_and_separator_with_dot }}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            <tr style="font-weight: bold;">
+                                                                <td colspan="2" class="card-text" style="text-align: right">
+                                                                    Total :
+                                                                </td>
+                                                                <td class="card-text" style="text-align: left">
+                                                                    {{ recommendation_offer.total_payments }}
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <span style='color:red;'>
+                                                            <p>
+                                                                Angsuran #{{ recommendation_offer.first_payment_number }} di atas sebesar <strong>{{ recommendation_offer.prerequisite_amount }}
+                                                                </strong> wajib dibayar dalam 5 hari
+                                                            </p>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                        <br>
+                        <div style="background-color: #FDEFEE; border-top: solid #E2574C">
+                            <p class="alert-text" style="text-align: center; color: #E2574C">
+                                PENTING, segera lakukan pilihan dan pembayaran dalam 5 hari. Jika tidak, kesempatan akan hilang.
+                            </p>
+                        </div>
+                        <div class="form-check">
+                            <input name="term_and_agreement_1" class="form-check-input" type="checkbox" value="" id="term-and-agreement-1" required>
+                            <label class="form-check-label" for="term-and-agreement-1">
+                                <p>Saya paham bahwa saya wajib melakukan pembayaran sesuai dengan pilihan keringanan di atas, selambat-lambatnya dalam 5 hari.</p>
+                            </label>
+                        </div>
+                        <div class="form-check" style="margin-top: 10px;">
+                            <input name="term_and_agreement_2" class="form-check-input" type="checkbox" value="" id="term-and-agreement-2" required>
+                            <label class="form-check-label" for="term-and-agreement-2">
+                                <p>Saya paham bahwa jika pembayaran tidak dilakukan dalam 5 hari, program keringanan hutang di atas akan hilang.</p>
+                            </label>
+                        </div>
+                        <button type="button" class="btn confirm-btn-modal"
+                                style="background-color: #08ACF0; width: 100%; color: white;
+                                margin-top: 20px;">
+                            Lanjutkan
+                        </button>
+                    </form>
+                    <div class="warning-text">
+
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="confirmation" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+
+                                <div class="modal-body confirm-modal">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            <br/>
+                            Apabila ada pertanyaan lebih lanjut, silahkan hubungi JULO customer care melalui:
+                            <br/><br/>Telpon: <label class="phonenumber-one">021-5091-9036</label>
+                            <br/><label class="phonenumber-two">021-5091-9037</label>
+                            <br/>Email: <label class="email" ><a href="mailto:collections@julo.co.id">collections@julo.co.id</a></label>
+                            <br/>Whatsapp: <label class="whatsapp" >0813-1778-2065</label>
+                            <br/><br/> Terima kasih {{fullname_with_title}}, dan tetap sehat #DiRumahAja.
+                            <br/><br/>PT. JULO Teknologi Finansial
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+        </div>
+    </div>
+
+    <div class="footer-top">
+        <div class="logo-footer">
+            <img src="https://julo.co.id/assets/img/julo-primary-logo-blue.png"/>
+        </div>
+        <div class="copyright">
+            <p>
+                © Copyright 2021 PT JULO Teknologi Finansial - All Rights Reserved
+            </p>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-area">
+
+            <div class="footer-conent">
+                <p>PT. JULO TEKNOLOGI FINANSIAL merupakan perusahaan penyedia layanan pinjaman online yang terdaftar dan
+                    berada dalam pengawasan oleh Otoritas Jasa Keuangan (OJK) dengan nomor registrasi S-589/NB.213/2018
+                    sesuai dengan Hukum Republik Indonesia dan Peraturan Otoritas Jasa Keuangan nomor 77/POJK.01/2016.
+                    Oleh karena itu,
+                    PT JULO TEKNOLOGI FINANSIAL berkomitmen untuk menjunjung tinggi integritas dan melaksanakan
+                    perlindungan konsumen sesuai dengan hukum yang berlaku.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Button trigger modal -->
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://julo.co.id/assets/script/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://julo.co.id/assets/script/bootstrap.min.js"></script>
+    <script src="https://julo.co.id/assets/script/popper.min.js"></script>
+    <script type="application/javascript">
+        $(document).ready(() => {
+            $("input[type='radio']").change(() => {
+                $(".warning-text").empty();
+                let radioIndex = $("input[name='product_type']:checked").data('index');
+                if (radioIndex == 1) {
+                    $('.product_1').addClass("blue")
+                    $('.product_1_body').addClass("white")
+                    $('.product_2').removeClass("blue")
+                    $('.product_2').removeClass("white")
+                } else if (radioIndex == 2) {
+                    $('.product_2').addClass("blue");
+                    $('.product_2_body').addClass("white");
+                    $('.product_1').removeClass("blue");
+                    $('.product_1').removeClass("white");
+                }
+            });
+        });
+        $(".confirm-btn-modal").click(function (e) {
+            $(".warning-text").empty();
+            $(".confirm-modal").empty();
+            let radioValue = $("input[name='product_type']:checked").val();
+            if (validationProgramData() == false) {
+                return false;
+            }
+            var product = 'Pembayaran pinjaman dengan diskon'
+            if (radioValue == 'R1') {
+                product = 'Perpanjangan cicilan dengan detail angsuran baru'
+            }
+            else if (radioValue == 'R2'){
+                product = 'Perpanjangan Angsuran dengan Biaya bunga'
+            }
+            else if (radioValue == 'R3'){
+                product = 'Perpanjangan Angsuran dengan Biaya Admin'
+            }
+            else if (radioValue == 'R4') {
+                product = 'Pelunasan Pinjaman dengan diskon bunga'
+            }
+            else if (radioValue == 'R5') {
+                product = 'Pembayaran Pinjaman dengan diskon denda'
+            }
+            else if (radioValue == 'R6') {
+                product = 'Pembayaran Pinjaman dengan diskon bunga dan denda'
+            }
+            var modalContents = '<p style="font-size: 15px; text-align: center"><strong>Apakah anda yakin?</strong></p>' +
+                `<p>Metode yang anda pilih untuk meringankan cicilan adalah <b>${product}</b></p>` +
+                '<button type="button" class="btn setuju-btn"style="background-color: #08ACF0; width: 100%; color: white" onclick="submitForm()">Setuju</button>' +
+                '<button type="button" class="btn kembali-btn" data-dismiss="modal" style="background-color: white; width: 100%; color: #08ACF0; border: solid #DCE3E6; margin-top: 9px">Kembali</button>'
+
+            $(".confirm-modal").append(modalContents);
+            $('#confirmation').modal('show');
+
+        });
+
+        function submitForm() {
+            $(".warning-text").empty()
+            let radioValue = $("input[name='product_type']:checked").val();
+            let radioIndex = $("input[name='product_type']:checked").data('index');
+
+            if (validationProgramData() == false) {
+                return false;
+            }
+            if (radioIndex == 1) {
+                $("input[name='product_id_2']").val(0);
+            } else {
+                $("input[name='product_id_1']").val(0);
+            }
+            $('#offerForm').submit()
+        }
+
+        function addWarning() {
+            $(".warning-text").append('<p style="font-size: 15px; color: #E2574C; text-align: center"><strong>Pilih salah satu keringanan !</strong></p>');
+        }
+
+        function validationProgramData() {
+            need_pay_check = $("input[name=term_and_agreement_1]").prop('checked');
+            if (need_pay_check == false) {
+                $(".warning-text").append('<p style="font-size: 15px; color: #E2574C; text-align: center"><strong>Anda Wajib menyatakan bahwa Anda akan membayar paling lambat 5 hari kedepan !</strong></p>');
+                return false;
+            }
+            expired_check = $("input[name=term_and_agreement_2]").prop('checked');
+            if (expired_check == false) {
+                $(".warning-text").append('<p style="font-size: 15px; color: #E2574C; text-align: center"><strong>Anda Wajib mencentang pernyataan bahwa jika tidak segera melakukan pembayaran sesuai dengan ketentuan, kesempatan yang saya dapatkan akan hilang !</strong></p>');
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+</body>
+
+</html>

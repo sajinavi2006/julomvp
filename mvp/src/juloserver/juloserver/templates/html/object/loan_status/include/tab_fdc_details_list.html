@@ -1,0 +1,37 @@
+{% load default unit %}
+<div>
+  <transition name="fade">
+    <div class="loading-call-history" v-show="fdc_call_loading">
+      <span class="fa fa-spinner fa-spin"></span> Loading
+      </div>
+  </transition>
+  <table id="demo-foo-paginations"  class="table m-b-0 toggle-arrow-tiny" data-page-size="25">
+      <thead>
+          <tr>
+              <th ><small>No</small></th>
+              <th ><small>ID Penyelenggara</small></th>
+              <th ><small>Penyelenggara</small></th>
+              <th ><small>Sisa Pinjaman Berjalan</small></th>
+              <th ><small>Jatuh Tempo</small></th>
+              <th><small>Updated Date</small></th>
+          </tr>
+      </thead>
+      <tbody v-for="(item, index) in FDCSummary" :key="index" v-if="FDCSummary.length > 0">
+          <tr>
+              <td><small>[[index + 1]]</small></td>
+              <td><small>[[item.id_penyelenggara]]</small></td>
+              <td><small>[[item.penyelenggara]]</small></td>
+              <td><small>[[item.sisa_pinjaman_berjalan]]</small></td>
+              <td><small>[[item.tgl_jatuh_tempo_pinjaman]]</small></td>
+              <td><small>[[item.cdate]]</small></td>
+          </tr>
+      </tbody>
+      <tbody v-if="FDCSummary.length == 0">
+          <tr>
+              <td colspan="6">
+                  <small><code>-- Tidak ada data --</code></small>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>

@@ -1,0 +1,223 @@
+{% load utils %}
+{% load format_date %}
+{% load currency %}
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="id" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" style="color-scheme: light dark;">
+<head>
+  <meta charset="utf-8">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings xmlns:o="urn:schemas-microsoft-com:office:office">
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <style>
+    td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
+  </style>
+  <![endif]-->
+  <style>:root {
+  color-scheme: light dark;
+}
+@media (max-width: 600px) {
+  .sm-w-full {
+    width: 100% !important;
+  }
+  .sm-px-6 {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  .sm-py-8 {
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
+  }
+  .sm-pl-2 {
+    padding-left: 10px !important;
+  }
+  .sm-pr-2 {
+    padding-right: 10px !important;
+  }
+  .sm-p-2 {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .sm-text-sm {
+    font-size: 14px !important;
+  }
+  .sm-text-xss{
+    font-size: 10px !important;
+    line-height: 12px !important;
+  }
+}
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    @font-face {
+      font-family: 'Nunito';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/nunito/v25/XRXV3I6Li01BKofINeaBTMnFcQ.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }</style></head>
+<body style="-webkit-font-smoothing: antialiased; word-break: break-word; margin: 0; width: 100%; background-color: #f8fafc; padding: 0">
+  <div role="article" aria-roledescription="email" aria-label lang="en">    <table style="width: 100%; font-family: Nunito, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" cellpadding="0" cellspacing="0" role="presentation">
+      <tr>
+        <td align="center" style="background-color: #e7e7e7; background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); --tw-gradient-from: #008fc7; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); --tw-gradient-to: #008AC0; color: #404040">
+          <table class="sm-w-full" style="width: 640px" cellpadding="0" cellspacing="0" role="presentation">
+            <tr>
+              <td class="sm-py-8 sm-px-6" style="padding: 48px; padding-bottom: 32px; text-align: center">
+              </td>
+            </tr>
+            <tr>
+              <td align="center">
+  <table style="width: 100%" cellpadding="0" cellspacing="0" role="presentation">
+    <tr>
+      <td style="border-radius: 16px; background-color: #fff; font-size: 16px; line-height: 24px">                <img src="https://www.julo.co.id/sites/default/files/newsletter/newsletterbanner/refinancing-discount-banner.png" width="640" alt="JULO" style="border: 0; max-width: 100%; vertical-align: middle">
+                <table style="width: 100%" cellpadding="0" cellspacing="0" role="presentation">
+                  <tr>
+                    <td class="sm-p-2" colspan="2" style="padding: 10px">
+                      <table style="width: 100%" cellpadding="0" cellspacing="0" role="presentation">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <p class="sm-text-sm" style="font-size: 16px; font-weight: 700">
+                                <strong>Halo {{ fullname_with_title }},</strong>
+                              </p>
+                              <p class="sm-text-sm" style="font-size: 16px">
+                                Selamat, kamu terpilih sebagai pelanggan JULO yang beruntung untuk dapatkan program <strong>Pengurangan Cicilan!</strong>
+                              </p>
+                              <p class="sm-text-sm" style="margin-bottom: 0; font-size: 16px">
+                                Kami akan menerapkan skema pembayaran baru yang lebih ringan untuk kamu sebagai berikut:
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="sm-pl-2" style="width: 50%; padding-left: 10px; text-align: center;vertical-align: top;">
+                      <table style="width: 100%" cellpadding="1" cellspacing="1" role="presentation">
+                        <tbody>
+                            <tr>
+                                <td style="background-color: #DB4D3D; padding-top: 8px; padding-bottom: 8px; font-weight: 700; color: #fff; text-align: center;">TAGIHAN LAMA</td>
+                                <td style="background-color: #DB4D3D; padding-top: 8px; padding-bottom: 8px; font-weight: 700; color: #fff; text-align: center;">JATUH TEMPO</td>
+                            </tr>
+                            {% for payment in old_payments %}
+                            <tr>
+                                <td class="sm-text-xss" style="background-color: #F7D8D4; font-size: 12px; font-weight: 700; color: #404040;height:35px; text-align: center;">
+                                  {% if payment.due_amount %}
+                                    {{ payment.due_amount|add_rupiah_and_separator }}
+                                  {% else %}
+                                    <span style="color: transparent">{{ payment.due_amount|add_rupiah_and_separator }}</span>
+                                  {% endif %}
+                                </td>
+                                <td class="sm-text-xss" style="background-color: #F7D8D4; font-size: 12px; font-weight: 700; color: #404040;height:35px; text-align: center;">
+                                  {% if payment.due_date %}
+                                    {{ payment.due_date|format_date_to_locale_format }}
+                                  {% else %}
+                                    <span style="color: transparent">{{ payment.due_date|format_date_to_locale_format }}</span>
+                                  {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                    </td>
+                    <td class="sm-pr-2" style="padding-right: 10px; text-align: center;vertical-align: top;">
+                      <table style="width: 100%" cellpadding="1" cellspacing="1" role="presentation">
+                        <tbody>
+                            <tr>
+                                <td style="background-color: #00ACF0; padding-top: 8px; padding-bottom: 8px; font-weight: 700; color: #fff; text-align: center;">TAGIHAN BARU</td>
+                                <td style="background-color: #00ACF0; padding-top: 8px; padding-bottom: 8px; font-weight: 700; color: #fff; text-align: center;">JATUH TEMPO</td>
+                            </tr>
+                            {% for payment in new_payments %}
+                            <tr>
+                                <td class="sm-text-xss" style="background-color: #B2E6FA; font-size: 12px; font-weight: 700; color: #404040;height:35px; text-align: center;">
+                                  {{ payment.due_amount|add_rupiah_and_separator }}
+                                </td>
+                                <td class="sm-text-xss" style="background-color: #B2E6FA; font-size: 12px; font-weight: 700; color: #404040;height:35px; text-align: center;">
+                                  {{ payment.due_date|format_date_to_locale_format }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="sm-p-2" colspan="2" style="padding-left: 10px; padding-right: 10px;padding-bottom: 10px;">
+                      <table style="width: 100%" cellpadding="0" cellspacing="0" role="presentation">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <p class="sm-text-sm" style="margin-bottom: 4px; font-size: 16px">
+                                Jika kamu ingin keluar dari kesempatan emas ini, kamu bisa <a href="https://www.julo.co.id/refinancing-10-66?in_app=true" style="color: #00ACF0">klik disini</a>
+                              </p>
+                              <p style="margin-top: 0; font-size: 11px">
+                                Program spesial ini akan digunakan secara otomatis jika kamu tidak klik link di atas dalam 24 jam.
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="sm-p-2" colspan="2" style="background-color: #00ACF0; padding: 10px">
+                      <table style="width: 100%" cellpadding="0" cellspacing="0" role="presentation">
+                        <tbody>
+                          <tr>
+                            <td rowspan="2" style="text-align: left; font-size: 16px; color: #fff">
+                                <p style="margin: 0; font-size: 14px; font-weight: 700">Informasi Kontak:</p>
+                                <p style="margin: 0; font-size: 10px; line-height: 16px"><img width="14" height="14" src="https://www.julo.co.id/sites/default/files/newsletter/ic-mail.png" style="margin-right: 2px; vertical-align: middle" alt> <a href="mailto:collections@julo.co.id" style="color:white; text-decoration:none;">collections@julo.co.id</a></p>
+                                <p style="margin: 0; font-size: 10px; line-height: 16px"><img width="14" height="14" src="https://www.julo.co.id/sites/default/files/newsletter/ic-pusat-bantuan.png" style="margin-right: 4px; vertical-align: middle" alt>021-5091-9036</p>
+                                <p style="margin: 0; font-size: 10px; line-height: 16px"><img width="14" height="14" src="https://www.julo.co.id/sites/default/files/newsletter/ic-pusat-bantuan.png" style="opacity:0; margin-right: 4px; vertical-align: middle" alt>021-5091-9037</p>
+                            </td>
+                            <td rowspan="2" style="text-align: right; vertical-align: top; font-size: 16px; color: #fff" valign="top">
+                                <p style="margin: 0; font-size: 14px; font-weight: 700">PT Julo Teknologi Finansial</p>
+                                <p style="margin: 0; font-size: 10px; line-height: 16px">88@Kasablanka Tower A Lantai 5.</p>
+                                <p style="margin: 0; font-size: 10px; line-height: 16px">Jl. Casablanca Raya Kav.88,</p>
+                                <p style="margin: 0; font-size: 10px; line-height: 16px">Jakarta Selatan 12870</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="sm-p-2" colspan="2" style="background-color: #00ACF0; text-align:right; padding-right: 10px; padding-bottom: 13px; color:white; font-size:10px;">©Copyright PT JULO Teknologi Finansial - All Rights Reserved</td>
+                  </tr>
+                </table>      
+              </td>
+    </tr>
+  </table>
+</td>
+            </tr>
+            <tr role="separator">
+              <td style="height: 20px"></td>
+            </tr>
+            <tr role="separator">
+              <td style="height: 20px"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>  </div>
+</body>
+<script src="{% static 'plugins/js/refinancing/jquery-3.3.1.slim.min.js' %}"></script>
+<script src="{% static 'plugins/js/refinancing/jquery.min.js' %}"></script>
+</html>

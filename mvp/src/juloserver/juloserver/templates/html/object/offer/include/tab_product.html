@@ -1,0 +1,88 @@
+{% load unit utils %}
+
+<table>
+  <tr>
+    <td class='m-r-10'>
+      Product ID
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.product_code|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10'>
+      Product Name
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong> {{ object.product_name|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Interest Rate
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.interest_rate|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Payment Frequency
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.payment_frequency|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Original Fee PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.origination_fee_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  
+  <tr>
+    <td class='m-r-10'>
+      Cashback Initial PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.cashback_initial_pct|default:"-"|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Cashback Payment PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.cashback_payment_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      Late Fee PCT
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.late_fee_pct|default:"-"|safe}}</strong>
+    </td>
+  </tr>
+  <tr>
+    <td class='m-r-10 m-t-10 m-b-10'>
+      is Active
+    </td>
+    <td>
+      &nbsp;&nbsp;<icon class='fa fa-arrow-circle-o-right fa-fw'></icon>
+      <strong>{{ object.is_active|yesno:"Ya, Tidak"|safe}}</strong>
+    </td>
+  </tr>
+
+</table>

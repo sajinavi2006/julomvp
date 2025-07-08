@@ -1,0 +1,1208 @@
+{% extends "common/theme1/list/list_footable_theme1.html" %}
+{% load template %}
+{% load currency %}
+{% load format_date %}
+
+{% load model %}
+
+{% load static from staticfiles %}
+
+{% block breadcrumb_title %}{% endblock %}
+{% block breadcrumb_path %}
+{% endblock %}
+{% block custom_css %}
+<style type="text/css">
+    .flex {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .mb10 {
+        margin-bottom: 10px;
+    }
+
+    .ml5 {
+        margin-left: 5px;
+    }
+
+    .w100 {
+        width: 100px;
+    }
+
+    .w170 {
+        width: 170px;
+    }
+
+    .w15 {
+        width: 20px;
+    }
+
+    .w200 {
+        width: 200px;
+    }
+
+    .grid {
+        display: grid;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .lb-result {
+        font-size: larger;
+    }
+
+    .center {
+        align-items: center;
+    }
+
+    .no-border {
+        border-top: 0;
+        border-right: 0;
+        border-left: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        font-weight: bold;
+        color: #67717F;
+    }
+
+    .dot-false {
+        height: 15px;
+        width: 15px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .dot-true {
+        height: 15px;
+        width: 15px;
+        background-color: #5AD3A6;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .txt-align {
+        padding: 10px;
+    }
+
+    .txt-blue {
+        color: blue;
+    }
+
+    .error-msg {
+        border: 1px solid red;
+    }
+
+    .container {
+        width: 90% !important;
+    }
+
+    .border-grey {
+        border-right: 10px solid #cccccc
+    }
+
+    .border-blue {
+        border: 5px solid #33C4FF;
+    }
+
+    .left-div-bg {
+        height: 40px !important;
+        background-color: #cccccc !important;
+        font-size: 14px !important;
+        padding: 10px !important;
+        font-weight: bold !important;
+        line-height: 16px !important;
+        font-color: #000000 !important;
+    }
+
+    .text-left {
+        font-size: 12px !important;
+        ;
+        font-weight: bold !important;
+        padding-left: 15px !important;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+        font-color: #000000 !important;
+        line-height: 14px !important;
+    }
+
+    .text-right {
+        font-size: 12px;
+        padding-left: 15px !important;
+        text-align: left;
+        font-color: #000000 !important;
+        line-height: 14px !important;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
+
+    .box-padding {
+        padding-bottom: 30px;
+    }
+
+    .box-row-ht {
+        height: 25px !important;
+    }
+
+    .small-text {
+        font-size: 8px !important;
+        ;
+    }
+
+    .right-div-bg-top,
+    .right-div-bg-bottom {
+        height: 40px !important;
+        background-color: #AB8CE4 !important;
+        font-size: 14px !important;
+        padding: 10px !important;
+        font-weight: bold !important;
+        line-height: 16px !important;
+        color: white !important;
+        text-align: center;
+    }
+
+    .right-div-bg-bottom {
+        background-color: #AB8BE4 !important;
+        font-color: white !important;
+    }
+
+    .align-middle {
+        text-align: center !important;
+    }
+
+    .align-left {
+        text-align: left !important;
+    }
+
+    .align-right {
+        text-align: right !important;
+        padding-right: 10px !important;
+    }
+
+    .align-right_txt {
+        text-align: right !important;
+        padding-right: 2% !important;
+    }
+
+    .loading-div,
+    .loading-div_simulasi {
+        background: gray none repeat scroll 0 0;
+        display: inline;
+        height: 500px;
+        left: 0;
+        opacity: 0.20;
+        position: absolute;
+        width: 100%;
+        z-index: 999;
+    }
+
+    #loading-div>img,
+    #loading-div_simulasi>img {
+        left: 30%;
+        position: absolute;
+        top: 50px;
+    }
+
+    .existing_offer_modal {
+        width: 90% !important;
+    }
+
+    .btn-circle-portal {
+        background-color: #AB8CE4;
+        border: none;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 33px 2px;
+        border-radius: 8px;
+        width: 35%;
+    }
+
+    .multiple-ptp-payment-table tbody tr td,
+    .multiple-ptp-payment-table tfoot tr td {
+        padding: 8px 40px;
+    }
+
+    .edit-link {
+        display: inline-block;
+        color: #337ab7;
+        font-weight: bold;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .multiple-ptp-payment-message {
+        display: inline-block;
+        color: #E2574C;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+
+    .max_cap_rule_content {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.2em;
+        grid-gap: .6em;
+    }
+
+    .refinancing-rule-icon {
+        margin-right: 1em;
+    }
+
+    .fa-check-circle {
+        color: green;
+    }
+
+    .refinancing-rule-message,
+    .fa-times-circle-o {
+        color: red;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+{% endblock %}
+
+{% block list_title %}
+<div style="border-bottom: 1px solid;">
+    <h3 class="box-title m-b-0">Collection Offer Recommendations (APPROVAL)</h3>
+</div>
+{% endblock %}
+{% block list_subtitle %}{% endblock %}
+
+
+{% block content-list %}
+<div class="loading-div" style="display:none;padding-left:30px;min-height:800px;" id="loading-div"><img
+        src="{% static 'images/collections/ajax-loader.gif' %}"></div>
+<div class="row">
+    <div class="col-md-4">
+        <form method="get" id="frm_search_account">
+            <div class="center flex">
+                <label class="w100">Account ID:</label>
+                <div style="width: 200px;">
+                    <input type="text" class="form-control" name="account_id" id="account_id" value="{{ account_id }}"
+                        maxlength="15" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+                </div>
+                <div style="width: 200px;">
+                    &nbsp;&nbsp;<button type="button" class="btn btn-primary" id="btn_search_account">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if show == True %}
+    <div class="col-md-5 refinancing_status_layout">
+        <table style="margin-bottom: 1%;">
+            <tr>
+                <td><label id="refinancing_status">Status: {{ current_loan_refinancing_status }}</label></td>
+            </tr>
+            <tr>
+                <td colspan="2" id="tips">
+                    TAWARKAN Keringanan Pinjaman sesuai rekomendasi / negosiasi. Customer sudah
+                    mengisi formulir tapi belum memilih produk
+                    keringanan.
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-3 align-right refinancing_status_layout">
+        <button type="button" class="btn btn-primary" id="btn_offer_history">Offer History</button>
+    </div>
+    {% endif %}
+</div>
+{% if show == False and account_id_list %}
+<div class="row" style="height: 400px;overflow-y: auto;overflow-x: hidden">
+    <div id="jstree" class="col-md-6">
+
+        <!-- in this example the tree is populated from inline HTML -->
+        {% for bucket, account_ids in account_id_list.items %}
+        <ul>
+            <li id="{{bucket}}"
+                data-jstree='{"icon":"glyphicon {% if account_ids %} glyphicon-plus-sign {% else %} glyphicon-remove {% endif %}"}'>
+                {{bucket | waiver_bucket_name}}
+                <ul>
+                    {% for account_id in account_ids %}
+                    <li data-jstree='{"icon":"glyphicon glyphicon-triangle-right"}'
+                        onclick="directLink({{ account_id }})">Account ID - {{ account_id }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="row" id="contain_div" {% if show == False %} style="display: none;min-height:800px;" {% else %}
+    style="min-height:800px;" {%endif %}>
+    {% csrf_token %}
+    <div class="col-md-3 border-grey">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row left-div-bg">
+                    <div class="col-md-12">
+                        General Info
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: auto auto; padding: 12px;">
+                    <p>Program</p>
+                    <p>
+                        <strong>{{ program }}</strong>
+                    </p>
+                    <p>Account ID</p>
+                    <p>
+                        <strong>{{ account_id }}</strong>
+                    </p>
+                    <p>Nama Customer</p>
+                    <p>
+                        <strong>{{ customer_name }}</strong>
+                    </p>
+                    <p>Email</p>
+                    <p>
+                        <strong>{{ email }}</strong>
+                    </p>
+                    <p>Original Program</p>
+                    <p>
+                        <strong>{{ program }}</strong>
+                    </p>
+                    <p>Agent</p>
+                    <p>
+                        <strong>{{ agent_name }}</strong>
+                    </p>
+                    <p>Group Penanganan</p>
+                    <p>
+                        <strong>{{ source }}</strong>
+                    </p>
+                    {% if field_collection_agent_name %}
+                    <p>Agent Pemohon Program</p>
+                    <p>
+                        <strong>{{ field_collection_agent_name }}</strong>
+                    </p>
+                    {% endif %}
+                    <p>Tgl refinancing dibuat</p>
+                    <p>
+                        <strong>{{ refinancing_created }}</strong>
+                    </p>
+                    <p>Notes</p>
+                    <div id="btn_approval_notes" class="fa fa-comment text-success" style="cursor: pointer;">
+                    </div>
+                    <p>Jumlah Pembayaran</p>
+                    <p>
+                        <strong>{{ account_payments_count }}</strong>
+                    </p>
+                    <p>Refinancing Account Payment</p>
+                    {% if refinancing_account_payments %}
+                    <ul class="p-l-10 font-bold">
+                        {% for refinancing_account_payment in refinancing_account_payments %}
+                        <li>{{ refinancing_account_payment }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <p>Status Pekerjaan Baru</p>
+                    <p>
+                        <strong>{{ refinancing_reason }}</strong>
+                    </p>
+                    <p>Pendapatan Baru</p>
+                    <p>
+                        <strong>{{ new_income }}</strong>
+                    </p>
+                    <p>Pengeluaran Baru</p>
+                    <p>
+                        <strong>{{ new_expense }}</strong>
+                    </p>
+                    <p>Dibutuhkan untuk</p>
+                    <p>
+                        <strong>{{ refinancing_duration }} bulan</strong>
+                    </p>
+                </div>
+                <div style="text-align: right;">
+                    <button type="button" class="btn btn-success" id="btn_approve">Approve</button>
+                    <button type="button" class="btn btn-danger" id="btn_reject">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row right-div-bg-top">
+            <div class="col-md-12">
+                Pinjaman yang sedang berjalan
+                <span class="glyphicon glyphicon-forward original_amount_table-forward" aria-hidden="true"
+                    style="float: right" onclick="expandTable('original_amount_table')"></span>
+                <span class="glyphicon glyphicon-backward original_amount_table-backward" aria-hidden="true"
+                    style="float: right; display: none;" onclick="expandTable('original_amount_table')"></span>
+            </div>
+        </div>
+        <div class="row" id="ongoing_account_table"
+            style="width: 100%;display: flex;overflow-x: auto; overflow-y: hidden">
+            {% if ongoing_account_payments %}
+            <div style="width: 100%;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="height: 77px">
+                            <th class="align-middle"> Payment# </th>
+                            <th class="align-middle"> Telah jatuh tempo? </th>
+                            <th class="align-middle"> Tgl jatuh tempo </th>
+                            <th class="align-middle"> Status </th>
+                            <th class="align-middle"> Total Angsuran </th>
+                            <th class="align-middle"> Sisa Principal </th>
+                            <th class="align-middle"> Sisa Interest </th>
+                            <th class="align-middle"> Sisa Late Fee </th>
+                            <th class="align-middle"> Sisa Angsuran </th>
+                            <th class="align-middle"> Terbayar </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ongoing_account_payment in ongoing_account_payments %}
+                        <tr
+                            style="height: 78px;{% if ongoing_account_payment.outstanding == 0 %} background:#DCDCDC;{% endif %}">
+                            <td class="align-middle">{{ ongoing_account_payment.payment_number }}</td>
+                            <td class="align-middle">{{ ongoing_account_payment.due_status }}</td>
+                            <td class="align-middle">{{ ongoing_account_payment.due_date|format_date_to_locale_format }}</td>
+                            <td class="align-middle">{{ ongoing_account_payment.paid_status }}</td>
+                            <td class="align-middle">{{ ongoing_account_payment.total_installment|add_rupiah_separator }}</td>
+                            <td class="align-middle">{{ ongoing_account_payment.remaining_principal|add_rupiah_separator }}</td>
+                            <td class="align-middle">{{ ongoing_account_payment.remaining_interest|add_rupiah_separator }}</td>
+                            <td class="align-middle">
+                                {% if ongoing_account_payment.remaining_late_fee > 0 %}
+                                {{ ongoing_account_payment.remaining_late_fee|add_rupiah_separator }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">{{ ongoing_account_payment.outstanding|add_rupiah_separator }}
+                            </td>
+                            <td class="align-middle">
+                                {% if ongoing_account_payment.paid_amount > 0 %}
+                                {{ ongoing_account_payment.paid_amount|add_rupiah_separator }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <b>{{ total_installment_amount_account|add_rupiah_separator }}</b>
+                            </td>
+                            <td class="align-middle"><b>{{ total_remaining_principal|add_rupiah_separator }}</b></td>
+                            <td class="align-middle"><b>{{ total_remaining_interest|add_rupiah_separator }}</b></td>
+                            <td class="align-middle"><b>{{ total_remaining_late_fee|add_rupiah_separator }}</b></td>
+                            <td class="align-middle" id="pay_net_due"
+                                net_due_amt="{{ total_installment_outstanding_account }}">
+                                <b>{{ total_installment_outstanding_account|add_rupiah_separator }}</b>
+                            </td>
+                            <td class="align-middle"><b>{{ total_installment_paid_account|add_rupiah_separator }}</b>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div>
+                <table class="table table-bordered" id="original_amount_table" style="display: none">
+                    <thead>
+                        <tr style="height: 77px">
+                            <th class="align-middle"> Original Principal </th>
+                            <th class="align-middle"> Original Interest </th>
+                            <th class="align-middle"> Original Late Fee </th>
+                            <th class="align-middle"> Tanggal Bayar </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ongoing_account_payment in ongoing_account_payments %}
+                        <tr
+                            style="height: 78px;{% if ongoing_account_payment.outstanding == 0 %} background:#DCDCDC{% endif %}">
+                            <td class="align-middle">{{ ongoing_account_payment.remaining_principal|add_rupiah_separator }}</td>
+                            <td class="align-middle">{{ ongoing_account_payment.remaining_interest|add_rupiah_separator }}</td>
+                            <td class="align-middle">
+                                {% if ongoing_account_payment.remaining_late_fee > 0 %}
+                                {{ ongoing_account_payment.remaining_late_fee | add_rupiah_separator }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                {% if ongoing_account_payment.paid_date %}
+                                {{ ongoing_account_payment.paid_date | format_date_to_locale_format }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="align-middle"><b>{{ total_principal_account|add_rupiah_separator }}</b></td>
+                            <td class="align-middle"><b>{{ total_interest_account|add_rupiah_separator }}</b></td>
+                            <td class="align-middle"><b>{{ total_late_fee_account|add_rupiah_separator }}</b></td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+            </div>
+            {% else %}
+            <div class="col-md-12" style="text-align:center; padding-top:10px;">
+                No data found...
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="loading-div_simulasi" style="display:none" id="loading-div_simulasi" style="padding-left:30px;"><img
+                src="{% static 'images/collections/ajax-loader.gif' %}"></div>
+        <div class="row">
+            <div class="col-md-12 box-padding">
+                &nbsp;
+            </div>
+        </div>
+        <div class="row right-div-bg-bottom">
+            <div class="col-md-12">
+                Simulasi Offer
+            </div>
+        </div>
+        <div class="row">
+            <div style="width: 100%;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="align-middle"> Payment# </th>
+                            <th class="align-middle"> Tgl jatuh tempo </th>
+                            <th class="align-middle"> Tgl dibayar </th>
+                            <th class="align-middle"> Telah jatuh tempo? </th>
+                            <th class="align-middle"> Principal </th>
+                            <th class="align-middle"> Interest </th>
+                            <th class="align-middle"> Late Fee </th>
+                            <th class="align-middle"> Total </th>
+                            <th class="align-middle"> Terbayar </th>
+                            <th class="align-middle"> Outstanding </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for simulated_payment in simulated_payments %}
+                        <tr>
+                            <td class="align-middle">{{ simulated_payment.payment_number }}</td>
+                            <td class="align-middle">{{ simulated_payment.due_date|replace_dash_on_sting }}</td>
+                            <td class="align-middle">{{ simulated_payment.paid_date }}</td>
+                            <td class="align-middle">{{ simulated_payment.due_status }}</td>
+                            <td class="align-middle">{{ simulated_payment.installment_principal|add_rupiah_separator_approval_page }}</td>
+                            <td class="align-middle">{{ simulated_payment.installment_interest|add_rupiah_separator_approval_page }}</td>
+                            <td class="align-middle">{{ simulated_payment.installment_late_fee|add_rupiah_separator_approval_page }}</td>
+                            <td class="align-middle">{{ simulated_payment.total_installment_amount|add_rupiah_separator_approval_page }}</td>
+                            <td class="align-middle">{{ simulated_payment.paid_amount }}</td>
+                            <td class="align-middle" style="background:yellow">{{ simulated_payment.outstanding|add_rupiah_separator_approval_page }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle"></td>
+                            <td class="align-middle">
+                                <b>{{ total_principal|add_rupiah_separator_approval_page }}</b>
+                            </td>
+                            <td class="align-middle">
+                                <b>{{ total_interest|add_rupiah_separator_approval_page }}</b>
+                            </td>
+                            <td class="align-middle">
+                                <b>{{ total_late_fee|add_rupiah_separator_approval_page }}</b>
+                            </td>
+                            <td class="align-middle">
+                                <b>{{ total_all_installment_amount|add_rupiah_separator_approval_page }}</b>
+                            </td>
+                            <td class="align-middle">
+                                <b>{{ total_paid_amount|add_rupiah_separator_approval_page }}</b>
+                            </td>
+                            <td class="align-middle" style="background:yellow">
+                                <b>{{ total_outstanding_amount|add_rupiah_separator_approval_page }}</b>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 box-padding">
+                &nbsp;
+            </div>
+        </div>
+
+        <div class="row right-div-bg-bottom">
+            <div class="col-md-12">
+                Simulasi Offer
+            </div>
+        </div>
+        <div class="row">
+            <div style="width: 100%;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="align-middle"> Email Address </th>
+                            <th class="align-middle"> Account ID </th>
+                            <th class="align-middle"> Covid Product </th>
+                            <th class="align-middle"> Tenure Extension</th>
+                            <th class="align-middle"> New Income </th>
+                            <th class="align-middle"> New Expense </th>
+                            <th class="align-middle"> New Employment Status </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td class="align-middle">{{ email }}</td>
+                        <td class="align-middle">{{ account_id }}</td>
+                        <td class="align-middle">{{ program }}</td>
+                        <td class="align-middle">{{ refinancing_duration }}</td>
+                        <td class="align-middle">{{ new_income }}</td>
+                        <td class="align-middle">{{ new_expense }}</td>
+                        <td class="align-middle">{{ refinancing_reason }}</td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--########################### modal box to show no score in db ###############################################-->
+<div id="error_pop_up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Collection Offer Recommendations</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12" id="pop_msg">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="existing_offer_pop_up" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" style="display: none;">
+    <div class="modal-dialog existing_offer_modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header label-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Offer history</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 text-center" id="blank_existing_offer_content">
+                        Customer ini belum pernah mendapatkan refinancing sebelumnya
+                    </div>
+                    <div class="col-md-12 col-sm-12" id="existing_offer_content">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle"> No. </th>
+                                    <th class="align-middle"> Offer Type </th>
+                                    <th class="align-middle"> Request Date </th>
+                                    <th class="align-middle"> Principal disc. </th>
+                                    <th class="align-middle"> Interest disc. </th>
+                                    <th class="align-middle"> Late Fee disc. </th>
+                                    <th class="align-middle"> Extension </th>
+                                    <th class="align-middle"> Status </th>
+                                    <th class="align-middle"> Pre-requisite Amount </th>
+                                    <th class="align-middle"> Status Date </th>
+                                    <th class="align-middle"> Expire Date </th>
+                                </tr>
+                            </thead>
+                            <tbody id='existing_offer_table_body'>
+                            </tbody>
+                        </table>
+                        <div id="existing_offer_ps">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="existing_offer_footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="agent_notes_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <h1 align="center"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"
+                                style="color: #F9992E"></span></h1>
+                        <h3 id="text_agent_note"></h3>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="5" id="agent_note"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 text-center">
+                        <button class="btn btn-primary"
+                            style="background-color: white; color: #000000; border-color: #0a0a0a"
+                            data-dismiss="modal">Tidak</button>
+                        <button class="btn btn-primary" id="btn_waiver_request_submit" data-dismiss="modal"
+                            disabled>Ya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="approval_note" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title">Notes</h4>
+            </div>
+            <div class="modal-body">
+                <p class="font-bold">Agent:</p>
+                <p id="agent_notes">
+                    {{ agent_notes|linebreaksbr }}
+                </p>
+
+                <p class="font-bold">Approvers:</p>
+                <p id="spv_notes">
+                    {{ spv_notes|linebreaksbr }}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete"
+                    data-dismiss="modal">Kembali</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="approve_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header bg-success">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h4 class="modal-title">Approver Notes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Program Notes</p>
+                    <p class="font-bold">
+                        {{ program }}
+                    </p>
+
+                    <p>Reason</p>
+                    <select class="form-control m-b-10" name="reason" required>
+                        <option value="" selected="selected">---</option>
+                        <option value='Desk Collection Internal'>
+                            Desk Collection Internal
+                        </option>
+                        <option value='Field Collection Internal'>
+                            Field Collection Internal
+                        </option>
+                    </select>
+
+                    <p>Notes</p>
+                    <textarea name="notes" class="form-control" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Kembali</button>
+                    <button type="submit" class="btn btn-success waves-effect">Approve</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="reject_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h4 class="modal-title">Approver Notes</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Program Notes</p>
+                    <p class="font-bold">
+                        {{ program }}
+                    </p>
+
+                    <p>Reason</p>
+                    <select class="form-control m-b-10" name="reason" required>
+                        <option value="" selected="selected">---</option>
+                        <option value='Docs tidak sesuai'>
+                            Docs tidak sesuai
+                        </option>
+                        <option value='Terdeteksi fraud'>
+                            Terdeteksi fraud
+                        </option>
+                        <option value='Lainnya'>
+                            Lainnya
+                        </option>
+                    </select>
+
+                    <p>Notes</p>
+                    <textarea name="notes" class="form-control" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Kembali</button>
+                    <button type="submit" class="btn btn-danger waves-effect">Reject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% include "covid_loan_refinancing/include/collection_offers_portal_modal.html" %}
+{% endblock %}
+
+{% block custom_link %}
+<link href="{% static 'theme/plugins/bower_components/toast-master/css/jquery.toast.css' %}" rel="stylesheet">
+<link href="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css' %}"
+    rel="stylesheet" type="text/css" />
+<link href="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block script_additional %}
+<script src="{% static 'theme/plugins/bower_components/toast-master/js/jquery.toast.js' %}"></script>
+<script src="{% static 'default/theme/js/jquery.maskMoney.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/moment/moment.js' %}"></script>
+<!-- Sweet-Alert  -->
+<script src="{% static 'theme/plugins/bower_components/sweetalert/sweetalert.min.js' %}"></script>
+<script src="{% static 'theme/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script src="{% static 'default/js/loan-refinancing.js' %}"></script>
+{% endblock %}
+
+{% block script_local_list %}
+<script type="text/javascript">
+    var show = '{{ show }}'
+    var account_id = '{{ account_id }}'
+    var predefined_message = '{{ predefined_message }}';
+    if (predefined_message != '') {
+        ToastDanger('Failure', predefined_message);
+    } else if (account_id && show == 'False') {
+        ToastDanger('Failure', 'Invalid Account ID');
+    }
+    var ongoing_account_payment_ids = [];
+    {% for ongoing_account_payment in ongoing_account_payments %}
+    ongoing_account_payment_ids.push({{ ongoing_account_payment.account_payment_id }});
+    {% endfor %}
+    var simulated_payments = [];
+    {% for simulated_payment in simulated_payments %}
+    simulated_payments.push({
+        payment_number: {{ simulated_payment.payment_number }},
+        due_date: '{{ simulated_payment.due_date }}',
+        paid_date: '{{ simulated_payment.paid_date }}',
+        due_status: '{{ simulated_payment.due_status }}',
+        installment_principal: {{ simulated_payment.installment_principal }},
+        installment_interest: {{ simulated_payment.installment_interest }},
+        installment_late_fee: {{ simulated_payment.installment_late_fee }},
+        total_installment_amount: {{ simulated_payment.total_installment_amount }},
+        paid_amount: '{{ simulated_payment.paid_amount }}',
+        outstanding: {{ simulated_payment.outstanding }}
+        })
+    {% endfor %}
+
+    $("#btn_search_account").on('click', function (e) {
+        account_id = $('#account_id').val();
+        if (!account_id) {
+            ToastDanger('Failure', 'Please enter Account ID');
+            e.preventDefault();
+            return false;
+        } else {
+            $('#loading-div').show();
+            {% if is_approver %}
+            showModalPortal(account_id);
+            {% else %}
+            $("#frm_search_account").submit();
+            {% endif %}
+        }
+    });
+
+    $('#portal_modal').on('hidden.bs.modal', function () {
+        $('#loading-div').hide();
+    });
+
+    function directLink(account_id) {
+        window.location.href = "{%url 'refinancing_collection_offer_j1' %}?portal_type=approver_portal&account_id=" + account_id;
+    }
+
+    function ToastDanger(header_msg, body_message, type = '') {
+        if (type == 1)
+            hide_time = 6300
+        else
+            hide_time = 2800
+        $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'error',
+            hideAfter: hide_time
+        });
+    }
+
+    function ToastSuccess(header_msg, body_message, type = '') {
+        if (type == 1)
+            hide_time = 6300
+        else
+            hide_time = 1500
+        $.toast({
+            heading: header_msg,
+            text: body_message,
+            position: 'top-right',
+            loaderBg: '#ff6849',
+            icon: 'success',
+            hideAfter: hide_time,
+            stack: 6
+        });
+    }
+
+
+    function expandTable(tableName) {
+        $("#" + tableName).toggle();
+        $("." + tableName + "-backward").toggle();
+        $("." + tableName + "-forward").toggle();
+    }
+
+    function numberWithCommas(x) {
+        num = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (num == '-')
+            formatted_num = '-';
+        else
+            formatted_num = 'Rp. ' + num;
+        return formatted_num;
+    }
+
+    function addComma(x) {
+        num = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return num
+    }
+
+
+    $(".mask").maskMoney({thousands:',', decimal:'.', allowZero: true, suffix: '', precision:0});
+
+    function round_numbers(num) {
+        if (!Number.isInteger(num)) {
+            num = num.toFixed(0);
+        }
+        return num
+    }
+
+    function round_numbers_percent(num) {
+        if (!Number.isInteger(num)) {
+            num = num.toFixed(2);
+        }
+        return num
+    }
+
+
+    function show_hide_divs_right(type) {
+        if (type) {
+        } else {
+            $("#div_simulasi_head").hide();
+            $("#div_simulasi_details").hide();
+            $("#cp_head").hide();
+            $("#cp_table").hide();
+            $("#div_offer_recommend").hide();
+        }
+    }
+
+    function negative_response_swal(msg) {
+        swal({
+            title: "Gagal!",
+            html: true,
+            text: msg,
+            type: "error",
+            showCancelButton: true,
+            showConfirmButton: false,
+            cancelButtonColor: "#ffffff",
+            cancelButtonText: "Kembali",
+            closeOnCancel: true
+        });
+    }
+
+    $("#btn_offer_history").click(function () {
+        $.ajax({
+            url: "{%url 'loan_refinancing:ajax_get_exisiting_offers' %}",
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                account_id: parseInt(account_id)
+            },
+            success: function (json) {
+                if (json.status == 'success') {
+                    response = json.response
+                    repeated_offer_swal(response.existing_offers);
+                } else {
+                    ToastDanger('Failure', "Mohon maaf. Silakan coba lagi.");
+                    show_hide_divs_right(false);
+                }
+            },
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                ToastDanger('Failure', "Mohon maaf. Silakan coba lagi.");
+                console.log(xhr.responseText);
+                show_hide_divs_right(false);
+            }
+        });
+    });
+
+    function updateResponseRefinancingRequest(isApprove = false, reason, notes) {
+        $.ajax({
+            url: "{%url 'refinancing:ajax_approve_j1_refinancing_request' %}",
+            type: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRFToken": $("input[name=csrfmiddlewaretoken]").val(),
+            },
+            data: JSON.stringify({
+                account_id: parseInt(account_id),
+                loan_refinancing_request_id: '{{ loan_refinancing_request_id }}',
+                loan_refinancing_approval_id: '{{ loan_refinancing_approval_id }}',
+                is_accepted: isApprove,
+                reason,
+                notes,
+                extra_data: {
+                    account_payment_ids: ongoing_account_payment_ids,
+                    simulated_payments: simulated_payments.map(item => ({
+                        "payment_number": item.payment_number,
+                        "due_date": item.due_date == '-' ? item.due_date : item.due_date.replace(/-/g, " "),
+                        "paid_date": item.paid_date == '-' ? item.paid_date : item.paid_date.replace(/-/g, " "),
+                        "due_status": item.due_status,
+                        "installment_principal": item.installment_principal,
+                        "installment_interest": item.installment_interest,
+                        "installment_late_fee": item.installment_late_fee,
+                        "total_installment_amount": item.total_installment_amount,
+                        "paid_amount": item.paid_amount,
+                        "outstanding": item.outstanding
+                    }))
+                }
+            }),
+            success: function (json) {
+                if (json.status == 'success') {
+                    window.location.assign('/collection-offer-j1')
+                } else {
+                    ToastDanger('Failure', "Mohon maaf. Silakan coba lagi.");
+                }
+            },
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                ToastDanger('Failure', "Mohon maaf. Silakan coba lagi.");
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+    $("#reject_modal form button[type=submit]").click(function (e) {
+        e.preventDefault();
+        var reason = $('#reject_modal form select[name=reason]').val();
+        var notes = $('#reject_modal form textarea[name=notes]').val();
+
+        if (reason === "" || notes === "") {
+            ToastDanger('Failure', "Reason dan Notes tidak boleh kosong.");
+            return;
+        }
+        updateResponseRefinancingRequest(false, reason, notes);
+    });
+
+    $("#approve_modal form button[type=submit]").click(function (e) {
+        e.preventDefault();
+        var reason = $('#approve_modal form select[name=reason]').val();
+        var notes = $('#approve_modal form textarea[name=notes]').val();
+        if (reason === "" || notes === "") {
+            ToastDanger('Failure', "Reason dan Notes tidak boleh kosong.");
+            return;
+        }
+        updateResponseRefinancingRequest(true, reason, notes);
+    });
+
+    function repeated_offer_swal(existing_offers, show_button = false) {
+        if (existing_offers.length > 0) {
+            msg = ''
+            for (var i = 0; i < existing_offers.length; i++) {
+                var offer = existing_offers[i];
+                if (offer.status == 'Activated') {
+                    status_class = 'success';
+                } else if (offer.status == 'Expired') {
+                    status_class = 'danger';
+                } else {
+                    status_class = 'warning';
+                }
+                var number = i + 1;
+                msg += '<tr>\
+                    <td class="align-middle"> '+ number.toString() + ' </td>\
+                    <td class="align-middle"> '+ offer.product_type + ' </td>\
+                    <td class="align-middle"> '+ offer.request_date + ' </td>\
+                    <td class="align-middle"> '+ offer.principal_discount + ' </td>\
+                    <td class="align-middle"> '+ offer.interest_discount + ' </td>\
+                    <td class="align-middle"> '+ offer.latefee_discount + ' </td>\
+                    <td class="align-middle"> '+ offer.extension + ' </td>\
+                    <td class="align-middle '+ status_class + '"> ' + offer.status + ' </td>\
+                    <td class="align-middle"> '+ offer.prerequisite_amount + ' </td>\
+                    <td class="align-middle"> '+ offer.status_date + ' </td>\
+                    <td class="align-middle"> '+ offer.expire_date + ' </td>\
+                </tr>';
+            }
+
+            $('#existing_offer_table_body').html(msg);
+            if (show_button) {
+                button_html = '<button type="button" class="btn btn-primary waves-effect" onclick="generate_offer()">Generate Offer</button>\
+                            <button type="button" class="btn btn-default waves-effect" id="close_confirm_delete" data-dismiss="modal">Kembali</button>';
+                post_script_html = '<p>Customer sudah mendapatkan keringanan sebelumnya.</p>\
+                                    <p>Apakah ingin memberikan keringanan kembali? </p>'
+            } else {
+                button_html = '';
+                post_script_html = '';
+            }
+            $('#existing_offer_footer').html(button_html);
+            $('#existing_offer_ps').html(post_script_html);
+            $('#blank_existing_offer_content').hide();
+            $('#existing_offer_content').show();
+        } else {
+            $('#blank_existing_offer_content').show();
+            $('#existing_offer_content').hide();
+        };
+        $('#existing_offer_pop_up').modal('show');
+    }
+
+    $('#btn_approval_notes').click(function () {
+        $('#approval_note').modal('show');
+    });
+
+    $('#btn_approve').click(function () {
+        $('#approve_modal').modal('show');
+    });
+
+    $('#btn_reject').click(function () {
+        $('#reject_modal').modal('show');
+    })
+
+    $(function () {
+        // 6 create an instance when the DOM is ready
+        $('#jstree').jstree();
+        // 7 bind to events triggered on the tree
+        $('#jstree').on("changed.jstree", function (e, data) {
+        });
+    });
+</script>
+{% endblock %}
