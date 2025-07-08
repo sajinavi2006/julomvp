@@ -1,0 +1,8 @@
+---
+
+git_repo: git@github.com:julofinance/mvp.git
+git_deploy_key_path: "{{ lookup('env','HOME') }}/.ssh/github-julociuser-checkout.pem"
+relative_django_path: src/juloserver
+
+project_name: juloserver
+application_name: juloserver

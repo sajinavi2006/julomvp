@@ -1,0 +1,51 @@
+# Use Ubuntu 22.04 as builder image
+FROM ghcr.io/julofinance/python37:ubuntu2204 AS builder
+LABEL org.opencontainers.image.source="https://github.com/julofinance/mvp"
+LABEL maintainer="JULO Finance"
+LABEL org.opencontainers.image.description="Source code for JULO operational server providing API for the android app, web apps, external integrations, and the CRM."
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+#COPY requirements.txt requirements.txt
+COPY ./src/juloserver/requirements/python3/ .
+
+RUN set -eux && \
+    pip3 install --upgrade wheel && \
+    pip3 install -r requirements_local.txt
+
+# second stage build, use Ubuntu 22.04 as base image
+FROM ghcr.io/julofinance/python37:ubuntu2204
+
+# Update package lists and install necessary dependencies
+RUN set -eux \
+    # Create a non-root user
+    && addgroup --system --gid 999 webapps \
+    && adduser --system --uid 1002 --gid 999 --no-create-home juloserver-nonprod \
+    && adduser --system --uid 1001 --gid 999 --no-create-home juloserver-prod \
+    # Upgrade the package index and install security upgrades
+    && apt-get update \
+    && apt-get upgrade -y \
+    # Install dependencies
+    && apt-get install -y --no-install-recommends git wkhtmltopdf libmagickwand-dev imagemagick libmagic1 \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /usr/local/lib /usr/local/lib
+
+#WORKDIR /code/juloserverve
+
+RUN set -eux && \
+    mkdir -p /code/juloserverve/juloserver
+
+COPY . /code/juloserverve/juloserver/
+
+RUN set -eux && \
+    chown juloserver-prod:webapps -R /code/juloserverve/juloserver/ && \
+    chmod g+rwx -R /code/juloserverve/juloserver/
+
+USER juloserver-prod
+
+CMD ["python3"]

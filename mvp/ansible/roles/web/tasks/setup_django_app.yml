@@ -1,0 +1,51 @@
+---
+
+- name: Install packages required by the Django app inside virtualenv
+  pip: virtualenv={{ virtualenv_path }} requirements={{ requirements_file }}
+
+- name: Run the Django syncdb command
+  django_manage:
+    command: syncdb
+    app_path: "{{ django_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: "{{ django_environment }}"
+  when: run_django_syncdb is defined and run_django_syncdb
+  tags: django.syncdb
+
+- name: Run Django database migrations
+  django_manage:
+    command: migrate
+    app_path: "{{ django_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: "{{ django_environment }}"
+  when: run_django_db_migrations is defined and run_django_db_migrations
+  tags: django.migrate
+
+- name: Run Django collectstatic
+  django_manage:
+    command: collectstatic
+    app_path: "{{ django_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: "{{ django_environment }}"
+  when: run_django_collectstatic is defined and run_django_collectstatic
+  tags: django.collectstatic
+
+- name: Run Django custom commands
+  django_manage:
+    command: "{{ item }}"
+    app_path: "{{ django_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: "{{ django_environment }}"
+  with_items:
+    - update_status_lookups
+
+- name: Create Google api client_secret.json
+  copy: content={{ google_client_secret }}
+        dest={{ django_path }}/google_api_client_secret.json
+        owner={{ gunicorn_user }}
+        group={{ gunicorn_group }}
+        mode=0664

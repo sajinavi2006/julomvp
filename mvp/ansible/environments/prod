@@ -1,0 +1,10 @@
+[all:vars]
+env=prod
+
+; AWS elastic IPs, public, resolved by api.julofinance.com
+[webservers]
+10.0.10.120
+
+; AWS elastic IPs, public, resolved by db.julofinance.com
+[dbservers]
+10.0.250.210

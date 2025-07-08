@@ -1,0 +1,32 @@
+---
+
+- name: Creates .ssh directory for root
+  become: yes
+  file: path=~/.ssh state=directory
+
+- name: Upload the private key used for Github cloning
+  become: yes
+  copy: src={{ git_deploy_key_path }} dest=~/.ssh/github
+
+- name: Correct SSH deploy key permissions
+  become: yes
+  file: dest=~/.ssh/github mode=0600
+
+- name: Specify the SSH key to check out code from github in ssh config
+  become: yes
+  template: src=ssh_config dest=~/.ssh/config
+
+- name: Setup the Git repo
+  git: repo={{ git_repo }}
+       version="{{ git_branch }}"
+       dest={{ project_path }}
+       accept_hostkey=yes
+       key_file=~/.ssh/github
+  when: setup_git_repo is defined and setup_git_repo
+  tags: git
+
+- name: Delete all .pyc files
+  command: find . -name '*.pyc' -delete
+  args:
+    chdir: "{{ project_path }}"
+  tags: git

@@ -1,0 +1,64 @@
+---
+
+# Git settings.
+setup_git_repo: yes
+git_branch: develop
+julo_env: vagrant
+
+
+# Database settings.
+postgresql_name: "{{ application_name }}"
+postgresql_user: "{{ application_name }}"
+postgresql_password: "{{ vault_postgresql_password }}"
+postgresql_host: 127.0.0.1
+postgresql_port: 5432
+analytic_name: analytic
+analytic_user: analytic
+analytic_password: "{{ vault_analytic_password }}"
+
+# Gunicorn settings. For the number of workers, a good rule to follow is
+# 2 x number of CPUs + 1
+gunicorn_num_workers: 3
+
+# Setting this to 1 will restart the Gunicorn process each time
+# you make a request, basically reloading the code. Very handy
+# when developing. Set to 0 for unlimited requests (default).
+gunicorn_max_requests: 0
+
+gunicorn_timeout_seconds: 300
+
+
+# Nginx settings.
+nginx_server_name: 192.168.33.15
+ssl_dest_dir: /etc/ssl
+
+
+# RabbitMQ settings.
+rabbitmq_server_name: "{{ inventory_hostname }}"
+
+rabbitmq_admin_user: "{{ application_name }}_admin"
+rabbitmq_admin_password: "{{ vault_rabbitmq_admin_password }}"
+
+rabbitmq_application_vhost: "{{ application_name }}"
+rabbitmq_application_user: "{{ application_name }}"
+rabbitmq_application_password: "{{ vault_rabbitmq_application_password }}"
+
+
+# Celery settings.
+celery_num_workers: 2
+flower_admin_password: "{{ vault_flower_admin_password }}"
+
+
+# Application settings.
+django_requirements_path: "requirements/{{ julo_env }}.pip"
+django_secret_key: "{{ vault_django_secret_key }}"
+django_settings_file: "{{ application_name }}.settings.{{ julo_env }}"
+
+broker_url: "amqp://{{ rabbitmq_application_user }}:{{ rabbitmq_application_password }}@localhost/{{ rabbitmq_application_vhost }}"
+
+run_django_db_migrations: yes
+run_django_collectstatic: yes
+
+
+# GCM settings.
+gcm_server_key: "{{ vault_gcm_server_key }}"

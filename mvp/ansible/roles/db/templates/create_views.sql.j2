@@ -1,0 +1,125 @@
+CREATE OR REPLACE VIEW public.sd_app AS
+ SELECT sd_app.sd_app_id,
+    sd_app.julo_application_id,
+    sd_app.julo_customer_id,
+    sd_app.julo_cdate,
+    sd_app.application_id,
+    sd_app.application_name,
+    sd_app.application_package_name,
+    sd_app.icon,
+    sd_app.received,
+    sd_app.send,
+    sd_app.total,
+    sd_app.julo_install_time_millis,
+    sd_app.julo_last_updated_millis,
+    sd_app.install_time_millis,
+    sd_app.last_updated_millis
+   FROM dblink('dbname=analytic'::text, 'SELECT *  FROM sd_app'::text) sd_app(sd_app_id text, julo_application_id bigint, julo_customer_id bigint, julo_cdate text, application_id bigint, application_name text, application_package_name text, icon text, received double precision, send double precision, total double precision, julo_install_time_millis text, julo_last_updated_millis text, install_time_millis bigint, last_updated_millis bigint);
+
+ALTER TABLE public.sd_app
+    OWNER TO juloserver;
+
+-- View: public.sd_call
+
+-- DROP VIEW public.sd_call;
+
+CREATE OR REPLACE VIEW public.sd_call AS
+ SELECT sd.sd_call_id,
+    sd.julo_application_id,
+    sd.julo_customer_id,
+    sd.julo_cdate,
+    sd.name,
+    sd.phone_number,
+    sd.call_type,
+    sd.julo_call_date,
+    sd.call_date,
+    sd.call_duration_in_sec,
+    sd.number_label,
+    sd.number_type,
+    sd.presentation,
+    sd.readmess,
+    sd.date_time,
+    sd.geocode_location,
+    sd.photo_uri,
+    sd.lookup_uri,
+    sd.country_iso,
+    sd.transcription,
+    sd.phone_account_id,
+    sd.photo_id,
+    sd.voicemail_uri,
+    sd.features,
+    sd.new,
+    sd.data_usage,
+    sd.phone_account_component_name,
+    sd.matched_number,
+    sd.normalized_number,
+    sd.formatted_number
+   FROM dblink('dbname=analytic'::text, 'SELECT * FROM sd_call'::text) sd(sd_call_id text, julo_application_id bigint, julo_customer_id bigint, julo_cdate text, name text, phone_number text, call_type text, julo_call_date text, call_date text, call_duration_in_sec integer, number_label text, number_type text, presentation text, readmess text, date_time text, geocode_location text, photo_uri text, lookup_uri text, country_iso text, transcription text, phone_account_id text, photo_id bigint, voicemail_uri text, features text, new text, data_usage text, phone_account_component_name text, matched_number text, normalized_number text, formatted_number text);
+
+ALTER TABLE public.sd_call
+    OWNER TO juloserver;
+
+-- View: public.sd_phonebook
+
+-- DROP VIEW public.sd_phonebook;
+
+CREATE OR REPLACE VIEW public.sd_phonebook AS
+ SELECT sd.sd_phonebook_id,
+    sd.julo_application_id,
+    sd.julo_customer_id,
+    sd.julo_cdate,
+    sd._id_,
+    sd.name,
+    sd.phone_number,
+    sd.type
+   FROM dblink('dbname=analytic'::text, 'SELECT * FROM sd_phonebook'::text) sd(sd_phonebook_id text, julo_application_id bigint, julo_customer_id bigint, julo_cdate text, _id_ integer, name text, phone_number text, type integer);
+
+ALTER TABLE public.sd_phonebook
+    OWNER TO juloserver;
+
+
+-- View: public.sd_sms
+
+-- DROP VIEW public.sd_sms;
+
+CREATE OR REPLACE VIEW public.sd_sms AS
+ SELECT sd.sd_sms_id,
+    sd.julo_application_id,
+    sd.julo_customer_id,
+    sd.julo_cdate,
+    sd._id_,
+    sd.subject,
+    sd.body,
+    sd.address,
+    sd.julo_date,
+    sd.date,
+    sd.date_sent,
+    sd.read,
+    sd.type,
+    sd.thread_id,
+    sd.service_center,
+    sd.bind_id,
+    sd.marker,
+    sd.protocol,
+    sd.status,
+    sd.reply_path_present,
+    sd.locked,
+    sd.person,
+    sd.error_code,
+    sd.seen,
+    sd.timed,
+    sd.deleted,
+    sd.sync_state,
+    sd.source,
+    sd.mx_status,
+    sd.mx_id,
+    sd.out_time,
+    sd.account,
+    sd.sim_id,
+    sd.block_type,
+    sd.advanced_seen,
+    sd.b2c_ttl
+   FROM dblink('dbname=analytic'::text, 'SELECT * FROM sd_sms'::text) sd(sd_sms_id text, julo_application_id bigint, julo_customer_id bigint, julo_cdate text, _id_ text, subject text, body text, address text, julo_date text, date text, date_sent bigint, read integer, type text, thread_id integer, service_center text, bind_id bigint, marker bigint, protocol text, status integer, reply_path_present text, locked integer, person text, error_code integer, seen integer, timed integer, deleted integer, sync_state integer, source text, mx_status integer, mx_id text, out_time integer, account text, sim_id integer, block_type integer, advanced_seen integer, b2c_ttl integer);
+
+ALTER TABLE public.sd_sms
+    OWNER TO juloserver;

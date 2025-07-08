@@ -1,0 +1,13 @@
+#!/bin/sh
+
+DJANGODIR={{ django_path }}
+
+# Activate the virtual environment.
+cd $DJANGODIR
+. {{ virtualenv_path }}/bin/activate
+. {{ virtualenv_path }}/bin/postactivate
+
+# Programs meant to be run under supervisor should not daemonize themselves
+# (do not use --daemon).
+exec celery --app={{ application_name }} worker --events --loglevel=info \
+  --concurrency={{ celery_num_workers }}

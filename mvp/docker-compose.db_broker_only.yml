@@ -1,0 +1,42 @@
+version: "3.4"
+services:
+  db:
+    container_name : mvp_db_docker
+    image: postgis/postgis:10-3.1-alpine
+    environment:
+      - POSTGRES_DB=julodb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    networks :
+      - mvp_default_docker
+    volumes:
+      - ${PWD}/src/juloserver/setup_database.sql:/docker-entrypoint-initdb.d/setup_database.sql
+
+  broker:
+    container_name : mvp_broker_docker
+    image: rabbitmq:3.6.15-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks :
+      - mvp_default_docker
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 2s
+      timeout: 20s
+  
+  redis:
+    container_name: mvp_redis_docker
+    image: redis:6.2.5-alpine
+    ports: 
+        - "6379:6379"
+    networks: 
+        - mvp_default_docker
+
+networks:
+  mvp_default_docker:
+    name: "mvp_default_docker"
+    driver: bridge
+

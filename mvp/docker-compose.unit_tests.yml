@@ -1,0 +1,20 @@
+version: "3.4"
+services:
+  unit_test:
+    container_name: mvp_unit_test_docker
+    build:
+      context: ./src/juloserver
+    restart: always
+    networks :
+      - mvp_default_docker
+    volumes:
+      - ./src/juloserver:/service
+    command: bash -c
+      "source ./postactivate_unit_test_docker
+      && source ./run_unit_tests"
+
+networks:
+  mvp_default_docker:
+    name: "mvp_default_docker"
+    external: true
+

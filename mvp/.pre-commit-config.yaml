@@ -1,0 +1,21 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ticket
+        name: 'Prepend ticket number'
+        entry: ./bin/ticket
+        language: script
+        stages:
+          - prepare-commit-msg
+  - repo: https://github.com/akaihola/darker
+    rev: 1.7.3
+    hooks:
+      - id: darker
+        name: 'Darker: Format your changes'
+        args: [--lint, "flake8 --config=src/juloserver/.pre-commit-flake8"]
+        additional_dependencies:
+          - black==22.6.0
+          - flake8==4.0.1
+
+default_stages:
+  - commit

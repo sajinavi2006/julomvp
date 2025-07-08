@@ -1,0 +1,10 @@
+[all:vars]
+env=staging
+
+; AWS elastic IPs, public, resolved by api-staging.julofinance.com
+[webservers]
+10.0.10.138
+
+; AWS elastic IPs, public, resolved by db-staging.julofinance.com
+[dbservers]
+10.0.201.17

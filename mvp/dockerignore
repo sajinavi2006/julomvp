@@ -1,0 +1,12 @@
+*/
+*
+*postactivate*
+*docker*
+!/src/
+/src/juloserver/Docker*
+/src/juloserver/docker-*
+/src/juloserver/postactivate*
+/src/juloserver/envvars
+/src/juloserver/run*
+/src/juloserver/*.sql
+/src/juloserver/*.rdb

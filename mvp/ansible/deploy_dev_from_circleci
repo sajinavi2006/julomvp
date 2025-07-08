@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source ~/juloansibleve/bin/activate
+cd ~/julo/mvp/ansible
+git reset HEAD .; git checkout -- .
+git checkout develop; git pull;
+ansible-playbook -i environments/dev webservers.yml -vv

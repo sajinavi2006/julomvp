@@ -1,0 +1,121 @@
+---
+
+# Application settings.
+virtualenv_path: "/webapps/{{ application_name }}ve"
+project_path: "{{ virtualenv_path }}/{{ project_name }}"
+application_log_dir: "{{ virtualenv_path }}/logs"
+application_log_file: "{{ application_log_dir }}/gunicorn_supervisor.log"
+django_path: "{{ project_path }}/{{ relative_django_path }}"
+requirements_file: "{{ django_path }}/{{ django_requirements_path }}"
+
+
+# Gunicorn settings
+gunicorn_user: "{{ application_name }}"
+gunicorn_group: webapps
+
+
+# Nginx settings
+nginx_http_port: 80
+nginx_https_port: 443
+nginx_access_log_file: "{{ application_log_dir }}/nginx_access.log"
+nginx_error_log_file: "{{ application_log_dir }}/nginx_error.log"
+nginx_static_dir: "{{ virtualenv_path }}/static/"
+nginx_media_dir: "{{ virtualenv_path }}/media/"
+
+
+# Django Environment variables
+django_environment:
+
+  ALLOWED_HOSTS: "{{ domain_name}},{{ groups['webservers'] | join(',') }}"
+  BASE_URL: "{{ base_url }}"
+  DJANGO_SETTINGS_MODULE: "{{ django_settings_file }}"
+  DJANGO_SECRET_KEY: "{{ django_secret_key }}"
+  MEDIA_ROOT: "{{ nginx_media_dir }}"
+  STATIC_ROOT: "{{ nginx_static_dir }}"
+  EMAIL_HOST: "{{ email_host|default(omit) }}"
+  EMAIL_HOST_USER: "{{ email_host_user|default(omit) }}"
+  EMAIL_HOST_PASSWORD: "{{ email_host_password|default(omit) }}"
+  BROKER_URL: "{{ broker_url|default(omit) }}"
+
+  POSTGRESQL_NAME: "{{ postgresql_name }}"
+  POSTGRESQL_USER: "{{ postgresql_user }}"
+  POSTGRESQL_PASSWORD: "{{ postgresql_password }}"
+  POSTGRESQL_HOST: "{{ postgresql_host }}"
+  POSTGRESQL_PORT: "{{ postgresql_port }}"
+
+  POSTGRESQL_OPS_NAME: "{{ postgresql_ops_name }}"
+  POSTGRESQL_OPS_USER: "{{ postgresql_ops_user }}"
+  POSTGRESQL_OPS_PASSWORD: "{{ postgresql_ops_password }}"
+  POSTGRESQL_OPS_HOST: "{{ postgresql_ops_host }}"
+  POSTGRESQL_OPS_PORT: "{{ postgresql_ops_port }}"
+
+  S3_DATA_BUCKET: "{{ s3_data_bucket }}"
+  S3_MEDIA_BUCKET: "{{ s3_media_bucket }}"
+  S3_ANALYTICS_BUCKET: "{{ s3_analytics_bucket }}"
+  AWS_DEFAULT_REGION: "{{ aws_default_region }}"
+  AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+  AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+  OBJECT_STORAGE_ACCESS_KEY_ID: "{{ object_storage_access_key_id }}"
+  OBJECT_STORAGE_SECRET_ACCESS_KEY: "{{ object_storage_secret_access_key }}"
+  OBJECT_STORAGE_ENDPOINT_URL: "{{ object_storage_endpoint_url }}"
+
+  GCM_SERVER_KEY: "{{ gcm_server_key }}"
+  GOOGLE_MAPS_API_KEY: "{{ google_maps_api_key }}"
+
+  SENTRY_DSN: "{{ sentry_dsn }}"
+
+  NEXMO_API_KEY: "{{ nexmo_api_key }}"
+  NEXMO_API_SECRET: "{{ nexmo_api_secret }}"
+  NEXMO_SMS_URL: "{{ nexmo_sms_url }}"
+
+  SENDGRID_API_KEY: "{{ sendgrid_api_key }}"
+
+  POSTGRESQL_ANALYTICS_USER: "{{ analytic_user }}"
+  POSTGRESQL_ANALYTICS_PWD: "{{ analytic_password}}"
+  POSTGRESQL_ANALYTICS_DATABASE: "{{ analytic_name }}"
+  POSTGRESQL_ANALYTICS_PORT: "{{ postgresql_port }}"
+  POSTGRESQL_ANALYTICS_HOSTNAME: "{{ postgresql_host }}"
+
+  POSTGRESQL_ANA_NAME: "{{ postgresql_ana_name }}"
+  POSTGRESQL_ANA_USER: "{{ postgresql_ana_user }}"
+  POSTGRESQL_ANA_PASSWORD: "{{ postgresql_ana_password }}"
+  POSTGRESQL_ANA_HOST: "{{ postgresql_ana_host }}"
+  POSTGRESQL_ANA_PORT: "{{ postgresql_ana_port }}"
+
+  ANASERVER_BASE_URL: "{{ anaserver_base_url }}"
+  ANASERVER_TOKEN: "{{ anaserver_token }}"
+
+  DOKU_BASE_URL: "{{ doku_base_url }}"
+  DOKU_PROXY_URL: "{{ doku_proxy_url }}"
+  DOKU_CLIENT_ID: "{{ doku_client_id }}"
+  DOKU_CLIENT_SECRET: "{{ doku_client_secret }}"
+  DOKU_SHARED_KEY: "{{ doku_shared_key }}"
+
+  DUTAMEDIA_API_KEY_CLICK2CALL: "{{ dutamedia_api_key_click2call }}"
+  DUTAMEDIA_API_KEY_ROBODIAL: "{{ dutamedia_api_key_robodial }}"
+  DUTAMEDIA_BASE_URL: "{{ dutamedia_base_url }}"
+
+  XENDIT_API_KEY: "{{ xendit_api_key }}"
+  XENDIT_BASE_URL: "{{ xendit_base_url }}"
+  XENDIT_DISBURSEMENT_VALIDATION_TOKEN: "{{ xendit_disbursement_validation_token }}"
+
+  BFI_CLIENT_ID: "{{ bfi_client_id }}"
+  BFI_BASE_URL: "{{ bfi_base_url }}"
+
+  SLACK_WEB_API_TOKEN: "{{ slack_web_api_token }}"
+
+  BRI_X_KEY: "{{ bri_x_key }}"
+  BRI_CLIENT_ID: "{{bri_client_id}}"
+  BRI_CLIENT_SECRET: "{{bri_client_secret}}"
+  BRI_CODE: "{{bri_code}}"
+
+  FASPAY_MERCHANT_NAME: "{{ faspay_merchant_name }}"
+  FASPAY_MERCHANT_ID: "{{ faspay_merchant_id }}"
+  FASPAY_USER_ID: "{{ faspay_user_id }}"
+  FASPAY_PASSWORD: "{{ faspay_password }}"
+
+  OTP_SECRET_KEY: "{{ otp_secret_key }}"
+  
+  TOKOPEDIA_CLIENT_ID: "{{ tokopedia_client_id }}"
+  TOKOPEDIA_CLIENT_SECRET: "{{ tokopedia_client_secret }}"
+  TOKOPEDIA_BASE_URL: "{{ tokopedia_base_url }}"

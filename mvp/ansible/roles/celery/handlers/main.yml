@@ -1,0 +1,7 @@
+---
+
+- name: restart {{ celery_worker_name }}
+  supervisorctl: name={{ celery_worker_name }} state=restarted
+
+- name: restart {{ celery_beat_name }}
+  supervisorctl: name={{ celery_beat_name }} state=restarted

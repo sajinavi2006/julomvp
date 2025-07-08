@@ -1,0 +1,3 @@
+[bandit]
+targets: src/juloserver/juloserver
+exclude: **/apiv1/data/*.py,**/apiv1/dropdown/*.py,**/sdk/data/*.py,**/tests/*.py,**/test*.py

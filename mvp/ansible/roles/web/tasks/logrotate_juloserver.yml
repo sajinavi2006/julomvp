@@ -1,0 +1,14 @@
+---
+ - name: s3upload script for sending juloserver logs to s3 bucket.
+   template:
+      src: s3uploadforjuloserverlog.sh
+      dest: /opt/s3uploadforjuloserverlog.sh
+      mode: a+x
+      backup: yes
+
+ - cron:
+    name: "upload newest juloserver log to s3"
+    user: "root"
+    minute: "30"
+    hour: "00"
+    job: "/opt/s3uploadforjuloserverlog.sh"

@@ -1,0 +1,39 @@
+---
+
+- name: Provision a {{ application_name }} web server
+  hosts: webservers
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  vars:
+    - update_apt_cache: yes
+  vars_files:
+    - env_vars/base.yml
+    - env_vars/{{ env }}.yml
+    - env_vars/{{ env }}_secure.yml
+
+  roles:
+    - base
+    - rabbitmq
+    - web
+    - celery
+
+# TODO: refactor this to a role or a module or combine with the play above
+- name: slack
+  hosts: webservers
+  become: yes
+  become_user: root
+  remote_user: ubuntu
+  vars_files:
+    - env_vars/base.yml
+    - env_vars/{{ env }}.yml
+    - env_vars/{{ env }}_secure.yml
+  tasks:
+  - name: Notify slack that appserver deployed successfully
+    slack:
+      token: '{{ slack_api_token }}'
+      msg: 'The latest of `{{ git_branch }}` deployed to: https://{{ domain_name }}'
+      channel: #deployed
+      username: 'Julo Ansible'
+      parse: full
+      color: good

@@ -1,0 +1,88 @@
+version: "3.4"
+services:
+  api:
+    container_name: mvp_api_docker
+    build:
+      context: ./src/juloserver
+    restart: always
+    ports:
+      - "8001:8000"
+    networks :
+      - mvp_default_docker
+    volumes:
+      - ./src/juloserver:/service
+    depends_on:
+      - db
+      - broker
+      - redis
+    command: bash -c
+      "source ./wait-for-postgres.sh
+      && source ./wait-for-rabbitmq.sh
+      && source ./wait-for-redis.sh
+      && source ./postactivate_docker
+      && python manage.py centralized_migrate
+      && source ./initialize_database.sh
+      && gunicorn --timeout 1000 --workers 3 --max-requests 0 --bind 0.0.0.0:8000 juloserver.wsgi"
+
+  celery:
+    container_name: mvp_celery_docker
+    build:
+      context: ./src/juloserver
+    restart: always
+    networks :
+      - mvp_default_docker
+    volumes:
+      - ./src/juloserver:/service
+    depends_on:
+      - api
+      - db
+      - broker
+      - redis
+    command: bash -c
+      "source ./wait-for-postgres.sh
+      && source ./wait-for-rabbitmq.sh
+      && source ./wait-for-redis.sh
+      && source ./wait-for-juloserver.sh
+      && source ./postactivate_docker
+      && source ./run_celery_docker"
+
+  db:
+    container_name : mvp_db_docker
+    image: postgis/postgis:10-3.1-alpine
+    environment:
+      - POSTGRES_DB=julodb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "7001:5432"
+    networks :
+      - mvp_default_docker
+    volumes:
+      - ${PWD}/src/juloserver/setup_database.sql:/docker-entrypoint-initdb.d/setup_database.sql
+
+  broker:
+    container_name : mvp_broker_docker
+    image: rabbitmq:3.6.15-management-alpine
+    ports:
+      - "6001:15672"
+      - "6002:5672"
+    networks :
+      - mvp_default_docker
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 2s
+      timeout: 20s
+  
+  redis:
+    container_name: mvp_redis_docker
+    image: redis:6.2.5-alpine
+    ports: 
+        - "5000:6379"
+    networks: 
+        - mvp_default_docker
+
+networks:
+  mvp_default_docker:
+    name: "mvp_default_docker"
+    driver: bridge
+

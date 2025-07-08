@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+source ~/juloansibleve/bin/activate
+cd ~/julo/mvp/ansible
+git reset HEAD .; git checkout -- .
+git checkout master; git pull
+
+ansible-playbook -i environments/staging webservers.yml \
+  --extra-vars="ansible_ssh_user=ubuntu" --private-key=~/.ssh/julo-ssh-singapore-dev.pem

@@ -1,0 +1,43 @@
+# IDE
+*.idea
+*.orig
+.Rhistory
+.project
+.pydevproject
+.settings/
+.vscode/
+
+# Python
+*.pyc
+
+# pytest
+*.cache
+*.pytest_cache
+*.coverage
+*htmlcov
+src/juloserver/assets/
+unit_test_results.html
+unit_test_results.xml
+
+# Logging
+*.log
+
+# Django
+*.sqlite3
+
+# Vagrant
+*.vagrant
+
+# Ansible
+*.retry
+
+# Helm
+*.tgz
+
+# credentials
+*google_api_client_secret.json
+*.dec
+media/
+
+# celery
+src/juloserver/celerybeat-schedule.db

@@ -1,0 +1,113 @@
+version: "3.4"
+services:
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - "4040:4040"
+    networks:
+      - mvp_default
+    links:
+      - api
+    depends_on:
+      - api
+    tty: true
+    environment:
+      NGROK_PORT: api:8000
+      NGROK_REGION: ap
+      NGROK_DEBUG: enable
+
+  api:
+    container_name: mvp_api
+    build:
+      context: ./src/juloserver
+    restart: always
+    ports:
+      - "8000:8000"
+    networks :
+      - mvp_default
+    volumes:
+      - ./src/juloserver:/service
+    depends_on:
+      - db
+    command: sh -c
+      "source ./wait-for-postgres.sh
+      && source ./wait-for-rabbitmq.sh
+      && source ./postactivate_docker
+      && gunicorn --workers 3 --max-requests 0 --bind 0.0.0.0:8000 juloserver.wsgi"
+
+  async:
+    container_name: mvp_async
+    build:
+      context: ./src/juloserver
+    restart: always
+    networks:
+      - mvp_default
+    volumes:
+      - ./src/juloserver:/service
+    depends_on:
+      - db
+      - broker
+    command: sh -c
+      "source ./wait-for-postgres.sh
+      && source ./wait-for-rabbitmq.sh
+      && source ./postactivate_docker
+      && watchmedo auto-restart --directory=./ --pattern=*.py --recursive
+      -- celery worker --app=juloserver --hostname 'worker@%h%n%d' --loglevel=info"
+
+  scheduler:
+    container_name: mvp_scheduler
+    build:
+      context: ./src/juloserver
+    restart: always
+    networks :
+      - mvp_default
+    volumes:
+      - ./src/juloserver:/service
+    depends_on:
+      - db
+      - broker
+    command: sh -c
+      "source ./wait-for-postgres.sh
+      && source ./wait-for-rabbitmq.sh
+      && source ./postactivate_docker
+      && rm -f celerybeat.pid
+      && celery beat --app=juloserver --loglevel=info --logfile=celery_beat.log"
+
+  db:
+    container_name : mvp_db_remote
+    build:
+      context: ./ssh-tunneling
+    restart: always
+    networks :
+      - mvp_default
+    volumes:
+      - $HOME/.ssh/julo-jumpbox.pem:/julo-jumpbox.pem
+    environment:
+      - SSH_SRC_PORT=5432
+      - SSH_DEST_HOST=192.168.20.153
+      - SSH_DEST_PORT=5432
+      - SSH_HOSTUSER=tunneler
+      - SSH_HOSTNAME=jumpbox.julofinance.com
+      - SSH_SRC_HOSTNAME=0.0.0.0
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5432" ]
+      interval: 2s
+      timeout: 20s
+
+  broker:
+    container_name : mvp_broker
+    image: rabbitmq:3.6.15-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks :
+      - mvp_default
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 2s
+      timeout: 20s
+
+networks:
+  mvp_default:
+    driver: bridge
+

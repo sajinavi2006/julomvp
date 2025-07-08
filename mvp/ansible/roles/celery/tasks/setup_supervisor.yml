@@ -1,0 +1,77 @@
+---
+
+# Set up supervisor
+
+- name: Install Supervisor
+  apt: name=supervisor update_cache={{ update_apt_cache }} state=installed
+  tags:
+    - celery
+
+- name: Ensure supervisor service is started
+  service: name=supervisor state=started enabled=yes
+  tags:
+    - celery
+
+# Set up running celery worker and beat on supervisor
+
+- name: Create the Supervisor config file for {{ celery_worker_name }}
+  template: src=supervisor_{{ celery_worker_name }}.conf.j2
+            dest=/etc/supervisor/conf.d/{{ celery_worker_name }}.conf
+  tags:
+    - celery
+
+- name: Create the Supervisor config file for {{ celery2_worker_name }}
+  template: src=supervisor_{{ celery2_worker_name }}.conf.j2
+            dest=/etc/supervisor/conf.d/{{ celery2_worker_name }}.conf
+  tags:
+    - celery
+
+- name: Create the Supervisor config file for {{ celery_beat_name }}
+  template: src=supervisor_{{ celery_beat_name }}.conf.j2
+            dest=/etc/supervisor/conf.d/{{ celery_beat_name }}.conf
+  tags:
+    - celery
+
+- name: Create the {{ celery_worker_name }} log directory
+  file: path={{ celery_log_dir }}
+        owner={{ celery_user }}
+        group={{ celery_group }}
+        state=directory
+  tags:
+    - celery
+
+- name: Create the {{ celery_worker_name }} log file
+  file: path={{ celery_worker_log_file }}
+        owner={{ celery_user }}
+        group={{ celery_group }}
+        state=touch
+  tags:
+    - celery
+
+- name: Create the {{ celery2_worker_name }} log file
+  file: path={{ celery2_worker_log_file }}
+        owner={{ celery_user }}
+        group={{ celery_group }}
+        state=touch
+  tags:
+    - celery
+
+- name: Create the {{ celery_beat_name }} log file
+  file: path={{ celery_beat_log_file }}
+        owner={{ celery_user }}
+        group={{ celery_group }}
+        state=touch
+  tags:
+    - celery
+
+# Reload supervisor
+
+- name: Re-read the Supervisor config files
+  command: supervisorctl reread
+  tags:
+    - celery
+
+- name: Update Supervisor to add the app in the process group
+  command: supervisorctl update
+  tags:
+    - celery

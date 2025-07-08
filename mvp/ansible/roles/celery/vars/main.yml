@@ -1,0 +1,25 @@
+---
+
+server_root_dir: /webapps
+
+virtualenv_path: "/webapps/{{ application_name }}ve"
+project_path: "{{ virtualenv_path }}/{{ project_name }}"
+
+celery_user: "{{ application_name }}"
+celery_group: webapps
+celery_log_dir: "{{ virtualenv_path }}/logs"
+celery_scripts_dir: "{{ virtualenv_path }}/scripts/celery"
+
+celery_worker_name: celery
+celery_worker_template_file: "{{ celery_worker_name }}_start.j2"
+celery_worker_log_file: "{{ celery_log_dir }}/{{ celery_worker_name }}.log"
+
+celery2_worker_name: celery2
+celery2_worker_template_file: "{{ celery2_worker_name }}_start.j2"
+celery2_worker_log_file: "{{ celery_log_dir }}/{{ celery2_worker_name }}.log"
+
+celery_beat_name: celerybeat
+celery_beat_template_file: "{{ celery_beat_name }}_start.j2"
+celery_beat_log_file: "{{ celery_log_dir }}/{{ celery_beat_name }}.log"
+
+

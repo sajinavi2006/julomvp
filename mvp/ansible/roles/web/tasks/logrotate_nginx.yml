@@ -1,0 +1,18 @@
+---
+ - name: Assures aws dir exists
+   file: path="~/.aws"  state=directory
+
+ - name: aws credential file.
+   template:
+      src: aws_credentials.j2
+      dest: ~/.aws/credentials
+
+ - name: Create the Logrotate conf file
+   template: src=julo_logrotate_nginx.j2
+             dest=/etc/logrotate.d/nginx
+             backup=yes
+
+ - name: s3upload script for sending logs to s3 bucket.
+   template: src=s3upload.sh
+             dest=/opt/
+             backup=yes
