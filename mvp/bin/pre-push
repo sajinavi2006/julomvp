@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+repo_root_dir=$(git rev-parse --show-toplevel)
+current_branch=$(git branch | grep \* | cut -d ' ' -f2)
+
+cmd="git branch -r | grep $current_branch"
+eval $cmd
+result=$?
+if [ $result -eq 0 ]; then
+    # Check if we actually have commits to push
+    commits=`git log origin/${current_branch}..HEAD`
+    if [ -z "$commits" ]; then
+        echo "No commits, exiting..."
+        exit 0
+    fi
+fi
+
+cmd="(cd $repo_root_dir/src/juloserver && tox -e flake8)"
+eval $cmd
+result=$?
+if [ $result -ne 0 ]; then
+    echo "failed $cmd"
+    echo "exit code: $result"
+#    exit 1
+fi
+
+export PYTHONPATH="$repo_root_dir/src/juloserver/portal:$PYTHONPATH"
+export PYTHONPATH="$repo_root_dir/src/juloserver/portal/object:$PYTHONPATH"
+cmd="(cd $repo_root_dir/src/juloserver && tox -e unit_test)"
+eval $cmd
+result=$?
+if [ $result -ne 0 ]; then
+    echo "failed $cmd"
+    echo "exit code: $result"
+    exit 1
+fi
+exit 0
